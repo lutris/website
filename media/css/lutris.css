@@ -1,45 +1,106 @@
-body {
-	background-image: url("/media/images/regular-body.png") ;
-    background-repeat: repeat-x;
-    background-color: #000;
-	font-family: sans;
-	padding:0;
-	margin:0;
-	background-color:white;
-    font-size: 13px;
+/*
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 3.0.0pr2
+*/
+/* reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+/* fonts */
+body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+
+/* **************** TEMPLATE ***************** */
+/* ====== Page Head, Body, and Foot ====== */
+body{/*_text-align:center;*/}/* IE5.5 */
+.body{overflow:hidden; _overflow:visible; _zoom:1;}
+.page{margin: 0 auto; width: 950px;/*_text-align:left;*/} /* wraps other template elems to set width */ /* text-align IE5.5 */
+/* "old school" and "liquid" extend page to allow for different page widths */
+.oldSchool{width:750px;}
+.gs960{width:960px;}
+.liquid{extends:.page; width: auto;margin:0;}
+/* ====== Columns ====== */
+.main{overflow: hidden;_overflow:visible;_zoom:1;}
+.leftCol{float:left; width:250px;_margin-right:-3px;}
+.rightCol{float:right; width: 300px;_margin-left:-3px;}
+/* extend columns to allow for common column widths */
+.gMail{width:160px;}
+.gCal{width:180px;}
+.yahoo{width:240px;}
+.myYahoo{width:300px;}
+
+/* **************** GRIDS ***************** */
+.line:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+.lastUnit:after{content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";visibility:hidden; clear:both;height:0 !important;display:block;line-height:0;}
+.line{*zoom:1;}
+.unit{float:left;}
+.size1of1{float:none;}
+.size1of2{width:50%;}
+.size1of3{width:33.33333%;}
+.size2of3{width:66.66666%;}
+.size1of4{width:25%;}
+.size3of4{width:75%;}
+.size1of5{width:20%;}
+.size2of5{width:40%;}
+.size3of5{width:60%;}
+.size4of5{width:80%;}
+.lastUnit {display: table-cell; *display:block;*zoom:1;float:none;_position:relative; _left:-3px; _margin-right: -3px;width:auto;}
+
+.bodybg {
+    height: 100%;
+	background: black url("/media/images/regular-body.png") repeat-x;
+    z-index: -2;
 }
+h1, h2, h3, h4 {
+    padding: 1em;
+}
+h3 {
+    font-size: 21px;
+    font-weight: 400;
+    word-spacing: 10px;
+    color: #c30;
+}
+
 #logo-bg {
     position: fixed;
   	background: transparent url("/media/images/logo-body.png") no-repeat;
     width: 350px;
     height:1000px;
-    z-index: -100;
+    z-index: -1;
+}
+.content {
+    width: 960px;
+    margin: 0 auto;
+}
+#header { 
+}
+
+.nav_menu li {
+    background-color: black;
+    float: left;
+    display: block;
+    padding: 40px 15px 5px;
+}
+
+.nav_menu li:hover {
+    background-color: #666;
+}
+.nav_menu li a{
+    color: #FFF;
+    font-size: 1.5em;
+    text-decoration: none;
 }
 #content{
-    background-color: #000;
+    font-size: 1.2em;
+    clear: both;
+    background: #000;
     color: #FFF;
-    top:0;
-    bottom: 0;
-	width:600px;
-	margin: 0 auto;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    padding: 20px;
 }
 #content p {
-    padding: 7px;
+    padding: 10px 50px;
     line-height: 1.4em;
     text-align: justify;   
 }
-#content h1, #content h2, #content h3, #content h4 {
-   
-}
-h3 {
-    font-size: 21px;
-    font-weight: lighter;
-    word-spacing: 10px;
-    color: #c30;
-}
+
 
 #content img {
     padding: 5px;
@@ -47,48 +108,16 @@ h3 {
 #content a {
     color: orange;
 }
-#left {
-	width:220px;
-	float:left;
-	text-align:center;
-}
-hr{
-width : 70%;
-}
-#right{
-	width:780px;
-	float:left;
-}
-.title {
-	font-size:150%;
-	font-weight:bolder;
-}
-.subtitle{
-	font-size:70%;
 
-}
-.formLabel{
-	display:inline-block;
-	width: 200px;
-}
-#menu {
-	text-align:center;
-	margin-top:100px;
-	margin-bottom:30px;
-}
-#menu a{
-	font-size:12px;
-	color:black;
-	text-decoration:none;
-	clear:both;
-	width:190px;
-
-}
-.center_table{
-	border : 1px solid #444;
-	padding : 5px;
-	margin : 20px;
-
+.bigButton {
+    border-color: #a84300;
+    background-color: #fc6500;
+    padding: 15px;
+    font-size: 1.6em;
+    text-align: center;
+    width: 130px;
+    -moz-border-radius: 15px;
+    margin: 60px 30px 0 0px;
 }
 
 

@@ -2,13 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
     <head>
         <title>Lutris : Play video games on Linux easily</title>
-        <link type="text/css" href="/media/css/reset.css" rel="stylesheet" />
         <link type="text/css" href="/media/css/lutris.css" rel="stylesheet" />
     </head>
-    <body>
+    <body class="body bodybg">
+      
         <div id="logo-bg">
         </div>
-        <div id="content">
+        <div id="header" class="page">
+            <div class="login_form">
+
+            </div>
+            <ul class="nav_menu">
+                <li><a href="/download">Get Lutris</a></li>
+                <li><a href="/games">Games</a></li>
+                <li><a href="http://lutris.net/blog">Blog</a></li>
+                <li><a href="/contribute">Contribute</a></li>
+            </ul>
+        </div>
+        <div id="content" class="page">
                 {% block content %}
                 {% endblock %}
         </div>
