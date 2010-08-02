@@ -2,3 +2,5 @@ __init__.pyc
 settings.pyc
 urls.pyc
 nbproject
+.project
+.pydevproject

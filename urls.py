@@ -6,7 +6,8 @@ from django.conf import settings
 urlpatterns = patterns('',
     (r'^$', 'lutrisweb.static.views.index'),
     (r'^contribute/', 'lutrisweb.static.views.contribute'),
-    (r'^download/', 'lutrisweb.static.views.download')
+    (r'^download/', 'lutrisweb.static.views.download'),
+    (r'^games/', include('lutrisweb.games.urls')),
     # (r'^admin/', include(admin.site.urls)),
 )
 
