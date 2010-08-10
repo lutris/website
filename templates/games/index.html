@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  {% for game in games %}
+    {{ game.name }}<br/>
+    {% if game.installer %}
+      <a href='lutris://{{ game.slug}}'>Install</a>
+    {% endif %} 
+  {% endfor %}
+{% endblock %}
