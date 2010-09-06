@@ -1,0 +1,189 @@
+/*
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 3.0.0pr2
+*/
+/* reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+/* fonts */
+body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+
+/* **************** TEMPLATE ***************** */
+/* ====== Page Head, Body, and Foot ====== */
+body{/*_text-align:center;*/}/* IE5.5 */
+.body{overflow:hidden; _overflow:visible; _zoom:1; color: #FFF;}
+.page{margin: 0 auto; width: 950px;/*_text-align:left;*/} /* wraps other template elems to set width */ /* text-align IE5.5 */
+/* "old school" and "liquid" extend page to allow for different page widths */
+.oldSchool{width:750px;}
+.gs960{width:960px;}
+.liquid{extends:.page; width: auto;margin:0;}
+/* ====== Columns ====== */
+.main{overflow: hidden;_overflow:visible;_zoom:1;}
+.leftCol{float:left; width:250px;_margin-right:-3px;}
+.rightCol{float:right; width: 300px;_margin-left:-3px;}
+/* extend columns to allow for common column widths */
+.gMail{width:160px;}
+.gCal{width:180px;}
+.yahoo{width:240px;}
+.myYahoo{width:300px;}
+
+/* **************** GRIDS ***************** */
+.line:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+.lastUnit:after{content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";visibility:hidden; clear:both;height:0 !important;display:block;line-height:0;}
+.line{*zoom:1;}
+.unit{float:left;}
+.size1of1{float:none;}
+.size1of2{width:50%;}
+.size1of3{width:33.33333%;}
+.size2of3{width:66.66666%;}
+.size1of4{width:25%;}
+.size3of4{width:75%;}
+.size1of5{width:20%;}
+.size2of5{width:40%;}
+.size3of5{width:60%;}
+.size4of5{width:80%;}
+.lastUnit {display: table-cell; *display:block;*zoom:1;float:none;_position:relative; _left:-3px; _margin-right: -3px;width:auto;}
+
+.clearfix {display: inline-block;}  /* for IE/Mac */
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.bodybg {
+    height: 100%;
+	background: black url("/media/images/regular-body.png") repeat-x;
+    z-index: -2;
+}
+h1, h2, h3, h4 {
+}
+h3 {
+    font-size: 21px;
+    font-weight: 400;
+    word-spacing: 10px;
+    color: #c30;
+}
+
+#logo_bg {
+    position: fixed;
+  	background: transparent url("/media/images/logo-body.png") no-repeat;
+    width: 350px;
+    height:1000px;
+    z-index: -1;
+}
+#header { 
+    background-color: #000;
+    width: 100%;
+    height: 240px;
+    .logo {
+        padding: 0 15px;
+        margin-left: -70px;
+        float: left;
+    }
+    .title {
+        font-size: 6em;
+        color: #AAA;
+        margin-left: -100px;
+        font-weight: bolder;
+        text-decoration: none;
+        outline: none;
+    }
+    .tagline {
+        font-family: Times, serif;
+        font-style: italic;
+        font-size: 1.3em;
+        margin-left: -100px;
+        margin-top: -20px;
+    }
+}
+.nav_menu {
+    float: none;
+    li {
+        float: left;
+        display: block;
+        padding: 40px 15px 5px;
+        :hover {
+            background-color: #666;
+        }
+        a {
+            color: #FFF;
+            font-size: 1.5em;
+            text-decoration: none;
+        }
+    }
+}
+
+#content{
+    font-size: 1.2em;
+    background: #000;
+    color: #FFF;
+    img {
+        padding: 5px;
+    }
+    a {
+        color: orange;
+    }
+    p {
+        padding: 10px 50px;
+        line-height: 1.4em;
+        text-align: justify;   
+    }
+}
+.login_form {
+    background-color: #D95E0C;
+    padding: 15px;
+    margin: 0 15px;
+    float: right;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    .form_title {
+        font-family: Times, serif;
+        font-style: italic;
+        float: none;
+        clear: both;
+        display: block;
+        margin-top:-20px;
+        color: #F6FBB9;
+        font-size: 2em;
+    }
+        
+    input[type=text], input[type=password] {
+        border: 2px solid #FF9400;
+        background-color:#F0E9D3; 
+        color: #777;
+        height: 20px;
+        padding: 2px;
+        font-size: 1.2em;
+    }
+    input[type=submit] {
+        border: 1px solid #EEEEEE ;    
+        color: #FF9400;
+        background-color: #463E39;
+        font-size: 1.5em;
+        float: right;
+        padding: 3px 7px; 
+    }
+    .form_row {
+        padding: 4px;
+    }
+}
+
+
+.bigButton {
+    color: #FFFFFF;
+    border-color: #a84300;
+    background-color: #fc6500;
+    padding: 15px;
+    font-size: 1.6em;
+    text-align: center;
+    width: 130px;
+    -moz-border-radius: 15px;
+    margin: 60px 30px 0 0px;
+}
+
+

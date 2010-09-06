@@ -5,24 +5,45 @@
         <link type="text/css" href="/media/css/lutris.css" rel="stylesheet" />
     </head>
     <body class="body bodybg">
-      
-        <div id="logo-bg">
-        </div>
-        <div id="header" class="page">
-            <div class="login_form">
-
-            </div>
-            <ul class="nav_menu">
-                <li><a href="/download">Get Lutris</a></li>
-                <li><a href="/games">Games</a></li>
-                <li><a href="http://lutris.net/blog">Blog</a></li>
-                <li><a href="/contribute">Contribute</a></li>
+      <div id="logo_bg"></div>
+      <div class='page'>
+        <div id="header" class="line clearfix">
+          <div class='unit size1of4'>
+            <img class='logo' src='/media/images/logo.png' alt='Lutris'/>
+          </div>
+          <div class='unit size2of4'>
+            <ul class='nav_menu'>
+              <li><a href="/download">Get Lutris</a></li>
+              <li><a href="/games">Games</a></li>
+              <li><a href="http://lutris.net/blog">Blog</a></li>
+              <li><a href="/contribute">Contribute</a></li>
             </ul>
+            <div>
+              <a href='/' class='title'>Lutris</a>
+              <h2 class='tagline'>The universal gaming platform for GNU/Linux</h2>
+            </div>
+          </div>
+          <div class="unit size1of4 lastUnit">
+            
+            <div class='login_form'>
+              <span class='form_title'>Sign in</span>
+              <div class='form_row'>
+                <input type='text' name='login' value='username'/>
+              </div>
+              <div class='form_row'>
+                <input type='text' name='password' value='password'/>
+              </div>
+              <div class='form_row'>
+              <input type='submit' value='Login' />
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="content" class="page">
+        <div id="content">
                 {% block content %}
                 {% endblock %}
         </div>
+      </div>
     </body>
 </html>
 
