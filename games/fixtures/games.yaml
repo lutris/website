@@ -1,0 +1,30 @@
+- model: games.runner
+  pk: 1
+  fields:
+    name: wine
+    website: http://Winehq.org
+
+- model: games.genre
+  pk: 1
+  fields:
+    name: FPS
+- model: games.genre
+  pk: 2
+  fields:
+    name: Action
+- model: games.genre
+  pk: 3
+  fields:
+    name: Adventure
+- model: games.genre
+  pk: 4
+  fields:
+    name: Racing
+
+- model: games.game
+  pk: 1
+  fields:
+    name: Quake
+    slug: quake
+    runner: 1
+    genre: 1
