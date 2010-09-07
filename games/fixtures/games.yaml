@@ -1,3 +1,12 @@
+- model: games.platform
+  pk: 1
+  fields:
+    name: Windows
+- model: games.platform
+  pk: 2
+  fields:
+    name: Linux
+
 - model: games.runner
   pk: 1
   fields:
