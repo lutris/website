@@ -1,0 +1,63 @@
+- model: games.platform
+  pk: 1
+  fields:
+    name: Windows
+    slug: windows
+- model: games.platform
+  pk: 2
+  fields:
+    name: Linux
+    slug: linux
+- model: games.platform
+  pk: 3
+  fields:
+    name: Playstation
+    slug: playstation
+    
+- model: games.runner
+  pk: 1
+  fields:
+    name: linux
+    slug: linux
+    website: http://kernel.org
+- model: games.runner
+  pk: 2
+  fields:
+    name: wine
+    slug: wine
+    website: http://winehq.org
+- model: games.runner
+  pk: 3
+  fields:
+    name: pcsx
+    slug: pcsx
+    website: http://pcsxr.codeplex.com/
+
+- model: games.genre
+  pk: 1
+  fields:
+    name: First Person Shooter
+- model: games.genre
+  pk: 2
+  fields:
+    name: Action
+- model: games.genre
+  pk: 3
+  fields:
+    name: Adventure
+- model: games.genre
+  pk: 4
+  fields:
+    name: Real time strategy
+- model: games.genre
+  pk: 5
+  fields:
+    name: Racing
+
+- model: games.game
+  pk: 1
+  fields:
+    name: Quake
+    slug: quake
+    runner: 1
+    genre: 1
