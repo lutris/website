@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  {% for game in object_list %}
+  {% for game in games %}
     <img src='/media/{{ game.icon }}' width='32' height='32' />
     <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
     {% if game.installer %}
       <a href='lutris://{{ game.slug}}'>Install</a>
-    {% endif %} 
+    {% endif %}
   {% endfor %}
 {% endblock %}

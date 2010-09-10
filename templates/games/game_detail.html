@@ -1,1 +1,8 @@
-<h1>Hello !</h1>
+{% extends "base.html" %}
+{% block content %}
+    <img src='/media/{{ game.icon }}' width='32' height='32' />
+    <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
+    {% if game.installer %}
+      <a href='lutris://{{ game.slug}}'>Install</a>
+    {% endif %}
+{% endblock %}
