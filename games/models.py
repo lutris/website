@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext as _
 import os
@@ -15,7 +16,13 @@ class Company(models.Model):
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)
     logo = models.ImageField(upload_to='company_logos', blank=True)
-    website = models.CharField(blank=True)
+    website = models.CharField(max_length=128, blank=True)
+
+    class Meta:
+        verbose_name_plural = "companies"
+
+    def __unicode__(self):
+        return "%s" % self.name
 
 class Runner(models.Model):
     '''Model definition for the runners.'''
@@ -43,13 +50,19 @@ class Genre(models.Model):
 class Game(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    runner = models.ForeignKey(Runner)
-    genre = models.ForeignKey(Genre)
-    publisher = models.ForeignKey(Company)
-    developer = models.ForeignKey(Company)
+    runner = models.ForeignKey(Runner, null=True, blank=True)
+    year = models.IntegerField(null=True)
+    genre = models.ForeignKey(Genre, null=True, blank=True)
+    publisher = models.ForeignKey(Company,
+            related_name='published_game',
+            null=True, blank=True)
+    developer = models.ForeignKey(Company,
+            related_name='developed_game',
+            null=True, blank=True)
     website = models.CharField(max_length=200, blank=True)
     icon = models.ImageField(upload_to='game_icons', blank=True)
     cover = models.ImageField(upload_to='game_covers', blank=True)
+    description = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -58,8 +71,8 @@ class Game(models.Model):
         return "/games/%s" % self.slug
 
 class Installer(models.Model):
-    game = models.ForeignField(Game)
-    user = models.ForeignField(User)
+    game = models.ForeignKey(Game)
+    user = models.ForeignKey(User)
     version = models.CharField(max_length=20)
     install_file = models.FileField(upload_to=generate_installer_name)
 

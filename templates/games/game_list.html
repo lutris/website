@@ -1,10 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-  {% for game in games %}
-    <img src='/media/{{ game.icon }}' width='32' height='32' />
-    <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
+ <div class='breadcrumb'>
+  <a href='/games/'>All games</a> <span class='breadcrumb'>&gt;</span>
+  {% if genre %}
+    <a href='/games/genre/{{ genre.slug }}' />{{ genre }}</a> 
+  {% endif %}
+  {% if platform %}
+    <a href='/games/platform/{{ platform.slug }}' />{{ platform }}</a>
+  {% endif %}
+  {% if runner %}
+    <a href='/games/runner/{{ runner.slug }}' />{{ runner }}</a>
+  {% endif %}
+  {% if year %}
+    <a href='/games/year/{{ year }}' />{{ year }}</a>
+  {% endif %}
+ </div>
+ {% for game in games_list %}
+    <div class='game_list_element'>
+      <img class='logo' src='/media/{{ game.icon }}' />
+      <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
+      <p class='info'>
+    Released : <a href='/games/year/{{game.year}}' />{{ game.year }}</a>
+    , Developer : <a href='/games/by-developer/{{ game.developer.slug }}' />{{ game.developer }}</a>
+    , Publisher : <a href='/games/by-company/{{ game.publisher.slug }}' />{{ game.publisher }}</a>
+    </p>
+      <a href='/games/runner/{{ game.runner.slug }}' /><img src='/media/{{ game.runner.icon }}' /></a>
     {% if game.installer %}
-      <a href='lutris://{{ game.slug}}'>Install</a>
+      <a class='install-button' href='lutris:{{ game.slug }}'>Install</a>
     {% endif %}
+    </div>
   {% endfor %}
 {% endblock %}
+

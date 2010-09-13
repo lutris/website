@@ -189,7 +189,6 @@ h3 {
   color: #ffffff;
 }
 #content img { padding: 5px; }
-#content a { color: orange; }
 #content p {
   padding: 10px 50px;
   line-height: 1.4em;
@@ -249,3 +248,25 @@ h3 {
   -moz-border-radius: 15px;
   margin: 60px 30px 0 0px;
 }
+.breadcrumb a {
+  color: #aaaaaa;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+.game_list_element {
+  border: 1px solid #333333;
+  padding: 10px;
+  height: 148px;
+}
+.game_list_element a {
+  color: #dddddd;
+  text-decoration: none;
+}
+.game_list_element .game-title { font-size: 1.3em; }
+.game_list_element .logo {
+  float: left;
+  vertical-align: top;
+  margin-right: 20px;
+}
+.game_list_element .info { font-size: 0.8em; }

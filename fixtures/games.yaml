@@ -13,13 +13,25 @@
   fields:
     name: Playstation
     slug: playstation
-    
+
+- model: games.company
+  pk: 1
+  fields:
+    name: id Software
+    slug: id-software
+- model: games.company
+  pk: 2
+  fields:
+    name: GT Interactive
+    slug: gt-interactive
+
 - model: games.runner
   pk: 1
   fields:
     name: linux
     slug: linux
     website: http://kernel.org
+    icon: runner_icons/linux.png
 - model: games.runner
   pk: 2
   fields:
@@ -37,27 +49,35 @@
   pk: 1
   fields:
     name: First Person Shooter
+    slug: fps
 - model: games.genre
   pk: 2
   fields:
     name: Action
+    slug: action
 - model: games.genre
   pk: 3
   fields:
     name: Adventure
+    slug: adventure
 - model: games.genre
   pk: 4
   fields:
     name: Real time strategy
+    slug: rts
 - model: games.genre
   pk: 5
   fields:
     name: Racing
+    slug: racing
 
 - model: games.game
   pk: 1
   fields:
     name: Quake
     slug: quake
+    year: 1996
     runner: 1
     genre: 1
+    website: http://www.idsoftware.com/games/quake/quake/
+    icon: game_icons/quake.png

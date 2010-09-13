@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <img src='/media/{{ game.icon }}' width='32' height='32' />
+    <h1>{{ game.name }}</h1>
     <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
     {% if game.installer %}
       <a href='lutris://{{ game.slug}}'>Install</a>
