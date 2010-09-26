@@ -2,10 +2,13 @@ protocol: 1
 version: 1
 name: Quake
 runner: linux
+exe: darkplaces-linux-686-glx
 
 files:
   - darkplaces-engine: http://icculus.org/twilight/darkplaces/files/darkplacesengine20100408.zip
-  - quake_files: http://strycore.com/games/quake.zip
+  - quake_files: http://strycore.com/games/quake/quake.zip
+  - quake_config: http://strycore.com/games/quake/config.cfg
+
 installer:
   - check_md5: { file: darkplaces-engine , value: 24e7e417b32cfb06ff915f6d8f251e80  }
   - check_md5: { file: quake_files , value: 24e7e417b32cfb06ff915f6d8f251e80  }
@@ -14,4 +17,4 @@ installer:
   - move: { src: 'quake/id1', dst: gamedir }
   - delete: { file: darkplaces-engine }
   - delete: { file: quake_files }
-bugs: [ twinview_extend ]
+  - move: { src: quake_config, dst: homedir/.darkplaces/id1/ }

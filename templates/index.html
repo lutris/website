@@ -1,26 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-
 <div class="line">
-    <div class="unit size4of5">
-        <h3>What is Lutris ?</h3>
-        <p>
-            Lutris is an graphical frontend allowing users to easily run any
-            video game than is supported on GNU/Linux.
-            Lutris let you to change some system settings and keep the configuration.
-            Once a game is correctly configured, you only are one mouse click from gaming.<br/>
-        </p>
+  <div class="unit size3of5">
+    <div class='spaced'>
+      <img class='spaced' src='/media/images/preview.png' />
     </div>
-    <div class="unit size1of5 lastUnit">
-        <div class="bigButton"><a href='/download'>Download Lutris</a></div>
+  </div>
+  <div class='unit lastUnit size2of5'>
+    <div class='spaced download-pane'>
+      <h1>Lutris <em>0.2.1</em></h1>
+      <a class="big-button" href='/download'>Download it now</a>
+      <h2>Features</h2>
+      <ul>
+        <li>Supports thousands of games</li>
+        <li>Optimizes your gaming experience</li>
+        <li>Minimize tedious configuration</li>
+      </ul>
     </div>
-</div>
-
-<div class="line">
-<h3>More about Lutris</h3>
-<ul>
-    <li><a href="/future">List of supported systems</a></li>
-    <li><a href="/future">Plans for the future</a></li>
-</ul>
-</div>
+  </div>
 {% endblock %}

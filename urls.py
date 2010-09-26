@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^$', direct_to_template, {'template': 'index.html'}),
-    (r'^contribute/', direct_to_template, {'template': 'static/contribute.html'}),
+    (r'^about$', direct_to_template, {'template': 'static/about.html'}),
     (r'^download/', direct_to_template, {'template': 'static/download.html'}),
     (r'^games/', include('lutrisweb.games.urls')),
     (r'^admin/', include(admin.site.urls)),
