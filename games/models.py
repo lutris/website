@@ -12,6 +12,8 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platform_icons', blank=True)
 
+    def __unicode__(self):
+        return "%s" % self.name
 class Company(models.Model):
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)
@@ -72,7 +74,8 @@ class Game(models.Model):
 
 class Installer(models.Model):
     game = models.ForeignKey(Game)
+    slug = models.SlugField(unique=True)
     user = models.ForeignKey(User)
-    version = models.CharField(max_length=20)
+    version = models.CharField(max_length=32)
     install_file = models.FileField(upload_to=generate_installer_name)
 

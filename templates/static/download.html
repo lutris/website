@@ -1,6 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Download Lutris</h1>
+<div class='line content'>
+  <div class='unit spaced'>
+    <h2>Download Lutris</h2>
+    <p>
+    Lutris is still in a very early stage of development, so it's not yet
+    available for every Linux distribution.
+    The package provided should work on Ubuntu 10.04, 10.10 and Debian Squeeze.<br/>
 
+    <br/>
+    <a href='https://launchpad.net/~strycore/+archive/ppa/+files/lutris_0.2.2_all.deb'>Download Lutris 0.2.2</a>
+    <br/><br/>
+    To install this package, double click on the file you have downloaded or 
+    open it with the Software Center.
+    </p>
+    <h1>Getting Lutris from bazaar</h1>
+    <p>
+    If you run another distribution than Ubuntu or Debian, you can use bzr to 
+    fetch the sources. Lutris is in pure Python so no compilation is needed.
+    Getting Lutris from bazaar is also the best way to get the latest bleeding 
+    edge version with the latest features (and also the latest bugs).
+
+    To get Lutris from bazaar, type the following command : 
+    <pre>
+    bzr branch lp:lutris
+    </pre>
+    If you want to contribute you can commit changes to your own Launchpad account, 
+    I'll take care of reviewing and merging your code into the official branch.<br/>
+    Working with bzr is very simple :
+    </p>
+    <ul>
+      <li>Make modifications to the source code</li>
+      <li>Type: <pre>bzr commit -m 'Description of what i changed'</li>
+      <li>Type: <pre>bzr push lp:~yourusername/+junk/lutris</li>
+    </ul>
+  </div>
+</div>
 {% endblock %}
