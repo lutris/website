@@ -12,21 +12,45 @@
     <br/>
     <a href='https://launchpad.net/~strycore/+archive/ppa/+files/lutris_0.2.2_all.deb'>Download Lutris 0.2.2</a>
     <br/><br/>
-    To install this package, double click on the file you have downloaded or 
+    To install this package, double click on the file you have downloaded or
     open it with the Software Center.
     </p>
     <h1>Getting Lutris from bazaar</h1>
     <p>
-    If you run another distribution than Ubuntu or Debian, you can use bzr to 
+    If you run another distribution than Ubuntu or Debian, you can use bzr to
     fetch the sources. Lutris is in pure Python so no compilation is needed.
-    Getting Lutris from bazaar is also the best way to get the latest bleeding 
+    Getting Lutris from bazaar is also the best way to get the latest bleeding
     edge version with the latest features (and also the latest bugs).
 
-    To get Lutris from bazaar, type the following command : 
+    To get Lutris from bazaar, type the following command :
+    </p>
+
     <pre>
     bzr branch lp:lutris
     </pre>
-    If you want to contribute you can commit changes to your own Launchpad account, 
+
+    <p>
+    Then run the program by typing:
+    </p>
+
+    <pre>
+    cd lutris
+    ./bin/lutris
+    </pre>
+
+    <p>Make sure you have installed the following depencies:</p>
+    <ul>
+      <li>python-apport</li>
+      <li>python-pyglet (optional, for fullscreen support)</li>
+      <li>python-gobject</li>
+      <li>python-gtk2</li>
+      <li>python-yaml</li>
+      <li>python-gconf</li>
+      <li>joy2key</li>
+    </ul>
+    <h1>Contributing</h1>
+    <p>
+    If you want to contribute you can commit changes to your own Launchpad account,
     I'll take care of reviewing and merging your code into the official branch.<br/>
     Working with bzr is very simple :
     </p>
