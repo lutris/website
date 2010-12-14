@@ -3,7 +3,25 @@
     <img src='/media/{{ game.icon }}' width='32' height='32' />
     <h1>{{ game.name }}</h1>
     <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
-    {% if game.installer %}
-      <a href='lutris://{{ game.slug}}'>Install</a>
-    {% endif %}
+    <div class='main-col'>
+        <div id='screenshots'>
+            <!-- put screenshots here -->
+        </div>
+        {% if game.installer %}
+          <a href='lutris://{{ game.slug}}'>Install</a>
+        {% endif %}
+    </div>
+    <div class='info-col'>
+        <img src='/media/{{ game.cover }}' />
+        <p>
+        {{ game.description }}
+        </p>
+        <hr />
+        <strong>Genre: </strong>{{ game.genre }}<br/>
+        <strong>Platform: </strong>{{ game.platform }}<br/>
+        <strong>Developer: </strong>{{ game.developer }}<br/>
+        <strong>Publisher: </strong>{{ game.publisher }}<br/>
+        <strong>Release date: </strong>{{ game.year }}<br/>
+        <strong>Website: </strong><a href='{{ game.website }}' >{{ game.website }}</a>
+    </div>
 {% endblock %}
