@@ -178,11 +178,11 @@ h3 { font-size: 21px; }
 }
 .nav_menu li a:hover { background-color: #666666; }
 #content {
+  width: 950px;
   font-size: 1.2em;
   background: #000000;
   color: #ffffff;
 }
-#content img { padding: 5px; }
 #content p { padding: 20px; }
 #content li {
   list-style-type: square;
@@ -209,6 +209,57 @@ h3 { font-size: 21px; }
   word-spacing: 10px;
   color: #cc3300;
 }
+.game-header {
+  background-color: #000000;
+  background-image: url("/media/images/banners/quake-banner.jpg");
+  background-repeat: no-repeat;
+  height: 150px;
+  position: relative;
+}
+.game-header h1 {
+  position: absolute;
+  height: 50px;
+  left: 0;
+  right: 0;
+  background-color: #222222;
+  opacity: 0.8;
+  bottom: 0px;
+  font-size: 25px;
+  line-height: 50px;
+}
+.game-header h1 a {
+  color: #ededed;
+  text-decoration: none;
+}
+.game-header h1 img {
+  vertical-align: middle;
+  padding-left: 15px;
+  opacity: 1;
+}
+.screenshots {
+  margin: 10px;
+  padding: 10px;
+  width: 620px;
+  border: 1px solid #333333;
+  float: left;
+}
+.game-info {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #333333;
+  width: 235px;
+  float: left;
+  font-size: 0.7em;
+  color: #dddddd;
+}
+.game-info strong {
+  margin-top: 0.5em;
+  display: block;
+  font-weight: bold;
+  color: #cccccc;
+  font-size: 1.1em;
+}
+.game-info a { color: #dddddd; }
 .login_form {
   background-color: #d95e0c;
   padding: 15px;

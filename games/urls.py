@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^runner/(?P<runner_slug>[\w\-]+)$', games_by_runner),
     url(r'^by-publisher/(?P<publisher_slug>[\w\-]+)$', games_by_publisher),
     url(r'^by-developer/(?P<developer_slug>[\w\-]+)$', games_by_developer),
-    url(r'^by-company/(?P<company_slug>[\w\-]+)$', games_by_company),
+    url(r'^publisher/(?P<company_slug>[\w\-]+)$', games_by_company),
     url(r'^platform/(?P<platform_slug>[\w\-]+)$', games_by_platform),
     url(r'(?P<slug>[\w\-]+)$',
         list_detail.object_detail,

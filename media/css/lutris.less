@@ -122,12 +122,10 @@ h3 {
 }
 
 #content {
+    width: 950px;
     font-size: 1.2em;
     background: #000;
     color: #FFF;
-    img {
-        padding: 5px;
-    }
     p{
         padding: 20px;
     }
@@ -141,7 +139,61 @@ h3 {
         font-weight: 400;
         word-spacing: 10px;
         color: #c30;
+    }
+}
+.game-header {
+    background-color: #000;
+    background-image: url("/media/images/banners/quake-banner.jpg");
+    background-repeat: no-repeat;
+    height: 150px;
+    position: relative;
+    h1 {
+        position: absolute;
+        height: 50px;
+        left: 0;
+        right: 0;
+        background-color: #222;
+        opacity: .8;
+        bottom: 0px;
+        font-size: 25px;
+        line-height: 50px;
+        a {
+            color: #EDEDED;
+            text-decoration: none;
+        }
+        img {
+            vertical-align: middle;
+            padding-left: 15px;
+            opacity: 1;
+        }
+    }
+}
 
+.screenshots {
+    margin: 10px;
+    padding: 10px;
+    width: 620px;
+    border: 1px solid #333;
+    float: left;
+}
+.game-info {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #333;
+    width: 235px;
+    float: left;
+    font-size: .7em;
+
+    color: #DDD;
+    strong {
+        margin-top: .5em;
+        display: block;
+        font-weight: bold;
+        color: #CCC;
+        font-size: 1.1em;
+    }
+    a {
+        color: #DDD;
     }
 }
 .login_form {

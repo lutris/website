@@ -14,6 +14,7 @@ class Platform(models.Model):
 
     def __unicode__(self):
         return "%s" % self.name
+
 class Company(models.Model):
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)

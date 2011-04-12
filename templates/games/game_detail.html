@@ -1,27 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-    <img src='/media/{{ game.icon }}' width='32' height='32' />
-    <h1>{{ game.name }}</h1>
-    <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
-    <div class='main-col'>
-        <div id='screenshots'>
-            <!-- put screenshots here -->
-        </div>
-        {% if game.installer %}
-          <a href='lutris://{{ game.slug}}'>Install</a>
+<div class="game-header">
+    <h1
+        {% if game.get_banner %}
+        style="background-image: url("{{ game.get_banner }}")"
         {% endif %}
-    </div>
-    <div class='info-col'>
-        <img src='/media/{{ game.cover }}' />
-        <p>
+        >
+    <img src='/media/{{ game.icon }}' width='32' height='32' />
+    <a href='{{ game.get_absolute_url }}'>{{ game.name }}</a>
+</h1>
+</div>
+<div class='screenshots'>
+    <img src="/media/images/screenshots/quake1.jpg" />
+</div>
+<div class="game-info">
+    <img src="/media/images/covers/quake.jpg" />
+    <strong>Genre: </strong>
+    {{ game.genre }}
+    <strong>Platform: </strong>
+    {{ game.platform }}
+    <strong>Developer: </strong>
+    {{ game.developer }}
+    <strong>Publisher: </strong>
+    {{ game.publisher }}
+    <strong>Release date: </strong>
+    {{ game.year }}
+    <strong>Website: </strong>
+    <a href='{{ game.website }}' >{{ game.website }}</a>
+</div>
+    <p>
         {{ game.description }}
-        </p>
-        <hr />
-        <strong>Genre: </strong>{{ game.genre }}<br/>
-        <strong>Platform: </strong>{{ game.platform }}<br/>
-        <strong>Developer: </strong>{{ game.developer }}<br/>
-        <strong>Publisher: </strong>{{ game.publisher }}<br/>
-        <strong>Release date: </strong>{{ game.year }}<br/>
-        <strong>Website: </strong><a href='{{ game.website }}' >{{ game.website }}</a>
-    </div>
+    </p>
+    {% if game.installer %}
+        <a href='lutris://{{ game.slug}}'>Install</a>
+    {% endif %}
+    <p>xcx</p>
 {% endblock %}
