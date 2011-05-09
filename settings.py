@@ -14,17 +14,15 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'lutris'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
+DATABASE_ENGINE = 'mysql'
+DATABASE_NAME = 'lutris'
+DATABASE_USER = 'root'
 if socket.gethostname() == 'astoria':
-    DATABASE_PASSWORD = 'admin'         # Not used with sqlite3.
-elif socket.gethostname() == 'may-laptop':
-    DATABASE_PASSWORD = 'mysql'
+    DATABASE_PASSWORD = 'admin'
 else:
     DATABASE_PASSWORD = 'admin'
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_HOST = ''
+DATABASE_PORT = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
