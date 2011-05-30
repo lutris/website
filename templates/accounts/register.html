@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+      <div class="line">
+        <div class="base-block unit size1of2">
+          <h1>Create an account</h1>
+          <form action="." method="post" class="base-form">
+            {% if form.errors %}
+              <p class="error">Please correct the errors below.</p>
+            {% endif %}
+    
+            <label for="id_username">Username:</label>
+            {{ form.username.errors }}
+            {{ form.username }}
+    
+            <label for="id_password1">Password:
+            {{ form.password1.errors }}
+            {{ form.password1 }}
+    
+            <label for="id_password2">Password (again):
+            {{ form.password2.errors }}
+            {{ form.password2 }}
+            <input type="submit" value="Create the account" />
+          </label>
+        </div>
+      </div>
+{% endblock %}

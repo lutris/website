@@ -85,4 +85,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'lutrisweb.static',
     'lutrisweb.games',
+    'lutrisweb.accounts'
 )
+
+LOGIN_REDIRECT_URL="/"
+AUTH_PROFILE_MODULE = "accounts.Profile"

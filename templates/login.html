@@ -1,25 +1,39 @@
-<div class='line'>
-  <div class='unit size2of3'>
-    <div class='login-form'>
-      <h2>Sign in</h2>
-      <div class='form-row'>
-        <input type='text' name='login' value='username'/>
-      </div>
-      <div class='form-row'>
-        <input type='text' name='password' value='password'/>
-      </div>
-      <div class='form-row'>
-        <input type='submit' value='Login' />
-      </div>
+{% extends "base.html" %}
+{% load url from future %}
+{% block content %}
+    <div class='line'>
+        <div class='unit size1of3'>
+            <form class='base-form base-block' method="post" action="{% url 'django.contrib.auth.views.login' %}">
+                <h2>Sign in</h2>
+                {% csrf_token %}
+                {% if form.errors %}
+                <p>Error while logging in</p>
+                {% endif %}
+                <div class='form-row'>
+                    <label for="id_username">Username</label>
+                    {{ form.username }}
+                </div>
+                <div class='form-row'>
+                    <label for="password-field">Password</label>
+                    {{ form.password }}
+                </div>
+                <div class='form-row'>
+                    <input type='submit' value='Login' />
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </div>
+            </div>
+            <div class="unit size1of3">
+                <div class="base-block">
+                    <h2>Create an account</h2>
+                    <p>
+                        Creating a Lutris account is totally optional.
+                        You can still use Lutris without an account.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class='unit lastUnit size1of3'>
+            &nbsp;
+        </div>
     </div>
-    <div>
-      <h2>Create an account</h2>
-      <p>
-        Creating a Lutris account is totally optional. You can still
-        use Lutris without an account.
-    </div>
-  </div> 
-  <div class='unit lastUnit size1of3'>
-    &nbsp;
-  </div>
-</div>
+{% endblock %}
