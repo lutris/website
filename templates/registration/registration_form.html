@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+{% block content %}
+    <div class="unit size1of3">
+      <div class="base-block">
+        <h2>Create an account</h2>
+        <p>
+          Creating a Lutris account is totally optional.
+          You can still use Lutris without an account.
+        </p>
+        <form action="/accounts/register/" method="post" class="base-form">
+          {% csrf_token %}
+          {% if form.errors %}
+            <p class="error">Please correct the errors below.</p>
+          {% endif %}
+          {{ form }}
+          <div class="form-row">
+            <input type="submit" value="Create the account" />
+          </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}

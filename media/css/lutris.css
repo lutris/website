@@ -1,4 +1,29 @@
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+/* reset */
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td {
   margin: 0;
   padding: 0;
 }
@@ -6,60 +31,115 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-fieldset, img { border: 0; }
-address, caption, cite, code, dfn, em, strong, th, var {
+fieldset, img {
+  border: 0;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var {
   font-style: normal;
   font-weight: normal;
 }
-li { list-style: none; }
-caption, th { text-align: left; }
-h1, h2, h3, h4, h5, h6 {
+li {
+  list-style: none;
+}
+caption, th {
+  text-align: left;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: 100%;
   font-weight: normal;
 }
-q:before { content: ''; }
-q:after { content: ''; }
+q:before, q:after {
+  content: '';
+}
 abbr, acronym {
   border: 0;
   font-variant: normal;
 }
-sup { vertical-align: text-top; }
-sub { vertical-align: text-bottom; }
+sup {
+  vertical-align: text-top;
+}
+sub {
+  vertical-align: text-bottom;
+}
 input, textarea, select {
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
 }
-input, textarea, select { *font-size: 100%; }
-legend { color: #000000; }
-a:active { outline: 0; }
+input, textarea, select {
+  *font-size: 100%;
+}
+legend {
+  color: #000;
+}
+a:active {
+  outline: 0;
+}
+/* fonts */
 body {
   font: 13px/1.231 arial, helvetica, clean, sans-serif;
   *font-size: small;
   *font: x-small;
 }
-select, input, button, textarea { font: 99% arial, helvetica, clean, sans-serif; }
+select,
+input,
+button,
+textarea {
+  font: 99% arial, helvetica, clean, sans-serif;
+}
 table {
   font-size: inherit;
   font: 100%;
 }
-pre, code, kbd, samp, tt {
+pre,
+code,
+kbd,
+samp,
+tt {
   font-family: monospace;
   *font-size: 108%;
   line-height: 100%;
 }
-.body { color: #ffffff; }
+/* == Template  */
+body {
+  /*_text-align:center;*/
+}
+/* IE5.5 */
+.body {
+  color: #FFF;
+}
 .page {
   margin: 0 auto;
   width: 950px;
+  /*_text-align:left;*/
 }
-.oldSchool { width: 750px; }
-.gs960 { width: 960px; }
+/* wraps other template elems to set width *//* text-align IE5.5 */
+/* "old school" and "liquid" extend page to allow for different page widths */
+.oldSchool {
+  width: 750px;
+}
+.gs960 {
+  width: 960px;
+}
 .liquid {
   extends: .page;
   width: auto;
   margin: 0;
 }
+/* == Columns */
 .main {
   overflow: hidden;
   _overflow: visible;
@@ -75,10 +155,20 @@ pre, code, kbd, samp, tt {
   width: 300px;
   _margin-left: -3px;
 }
-.gMail { width: 160px; }
-.gCal { width: 180px; }
-.yahoo { width: 240px; }
-.myYahoo { width: 300px; }
+/* extend columns to allow for common column widths */
+.gMail {
+  width: 160px;
+}
+.gCal {
+  width: 180px;
+}
+.yahoo {
+  width: 240px;
+}
+.myYahoo {
+  width: 300px;
+}
+/* ==  Grids */
 .line:after {
   content: ".";
   display: block;
@@ -94,18 +184,42 @@ pre, code, kbd, samp, tt {
   display: block;
   line-height: 0;
 }
-.line { *zoom: 1; }
-.unit { float: left; }
-.size1of1 { float: none; }
-.size1of2 { width: 50%; }
-.size1of3 { width: 33.33333%; }
-.size2of3 { width: 66.66666%; }
-.size1of4 { width: 25%; }
-.size3of4 { width: 75%; }
-.size1of5 { width: 20%; }
-.size2of5 { width: 40%; }
-.size3of5 { width: 60%; }
-.size4of5 { width: 80%; }
+.line {
+  *zoom: 1;
+}
+.unit {
+  float: left;
+}
+.size1of1 {
+  float: none;
+}
+.size1of2 {
+  width: 50%;
+}
+.size1of3 {
+  width: 33.33333%;
+}
+.size2of3 {
+  width: 66.66666%;
+}
+.size1of4 {
+  width: 25%;
+}
+.size3of4 {
+  width: 75%;
+}
+.size1of5 {
+  width: 20%;
+}
+.size2of5 {
+  width: 40%;
+}
+.size3of5 {
+  width: 60%;
+}
+.size4of5 {
+  width: 80%;
+}
 .lastUnit {
   display: table-cell;
   *display: block;
@@ -116,7 +230,10 @@ pre, code, kbd, samp, tt {
   _margin-right: -3px;
   width: auto;
 }
-.clearfix { display: inline-block; }
+.clearfix {
+  display: inline-block;
+}
+/* for IE/Mac */
 .clearfix:after {
   content: ".";
   display: block;
@@ -124,14 +241,21 @@ pre, code, kbd, samp, tt {
   clear: both;
   visibility: hidden;
 }
-.spaced { padding: 15px; }
-.centered { text-align: center; }
+.spaced {
+  padding: 15px;
+}
+.centered {
+  text-align: center;
+}
+/* == Functions */
 .bodybg {
   height: 100%;
   background: black url("/media/images/regular-body.png") repeat-x;
   z-index: -2;
 }
-h3 { font-size: 21px; }
+h3 {
+  font-size: 21px;
+}
 #logo_bg {
   position: fixed;
   background: transparent url("/media/images/logo-body.png") no-repeat;
@@ -140,7 +264,7 @@ h3 { font-size: 21px; }
   z-index: -1;
 }
 #header {
-  background-color: #000000;
+  background-color: #000;
   width: 100%;
   height: 100px;
 }
@@ -152,11 +276,11 @@ h3 { font-size: 21px; }
 #header .title {
   font-size: 1.53em;
   padding-top: 1em;
-  color: #aaaaaa;
+  color: #AAA;
   float: left;
 }
 #header .title a {
-  color: #aaaaaa;
+  color: #AAA;
   font-weight: bolder;
   text-decoration: none;
   outline: none;
@@ -169,52 +293,41 @@ h3 { font-size: 21px; }
   float: right;
   padding-right: 10px;
 }
-.nav_menu li { float: left; }
+.nav_menu li {
+  float: left;
+}
 .nav_menu li a {
-  color: #ffffff;
+  color: #FFF;
   display: block;
   padding: 20px 15px;
   font-size: 1.1em;
   text-decoration: none;
 }
-.nav_menu li a:hover { background-color: #666666; }
+.nav_menu li a :hover {
+  background-color: #666;
+}
+/* == Content */
 #content {
   width: 950px;
   font-size: 1em;
-  background: #000000;
-  color: #e0e0e0;
+  background: #000;
+  color: #E0E0E0;
 }
-#content h1 {
+#content h1,
+#content h2,
+#content h3,
+#content h4 {
   font-weight: normal;
-  word-spacing: 0.1em;
-  color: #ff8541;
+  word-spacing: .1em;
+  color: #FF8541;
   margin-bottom: 1em;
   text-shadow: -1px 2px 2px #777777;
 }
 #content h2 {
-  font-weight: normal;
-  word-spacing: 0.1em;
-  color: #ff8541;
-  margin-bottom: 1em;
-  text-shadow: -1px 2px 2px #777777;
+  font-size: 1.3em;
 }
-#content h3 {
-  font-weight: normal;
-  word-spacing: 0.1em;
-  color: #ff8541;
-  margin-bottom: 1em;
-  text-shadow: -1px 2px 2px #777777;
-}
-#content h4 {
-  font-weight: normal;
-  word-spacing: 0.1em;
-  color: #ff8541;
-  margin-bottom: 1em;
-  text-shadow: -1px 2px 2px #777777;
-}
-#content h2 { font-size: 1.3em; }
 .game-header {
-  background-color: #000000;
+  background-color: #000;
   background-image: url("/media/images/banners/quake-banner.jpg");
   background-repeat: no-repeat;
   height: 150px;
@@ -225,14 +338,14 @@ h3 { font-size: 21px; }
   height: 50px;
   left: 0;
   right: 0;
-  background-color: #222222;
-  opacity: 0.8;
+  background-color: #222;
+  opacity: .8;
   bottom: 0px;
   font-size: 25px;
   line-height: 50px;
 }
 .game-header h1 a {
-  color: #ededed;
+  color: #EDEDED;
   text-decoration: none;
 }
 .game-header h1 img {
@@ -244,74 +357,70 @@ h3 { font-size: 21px; }
   margin: 10px;
   padding: 10px;
   width: 620px;
-  border: 1px solid #333333;
+  border: 1px solid #333;
   float: left;
 }
 .game-info {
   padding: 10px;
   margin: 10px;
-  border: 1px solid #333333;
+  border: 1px solid #333;
   width: 235px;
   float: left;
-  font-size: 0.7em;
-  color: #dddddd;
+  font-size: .7em;
+  color: #DDD;
 }
 .game-info strong {
-  margin-top: 0.5em;
+  margin-top: .5em;
   display: block;
   font-weight: bold;
-  color: #cccccc;
+  color: #CCC;
   font-size: 1.1em;
 }
-.game-info a { color: #dddddd; }
+.game-info a {
+  color: #DDD;
+}
+/* == Blocks */
 .base-block {
   margin: 15px;
   padding: 15px;
-  border: 1px solid #222222;
+  border: 1px solid #222;
   background: #000000;
-  filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end')");
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end');
   background: -webkit-gradient(linear, left top, left bottom, from(#222222), to(#000000));
   background: -moz-linear-gradient(top, #222222, #000000);
 }
+/* == Forms */
 .base-form label {
   display: block;
-  color: #dddddd;
-  font-size: 0.9em;
+  color: #DDD;
+  font-size: .9em;
   line-height: 1.6em;
 }
-.base-form .form-row { display: block; }
-.base-form input[type=text] {
-  color: #444444;
-  border: 2px solid #444444;
-  background-color: #aaaaaa;
+.base-form .form-row {
+  display: block;
+}
+.base-form input[type=text], .base-form input[type=password] {
+  color: #444;
+  border: 2px solid #444;
+  background-color: #AAA;
   margin-bottom: 1em;
-  padding: 3px 0;
+  padding: 5px;
   width: 100%;
 }
-.base-form input[type=password] {
-  color: #444444;
-  border: 2px solid #444444;
-  background-color: #aaaaaa;
-  margin-bottom: 1em;
-  padding: 3px 0;
-  width: 100%;
-}
-.base-form input[type=submit] {
+.base-form input[type=submit], .base-form input[type=button] {
   border-radius: 4px;
-  border: 1px solid #ff9400;
-  color: #ff9400;
+  border: 1px solid #FF9400;
+  color: #FF9400;
   padding: 5px;
 }
-.base-form input[type=button] {
-  border-radius: 4px;
-  border: 1px solid #ff9400;
-  color: #ff9400;
-  padding: 5px;
+.base-form .errorlist {
+  color: red;
 }
-.base-form .errorlist { color: red; }
-.base-form .errorlist li { list-style-type: none; }
+.base-form .errorlist li {
+  list-style-type: none;
+}
 .big-button {
-  color: #ffffff;
+  color: #FFFFFF;
   border-color: #a84300;
   background-color: #fc6500;
   padding: 15px;
@@ -320,33 +429,44 @@ h3 { font-size: 21px; }
   text-align: center;
   width: 160px;
   -moz-border-radius: 15px;
+  /*
+    -webkit-gradient: (linear, left bottom,left top,color-stop(0.45, rgb(148,30,12)), color-stop(0.74, rgb(219,139,48)), color-stop(0.94, rgb(255,195,161)));
+    -moz-linear-gradient: (center bottom, rgb(148,30,12) 45%, rgb(219,139,48) 74%, rgb(255,195,161) 94%);
+    */
+
   margin: 20px 10px;
-  border: 2px solid #c85000;
+  border: 2px solid #C85000;
   text-decoration: none;
 }
 .breadcrumb a {
-  color: #aaaaaa;
+  color: #AAA;
   font-weight: bold;
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: .9em;
 }
 .game_list_element {
-  border: 1px solid #333333;
+  border: 1px solid #333;
   padding: 10px;
   height: 148px;
 }
 .game_list_element a {
-  color: #dddddd;
+  color: #DDD;
   text-decoration: none;
 }
-.game_list_element .game-title { font-size: 1.3em; }
+.game_list_element .game-title {
+  font-size: 1.3em;
+}
 .game_list_element .logo {
   float: left;
   vertical-align: top;
   margin-right: 20px;
 }
-.game_list_element .info { font-size: 0.8em; }
-.download-pane { margin: 140px 40px; }
+.game_list_element .info {
+  font-size: .8em;
+}
+.download-pane {
+  margin: 140px 40px;
+}
 .download-pane h1 {
   font-size: 2em;
   font-weight: bolder;
@@ -356,7 +476,7 @@ h3 { font-size: 21px; }
   font-size: 0.7em;
 }
 .download-pane h2 {
-  color: #aaaaaa;
+  color: #AAA;
   font-style: italic;
 }
 .download-pane li {

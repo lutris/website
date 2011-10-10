@@ -14,15 +14,16 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'lutris'
-DATABASE_USER = 'root'
-if socket.gethostname() == 'astoria':
-    DATABASE_PASSWORD = 'admin'
-else:
-    DATABASE_PASSWORD = 'admin'
-DATABASE_HOST = ''
-DATABASE_PORT = ''
+DATABASES = {
+    'default': {
+        'ENGINE' : 'django.db.backends.mysql',
+        'NAME': 'lutris',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': '',
+        'PORT': ''
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -36,7 +37,7 @@ TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
-
+SERVER_NAME = "lutris.net"
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -83,10 +84,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'registration',
     'lutrisweb.static',
     'lutrisweb.games',
-    'lutrisweb.accounts'
+    'lutrisweb.accounts',
 )
-
+ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL="/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
+
+# Sending email
+
+# Default email backend to use in production.
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# File based backend for development environment.
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "/tmp/django-emails/"
+DEFAULT_FROM_EMAIL = "admin@lutris.net"
+EMAIL_SUBJECT_PREFIX = "[Lutris] "

@@ -10,9 +10,7 @@ urlpatterns = patterns('',
     (r'^about$', direct_to_template, {'template': 'static/about.html'}),
     (r'^download/', direct_to_template, {'template': 'static/download.html'}),
     (r'^games/', include('lutrisweb.games.urls')),
-    (r'^login/', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
-    (r'^logout/', 'django.contrib.auth.views.logout', {'template_name': 'index.html'}),
-    (r'^register/$', 'accounts.views.register'),
+    (r'^accounts/', include('registration.backends.default.urls')),
     (r'^admin/', include(admin.site.urls)),
 )
 

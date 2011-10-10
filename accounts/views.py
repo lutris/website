@@ -20,3 +20,5 @@ def register(request):
         }, context_instance=RequestContext(request)
     )
     
+#def login_or_register(request):
+    
