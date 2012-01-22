@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append('/home/strider/sites/djangoprojects')
+sys.path.append('/srv/django')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'lutrisweb.settings'
 

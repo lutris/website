@@ -47,7 +47,7 @@ pre, code, kbd, samp, tt {
   *font-size: 108%;
   line-height: 100%;
 }
-.body { color: #ffffff; }
+.body { color: #DEDEDE; }
 .page {
   margin: 0 auto;
   width: 950px;
@@ -170,7 +170,7 @@ h3 { font-size: 21px; }
 }
 .nav_menu li { float: left; }
 .nav_menu li a {
-  color: #ffffff;
+  color: #EEE;
   display: block;
   padding: 20px 15px;
   font-size: 1.1em;
@@ -181,7 +181,7 @@ h3 { font-size: 21px; }
   width: 950px;
   font-size: 1.2em;
   background: #000000;
-  color: #ffffff;
+  color: #DEDEDE;
 }
 #content p { padding: 20px; }
 #content li {
@@ -304,7 +304,7 @@ h3 { font-size: 21px; }
 }
 .login_form .form_row { padding: 4px; }
 .big-button {
-  color: #ffffff;
+  color: #EEE;
   border-color: #a84300;
   background-color: #fc6500;
   padding: 15px;
@@ -356,4 +356,10 @@ h3 { font-size: 21px; }
   list-style-type: square;
   font-size: 0.8em;
   line-height: 1.8em;
+}
+
+
+a {
+    color: #DDD;
+    font-weight: bolder;
 }

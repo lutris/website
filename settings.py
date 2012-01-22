@@ -3,7 +3,7 @@
 import os
 import socket
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 STATIC_SERVE = True
 
@@ -14,15 +14,12 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'lutris'
-DATABASE_USER = 'root'
-if socket.gethostname() == 'astoria':
-    DATABASE_PASSWORD = 'admin'
-else:
-    DATABASE_PASSWORD = 'admin'
-DATABASE_HOST = ''
-DATABASE_PORT = ''
+DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = 'lutris'             # Or path to database file if using sqlite3.
+DATABASE_USER = 'lutris'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'lutrisweb'
+DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -33,16 +30,16 @@ TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+language_code = 'en-us'
 
 SITE_ID = 1
 
-# If you set this to False, Django will make some optimizations so as not
+# if you set this to false, django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
+# absolute path to the directory that holds media.
+# example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
