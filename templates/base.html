@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>
-        <meta charset="utf-8"> 
+        <meta charset="utf-8">
         <meta name="author" content="Mathieu Comandon">
         <title>Lutris : Play video games on Linux easily</title>
         <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
@@ -27,6 +27,12 @@
               <!--<li><a href="/games">Games</a></li>-->
               <li><a href="https://launchpad.net/lutris">Contribute</a></li>
               <li><a href="http://lutris.net/blog">Blog</a></li>
+              {% if user.is_authenticated %}
+              <li><a href="/accounts/logout/">Logout</a></li>
+              {% else %}
+              <li><a href="/accounts/login/">Login</a></li>
+              <li><a href="/accounts/register">Register</a></li>
+              {% endif %}
             </ul>
           </div>
           <div class="unit size1of4 lastUnit">

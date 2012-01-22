@@ -1,0 +1,15 @@
+protocol: 1
+version: warsow-0.62
+name: Warsow
+description: Warsow is a completely free fastpaced first-person shooter (FPS) set in a futuristic cartoon-like world
+runner: linux
+exe: warsow-686
+exe64: warsow-x64
+
+files:
+  - full061: http://www.zcdn.org/dl/warsow_0.61_unified.zip
+  - update062: http://www.zcdn.org/dl/warsow_0.62_update.zip
+
+installer:
+  - extract: { file: full061, destination: cache }
+  - extract: { file: update062, destination: cache }

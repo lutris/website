@@ -33,8 +33,13 @@ TIME_ZONE = 'America/Chicago'
 language_code = 'en-us'
 
 SITE_ID = 1
+<<<<<<< TREE
 
 # if you set this to false, django will make some optimizations so as not
+=======
+SERVER_NAME = "lutris.net"
+# If you set this to False, Django will make some optimizations so as not
+>>>>>>> MERGE-SOURCE
 # to load the internationalization machinery.
 USE_I18N = True
 
@@ -80,6 +85,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'registration',
     'lutrisweb.static',
     'lutrisweb.games',
+    'lutrisweb.accounts',
 )
+ACCOUNT_ACTIVATION_DAYS = 3
+LOGIN_REDIRECT_URL="/"
+AUTH_PROFILE_MODULE = "accounts.Profile"
+
+# Sending email
+
+# Default email backend to use in production.
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# File based backend for development environment.
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "/tmp/django-emails/"
+DEFAULT_FROM_EMAIL = "admin@lutris.net"
+EMAIL_SUBJECT_PREFIX = "[Lutris] "

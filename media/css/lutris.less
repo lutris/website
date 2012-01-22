@@ -1,16 +1,11 @@
-/*
-Copyright (c) 2008, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 3.0.0pr2
-*/
 /* reset */
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+a:active { outline: 0; }
 /* fonts */
 body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
-/* **************** TEMPLATE ***************** */
-/* ====== Page Head, Body, and Foot ====== */
+
+/* == Template  */
 body{/*_text-align:center;*/}/* IE5.5 */
 .body{color: #FFF;}
 .page{margin: 0 auto; width: 950px;/*_text-align:left;*/} /* wraps other template elems to set width */ /* text-align IE5.5 */
@@ -18,7 +13,7 @@ body{/*_text-align:center;*/}/* IE5.5 */
 .oldSchool{width:750px;}
 .gs960{width:960px;}
 .liquid{extends:.page; width: auto;margin:0;}
-/* ====== Columns ====== */
+/* == Columns */
 .main{overflow: hidden;_overflow:visible;_zoom:1;}
 .leftCol{float:left; width:250px;_margin-right:-3px;}
 .rightCol{float:right; width: 300px;_margin-left:-3px;}
@@ -28,7 +23,7 @@ body{/*_text-align:center;*/}/* IE5.5 */
 .yahoo{width:240px;}
 .myYahoo{width:300px;}
 
-/* **************** GRIDS ***************** */
+/* ==  Grids */
 .line:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
 .lastUnit:after{content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";visibility:hidden; clear:both;height:0 !important;display:block;line-height:0;}
 .line{*zoom:1;}
@@ -60,21 +55,49 @@ body{/*_text-align:center;*/}/* IE5.5 */
 .centered {
     text-align: center;
 }
+
+/* == Functions */
+.rounded-corners (@radius: 5px) {
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.rounded-top (@radius: 5px) {
+    -moz-border-radius: @radius @radius 0 0;
+    -webkit-border-radius: @radius @radius 0 0;
+    border-radius: @radius @radius 0 0;
+}
+
+.inset-shadow(@color: #ddd, @offset: -1px) {
+    -moz-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+    -webkit-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+    box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+}
+
+.top-down-gradient(@gradient-start: #555, @gradient-end: #EEE) {
+    background: @gradient-end;
+    filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end')");
+    background: -webkit-gradient(linear, left top, left bottom, from(@gradient-start), to(@gradient-end));
+    background: -moz-linear-gradient(top,  @gradient-start,  @gradient-end);
+}
+
+
 .bodybg {
     height: 100%;
 	background: black url("/media/images/regular-body.png") repeat-x;
     z-index: -2;
 }
 h3 {
-    font-size: 21px;
+  font-size: 21px;
 }
 
 #logo_bg {
-    position: fixed;
-  	background: transparent url("/media/images/logo-body.png") no-repeat;
-    width: 350px;
-    height:1000px;
-    z-index: -1;
+  position: fixed;
+  background: transparent url("/media/images/logo-body.png") no-repeat;
+  width: 350px;
+  height:1000px;
+  z-index: -1;
 }
 #header {
     background-color: #000;
@@ -121,24 +144,21 @@ h3 {
     }
 }
 
+/* == Content */
 #content {
     width: 950px;
-    font-size: 1.2em;
+    font-size: 1em;
     background: #000;
-    color: #FFF;
-    p{
-        padding: 20px;
-    }
-    li {
-        list-style-type: square;
-        margin-left: 40px;
-        padding: 2px 10px;
-    }
-
+    color: #E0E0E0;
     h1, h2, h3, h4 {
-        font-weight: 400;
-        word-spacing: 10px;
-        color: #c30;
+        font-weight: normal;
+        word-spacing: .1em;
+        color: #FF8541;
+        margin-bottom: 1em;
+        text-shadow: -1px 2px 2px #777;
+    }
+    h2 {
+        font-size: 1.3em;
     }
 }
 .game-header {
@@ -196,44 +216,48 @@ h3 {
         color: #DDD;
     }
 }
-.login_form {
-    background-color: #D95E0C;
+/* == Blocks */
+.base-block {
+    margin: 15px;
     padding: 15px;
-    margin: 0 15px;
-    float: right;
-    -moz-border-radius-bottomleft: 10px;
-    -moz-border-radius-bottomright: 10px;
-    .form_title {
-        font-family: Times, serif;
-        font-style: italic;
-        float: none;
-        clear: both;
-        display: block;
-        margin-top:-20px;
-        color: #F6FBB9;
-        font-size: 2em;
-    }
+    border: 1px solid #222;
+    .top-down-gradient(#222,#000);
+}
 
+/* == Forms */
+.base-form {
+    label {
+        display: block;
+        color: #DDD;
+        font-size: .9em;
+        line-height: 1.6em;
+        
+    }
+    .form-row {
+        display: block;
+    }
     input[type=text], input[type=password] {
-        border: 2px solid #FF9400;
-        background-color:#F0E9D3;
-        color: #777;
-        height: 20px;
-        padding: 2px;
-        font-size: 1.2em;
+        color: #444;
+        border: 2px solid #444;
+        background-color: #AAA;
+        margin-bottom: 1em;
+        padding: 5px;
+        width: 100%;
     }
-    input[type=submit] {
-        border: 1px solid #EEEEEE ;
+    input[type=submit], input[type=button] {
+        border-radius: 4px;
+        border: 1px solid #FF9400;
         color: #FF9400;
-        background-color: #463E39;
-        font-size: 1.5em;
-        float: right;
-        padding: 3px 7px;
+        padding: 5px;
     }
-    .form_row {
-        padding: 4px;
+    .errorlist {
+        color: red;
+        li {
+            list-style-type: none;
+        }
     }
 }
+
 
 
 .big-button {
@@ -253,7 +277,7 @@ h3 {
     margin: 20px 10px;
     border: 2px solid #C85000;
     text-decoration: none;
-    }
+}
 .breadcrumb {
     a {
         color: #AAA;

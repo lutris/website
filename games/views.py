@@ -1,7 +1,6 @@
 from django.http import Http404
 from django.views.generic import list_detail
 from django.template.context import RequestContext
-#from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from lutrisweb.games.models import Game, Runner, Genre, Platform, Company
 
@@ -101,3 +100,5 @@ def games_by_platform(request, platform_slug):
             template_object_name = 'games',
             extra_context = {'platform': platform}
     )
+
+

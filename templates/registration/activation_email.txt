@@ -1,0 +1,7 @@
+Welcome to lutris.net
+
+You can now activate your account by clicking the link below:
+
+http://{{ site }}/activate/{{ activation_key }}
+
+This link will expire in {{ expiration_days }} days.
