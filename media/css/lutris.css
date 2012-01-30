@@ -93,6 +93,7 @@ body {
   font: 13px/1.231 arial, helvetica, clean, sans-serif;
   *font-size: small;
   *font: x-small;
+  background-color: #000;
 }
 select,
 input,
@@ -113,14 +114,14 @@ tt {
   *font-size: 108%;
   line-height: 100%;
 }
-.body { color: #DEDEDE; }
+/* == Template  */
+.body {
+  color: #FFF;
+}
 .page {
   margin: 0 auto;
   width: 950px;
-  /*_text-align:left;*/
 }
-/* wraps other template elems to set width *//* text-align IE5.5 */
-/* "old school" and "liquid" extend page to allow for different page widths */
 .oldSchool {
   width: 750px;
 }
@@ -132,7 +133,6 @@ tt {
   width: auto;
   margin: 0;
 }
-/* == Columns */
 .main {
   overflow: hidden;
   _overflow: visible;
@@ -149,18 +149,6 @@ tt {
   _margin-left: -3px;
 }
 /* extend columns to allow for common column widths */
-.gMail {
-  width: 160px;
-}
-.gCal {
-  width: 180px;
-}
-.yahoo {
-  width: 240px;
-}
-.myYahoo {
-  width: 300px;
-}
 /* ==  Grids */
 .line:after {
   content: ".";
@@ -226,7 +214,6 @@ tt {
 .clearfix {
   display: inline-block;
 }
-/* for IE/Mac */
 .clearfix:after {
   content: ".";
   display: block;
@@ -241,83 +228,76 @@ tt {
   text-align: center;
 }
 /* == Functions */
-.bodybg {
-  height: 100%;
-  background: black url("/media/images/regular-body.png") repeat-x;
-  z-index: -2;
-}
 h3 {
   font-size: 21px;
 }
-#logo_bg {
-  position: fixed;
-  background: transparent url("/media/images/logo-body.png") no-repeat;
-  width: 350px;
-  height: 1000px;
-  z-index: -1;
+.container {
+  width: 1020px;
+  margin: auto;
 }
-#header {
-  background-color: #000;
+header {
+  background-color: #333;
   width: 100%;
-  height: 100px;
+  height: 80px;
+  border-bottom: 1px solid #888;
+  box-shadow: 0 1px 8px #888;
+  margin-bottom: 5px;
 }
-#header .logo {
-  padding: 0px 15px;
-  float: left;
+header .title {
+  font-size: 1.43em;
+  color: #AAA;
+  display: table-cell;
+  width: 400px;
+  padding: 10px;
+}
+header .title .logo {
+  padding: 0 15px;
+  display: inline;
   vertical-align: middle;
 }
-#header .title {
-  font-size: 1.53em;
-  padding-top: 1em;
-  color: #AAA;
-  float: left;
+header .title h1 {
+  display: inline-block;
 }
-#header .title a {
+header .title h1 a {
   color: #AAA;
   font-weight: bolder;
   text-decoration: none;
   outline: none;
 }
-#header .tagline {
+header .title h1 .tagline {
   font-style: italic;
   font-size: 0.7em;
-}
-.nav_menu {
-  float: right;
-  padding-right: 10px;
-}
-.nav_menu li {
-  float: left;
-}
-.nav_menu li a {
-  color: #EEE;
   display: block;
-  padding: 20px 15px;
+  clear: both;
+}
+.nav-menu {
+  display: table-cell;
+}
+.nav-menu li {
+  display: table-cell;
+  height: 80px;
+  vertical-align: middle;
+}
+.nav-menu li:hover {
+  background: #888888;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end');
+  background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#888888));
+  background: -moz-linear-gradient(top, #333333, #888888);
+}
+.nav-menu li:hover a {
+  color: #EEE;
+  text-shadow: 0 0 2px #EEE;
+}
+.nav-menu li a {
+  color: #CCC;
+  padding: 10px 15px;
   font-size: 1.1em;
   text-decoration: none;
 }
-.nav_menu li a :hover {
-  background-color: #666;
-}
 /* == Content */
 #content {
-  width: 950px;
-  font-size: 1.2em;
-  background: #000000;
-  color: #DEDEDE;
-}
-#content p { padding: 20px; }
-#content li {
-  list-style-type: square;
-  margin-left: 40px;
-  padding: 2px 10px;
-}
-#content h1 {
-  font-weight: 400;
-  word-spacing: 10px;
-  color: #cc3300;
+  width: 1020px;
   font-size: 1em;
-  background: #000;
   color: #E0E0E0;
 }
 #content h1,
@@ -427,7 +407,7 @@ h3 {
   list-style-type: none;
 }
 .big-button {
-  color: #EEE;
+  color: #FFFFFF;
   border-color: #a84300;
   background-color: #fc6500;
   padding: 15px;
@@ -490,10 +470,4 @@ h3 {
   list-style-type: square;
   font-size: 0.8em;
   line-height: 1.8em;
-}
-
-
-a {
-    color: #DDD;
-    font-weight: bolder;
 }

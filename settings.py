@@ -3,23 +3,27 @@
 import os
 import socket
 
-DEBUG = False
+from os.path import join
+
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 STATIC_SERVE = True
+USE_VOGUE = True
 
 ADMINS = (
-     ('Mathieu Comandon', 'strycore@gmail.com'),
+     ('Mathieu Comandon', 'strider@strycore.com'),
 )
+
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE' : 'django.db.backends.mysql',
-        'NAME': 'lutris',
-        'USER': 'lutris',
-        'PASSWORD': 'lutrisweb',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': join(PROJECT_PATH, 'lutris.db'),
+        'USER': '',
+        'PASSWORD': '',
         'HOST': '',
         'PORT': ''
     }
@@ -37,13 +41,8 @@ TIME_ZONE = 'America/Chicago'
 language_code = 'en-us'
 
 SITE_ID = 1
-<<<<<<< TREE
-
-# if you set this to false, django will make some optimizations so as not
-=======
 SERVER_NAME = "lutris.net"
 # If you set this to False, Django will make some optimizations so as not
->>>>>>> MERGE-SOURCE
 # to load the internationalization machinery.
 USE_I18N = True
 
@@ -90,12 +89,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'registration',
-    'lutrisweb.static',
     'lutrisweb.games',
     'lutrisweb.accounts',
 )
 ACCOUNT_ACTIVATION_DAYS = 3
-LOGIN_REDIRECT_URL="/"
+LOGIN_REDIRECT_URL = "/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
 # Sending email

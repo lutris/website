@@ -9,43 +9,41 @@
         <link type="text/css" href="/media/css/lutris.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width">
     </head>
-    <body class="body bodybg">
-      <div id="logo_bg"></div>
-      <div class='page'>
-        <div id="header" class="line">
-          <div class='title size1of2'>
-            <img class='logo' src='/media/images/logo.png' alt='Lutris'/>
-              <a href='/' >Lutris</a>
-              <h2 class='tagline'>The universal gaming platform for GNU/Linux</h2>
-          </div>
-          <div class='unit size1of2'>
-            <ul class='nav_menu'>
-              <li><a href="/">Home</a></li>
-              <li><a href='/about'>About</a></li>
-              <li><a href="/download">Get Lutris</a></li>
-              <!--Coming soon ;) -->
-              <!--<li><a href="/games">Games</a></li>-->
-              <li><a href="https://launchpad.net/lutris">Contribute</a></li>
-              <li><a href="http://lutris.net/blog">Blog</a></li>
-              {% if user.is_authenticated %}
-              <li><a href="/accounts/logout/">Logout</a></li>
-              {% else %}
-              <li><a href="/accounts/login/">Login</a></li>
-              <li><a href="/accounts/register">Register</a></li>
-              {% endif %}
-            </ul>
-          </div>
-          <div class="unit size1of4 lastUnit">
-            &nbsp;
-          </div>
+    <body>
+        <header id="header" class="line">
+            <div class="container">
+                <div class='title'>
+                    <img class='logo' src='/media/images/logo.png' alt='Lutris'/>
+                    <h1>
+                        <a href='/' >
+                            Lutris
+                            <span class='tagline'>
+                                The universal gaming platform for GNU/Linux
+                            </span>
+                        </a>
+                    </h1>
+                </div>
+                <ul class='nav-menu'>
+                    <li><a href="/">Home</a></li>
+                    <li><a href='/about'>About</a></li>
+                    <li><a href="/download">Get Lutris</a></li>
+                    <!--Coming soon ;) -->
+                    <!--<li><a href="/games">Games</a></li>-->
+                    <li><a href="https://launchpad.net/lutris">Contribute</a></li>
+                    <li><a href="http://lutris.net/blog">Blog</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/accounts/logout/">Logout</a></li>
+                    {% else %}
+                        <li><a href="/accounts/login/">Login</a></li>
+                        <li><a href="/accounts/register">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </header>
+        <div id="content" class="page container">
+            {% block content %}
+            {% endblock %}
         </div>
-        <div id="content" class="clearfix">
-                {% block content %}
-                {% endblock %}
-        </div>
-      <div id='footer'>
-      </div>
-      </div>
     </body>
 </html>
 

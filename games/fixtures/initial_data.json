@@ -1,0 +1,156 @@
+[
+  {
+    "pk": 1,
+    "model": "games.platform",
+    "fields": {
+      "icon": "",
+      "name": "Windows",
+      "slug": "windows"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "games.platform",
+    "fields": {
+      "icon": "",
+      "name": "Linux",
+      "slug": "linux"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "games.platform",
+    "fields": {
+      "icon": "",
+      "name": "Playstation",
+      "slug": "playstation"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "games.company",
+    "fields": {
+      "website": "",
+      "logo": "",
+      "name": "id Software",
+      "slug": "id-software"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "games.company",
+    "fields": {
+      "website": "",
+      "logo": "",
+      "name": "GT Interactive",
+      "slug": "gt-interactive"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "games.company",
+    "fields": {
+      "website": "http://ea.com",
+      "logo": "company_logos/200px-Ealogo.svg.png",
+      "name": "Electronic Arts",
+      "slug": "electronic-arts"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "games.runner",
+    "fields": {
+      "website": "http://kernel.org",
+      "icon": "runner_icons/linux.png",
+      "name": "linux",
+      "slug": "linux"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "games.runner",
+    "fields": {
+      "website": "http://winehq.org",
+      "icon": "",
+      "name": "wine",
+      "slug": "wine"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "games.runner",
+    "fields": {
+      "website": "http://pcsxr.codeplex.com/",
+      "icon": "",
+      "name": "pcsx",
+      "slug": "pcsx"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "games.runner",
+    "fields": {
+      "website": "http://redmine.strycore.com/projects/o2em",
+      "icon": "",
+      "name": "o2em",
+      "slug": "o2em"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "games.genre",
+    "fields": {
+      "name": "First Person Shooter",
+      "slug": "fps"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "games.genre",
+    "fields": {
+      "name": "Action",
+      "slug": "action"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "games.genre",
+    "fields": {
+      "name": "Adventure",
+      "slug": "adventure"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "games.genre",
+    "fields": {
+      "name": "Real time strategy",
+      "slug": "rts"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "games.genre",
+    "fields": {
+      "name": "Racing",
+      "slug": "racing"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "games.game",
+    "fields": {
+      "website": "http://www.idsoftware.com/games/quake/quake/",
+      "publisher": null,
+      "name": "Quake",
+      "runner": 1,
+      "description": "",
+      "cover": "",
+      "year": 1996,
+      "genre": 1,
+      "icon": "game_icons/quake.png",
+      "slug": "quake",
+      "developer": null
+    }
+  }
+]
