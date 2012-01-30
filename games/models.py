@@ -66,6 +66,8 @@ class Game(models.Model):
     icon = models.ImageField(upload_to='game_icons', blank=True)
     cover = models.ImageField(upload_to='game_covers', blank=True)
     description = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.name

@@ -19,7 +19,7 @@ class GameAdmin(BaseAdmin):
 
 class RunnerAdmin(BaseAdmin):
     prepopulated_fields = {'slug': ('name',)}
-    
+
 
 class CompanyAdmin(BaseAdmin):
     prepopulated_fields = {'slug': ('name',)}
