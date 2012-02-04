@@ -1,11 +1,14 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext as _
-import os
+
 
 def generate_installer_name(instance, filename):
     return os.path.join('installers', instance.slug + ".yml")
+
 
 class Platform(models.Model):
     name = models.CharField(_('Name'), max_length=127)
@@ -14,6 +17,7 @@ class Platform(models.Model):
 
     def __unicode__(self):
         return "%s" % self.name
+
 
 class Company(models.Model):
     name = models.CharField(_('Name'), max_length=127)
@@ -27,6 +31,7 @@ class Company(models.Model):
     def __unicode__(self):
         return "%s" % self.name
 
+
 class Runner(models.Model):
     '''Model definition for the runners.'''
     name = models.CharField(_("Name"), max_length=127)
@@ -37,11 +42,13 @@ class Runner(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class RunnerPlatform(models.Model):
     '''Model to associate runners and platforms.'''
     runner = models.ForeignKey(Runner)
     platform = models.ForeignKey(Platform)
     notes = models.TextField(blank=True)
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
@@ -50,11 +57,12 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Game(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     runner = models.ForeignKey(Runner, null=True, blank=True)
-    year = models.IntegerField(null=True)
+    year = models.IntegerField(null=True, blank=True)
     genre = models.ForeignKey(Genre, null=True, blank=True)
     publisher = models.ForeignKey(Company,
             related_name='published_game',
@@ -75,10 +83,10 @@ class Game(models.Model):
     def get_absolute_url(self):
         return "/games/%s" % self.slug
 
+
 class Installer(models.Model):
     game = models.ForeignKey(Game)
     slug = models.SlugField(unique=True)
     user = models.ForeignKey(User)
     version = models.CharField(max_length=32)
     install_file = models.FileField(upload_to=generate_installer_name)
-

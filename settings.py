@@ -90,7 +90,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'registration',
     'lutrisweb.games',
-    'lutrisweb.accounts',
 )
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"

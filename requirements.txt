@@ -1,3 +1,4 @@
+PyYAML
 django
-MySQL-python
+PIL
 django-registration
