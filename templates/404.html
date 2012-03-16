@@ -1,10 +1,8 @@
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-    <title>Oops, content not found</title>
-</head>
-<body>
-    <h1 id="title">404 Error, content not found</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}
+<title>Oops, content not found</title>
+{% endblock %}
+{% block content %}
+<h1 id="title">404 Error, content not found</h1>
+<p>Sorry, but the requested page could not be found.</p>
+{% endblock %}

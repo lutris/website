@@ -76,21 +76,6 @@ def games_by_developer(request, developer_slug):
     )
 
 
-def games_by_company(request, company_slug):
-    try:
-        company = Company.objects.get(slug=developer_slug)
-    except:
-        raise Http404
-
-    return list_detail.object_list(
-            request,
-            queryset=Game.objects.filter(developer=company),
-            template_name="games/game_list.html",
-            template_object_name='games',
-            extra_context={'developer': company}
-    )
-
-
 def games_by_platform(request, platform_slug):
     try:
         platform = Platform.objects.get(slug=platform_slug)

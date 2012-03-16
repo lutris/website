@@ -1,8 +1,5 @@
-
-# Django settings for lutrisweb project.
 import os
 import socket
-
 from os.path import join
 
 DEBUG = True
@@ -10,12 +7,11 @@ TEMPLATE_DEBUG = DEBUG
 STATIC_SERVE = True
 USE_VOGUE = True
 
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 ADMINS = (
      ('Mathieu Comandon', 'strider@strycore.com'),
 )
-
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-
 MANAGERS = ADMINS
 
 DATABASES = {

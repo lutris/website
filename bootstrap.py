@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-import os,sys,parser, subprocess
+import os
+import sys
+import parser
+import subprocess
 
 if "VIRTUAL_ENV" not in os.environ:
     sys.stderr.write("$VIRTUAL_ENV not found.\n\n")
