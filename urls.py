@@ -1,19 +1,19 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template, redirect_to
+from django.views.generic import TemplateView, RedirectView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', direct_to_template, {'template': 'index.html'}),
-    (r'^about$', direct_to_template, {'template': 'static/about.html'}),
-    (r'^download/', direct_to_template, {'template': 'static/download.html'}),
-    (r'^games/', include('games.urls')),
-    (r'^accounts/', include('registration.urls')),
+    (r'^$', TemplateView.as_view(template_name='index.html')),
+    (r'^about$', TemplateView.as_view(template_name='static/about.html')),
+    (r'^download/', TemplateView.as_view(template_name='static/download.html')),
+    #(r'^games/', include('games.urls')),
+    #(r'^accounts/', include('registration.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^robots\.txt$', direct_to_template, {'template': 'robots.txt', 'mimetype': 'text/plain'},),
-    (r'^favicon\.ico$', redirect_to, {'url': '/media/images/favicon.ico'}),
+    (r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt')),
+    (r'^favicon\.ico$', RedirectView(url='/media/images/favicon.ico')),
 )
 
 if settings.STATIC_SERVE:

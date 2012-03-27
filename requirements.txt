@@ -1,4 +1,4 @@
 PyYAML
-django
+django==1.4
 PIL
 django-registration
