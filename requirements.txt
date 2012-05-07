@@ -1,4 +1,4 @@
-PyYAML
 django
 PIL
-django-registration
+-e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
+#django-profiles

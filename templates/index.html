@@ -3,13 +3,13 @@
 <div class="line">
   <div class="unit size3of5">
     <div class='spaced'>
-      <img class='spaced' src='/media/images/preview.png' />
+      <img class='spaced' src='{{ STATIC_URL }}images/preview.png' />
     </div>
   </div>
   <div class='unit lastUnit size2of5'>
     <div class='spaced download-pane'>
       <h1>Lutris <em>0.2.6</em></h1>
-      <a class="big-button" href='/download'>Download it now</a>
+      <a class="big-button" href='{% url download %}'>Download it now</a>
       <h2>Features</h2>
       <ul>
         <li>Supports thousands of games</li>
