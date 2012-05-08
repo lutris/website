@@ -2,7 +2,7 @@ from django.http import Http404
 from django.views.generic import list_detail
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
-from games.models import Game, Runner, Genre, Platform, Company
+from models import Game, Runner, Genre, Platform, Company
 
 
 def games_all(request):

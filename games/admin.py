@@ -1,5 +1,4 @@
-from lutrisweb.games.models import Game, Genre, Runner, \
-                                   Platform, Company, Installer
+from models import Game, Genre, Runner, Platform, Company, Installer
 from django.contrib import admin
 
 
