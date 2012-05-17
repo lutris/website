@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>New installer for {{ game }}</h1>
+<form action="" method="post" class="well">
+  {% csrf_token %}
+  {% for field in field %}
+     {{ field.errors }}
+  {% endfor %}
+  {{ form.non_field_errors }}
+  {{ form.as_p }}
+  <input type="submit" />
+</form>
+{% endblock %}

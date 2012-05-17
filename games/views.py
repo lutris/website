@@ -3,8 +3,10 @@
 from django.http import Http404
 from django.views.generic import list_detail
 from django.template.context import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
+from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, Company
+from games.forms import InstallerForm
 #pylint: disable=E1101
 
 
@@ -22,6 +24,39 @@ def game_detail(request, slug):
     game = Game.objects.get(slug=slug)
     return render_to_response('games/detail.html', {
         "game": game,
+        }, context_instance=RequestContext(request)
+    )
+
+
+@login_required
+def write_installer(request, slug):
+    try:
+        game = Game.objects.get(slug=slug)
+    except Game.DoesNotExist:
+        raise Http404
+    form = InstallerForm()
+    if request.method == 'POST':
+        form = InstallerForm(request.POST)
+        if form.is_valid():
+            installer = form.save(commit=False)
+            installer.game_id = game.id
+            installer.user_id = request.user.id
+            installer.save()
+
+            return redirect("installer_complete", slug=game.slug)
+    return render_to_response('games/new-installer.html', {
+        'form': form, 'game': game
+        }, context_instance=RequestContext(request)
+    )
+
+
+def installer_complete(request, slug):
+    try:
+        game = Game.objects.get(slug=slug)
+    except Game.DoesNotExist:
+        raise Http404
+    return render_to_response('games/installer-complete.html', {
+        'game': game
         }, context_instance=RequestContext(request)
     )
 

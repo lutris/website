@@ -21,7 +21,10 @@
     </div>
     <div class="span3">
       <div class="game-info">
-        <img src="{{ STATIC_URL }}images/covers/quake.jpg" />
+        {% thumbnail game.cover "220" as img %}
+        <img src="{{ img.url }}" />
+        {% endthumbnail %}
+
         <strong>Genre: </strong>
         {{ game.genre }}
         <strong>Platform: </strong>
@@ -40,7 +43,14 @@
   <p>
     {{ game.description }}
   </p>
-  {% if game.installer %}
-    <a href='lutris://{{ game.slug}}'>Install</a>
-  {% endif %}
+  {% url new_installer slug=game.slug as installer_url %}
+  {% for installer in game.installer_set.all %}
+    <a href='lutris:{{ installer.slug }}' class="btn btn-inverse btn-large">Install</a>
+    {% if forloop.last %}
+      or <a href="{{ installer_url }}">Write a new one</a>
+    {% endif %}
+  {% empty %}
+    Oh noes! No installer has been written for this game. 
+    Why don't you <a href="{{ installer_url }}">write one</a> ?
+  {% endfor %}
 {% endblock %}

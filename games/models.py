@@ -1,14 +1,8 @@
 """Models for main lutris app"""
-import os
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-
-
-def generate_installer_name(instance):
-    """Return the path to installer file"""
-    return os.path.join('installers', instance.slug + ".yml")
+from django.template.defaultfilters import slugify
 
 
 class Platform(models.Model):
@@ -25,7 +19,7 @@ class Company(models.Model):
     """Gaming company"""
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)
-    logo = models.ImageField(upload_to='company_logos', blank=True)
+    logo = models.ImageField(upload_to='companies/logos', blank=True)
     website = models.CharField(max_length=128, blank=True)
 
     # pylint: disable=W0232, R0903
@@ -42,7 +36,7 @@ class Runner(models.Model):
     name = models.CharField(_("Name"), max_length=127)
     slug = models.SlugField(unique=True)
     website = models.CharField(_("Website"), max_length=127)
-    icon = models.ImageField(upload_to='runner_icons', blank=True)
+    icon = models.ImageField(upload_to='runners/icons', blank=True)
 
     def __unicode__(self):
         return self.name
@@ -107,7 +101,12 @@ class Screenshot(models.Model):
 class Installer(models.Model):
     """Game installer model"""
     game = models.ForeignKey(Game)
-    slug = models.SlugField(unique=True)
     user = models.ForeignKey(User)
+    slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
-    install_file = models.FileField(upload_to=generate_installer_name)
+    runner = models.ForeignKey(Runner)
+    content = models.TextField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.game.name + "-" + self.version)
+        super(Installer, self).save(*args, **kwargs)

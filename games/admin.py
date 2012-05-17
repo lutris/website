@@ -1,4 +1,5 @@
-from models import Game, Genre, Runner, Platform, Company, Installer
+"""Admin configuration for Lutris games"""
+from games.models import Game, Genre, Runner, Platform, Company, Installer
 from django.contrib import admin
 
 
