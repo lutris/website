@@ -1,317 +1,53 @@
-/* reset */
-body,
-div,
-dl,
-dt,
-dd,
-ul,
-ol,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-pre,
-code,
-form,
-fieldset,
-legend,
-input,
-textarea,
-p,
-blockquote,
-th,
-td {
-  margin: 0;
-  padding: 0;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-fieldset, img {
-  border: 0;
-}
-address,
-caption,
-cite,
-code,
-dfn,
-em,
-strong,
-th,
-var {
-  font-style: normal;
-  font-weight: normal;
-}
-li {
-  list-style: none;
-}
-caption, th {
-  text-align: left;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: 100%;
-  font-weight: normal;
-}
-q:before, q:after {
-  content: '';
-}
-abbr, acronym {
-  border: 0;
-  font-variant: normal;
-}
-sup {
-  vertical-align: text-top;
-}
-sub {
-  vertical-align: text-bottom;
-}
-input, textarea, select {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-}
-input, textarea, select {
-  *font-size: 100%;
-}
-legend {
-  color: #000;
-}
-a:active {
-  outline: 0;
-}
-/* fonts */
-body {
-  font: 13px/1.231 arial, helvetica, clean, sans-serif;
-  *font-size: small;
-  *font: x-small;
-  background-color: #000;
-}
-select,
-input,
-button,
-textarea {
-  font: 99% arial, helvetica, clean, sans-serif;
-}
-table {
-  font-size: inherit;
-  font: 100%;
-}
-pre,
-code,
-kbd,
-samp,
-tt {
-  font-family: monospace;
-  *font-size: 108%;
-  line-height: 100%;
-}
-/* == Template  */
-.body {
-  color: #FFF;
-}
-.page {
-  margin: 0 auto;
-  width: 950px;
-}
-.oldSchool {
-  width: 750px;
-}
-.gs960 {
-  width: 960px;
-}
-.liquid {
-  extends: .page;
-  width: auto;
-  margin: 0;
-}
-.main {
-  overflow: hidden;
-  _overflow: visible;
-  _zoom: 1;
-}
-.leftCol {
-  float: left;
-  width: 250px;
-  _margin-right: -3px;
-}
-.rightCol {
-  float: right;
-  width: 300px;
-  _margin-left: -3px;
-}
-/* extend columns to allow for common column widths */
-/* ==  Grids */
-.line:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-.lastUnit:after {
-  content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
-  visibility: hidden;
-  clear: both;
-  height: 0 !important;
-  display: block;
-  line-height: 0;
-}
-.line {
-  *zoom: 1;
-}
-.unit {
-  float: left;
-}
-.size1of1 {
-  float: none;
-}
-.size1of2 {
-  width: 50%;
-}
-.size1of3 {
-  width: 33.33333%;
-}
-.size2of3 {
-  width: 66.66666%;
-}
-.size1of4 {
-  width: 25%;
-}
-.size3of4 {
-  width: 75%;
-}
-.size1of5 {
-  width: 20%;
-}
-.size2of5 {
-  width: 40%;
-}
-.size3of5 {
-  width: 60%;
-}
-.size4of5 {
-  width: 80%;
-}
-.lastUnit {
-  display: table-cell;
-  *display: block;
-  *zoom: 1;
-  float: none;
-  _position: relative;
-  _left: -3px;
-  _margin-right: -3px;
-  width: auto;
-}
-.clearfix {
-  display: inline-block;
-}
-.clearfix:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-.spaced {
-  padding: 15px;
-}
-.centered {
-  text-align: center;
-}
 /* == Functions */
 h3 {
   font-size: 21px;
 }
-.container {
-  width: 1020px;
+/* == Tags */
+body {
+  background-color: #121212;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: normal;
+  word-spacing: .1em;
+  margin-bottom: 1em;
+  text-shadow: -1px 2px 2px #777777;
+  padding: 0 1em;
+}
+h2 {
+  font-size: 1.3em;
+}
+.navbar {
+  width: 940px;
   margin: auto;
 }
-header {
-  background-color: #333;
-  width: 100%;
-  height: 80px;
-  border-bottom: 1px solid #888;
-  box-shadow: 0 1px 8px #888;
-  margin-bottom: 5px;
-}
-header .title {
-  font-size: 1.43em;
-  color: #AAA;
-  display: table-cell;
-  width: 400px;
-  padding: 10px;
-}
-header .title .logo {
-  padding: 0 15px;
-  display: inline;
-  vertical-align: middle;
-}
-header .title h1 {
-  display: inline-block;
-}
-header .title h1 a {
-  color: #AAA;
-  font-weight: bolder;
-  text-decoration: none;
-  outline: none;
-}
-header .title h1 .tagline {
-  font-style: italic;
-  font-size: 0.7em;
-  display: block;
-  clear: both;
-}
-.nav-menu {
-  display: table-cell;
-}
-.nav-menu li {
-  display: table-cell;
-  height: 80px;
-  vertical-align: middle;
-}
-.nav-menu li:hover {
-  background: #888888;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end');
-  background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#888888));
-  background: -moz-linear-gradient(top, #333333, #888888);
-}
-.nav-menu li:hover a {
-  color: #EEE;
-  text-shadow: 0 0 2px #EEE;
-}
-.nav-menu li a {
-  color: #CCC;
-  padding: 10px 15px;
-  font-size: 1.1em;
-  text-decoration: none;
+.icon {
+  position: relative;
+  float: left;
+  top: -48px;
+  margin-right: 20px;
 }
 /* == Content */
 #content {
-  width: 1020px;
+  width: 940px;
   font-size: 1em;
   color: #E0E0E0;
 }
-#content h1,
-#content h2,
-#content h3,
-#content h4 {
-  font-weight: normal;
-  word-spacing: .1em;
-  color: #FF8541;
-  margin-bottom: 1em;
-  text-shadow: -1px 2px 2px #777777;
+.feature {
+  width: 400px;
+  height: 300px;
 }
-#content h2 {
-  font-size: 1.3em;
+.overlay {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #EEE;
+  padding: 5px;
+  position: relative;
+  line-height: 25px;
+  top: -25px;
+  white-space: nowrap;
 }
 .game-header {
   background-color: #000;
@@ -341,18 +77,12 @@ header .title h1 .tagline {
   opacity: 1;
 }
 .screenshots {
-  margin: 10px;
   padding: 10px;
-  width: 620px;
   border: 1px solid #333;
-  float: left;
 }
 .game-info {
   padding: 10px;
-  margin: 10px;
   border: 1px solid #333;
-  width: 235px;
-  float: left;
   font-size: .7em;
   color: #DDD;
 }
@@ -367,15 +97,6 @@ header .title h1 .tagline {
   color: #DDD;
 }
 /* == Blocks */
-.base-block {
-  margin: 15px;
-  padding: 15px;
-  border: 1px solid #222;
-  background: #000000;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end');
-  background: -webkit-gradient(linear, left top, left bottom, from(#222222), to(#000000));
-  background: -moz-linear-gradient(top, #222222, #000000);
-}
 /* == Forms */
 .base-form label {
   display: block;
@@ -386,7 +107,8 @@ header .title h1 .tagline {
 .base-form .form-row {
   display: block;
 }
-.base-form input[type=text], .base-form input[type=password] {
+.base-form input[type=text],
+.base-form input[type=password] {
   color: #444;
   border: 2px solid #444;
   background-color: #AAA;
@@ -394,7 +116,8 @@ header .title h1 .tagline {
   padding: 5px;
   width: 100%;
 }
-.base-form input[type=submit], .base-form input[type=button] {
+.base-form input[type=submit],
+.base-form input[type=button] {
   border-radius: 4px;
   border: 1px solid #FF9400;
   color: #FF9400;

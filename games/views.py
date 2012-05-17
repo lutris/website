@@ -1,11 +1,33 @@
+"""Views for lutris main app"""
+
 from django.http import Http404
 from django.views.generic import list_detail
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
-from models import Game, Runner, Genre, Platform, Company
+from games.models import Game, Runner, Genre, Platform, Company
+#pylint: disable=E1101
+
+
+def home(request):
+    """Homepage view"""
+    featured = Game.objects.exclude(cover__exact="")[:5]
+    return render_to_response('home.html', {
+        'featured': featured
+        }, context_instance=RequestContext(request)
+    )
+
+
+def game_detail(request, slug):
+    """docstring for game_detail"""
+    game = Game.objects.get(slug=slug)
+    return render_to_response('games/detail.html', {
+        "game": game,
+        }, context_instance=RequestContext(request)
+    )
 
 
 def games_all(request):
+    """View for all games"""
     games = Game.objects.all()
     return render_to_response('games/game_list.html',
                               {'games': games},
@@ -13,6 +35,7 @@ def games_all(request):
 
 
 def games_by_runner(request, runner_slug):
+    """View for games filtered by runner"""
     try:
         runner = Runner.objects.get(slug=runner_slug)
     except Runner.DoesNotExist:
@@ -25,6 +48,7 @@ def games_by_runner(request, runner_slug):
 
 
 def games_by_year(request, year):
+    """View for games filtered by year"""
     return list_detail.object_list(request,
                                    queryset=Game.objects.filter(year=year),
                                    template_name="games/game_list.html",
@@ -33,20 +57,22 @@ def games_by_year(request, year):
 
 
 def games_by_genre(request, genre_slug):
+    """View for games filtered by genre"""
     try:
         genre = Genre.objects.get(slug=genre_slug)
     except Genre.DoesNotExist:
         raise Http404
     return list_detail.object_list(
-            request,
-            queryset=Game.objects.filter(genre=genre),
-            template_name="games/game_list.html",
-            template_object_name="games",
-            extra_context={'genre': genre}
+        request,
+        queryset=Game.objects.filter(genre=genre),
+        template_name="games/game_list.html",
+        template_object_name="games",
+        extra_context={'genre': genre}
     )
 
 
 def games_by_publisher(request, publisher_slug):
+    """View for games filtered by publisher"""
     try:
         company = Company.objects.get(slug=publisher_slug)
     except:
@@ -62,6 +88,7 @@ def games_by_publisher(request, publisher_slug):
 
 
 def games_by_developer(request, developer_slug):
+    """View for games filtered by developer"""
     try:
         company = Company.objects.get(slug=developer_slug)
     except:
@@ -77,6 +104,7 @@ def games_by_developer(request, developer_slug):
 
 
 def games_by_platform(request, platform_slug):
+    """View for games filtered by platform"""
     try:
         platform = Platform.objects.get(slug=platform_slug)
     except:

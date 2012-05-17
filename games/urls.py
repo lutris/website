@@ -1,8 +1,5 @@
-from django.conf.urls.defaults import *
-from django.conf import settings
-from django.views.generic import list_detail
+from django.conf.urls.defaults import patterns, url
 
-from models import Game
 
 urlpatterns = patterns('games.views',
     url(r'^$', 'games_all'),
@@ -12,8 +9,5 @@ urlpatterns = patterns('games.views',
     #url(r'^developer/(?P<developer_slug>[\w\-]+)$', views.games_by_developer),
     #url(r'^publisher/(?P<publihser_slug>[\w\-]+)$', views.games_by_publisher),
     #url(r'^platform/(?P<platform_slug>[\w\-]+)$', views.games_by_platform),
-    #url(r'(?P<slug>[\w\-]+)$',
-    #    list_detail.object_detail,
-    #    {'queryset': Game.objects.all(),
-    #     'template_object_name': 'game'})
+    url(r'(?P<slug>[\w\-]+)$', "game_detail", name="game_detail"),
 )

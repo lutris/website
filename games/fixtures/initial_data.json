@@ -57,6 +57,16 @@
     }
   },
   {
+    "pk": 4,
+    "model": "games.company",
+    "fields": {
+      "website": "www.ubi.com",
+      "logo": "company_logos/ubisoft.jpg",
+      "name": "Ubisoft",
+      "slug": "ubisoft"
+    }
+  },
+  {
     "pk": 1,
     "model": "games.runner",
     "fields": {
@@ -142,7 +152,9 @@
     "fields": {
       "website": "http://www.idsoftware.com/games/quake/quake/",
       "publisher": null,
+      "updated": "2012-05-17T18:30:19.044Z",
       "name": "Quake",
+      "created": "2012-05-17T18:30:19.044Z",
       "runner": 1,
       "description": "",
       "cover": "",
@@ -150,6 +162,25 @@
       "genre": 1,
       "icon": "game_icons/quake.png",
       "slug": "quake",
+      "developer": null
+    }
+  },
+  {
+    "pk": 2,
+    "model": "games.game",
+    "fields": {
+      "website": "",
+      "publisher": 4,
+      "updated": "2012-05-17T17:44:48.578Z",
+      "name": "Prince of Persia: The sands of time",
+      "created": "2012-05-17T17:31:18.138Z",
+      "runner": 2,
+      "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.",
+      "cover": "games/covers/prince_of_persia_the_sands_of_time1c.jpg",
+      "year": 2003,
+      "genre": 2,
+      "icon": "games/icons/Prince_of_Persia_Sands_of_Time_2.png",
+      "slug": "prince-persia-sands-time",
       "developer": null
     }
   }

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+  {% for game in featured %}
+  <div class="feature">
+    {% thumbnail game.cover "400x300" crop="center" as img %}
+    <a href="{{ game.get_absolute_url }}">
+      <img src="{{ img.url }}">
+    </a>
+    {% endthumbnail %}
+    <span class="overlay">{{ game.name }}</span>
+  </div>
+  {% endfor %}
+{% endblock %}

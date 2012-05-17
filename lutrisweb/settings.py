@@ -53,12 +53,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = join(PROJECT_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = join(PROJECT_PATH, 'static')
 
@@ -123,11 +123,15 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration',
-    'games',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'registration',
+    'sorl.thumbnail',
+    'games',
 )
+
+if DEBUG:
+    THUMBNAIL_DEBUG = True
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
