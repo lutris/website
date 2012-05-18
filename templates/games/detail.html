@@ -40,17 +40,29 @@
       </div>
     </div>
   </div>
+  <div class="span9">
   <p>
     {{ game.description }}
   </p>
   {% url new_installer slug=game.slug as installer_url %}
   {% for installer in game.installer_set.all %}
-    <a href='lutris:{{ installer.slug }}' class="btn btn-inverse btn-large">Install</a>
+    <div>  
+      <span class="label label-important">{{ installer.slug }}</span> for {{ installer.runner }},
+      submitted by {{ installer.user.username }}
+      <a href='lutris:{{ installer.slug }}' class="pull-right btn btn-inverse btn-large">Install</a>
+      {% if installer.user == user %}
+      {% url edit_installer slug=installer.slug as edit_url %}
+      <a href="{{ edit_url }}">Edit installer </a>
+      {% endif %}
+    </div>
     {% if forloop.last %}
-      or <a href="{{ installer_url }}">Write a new one</a>
+    <div>
+      <a href="{{ installer_url }}" class="btn btn-small btn-inverse">Write a new installer</a>
+    </div>
     {% endif %}
   {% empty %}
-    Oh noes! No installer has been written for this game. 
-    Why don't you <a href="{{ installer_url }}">write one</a> ?
+    Oh noes! No installer has been written for this game.
+    Why don't you <a href="{{ installer_url }}" class="btn btn-small btn-inverse">write one</a> ?
   {% endfor %}
+  </div>
 {% endblock %}

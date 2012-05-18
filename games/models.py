@@ -106,6 +106,7 @@ class Installer(models.Model):
     version = models.CharField(max_length=32)
     runner = models.ForeignKey(Runner)
     content = models.TextField()
+    #created_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)

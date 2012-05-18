@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<p>
-  Your installer has been created
+<p class="alert alert-success">
+  Your installer has been created<br>
+  <a href="{{ game.get_absolute_url }}">Return to game</a>
 </p>
 {% endblock %}

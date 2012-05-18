@@ -5,7 +5,7 @@ from django.views.generic import list_detail
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
-from games.models import Game, Runner, Genre, Platform, Company
+from games.models import Game, Runner, Genre, Platform, Company, Installer
 from games.forms import InstallerForm
 #pylint: disable=E1101
 
@@ -29,7 +29,7 @@ def game_detail(request, slug):
 
 
 @login_required
-def write_installer(request, slug):
+def new_installer(request, slug):
     try:
         game = Game.objects.get(slug=slug)
     except Game.DoesNotExist:
@@ -46,6 +46,24 @@ def write_installer(request, slug):
             return redirect("installer_complete", slug=game.slug)
     return render_to_response('games/new-installer.html', {
         'form': form, 'game': game
+        }, context_instance=RequestContext(request)
+    )
+
+
+@login_required
+def edit_installer(request, slug):
+    try:
+        installer = Installer.objects.get(slug=slug)
+    except Installer.DoesNotExist:
+        raise Http404
+    form = InstallerForm(instance=installer)
+    if request.method == 'POST':
+        form = InstallerForm(data=request.POST, instance=installer)
+        if form.is_valid():
+            form.save()
+            return redirect("installer_complete", slug=installer.game.slug)
+    return render_to_response('games/installer-form.html', {
+        'form': form, 'game': installer.game, 'new': False
         }, context_instance=RequestContext(request)
     )
 

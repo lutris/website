@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if new %}
 <h1>New installer for {{ game }}</h1>
+{% else %}
+<h1>Edit installer for {{ game }}</h1>
+{% endif %}
+
 <form action="" method="post" class="well">
   {% csrf_token %}
   {% for field in field %}
