@@ -1,6 +1,6 @@
 """Views for lutris main app"""
 
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.views.generic import list_detail
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response, redirect
@@ -77,6 +77,16 @@ def installer_complete(request, slug):
         'game': game
         }, context_instance=RequestContext(request)
     )
+
+
+def serve_installer(request, slug):
+    try:
+        installer = Installer.objects.get(slug=slug)
+    except Installer.DoesNotExist:
+        raise Http404
+
+    content = installer.content
+    return HttpResponse(content, content_type="application/yaml")
 
 
 def games_all(request):

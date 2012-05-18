@@ -54,6 +54,8 @@
       {% url edit_installer slug=installer.slug as edit_url %}
       <a href="{{ edit_url }}">Edit installer </a>
       {% endif %}
+      {% url serve_installer slug=installer.slug as download_url %}
+      <a href="{{ download_url }}">Download raw installer</a>
     </div>
     {% if forloop.last %}
     <div>
