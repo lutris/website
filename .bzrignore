@@ -7,6 +7,5 @@ nbproject
 lutrisweb.komodoproject
 tags
 lutris.db
-PYSMELLTAGS
-PYSMELLTAGS.venv
+PYSMELLTAGS*
 .ropeproject
