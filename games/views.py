@@ -13,6 +13,7 @@ from games.forms import InstallerForm
 def home(request):
     """Homepage view"""
     featured = Game.objects.exclude(cover__exact="")[:5]
+    
     return render_to_response('home.html', {
         'featured': featured
         }, context_instance=RequestContext(request)

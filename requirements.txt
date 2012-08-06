@@ -1,5 +1,5 @@
 PyYAML
-django==1.4
+django
 PIL
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 #django-profiles

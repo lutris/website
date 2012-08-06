@@ -1,30 +1,18 @@
 {% extends "base.html" %}
-{% load url from future %}
 {% block content %}
-  <div class='line'>
-    <div class='unit size1of3'>&nbsp;</div>
-    <div class='unit size1of3'>
-      <form class='base-form base-block' method="post" action="{% url 'django.contrib.auth.views.login' %}">
+  <div class='row'>
+    <div class='span4 block'>
+      <form class='base-form' method="post" 
+            action="" %}">
         <h2>Sign in</h2>
         {% csrf_token %}
-        {% if form.errors %}
-          <p>Error while logging in</p>
-        {% endif %}
+        {{ form }}
         <div class='form-row'>
-            <label for="id_username">Username</label>
-            {{ form.username }}
-        </div>
-        <div class='form-row'>
-            <label for="password-field">Password</label>
-            {{ form.password }}
-        </div>
-        <div class='form-row'>
-            <input type='submit' value='Login' />
+            <input type='submit' value='Login' class="btn" />
             <input type="hidden" name="next" value="{{ next }}" />
         </div>
       </form>
     </div>
   </div>
-  <div class='unit size1of3 lastUnit'>&nbsp;</div>
 </div>
 {% endblock %}
