@@ -1,4 +1,0 @@
-#/bin/bash
-
-rm -f lutris.db
-./manage.py syncdb --noinput

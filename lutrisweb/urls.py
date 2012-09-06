@@ -17,8 +17,9 @@ urlpatterns = patterns('',
     url(r'^$', "games.views.home", name="homepage"),
 )
 
-urlpatterns += patterns('',
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.MEDIA_ROOT,
-        'show_indexes': True}),
-)
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT,
+            'show_indexes': True}),
+    )

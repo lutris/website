@@ -1,5 +1,6 @@
 PyYAML
 django
-PIL
+Pillow
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
-#django-profiles
+sorl-thumbnail
+south

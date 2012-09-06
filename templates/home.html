@@ -9,6 +9,8 @@
     <a href="{{ game.get_absolute_url }}">
       <img src="{{ img.url }}">
     </a>
+    {% empty %}
+      Image not available
     {% endthumbnail %}
     <span class="overlay">{{ game.name }}</span>
   </div>

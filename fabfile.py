@@ -1,5 +1,5 @@
-import os
-from fabric.api import run, require, env,  cd, put
+from os.path import join
+from fabric.api import run, env, local, sudo, put, require, cd
 from fabric.contrib.project import rsync_project
 from fabric import utils
 from fabric.contrib import console
@@ -10,80 +10,87 @@ RSYNC_EXCLUDE = (
     '*.pyc',
     '*.example',
     '*.db',
-    'media/admin',
-    'media/attachments',
+    'media',
     'local_settings.py',
     'fabfile.py',
     'bootstrap.py',
+    'tags',
+    'PYSMELL*'
 )
 
-env.home = '/srv/django/'
 env.project = 'lutrisweb'
 
 
 def _setup_path():
-    env.root = os.path.join(env.home, env.environment)
-    env.code_root = os.path.join(env.root, env.project)
-    env.virtualenv_root = os.path.join(env.root, 'island_env')
-    env.settings = '%(project)s.settings_%(environment)s' % env
+    env.root = join(env.home, env.domain)
+    env.code_root = join(env.root, env.project)
 
 
 def staging():
     """ use staging environment on remote host"""
-    env.user = 'strider'
+    env.home = '/srv/django'
+    env.user = 'django'
     env.environment = 'staging'
-    env.hosts = ['dev.lutris.net']
+    env.domain = 'dev.lutris.net'
+    env.hosts = [env.domain]
     _setup_path()
 
 
 def production():
     """ use production environment on remote host"""
-    utils.abort('Production deployment not yet implemented.')
+    env.home = '/srv/django'
+    env.user = 'django'
+    env.environment = 'production'
+    env.domain = 'lutris.net'
+    env.hosts = [env.domain]
+    _setup_path()
+
+
+def touch():
+    """Touch wsgi file to trigger reload."""
+    require('code_root', provided_by=('staging', 'production'))
+    conf_dir = join(env.code_root, 'config')
+    with cd(conf_dir):
+        run('touch %s.wsgi' % env.project)
 
 
 def apache_reload():
     """ reload Apache on remote host """
-    require('root', provided_by=('staging', 'production'))
-    run('sudo /etc/init.d/apache2 reload')
+    sudo('service apache2 reload', shell=False)
 
 
-def apache_restart():
-    """ restart Apache on remote host """
-    require('root', provided_by=('staging', 'production'))
-    run('sudo /etc/init.d/apache2 restart')
+def test():
+    local("python manage.py test games")
+    local("python manage.py test accounts")
+
+
+def initial_setup():
+    """Setup virtualenv"""
+    run("mkdir -p %s" % env.root)
+    with cd(env.root):
+        run('virtualenv --no-site-packages .')
 
 
 def bootstrap():
-    """ initialize remote host environment (virtualenv, deploy, update) """
-    require('root', provided_by=('staging', 'production'))
-    run('mkdir -p %(root)s' % env)
-    run('mkdir -p %s' % os.path.join(env.home, 'www', 'log'))
-    create_virtualenv()
-    deploy()
-    update_requirements()
+    put('requirements.txt', env.root)
+    with cd(env.root):
+        run('source ./bin/activate && '
+            'pip install --requirement requirements.txt')
 
 
-def syncdb():
-    with cd(env.code_root):
-        run("./manage.py syncdb")
+def update_vhost():
+    local('cp config/%(project)s.conf /tmp' % env)
+    local('sed -i s#%%ROOT%%#%(root)s#g /tmp/%(project)s.conf' % env)
+    local('sed -i s/%%PROJECT%%/%(project)s/g /tmp/%(project)s.conf' % env)
+    local('sed -i s/%%ENV%%/%(environment)s/g /tmp/%(project)s.conf' % env)
+    local('sed -i s/%%DOMAIN%%/%(domain)s/g /tmp/%(project)s.conf' % env)
+    put('/tmp/%(project)s.conf' % env, '%(root)s' % env)
+    sudo('cp %(root)s/%(project)s.conf ' % env +
+         '/etc/apache2/sites-available/%(domain)s' % env, shell=False)
+    sudo('a2ensite %(domain)s' % env, shell=False)
 
 
-def touch():
-    """ touch wsgi file to trigger reload """
-    require('code_root', provided_by=('staging', 'production'))
-    apache_dir = os.path.join(env.code_root, 'apache')
-    with cd(apache_dir):
-        run('touch %s.wsgi' % env.environment)
-
-
-def create_virtualenv():
-    """ setup virtualenv on remote host """
-    require('virtualenv_root', provided_by=('staging', 'production'))
-    args = '--clear --distribute'
-    run('virtualenv %s %s' % (args, env.virtualenv_root))
-
-
-def deploy():
+def rsync():
     """ rsync code to remote host """
     require('root', provided_by=('staging', 'production'))
     if env.environment == 'production':
@@ -97,33 +104,44 @@ def deploy():
         delete=True,
         extra_opts=extra_opts,
     )
-    touch()
 
 
-def update_apache_conf():
-    """ upload apache configuration to remote host """
-    require('root', provided_by=('staging', 'production'))
-    source = os.path.join('apache', '%(environment)s.conf' % env)
-    dest = os.path.join(env.home, 'apache.conf.d')
-    put(source, dest, mode=0755)
-    apache_reload()
-
-
-def update_requirements():
-    """ update external dependencies on remote host """
+def copy_local_settings():
     require('code_root', provided_by=('staging', 'production'))
-    requirements = os.path.join(env.code_root, 'requirements.txt')
-    cmd = ['pip install']
-    cmd += ['-E %(virtualenv_root)s' % env]
-    cmd += ['--requirement %s' % requirements]
-    run(' '.join(cmd))
+    put('config/local_settings_%(environment)s.py' % env, env.code_root)
+    with cd(env.code_root):
+        run('mv local_settings_%(environment)s.py local_settings.py' % env)
+
+
+def migrate():
+    require('code_root', provided_by=('staging', 'production'))
+    with cd(env.code_root):
+        run("source ../bin/activate; "
+            "python manage.py migrate")
+
+
+def syncdb():
+    require('code_root', provided_by=('staging', 'production'))
+    with cd(env.code_root):
+        run("source ../bin/activate; "
+            "python manage.py syncdb --noinput")
+
+
+def collect_static():
+    require('code_root', provided_by=('stating', 'production'))
+    with cd(env.code_root):
+        run('source ../bin/activate; python manage.py collectstatic --noinput')
 
 
 def configtest():
-    """ test Apache configuration """
-    require('root', provided_by=('staging', 'production'))
-    run('apache2ctl configtest')
+    run("apache2ctl configtest")
 
 
-def bzr_commit():
-    run('bzr commit')
+def deploy():
+    rsync()
+    copy_local_settings()
+    bootstrap()
+    collect_static()
+    update_vhost()
+    configtest()
+    apache_reload()
