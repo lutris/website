@@ -21,7 +21,7 @@
 <ul class='game-list'>
   {% for game in games %}
     <li class='clearfix'>
-      {% thumbnail game.cover '120x40' crop="center" as img %}
+      {% thumbnail game.cover '120x40' crop="top" as img %}
         <img class='game-cover' src='{{ img.url }}' />
       {% empty %}
         <span class='game-cover'>no image</span>

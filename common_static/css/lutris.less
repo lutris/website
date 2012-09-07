@@ -84,10 +84,8 @@ h3 {
   font-size: 1em;
   color: #E0E0E0;
 }
-.feature {
-  width: 400px;
-  height: 300px;
-}
+
+
 
 .overlay {
   display: block;
@@ -128,8 +126,21 @@ h3 {
 }
 
 .screenshots {
-    padding: 10px;
-    border: 1px solid #333;
+  padding: 30px;
+  border: 1px solid #333;
+  .no-screenshots {
+    height: 400px;
+    width: 640px;
+    padding-top: 80px;
+    line-height: 80px;
+    background: rgba(0,0,0,.7);
+    text-align: center;  
+    strong {
+      text-transform: uppercase;
+      font-size: 2.1em;
+      color: #777;
+    }
+  }
 }
 
 .game-info {
@@ -219,7 +230,7 @@ h3 {
     margin: 8px 0;
     border: 1px solid #555;
     &:hover {
-      background-color: #222;  
+      background-color: #222;
     }
   }
 

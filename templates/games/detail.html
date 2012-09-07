@@ -16,7 +16,19 @@
   <div class="row">
     <div class="span9">
       <div class='screenshots'>
-        <img src="{{ STATIC_URL }}images/screenshots/quake1.jpg" />
+        {% for screenshot in game.screenshot_set.all %}
+          {% thumbnail screenshot.image 640x480 crop="center" as img %}
+          <img src="{{ STATIC_URL }}images/screenshots/quake1.jpg" />
+          {% endthumbnail %}
+        {% empty %}
+        <div class='no-screenshots'>
+        <strong>
+          No screenshot available
+        </strong>
+          <br>
+          <a href='#'>Add one ?</a>
+        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="span3">
@@ -46,7 +58,7 @@
   </p>
   {% url new_installer slug=game.slug as installer_url %}
   {% for installer in game.installer_set.all %}
-    <div>  
+    <div>
       <span class="label label-important">{{ installer.slug }}</span> for {{ installer.runner }},
       submitted by {{ installer.user.username }}
       <a href='lutris:{{ installer.slug }}' class="pull-right btn btn-inverse btn-large">Install</a>
