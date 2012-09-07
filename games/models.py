@@ -123,11 +123,12 @@ class Installer(models.Model):
     """Game installer model"""
     game = models.ForeignKey(Game)
     user = models.ForeignKey(User)
+    runner = models.ForeignKey(Runner)
+
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
-    runner = models.ForeignKey(Runner)
     content = models.TextField()
-    #created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now=True, null=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)
