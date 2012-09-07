@@ -158,7 +158,6 @@
       "description": "",
       "cover": "",
       "year": 1996,
-      "genre": 1,
       "icon": "game_icons/quake.png",
       "slug": "quake",
       "developer": null
@@ -176,7 +175,6 @@
       "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.",
       "cover": "games/covers/prince_of_persia_the_sands_of_time1c.jpg",
       "year": 2003,
-      "genre": 2,
       "icon": "games/icons/Prince_of_Persia_Sands_of_Time_2.png",
       "slug": "prince-persia-sands-time",
       "developer": null
