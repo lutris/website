@@ -46,6 +46,7 @@ class Runner(models.Model):
     slug = models.SlugField(unique=True)
     website = models.CharField(_("Website"), max_length=127)
     icon = models.ImageField(upload_to='runners/icons', blank=True)
+    platforms = models.ManyToManyField(Platform)
 
     class Meta:
         ordering = ['name']
@@ -56,12 +57,6 @@ class Runner(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Runner, self).save(*args, **kwargs)
-
-
-class RunnerPlatform(models.Model):
-    '''Model to associate runners and platforms.'''
-    runner = models.ForeignKey(Runner)
-    platform = models.ForeignKey(Platform)
 
 
 class Genre(models.Model):
