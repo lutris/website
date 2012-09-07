@@ -1,10 +1,8 @@
 """Views for lutris main app"""
 
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.views.generic import list_detail
-from django.template.context import RequestContext
 from django.shortcuts import render, redirect, get_object_or_404
-from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, Company, Installer
 from games.forms import InstallerForm
@@ -64,7 +62,7 @@ def serve_installer(request, slug):
 def games_all(request):
     """View for all games"""
     games = Game.objects.all()
-    return render('games/game_list.html', {'games': games})
+    return render(request, 'games/game_list.html', {'games': games})
 
 
 def games_by_runner(request, runner_slug):
