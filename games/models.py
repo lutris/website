@@ -107,6 +107,7 @@ class Screenshot(models.Model):
     game = models.ForeignKey(Game)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now=True)
+    uploaded_by = models.ForeignKey(User)
     description = models.CharField(max_length=256, null=True, blank=True)
 
     def __unicode__(self):
