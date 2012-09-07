@@ -3,7 +3,8 @@
 from django.http import Http404, HttpResponse
 from django.views.generic import list_detail
 from django.template.context import RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, Company, Installer
 from games.forms import InstallerForm
@@ -13,79 +14,49 @@ from games.forms import InstallerForm
 def home(request):
     """Homepage view"""
     featured = Game.objects.exclude(cover__exact="")[:5]
-    
-    return render_to_response('home.html', {
-        'featured': featured
-        }, context_instance=RequestContext(request)
-    )
+    return render(request, 'home.html', {'featured': featured})
 
 
 def game_detail(request, slug):
     """docstring for game_detail"""
-    game = Game.objects.get(slug=slug)
-    return render_to_response('games/detail.html', {
-        "game": game,
-        }, context_instance=RequestContext(request)
-    )
+    game = get_object_or_404(Game, slug=slug)
+    return render(request, 'games/detail.html', {'game': game})
 
 
 @login_required
 def new_installer(request, slug):
-    try:
-        game = Game.objects.get(slug=slug)
-    except Game.DoesNotExist:
-        raise Http404
-    form = InstallerForm()
-    if request.method == 'POST':
-        form = InstallerForm(request.POST)
-        if form.is_valid():
-            installer = form.save(commit=False)
-            installer.game_id = game.id
-            installer.user_id = request.user.id
-            installer.save()
+    game = get_object_or_404(Game, slug=slug)
+    form = InstallerForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        installer = form.save(commit=False)
+        installer.game_id = game.id
+        installer.user_id = request.user.id
+        installer.save()
 
-            return redirect("installer_complete", slug=game.slug)
-    return render_to_response('games/new-installer.html', {
-        'form': form, 'game': game
-        }, context_instance=RequestContext(request)
-    )
+        return redirect("installer_complete", slug=game.slug)
+    return render(request, 'games/new-installer.html',
+                  {'form': form, 'game': game})
 
 
 @login_required
 def edit_installer(request, slug):
-    try:
-        installer = Installer.objects.get(slug=slug)
-    except Installer.DoesNotExist:
-        raise Http404
-    form = InstallerForm(instance=installer)
-    if request.method == 'POST':
-        form = InstallerForm(data=request.POST, instance=installer)
-        if form.is_valid():
-            form.save()
-            return redirect("installer_complete", slug=installer.game.slug)
-    return render_to_response('games/installer-form.html', {
-        'form': form, 'game': installer.game, 'new': False
-        }, context_instance=RequestContext(request)
-    )
+    installer = get_object_or_404(Installer, slug=slug)
+    form = InstallerForm(request.POST or None, instance=installer)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect("installer_complete", slug=installer.game.slug)
+    return render(request, 'games/installer-form.html',
+                  {'form': form, 'game': installer.game, 'new': False})
 
 
 def installer_complete(request, slug):
-    try:
-        game = Game.objects.get(slug=slug)
-    except Game.DoesNotExist:
-        raise Http404
-    return render_to_response('games/installer-complete.html', {
-        'game': game
-        }, context_instance=RequestContext(request)
-    )
+    game = get_object_or_404(Game, slug=slug)
+    return render(request, 'games/installer-complete.html', {'game': game})
 
 
 def serve_installer(request, slug):
-    try:
-        installer = Installer.objects.get(slug=slug)
-    except Installer.DoesNotExist:
-        raise Http404
-
+    """Serve the content of an installer in yaml format"""
+    installer = get_object_or_404(Installer, slug=slug)
     content = installer.content
     return HttpResponse(content, content_type="application/yaml")
 
@@ -93,42 +64,34 @@ def serve_installer(request, slug):
 def games_all(request):
     """View for all games"""
     games = Game.objects.all()
-    return render_to_response('games/game_list.html',
-                              {'games': games},
-                              context_instance=RequestContext(request))
+    return render('games/game_list.html', {'games': games})
 
 
 def games_by_runner(request, runner_slug):
     """View for games filtered by runner"""
-    try:
-        runner = Runner.objects.get(slug=runner_slug)
-    except Runner.DoesNotExist:
-        raise Http404
+    runner = get_object_or_404(Runner, slug=runner_slug)
     games = Game.objects.filter(runner__slug=runner.slug)
-    return render_to_response('games/game_list.html', {
-        'games': games
-        }, context_instance=RequestContext(request)
-    )
+    return render(request, 'games/game_list.html',
+                  {'games': games})
 
 
 def games_by_year(request, year):
     """View for games filtered by year"""
-    return list_detail.object_list(request,
-                                   queryset=Game.objects.filter(year=year),
-                                   template_name="games/game_list.html",
-                                   template_object_name="games",
-                                   extra_context={"year": year})
+    return list_detail.object_list(
+        request,
+        queryset=Game.objects.filter(year=year),
+        template_name="games/game_list.html",
+        template_object_name="games",
+        extra_context={"year": year}
+    )
 
 
 def games_by_genre(request, genre_slug):
     """View for games filtered by genre"""
-    try:
-        genre = Genre.objects.get(slug=genre_slug)
-    except Genre.DoesNotExist:
-        raise Http404
+    genre = get_object_or_404(Genre, slug=genre_slug)
     return list_detail.object_list(
         request,
-        queryset=Game.objects.filter(genre=genre),
+        queryset=Game.objects.filter(genre__slug=genre_slug),
         template_name="games/game_list.html",
         template_object_name="games",
         extra_context={'genre': genre}
@@ -137,47 +100,35 @@ def games_by_genre(request, genre_slug):
 
 def games_by_publisher(request, publisher_slug):
     """View for games filtered by publisher"""
-    try:
-        company = Company.objects.get(slug=publisher_slug)
-    except:
-        raise Http404
-
+    company = get_object_or_404(Company, slug=publisher_slug)
     return list_detail.object_list(
-            request,
-            queryset=Game.objects.filter(publisher=company),
-            template_name="games/game_list.html",
-            template_object_name='games',
-            extra_context={'publisher': company}
+        request,
+        queryset=Game.objects.filter(publisher=company),
+        template_name="games/game_list.html",
+        template_object_name='games',
+        extra_context={'publisher': company}
     )
 
 
 def games_by_developer(request, developer_slug):
     """View for games filtered by developer"""
-    try:
-        company = Company.objects.get(slug=developer_slug)
-    except:
-        raise Http404
-
+    company = get_object_or_404(Company, slug=developer_slug)
     return list_detail.object_list(
-            request,
-            queryset=Game.objects.filter(developer=company),
-            template_name="games/game_list.html",
-            template_object_name='games',
-            extra_context={'developer': company}
+        request,
+        queryset=Game.objects.filter(developer=company),
+        template_name="games/game_list.html",
+        template_object_name='games',
+        extra_context={'developer': company}
     )
 
 
 def games_by_platform(request, platform_slug):
     """View for games filtered by platform"""
-    try:
-        platform = Platform.objects.get(slug=platform_slug)
-    except:
-        raise Http404
-
+    platform = get_object_or_404(Platform, slug=platform_slug)
     return list_detail.object_list(
-            request,
-            queryset=Game.objects.filter(platform=platform),
-            template_name="games/game_list.html",
-            template_object_name='games',
-            extra_context={'platform': platform}
+        request,
+        queryset=Game.objects.filter(platform=platform),
+        template_name="games/game_list.html",
+        template_object_name='games',
+        extra_context={'platform': platform}
     )
