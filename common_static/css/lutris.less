@@ -1,3 +1,12 @@
+
+// 1) Reset
+// 2) Defaults
+// 3) Helpers (clearfix, classes to @extend)
+// 4) Page Layout (the shell)
+// 5) Elements by type (classes)
+// 6) Elements by module (IDs)
+// 7) Overrides
+
 @siteWidth: 940px;
 
 /* == Functions */
@@ -26,15 +35,11 @@
     background: -moz-linear-gradient(top,  @gradient-start,  @gradient-end);
 }
 
-h3 {
-  font-size: 21px;
-}
 
 /* == Tags */
 body {
   background-color: #121212;
 }
-
 h1, h2, h3, h4 {
   font-weight: 800;
   word-spacing: .1em;
@@ -43,6 +48,10 @@ h1, h2, h3, h4 {
 h2 {
   font-size: 1.4em;
 }
+h3 {
+  font-size: 21px;
+}
+
 .navbar {
   width: @siteWidth;
   margin: auto;
@@ -71,9 +80,9 @@ h2 {
 }
 /* == Content */
 #content {
-    width: @siteWidth;
-    font-size: 1em;
-    color: #E0E0E0;
+  width: @siteWidth;
+  font-size: 1em;
+  color: #E0E0E0;
 }
 .feature {
   width: 400px;
@@ -90,9 +99,9 @@ h2 {
   top: -25px;
   white-space: nowrap;
 }
+
 .game-header {
     background-color: #000;
-    background-image: url("/media/images/banners/quake-banner.jpg");
     background-repeat: no-repeat;
     height: 150px;
     position: relative;
@@ -107,13 +116,13 @@ h2 {
         font-size: 25px;
         line-height: 50px;
         a {
-            color: #EDEDED;
-            text-decoration: none;
+          color: #EDEDED;
+          text-decoration: none;
         }
         img {
-            vertical-align: middle;
-            padding-left: 15px;
-            opacity: 1;
+          vertical-align: middle;
+          padding-left: 15px;
+          opacity: 1;
         }
     }
 }
@@ -122,6 +131,7 @@ h2 {
     padding: 10px;
     border: 1px solid #333;
 }
+
 .game-info {
     padding: 10px;
     border: 1px solid #333;
@@ -155,73 +165,98 @@ h2 {
 
 /* == Forms */
 .base-form {
-    label {
-      display: block;
-      font-size: .9em;
-      line-height: 1.6em;
-    }
-    .form-row {
-      display: block;
-    }
-    input[type=text], input[type=password] {
-      font-size: 1.1em;
-      color: #555;
-      border: 2px solid #444;
-      background-color: #EDEDED;
-      margin-bottom: 1em;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 15px;
-      border-radius: 4px;
-      box-shadow: 0 2px 2px rgba(30,30,30,.3) inset;
-    }
+  label {
+    display: block;
+    font-size: .9em;
+    line-height: 1.6em;
+  }
+  .form-row {
+    display: block;
+  }
+  input[type=text], input[type=password] {
+    font-size: 1.1em;
+    color: #555;
+    border: 2px solid #444;
+    background-color: #EDEDED;
+    margin-bottom: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 2px rgba(30,30,30,.3) inset;
+  }
 }
 
 .big-button {
-    color: #FFFFFF;
-    border-color: #a84300;
-    background-color: #fc6500;
-    padding: 15px;
-    display: block;
-    font-size: 1.2em;
-    text-align: center;
-    width: 160px;
-    -moz-border-radius: 15px;
-    /*
-    -webkit-gradient: (linear, left bottom,left top,color-stop(0.45, rgb(148,30,12)), color-stop(0.74, rgb(219,139,48)), color-stop(0.94, rgb(255,195,161)));
-    -moz-linear-gradient: (center bottom, rgb(148,30,12) 45%, rgb(219,139,48) 74%, rgb(255,195,161) 94%);
-    */
-    margin: 20px 10px;
-    border: 2px solid #C85000;
-    text-decoration: none;
+  color: #FFFFFF;
+  border-color: #a84300;
+  background-color: #fc6500;
+  display: block;
+  padding: 15px;
+  margin: 20px 10px;
+  font-size: 1.2em;
+  text-align: center;
+  width: 160px;
+  border: 2px solid #C85000;
+  text-decoration: none;
+  -moz-border-radius: 15px;
 }
 .breadcrumb {
-    a {
-        color: #AAA;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: .9em;
-    }
+  a {
+    color: #AAA;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: .9em;
+  }
 }
-.game_list_element {
-    border: 1px solid #333;
-    padding: 10px;
-    height: 148px;
+
+
+.game-list {
+  margin: 0;
+  li {
+    list-style-type: none;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #555;
+    &:hover {
+      background-color: #222;  
+    }
+  }
+
+  a {
+    color :#DDD;
+    text-decoration: none;
+  }
+  .game-cover {
+    float: left;
+    width: 120px;
+    height: 40px;
+    text-transform: uppercase;
+    line-height: 40px;
+    background-color: #666;
+    text-align: center;
+    margin-right: 15px;
+    color: #AAA;
+    font-size: 1.5em;
+    border: 1px solid #AAA;
+    padding: 2px;
+  }
+  .game-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #D9B555;
+  }
+  .logo {
+    float: left;
+    vertical-align: top;
+    margin-right: 20px;
+  }
+  .info {
+    font-size: .8em;
     a {
-        color :#DDD;
-        text-decoration: none;
+      border-bottom: 1px dotted #666;
     }
-    .game-title {
-        font-size: 1.3em;
-    }
-    .logo {
-        float: left;
-        vertical-align: top;
-        margin-right: 20px;
-    }
-    .info {
-        font-size: .8em;
-    }
+  }
 }
 
 .download-pane {

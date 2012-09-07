@@ -1,40 +1,45 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block content %}
 <div class='breadcrumb'>
-  <a href='/games/'>All games</a><span class='breadcrumb'>&gt;</span>
+  <a href='{% url game_list %}'>Games</a>
+  <span class='breadcrumb'>&gt;</span>
   {% if genre %}
-    <a href='/games/genre/{{ genre.slug }}' />{{ genre }}</a>
+    <a href='{% url game_list_by_genre genre.slug %}'>{{ genre }}</a>
   {% endif %}
   {% if platform %}
-    <a href='/games/platform/{{ platform.slug }}' />{{ platform }}</a>
+    <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
   {% endif %}
   {% if runner %}
-    <a href='/games/runner/{{ runner.slug }}' />{{ runner }}</a>
+    <a href='/games/runner/{{ runner.slug }}'>{{ runner }}</a>
   {% endif %}
   {% if year %}
-    <a href='/games/year/{{ year }}' />{{ year }}</a>
+    <a href='{% url game_list_by_year year %}'>{{ year }}</a>
   {% endif %}
 </div>
-{% for game in games %}
-  <div class='game_list_element'>
-    {% if game.icon %}
-      <img class='logo' src='{{ STATIC_URL }}{{ game.icon }}' />
-    {% else %}
-      NO LOGO
-    {% endif %}
-    <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
-    <p>{% firstof game.description "No description available" %}</p>
-    <p class='info'>
-      Released : <a href='/games/year/{{game.year}}' />{{ game.year }}</a>
-      , Developer : <a href='/games/developer/{{ game.developer.slug }}' />{{ game.developer }}</a>
-      , Publisher : <a href='/games/publisher/{{ game.publisher.slug }}' />{{ game.publisher }}</a>
-    </p>
-    <a href='/games/runner/{{ game.runner.slug }}' /><img src='{{ STATIC_URL }}{{ game.runner.icon }}' /></a>
-    {% if game.installer %}
-      <a class='install-button' href='lutris:{{ game.slug }}'>Install</a>
-    {% endif %}
-  </div>
-{% endfor %}
+<ul class='game-list'>
+  {% for game in games %}
+    <li class='clearfix'>
+      {% thumbnail game.cover '120x40' crop="center" as img %}
+        <img class='game-cover' src='{{ img.url }}' />
+      {% empty %}
+        <span class='game-cover'>no image</span>
+      {% endthumbnail %}
+      <div>
+        <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
+        <div class='info'>
+          Released in <a href='{% url game_list_by_year game.year %}'>{{ game.year }}</a>
+          {% if game.developer %}
+          Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
+          {% endif %}
+          {% if game.publisher %}
+          Published by <a href='/games/publisher/{{ game.publisher.slug }}'>{{ game.publisher }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
 {% endblock %}
 

@@ -4,3 +4,4 @@ Pillow
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 sorl-thumbnail
 south
+django-compressor

@@ -1,46 +1,48 @@
+{% load compress %}
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="author" content="Mathieu Comandon">
-    <title>{% block title %}Lutris : Play video games on Linux easily{% endblock %}</title>
-    <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
-    <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
-    <link type="text/css" href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" />
-    <link type="text/css" href="{{ STATIC_URL }}css/lutris.css" rel="stylesheet" />
-    <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <meta name="author" content="Mathieu Comandon">
+  <title>{% block title %}Lutris : Play video games on Linux easily{% endblock %}</title>
+  <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
+  <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
+  <link type="text/css" href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" />
+  {% compress css %}
+  <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
+  {% endcompress %}
+  <meta name="viewport" content="width=device-width">
 </head>
-  <body>
-    <header id="header" class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class='title'>
-            <a class="brand" href='/' >
-              <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
-              Lutris
-            </a>
-          </div>
-          <ul class='nav pull-right'>
-            <li><a href="{% url homepage %}">Home</a></li>
-            <li><a href='/about'>About</a></li>
-            <li><a href="/download">Get Lutris</a></li>
-            <li><a href="/games">Games</a></li>
-            <li><a href="https://launchpad.net/lutris">Contribute</a></li>
-            <li><a href="http://lutris.net/blog">Blog</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="/accounts/logout/">Logout ({{ user.username }})</a></li>
-            {% else %}
-                <li><a href="/accounts/login/">Login</a></li>
-                <li><a href="/accounts/register">Register</a></li>
-            {% endif %}
-          </ul>
+<body>
+  <header id="header" class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <div class='title'>
+          <a class="brand" href='/' >
+            <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
+            Lutris
+          </a>
         </div>
+        <ul class='nav pull-right'>
+          <li><a href="{% url homepage %}">Home</a></li>
+          <li><a href='{% url about %}'>About</a></li>
+          <li><a href="{% url download %}">Get Lutris</a></li>
+          <li><a href="/games">Games</a></li>
+          <li><a href="https://launchpad.net/lutris">Contribute</a></li>
+          <li><a href="http://lutris.net/blog">Blog</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="/accounts/logout/">Logout ({{ user.username }})</a></li>
+          {% else %}
+              <li><a href="/accounts/login/">Login</a></li>
+              <li><a href="/accounts/register">Register</a></li>
+          {% endif %}
+        </ul>
       </div>
-    </header>
-    <div id="content" class="page container">
-      {% block content %}
-      {% endblock %}
     </div>
-  </body>
+  </header>
+  <div id="content" class="page container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
 </html>
 

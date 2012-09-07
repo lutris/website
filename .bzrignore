@@ -10,3 +10,6 @@ lutris.db
 PYSMELLTAGS*
 .ropeproject
 lutrisweb.log
+media/cache
+static/CACHE
+./static

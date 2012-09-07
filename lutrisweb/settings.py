@@ -38,6 +38,11 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+COMPRESS_PRECOMPILERS = (
+    ('text/coffeescript', 'coffee --compile --stdio'),
+    ('text/less', 'lessc {infile} {outfile}'),
 )
 
 SECRET_KEY = 'f8uok&amp;mchb26x5w6w+8nsa$+4zowxf09dayl3wk7(7l95+ppk1'
@@ -84,6 +89,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'registration',
     'sorl.thumbnail',
+    'compressor',
     'games',
     'south'
 )

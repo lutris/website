@@ -14,6 +14,10 @@ class Platform(models.Model):
     def __unicode__(self):
         return "%s" % self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Platform, self).save(*args, **args)
+
 
 class Company(models.Model):
     """Gaming company"""
@@ -26,9 +30,14 @@ class Company(models.Model):
     class Meta:
         """Additional configuration for model"""
         verbose_name_plural = "companies"
+        ordering = ['name']
 
     def __unicode__(self):
         return "%s" % self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Company, self).save(*args, **kwargs)
 
 
 class Runner(models.Model):
@@ -38,21 +47,30 @@ class Runner(models.Model):
     website = models.CharField(_("Website"), max_length=127)
     icon = models.ImageField(upload_to='runners/icons', blank=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Runner, self).save(*args, **kwargs)
 
 
 class RunnerPlatform(models.Model):
     '''Model to associate runners and platforms.'''
     runner = models.ForeignKey(Runner)
     platform = models.ForeignKey(Platform)
-    notes = models.TextField(blank=True)
 
 
 class Genre(models.Model):
     """Gaming genre"""
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -65,12 +83,12 @@ class Game(models.Model):
     runner = models.ForeignKey(Runner, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
     genre = models.ForeignKey(Genre, null=True, blank=True)
-    publisher = models.ForeignKey(Company,
-            related_name='published_game',
-            null=True, blank=True)
-    developer = models.ForeignKey(Company,
-            related_name='developed_game',
-            null=True, blank=True)
+    publisher = models.ForeignKey(
+        Company, related_name='published_game', null=True, blank=True
+    )
+    developer = models.ForeignKey(
+        Company, related_name='developed_game', null=True, blank=True
+    )
     website = models.CharField(max_length=200, blank=True)
     icon = models.ImageField(upload_to='games/icons', blank=True)
     cover = models.ImageField(upload_to='games/covers', blank=True)
@@ -78,12 +96,15 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
-        return "/games/%s" % self.slug
+        return "/games/%s/" % self.slug
 
 
 class Screenshot(models.Model):

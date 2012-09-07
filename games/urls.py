@@ -1,10 +1,12 @@
 from django.conf.urls.defaults import patterns, url
+from games.views import GameList, GameListByYear
 
 
 urlpatterns = patterns('games.views',
-    url(r'^$', 'games_all'),
-    #url(r'^genre/(?P<genre_slug>[\w\-]+$)', views.games_by_genre),
-    #url(r'^year/(?P<year>[\d]+)$', views.games_by_year),
+    url(r'^$', GameList.as_view(), name='game_list'),
+    url(r'^year/(\d+)/$', GameListByYear.as_view(), name='game_list_by_year'),
+    url(r'^genre/(?P<genre_slug>[\w\-]+/$)', 'game_list_by_genre',
+        name='game_list_by_genre'),
     url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
     #url(r'^developer/(?P<developer_slug>[\w\-]+)$', views.games_by_developer),
     #url(r'^publisher/(?P<publihser_slug>[\w\-]+)$', views.games_by_publisher),
@@ -17,5 +19,5 @@ urlpatterns = patterns('games.views',
         name='edit_installer'),
     url(r'(?P<slug>[\w\-]+)/installer/complete$', 'installer_complete',
         name='installer_complete'),
-    url(r'(?P<slug>[\w\-]+)$', "game_detail", name="game_detail"),
+    url(r'(?P<slug>[\w\-]+)/$', "game_detail", name="game_detail"),
 )

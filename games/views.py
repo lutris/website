@@ -1,12 +1,27 @@
 """Views for lutris main app"""
 
 from django.http import HttpResponse
-from django.views.generic import list_detail
+from django.views.generic import list_detail, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, Company, Installer
 from games.forms import InstallerForm
 #pylint: disable=E1101
+
+
+class GameList(ListView):
+    model = Game
+    context_object_name = "games"
+
+
+class GameListByYear(GameList):
+    def get_queryset(self):
+        return Game.objects.filter(year=self.args[0])
+
+    def get_context_data(self, **kwargs):
+        context = super(GameListByYear, self).get_context_data(**kwargs)
+        context['year'] = self.args[0]
+        return context
 
 
 def home(request):
@@ -59,7 +74,7 @@ def serve_installer(request, slug):
     return HttpResponse(content, content_type="application/yaml")
 
 
-def games_all(request):
+def game_list(request):
     """View for all games"""
     games = Game.objects.all()
     return render(request, 'games/game_list.html', {'games': games})
@@ -73,18 +88,18 @@ def games_by_runner(request, runner_slug):
                   {'games': games})
 
 
-def games_by_year(request, year):
+def game_list_by_year(request, year):
     """View for games filtered by year"""
     return list_detail.object_list(
         request,
-        queryset=Game.objects.filter(year=year),
+        queryset=Game.objects.filter(year__gt=2000),
         template_name="games/game_list.html",
         template_object_name="games",
         extra_context={"year": year}
     )
 
 
-def games_by_genre(request, genre_slug):
+def game_list_by_genre(request, genre_slug):
     """View for games filtered by genre"""
     genre = get_object_or_404(Genre, slug=genre_slug)
     return list_detail.object_list(
