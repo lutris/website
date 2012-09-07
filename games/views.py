@@ -145,3 +145,8 @@ def games_by_platform(request, platform_slug):
         template_object_name='games',
         extra_context={'platform': platform}
     )
+
+
+def screenshot_add(request, slug):
+    game = get_object_or_404(Game, slug=slug)
+    return render(request, 'games/screenshot/add.html')

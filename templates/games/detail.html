@@ -22,11 +22,10 @@
           {% endthumbnail %}
         {% empty %}
         <div class='no-screenshots'>
-        <strong>
-          No screenshot available
-        </strong>
-          <br>
-          <a href='#'>Add one ?</a>
+          <strong>
+            No screenshot available
+          </strong>
+          <a href='{% url screenshot_add game.slug %}'>Add one ?</a>
         </div>
         {% endfor %}
       </div>

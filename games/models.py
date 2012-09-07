@@ -111,8 +111,8 @@ class Screenshot(models.Model):
     description = models.CharField(max_length=256, null=True, blank=True)
 
     def __unicode__(self):
-        return "Screenshot for %s uploaded at %s" % (self.game.name,
-                                                     self.uploaded_at)
+        desc = self.description if self.description else self.game.name
+        return "%s uploaded by %s" % (desc, self.uploaded_by)
 
 
 class Installer(models.Model):
