@@ -77,7 +77,7 @@ class Game(models.Model):
     slug = models.SlugField(unique=True)
     platforms = models.ManyToManyField(Platform)
     year = models.IntegerField(null=True, blank=True)
-    genre = models.ForeignKey(Genre, null=True, blank=True)
+    genres = models.ManyToManyField(Genre)
     publisher = models.ForeignKey(
         Company, related_name='published_game', null=True, blank=True
     )
