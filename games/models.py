@@ -80,7 +80,7 @@ class Game(models.Model):
     """Game model"""
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    runner = models.ForeignKey(Runner, null=True, blank=True)
+    platforms = models.ManyToManyField(Platform)
     year = models.IntegerField(null=True, blank=True)
     genre = models.ForeignKey(Genre, null=True, blank=True)
     publisher = models.ForeignKey(
