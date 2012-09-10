@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from django.views.generic import list_detail, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from games.models import Game, Runner, Genre, Platform, Company, Installer
+from games.models import Game, Runner, Genre, Platform, \
+                         Company, Installer, News
 from games.forms import InstallerForm
 #pylint: disable=E1101
 
@@ -27,11 +28,12 @@ class GameListByYear(GameList):
 def home(request):
     """Homepage view"""
     featured = Game.objects.exclude(cover__exact="")[:5]
-    return render(request, 'home.html', {'featured': featured})
+    news = News.objects.all()[:5]
+    return render(request, 'home.html',
+                  {'featured': featured, 'news': news})
 
 
 def game_detail(request, slug):
-    """docstring for game_detail"""
     game = get_object_or_404(Game, slug=slug)
     return render(request, 'games/detail.html', {'game': game})
 

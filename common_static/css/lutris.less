@@ -1,55 +1,63 @@
-
-// 1) Reset
-// 2) Defaults
-// 3) Helpers (clearfix, classes to @extend)
-// 4) Page Layout (the shell)
-// 5) Elements by type (classes)
-// 6) Elements by module (IDs)
-// 7) Overrides
-
+/* == Variables */
 @siteWidth: 940px;
 
-/* == Functions */
-.rounded-corners (@radius: 5px) {
-    -moz-border-radius: @radius;
-    -webkit-border-radius: @radius;
-    border-radius: @radius;
-}
-
-.rounded-top (@radius: 5px) {
-    -moz-border-radius: @radius @radius 0 0;
-    -webkit-border-radius: @radius @radius 0 0;
-    border-radius: @radius @radius 0 0;
-}
-
-.inset-shadow(@color: #ddd, @offset: -1px) {
-    -moz-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
-    -webkit-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
-    box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
-}
-
-.top-down-gradient(@gradient-start: #555, @gradient-end: #EEE) {
-    background: @gradient-end;
-    filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end')");
-    background: -webkit-gradient(linear, left top, left bottom, from(@gradient-start), to(@gradient-end));
-    background: -moz-linear-gradient(top,  @gradient-start,  @gradient-end);
-}
-
-
-/* == Tags */
+/* == Defaults */
 body {
   background-color: #121212;
+  font-size: 16px;
 }
 h1, h2, h3, h4 {
   font-weight: 800;
   word-spacing: .1em;
   margin-bottom: .8em;
 }
-h2 {
-  font-size: 1.4em;
+h1 { font-size: 1.8em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.2em; }
+h4 { font-size: 1.1em;  }
+
+/* == Helpers */
+.rounded-corners (@radius: 5px) {
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
 }
-h3 {
-  font-size: 21px;
+
+.rounded-top (@radius: 5px) {
+  -moz-border-radius: @radius @radius 0 0;
+  -webkit-border-radius: @radius @radius 0 0;
+  border-radius: @radius @radius 0 0;
+}
+
+.inset-shadow(@color: #ddd, @offset: -1px) {
+  -moz-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+  -webkit-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+  box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
+}
+
+.top-down-gradient(@gradient-start: #555, @gradient-end: #EEE) {
+  background: @gradient-end;
+  background: -webkit-gradient(linear, left top, left bottom, from(@gradient-start), to(@gradient-end));
+  background: -moz-linear-gradient(top,  @gradient-start,  @gradient-end);
+  filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@gradient-start', endColorstr='@gradient-end')");
+}
+
+/* == Page Layout */
+.content {
+  width: @siteWidth;
+  color: #E0E0E0;
+}
+
+.block {
+  margin-top: 20px;
+  border-radius: 3px;
+  border: 1px solid #444;
+  box-shadow: 0px 1px 1px rgba(200,200,200,.6) inset,
+              0 1px 1px rgba(230,230,230, .7);
+  background-color: #F0F0F0;
+  box-sizing: border-box;
+  padding: 20px;
+  color: #222;
 }
 
 .navbar {
@@ -78,14 +86,7 @@ h3 {
       list-style-type: none;
   }
 }
-/* == Content */
-#content {
-  width: @siteWidth;
-  font-size: 1em;
-  color: #E0E0E0;
-}
-
-
+/* == Classes */
 
 .overlay {
   display: block;
@@ -99,30 +100,31 @@ h3 {
 }
 
 .game-header {
-    background-color: #000;
-    background-repeat: no-repeat;
-    height: 150px;
-    position: relative;
-    h1 {
-        position: absolute;
-        height: 50px;
-        left: 0;
-        right: 0;
-        background-color: #222;
-        opacity: .8;
-        bottom: 0px;
-        font-size: 25px;
-        line-height: 50px;
-        a {
-          color: #EDEDED;
-          text-decoration: none;
-        }
-        img {
-          vertical-align: middle;
-          padding-left: 15px;
-          opacity: 1;
-        }
+  background-color: #000;
+  background-repeat: no-repeat;
+  height: 150px;
+  position: relative;
+  // FIXME : no H1 here !
+  h1 {
+    position: absolute;
+    height: 50px;
+    left: 0;
+    right: 0;
+    background-color: #222;
+    opacity: .8;
+    bottom: 0px;
+    font-size: 25px;
+    line-height: 50px;
+    a {
+      color: #EDEDED;
+      text-decoration: none;
     }
+    img {
+      vertical-align: middle;
+      padding-left: 15px;
+      opacity: 1;
+    }
+  }
 }
 
 .screenshots {
@@ -134,7 +136,7 @@ h3 {
     padding-top: 80px;
     line-height: 80px;
     background: rgba(0,0,0,.7);
-    text-align: center;  
+    text-align: center;
     strong {
       text-transform: uppercase;
       font-size: 2.1em;
@@ -150,31 +152,16 @@ h3 {
     font-size: .7em;
     color: #DDD;
     strong {
-        margin-top: .5em;
-        display: block;
-        font-weight: bold;
-        color: #CCC;
-        font-size: 1.1em;
+      margin-top: .5em;
+      display: block;
+      font-weight: bold;
+      color: #CCC;
+      font-size: 1.1em;
     }
     a {
-        color: #DDD;
+      color: #DDD;
     }
 }
-/* == Blocks */
-
-.block {
-  margin-top: 20px;
-  border-radius: 3px;
-  border: 1px solid #444;
-  box-shadow: 0px 1px 1px rgba(200,200,200,.6) inset,
-              0 1px 1px rgba(230,230,230, .7);
-  background-color: #F0F0F0;
-  box-sizing: border-box;
-  padding: 20px;
-  color: #222;
-
-}
-
 /* == Forms */
 .base-form {
   label {
@@ -222,7 +209,6 @@ h3 {
   }
 }
 
-
 .game-list {
   margin: 0;
   li {
@@ -234,7 +220,6 @@ h3 {
       background-color: #222;
     }
   }
-
   a {
     color :#DDD;
     text-decoration: none;
@@ -272,23 +257,22 @@ h3 {
 }
 
 .download-pane {
-    margin: 140px 40px;
-    h1 {
-        font-size: 2em;
-        font-weight: bolder;
-        em {
-            font-weight: 100;
-            font-size: 0.7em;
-        }
+  margin: 140px 40px;
+  h1 {
+    font-size: 2em;
+    font-weight: bolder;
+    em {
+      font-weight: 100;
+      font-size: 0.7em;
     }
-    h2 {
-        color: #AAA;
-        font-style: italic;
-    }
-    li {
-        list-style-type: square;
-        font-size: 0.8em;
-        line-height: 1.8em;
-    }
+  }
+  h2 {
+    color: #AAA;
+    font-style: italic;
+  }
+  li {
+    list-style-type: square;
+    font-size: 0.8em;
+    line-height: 1.8em;
+  }
 }
-
