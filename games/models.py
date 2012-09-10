@@ -5,6 +5,26 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
 
+class News(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    content = models.TextField()
+    author = models.ForeignKey(User)
+    publish_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-publish_date']
+
+    def __unicode__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return '/news/%s/' % self.slug
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify("%d-%s" % (self.id, self.title))
+        return super(News, self).save(*args, **kwargs)
+
 class Platform(models.Model):
     """Gaming platform"""
     name = models.CharField(_('Name'), max_length=127)
@@ -16,7 +36,7 @@ class Platform(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Platform, self).save(*args, **args)
+        return super(Platform, self).save(*args, **args)
 
 
 class Company(models.Model):
@@ -37,7 +57,7 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Company, self).save(*args, **kwargs)
+        return super(Company, self).save(*args, **kwargs)
 
 
 class Runner(models.Model):
@@ -56,7 +76,7 @@ class Runner(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Runner, self).save(*args, **kwargs)
+        return super(Runner, self).save(*args, **kwargs)
 
 
 class Genre(models.Model):
@@ -128,4 +148,4 @@ class Installer(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)
-        super(Installer, self).save(*args, **kwargs)
+        return super(Installer, self).save(*args, **kwargs)

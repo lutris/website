@@ -3,6 +3,7 @@
 
 
 {% block content %}
+<div class="featured">
   {% for game in featured %}
   <div class="feature">
     <a href="{{ game.get_absolute_url }}">
@@ -15,4 +16,25 @@
     <span class="overlay">{{ game.name }}</span>
   </div>
   {% endfor %}
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>News</h3>
+    {% for article in news %}
+      <article>
+        <h4>{{ article.title }}
+          <small>Posted by: {{ article.author }} on {{ article.date }}</small>
+        </h4>
+        {{ article.content }}
+      </article>
+    {% endfor %}
+    <a href="" class="archives">Older news</a>
+  </div>
+  <div class="span3">
+    <h3>Latest games</h3>
+    {% for game in lastest_games %}
+      <strong>{{ game.name }}</strong>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
