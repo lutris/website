@@ -2,12 +2,9 @@
 {% load thumbnail %}
 {% block content %}
   <div class="game-header"
-    {% if game.cover %}
        {% thumbnail game.cover "940x150" crop="center" as banner %}
-        style="background-image: url('{{ banner.url }}')"
-       {% endthumbnail %}
-    {% endif %}
-    >
+       style="background-image: url('{{ banner.url }}')"
+       {% endthumbnail %}>
     <h1>
       <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' class='icon' />
       {{ game.name }}
