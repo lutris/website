@@ -1,4 +1,5 @@
 DEBUG = False
+ENVIRONMENT = "staging"
 
 DATABASES = {
     'default': {
@@ -10,3 +11,5 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+

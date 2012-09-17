@@ -2,6 +2,7 @@ from os.path import join, dirname, abspath
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+ENVIRONMENT = "dev"
 
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 
@@ -152,3 +153,9 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+if ENVIRONMENT in ("staging", "dev"):
+    MITHRIL_STRATEGY = 'myapp.strategy.MyStrategy'
+    MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
+            ['mithril.middleware.WhitelistMiddleware']
+    INSTALLED_APPS = list(INSTALLED_APPS) + ['mithril']
