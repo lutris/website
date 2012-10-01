@@ -155,7 +155,7 @@ except ImportError:
     pass
 
 if ENVIRONMENT in ("staging", "dev"):
-    MITHRIL_STRATEGY = 'myapp.strategy.MyStrategy'
+    MITHRIL_STRATEGY = 'games.strategy.DevelStrategy'
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
             ['mithril.middleware.WhitelistMiddleware']
     INSTALLED_APPS = list(INSTALLED_APPS) + ['mithril']

@@ -3,7 +3,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
+from django.contrib.sites.models import Site
 
+from mithril.models import Whitelist
+
+
+class SiteACL(models.Model):
+    site = models.OneToOneField(Site)
+    whitelist = models.ForeignKey(Whitelist, related_name='site_acl')
 
 class News(models.Model):
     title = models.CharField(max_length=255)

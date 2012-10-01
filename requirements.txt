@@ -1,7 +1,8 @@
 PyYAML
-django
+Django
 Pillow
--e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 sorl-thumbnail
 south
 django-compressor
+-e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
+-e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril 

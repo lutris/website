@@ -117,7 +117,7 @@ def migrate():
     require('code_root', provided_by=('staging', 'production'))
     with cd(env.code_root):
         run("source ../bin/activate; "
-            "python manage.py migrate")
+            "python manage.py migrate --no-initial-data")
 
 
 def syncdb():
@@ -134,7 +134,7 @@ def collect_static():
 
 
 def configtest():
-    run("apache2ctl configtest")
+    sudo("apache2ctl configtest")
 
 
 def deploy():
@@ -142,6 +142,8 @@ def deploy():
     copy_local_settings()
     bootstrap()
     collect_static()
+    syncdb()
+    migrate()
     update_vhost()
     configtest()
     apache_reload()
