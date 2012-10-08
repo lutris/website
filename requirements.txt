@@ -4,5 +4,7 @@ Pillow
 sorl-thumbnail
 south
 django-compressor
+django-grappelli
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
--e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril 
+-e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
+-e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop

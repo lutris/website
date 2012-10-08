@@ -3,6 +3,8 @@ from os.path import join, dirname, abspath
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ENVIRONMENT = "dev"
+if DEBUG:
+    THUMBNAIL_DEBUG = True
 
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 
@@ -86,17 +88,19 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
+
     'registration',
     'sorl.thumbnail',
     'compressor',
-    'games',
-    'south'
-)
+    'south',
+    'django_jcrop',
+    'mithril',
 
-if DEBUG:
-    THUMBNAIL_DEBUG = True
+    'games',
+)
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
@@ -141,7 +145,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'games': {
+        'lutrisweb': {
             'handlers': ['mail_admins'],
             'level': 'DEBUG',
             'propagate': True,
@@ -154,8 +158,7 @@ try:
 except ImportError:
     pass
 
-if ENVIRONMENT in ("staging", "dev"):
+if ENVIRONMENT in ("staging", ):
     MITHRIL_STRATEGY = 'games.strategy.DevelStrategy'
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
             ['mithril.middleware.WhitelistMiddleware']
-    INSTALLED_APPS = list(INSTALLED_APPS) + ['mithril']

@@ -1,7 +1,25 @@
 """Forms for the main app"""
+
+# pylint: disable=W0232, R0903
+
 import yaml
+from django_jcrop.forms import JCropImageWidget
+
 from django import forms
-from games.models import Installer
+
+import models
+
+
+class GameForm(forms.ModelForm):
+    cover = forms.ImageField(
+        widget=JCropImageWidget
+    )
+
+    class Media:
+        js = ('js/jquery-1.8.2.js', )
+
+    class Meta:
+        model = models.Game
 
 
 class InstallerForm(forms.ModelForm):
@@ -12,10 +30,9 @@ class InstallerForm(forms.ModelForm):
                                      'spellcheck': 'false'})
     )
 
-    # pylint: disable=W0232, R0903
     class Meta:
         """Form configuration"""
-        model = Installer
+        model = models.Installer
         exclude = ("user", "slug", "game")
 
     def clean_content(self):
@@ -28,4 +45,3 @@ class InstallerForm(forms.ModelForm):
         except yaml.parser.ParserError:
             raise forms.ValidationError("Invalid YAML data (parse error)")
         return yaml.dump(yaml_data, default_flow_style=False)
-        #return yaml_data

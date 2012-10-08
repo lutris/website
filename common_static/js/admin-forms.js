@@ -5,7 +5,6 @@ filters = function() {
 };
 
 $(function(){
-alert('plop');
     filters();
     $('#id_confirm_enabled').click(filters);
 });

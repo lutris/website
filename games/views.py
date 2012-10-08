@@ -27,6 +27,7 @@ class GameListByYear(GameList):
 
 def home(request):
     """Homepage view"""
+    print "this is the home"
     featured = Game.objects.exclude(cover__exact="")[:5]
     news = News.objects.all()[:5]
     return render(request, 'home.html',

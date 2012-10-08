@@ -12,6 +12,7 @@ class SiteACL(models.Model):
     site = models.OneToOneField(Site)
     whitelist = models.ForeignKey(Whitelist, related_name='site_acl')
 
+
 class News(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
@@ -21,6 +22,7 @@ class News(models.Model):
 
     class Meta:
         ordering = ['-publish_date']
+        verbose_name_plural = "news"
 
     def __unicode__(self):
         return self.title
@@ -31,6 +33,7 @@ class News(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify("%d-%s" % (self.id, self.title))
         return super(News, self).save(*args, **kwargs)
+
 
 class Platform(models.Model):
     """Gaming platform"""
