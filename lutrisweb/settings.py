@@ -3,8 +3,7 @@ from os.path import join, dirname, abspath
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ENVIRONMENT = "dev"
-if DEBUG:
-    THUMBNAIL_DEBUG = True
+THUMBNAIL_DEBUG = False
 
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 
@@ -98,9 +97,12 @@ INSTALLED_APPS = (
     'south',
     'django_jcrop',
     'mithril',
+    'django_nose',
 
     'games',
 )
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
