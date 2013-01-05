@@ -1,4 +1,5 @@
 """Views for lutris main app"""
+# pylint: disable=E1101
 
 from django.http import HttpResponse
 from django.views.generic import list_detail, ListView
@@ -7,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, \
                          Company, Installer, News
 from games.forms import InstallerForm
-#pylint: disable=E1101
 
 
 class GameList(ListView):
@@ -27,7 +27,6 @@ class GameListByYear(GameList):
 
 def home(request):
     """Homepage view"""
-    print "this is the home"
     featured = Game.objects.exclude(cover__exact="")[:5]
     news = News.objects.all()[:5]
     return render(request, 'home.html',
@@ -52,6 +51,13 @@ def new_installer(request, slug):
         return redirect("installer_complete", slug=game.slug)
     return render(request, 'games/new-installer.html',
                   {'form': form, 'game': game})
+
+def validate(game, request, form):
+    if request.method == 'POST' and form.is_valid():
+        installer = form.save(commit=False)
+        installer.game_id = game.id
+        installer.user_id = request.user.id
+        installer.save()
 
 
 @login_required
