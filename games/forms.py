@@ -15,9 +15,6 @@ class GameForm(forms.ModelForm):
         widget=JCropImageWidget
     )
 
-    class Media:
-        js = ('js/jquery-1.8.2.js', )
-
     class Meta:
         model = models.Game
 
