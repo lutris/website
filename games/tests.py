@@ -6,18 +6,17 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from django.test.client import Client
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+class PagesTest(TestCase):
+    def setUp(self):
+        self.client = Client()
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+    def test_get_homepage(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
 
->>> 1 + 1 == 2
-True
-"""}
+    def test_non_existent(self):
+        response = self.client.get("/foobar/baz")
+        self.assertEqual(response.status_code, 404)
