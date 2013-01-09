@@ -1,0 +1,7 @@
+*.pyc
+tags
+lutris.db
+lutrisweb.log
+media/cache
+static/CACHE
+./static
