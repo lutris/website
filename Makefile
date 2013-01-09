@@ -5,6 +5,9 @@ db:
 	./manage.py syncdb --noinput
 	./manage.py migrate
 
+clean:
+	find . -name "*.pyc" -delete
+
 test:
 	./manage.py test
 
