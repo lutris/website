@@ -1,14 +1,15 @@
 """Forms for the main app"""
-
 # pylint: disable=W0232, R0903
-
 import yaml
 from django_jcrop.forms import JCropImageWidget
-
 from django import forms
-
 import models
 
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = models.News
+        exclude = ('slug', )
 
 class GameForm(forms.ModelForm):
     cover = forms.ImageField(

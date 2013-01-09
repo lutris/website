@@ -16,8 +16,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': join(PROJECT_PATH, 'lutris.db'),
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
+        'USER': '',
+        'PASSWORD': '',
         'HOST': '',
         'PORT': '',
     }
@@ -160,7 +160,7 @@ try:
 except ImportError:
     pass
 
-if ENVIRONMENT in ("staging", ):
+if ENVIRONMENT == "staging":
     MITHRIL_STRATEGY = 'games.strategy.DevelStrategy'
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + \
             ['mithril.middleware.WhitelistMiddleware']

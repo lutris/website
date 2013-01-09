@@ -17,7 +17,6 @@ class News(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     content = models.TextField()
-    author = models.ForeignKey(User)
     publish_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -31,7 +30,7 @@ class News(models.Model):
         return '/news/%s/' % self.slug
 
     def save(self, *args, **kwargs):
-        self.slug = slugify("%d-%s" % (self.id, self.title))
+        self.slug = slugify(self.title)
         return super(News, self).save(*args, **kwargs)
 
 
