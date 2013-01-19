@@ -9,7 +9,7 @@
     {% for game in featured %}
     <div class="feature ">
       <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.cover "960x320" crop="top" as img %}
+      {% thumbnail game.title_logo "960x320" crop="top" as img %}
         <img src="{{ img.url }}">
       {% empty %}
         Image not available

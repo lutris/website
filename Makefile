@@ -17,3 +17,6 @@ deps:
 migration:
 	./manage.py schemamigration games --auto
 	./manage.py migrate
+
+fixtures:
+	./manage.py dumpdata --indent=2 games > games/fixtures/initial_data.json
