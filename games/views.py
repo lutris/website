@@ -1,8 +1,11 @@
 """Views for lutris main app"""
 # pylint: disable=E1101
 
+from django.conf import settings
 from django.http import HttpResponse
+
 from django.views.generic import list_detail, ListView
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, \
@@ -28,9 +31,21 @@ class GameListByYear(GameList):
 def home(request):
     """Homepage view"""
     featured = Game.objects.exclude(cover__exact="")[:5]
+    latest_games = Game.objects.all()[:5]
     news = News.objects.all()[:5]
+    download_type = "Ubuntu"
     return render(request, 'home.html',
-                  {'featured': featured, 'news': news})
+                  {'featured': featured, 'news': news,
+                   'download_type': download_type})
+
+def news_archives(request):
+    news = News.objects.all()
+    return render(request, 'news.html', {'news': news})
+
+def download_latest(request):
+    archive_url = settings.LATEST_LUSTRIS_DEB
+    return redirect(archive_url)
+
 
 
 def game_detail(request, slug):

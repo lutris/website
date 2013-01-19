@@ -103,6 +103,7 @@ INSTALLED_APPS = (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+LATEST_LUSTRIS_DEB = "http://lutris.net/releases/lutris_0.2.7ubuntu0_all.deb"
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"

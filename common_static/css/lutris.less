@@ -5,8 +5,13 @@
 body {
   background-color: #121212;
   font-size: 16px;
+  color: #EFEFEF;
+    
 }
 
+article {
+  margin-bottom: 2em;
+}
 h1, h2, h3, h4 {
   font-weight: normal;
   word-spacing: .1em;
@@ -15,8 +20,18 @@ h1, h2, h3, h4 {
 
 h1 { font-size: 1.8em; }
 h2 { font-size: 1.4em; }
-h3 { font-size: 1.2em; }
-h4 { font-size: 1.1em;  }
+h3 {
+  color: #BBB; 
+  font-size: 1.2em; 
+  background-color: #444;
+  padding: 7px 14px;
+
+}
+h4 { 
+  font-size: 1.1em;
+  color: #CDCDCD;
+  border-bottom: 1px solid #4D4D4D;
+}
 
 /* == Helpers */
 .rounded-corners (@radius: 5px) {
@@ -47,7 +62,7 @@ h4 { font-size: 1.1em;  }
 /* == Page Layout */
 .content {
   width: @siteWidth;
-  color: #E0E0E0;
+
 }
 
 .block {
@@ -65,6 +80,7 @@ h4 { font-size: 1.1em;  }
 .navbar {
   width: @siteWidth;
   margin: auto;
+  margin-bottom: 25px;
 }
 
 .icon {
@@ -259,23 +275,18 @@ h4 { font-size: 1.1em;  }
   }
 }
 
+.download-button {
+  color: #222;
+  display: block;
+  background-color: #55BAD9;
+  padding: 15px;
+  text-align: center;
+  em {
+    font-size: .8em;
+    color: #555;
+  }
+}
+
 .download-pane {
-  margin: 140px 40px;
-  h1 {
-    font-size: 2em;
-    font-weight: bolder;
-    em {
-      font-weight: 100;
-      font-size: 0.7em;
-    }
-  }
-  h2 {
-    color: #AAA;
-    font-style: italic;
-  }
-  li {
-    list-style-type: square;
-    font-size: 0.8em;
-    line-height: 1.8em;
-  }
+  margin: 33px 15px;
 }

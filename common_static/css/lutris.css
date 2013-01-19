@@ -1,25 +1,57 @@
-/* == Functions */
-h3 {
-  font-size: 21px;
-}
-/* == Tags */
+/* == Variables */
+/* == Defaults */
 body {
   background-color: #121212;
+  font-size: 16px;
+  color: #EFEFEF;
+}
+article {
+  margin-bottom: 2em;
 }
 h1,
 h2,
 h3,
 h4 {
-  font-weight: 800;
+  font-weight: normal;
   word-spacing: .1em;
   margin-bottom: .8em;
+}
+h1 {
+  font-size: 1.8em;
 }
 h2 {
   font-size: 1.4em;
 }
+h3 {
+  color: #BBB;
+  font-size: 1.2em;
+  background-color: #444;
+  padding: 7px 14px;
+}
+h4 {
+  font-size: 1.1em;
+  color: #CDCDCD;
+  border-bottom: 1px solid #4D4D4D;
+}
+/* == Helpers */
+/* == Page Layout */
+.content {
+  width: 940px;
+}
+.block {
+  margin-top: 20px;
+  border-radius: 3px;
+  border: 1px solid #444;
+  box-shadow: 0px 1px 1px rgba(200, 200, 200, 0.6) inset, 0 1px 1px rgba(230, 230, 230, 0.7);
+  background-color: #F0F0F0;
+  box-sizing: border-box;
+  padding: 20px;
+  color: #222;
+}
 .navbar {
   width: 940px;
   margin: auto;
+  margin-bottom: 25px;
 }
 .icon {
   position: relative;
@@ -40,43 +72,34 @@ h2 {
 .errorlist li {
   list-style-type: none;
 }
-/* == Content */
-#content {
-  width: 940px;
-  font-size: 1em;
-  color: #E0E0E0;
-}
-.feature {
-  width: 400px;
-  height: 300px;
-}
+/* == Classes */
 .overlay {
+  position: relative;
   display: block;
+  top: -25px;
+  padding: 5px;
+  line-height: 25px;
+  white-space: nowrap;
   background-color: rgba(0, 0, 0, 0.8);
   color: #EEE;
-  padding: 5px;
-  position: relative;
-  line-height: 25px;
-  top: -25px;
-  white-space: nowrap;
 }
 .game-header {
-  background-color: #000;
-  background-image: url("/media/images/banners/quake-banner.jpg");
-  background-repeat: no-repeat;
-  height: 150px;
   position: relative;
+  height: 150px;
+  background-repeat: no-repeat;
+  background-color: #000;
 }
 .game-header h1 {
   position: absolute;
   height: 50px;
   left: 0;
   right: 0;
-  background-color: #222;
-  opacity: .8;
-  bottom: 0px;
+  bottom: 0;
   font-size: 25px;
   line-height: 50px;
+  background-color: #222;
+  color: #EEE;
+  opacity: .8;
 }
 .game-header h1 a {
   color: #EDEDED;
@@ -88,8 +111,22 @@ h2 {
   opacity: 1;
 }
 .screenshots {
-  padding: 10px;
+  padding: 30px;
   border: 1px solid #333;
+}
+.screenshots .no-screenshots {
+  height: 400px;
+  width: 640px;
+  padding-top: 80px;
+  line-height: 80px;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+}
+.screenshots .no-screenshots strong {
+  text-transform: uppercase;
+  font-size: 2.1em;
+  color: #777;
+  display: block;
 }
 .game-info {
   padding: 10px;
@@ -106,17 +143,6 @@ h2 {
 }
 .game-info a {
   color: #DDD;
-}
-/* == Blocks */
-.block {
-  margin-top: 20px;
-  border-radius: 3px;
-  border: 1px solid #444;
-  box-shadow: 0px 1px 1px rgba(200, 200, 200, 0.6) inset, 0 1px 1px rgba(230, 230, 230, 0.7);
-  background-color: #F0F0F0;
-  box-sizing: border-box;
-  padding: 20px;
-  color: #222;
 }
 /* == Forms */
 .base-form label {
@@ -144,20 +170,15 @@ h2 {
   color: #FFFFFF;
   border-color: #a84300;
   background-color: #fc6500;
-  padding: 15px;
   display: block;
+  padding: 15px;
+  margin: 20px 10px;
   font-size: 1.2em;
   text-align: center;
   width: 160px;
-  -moz-border-radius: 15px;
-  /*
-    -webkit-gradient: (linear, left bottom,left top,color-stop(0.45, rgb(148,30,12)), color-stop(0.74, rgb(219,139,48)), color-stop(0.94, rgb(255,195,161)));
-    -moz-linear-gradient: (center bottom, rgb(148,30,12) 45%, rgb(219,139,48) 74%, rgb(255,195,161) 94%);
-    */
-
-  margin: 20px 10px;
   border: 2px solid #C85000;
   text-decoration: none;
+  -moz-border-radius: 15px;
 }
 .breadcrumb a {
   color: #AAA;
@@ -165,43 +186,63 @@ h2 {
   text-decoration: none;
   font-size: .9em;
 }
-.game_list_element {
-  border: 1px solid #333;
-  padding: 10px;
-  height: 148px;
+.game-list {
+  margin: 0;
 }
-.game_list_element a {
+.game-list li {
+  list-style-type: none;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #555;
+}
+.game-list li:hover {
+  background-color: #222;
+}
+.game-list a {
   color: #DDD;
   text-decoration: none;
 }
-.game_list_element .game-title {
-  font-size: 1.3em;
+.game-list .game-cover {
+  float: left;
+  width: 120px;
+  height: 40px;
+  text-transform: uppercase;
+  line-height: 40px;
+  background-color: #666;
+  text-align: center;
+  margin-right: 15px;
+  color: #AAA;
+  font-size: 1.5em;
+  border: 1px solid #AAA;
+  padding: 2px;
 }
-.game_list_element .logo {
+.game-list .game-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #D9B555;
+}
+.game-list .logo {
   float: left;
   vertical-align: top;
   margin-right: 20px;
 }
-.game_list_element .info {
+.game-list .info {
   font-size: .8em;
 }
+.game-list .info a {
+  border-bottom: 1px dotted #666;
+}
+.download-button {
+  color: #222;
+  display: block;
+  background-color: #55BAD9;
+  padding: 15px;
+  text-align: center;
+}
+.download-button em {
+  font-size: .8em;
+  color: #555;
+}
 .download-pane {
-  margin: 140px 40px;
-}
-.download-pane h1 {
-  font-size: 2em;
-  font-weight: bolder;
-}
-.download-pane h1 em {
-  font-weight: 100;
-  font-size: 0.7em;
-}
-.download-pane h2 {
-  color: #AAA;
-  font-style: italic;
-}
-.download-pane li {
-  list-style-type: square;
-  font-size: 0.8em;
-  line-height: 1.8em;
+  margin: 33px 15px;
 }

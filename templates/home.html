@@ -1,43 +1,45 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load url from future %}
 
 
 {% block content %}
-<div class="featured">
-  {% for game in featured %}
-  <div class="feature">
-    <a href="{{ game.get_absolute_url }}">
-    {% thumbnail game.cover "960x320" crop="top" as img %}
-      <img src="{{ img.url }}">
-    {% empty %}
-      Image not available
-    {% endthumbnail %}
-    </a>
-    <span class="overlay">{{ game.name }}</span>
+<div class='row'>
+  <div class="featured span9">
+    {% for game in featured %}
+    <div class="feature ">
+      <a href="{{ game.get_absolute_url }}">
+      {% thumbnail game.cover "960x320" crop="top" as img %}
+        <img src="{{ img.url }}">
+      {% empty %}
+        Image not available
+      {% endthumbnail %}
+      </a>
+      <span class="overlay">{{ game.name }}</span>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
+  <div class="span3">
+    <p class="download-pane">
+      <a href="{% url "download_latest" %}" class='download-button'>
+        Download Lutris client<br/>
+        <em>for {{ download_type }}</em>
+      </a>
+      <a href="{% url "download" %}">Other download options</a>
+    </p>
+    
+  </div>
 </div>
 <div class="row">
-  <div class="span9">
+  <div class="span9 news">
     <h3>News</h3>
-    {% for article in news %}
-      <article>
-        <h4>{{ article.title }}
-          <small>Posted by: {{ article.author }} on {{ article.date }}</small>
-        </h4>
-        {{ article.content }}
-      </article>
-    {% empty %}
-      <p>
-      Sorry, no news is published.
-      </p>
-    {% endfor %}
-    <a href="" class="archives">Older news</a>
+    {% include "_news-list.html" %}
+    <a href="{% url "news_archives" %}" class="archives">Older news</a>
   </div>
   <div class="span3">
     <h3>Latest games</h3>
-    {% for game in lastest_games %}
-      <strong>{{ game.name }}</strong>
+    {% for game in latest_games %}
+      <strong>{{ game }}</strong>
     {% endfor %}
   </div>
 </div>

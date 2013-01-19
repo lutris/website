@@ -1,0 +1,12 @@
+{% for article in news %}
+  <article>
+    <h4>{{ article.title }}
+      <small>Posted {{ article.publish_date }}</small>
+    </h4>
+    {{ article.content }}
+  </article>
+{% empty %}
+  <p>
+  Sorry, no news is published.
+  </p>
+{% endfor %}
