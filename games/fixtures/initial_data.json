@@ -176,11 +176,11 @@
     "fields": {
       "website": "", 
       "publisher": 4, 
-      "updated": "2013-01-19T21:42:44.922Z", 
+      "updated": "2013-01-19T23:44:11.395Z", 
       "name": "Prince of Persia: The sands of time", 
-      "created": "2013-01-19T21:42:44.922Z", 
+      "created": "2013-01-19T23:44:11.395Z", 
       "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.", 
-      "cover": "games/covers/Sands_of_time_cover_3.jpg", 
+      "cover": "games/covers/Sands_of_time_cover_1.jpg", 
       "genres": [
         2
       ], 
@@ -188,9 +188,9 @@
         1
       ], 
       "year": 2003, 
-      "icon": "games/icons/Prince_of_Persia_Sands_of_Time_2.png", 
+      "icon": "games/icons/quake_1.png", 
       "slug": "prince-persia-sands-time", 
-      "title_logo": "games/banners/POP_Logo_Black_Background_2.gif", 
+      "title_logo": "games/banners/POP_Logo_Black_Background_1.gif", 
       "developer": null
     }
   }, 
@@ -216,6 +216,17 @@
       "slug": "quake", 
       "title_logo": "games/banners/quake.jpg", 
       "developer": 1
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "games.screenshot", 
+    "fields": {
+      "description": "cv", 
+      "game": 1, 
+      "uploaded_at": "2013-01-19T23:01:14.868Z", 
+      "image": "games/screenshots/dp000005.jpg", 
+      "uploaded_by": 1
     }
   }
 ]

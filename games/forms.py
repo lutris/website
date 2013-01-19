@@ -23,6 +23,21 @@ class GameForm(forms.ModelForm):
         model = models.Game
 
 
+class ScreenshotForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Screenshot
+        exclude = ['game', 'uploaded_at', 'uploaded_by']
+
+    def __init__(self, *args, **kwargs):
+        self.game = models.Game.objects.get(pk=kwargs.pop('game_id'))
+        super(ScreenshotForm, self).__init__(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.instance['game'] = self.game
+        return super(ScreenshotForm, self).save(*args, **kwargs)
+
+
 class InstallerForm(forms.ModelForm):
     """Form to create and modify installers"""
 

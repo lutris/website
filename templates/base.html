@@ -11,6 +11,8 @@
   {% compress css %}
   <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
   {% endcompress %}
+  {% block stylesheets %}
+  {% endblock %}
   <meta name="viewport" content="width=device-width">
 </head>
 <body>
@@ -43,6 +45,10 @@
   <div id="content" class="page container">
     {% block content %}{% endblock %}
   </div>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
+  {% block scripts %}
+
+  {% endblock %}
 </body>
 </html>
 

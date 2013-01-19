@@ -2,22 +2,27 @@
 {% load thumbnail %}
 {% load url from future %}
 
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
+{% endblock %}
 
 {% block content %}
 <div class='row'>
   <div class="featured span9">
+    <div class="slider-wrapper theme-dark">
+    <div id="featured-slider" class="nivoSlider" style="width: 680px; height: 220px;">
     {% for game in featured %}
-    <div class="feature ">
       <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.title_logo "960x320" crop="top" as img %}
-        <img src="{{ img.url }}">
+      {% thumbnail game.title_logo "680x220" crop="top" as img %}
+      <img src="{{ img.url }}" width=680 height=220>
       {% empty %}
         Image not available
       {% endthumbnail %}
       </a>
-      <span class="overlay">{{ game.name }}</span>
-    </div>
     {% endfor %}
+    </div>
+    </div>
   </div>
   <div class="span3">
     <p class="download-pane">
@@ -43,4 +48,14 @@
     {% endfor %}
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.nivo.slider.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#featured-slider").nivoSlider();
+  })
+</script>
 {% endblock %}

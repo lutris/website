@@ -5,3 +5,4 @@ lutrisweb.log
 media/cache
 static/CACHE
 ./static
+media/games/screenshots/*

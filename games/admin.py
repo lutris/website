@@ -19,6 +19,7 @@ class GameAdmin(admin.ModelAdmin):
 admin.site.register(models.SiteACL)
 admin.site.register(models.News, NewsAdmin)
 admin.site.register(models.Game, GameAdmin)
+admin.site.register(models.Screenshot)
 admin.site.register(models.Genre)
 admin.site.register(models.Runner)
 admin.site.register(models.Platform)

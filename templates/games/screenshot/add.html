@@ -4,15 +4,12 @@
 
 <div class="row">
   <div class="span12">
-    <form action="" method='post'>
-      <ul>
-      {{ form.as_ul }}
-      <li>
-        <input type="submit" />
-      </li>
-      </ul>
+    <form action="" method='post' class='upload-form' enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" value="Upload screenshot"/>
     </form>
   </div>
 </div>
-  
+
 {% endblock %}

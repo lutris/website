@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from games.models import Game, Runner, Genre, Platform, \
                          Company, Installer, News
-from games.forms import InstallerForm
+from games.forms import InstallerForm, ScreenshotForm
 
 
 class GameList(ListView):
@@ -173,4 +173,7 @@ def games_by_platform(request, platform_slug):
 
 def screenshot_add(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    return render(request, 'games/screenshot/add.html')
+    form = ScreenshotForm(request.POST or None, game_id=game.id)
+    if form.is_valid():
+        form.save()
+    return render(request, 'games/screenshot/add.html', {'form': form})

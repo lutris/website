@@ -147,16 +147,16 @@ h4 {
   color: #DDD;
 }
 /* == Forms */
-.base-form label {
+form label {
   display: block;
   font-size: .9em;
   line-height: 1.6em;
 }
-.base-form .form-row {
+form .form-row {
   display: block;
 }
-.base-form input[type=text],
-.base-form input[type=password] {
+form input[type=text],
+form input[type=password] {
   font-size: 1.1em;
   color: #555;
   border: 2px solid #444;
