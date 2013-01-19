@@ -85,7 +85,7 @@ h4 {
 }
 .game-header {
   position: relative;
-  height: 150px;
+  height: 250px;
   background-repeat: no-repeat;
   background-color: #000;
 }
@@ -97,9 +97,11 @@ h4 {
   bottom: 0;
   font-size: 25px;
   line-height: 50px;
-  background-color: #222;
+  background: rgba(22, 22, 22, 0.5);
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.7)), to(rgba(22, 22, 22, 0.5)));
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.7), rgba(22, 22, 22, 0.5));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@start', endColorstr='@end');
   color: #EEE;
-  opacity: .8;
 }
 .game-header h1 a {
   color: #EDEDED;

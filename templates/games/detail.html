@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% block content %}
   <div class="game-header"
-       {% thumbnail game.cover "940x150" crop="center" as banner %}
+       {% thumbnail game.title_logo "940x250" crop="top" as banner %}
        style="background-image: url('{{ banner.url }}')"
        {% endthumbnail %}>
     <h1>

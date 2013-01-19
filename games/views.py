@@ -64,7 +64,7 @@ def new_installer(request, slug):
         installer.save()
 
         return redirect("installer_complete", slug=game.slug)
-    return render(request, 'games/new-installer.html',
+    return render(request, 'games/installer-form.html',
                   {'form': form, 'game': game})
 
 def validate(game, request, form):
