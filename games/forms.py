@@ -12,15 +12,13 @@ class NewsForm(forms.ModelForm):
         exclude = ('slug', )
 
 class GameForm(forms.ModelForm):
-    cover = forms.ImageField(
-        widget=JCropImageWidget
-    )
     title_logo = forms.ImageField(
         widget=JCropImageWidget
     )
 
     class Meta:
         model = models.Game
+        exclude = ('slug', )
 
 
 class ScreenshotForm(forms.ModelForm):

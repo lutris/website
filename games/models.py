@@ -115,7 +115,6 @@ class Game(models.Model):
     )
     website = models.CharField(max_length=200, blank=True)
     icon = models.ImageField(upload_to='games/icons', blank=True)
-    cover = models.ImageField(upload_to='games/covers', blank=True)
     title_logo = models.ImageField(upload_to='games/banners', blank=True)
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now=True)
