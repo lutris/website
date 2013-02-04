@@ -1,10 +1,10 @@
 PyYAML
-Django
+Django>=1.4.3
 Pillow
 sorl-thumbnail
 south
 nose
-django-compressor
+django-compressor>=1.2
 django-grappelli
 django-nose
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration

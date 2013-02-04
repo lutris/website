@@ -134,18 +134,24 @@ def collect_static():
     with cd(env.code_root):
         run('source ../bin/activate; python manage.py collectstatic --noinput')
 
+def fix_perms(user='www-data'):
+    with cd(env.code_root):
+        sudo('chown -R %s:%s static' % (user, user))
+        sudo('chown -R %s:%s media' % (user, user))
 
 def configtest():
     sudo("apache2ctl configtest")
 
 
 def deploy():
+    fix_perms(user='django')
     rsync()
     copy_local_settings()
     bootstrap()
     collect_static()
     syncdb()
     migrate()
+    fix_perms()
     update_vhost()
     configtest()
     apache_reload()
