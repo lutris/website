@@ -5,7 +5,9 @@
 {% block content %}
 <div class='breadcrumb'>
   <a href='{% url "game_list" %}'>Games</a>
-  <span class='breadcrumb'>&gt;</span>
+  {% if genre or platform or runner or year %}
+    <span class='breadcrumb'>&gt;</span>
+  {% endif %}
   {% if genre %}
     <a href='{% url "game_list_by_genre" genre.slug %}'>{{ genre }}</a>
   {% endif %}
@@ -22,14 +24,21 @@
 <ul class='game-list'>
   {% for game in games %}
     <li class='clearfix'>
+    <a href="{{ game.get_absolute_url }}">
       {% thumbnail game.title_logo '120x40' crop="top" as img %}
         <img class='game-cover' src='{{ img.url }}' />
       {% empty %}
         <span class='game-cover'>no image</span>
       {% endthumbnail %}
+      </a>
       <div>
-        <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
+        <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a>
         <div class='info'>
+          <p>
+            {% for genre in game.genres.all %}
+            <a href="#">{{ genre }}</a>
+            {% endfor %}
+          </p>  
           {% if game.year %}
           Released in <a href='{% url "game_list_by_year" game.year %}'>{{ game.year }}</a>
           {% endif %}
