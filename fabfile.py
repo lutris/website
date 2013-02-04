@@ -7,6 +7,8 @@ from fabric.contrib import console
 RSYNC_EXCLUDE = (
     '.bzr',
     '.bzrignore',
+    '.git',
+    '.gitignore',
     '*.pyc',
     '*.example',
     '*.db',
