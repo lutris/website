@@ -21,6 +21,9 @@
     <a href='{% url "game_list_by_year" year %}'>{{ year }}</a>
   {% endif %}
 </div>
+
+<a href="{% url "submit_game" %}">Submit a new game</a>
+
 <ul class='game-list'>
   {% for game in games %}
     <li class='clearfix'>
@@ -40,7 +43,7 @@
             {% endfor %}
           </p>  
           {% if game.year %}
-          Released in <a href='{% url "game_list_by_year" game.year %}'>{{ game.year }}</a>
+          Released in <a href='{% url "games_by_year" game.year %}'>{{ game.year }}</a>
           {% endif %}
           {% if game.developer %}
           Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>

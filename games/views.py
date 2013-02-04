@@ -8,9 +8,9 @@ from django.views.generic import list_detail, ListView
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from games.models import Game, Runner, Genre, Platform, \
-                         Company, Installer, News
-from games.forms import InstallerForm, ScreenshotForm
+from games.models import (Game, Runner, Genre, Platform,
+                          Company, Installer, News)
+from games.forms import InstallerForm, ScreenshotForm, GameForm
 
 
 class GameList(ListView):
@@ -31,21 +31,22 @@ class GameListByYear(GameList):
 def home(request):
     """Homepage view"""
     featured = Game.objects.exclude(cover__exact="")[:5]
-    latest_games = Game.objects.all()[:5]
+    #latest_games = Game.objects.all()[:5]
     news = News.objects.all()[:5]
     download_type = "Ubuntu"
     return render(request, 'home.html',
                   {'featured': featured, 'news': news,
                    'download_type': download_type})
 
+
 def news_archives(request):
     news = News.objects.all()
     return render(request, 'news.html', {'news': news})
 
+
 def download_latest(request):
     archive_url = settings.LATEST_LUSTRIS_DEB
     return redirect(archive_url)
-
 
 
 def game_detail(request, slug):
@@ -66,6 +67,7 @@ def new_installer(request, slug):
         return redirect("installer_complete", slug=game.slug)
     return render(request, 'games/installer-form.html',
                   {'form': form, 'game': game})
+
 
 def validate(game, request, form):
     if request.method == 'POST' and form.is_valid():
@@ -112,7 +114,7 @@ def games_by_runner(request, runner_slug):
                   {'games': games})
 
 
-def game_list_by_year(request, year):
+def games_by_year(request, year):
     """View for games filtered by year"""
     return list_detail.object_list(
         request,
@@ -123,7 +125,7 @@ def game_list_by_year(request, year):
     )
 
 
-def game_list_by_genre(request, genre_slug):
+def games_by_genre(request, genre_slug):
     """View for games filtered by genre"""
     genre = get_object_or_404(Genre, slug=genre_slug)
     return list_detail.object_list(
@@ -169,6 +171,11 @@ def games_by_platform(request, platform_slug):
         template_object_name='games',
         extra_context={'platform': platform}
     )
+
+
+def submit_game(request):
+    form = GameForm()
+    return render(request, 'games/submit.html', {'form': form})
 
 
 def screenshot_add(request, slug):
