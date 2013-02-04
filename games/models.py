@@ -45,7 +45,7 @@ class Platform(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        return super(Platform, self).save(*args, **args)
+        return super(Platform, self).save(*args, **kwargs)
 
 
 class Company(models.Model):

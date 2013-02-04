@@ -6,7 +6,9 @@
        style="background-image: url('{{ banner.url }}')"
        {% endthumbnail %}>
     <h1>
-      <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' class='icon' />
+      {% if game.icon %}
+        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' class='icon' />
+      {% endif %}
       {{ game.name }}
     </h1>
   </div>
@@ -34,17 +36,26 @@
         {% endthumbnail %}
 
         <strong>Genre: </strong>
-        {{ game.genre }}
+        {{ game.genres.name }}
+        {% for genre in game.genres.all %}
+        {{ genre }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+
         <strong>Platform: </strong>
-        {{ game.platform }}
+       {% for platform in game.platforms.all %}
+        {{ platform }}
+       {% endfor %}
+
         <strong>Developer: </strong>
         {{ game.developer }}
         <strong>Publisher: </strong>
         {{ game.publisher }}
         <strong>Release date: </strong>
         {{ game.year }}
-        <strong>Website: </strong>
-        <a href='{{ game.website }}' >{{ game.website }}</a>
+        {% if game.website %} 
+          <strong>Website: </strong>
+          <a href='{{ game.website }}' >{{ game.website }}</a>
+        {% endif %}
       </div>
     </div>
   </div>

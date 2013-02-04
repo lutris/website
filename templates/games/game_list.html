@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load url from future %}
 
 {% block content %}
 <div class='breadcrumb'>
-  <a href='{% url game_list %}'>Games</a>
+  <a href='{% url "game_list" %}'>Games</a>
   <span class='breadcrumb'>&gt;</span>
   {% if genre %}
-    <a href='{% url game_list_by_genre genre.slug %}'>{{ genre }}</a>
+    <a href='{% url "game_list_by_genre" genre.slug %}'>{{ genre }}</a>
   {% endif %}
   {% if platform %}
     <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
@@ -15,13 +16,13 @@
     <a href='/games/runner/{{ runner.slug }}'>{{ runner }}</a>
   {% endif %}
   {% if year %}
-    <a href='{% url game_list_by_year year %}'>{{ year }}</a>
+    <a href='{% url "game_list_by_year" year %}'>{{ year }}</a>
   {% endif %}
 </div>
 <ul class='game-list'>
   {% for game in games %}
     <li class='clearfix'>
-      {% thumbnail game.cover '120x40' crop="top" as img %}
+      {% thumbnail game.title_logo '120x40' crop="top" as img %}
         <img class='game-cover' src='{{ img.url }}' />
       {% empty %}
         <span class='game-cover'>no image</span>
@@ -29,7 +30,9 @@
       <div>
         <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a><br/>
         <div class='info'>
-          Released in <a href='{% url game_list_by_year game.year %}'>{{ game.year }}</a>
+          {% if game.year %}
+          Released in <a href='{% url "game_list_by_year" game.year %}'>{{ game.year }}</a>
+          {% endif %}
           {% if game.developer %}
           Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
           {% endif %}
