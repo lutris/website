@@ -1,5 +1,7 @@
 """Models for main lutris app"""
+import os
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
@@ -129,6 +131,11 @@ class Game(models.Model):
     def get_absolute_url(self):
         """Return the absolute url for a game"""
         return "/games/%s/" % self.slug
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super(Game, self).save(*args, **kwargs)
 
 
 class Screenshot(models.Model):

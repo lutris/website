@@ -1,9 +1,14 @@
 """Forms for the main app"""
 # pylint: disable=W0232, R0903
+import os
 import yaml
-from django_jcrop.forms import JCropImageWidget
+
 from django import forms
-import models
+from django.conf import settings
+from django.template.defaultfilters import slugify
+
+from django_jcrop.forms import JCropImageWidget
+from games import models
 
 
 class NewsForm(forms.ModelForm):
@@ -11,14 +16,41 @@ class NewsForm(forms.ModelForm):
         model = models.News
         exclude = ('slug', )
 
+
 class GameForm(forms.ModelForm):
     title_logo = forms.ImageField(
-        widget=JCropImageWidget
+        widget=JCropImageWidget, required=False
     )
 
     class Meta:
         model = models.Game
         exclude = ('slug', )
+
+    def rename_uploaded_file(self, file_field, cleaned_data, slug):
+        if self.files.get(file_field):
+            clean_field = cleaned_data.get(file_field)
+            _, ext = os.path.splitext(clean_field.name)
+            relpath = 'games/banners/%s%s' % (slug, ext)
+            clean_field.name = relpath
+            current_abspath = os.path.join(settings.MEDIA_ROOT, relpath)
+            if os.path.exists(current_abspath):
+                os.remove(current_abspath)
+            return clean_field
+        return None
+
+    def clean(self):
+        cleaned_data = super(GameForm, self).clean()
+        slug = cleaned_data.get('slug', self.instance.slug)
+        name = cleaned_data.get('name', self.instance.name)
+        if not slug:
+            slug = slugify(name)
+        # Modify only if title_logo has been posted
+        for file_field in ('title_logo', 'icon'):
+            cleaned_data[file_field] = self.rename_uploaded_file(file_field,
+                                                                 cleaned_data,
+                                                                 slug)
+        cleaned_data['slug'] = slug
+        return cleaned_data
 
 
 class ScreenshotForm(forms.ModelForm):

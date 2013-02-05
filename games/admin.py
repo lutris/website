@@ -13,7 +13,7 @@ class GameAdmin(admin.ModelAdmin):
     form = forms.GameForm
 
     class Media:
-        js = ('js/jquery-1.8.2.js', )
+        js = ('js/jquery-1.9.0.min.js', )
 
 
 admin.site.register(models.SiteACL)

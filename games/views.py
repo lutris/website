@@ -30,7 +30,7 @@ class GameListByYear(GameList):
 
 def home(request):
     """Homepage view"""
-    featured = Game.objects.exclude(cover__exact="")[:5]
+    featured = Game.objects.exclude(title_logo__exact="")[:5]
     #latest_games = Game.objects.all()[:5]
     news = News.objects.all()[:5]
     download_type = "Ubuntu"
