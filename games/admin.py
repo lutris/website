@@ -11,6 +11,7 @@ class NewsAdmin(admin.ModelAdmin):
 
 class GameAdmin(admin.ModelAdmin):
     form = forms.GameForm
+    ordering = ("name", )
 
     class Media:
         js = ('js/jquery-1.9.0.min.js', )
