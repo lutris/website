@@ -1,231 +1,229 @@
 [
   {
-    "pk": 2, 
-    "model": "games.news", 
+    "pk": 2,
+    "model": "games.news",
     "fields": {
-      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
-      "publish_date": "2013-01-19T20:15:53.143Z", 
-      "slug": "lutris-028-released", 
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "publish_date": "2013-01-19T20:15:53.143Z",
+      "slug": "lutris-028-released",
       "title": "Lutris 0.2.8 released"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.news", 
+    "pk": 1,
+    "model": "games.news",
     "fields": {
-      "content": "ploppi\r\n", 
-      "publish_date": "2013-01-09T22:57:57.005Z", 
-      "slug": "hello-world", 
+      "content": "ploppi\r\n",
+      "publish_date": "2013-01-09T22:57:57.005Z",
+      "slug": "hello-world",
       "title": "hello world"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.platform", 
+    "pk": 1,
+    "model": "games.platform",
     "fields": {
-      "icon": "", 
-      "name": "Windows", 
+      "icon": "",
+      "name": "Windows",
       "slug": "windows"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "games.platform", 
+    "pk": 2,
+    "model": "games.platform",
     "fields": {
-      "icon": "", 
-      "name": "Linux", 
+      "icon": "",
+      "name": "Linux",
       "slug": "linux"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "games.platform", 
+    "pk": 3,
+    "model": "games.platform",
     "fields": {
-      "icon": "", 
-      "name": "Playstation", 
+      "icon": "",
+      "name": "Playstation",
       "slug": "playstation"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "games.company", 
+    "pk": 3,
+    "model": "games.company",
     "fields": {
-      "website": "http://ea.com", 
-      "logo": "company_logos/200px-Ealogo.svg.png", 
-      "name": "Electronic Arts", 
+      "website": "http://ea.com",
+      "logo": "company_logos/200px-Ealogo.svg.png",
+      "name": "Electronic Arts",
       "slug": "electronic-arts"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "games.company", 
+    "pk": 2,
+    "model": "games.company",
     "fields": {
-      "website": "", 
-      "logo": "", 
-      "name": "GT Interactive", 
+      "website": "",
+      "logo": "",
+      "name": "GT Interactive",
       "slug": "gt-interactive"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "games.company", 
+    "pk": 4,
+    "model": "games.company",
     "fields": {
-      "website": "www.ubi.com", 
-      "logo": "company_logos/ubisoft.jpg", 
-      "name": "Ubisoft", 
+      "website": "www.ubi.com",
+      "logo": "company_logos/ubisoft.jpg",
+      "name": "Ubisoft",
       "slug": "ubisoft"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.company", 
+    "pk": 1,
+    "model": "games.company",
     "fields": {
-      "website": "", 
-      "logo": "", 
-      "name": "id Software", 
+      "website": "",
+      "logo": "",
+      "name": "id Software",
       "slug": "id-software"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.runner", 
+    "pk": 1,
+    "model": "games.runner",
     "fields": {
-      "website": "http://kernel.org", 
-      "platforms": [], 
-      "icon": "runner_icons/linux.png", 
-      "name": "linux", 
+      "website": "http://kernel.org",
+      "platforms": [],
+      "icon": "runner_icons/linux.png",
+      "name": "linux",
       "slug": "linux"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "games.runner", 
+    "pk": 4,
+    "model": "games.runner",
     "fields": {
-      "website": "http://redmine.strycore.com/projects/o2em", 
-      "platforms": [], 
-      "icon": "", 
-      "name": "o2em", 
+      "website": "http://redmine.strycore.com/projects/o2em",
+      "platforms": [],
+      "icon": "",
+      "name": "o2em",
       "slug": "o2em"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "games.runner", 
+    "pk": 3,
+    "model": "games.runner",
     "fields": {
-      "website": "http://pcsxr.codeplex.com/", 
-      "platforms": [], 
-      "icon": "", 
-      "name": "pcsx", 
+      "website": "http://pcsxr.codeplex.com/",
+      "platforms": [],
+      "icon": "",
+      "name": "pcsx",
       "slug": "pcsx"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "games.runner", 
+    "pk": 2,
+    "model": "games.runner",
     "fields": {
-      "website": "http://winehq.org", 
-      "platforms": [], 
-      "icon": "", 
-      "name": "wine", 
+      "website": "http://winehq.org",
+      "platforms": [],
+      "icon": "",
+      "name": "wine",
       "slug": "wine"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "games.genre", 
+    "pk": 2,
+    "model": "games.genre",
     "fields": {
-      "name": "Action", 
+      "name": "Action",
       "slug": "action"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "games.genre", 
+    "pk": 3,
+    "model": "games.genre",
     "fields": {
-      "name": "Adventure", 
+      "name": "Adventure",
       "slug": "adventure"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.genre", 
+    "pk": 1,
+    "model": "games.genre",
     "fields": {
-      "name": "First Person Shooter", 
+      "name": "First Person Shooter",
       "slug": "fps"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "games.genre", 
+    "pk": 5,
+    "model": "games.genre",
     "fields": {
-      "name": "Racing", 
+      "name": "Racing",
       "slug": "racing"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "games.genre", 
+    "pk": 4,
+    "model": "games.genre",
     "fields": {
-      "name": "Real time strategy", 
+      "name": "Real time strategy",
       "slug": "rts"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "games.game", 
+    "pk": 2,
+    "model": "games.game",
     "fields": {
-      "website": "", 
-      "publisher": 4, 
-      "updated": "2013-01-19T23:44:11.395Z", 
-      "name": "Prince of Persia: The sands of time", 
-      "created": "2013-01-19T23:44:11.395Z", 
-      "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.", 
-      "cover": "games/covers/Sands_of_time_cover_1.jpg", 
+      "website": "",
+      "publisher": 4,
+      "updated": "2013-01-19T23:44:11.395Z",
+      "name": "Prince of Persia: The sands of time",
+      "created": "2013-01-19T23:44:11.395Z",
+      "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.",
       "genres": [
         2
-      ], 
+      ],
       "platforms": [
         1
-      ], 
-      "year": 2003, 
-      "icon": "games/icons/quake_1.png", 
-      "slug": "prince-persia-sands-time", 
-      "title_logo": "games/banners/POP_Logo_Black_Background_1.gif", 
+      ],
+      "year": 2003,
+      "icon": "games/icons/quake_1.png",
+      "slug": "prince-persia-sands-time",
+      "title_logo": "games/banners/POP_Logo_Black_Background_1.gif",
       "developer": null
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.game", 
+    "pk": 1,
+    "model": "games.game",
     "fields": {
-      "website": "http://www.idsoftware.com/games/quake/quake/", 
-      "publisher": 2, 
-      "updated": "2013-01-19T21:54:37.356Z", 
-      "name": "Quake", 
-      "created": "2013-01-19T21:54:37.356Z", 
-      "description": "", 
-      "cover": "games/covers/quake-cover.jpg", 
+      "website": "http://www.idsoftware.com/games/quake/quake/",
+      "publisher": 2,
+      "updated": "2013-01-19T21:54:37.356Z",
+      "name": "Quake",
+      "created": "2013-01-19T21:54:37.356Z",
+      "description": "",
       "genres": [
         1
-      ], 
+      ],
       "platforms": [
         2
-      ], 
-      "year": 1996, 
-      "icon": "games/icons/quake.png", 
-      "slug": "quake", 
-      "title_logo": "games/banners/quake.jpg", 
+      ],
+      "year": 1996,
+      "icon": "games/icons/quake.png",
+      "slug": "quake",
+      "title_logo": "games/banners/quake.jpg",
       "developer": 1
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "games.screenshot", 
+    "pk": 1,
+    "model": "games.screenshot",
     "fields": {
-      "description": "cv", 
-      "game": 1, 
-      "uploaded_at": "2013-01-19T23:01:14.868Z", 
-      "image": "games/screenshots/dp000005.jpg", 
+      "description": "cv",
+      "game": 1,
+      "uploaded_at": "2013-01-19T23:01:14.868Z",
+      "image": "games/screenshots/dp000005.jpg",
       "uploaded_by": 1
     }
   }
