@@ -3,7 +3,7 @@ from django.conf import settings
 from games.models import SiteACL
 
 
-class DevelStrategy(Strategy):
+class PrivateBetaStrategy(Strategy):
     # a tuple of `method name` -> `lookup to apply`.
     # if the method does not exist, or returns None, it
     # continues to the next tuple.
@@ -16,5 +16,4 @@ class DevelStrategy(Strategy):
             site_acl = SiteACL.objects.get(site=settings.SITE_ID)
             return site_acl.pk
         except SiteACL.DoesNotExist:
-            print "pass"
             pass

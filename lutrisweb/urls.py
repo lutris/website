@@ -5,7 +5,8 @@ from django.conf import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^$', "games.views.home", name="homepage"),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
@@ -19,8 +20,9 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.MEDIA_ROOT,
-            'show_indexes': True}),
+         {'document_root': settings.MEDIA_ROOT,
+         'show_indexes': True}),
     )
