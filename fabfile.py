@@ -3,6 +3,8 @@ from fabric.api import run, env, local, sudo, put, require, cd
 from fabric.contrib.project import rsync_project
 from fabric import utils
 from fabric.contrib import console
+from fabric.context_managers import prefix
+
 
 RSYNC_EXCLUDE = (
     '.bzr',
@@ -21,6 +23,7 @@ RSYNC_EXCLUDE = (
 )
 
 env.project = 'lutrisweb'
+env.home = '/srv/django'
 
 
 def _setup_path():
@@ -30,7 +33,6 @@ def _setup_path():
 
 def staging():
     """ use staging environment on remote host"""
-    env.home = '/srv/django'
     env.user = 'django'
     env.environment = 'staging'
     env.domain = 'dev.lutris.net'
@@ -40,12 +42,15 @@ def staging():
 
 def production():
     """ use production environment on remote host"""
-    env.home = '/srv/django'
     env.user = 'django'
     env.environment = 'production'
     env.domain = 'lutris.net'
     env.hosts = [env.domain]
     _setup_path()
+
+
+def activate():
+    return prefix('. %s/bin/activate' % env.root)
 
 
 def touch():
@@ -134,13 +139,21 @@ def collect_static():
     with cd(env.code_root):
         run('source ../bin/activate; python manage.py collectstatic --noinput')
 
+
 def fix_perms(user='www-data'):
     with cd(env.code_root):
         sudo('chown -R %s:%s static' % (user, user))
         sudo('chown -R %s:%s media' % (user, user))
 
+
 def configtest():
     sudo("apache2ctl configtest")
+
+
+def authorize(ip):
+    with cd(env.code_root):
+        with activate():
+            run('./manage.py authorize %s' % ip)
 
 
 def deploy():
