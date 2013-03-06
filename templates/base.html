@@ -7,6 +7,7 @@
   <title>{% block title %}Lutris : Play video games on Linux easily{% endblock %}</title>
   <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
   <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   {% compress css %}
   <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
   {% endcompress %}
@@ -25,9 +26,9 @@
           </a>
         </div>
         <ul class='nav pull-right'>
-          <li><a href="{% url homepage %}">Home</a></li>
-          <li><a href='{% url about %}'>About</a></li>
-          <li><a href="{% url download %}">Get Lutris</a></li>
+          <li><a href="{% url "homepage" %}">Home</a></li>
+          <li><a href='{% url "about" %}'>About</a></li>
+          <li><a href="{% url "download" %}">Get Lutris</a></li>
           <li><a href="/games">Games</a></li>
           <li><a href="https://launchpad.net/lutris">Contribute</a></li>
           <li><a href="http://lutris.net/blog">Blog</a></li>

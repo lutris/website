@@ -7,7 +7,8 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', "games.views.home", name="homepage"),
+    url(r'^$', "games.views.home",
+        name="homepage"),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
     url(r'^download/', TemplateView.as_view(template_name='download.html'),
@@ -21,8 +22,7 @@ urlpatterns = patterns(
 
 if settings.DEBUG:
     urlpatterns += patterns(
-        '',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-         {'document_root': settings.MEDIA_ROOT,
-         'show_indexes': True}),
+        'django.views.static',
+        (r'^media/(?P<path>.*)$', 'serve',
+         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     )

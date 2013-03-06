@@ -110,8 +110,12 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
+## Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
+
+## Logging
+LOGGING_HANDLERS = ['file', 'mail_admins']
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -145,12 +149,12 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': LOGGING_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
         },
         'lutrisweb': {
-            'handlers': ['mail_admins'],
+            'handlers': LOGGING_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
         },
