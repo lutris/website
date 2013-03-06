@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'mithril',
     'django_nose',
 
+    'common',
     'games',
     'accounts',
 )

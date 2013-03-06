@@ -4,6 +4,7 @@ from django.contrib import admin
 from games import models
 from games import forms
 
+
 class PlatformAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('name', )

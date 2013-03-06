@@ -8,8 +8,7 @@ from django.views.generic import ListView
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from games.models import (Game, Runner, Genre, Platform,
-                          Company, Installer, News)
+from games.models import Game, Runner, Installer
 from games.forms import InstallerForm, ScreenshotForm, GameForm
 
 
@@ -70,22 +69,6 @@ class GameListByPlatform(ListView):
         context = super(GameListByGenre, self).get_context_data(**kwargs)
         context['platform'] = self.args[0]
         return context
-
-
-def home(request):
-    """Homepage view"""
-    featured = Game.objects.exclude(title_logo__exact="")[:5]
-    #latest_games = Game.objects.all()[:5]
-    news = News.objects.all()[:5]
-    download_type = "Ubuntu"
-    return render(request, 'home.html',
-                  {'featured': featured, 'news': news,
-                   'download_type': download_type})
-
-
-def news_archives(request):
-    news = News.objects.all()
-    return render(request, 'news.html', {'news': news})
 
 
 def download_latest(request):
@@ -156,6 +139,7 @@ def games_by_runner(request, runner_slug):
     games = Game.objects.filter(runner__slug=runner.slug)
     return render(request, 'games/game_list.html',
                   {'games': games})
+
 
 def submit_game(request):
     form = GameForm()

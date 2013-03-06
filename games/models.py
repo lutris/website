@@ -1,39 +1,8 @@
 """Models for main lutris app"""
-import os
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
-from django.contrib.sites.models import Site
-
-from mithril.models import Whitelist
-
-
-class SiteACL(models.Model):
-    site = models.OneToOneField(Site)
-    whitelist = models.ForeignKey(Whitelist, related_name='site_acl')
-
-
-class News(models.Model):
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-    content = models.TextField()
-    publish_date = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-publish_date']
-        verbose_name_plural = "news"
-
-    def __unicode__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return '/news/%s/' % self.slug
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        return super(News, self).save(*args, **kwargs)
 
 
 class Platform(models.Model):
@@ -57,7 +26,6 @@ class Company(models.Model):
     logo = models.ImageField(upload_to='companies/logos', blank=True)
     website = models.CharField(max_length=128, blank=True)
 
-    # pylint: disable=W0232, R0903
     class Meta:
         """Additional configuration for model"""
         verbose_name_plural = "companies"

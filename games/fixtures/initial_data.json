@@ -1,25 +1,5 @@
 [
   {
-    "pk": 2,
-    "model": "games.news",
-    "fields": {
-      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "publish_date": "2013-01-19T20:15:53.143Z",
-      "slug": "lutris-028-released",
-      "title": "Lutris 0.2.8 released"
-    }
-  },
-  {
-    "pk": 1,
-    "model": "games.news",
-    "fields": {
-      "content": "ploppi\r\n",
-      "publish_date": "2013-01-09T22:57:57.005Z",
-      "slug": "hello-world",
-      "title": "hello world"
-    }
-  },
-  {
     "pk": 1,
     "model": "games.platform",
     "fields": {
