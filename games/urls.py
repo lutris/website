@@ -2,7 +2,8 @@ from django.conf.urls.defaults import patterns, url
 from games.views import GameList, GameListByYear
 
 
-urlpatterns = patterns('games.views',
+urlpatterns = patterns(
+    'games.views',
     url(r'^$', GameList.as_view(), name='game_list'),
     url(r'^year/(\d+)/$', GameListByYear.as_view(), name='games_by_year'),
     url(r'^genre/(?P<genre_slug>[\w\-]+/$)', 'games_by_genre',

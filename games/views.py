@@ -4,7 +4,7 @@
 from django.conf import settings
 from django.http import HttpResponse
 
-from django.views.generic import list_detail, ListView
+from django.views.generic import ListView
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -25,6 +25,50 @@ class GameListByYear(GameList):
     def get_context_data(self, **kwargs):
         context = super(GameListByYear, self).get_context_data(**kwargs)
         context['year'] = self.args[0]
+        return context
+
+
+class GameListByGenre(ListView):
+    """View for games filtered by genre"""
+    def get_queryset(self):
+        return Game.objects.filter(genre=self.args[0])
+
+    def get_context_data(self, **kwargs):
+        context = super(GameListByGenre, self).get_context_data(**kwargs)
+        context['genre'] = self.args[0]
+        return context
+
+
+class GameListByPublisher(ListView):
+    """View for games filtered by publisher"""
+    def get_queryset(self):
+        return Game.objects.filter(publisher=self.args[0])
+
+    def get_context_data(self, **kwargs):
+        context = super(GameListByGenre, self).get_context_data(**kwargs)
+        context['publisher'] = self.args[0]
+        return context
+
+
+class GameListByDeveloper(ListView):
+    """View for games filtered by developer"""
+    def get_queryset(self):
+        return Game.objects.filter(developer=self.args[0])
+
+    def get_context_data(self, **kwargs):
+        context = super(GameListByGenre, self).get_context_data(**kwargs)
+        context['developer'] = self.args[0]
+        return context
+
+
+class GameListByPlatform(ListView):
+    """View for games filtered by platform"""
+    def get_queryset(self):
+        return Game.objects.filter(platform=self.args[0])
+
+    def get_context_data(self, **kwargs):
+        context = super(GameListByGenre, self).get_context_data(**kwargs)
+        context['platform'] = self.args[0]
         return context
 
 
@@ -112,66 +156,6 @@ def games_by_runner(request, runner_slug):
     games = Game.objects.filter(runner__slug=runner.slug)
     return render(request, 'games/game_list.html',
                   {'games': games})
-
-
-def games_by_year(request, year):
-    """View for games filtered by year"""
-    return list_detail.object_list(
-        request,
-        queryset=Game.objects.filter(year__gt=2000),
-        template_name="games/game_list.html",
-        template_object_name="games",
-        extra_context={"year": year}
-    )
-
-
-def games_by_genre(request, genre_slug):
-    """View for games filtered by genre"""
-    genre = get_object_or_404(Genre, slug=genre_slug)
-    return list_detail.object_list(
-        request,
-        queryset=Game.objects.filter(genre__slug=genre_slug),
-        template_name="games/game_list.html",
-        template_object_name="games",
-        extra_context={'genre': genre}
-    )
-
-
-def games_by_publisher(request, publisher_slug):
-    """View for games filtered by publisher"""
-    company = get_object_or_404(Company, slug=publisher_slug)
-    return list_detail.object_list(
-        request,
-        queryset=Game.objects.filter(publisher=company),
-        template_name="games/game_list.html",
-        template_object_name='games',
-        extra_context={'publisher': company}
-    )
-
-
-def games_by_developer(request, developer_slug):
-    """View for games filtered by developer"""
-    company = get_object_or_404(Company, slug=developer_slug)
-    return list_detail.object_list(
-        request,
-        queryset=Game.objects.filter(developer=company),
-        template_name="games/game_list.html",
-        template_object_name='games',
-        extra_context={'developer': company}
-    )
-
-
-def games_by_platform(request, platform_slug):
-    """View for games filtered by platform"""
-    platform = get_object_or_404(Platform, slug=platform_slug)
-    return list_detail.object_list(
-        request,
-        queryset=Game.objects.filter(platform=platform),
-        template_name="games/game_list.html",
-        template_object_name='games',
-        extra_context={'platform': platform}
-    )
-
 
 def submit_game(request):
     form = GameForm()
