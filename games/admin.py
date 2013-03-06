@@ -12,9 +12,12 @@ class PlatformAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     form = forms.NewsForm
 
+
 class GameAdmin(admin.ModelAdmin):
     form = forms.GameForm
     ordering = ("name", )
+    list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
+    list_filter = ('is_public', 'publisher', 'developer', 'genres')
 
     class Media:
         js = ('js/jquery-1.9.0.min.js', )
