@@ -119,11 +119,16 @@ class Game(models.Model):
     icon = models.ImageField(upload_to='games/icons', blank=True)
     title_logo = models.ImageField(upload_to='games/banners', blank=True)
     description = models.TextField(blank=True)
+    is_public = models.BooleanField("Published on website", default=False)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+
     class Meta:
         ordering = ['name']
+        permissions = (
+            ('can_publish_game', "Can make the game visible"),
+        )
 
     def __unicode__(self):
         return self.name
