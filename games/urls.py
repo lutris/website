@@ -28,8 +28,6 @@ urlpatterns = patterns(
         name='screenshot_add'),
     url(r'(?P<slug>[\w\-]+)/$', "game_detail",
         name="game_detail"),
-    url(r'news/all/?$', 'news_archives',
-        name='news_archives'),
     url(r'download/?', 'download_latest',
         name='download_latest'),
 )

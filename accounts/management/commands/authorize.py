@@ -13,7 +13,7 @@ class Command(BaseCommand):
         try:
             beta_whitelist = Whitelist.objects.get(slug=whitelist)
         except Whitelist.DoesNotExist:
-            self.stdout.write('Cant find whitelist %s\n' % whitelist)
+            self.stderr.write('Cant find whitelist %s\n' % whitelist)
             return
 
         beta_whitelist.range_set.create(ip=ip_address, cidr=32)

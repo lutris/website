@@ -10,10 +10,6 @@ class PlatformAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
-class NewsAdmin(admin.ModelAdmin):
-    form = forms.NewsForm
-
-
 class GameAdmin(admin.ModelAdmin):
     form = forms.GameForm
     ordering = ("name", )
@@ -24,8 +20,6 @@ class GameAdmin(admin.ModelAdmin):
         js = ('js/jquery-1.9.0.min.js', )
 
 
-admin.site.register(models.SiteACL)
-admin.site.register(models.News, NewsAdmin)
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot)
 admin.site.register(models.Genre)
