@@ -105,6 +105,7 @@ INSTALLED_APPS = (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = False
 LATEST_LUSTRIS_DEB = "http://lutris.net/releases/lutris_0.2.8_all.deb"
 
 ACCOUNT_ACTIVATION_DAYS = 3
@@ -119,7 +120,7 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 LOGGING_HANDLERS = ['file', 'mail_admins']
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -135,6 +136,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
         'mail_admins': {
             'level': 'DEBUG',
             'include_html': True,
@@ -149,10 +154,15 @@ LOGGING = {
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': False,
+            'level': 'INFO',
+        },
         'django.request': {
             'handlers': LOGGING_HANDLERS,
-            'level': 'DEBUG',
-            'propagate': True,
+            'level': 'WARNING',
+            'propagate': False,
         },
         'lutrisweb': {
             'handlers': LOGGING_HANDLERS,
