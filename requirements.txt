@@ -1,5 +1,5 @@
 PyYAML
-Django>=1.4.3
+Django>=1.5
 Pillow
 sorl-thumbnail
 south
