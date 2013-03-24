@@ -79,9 +79,9 @@ class InstallerForm(forms.ModelForm):
         """Verify that the content field is valid yaml"""
         yaml_data = self.cleaned_data["content"]
         try:
-            yaml_data = yaml.load(yaml_data)
+            yaml_data = yaml.safe_load(yaml_data)
         except yaml.scanner.ScannerError:
             raise forms.ValidationError("Invalid YAML data (scanner error)")
         except yaml.parser.ParserError:
             raise forms.ValidationError("Invalid YAML data (parse error)")
-        return yaml.dump(yaml_data, default_flow_style=False)
+        return yaml.safe_dump(yaml_data, default_flow_style=False)
