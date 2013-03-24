@@ -65,15 +65,15 @@ class ScreenshotForm(forms.ModelForm):
 class InstallerForm(forms.ModelForm):
     """Form to create and modify installers"""
 
-    content = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'code-editor',
-                                     'spellcheck': 'false'})
-    )
-
     class Meta:
         """Form configuration"""
         model = models.Installer
         exclude = ("user", "slug", "game")
+        widgets = {
+            'content': forms.Textarea(
+                attrs={'class': 'code-editor', 'spellcheck': 'false'}
+            )
+        }
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
