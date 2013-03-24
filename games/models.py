@@ -151,6 +151,9 @@ class Installer(models.Model):
     ))
     created_at = models.DateTimeField(auto_now=True, null=True)
 
+    def __unicode__(self):
+        return self.slug
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)
         return super(Installer, self).save(*args, **kwargs)
