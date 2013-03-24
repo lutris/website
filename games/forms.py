@@ -10,6 +10,7 @@ from django.template.defaultfilters import slugify
 from django_jcrop.forms import JCropImageWidget
 from games import models
 
+
 class GameForm(forms.ModelForm):
     title_logo = forms.ImageField(
         widget=JCropImageWidget, required=False

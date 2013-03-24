@@ -178,6 +178,6 @@ except ImportError:
     pass
 
 if ENVIRONMENT == "staging":
-    MITHRIL_STRATEGY = 'games.strategy.PrivateBetaStrategy'
+    MITHRIL_STRATEGY = 'common.strategy.PrivateBetaStrategy'
     MIDDLEWARE_CLASSES = (list(MIDDLEWARE_CLASSES)
                           + ['mithril.middleware.WhitelistMiddleware'])

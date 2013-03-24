@@ -1,6 +1,6 @@
 from mithril.strategy import Strategy
 from django.conf import settings
-from games.models import SiteACL
+from common.models import SiteACL
 
 
 class PrivateBetaStrategy(Strategy):
