@@ -41,10 +41,14 @@
             {% for genre in game.genres.all %}
             <a href="#">{{ genre }}</a>
             {% endfor %}
-          </p>  
+          </p>
           {% if game.year %}
           Released in <a href='{% url "games_by_year" game.year %}'>{{ game.year }}</a>
           {% endif %}
+          {% for platform in game.platforms.all %}
+          <a href='{% url "games_by_plaform" slug=platform.slug %}'>{{ platform }}</a>
+          {% endfor %}
+            
           {% if game.developer %}
           Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
           {% endif %}

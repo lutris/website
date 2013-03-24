@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, url
-from games.views import GameList, GameListByYear, GameListByGenre
+from games.views import (GameList, GameListByYear,
+                         GameListByGenre, GameListByPlatform)
 
 
 urlpatterns = patterns(
@@ -13,7 +14,8 @@ urlpatterns = patterns(
     url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
     #url(r'^developer/(?P<developer_slug>[\w\-]+)$', views.games_by_developer),
     #url(r'^publisher/(?P<publihser_slug>[\w\-]+)$', views.games_by_publisher),
-    #url(r'^platform/(?P<platform_slug>[\w\-]+)$', views.games_by_platform),
+    url(r'^platform/(?P<slug>[\w\-]+)$', GameListByPlatform.as_view(),
+        name="games_by_plaform"),
     url(r'submit-game/?', 'submit_game',
         name='submit_game'),
     url(r'install/(?P<slug>[\w\-]+).yml', 'serve_installer',

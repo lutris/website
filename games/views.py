@@ -8,7 +8,7 @@ from django.views.generic import ListView
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from games.models import Game, Runner, Installer
+from games.models import Game, Runner, Installer, Platform
 from games.forms import InstallerForm, ScreenshotForm, GameForm
 
 
@@ -60,14 +60,14 @@ class GameListByDeveloper(ListView):
         return context
 
 
-class GameListByPlatform(ListView):
+class GameListByPlatform(GameList):
     """View for games filtered by platform"""
     def get_queryset(self):
-        return Game.objects.filter(platform=self.args[0])
+        return Game.objects.filter(platforms__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
-        context = super(GameListByGenre, self).get_context_data(**kwargs)
-        context['platform'] = self.args[0]
+        context = super(GameListByPlatform, self).get_context_data(**kwargs)
+        context['platform'] = Platform.objects.get(slug=self.kwargs['slug'])
         return context
 
 
