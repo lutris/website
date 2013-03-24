@@ -1,8 +1,23 @@
 """Models for main lutris app"""
+import yaml
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
+
+DEFAULT_INSTALLER = {
+    'protocol': 1,
+    'version': 1,
+    'name': "Game name",
+    'runner': "Name of runner",
+    'files': [
+        {'file_id': "http://location"},
+        {'unredistribuable_file': "ASK_USER/filename"}
+    ],
+    'installer': [
+        {'move': {'src': 'file_id', 'dst': 'gamedir'}}
+    ]
+}
 
 
 class Platform(models.Model):
@@ -131,7 +146,9 @@ class Installer(models.Model):
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
-    content = models.TextField()
+    content = models.TextField(default=yaml.safe_dump(
+        DEFAULT_INSTALLER, default_flow_style=False
+    ))
     created_at = models.DateTimeField(auto_now=True, null=True)
 
     def save(self, *args, **kwargs):

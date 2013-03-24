@@ -33,10 +33,10 @@
           <li><a href="https://launchpad.net/lutris">Contribute</a></li>
           <li><a href="http://lutris.net/blog">Blog</a></li>
           {% if user.is_authenticated %}
-          <li><a href="/accounts/logout/">Logout ({{ user.username }})</a></li>
+          <li><a href="{% url "auth_logout" %}">Logout ({{ user.username }})</a></li>
           {% else %}
-              <li><a href="/accounts/login/">Login</a></li>
-              <li><a href="/accounts/register">Register</a></li>
+              <li><a href="{% url "auth_login" %}">Login</a></li>
+              <li><a href="{% url "registration_register" %}">Register</a></li>
           {% endif %}
         </ul>
       </div>
