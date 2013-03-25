@@ -123,7 +123,14 @@ def installer_complete(request, slug):
 
 def serve_installer(request, slug):
     """Serve the content of an installer in yaml format"""
-    installer = get_object_or_404(Installer, slug=slug)
+    try:
+        installer = Installer.objects.get(slug=slug)
+    except Installer.DoesNotExist:
+        installers = Installer.objects.filter(game__slug=slug)
+        if not installers:
+            raise Http404
+        else:
+            installer = installers[0]
     content = installer.content
     return HttpResponse(content, content_type="application/yaml")
 
