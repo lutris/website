@@ -2,12 +2,13 @@
 # pylint: disable=E1101
 
 from django.conf import settings
-from django.http import HttpResponse
-
+from django.http import HttpResponse, Http404
 from django.views.generic import ListView
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+
+from sorl.thumbnail import get_thumbnail
+
 from games.models import Game, Runner, Installer, Platform
 from games.forms import InstallerForm, ScreenshotForm, GameForm
 
@@ -125,6 +126,26 @@ def serve_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     content = installer.content
     return HttpResponse(content, content_type="application/yaml")
+
+
+def serve_installer_banner(request, slug):
+    installer = get_object_or_404(Installer, slug=slug)
+    if not installer.game.title_logo:
+        raise Http404
+    banner_thumbnail = get_thumbnail(installer.game.title_logo,
+                                     settings.BANNER_SIZE,
+                                     crop="top")
+    return redirect(banner_thumbnail.url)
+
+
+def serve_installer_icon(request, slug):
+    installer = get_object_or_404(Installer, slug=slug)
+    if not installer.game.icon:
+        raise Http404
+    banner_thumbnail = get_thumbnail(installer.game.icon,
+                                     settings.ICON_SIZE,
+                                     crop="top")
+    return redirect(banner_thumbnail.url)
 
 
 def game_list(request):

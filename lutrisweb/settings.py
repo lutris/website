@@ -108,6 +108,9 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 SOUTH_TESTS_MIGRATE = False
 LATEST_LUSTRIS_DEB = "http://lutris.net/releases/lutris_0.2.8_all.deb"
 
+BANNER_SIZE = "184x69"
+ICON_SIZE = "256x256"
+
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
