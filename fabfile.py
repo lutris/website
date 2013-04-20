@@ -78,11 +78,10 @@ def initial_setup():
         run('virtualenv --no-site-packages .')
 
 
-def bootstrap():
-    put('requirements.txt', env.root)
+def requirements():
     with cd(env.root):
-        run('source ./bin/activate && '
-            'pip install --requirement requirements.txt')
+        run('. ./bin/activate && '
+            'pip install -r config/requirements.pip')
 
 
 def update_vhost():
@@ -160,7 +159,7 @@ def deploy():
     fix_perms(user='django')
     rsync()
     copy_local_settings()
-    bootstrap()
+    requirements()
     collect_static()
     syncdb()
     migrate()
