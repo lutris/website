@@ -1,3 +1,4 @@
+import re
 from os.path import join, dirname, abspath
 
 DEBUG = True
@@ -121,6 +122,9 @@ DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 ## Logging
+IGNORABLE_404_URLS = (
+    re.compile(r'^/games/install/'),
+)
 LOGGING_HANDLERS = ['file', 'mail_admins']
 LOGGING = {
     'version': 1,

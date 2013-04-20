@@ -79,9 +79,9 @@ def initial_setup():
 
 
 def requirements():
-    with cd(env.root):
-        run('. ./bin/activate && '
-            'pip install -r config/requirements.pip')
+    with cd(env.code_root):
+        with activate():
+            run('pip install -r config/requirements.pip')
 
 
 def update_vhost():
