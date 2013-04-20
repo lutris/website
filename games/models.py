@@ -138,6 +138,18 @@ class Screenshot(models.Model):
         return "%s uploaded by %s" % (desc, self.uploaded_by)
 
 
+class InstallerManager(models.Manager):
+    def fuzzy_get(self, slug):
+        try:
+            installer = self.get_query_set().get(slug=slug)
+        except models.DoesNotExist:
+            installers = self.get_query_set().filter(game__slug=slug)
+            if not installers:
+                raise
+            else:
+                return installer[0]
+
+
 class Installer(models.Model):
     """Game installer model"""
     game = models.ForeignKey(Game)
@@ -150,6 +162,8 @@ class Installer(models.Model):
         DEFAULT_INSTALLER, default_flow_style=False
     ))
     created_at = models.DateTimeField(auto_now=True, null=True)
+
+    objects = InstallerManager()
 
     def __unicode__(self):
         return self.slug

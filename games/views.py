@@ -124,19 +124,18 @@ def installer_complete(request, slug):
 def serve_installer(request, slug):
     """Serve the content of an installer in yaml format"""
     try:
-        installer = Installer.objects.get(slug=slug)
+        installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
-        installers = Installer.objects.filter(game__slug=slug)
-        if not installers:
-            raise Http404
-        else:
-            installer = installers[0]
+        raise Http404
     content = installer.content
     return HttpResponse(content, content_type="application/yaml")
 
 
 def serve_installer_banner(request, slug):
-    installer = get_object_or_404(Installer, slug=slug)
+    try:
+        installer = Installer.objects.fuzzy_get(slug)
+    except Installer.DoesNotExist:
+        raise Http404
     if not installer.game.title_logo:
         raise Http404
     banner_thumbnail = get_thumbnail(installer.game.title_logo,
@@ -146,7 +145,10 @@ def serve_installer_banner(request, slug):
 
 
 def serve_installer_icon(request, slug):
-    installer = get_object_or_404(Installer, slug=slug)
+    try:
+        installer = Installer.objects.fuzzy_get(slug)
+    except Installer.DoesNotExist:
+        raise Http404
     if not installer.game.icon:
         raise Http404
     banner_thumbnail = get_thumbnail(installer.game.icon,
