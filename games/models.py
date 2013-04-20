@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
+from django.core.exceptions import ObjectDoesNotExist
 
 DEFAULT_INSTALLER = {
     'protocol': 1,
@@ -142,12 +143,13 @@ class InstallerManager(models.Manager):
     def fuzzy_get(self, slug):
         try:
             installer = self.get_query_set().get(slug=slug)
-        except models.DoesNotExist:
+            return installer
+        except ObjectDoesNotExist:
             installers = self.get_query_set().filter(game__slug=slug)
             if not installers:
                 raise
             else:
-                return installer[0]
+                return installers[0]
 
 
 class Installer(models.Model):
