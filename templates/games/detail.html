@@ -36,22 +36,21 @@
         {% endthumbnail %}
 
         <strong>Genre: </strong>
-        {{ game.genres.name }}
         {% for genre in game.genres.all %}
-        {{ genre }}{% if not forloop.last %}, {% endif %}
+          {{ genre }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
 
         <strong>Platform: </strong>
-       {% for platform in game.platforms.all %}
-        {{ platform }}
-       {% endfor %}
+        {% for platform in game.platforms.all %}
+          {{ platform }}
+        {% endfor %}
 
         <strong>Developer: </strong>
-        {{ game.developer }}
+        {% firstof game.developer "Unknown" %}
         <strong>Publisher: </strong>
-        {{ game.publisher }}
+        {% firstof game.publisher "Unknown" %}
         <strong>Release date: </strong>
-        {{ game.year }}
+        {% firstof game.year "Unknown" %}
         {% if game.website %}
           <strong>Website: </strong>
           <a href='{{ game.website }}' >{{ game.website }}</a>
