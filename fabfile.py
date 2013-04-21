@@ -15,6 +15,7 @@ RSYNC_EXCLUDE = (
     '*.example',
     '*.db',
     'media',
+    'static',
     'local_settings.py',
     'fabfile.py',
     'bootstrap.py',
