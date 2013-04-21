@@ -1,4 +1,3 @@
-import re
 from os.path import join, dirname, abspath
 
 DEBUG = True
@@ -122,9 +121,7 @@ DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 ## Logging
-IGNORABLE_404_URLS = (
-    re.compile(r'^/games/install/'),
-)
+SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins']
 LOGGING = {
     'version': 1,
@@ -149,7 +146,7 @@ LOGGING = {
             'class': 'django.utils.log.NullHandler',
         },
         'mail_admins': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'include_html': True,
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'

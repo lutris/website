@@ -81,7 +81,7 @@ def initial_setup():
 def requirements():
     with cd(env.code_root):
         with activate():
-            run('pip install -r config/requirements.pip')
+            run('pip install -r config/requirements.pip --exists-action=s')
 
 
 def update_vhost():
