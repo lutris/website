@@ -5150,6 +5150,14 @@ h4 {
   color: #CDCDCD;
   border-bottom: 1px solid #4D4D4D;
 }
+footer {
+  margin-top: 40px;
+  background-color: #222222;
+  min-height: 100px;
+  color: #AAA;
+  font-size: .8em;
+  padding: 30px;
+}
 /* == Helpers */
 /* == Page Layout */
 .content {
@@ -5324,8 +5332,11 @@ form .select2-container {
 }
 .game-list li {
   list-style-type: none;
-  padding: 8px 0;
-  margin: 8px 0;
+  padding: 8px;
+  margin: 10px 0;
+}
+.game-list li:hover {
+  background-color: #222222;
 }
 .game-list a {
   color: #DDD;
