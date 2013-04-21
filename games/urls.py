@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+from django.views.generic import TemplateView
 from games.views import (GameList, GameListByYear,
                          GameListByGenre, GameListByPlatform)
 
@@ -16,8 +17,11 @@ urlpatterns = patterns(
     #url(r'^publisher/(?P<publihser_slug>[\w\-]+)$', views.games_by_publisher),
     url(r'^platform/(?P<slug>[\w\-]+)$', GameListByPlatform.as_view(),
         name="games_by_plaform"),
-    url(r'submit-game/?', 'submit_game',
+    url(r'^add-game', 'submit_game',
         name='submit_game'),
+    url(r'^game-submitted',
+        TemplateView.as_view(template_name='games/submitted.html'),
+        name="game-submitted"),
     url(r'install/(?P<slug>[\w\-]+).yml', 'serve_installer',
         name='serve_installer'),
     url(r'install/(?P<slug>[\w\-]+).jpg', 'serve_installer_banner',

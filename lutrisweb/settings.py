@@ -97,6 +97,8 @@ INSTALLED_APPS = (
     'south',
     'django_jcrop',
     'mithril',
+    'crispy_forms',
+    'django_select2',
     'django_nose',
 
     'common',
@@ -115,6 +117,9 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login"
 AUTH_PROFILE_MODULE = "accounts.Profile"
+
+## Admin
+GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
 ## Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"

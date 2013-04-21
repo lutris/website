@@ -12,7 +12,7 @@ test:
 	./manage.py test
 
 deps:
-	pip install -r config/requirements.pip --exists-action=s --verbose
+	pip install -r config/requirements.pip --exists-action=s 
 
 migration:
 	./manage.py schemamigration games --auto

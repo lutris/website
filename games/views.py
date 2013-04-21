@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
@@ -172,7 +173,10 @@ def games_by_runner(request, runner_slug):
 
 
 def submit_game(request):
-    form = GameForm()
+    form = GameForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect(reverse("game-submitted"))
     return render(request, 'games/submit.html', {'form': form})
 
 

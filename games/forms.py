@@ -8,6 +8,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify
 
 from django_jcrop.forms import JCropImageWidget
+from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from games import models
 
 
@@ -18,7 +19,20 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = models.Game
-        exclude = ('slug', )
+        fields = ('name', 'year', 'website',
+                  'platforms', 'genres', 'description',
+                  'title_logo')
+        widgets = {
+            'platforms': Select2MultipleWidget,
+            'genres': Select2MultipleWidget,
+            'publisher': Select2Widget,
+            'developer': Select2Widget,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(GameForm, self).__init__(*args, **kwargs)
+        self.fields['platforms'].help_text = ""
+        self.fields['genres'].help_text = ""
 
     def rename_uploaded_file(self, file_field, cleaned_data, slug):
         if self.files.get(file_field):

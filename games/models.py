@@ -90,9 +90,9 @@ class Game(models.Model):
     """Game model"""
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    platforms = models.ManyToManyField(Platform, null=True)
     year = models.IntegerField(null=True, blank=True)
-    genres = models.ManyToManyField(Genre, null=True)
+    platforms = models.ManyToManyField(Platform, null=True, blank=True)
+    genres = models.ManyToManyField(Genre, null=True, blank=True)
     publisher = models.ForeignKey(
         Company, related_name='published_game', null=True, blank=True
     )

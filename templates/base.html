@@ -8,6 +8,7 @@
   <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
   <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
   {% compress css %}
   <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
   {% endcompress %}
@@ -45,7 +46,6 @@
   <div id="content" class="page container">
     {% block content %}{% endblock %}
   </div>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
   {% block scripts %}
 
   {% endblock %}

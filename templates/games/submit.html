@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% load url from future %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<form action="" method='post'>
-  {{ form }}
-  <input type="submit" value="Submit" />
+<form action="" method='post' class='full-form form-horizontal'>
+  {% csrf_token %}
+  {{ form.media }}
+  {{ form|crispy }}
+  <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
 </form>
 {% endblock %}

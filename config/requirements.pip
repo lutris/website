@@ -5,6 +5,8 @@ sorl-thumbnail
 south
 nose
 django-compressor>=1.2
+django-crispy-forms
+django_select2
 django-grappelli
 django-nose
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
