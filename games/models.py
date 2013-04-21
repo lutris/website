@@ -7,13 +7,9 @@ from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 
 DEFAULT_INSTALLER = {
-    'protocol': 1,
-    'version': 1,
-    'name': "Game name",
-    'runner': "Name of runner",
     'files': [
         {'file_id': "http://location"},
-        {'unredistribuable_file': "ASK_USER/filename"}
+        {'unredistribuable_file': "N/A"}
     ],
     'installer': [
         {'move': {'src': 'file_id', 'dst': 'gamedir'}}

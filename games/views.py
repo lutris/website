@@ -1,5 +1,6 @@
 """Views for lutris main app"""
 # pylint: disable=E1101
+import yaml
 
 from django.conf import settings
 from django.http import HttpResponse, Http404
@@ -128,7 +129,10 @@ def serve_installer(request, slug):
         installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
-    content = installer.content
+    yaml_content = yaml.safe_load(installer.content)
+    yaml_content['version'] = installer.version
+    yaml_content['name'] = installer.game.name
+    content = yaml.safe_dump(yaml_content)
     return HttpResponse(content, content_type="application/yaml")
 
 

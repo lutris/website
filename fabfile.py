@@ -168,3 +168,8 @@ def deploy():
     update_vhost()
     configtest()
     apache_reload()
+
+
+def fastdeploy():
+    rsync()
+    collect_static()

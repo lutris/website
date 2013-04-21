@@ -86,8 +86,13 @@ class InstallerForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
-            )
+            ),
+            'runner': Select2Widget,
         }
+
+    def __init__(self, *args, **kwargs):
+        super(InstallerForm, self).__init__(*args, **kwargs)
+        self.fields['runner'].empty_label = None
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
