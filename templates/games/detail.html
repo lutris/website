@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
+{% endblock %}
+
+
 {% block content %}
   <div class="game-header"
        {% thumbnail game.title_logo "940x250" crop="top" as banner %}
@@ -14,19 +22,21 @@
   </div>
   <div class="row">
     <div class="span9">
-      <div class='screenshots'>
-        {% for screenshot in game.screenshot_set.all %}
-          {% thumbnail screenshot.image '640x480' crop="center" as img %}
-          <img src="{{ MEDIA_URL }}/{{ img }}" />
-          {% endthumbnail %}
-        {% empty %}
-        <div class='no-screenshots'>
-          <strong>
-            No screenshot available
-          </strong>
-          <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
+      <div class="slider-wrapper theme-dark">
+        <div class='screenshots nivoSlider'>
+          {% for screenshot in game.screenshot_set.published %}
+            {% thumbnail screenshot.image '640x480' crop="center" as img %}
+            <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
+            {% endthumbnail %}
+          {% empty %}
+          <div class='no-screenshots'>
+            <strong>
+              No screenshot available
+            </strong>
+            <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
     <div class="span3">
@@ -85,4 +95,7 @@
     Why don't you <a href="{{ installer_url }}" class="btn btn-small btn-inverse">write one</a> ?
   {% endfor %}
   </div>
+{% endblock %}
+{% block scripts %}
+   {% include "includes/_nivoslider.html" %}
 {% endblock %}

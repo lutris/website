@@ -51,11 +51,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.nivo.slider.js"></script>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-    $("#featured-slider").nivoSlider();
-  })
-</script>
+   {% include "includes/_nivoslider.html" %}
 {% endblock %}

@@ -5254,12 +5254,7 @@ footer {
   padding-left: 15px;
   opacity: 1;
 }
-.screenshots {
-  padding: 30px;
-}
 .screenshots .no-screenshots {
-  height: 400px;
-  width: 640px;
   padding-top: 80px;
   line-height: 80px;
   background: rgba(0, 0, 0, 0.7);

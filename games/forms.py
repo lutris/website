@@ -7,6 +7,8 @@ from django import forms
 from django.conf import settings
 from django.template.defaultfilters import slugify
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django_jcrop.forms import JCropImageWidget
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from games import models
@@ -70,9 +72,11 @@ class ScreenshotForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.game = models.Game.objects.get(pk=kwargs.pop('game_id'))
         super(ScreenshotForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', "Upload screenshot"))
 
     def save(self, *args, **kwargs):
-        self.instance['game'] = self.game
+        self.instance.game = self.game
         return super(ScreenshotForm, self).save(*args, **kwargs)
 
 

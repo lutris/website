@@ -24,8 +24,13 @@ class GameAdmin(admin.ModelAdmin):
         js = ('js/jquery-1.9.0.min.js', )
 
 
+class ScreenshotAdmin(admin.ModelAdmin):
+    ordering = ("game__slug", "description")
+    list_display = ("__unicode__", "uploaded_at", "published")
+    list_editable = ("published", )
+
 admin.site.register(models.Game, GameAdmin)
-admin.site.register(models.Screenshot)
+admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre)
 admin.site.register(models.Runner)
 admin.site.register(models.Platform, PlatformAdmin)

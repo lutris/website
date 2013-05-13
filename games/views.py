@@ -185,9 +185,13 @@ def submit_game(request):
     return render(request, 'games/submit.html', {'form': form})
 
 
+@login_required
 def screenshot_add(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    form = ScreenshotForm(request.POST or None, game_id=game.id)
+    form = ScreenshotForm(request.POST or None, request.FILES or None,
+                          game_id=game.id)
     if form.is_valid():
+        form.instance.uploaded_by = request.user
         form.save()
+        return redirect(reverse("game_detail", kwargs={'slug': slug}))
     return render(request, 'games/screenshot/add.html', {'form': form})

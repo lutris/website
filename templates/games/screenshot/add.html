@@ -1,14 +1,11 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 <div class="row">
   <div class="span12">
-    <form action="" method='post' class='upload-form' enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form }}
-      <input type="submit" value="Upload screenshot"/>
-    </form>
+    {% crispy form %}
   </div>
 </div>
 

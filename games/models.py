@@ -6,6 +6,8 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 
+from games import managers
+
 DEFAULT_INSTALLER = {
     'files': [
         {'file_id': "http://location"},
@@ -129,10 +131,13 @@ class Screenshot(models.Model):
     uploaded_at = models.DateTimeField(auto_now=True)
     uploaded_by = models.ForeignKey(User)
     description = models.CharField(max_length=256, null=True, blank=True)
+    published = models.BooleanField(default=False)
+
+    objects = managers.ScreenshotManager()
 
     def __unicode__(self):
         desc = self.description if self.description else self.game.name
-        return "%s uploaded by %s" % (desc, self.uploaded_by)
+        return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
 
 class InstallerManager(models.Manager):
