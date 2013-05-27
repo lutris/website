@@ -15,6 +15,7 @@ class GameAdmin(admin.ModelAdmin):
     ordering = ("name", )
     list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
+    search_fields = ('name', )
     formfield_overrides = {
         db_models.ManyToManyField: {'widget': Select2MultipleWidget},
         db_models.ForeignKey: {'widget': Select2Widget},
