@@ -682,8 +682,8 @@ ol.inline {
   margin-left: 0;
   list-style: none;
 }
-ul.inline  > li,
-ol.inline  > li {
+ul.inline > li,
+ol.inline > li {
   display: inline-block;
   padding-left: 5px;
   padding-right: 5px;
@@ -2455,7 +2455,7 @@ table th[class*="span"],
 .open {
   *z-index: 1000;
 }
-.open  > .dropdown-menu {
+.open > .dropdown-menu {
   display: block;
 }
 .pull-right > .dropdown-menu {
@@ -5227,7 +5227,8 @@ footer {
 }
 .game-header {
   position: relative;
-  height: 250px;
+  height: 352px;
+  width: 940px;
   background-repeat: no-repeat;
   background-color: #000;
 }
