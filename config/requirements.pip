@@ -1,7 +1,6 @@
 PyYAML
 Django>=1.5
 Pillow
-sorl-thumbnail
 south
 nose
 django-compressor>=1.2
@@ -12,3 +11,4 @@ django-nose
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
+-e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail

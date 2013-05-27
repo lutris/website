@@ -7,12 +7,17 @@ db:
 
 clean:
 	find . -name "*.pyc" -delete
+	
+cleanthumbs:
+	./manage.py thumbnail clear
+	./manage.py thumbnail cleanup
+	rm -rf ./media/cache/
 
 test:
 	./manage.py test
 
 deps:
-	pip install -r config/requirements.pip --exists-action=s 
+	pip install -r config/requirements.pip --exists-action=s
 
 migration:
 	./manage.py schemamigration games --auto
