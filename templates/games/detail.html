@@ -22,22 +22,20 @@
   </div>
   <div class="row">
     <div class="span9">
-      <div class="slider-wrapper theme-dark">
-        <div class='screenshots nivoSlider'>
-          {% for screenshot in game.screenshot_set.published %}
-            {% thumbnail screenshot.image '640x480' crop="center" as img %}
-            <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
-            {% endthumbnail %}
-          {% empty %}
-          <div class='no-screenshots'>
-            <strong>
-              No screenshot available
-            </strong>
-            <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
+      {% with game.screenshot_set.published as screenshots %}
+        {% if screenshots %}
+          <div class="slider-wrapper theme-dark">
+            <div class='screenshots nivoSlider'>
+              {% for screenshot in game.screenshot_set.published %}
+                {% thumbnail screenshot.image '640x480' crop="center" as img %}
+                  <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
+                {% endthumbnail %}
+              {% endfor %}
+            </div>
           </div>
-          {% endfor %}
-        </div>
-      </div>
+        {% endif %}
+      {% endwith %}
+      <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
     </div>
     <div class="span3">
       <div class="game-info">

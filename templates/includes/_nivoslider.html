@@ -5,6 +5,11 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $(".nivoSlider").nivoSlider();
+      var slider_images = $(".nivoSlider").find('img')
+      if(slider_images.length) {
+        $(".nivoSlider").nivoSlider();
+        } else {
+          $(".nivoSlider").removeClass(".nivoSlider");
+        }
   })
 </script>

@@ -5135,6 +5135,7 @@ h4 {
 }
 h1 {
   font-size: 1.8em;
+  font-family: "Roboto", Arial, sans;
 }
 h2 {
   font-size: 1.4em;
@@ -5144,6 +5145,8 @@ h3 {
   font-size: 1.2em;
   background-color: #444;
   padding: 7px 14px;
+  font-family: "Roboto", Arial, sans;
+  font-weight: 100;
 }
 h4 {
   font-size: 1.1em;
@@ -5158,6 +5161,9 @@ footer {
   font-size: .8em;
   padding: 30px;
 }
+footer a {
+  display: block;
+}
 /* == Helpers */
 /* == Page Layout */
 .content {
@@ -5166,16 +5172,21 @@ footer {
 .navbar {
   margin: auto;
   margin-bottom: 10px;
+  font-family: "Roboto", Arial, sans;
 }
 .navbar .container {
   width: 940px;
 }
 .navbar .brand {
   color: #ccc;
+  font-size: 2.2em;
 }
 .navbar .nav > li > a {
   color: #aaa;
-  line-height: 64px;
+  padding-top: 54px;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  font-size: .8em;
 }
 .navbar .nav > li > a:hover {
   color: #ccc;

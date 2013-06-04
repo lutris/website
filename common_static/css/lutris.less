@@ -3,6 +3,7 @@
 /* == Variables */
 @siteWidth: 940px;
 @darkBackground: #222;
+@sansSerif: "Roboto", Arial, sans;
 
 /* == Defaults */
 body {
@@ -23,6 +24,7 @@ h1, h2, h3, h4 {
 
 h1 {
   font-size: 1.8em;
+  font-family: @sansSerif;
 }
 h2 { font-size: 1.4em; }
 h3 {
@@ -30,7 +32,8 @@ h3 {
   font-size: 1.2em;
   background-color: #444;
   padding: 7px 14px;
-
+  font-family: @sansSerif;
+  font-weight:100;
 }
 h4 {
   font-size: 1.1em;
@@ -45,6 +48,9 @@ footer {
   color: #AAA;
   font-size: .8em;
   padding: 30px;
+  a {
+    display: block;
+  }
 }
 
 /* == Helpers */
@@ -80,15 +86,20 @@ footer {
 .navbar {
   margin: auto;
   margin-bottom: 10px;
+  font-family: @sansSerif;
   .container {
     width: @siteWidth;
   }
   .brand {
     color: #ccc;
+    font-size: 2.2em;
   }
   .nav > li > a {
     color: #aaa;
-    line-height: 64px;
+    padding-top: 54px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    font-size:.8em;
     &:hover {
       color: #ccc;
       background-color: #555;
@@ -149,7 +160,7 @@ footer {
   position: relative;
   height: 352px;
   width: 940px;
-  
+
   background-repeat: no-repeat;
   background-color: #000;
   // FIXME : no H1 here !

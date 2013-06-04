@@ -171,5 +171,7 @@ def deploy():
 
 
 def fastdeploy():
+    fix_perms(user='django')
     rsync()
     collect_static()
+    fix_perms()

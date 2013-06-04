@@ -9,6 +9,7 @@
   <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:100,900,500' rel='stylesheet' type='text/css'>
   {% compress css %}
   <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
   {% endcompress %}
@@ -27,12 +28,9 @@
           </a>
         </div>
         <ul class='nav pull-right'>
-          <li><a href="{% url "homepage" %}">Home</a></li>
           <li><a href='{% url "about" %}'>About</a></li>
-          <li><a href="{% url "download" %}">Get Lutris</a></li>
+          <li><a href="{% url "download" %}">Download</a></li>
           <li><a href="/games">Games</a></li>
-          <li><a href="https://launchpad.net/lutris">Contribute</a></li>
-          <li><a href="http://lutris.net/blog">Blog</a></li>
           {% if user.is_authenticated %}
           <li><a href="{% url "auth_logout" %}">Logout ({{ user.username }})</a></li>
           {% else %}
@@ -47,8 +45,21 @@
     {% block content %}{% endblock %}
   </div>
   <footer class="footer">
-  <div class="container">
-    blah
+  <div class="container row">
+    <div class="span4">
+      <h5>Lutris is also on:</h5>
+      <a href="">Launchpad</a>
+      <a href="">Google+</a>
+      <a href="">#lutris on Freenode</a>
+    </div>
+    <div class="span4">
+      <h5>Check out those:</h5>
+      <a href="">/r/linux_gaming</a>
+      <a href="">LinuxGameCast</a>
+      <a href="">Gaming on Linux</a>
+      <a href="">PlayOnLinux</a>
+    </div>
+    <div class="span4"></div>
   </div>
   </footer>
   {% block scripts %}
