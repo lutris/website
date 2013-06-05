@@ -7,7 +7,7 @@ db:
 
 clean:
 	find . -name "*.pyc" -delete
-	
+
 cleanthumbs:
 	./manage.py thumbnail clear
 	./manage.py thumbnail cleanup
@@ -20,7 +20,8 @@ deps:
 	pip install -r config/requirements.pip --exists-action=s
 
 migration:
-	./manage.py schemamigration games --auto
+	-./manage.py schemamigration games --auto
+	-./manage.py schemamigration common --auto
 	./manage.py migrate
 
 fixtures:

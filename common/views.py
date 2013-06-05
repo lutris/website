@@ -16,3 +16,8 @@ def home(request):
 def news_archives(request):
     news = News.objects.all()
     return render(request, 'news.html', {'news': news})
+
+
+def news_details(request, slug):
+    news = News.objects.get(slug=slug)
+    return render(request, 'common/news_details.html', {'news': news})

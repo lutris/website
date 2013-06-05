@@ -9,6 +9,7 @@ urlpatterns = patterns(
         name='about'),
     url(r'^download/', TemplateView.as_view(template_name='download.html'),
         name="download"),
+    url(r'^news/(?P<slug>[\w-]+)', 'news_details', name='news_details'),
     url(r'news/all/?$', 'news_archives',
         name='news_archives'),
 )

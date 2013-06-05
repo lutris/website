@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from mithril.models import Whitelist
 
 
@@ -9,6 +10,7 @@ class News(models.Model):
     slug = models.SlugField(unique=True)
     content = models.TextField()
     publish_date = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to='news', null=True)
 
     class Meta:
         ordering = ['-publish_date']
@@ -19,7 +21,7 @@ class News(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return '/news/%s/' % self.slug
+        return reverse('news_details', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
