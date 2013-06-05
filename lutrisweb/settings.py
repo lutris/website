@@ -11,7 +11,10 @@ ADMINS = (
     ('Mathieu Comandon', 'strider@strycore.com'),
 )
 MANAGERS = ADMINS
-
+INTERNAL_IPS = (
+    '127.0.0.1',
+    '192.168.0.10',
+)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
