@@ -13,6 +13,7 @@ class PlatformAdmin(admin.ModelAdmin):
 
 class GameAdmin(admin.ModelAdmin):
     ordering = ("name", )
+    prepopulated_fields = {"slug": ("name",)}
     list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
     search_fields = ('name', )

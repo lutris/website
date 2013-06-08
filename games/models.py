@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.files.base import ContentFile
 from games import managers
+from games.util import steam
 
 DEFAULT_INSTALLER = {
     'files': [
@@ -104,6 +105,7 @@ class Game(models.Model):
     is_public = models.BooleanField("Published on website", default=False)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    steamid = models.PositiveIntegerField(null=True)
 
     class Meta:
         ordering = ['name']
@@ -118,9 +120,18 @@ class Game(models.Model):
         """Return the absolute url for a game"""
         return "/games/%s/" % self.slug
 
+    def download_steam_capsule(self):
+        if self.title_logo or not self.steamid:
+            return
+        else:
+            self.title_logo = ContentFile(steam.get_capsule(self.steamid),
+                                          "%d.jpg" % self.steamid)
+            print self.title_logo
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        self.download_steam_capsule()
         return super(Game, self).save(*args, **kwargs)
 
 
