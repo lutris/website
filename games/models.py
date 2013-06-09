@@ -126,7 +126,6 @@ class Game(models.Model):
         else:
             self.title_logo = ContentFile(steam.get_capsule(self.steamid),
                                           "%d.jpg" % self.steamid)
-            print self.title_logo
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -10,13 +10,9 @@
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Roboto:100,900,500' rel='stylesheet' type='text/css'>
-  {% if DEBUG %}
-  <link type="text/css" href="{{ STATIC_URL }}css/lutris.css" rel="stylesheet" />
-  {% else %}
   {% compress css %}
   <link type="text/less" href="{{ STATIC_URL }}css/lutris.less" rel="stylesheet" />
   {% endcompress %}
-  {% endif %}
   {% block stylesheets %}
   {% endblock %}
   <meta name="viewport" content="width=device-width">
@@ -26,11 +22,6 @@
     <div class="navbar-inner">
       <div class="container">
         <div class='title'>
-          {% if DEBUG %}
-          DEBUG
-          {% else %}
-          NOT debug
-          {% endif %}
           <a class="brand" href='/' >
             <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
             Lutris
