@@ -6,15 +6,18 @@ from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
+    from games.models import GameLibrary
     if created:
         user_profile = Profile(user=instance)
         user_profile.save()
+        game_library = GameLibrary(user=instance)
+        game_library.save()
 
 
 class Profile(models.Model):
-    avatar = models.ImageField(upload_to='avatars', blank=True)
-    website = models.URLField()
     user = models.OneToOneField(User)
+    avatar = models.ImageField(upload_to='avatars', blank=True)
+    website = models.URLField(blank=True)
 
     def __unicode__(self):
         return "%s's profile" % self.user.username

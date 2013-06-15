@@ -7,12 +7,13 @@ from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
-from games.models import Game, Runner, Installer, Platform
-from games.forms import InstallerForm, ScreenshotForm, GameForm
+from .models import Game, Runner, Installer, Platform, GameLibrary
+from .forms import InstallerForm, ScreenshotForm, GameForm
 
 
 class GameList(ListView):
@@ -200,3 +201,27 @@ def screenshot_add(request, slug):
         form.save()
         return redirect(reverse("game_detail", kwargs={'slug': slug}))
     return render(request, 'games/screenshot/add.html', {'form': form})
+
+
+def library_show(request, username):
+    user = User.objects.get(username=username)
+    profile = user.get_profile()
+    library = GameLibrary.objects.get(user=user)
+    return render(request, 'games/library_show.html',
+                  {'profile': profile, 'library': library})
+
+
+def library_add(request, slug):
+    user = request.user
+    library = GameLibrary.objects.get(user=user)
+    game = get_object_or_404(Game, slug=slug)
+    library.games.add(game)
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def library_remove(request, slug):
+    user = request.user
+    library = GameLibrary.objects.get(user=user)
+    game = get_object_or_404(Game, slug=slug)
+    library.games.remove(game)
+    return redirect(request.META['HTTP_REFERER'])

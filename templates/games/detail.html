@@ -67,6 +67,7 @@
           <a href="http://store.steampowered.com/app/{{ game.steamid }}/">Stean page</a>
         {% endif %}
       </div>
+      <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
     </div>
   </div>
   <div class="span9">

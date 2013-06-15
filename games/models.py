@@ -184,3 +184,14 @@ class Installer(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)
         return super(Installer, self).save(*args, **kwargs)
+
+
+class GameLibrary(models.Model):
+    user = models.OneToOneField(User)
+    games = models.ManyToManyField(Game)
+
+    class Meta:
+        verbose_name_plural = "game libraries"
+
+    def __unicode__(self):
+        return "%s's library" % self.user.username

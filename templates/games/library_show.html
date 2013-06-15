@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ profile.user.username }}'s profile</h1>
+  <h2>Games in library</h2>
+  <ul class="game-list">
+    {% for game in library.games.all %}
+    <li>
+    {{ game }}
+    <a href='{% url "remove_from_library" slug=game.slug %}' class="right">Remove</a>
+    </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

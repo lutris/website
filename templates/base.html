@@ -32,10 +32,11 @@
           <li><a href="{% url "download" %}">Download</a></li>
           <li><a href="/games">Games</a></li>
           {% if user.is_authenticated %}
-          <li><a href="{% url "auth_logout" %}">Logout ({{ user.username }})</a></li>
+            <li><a href="{% url "library_show" username=user.username %}">My Library</a></li>
+            <li><a href="{% url "auth_logout" %}">Logout</a></li>
           {% else %}
-              <li><a href="{% url "auth_login" %}">Login</a></li>
-              <li><a href="{% url "registration_register" %}">Register</a></li>
+            <li><a href="{% url "auth_login" %}">Login</a></li>
+            <li><a href="{% url "registration_register" %}">Register</a></li>
           {% endif %}
         </ul>
       </div>
