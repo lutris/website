@@ -82,7 +82,7 @@ def download_latest(request):
 
 def game_detail(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    banner_options = {'crop': 'top', 'blur': '3x5'}
+    banner_options = {'crop': 'top', 'blur': '4x6'}
     banner_size = "940x352"
     return render(request, 'games/detail.html',
                   {'game': game,
