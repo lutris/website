@@ -20,6 +20,9 @@ class GameList(ListView):
     model = Game
     context_object_name = "games"
 
+    def get_queryset(self):
+        return Game.objects.published()
+
 
 class GameListByYear(GameList):
     def get_queryset(self):

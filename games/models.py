@@ -85,6 +85,11 @@ class Genre(models.Model):
         return self.name
 
 
+class GameManager(models.Manager):
+    def published(self):
+        return self.get_query_set().filter(is_public=True)
+
+
 class Game(models.Model):
     """Game model"""
     name = models.CharField(max_length=200)
@@ -105,7 +110,9 @@ class Game(models.Model):
     is_public = models.BooleanField("Published on website", default=False)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
-    steamid = models.PositiveIntegerField(null=True)
+    steamid = models.PositiveIntegerField(null=True, blank=True)
+
+    objects = GameManager()
 
     class Meta:
         ordering = ['name']

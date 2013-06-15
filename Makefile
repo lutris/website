@@ -22,6 +22,7 @@ deps:
 migration:
 	-./manage.py schemamigration games --auto
 	-./manage.py schemamigration common --auto
+	-./manage.py schemamigration accounts --auto
 	./manage.py migrate
 
 fixtures:
