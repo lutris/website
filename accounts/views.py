@@ -35,5 +35,4 @@ def client_auth(request):
         response_data = {'token': auth_token.token}
     else:
         response_data = {'error': "Bad credentials"}
-
-    return HttpResponse(json.dumps(response_data, mimetype="application/json"))
+    return HttpResponse(json.dumps(response_data), mimetype="application/json")
