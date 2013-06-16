@@ -31,5 +31,5 @@ class AuthToken(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        self.token = uuid.uuid4()
+        self.token = str(uuid.uuid4())
         return super(AuthToken, self).save(*args, **kwargs)
