@@ -3,6 +3,7 @@ Django>=1.5
 Pillow
 south
 nose
+sphinx
 django-compressor>=1.2
 django-crispy-forms
 django_select2

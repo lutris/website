@@ -35,3 +35,9 @@ ctags:
 
 deploy:
 	fab staging deploy
+
+client:
+	if [ -e lutris_client ]; then cd lutris_client; bzr pull; else bzr branch lp:lutris lutris_client; fi
+
+docs:
+	rst2html.py --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html
