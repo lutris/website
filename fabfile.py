@@ -20,6 +20,7 @@ RSYNC_EXCLUDE = (
     'fabfile.py',
     'bootstrap.py',
     'tags',
+    'lutris_client',
     'PYSMELL*'
 )
 
