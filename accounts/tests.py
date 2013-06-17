@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
+from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User
 
@@ -10,10 +11,11 @@ class TestRegistration(TestCase):
         self.client = Client()
 
     def test_user_can_register(self):
-        response = self.client.get("/user/register/")
+        registration_url = reverse("registration_register")
+        response = self.client.get(registration_url)
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post("/user/register/", {
+        response = self.client.post(registration_url, {
             'username': "testuser",
             'password1': "testpassword",
             'password2': "testpassword",
