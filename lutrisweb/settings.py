@@ -119,7 +119,7 @@ THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/user/login"
+LOGIN_URL = "/account/login/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
 ## Admin
