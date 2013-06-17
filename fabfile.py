@@ -156,6 +156,12 @@ def authorize(ip):
             run('./manage.py authorize %s' % ip)
 
 
+def docs():
+    with cd(env.code_root):
+        run("make client")
+        run("make docs")
+
+
 def deploy():
     fix_perms(user='django')
     rsync()
@@ -164,6 +170,7 @@ def deploy():
     collect_static()
     syncdb()
     migrate()
+    docs()
     fix_perms()
     update_vhost()
     configtest()
