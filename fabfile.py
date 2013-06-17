@@ -160,7 +160,8 @@ def authorize(ip):
 def docs():
     with cd(env.code_root):
         run("make client")
-        run("make docs")
+        with activate():
+            run("make docs")
 
 
 def deploy():
