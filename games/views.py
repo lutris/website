@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from sorl.thumbnail import get_thumbnail
 
 from .models import Game, Runner, Installer, Platform, GameLibrary
+from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 
 
@@ -26,7 +27,8 @@ class GameList(ListView):
 
 class GameListByYear(GameList):
     def get_queryset(self):
-        return Game.objects.filter(year=self.args[0])
+        queryset = super(GameListByYear, self).get_queryset()
+        return queryset.filter(year=self.args[0])
 
     def get_context_data(self, **kwargs):
         context = super(GameListByYear, self).get_context_data(**kwargs)
@@ -34,32 +36,35 @@ class GameListByYear(GameList):
         return context
 
 
-class GameListByGenre(ListView):
+class GameListByGenre(GameList):
     """View for games filtered by genre"""
     def get_queryset(self):
-        return Game.objects.filter(genre=self.args[0])
+        queryset = super(GameListByGenre, self).get_queryset()
+        return queryset.filter(genres__slug=self.args[0])
 
     def get_context_data(self, **kwargs):
         context = super(GameListByGenre, self).get_context_data(**kwargs)
-        context['genre'] = self.args[0]
+        context['genre'] = models.Genre.objects.get(slug=self.args[0])
         return context
 
 
-class GameListByPublisher(ListView):
+class GameListByPublisher(GameList):
     """View for games filtered by publisher"""
     def get_queryset(self):
-        return Game.objects.filter(publisher=self.args[0])
+        queryset = super(GameListByPublisher, self).get_queryset()
+        return queryset.filter(publisher=self.args[0])
 
     def get_context_data(self, **kwargs):
-        context = super(GameListByGenre, self).get_context_data(**kwargs)
+        context = super(GameListByPublisher, self).get_context_data(**kwargs)
         context['publisher'] = self.args[0]
         return context
 
 
-class GameListByDeveloper(ListView):
+class GameListByDeveloper(GameList):
     """View for games filtered by developer"""
     def get_queryset(self):
-        return Game.objects.filter(developer=self.args[0])
+        queryset = super(GameListByDeveloper, self).get_queryset()
+        return queryset.filter(developer=self.args[0])
 
     def get_context_data(self, **kwargs):
         context = super(GameListByGenre, self).get_context_data(**kwargs)
@@ -70,7 +75,8 @@ class GameListByDeveloper(ListView):
 class GameListByPlatform(GameList):
     """View for games filtered by platform"""
     def get_queryset(self):
-        return Game.objects.filter(platforms__slug=self.kwargs['slug'])
+        queryset = super(GameListByPlatform, self).get_queryset()
+        return queryset.filter(platforms__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super(GameListByPlatform, self).get_context_data(**kwargs)

@@ -7,7 +7,7 @@ def home(request):
     """Homepage view"""
     featured = FeaturedGame.objects.all()
     news = News.objects.all()[:5]
-    latest_games = Game.objects.published()[:5]
+    latest_games = Game.objects.published().order_by('-created')[:5]
     download_type = "Ubuntu"
     return render(request, 'home.html',
                   {'featured_games': featured,

@@ -184,3 +184,4 @@ def fastdeploy():
     rsync()
     collect_static()
     fix_perms()
+    apache_reload()

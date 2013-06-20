@@ -9,7 +9,7 @@
     <span class='breadcrumb'>&gt;</span>
   {% endif %}
   {% if genre %}
-    <a href='{% url "game_list_by_genre" genre.slug %}'>{{ genre }}</a>
+    <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
   {% endif %}
   {% if platform %}
     <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
@@ -18,7 +18,7 @@
     <a href='/games/runner/{{ runner.slug }}'>{{ runner }}</a>
   {% endif %}
   {% if year %}
-    <a href='{% url "game_list_by_year" year %}'>{{ year }}</a>
+    <a href='{% url "games_by_year" year %}'>{{ year }}</a>
   {% endif %}
 </div>
 
@@ -39,7 +39,7 @@
         <div class='info'>
           <p>
             {% for genre in game.genres.all %}
-            <a href="#">{{ genre }}</a>
+            <a href="{% url "games_by_genre" genre.slug %}">{{ genre }}</a>
             {% endfor %}
           </p>
           {% if game.year %}
