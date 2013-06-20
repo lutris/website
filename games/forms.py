@@ -63,6 +63,14 @@ class GameForm(forms.ModelForm):
         return cleaned_data
 
 
+class FeaturedGameForm(forms.ModelForm):
+    class Meta:
+        model = models.FeaturedGame
+        widgets = {
+            'image': JCropImageWidget(attrs={'ratio': '3.09'})
+        }
+
+
 class ScreenshotForm(forms.ModelForm):
 
     class Meta:

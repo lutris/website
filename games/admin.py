@@ -2,8 +2,9 @@
 from django.contrib import admin
 from django.db import models as db_models
 
-from games import models
-from django_select2.widgets import Select2MultipleWidget, Select2Widget
+from . import models
+from . import forms
+from django_select2.widgets import Select2MultipleWidget
 
 
 class PlatformAdmin(admin.ModelAdmin):
@@ -19,17 +20,22 @@ class GameAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     formfield_overrides = {
         db_models.ManyToManyField: {'widget': Select2MultipleWidget},
-        db_models.ForeignKey: {'widget': Select2Widget},
     }
-
-    class Media:
-        js = ('js/jquery-1.9.0.min.js', )
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("game__slug", "description")
     list_display = ("__unicode__", "uploaded_at", "published")
     list_editable = ("published", )
+
+
+class FeaturedGameAdmin(admin.ModelAdmin):
+    list_display = ("__unicode__", "created_at")
+    form = forms.FeaturedGameForm
+    raw_id_fields = ('game', )
+    autocomplete_lookup_fields = {
+        'fk': ['game']
+    }
 
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
@@ -39,3 +45,4 @@ admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company)
 admin.site.register(models.Installer)
 admin.site.register(models.GameLibrary)
+admin.site.register(models.FeaturedGame, FeaturedGameAdmin)

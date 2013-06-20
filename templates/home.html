@@ -14,9 +14,9 @@
   <div class="featured span9">
     <div class="slider-wrapper theme-dark">
       <div id="featured-slider" class="nivoSlider" style="width: 680px; height: 220px;">
-        {% for game in featured %}
-          <a href="{{ game.get_absolute_url }}">
-          {% thumbnail game.title_logo "680x220" crop="top" as img %}
+        {% for featured in featured_games %}
+          <a href="{{ featured.game.get_absolute_url }}">
+          {% thumbnail featured.image "680x220" crop="top" as img %}
           <img src="{{ img.url }}" width=680 height=220>
           {% empty %}
             Image not available

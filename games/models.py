@@ -123,6 +123,10 @@ class Game(models.Model):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains",)
+
     def get_absolute_url(self):
         """Return the absolute url for a game"""
         return "/games/%s/" % self.slug
@@ -202,3 +206,12 @@ class GameLibrary(models.Model):
 
     def __unicode__(self):
         return "%s's library" % self.user.username
+
+
+class FeaturedGame(models.Model):
+    game = models.ForeignKey(Game)
+    image = models.ImageField(upload_to='featured', max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.game.name

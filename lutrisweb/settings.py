@@ -116,6 +116,7 @@ LATEST_LUSTRIS_DEB = "http://lutris.net/releases/lutris_0.2.8_all.deb"
 BANNER_SIZE = "184x69"
 ICON_SIZE = "256x256"
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
+THUMBNAIL_COLORSPACE = "sRGB"
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
