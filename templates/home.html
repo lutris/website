@@ -44,9 +44,18 @@
   </div>
   <div class="span3">
     <h3>Latest games</h3>
+    <div class="mini-game-list">
     {% for game in latest_games %}
-      <strong>{{ game }}</strong>
+    <a href="{{ game.get_absolute_url }}">
+      {% thumbnail game.title_logo '184x69' crop="top" as img %}
+        <img class='game-cover' src='{{ img.url }}' />
+      {% empty %}
+        <span class='game-cover'>no image</span>
+      {% endthumbnail %}
+      {{ game.name }} 
+      </a>
     {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock %}
