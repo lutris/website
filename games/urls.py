@@ -36,8 +36,6 @@ urlpatterns = patterns(
         name='installer_complete'),
     url(r'([\w\-]+)/screenshot/add/', 'screenshot_add',
         name='screenshot_add'),
-    url(r'download/?', 'download_latest',
-        name='download_latest'),
     url(r'^library/(?P<username>[\w-]+)/$', 'library_show',
         name="library_show"),
     url(r'^library/add/(?P<slug>[\w-]+)/$', 'library_add',

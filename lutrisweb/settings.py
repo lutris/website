@@ -123,6 +123,13 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/account/login/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
+DOWNLOADS = {
+    'ubuntu': "lutris.deb",
+    'fedora': "lutris.rpm",
+    'linux': "lutris.tar.gz"
+}
+
+
 ## Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 

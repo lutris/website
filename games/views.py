@@ -84,11 +84,6 @@ class GameListByPlatform(GameList):
         return context
 
 
-def download_latest(request):
-    archive_url = settings.LATEST_LUSTRIS_DEB
-    return redirect(archive_url)
-
-
 def game_detail(request, slug):
     game = get_object_or_404(Game, slug=slug)
     banner_options = {'crop': 'top', 'blur': '14x6'}

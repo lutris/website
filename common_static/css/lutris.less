@@ -4,12 +4,14 @@
 @siteWidth: 960px;
 @darkBackground: #222;
 @sansSerif: "Roboto", Arial, sans;
+@linkColor: #ff9900;
 
 /* == Defaults */
 body {
   background-color: #121211;
   font-size: 16px;
   color: #EFEFEF;
+  font-family: @sansSerif;
 }
 
 article {
@@ -32,7 +34,7 @@ h3 {
   background-color: #444;
   padding: 7px 14px;
   font-family: @sansSerif;
-  font-weight:100;
+  font-weight: 300;
 }
 h4 {
   font-size: 1.1em;
@@ -40,6 +42,14 @@ h4 {
   border-bottom: 1px solid #4D4D4D;
 }
 
+a {
+  color: @linkColor;
+  text-decoration: none;
+  &:hover {
+    color: darken(@linkColor, 15%);
+    text-decoration: underline;
+  }
+}
 footer {
   margin-top: 40px;
   background-color: @darkBackground;
@@ -218,19 +228,19 @@ footer {
 }
 
 .game-info {
-    padding: 30px 0px;
-    font-size: .7em;
+  padding: 30px 0px;
+  font-size: .7em;
+  color: #DDD;
+  strong {
+    margin-top: .5em;
+    display: block;
+    font-weight: bold;
+    color: #CCC;
+    font-size: 1.1em;
+  }
+  a {
     color: #DDD;
-    strong {
-      margin-top: .5em;
-      display: block;
-      font-weight: bold;
-      color: #CCC;
-      font-size: 1.1em;
-    }
-    a {
-      color: #DDD;
-    }
+  }
 }
 
 
@@ -328,28 +338,71 @@ form  {
   margin: 10px auto;
   a {
     color: #EEE;
-    margin: 7px 15px;
+    margin: 7px 14px;
     padding: 7px;
-    border: 1px solid #444;
+    background-color: #222;
     display: inline-block;
     font-size: .8em;
     font-weight: 500;
-    font-family: "Roboto";
     &:hover {
-      background-color: #333;
+      background-color: #444;
       text-decoration: none;
     }
   }
 }
 
-.download-button {
-  color: #222;
+.pane {
+  padding: 7px 14px;
+  font-size: .8em;
+  p {
+    padding: 10px;
+    color: #ACACAC;
+  }
+}
+
+.main-button {
+  @backgroundColor: #DAF042;
+  @textColor: @linkColor;
+  color: darken(@linkColor, 10%);
   display: block;
-  background-color: #55BAD9;
-  padding: 15px;
+  padding: 12px;
+  background-color: @backgroundColor;
   text-align: center;
-  em {
-    font-size: .8em;
+  font-size: .95em;
+  font-weight: 500;
+  border: 1px solid darken(@backgroundColor, 30%);
+  border-radius: 3px;
+  span {
+    display: block;
+    font-size: .95em;
     color: #555;
+    text-transform: capitalize;
+  }
+  &:hover {
+    background-color: lighten(@backgroundColor, 10%);
+    text-decoration: none;
+  }
+}
+
+.choice-list {
+  list-style-type: none;
+  li {
+    margin: 10px 20px 3px 0px;
+  }
+  a {
+    background-color: #222;
+    border-radius: 2px;
+    padding: 4px 14px;
+    display: block;
+    text-transform:capitalize;
+    font-size: 1.1em;
+    color: #EDEDED;
+    &:hover {
+      background-color: #444;
+      text-decoration: none;
+    }
+  }
+  img {
+    margin-right: 4px;
   }
 }
