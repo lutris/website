@@ -10,16 +10,17 @@
 
 {% block content %}
   <div class="game-header"
-       {% thumbnail game.title_logo banner_size options=banner_options as banner %}
+    {% thumbnail game.title_logo banner_size options=banner_options as banner %}
        style="background-image: url('{{ banner.url }}')"
-       {% endthumbnail %}>
-    <h1>
+    {% endthumbnail %}>
+    <div class='title'>
       {% if game.icon %}
-        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' class='icon' />
+        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' />
       {% endif %}
-      {{ game.name }}
-    </h1>
+      <span>{{ game.name }}</span>
+    </div>
   </div>
+
   <div class="row">
     <div class="span9">
       {% with game.screenshot_set.published as screenshots %}
@@ -39,35 +40,54 @@
     </div>
     <div class="span3">
       <div class="game-info">
-        {% thumbnail game.cover "220" as img %}
-        <img src="{{ img.url }}" />
+        {% thumbnail game.title_logo "184" as img %}
+          <img src="{{ img.url }}" class="banner" />
         {% endthumbnail %}
 
-        <strong>Genre: </strong>
-        {% for genre in game.genres.all %}
-          {{ genre }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-
-        <strong>Platform: </strong>
-        {% for platform in game.platforms.all %}
-          {{ platform }}
-        {% endfor %}
-
-        <strong>Developer: </strong>
-        {% firstof game.developer "Unknown" %}
-        <strong>Publisher: </strong>
-        {% firstof game.publisher "Unknown" %}
-        <strong>Release date: </strong>
-        {% firstof game.year "Unknown" %}
-        {% if game.website %}
-          <strong>Website: </strong>
-          <a href='{{ game.website }}' >{{ game.website }}</a>
-        {% endif %}
-        {% if game.steamid %}
-          <a href="http://store.steampowered.com/app/{{ game.steamid }}/">Stean page</a>
-        {% endif %}
+        <ul>
+          <li>
+            <strong>Genre: </strong>
+            {% for genre in game.genres.all %}
+              {{ genre }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </li>
+          <li>
+            <strong>Platform: </strong>
+            {% for platform in game.platforms.all %}
+              {{ platform }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </li>
+          <li>
+            <strong>Developer: </strong>
+            {% firstof game.developer "Unknown" %}
+          </li>
+          <li>
+            <strong>Publisher: </strong>
+            {% firstof game.publisher "Unknown" %}
+          </li>
+          <li>
+            <strong>Release date: </strong>
+            {% firstof game.year "Unknown" %}
+          </li>
+          {% if game.website %}
+          <li>
+              <strong>Website: </strong>
+              <a href='{{ game.website }}' >{{ game.website }}</a>
+          </li>
+          {% endif %}
+          {% if game.steamid %}
+          <li>
+          </li>
+          {% endif %}
+        </ul>
+        <div class="centered">
+          <a href="http://store.steampowered.com/app/{{ game.steamid }}/" class="box-link">
+            <img src="{{ STATIC_URL }}images/steam.png" alt="" />
+            Get it on Steam
+          </a>
+          <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
+        </div>
       </div>
-      <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
     </div>
   </div>
   <div class="span9">

@@ -182,12 +182,7 @@ footer {
   }
 }
 
-.icon {
-  position: relative;
-  float: left;
-  top: -48px;
-  margin-right: 20px;
-}
+
 
 .code-editor {
   font-family: monospace;
@@ -270,27 +265,29 @@ footer {
   position: relative;
   height: 352px;
   width: 940px;
-
   background-repeat: no-repeat;
   background-color: #000;
-  // FIXME : no H1 here !
-  h1 {
+  margin-bottom: 40px;
+  .title {
     position: absolute;
     height: 50px;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 20px;
     font-size: 25px;
     line-height: 50px;
     .top-down-gradient(rgba(0,0,0,.7), rgba(22, 22, 22, 0.5));
     color: #EEE;
-    a {
+    span {
       color: #EDEDED;
-      text-decoration: none;
+      padding-left: 10px;
     }
     img {
+      position: relative;
+      float: left;
+      top: -48px;
       vertical-align: middle;
-      padding-left: 15px;
+      margin: 0 14px;
       opacity: 1;
     }
   }
@@ -312,15 +309,27 @@ footer {
 }
 
 .game-info {
-  padding: 30px 0px;
-  font-size: .7em;
+  font-size: .8em;
   color: #DDD;
-  strong {
-    margin-top: .5em;
+  padding: 7px 14px;
+  .banner {
+    margin: 0 auto;
     display: block;
-    font-weight: bold;
+    margin-bottom: 14px;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0;
+  }
+  li {
+    padding: 7px 0;
+    border-bottom: 1px solid @darkerBackground;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  strong {
     color: #CCC;
-    font-size: 1.1em;
   }
   a {
     color: #DDD;
@@ -512,5 +521,19 @@ form  {
     color: inherit;
     text-decoration: none;
   }
+}
 
+.box-link {
+  margin: 5px 0;
+  border: 1px solid @darkBackground;
+  padding: 2px;
+  padding-right: 7px;
+  display: inline-block;
+  img {
+    margin-right: 7px;
+  }
+  &:hover {
+    text-decoration: none;
+    background-color: @darkerBackground;
+  }
 }
