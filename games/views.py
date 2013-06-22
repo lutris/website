@@ -22,7 +22,18 @@ class GameList(ListView):
     context_object_name = "games"
 
     def get_queryset(self):
-        return Game.objects.published()
+        queryset = Game.objects.published()
+        search_terms = self.request.GET.get('q')
+        if search_terms:
+            queryset = queryset.filter(name__icontains=search_terms)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(GameList, self).get_context_data(**kwargs)
+        search_terms = self.request.GET.get('q')
+        if search_terms:
+            context['search_terms'] = search_terms
+        return context
 
 
 class GameListByYear(GameList):

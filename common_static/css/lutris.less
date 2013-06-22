@@ -2,7 +2,8 @@
 
 /* == Variables */
 @siteWidth: 960px;
-@darkBackground: #222;
+@darkBackground: #444;
+@darkerBackground: #222;
 @sansSerif: "Roboto", Arial, sans;
 @linkColor: #ff9900;
 
@@ -134,6 +135,35 @@ footer {
 .well {
   color: #333;
 }
+
+.btn {
+  background-color: #444;
+  background-image: none;
+  border-radius: 2px;
+  color: #DEDEDE;
+  text-shadow: none;
+  &:hover {
+    background-color: #222; 
+    color: #BEBEBE;
+  }
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  *margin-right: .3em;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("/static/images/glyphicons-halflings-white.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+  margin-top: 1px;
+}
+.icon-search {
+  background-position: -48px 0;
+}
 .docs {
   max-height: 840px;
   overflow:auto;
@@ -170,6 +200,56 @@ footer {
   }
 }
 
+.breadcrumb {
+  margin: 0 0 20px;
+  list-style: none;
+  background-color: #222;
+  overflow: hidden;
+  li {
+    float: left;
+    position: relative;
+    text-shadow: 0 1px 0 #ffffff;
+    a {
+      text-shadow: none;
+      padding: 8px 0px 8px 50px;
+      color: #AEAEAE;
+      &:before, &:after {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 50%;
+        margin-top: -30px;
+      }
+      &:after {
+        border-top: 30px solid transparent;
+        border-bottom: 30px solid transparent;
+        border-left: 30px solid @darkerBackground;
+        right: -30px;
+        z-index: 2;
+      }
+      &:before {
+        border-top: 30px solid transparent;
+        border-bottom: 30px solid transparent;
+        border-left: 30px solid #666;
+        right: -31px;
+        z-index: 1;
+        color: blue;  // Weird webkit bug on links with href
+      }
+      &:hover {
+        color: #FFF;
+        text-decoration: none;
+      }
+    }
+    &:first-child a {
+      padding-left: 10px;
+    }
+  }
+  & > .active {
+    color: #999999;
+  }
+}
 /* == Classes */
 .overlay {
   position: relative;
@@ -246,23 +326,18 @@ footer {
 
 /* == Forms */
 form  {
-  background-color: #EEE;
-  border: 1px solid #888;
-  margin: 20px;
-  padding: 30px;
   label {
     display: block;
-    color: #555;
     line-height: 1.6em;
   }
   input[type=text], input[type=password], textarea {
+    width: auto;
     background-color: #FFF;
     border-color: #aaa;
     border-radius: 0px;
     -webkit-border-radius: 0px;
   }
   textarea {
-    min-width: 385px;
   }
   .select2-container {
     min-width: 400px;
@@ -292,6 +367,7 @@ form  {
     list-style-type: none;
     padding: 8px;
     margin: 10px 0;
+    background-color: @darkerBackground;
     &:hover {
       background-color: @darkBackground;
     }

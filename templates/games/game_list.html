@@ -3,62 +3,83 @@
 {% load url from future %}
 
 {% block content %}
-<div class='breadcrumb'>
-  <a href='{% url "game_list" %}'>Games</a>
-  {% if genre or platform or runner or year %}
-    <span class='breadcrumb'>&gt;</span>
-  {% endif %}
-  {% if genre %}
-    <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
-  {% endif %}
-  {% if platform %}
-    <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
-  {% endif %}
-  {% if runner %}
-    <a href='/games/runner/{{ runner.slug }}'>{{ runner }}</a>
-  {% endif %}
-  {% if year %}
-    <a href='{% url "games_by_year" year %}'>{{ year }}</a>
-  {% endif %}
-</div>
+<div class="row">
+  <div class="span8">
+    <div class="pane">
+    <ul class='breadcrumb'>
+      <li>
+        <a href='{% url "game_list" %}'>Games</a>
+      </li> 
+      {% if genre %}
+        <li>
+          <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
+        </li>
+      {% endif %}
+      {% if platform %}
+      <li>
+        <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
+      </li>
+      {% endif %}
+      {% if year %}
+        <a href='{% url "games_by_year" year %}'>{{ year }}</a>
+      {% endif %}
+      {% if search_terms %}
+      <li><a href="{{ request.path }}">Search "{{ search_terms }}"</a></li>
+        
+      {% endif %}
+    </ul>
 
-<a href="{% url "submit_game" %}">Submit a new game</a>
 
-<ul class='game-list'>
-  {% for game in games %}
-    <li class='clearfix'>
-    <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.title_logo '184x69' crop="top" as img %}
-        <img class='game-cover' src='{{ img.url }}' />
-      {% empty %}
-        <span class='game-cover'>no image</span>
-      {% endthumbnail %}
-      </a>
-      <div>
-        <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a>
-        <div class='info'>
-          <p>
-            {% for genre in game.genres.all %}
-            <a href="{% url "games_by_genre" genre.slug %}">{{ genre }}</a>
-            {% endfor %}
-          </p>
-          {% if game.year %}
-          Released in <a href='{% url "games_by_year" game.year %}'>{{ game.year }}</a>
-          {% endif %}
-          {% for platform in game.platforms.all %}
-          <a href='{% url "games_by_plaform" slug=platform.slug %}'>{{ platform }}</a>
-          {% endfor %}
+    <ul class='game-list'>
+      {% for game in games %}
+        <li class='clearfix'>
+        <a href="{{ game.get_absolute_url }}">
+          {% thumbnail game.title_logo '184x69' crop="top" as img %}
+            <img class='game-cover' src='{{ img.url }}' />
+          {% empty %}
+            <span class='game-cover'>no image</span>
+          {% endthumbnail %}
+          </a>
+          <div>
+            <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a>
+            <div class='info'>
+              <p>
+                {% for genre in game.genres.all %}
+                <a href="{% url "games_by_genre" genre.slug %}">{{ genre }}</a>
+                {% endfor %}
+              </p>
+              {% if game.year %}
+              Released in <a href='{% url "games_by_year" game.year %}'>{{ game.year }}</a>
+              {% endif %}
+              {% for platform in game.platforms.all %}
+              <a href='{% url "games_by_plaform" slug=platform.slug %}'>{{ platform }}</a>
+              {% endfor %}
 
-          {% if game.developer %}
-          Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
-          {% endif %}
-          {% if game.publisher %}
-          Published by <a href='/games/publisher/{{ game.publisher.slug }}'>{{ game.publisher }}</a>
-          {% endif %}
+              {% if game.developer %}
+              Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
+              {% endif %}
+              {% if game.publisher %}
+              Published by <a href='/games/publisher/{{ game.publisher.slug }}'>{{ game.publisher }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
+  <div class="span4">
+    <div class="pane">
+      <a href="{% url "submit_game" %}" class=main-button>Submit a new game</a>
+      <h4>Search games</h4>
+      <form action="." method=get class=form-search>
+        <div class="input-append">
+          <input type="text" name="q" class="search-query" />
+          <button class=btn type="submit"><i class='icon-search'></i></button>
         </div>
-      </div>
-    </li>
-  {% endfor %}
-</ul>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
