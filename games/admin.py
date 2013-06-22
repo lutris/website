@@ -29,13 +29,13 @@ class ScreenshotAdmin(admin.ModelAdmin):
     list_editable = ("published", )
 
 
-class FeaturedGameAdmin(admin.ModelAdmin):
+class FeaturedAdmin(admin.ModelAdmin):
     list_display = ("__unicode__", "created_at")
-    form = forms.FeaturedGameForm
-    raw_id_fields = ('game', )
-    autocomplete_lookup_fields = {
-        'fk': ['game']
-    }
+    #form = forms.FeaturedForm
+    #raw_id_fields = ('game', )
+    #autocomplete_lookup_fields = {
+    #    'fk': ['game']
+    #}
 
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
@@ -45,4 +45,4 @@ admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company)
 admin.site.register(models.Installer)
 admin.site.register(models.GameLibrary)
-admin.site.register(models.FeaturedGame, FeaturedGameAdmin)
+admin.site.register(models.Featured, FeaturedAdmin)

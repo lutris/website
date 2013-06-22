@@ -1,10 +1,13 @@
 {% for article in news %}
-  <article>
     <h4>{{ article.title }}
-      <small>Posted {{ article.publish_date }}</small>
+      <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
     </h4>
-    {{ article.content }}
-  </article>
+    <article>
+    {{ article.content|striptags|truncatewords:100 }}…
+    <p>
+      <a href='{{ article.get_absolute_url }}'>Read more</a>
+    </p>
+    </article>
 {% empty %}
   <p>
   Sorry, no news is published.

@@ -37,6 +37,31 @@
         {% endif %}
       {% endwith %}
       <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
+      <p>
+        {{ game.description }}
+      </p>
+      {% url 'new_installer' slug=game.slug as installer_url %}
+      {% for installer in game.installer_set.all %}
+        <div>
+          <span class="label label-important">{{ installer.slug }}</span> for {{ installer.runner }},
+          submitted by {{ installer.user.username }}
+          <a href='lutris:{{ installer.slug }}' class="pull-right btn btn-inverse btn-large">Install</a>
+          {% if installer.user == user %}
+          {% url 'edit_installer' slug=installer.slug as edit_url %}
+          <a href="{{ edit_url }}">Edit installer </a>
+          {% endif %}
+          {% url 'serve_installer' slug=installer.slug as download_url %}
+          <a href="{{ download_url }}">Download raw installer</a>
+        </div>
+        {% if forloop.last %}
+        <div>
+          <a href="{{ installer_url }}" class="btn btn-small btn-inverse">Write a new installer</a>
+        </div>
+        {% endif %}
+      {% empty %}
+        Oh noes! No installer has been written for this game.
+        Why don't you <a href="{{ installer_url }}" class="btn btn-small btn-inverse">write one</a> ?
+      {% endfor %}
     </div>
     <div class="span3">
       <div class="game-info">
@@ -75,48 +100,20 @@
               <a href='{{ game.website }}' >{{ game.website }}</a>
           </li>
           {% endif %}
-          {% if game.steamid %}
-          <li>
-          </li>
-          {% endif %}
         </ul>
         <div class="centered">
+          {% if game.steamid %}
           <a href="http://store.steampowered.com/app/{{ game.steamid }}/" class="box-link">
             <img src="{{ STATIC_URL }}images/steam.png" alt="" />
             Get it on Steam
           </a>
+          {% endif %}
           <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
         </div>
       </div>
     </div>
   </div>
-  <div class="span9">
-  <p>
-    {{ game.description }}
-  </p>
-  {% url 'new_installer' slug=game.slug as installer_url %}
-  {% for installer in game.installer_set.all %}
-    <div>
-      <span class="label label-important">{{ installer.slug }}</span> for {{ installer.runner }},
-      submitted by {{ installer.user.username }}
-      <a href='lutris:{{ installer.slug }}' class="pull-right btn btn-inverse btn-large">Install</a>
-      {% if installer.user == user %}
-      {% url 'edit_installer' slug=installer.slug as edit_url %}
-      <a href="{{ edit_url }}">Edit installer </a>
-      {% endif %}
-      {% url 'serve_installer' slug=installer.slug as download_url %}
-      <a href="{{ download_url }}">Download raw installer</a>
-    </div>
-    {% if forloop.last %}
-    <div>
-      <a href="{{ installer_url }}" class="btn btn-small btn-inverse">Write a new installer</a>
-    </div>
-    {% endif %}
-  {% empty %}
-    Oh noes! No installer has been written for this game.
-    Why don't you <a href="{{ installer_url }}" class="btn btn-small btn-inverse">write one</a> ?
-  {% endfor %}
-  </div>
+
 {% endblock %}
 {% block scripts %}
    {% include "includes/_nivoslider.html" %}

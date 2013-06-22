@@ -6,6 +6,9 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+
 from games import managers
 from games.util import steam
 
@@ -15,7 +18,7 @@ DEFAULT_INSTALLER = {
         {'unredistribuable_file': "N/A"}
     ],
     'installer': [
-        {'move': {'src': 'file_id', 'dst': 'gamedir'}}
+        {'move': {'src': 'file_id', 'dst': '$GAMEDIR'}}
     ]
 }
 
@@ -211,10 +214,16 @@ class GameLibrary(models.Model):
         return "%s's library" % self.user.username
 
 
-class FeaturedGame(models.Model):
-    game = models.ForeignKey(Game)
+class Featured(models.Model):
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
     image = models.ImageField(upload_to='featured', max_length=100)
+    description = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Featured content"
+
     def __unicode__(self):
-        return self.game.name
+        return "[%s] %s" % (self.content_type, str(self.content_object), )

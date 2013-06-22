@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load lutris %}
 {% load url from future %}
 
 {% block stylesheets %}
@@ -12,63 +13,24 @@
 {% block content %}
 <div class='row'>
   <div class="featured span9">
-    <div class="slider-wrapper theme-dark">
-      <div id="featured-slider" class="nivoSlider" style="width: 680px; height: 220px;">
-        {% for featured in featured_games %}
-          <a href="{{ featured.game.get_absolute_url }}">
-          {% thumbnail featured.image "680x220" crop="top" as img %}
-          <img src="{{ img.url }}" width=680 height=220>
-          {% empty %}
-            Image not available
-          {% endthumbnail %}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
+    {% featured_slider %}
   </div>
   <div class="span3">
-    <div class="pane">
-      {% with main_download.items.0 as download  %}
-      <a href="{{ download.1 }}" class='main-button'>
-        Download Lutris client
-        <span><img src="{{ STATIC_URL }}images/{{ download.0 }}.png" />for {{ download.0 }}</span>
-      </a>
-      {% endwith %}
-      <p>
-        <h4>Other downloads</h4>
-        <ul class="choice-list">
-          {% for download in downloads.items  %}
-            <li>
-              <a href="{{ download.1 }}"><img src="{{ STATIC_URL }}images/{{ download.0 }}.png" /> {{ download.0}}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </p>
-    </div>
+    {% download_links %}
   </div>
 </div>
 <div class="row">
   <div class="span9">
+    {% block main %}
     <h3>News</h3>
     <div class=pane>
       {% include "_news-list.html" %}
       <a href="{% url "news_archives" %}" class="archives">Older news</a>
     </div>
+    {% endblock %}
   </div>
   <div class="span3">
-    <h3>Latest games</h3>
-    <div class="mini-game-list">
-    {% for game in latest_games %}
-    <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.title_logo '184x69' crop="top" as img %}
-        <img class='game-cover' src='{{ img.url }}' />
-      {% empty %}
-        <span class='game-cover'>no image</span>
-      {% endthumbnail %}
-      {{ game.name }}
-      </a>
-    {% endfor %}
-    </div>
+    {% latest_games %}
   </div>
 </div>
 {% endblock %}

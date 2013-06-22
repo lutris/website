@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
+from . import views
+
 urlpatterns = patterns(
     'common.views',
     url(r'^$', "home",
@@ -9,7 +11,7 @@ urlpatterns = patterns(
         name='about'),
     url(r'^download/', TemplateView.as_view(template_name='download.html'),
         name="download"),
-    url(r'^news/(?P<slug>[\w-]+)', 'news_details', name='news_details'),
+    url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(), name='news_details'),
     url(r'news/all/?$', 'news_archives',
         name='news_archives'),
 )

@@ -1,0 +1,10 @@
+{% extends "home.html" %}
+
+{% block main %}
+  <h3>{{ news }}</h3>
+  <p class="news-info"> Posted by {{ news.user }} {{ news.publish_date }} </p>
+
+  <article>
+    {{ news.content|linebreaks }} 
+  </article>
+{% endblock %}
