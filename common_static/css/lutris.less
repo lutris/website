@@ -90,6 +90,10 @@ footer {
 }
 .right {float: right;}
 
+.centered {
+  text-align: center;
+}
+
 /* == Page Layout */
 .content {
   width: @siteWidth;
@@ -405,6 +409,7 @@ form  {
   .info {
     font-size: .8em;
     a {
+      margin-right: 6px;
       border-bottom: 1px dotted #666;
     }
   }
@@ -483,10 +488,29 @@ form  {
   }
 }
 
-.platform-icon {
+.filter-list {
+  list-style-type: none;
+  list-style-position: inside;
+  margin: 0;
+  li {
+    margin: 5px 20px;
+  }
+  a {
+    display: block;
+    padding-left: 15px;
+  }
+}
+.filter-link {
   margin-left: 4px;
   background-color: #555;
   font-size: .8em;
   text-transform: uppercase;
   padding: 3px 6px;
+  color: #EDEDED;
+  &:hover {
+    background-color: #666;
+    color: inherit;
+    text-decoration: none;
+  }
+
 }

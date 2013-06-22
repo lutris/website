@@ -26,6 +26,9 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
 
+    class Meta:
+        ordering = ('name', )
+
     def __unicode__(self):
         return "%s" % self.name
 

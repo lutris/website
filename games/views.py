@@ -31,6 +31,8 @@ class GameList(ListView):
     def get_context_data(self, **kwargs):
         context = super(GameList, self).get_context_data(**kwargs)
         search_terms = self.request.GET.get('q')
+        context['platforms'] = models.Platform.objects.all()
+        context['genres'] = models.Genre.objects.all()
         if search_terms:
             context['search_terms'] = search_terms
         return context

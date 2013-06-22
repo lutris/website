@@ -43,24 +43,24 @@
           <div>
             <a class="game-title" href='{{ game.get_absolute_url }}'>{{ game.name }}</a>
               {% for platform in game.platforms.all %}
-                <a class='platform-icon' href='{% url "games_by_plaform" slug=platform.slug %}'>{{ platform }}</a>
+                <a class='filter-link' href='{% url "games_by_plaform" slug=platform.slug %}'>{{ platform }}</a>
               {% endfor %}
             <div class='info'>
-              <p>
+              <div>
                 {% for genre in game.genres.all %}
                 <a href="{% url "games_by_genre" genre.slug %}">{{ genre }}</a>
                 {% endfor %}
-              </p>
               {% if game.year %}
               Released in <a href='{% url "games_by_year" game.year %}'>{{ game.year }}</a>
               {% endif %}
-
+              <br/>
               {% if game.developer %}
               Developed by <a href='/games/developer/{{ game.developer.slug }}'>{{ game.developer }}</a>
               {% endif %}
               {% if game.publisher %}
               Published by <a href='/games/publisher/{{ game.publisher.slug }}'>{{ game.publisher }}</a>
               {% endif %}
+              </div>
             </div>
           </div>
         </li>
@@ -72,12 +72,27 @@
     <div class="pane">
       <a href="{% url "submit_game" %}" class=main-button>Submit a new game</a>
       <h4>Search games</h4>
-      <form action="." method=get class=form-search>
+      <form action="." method=get class="form-search centered">
         <div class="input-append">
           <input type="text" name="q" class="search-query" />
           <button class=btn type="submit"><i class='icon-search'></i></button>
         </div>
       </form>
+      <h4>Filter by platform</h4>
+      <ul class="filter-list">
+        {% for platform in platforms %}
+        <li><a class="filter-link" href="{% url "games_by_plaform" slug=platform.slug %}">{{ platform.name }}</a></li>
+        {% endfor %}
+      </ul>
+
+      <h4>Filter by genre</h4>
+      <ul class="filter-list">
+        {% for genre in genres %}
+        <li><a class="filter-link" href="{% url "games_by_genre" genre.slug %}">{{ genre.name }}</a></li>
+        {% endfor %}
+      </ul>
+        
+        
     </div>
   </div>
 </div>
