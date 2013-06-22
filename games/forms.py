@@ -75,12 +75,13 @@ class ScreenshotForm(forms.ModelForm):
 
     class Meta:
         model = models.Screenshot
-        exclude = ['game', 'uploaded_at', 'uploaded_by']
+        fields = ('image', 'description')
 
     def __init__(self, *args, **kwargs):
         self.game = models.Game.objects.get(pk=kwargs.pop('game_id'))
         super(ScreenshotForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs = {'class': 'form-horizontal', }
         self.helper.add_input(Submit('submit', "Upload screenshot"))
 
     def save(self, *args, **kwargs):

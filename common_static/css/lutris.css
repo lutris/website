@@ -211,14 +211,7 @@ body {
   color: #ffffff;
   background-color: #333333;
 }
-a {
-  color: #ff9900;
-  text-decoration: none;
-}
-a:hover {
-  color: #b36b00;
-  text-decoration: underline;
-}
+
 .img-rounded {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -1889,19 +1882,6 @@ table th[class*="span"],
 .table-hover tbody tr.info:hover td {
   background-color: #c4e3f3;
 }
-[class^="icon-"],
-[class*=" icon-"] {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  *margin-right: .3em;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-image: url("../img/glyphicons-halflings.png");
-  background-position: 14px 14px;
-  background-repeat: no-repeat;
-  margin-top: 1px;
-}
 /* White icons with optional class, or on hover/active states of certain elements */
 .icon-white,
 .nav-pills > .active > a > [class^="icon-"],
@@ -1924,9 +1904,7 @@ table th[class*="span"],
 .icon-music {
   background-position: -24px 0;
 }
-.icon-search {
-  background-position: -48px 0;
-}
+
 .icon-envelope {
   background-position: -72px 0;
 }
@@ -4094,30 +4072,6 @@ input[type="submit"].btn.btn-mini {
 .navbar-inverse .btn-navbar:active,
 .navbar-inverse .btn-navbar.active {
   background-color: #000000 \9;
-}
-.breadcrumb {
-  padding: 8px 15px;
-  margin: 0 0 20px;
-  list-style: none;
-  background-color: #222;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.breadcrumb > li {
-  display: inline-block;
-  *display: inline;
-  /* IE7 inline-block hack */
-
-  *zoom: 1;
-  text-shadow: 0 1px 0 #ffffff;
-}
-.breadcrumb > li > .divider {
-  padding: 0 5px;
-  color: #ccc;
-}
-.breadcrumb > .active {
-  color: #999999;
 }
 .pagination {
   margin: 20px 0;

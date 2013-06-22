@@ -19,7 +19,8 @@ article {
   margin-bottom: 2em;
   color: #ccc;
   font-size: .9em;
-  padding: 14px;
+  font-weight: 400;
+  padding: 14px 7px;
 }
 h1, h2, h3, h4 {
   font-weight: normal;
@@ -123,6 +124,13 @@ footer {
       background-color: #555;
     }
   }
+}
+
+.form-actions {
+  background-color: transparent;
+  border-top: none;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .navbar-inner {
   border-radius: 0;
@@ -299,6 +307,16 @@ footer {
   }
 }
 
+.form-view {
+  margin: 21px auto;
+  border: 1px solid @darkBackground;
+  border-radius: 4px;
+  background-color: @darkerBackground;
+  padding: 30px;
+  width: 500px;
+
+}
+
 .screenshots {
   .no-screenshots {
     padding-top: 80px;
@@ -345,6 +363,7 @@ footer {
 
 /* == Forms */
 form  {
+  margin: 0;
   label {
     display: block;
     line-height: 1.6em;

@@ -24,8 +24,8 @@
   <div class="row">
     <div class="span9">
       {% with game.screenshot_set.published as screenshots %}
+        <div class="slider-wrapper theme-dark clearfix">
         {% if screenshots %}
-          <div class="slider-wrapper theme-dark">
             <div class='screenshots nivoSlider'>
               {% for screenshot in game.screenshot_set.published %}
                 {% thumbnail screenshot.image '640x480' crop="center" as img %}
@@ -33,13 +33,13 @@
                 {% endthumbnail %}
               {% endfor %}
             </div>
-          </div>
         {% endif %}
+        <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-mini pull-right'>Submit screenshot</a>
+        </div>
       {% endwith %}
-      <a href='{% url 'screenshot_add' game.slug %}'>Add one ?</a>
-      <p>
-        {{ game.description }}
-      </p>
+      <article>
+        {{ game.description|linebreaks }}
+      </article>
       {% url 'new_installer' slug=game.slug as installer_url %}
       {% for installer in game.installer_set.all %}
         <div>

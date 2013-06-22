@@ -2,11 +2,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-<div class="row">
-  <div class="span12">
-    {% crispy form %}
-  </div>
+<div class="form-view">
+  <h4>Upload a screenshot</h4>
+  {% crispy form %}
 </div>
-
 {% endblock %}
