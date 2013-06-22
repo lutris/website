@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import patterns, url
 from django.views.generic import TemplateView
 from games.views import (GameList, GameListByYear,
-                         GameListByGenre, GameListByPlatform)
+                         GameListByGenre, GameListByPlatform,
+                         GameListByCompany)
 
 
 urlpatterns = patterns(
@@ -13,8 +14,8 @@ urlpatterns = patterns(
     url(r'^genre/([\w-]+)/$', GameListByGenre.as_view(),
         name='games_by_genre'),
     url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
-    #url(r'^developer/(?P<developer_slug>[\w\-]+)$', views.games_by_developer),
-    #url(r'^publisher/(?P<publihser_slug>[\w\-]+)$', views.games_by_publisher),
+    url(r'^by/([\w-]+)/$', GameListByCompany.as_view(),
+        name='games_by_company'),
     url(r'^platform/(?P<slug>[\w\-]+)$', GameListByPlatform.as_view(),
         name="games_by_plaform"),
     url(r'^add-game', 'submit_game',

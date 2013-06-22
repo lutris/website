@@ -5,6 +5,7 @@ import yaml
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -61,27 +62,16 @@ class GameListByGenre(GameList):
         return context
 
 
-class GameListByPublisher(GameList):
+class GameListByCompany(GameList):
     """View for games filtered by publisher"""
     def get_queryset(self):
-        queryset = super(GameListByPublisher, self).get_queryset()
-        return queryset.filter(publisher=self.args[0])
+        queryset = super(GameListByCompany, self).get_queryset()
+        return queryset.filter(Q(publisher__slug=self.args[0])
+                               | Q(developer__slug=self.args[0]))
 
     def get_context_data(self, **kwargs):
-        context = super(GameListByPublisher, self).get_context_data(**kwargs)
-        context['publisher'] = self.args[0]
-        return context
-
-
-class GameListByDeveloper(GameList):
-    """View for games filtered by developer"""
-    def get_queryset(self):
-        queryset = super(GameListByDeveloper, self).get_queryset()
-        return queryset.filter(developer=self.args[0])
-
-    def get_context_data(self, **kwargs):
-        context = super(GameListByGenre, self).get_context_data(**kwargs)
-        context['developer'] = self.args[0]
+        context = super(GameListByCompany, self).get_context_data(**kwargs)
+        context['company'] = models.Company.objects.get(slug=self.args[0])
         return context
 
 
