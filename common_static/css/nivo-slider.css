@@ -6,7 +6,7 @@
  * Free to use and abuse under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
  */
- 
+
 /* The Nivo Slider styles */
 .nivoSlider {
 	position:relative;
@@ -22,7 +22,7 @@
 }
 .nivo-main-image {
 	display: block !important;
-	position: relative !important; 
+	position: relative !important;
 	width: 100% !important;
 }
 
@@ -38,22 +38,20 @@
 	margin:0;
 	z-index:6;
 	display:none;
-	background:white; 
-	filter:alpha(opacity=0); 
+	background:white;
+	filter:alpha(opacity=0);
 	opacity:0;
 }
 /* The slices and boxes in the Slider */
 .nivo-slice {
 	display:block;
 	position:absolute;
-	z-index:5;
 	height:100%;
 	top:0;
 }
 .nivo-box {
 	display:block;
 	position:absolute;
-	z-index:5;
 	overflow:hidden;
 }
 .nivo-box img { display:block; }

@@ -1,72 +1,80 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="line">
-    <div class='spaced'>
-        <h3>What is Lutris ?</h3>
-        <p>
-        Lutris is a gaming platform aiming to support as many games as possible
-        for the GNU/Linux operating system. It takes care of running the game
-        by setting up the best environement in order to provide the most
-        enjoyable gaming experience.<br/>
-        The program is currently usable but only has a fraction of the planned
-        features. The best is yet to come!
-        </p>
-        <div class='centered'>
-          <img src='{{ STATIC_URL }}images/coverflow.jpg' alt='Lutris in fullscreen mode'
-               title='Lutris in fullscreen mode' />
-      </div>
-        <h3>What games are supported ?</h3>
-        <p>
-        Lutris supports native Linux games of course, both commercial and Open
-        Source and Windows games with the help of wine.
-        Lutris also supports the best of breed emulators so you can play almost
-        every game for the following platforms :
-        </p>
-        <ul>
-            <li>Many arcade based games</li>
-            <li>Amiga 500, 600, 1200</li>
-            <li>Atari 2600, 800, 800XL, 130XE, 5200, ST, STE, TT, Lynx</li>
-            <li>Bandai WonderSwan, WonderSwan Color</li>
-            <li>Browser games like Quake Live, Minecraft or Flash based games</li>
-            <li>Commmodore VIC-20, C64, C128, CBM-II, PLUS/4</li>
-            <li>LucasArt SCUMM based games (Monkey Island, Maniac Mansion, ...)</li>
-            <li>Magnavox Odyssey², Videopac+</li>
-            <li>Mattel Intellivision</li>
-            <li>Microsoft MSX, MS-DOS</li>
-            <li>NEC PC-Engine Turbographx 16, Supergraphx, PC-FX</li>
-            <li>Nintendo NES, SNES, Game Boy, Game Boy Advance, Gamecube</li>
-            <li>Sega Master Sytem, Game Gear, Genesis, Dreamcast</li>
-            <li>SNK Neo Geo, Neo Geo Pocket</li>
-            <li>Sony Playstation</li>
-            <li>Z-Machine games like Zork</li>
-            <li>And many more to come in the future ...</li>
-        </ul>
-        <br/>
-        <h3>You can help !</h3>
-        <p>
-        Lutris is Open Source Software and is under a GPL v3 License.
-        Contributors are more than welcome as I has lots of work elsewhere too
-        and I'm not able to devote 100% of my time to Lutris ;)
-        You don't have to be a Python expert to help, just run the program,
-        report bugs, submit your ideas, etc ...<br/>
-        If you happen to be a Python hacker then Lutris is a fun project to work
-        on. I try to keep the code clean and understandable. If you read the code and
-        find some things that are badly designed or could be improved, don't
-        hesitate to point them out.<br/>
-        There is all you need to start contributing right now ! If you have
-        <em>any</em> question about Lutris' source code, get in touch with me
-        and I'll happily guide you.
-        </p>
-        <h3>Want to get in touch?</h3>
-        <p>
-        If you have any questions or remarks about Lutris, feel free to write me
-        an email to <a href='mailto:strider@strycore.com'>strider@strycore.com</a> .
-        For bug report or wishlist features, it's best to use Launchpad, but for
-        anything else, use email. <br/>
-        To get the latest news, subscribe to Lutris's blog
-        <a href="http://www.lutris.net/blog/feed/">RSS feed</a>.
+{% load lutris %}
 
-        </p>
-    </div>
+
+{% block content %}
+<div class='row'>
+  <div class='span9'>
+    <h3>About Lutris</h3>
+    <article>
+      <p>
+        Lutris is an open gaming platform for GNU/Linux. It aims at supporting
+        as many games as possible thanks to emulators and providing a simple
+        and reliable experience when installing games.
+      </p>
+      <p>
+        The project combines the lutris.net website, a Linux client and game
+        runners which are provided by your distribution or by Lutris itself.
+      </p>
+    </article>
+
+    <h3>Supported platforms</h3>
+    <article>
+      <p>
+        Lutris should work on any modern Linux platform, the client tries to 
+        minimize its dependencies and avoid relying on the system package 
+        manager whenever it can. This allows to keep a predictable behavoir 
+        between different flavors of Linux.
+      </p>
+      <p>
+        However, due to the ack of maintainers for many distributions, Lutris is
+        only currently officially supported on current versions of Ubuntu and 
+        Fedora. Maintainers for every other distributions are more than welcome.
+      </p>
+      <p>
+        The following gaming platforms are supported on Lutris:
+        <ul>
+          <li>Native Linux games</li>
+          <li>Windows games (+ Steam based games)</li>
+          <li>Arcade based games</li>
+          <li>Amiga 500, 600, 1200</li>
+          <li>Atari 2600, 800, 800XL, 130XE, 5200, ST, STE, TT, Lynx</li>
+          <li>Bandai WonderSwan, WonderSwan Color</li>
+          <li>Browser games like Quake Live, Minecraft or Flash based games</li>
+          <li>Commmodore VIC-20, C64, C128, CBM-II, PLUS/4</li>
+          <li>LucasArt SCUMM based games (Monkey Island, Maniac Mansion, ...)</li>
+          <li>Magnavox Odyssey², Videopac+</li>
+          <li>Mattel Intellivision</li>
+          <li>Microsoft MSX, MS-DOS</li>
+          <li>NEC PC-Engine Turbographx 16, Supergraphx, PC-FX</li>
+          <li>Nintendo NES, SNES, Game Boy, Game Boy Advance, Gamecube</li>
+          <li>Sega Master Sytem, Game Gear, Genesis, Dreamcast</li>
+          <li>SNK Neo Geo, Neo Geo Pocket</li>
+          <li>Sony Playstation</li>
+          <li>Z-Machine games like Zork</li>
+          <li>And many more to come in the future ...</li>
+        </ul>
+      </p>
+    </article>
+    
+    <h3>Contributing to the project</h3>
+    <article>
+      <p>
+        There are many ways to contribute to Lutris. The simplest way is to 
+        submit games to the website's database and writing installers. If you 
+        want to go a step further, you can also submit bug reports and 
+        suggestions on the <a href="https://Launchpad.net/lutris">Launchpad page</a>.
+      </p>
+      <p>
+        If you know Python and Gtk, you can grab the source from bzr with:
+        <code>bzr branch lp:lutris</code> and start sending your patches and 
+        contributions to the code base. 
+      </p>
+
+    </article>
+  </div>
+  <div class="span3">
+    {% download_links %}
+  </div>
 </div>
 {% endblock %}

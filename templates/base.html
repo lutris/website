@@ -18,50 +18,51 @@
   <meta name="viewport" content="width=device-width">
 </head>
 <body>
-  <header id="header" class="navbar">
-    <div class="navbar-inner">
-      <div class="container">
-        <div class='title'>
-          <a class="brand" href='/' >
-            <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
-            Lutris
-          </a>
+  <div class="wrapper">
+    <header id="header" class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class='title'>
+            <a class="brand" href='/' >
+              <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
+              Lutris
+            </a>
+          </div>
+          <ul class='nav pull-right'>
+            <li><a href='{% url "about" %}'>About</a></li>
+            <li><a href="{% url "game_list" %}">Games</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url "library_show" username=user.username %}">My Library</a></li>
+              <li><a href="{% url "auth_logout" %}">Logout</a></li>
+            {% else %}
+              <li><a href="{% url "login" %}">Login</a></li>
+              <li><a href="{% url "registration_register" %}">Register</a></li>
+            {% endif %}
+          </ul>
         </div>
-        <ul class='nav pull-right'>
-          <li><a href='{% url "about" %}'>About</a></li>
-          <li><a href="{% url "download" %}">Download</a></li>
-          <li><a href="/games">Games</a></li>
-          {% if user.is_authenticated %}
-            <li><a href="{% url "library_show" username=user.username %}">My Library</a></li>
-            <li><a href="{% url "auth_logout" %}">Logout</a></li>
-          {% else %}
-            <li><a href="{% url "auth_login" %}">Login</a></li>
-            <li><a href="{% url "registration_register" %}">Register</a></li>
-          {% endif %}
-        </ul>
+      </div>
+    </header>
+    <div id="content" class="page container">
+      {% block content %}{% endblock %}
+    </div>
+    <footer class="footer">
+    <div class="container row">
+      <div class="span4">
+        <h5>Lutris is also on:</h5>
+        <a href="https://launchpad.net/lutris">Launchpad</a>
+        <a href="https://plus.google.com/107661366128884529485" rel="publisher">Google+</a>
+        <a href="irc://irc.freenode.org:6667/lutris">#lutris on Freenode</a>
+      </div>
+      <div class="span4">
+        <h5>Check out those:</h5>
+        <a href="http://www.reddit.com/r/linux_gaming/">/r/linux_gaming</a>
+        <a href="http://linuxgamecast.com/">LinuxGameCast</a>
+        <a href="http://www.gamingonlinux.com/">Gaming on Linux</a>
+        <a href="http://www.playonlinux.com">PlayOnLinux</a>
       </div>
     </div>
-  </header>
-  <div id="content" class="page container">
-    {% block content %}{% endblock %}
+    </footer>
   </div>
-  <footer class="footer">
-  <div class="container row">
-    <div class="span4">
-      <h5>Lutris is also on:</h5>
-      <a href="https://launchpad.net/lutris">Launchpad</a>
-      <a href="https://plus.google.com/107661366128884529485" rel="publisher">Google+</a>
-      <a href="irc://irc.freenode.org:6667/lutris">#lutris on Freenode</a>
-    </div>
-    <div class="span4">
-      <h5>Check out those:</h5>
-      <a href="http://www.reddit.com/r/linux_gaming/">/r/linux_gaming</a>
-      <a href="http://linuxgamecast.com/">LinuxGameCast</a>
-      <a href="http://www.gamingonlinux.com/">Gaming on Linux</a>
-      <a href="http://www.playonlinux.com">PlayOnLinux</a>
-    </div>
-  </div>
-  </footer>
   {% block scripts %}
 
   {% endblock %}

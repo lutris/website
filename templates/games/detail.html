@@ -25,7 +25,7 @@
     <div class="span9">
       {% with game.screenshot_set.published as screenshots %}
         <div class="slider-wrapper theme-dark clearfix">
-        {% if screenshots %}
+          {% if screenshots %}
             <div class='screenshots nivoSlider'>
               {% for screenshot in game.screenshot_set.published %}
                 {% thumbnail screenshot.image '640x480' crop="center" as img %}
@@ -33,35 +33,42 @@
                 {% endthumbnail %}
               {% endfor %}
             </div>
-        {% endif %}
-        <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-mini pull-right'>Submit screenshot</a>
+          {% endif %}
+          <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-mini pull-right'>Submit screenshot</a>
         </div>
       {% endwith %}
       <article>
         {{ game.description|linebreaks }}
       </article>
-      {% url 'new_installer' slug=game.slug as installer_url %}
-      {% for installer in game.installer_set.all %}
-        <div>
-          <span class="label label-important">{{ installer.slug }}</span> for {{ installer.runner }},
-          submitted by {{ installer.user.username }}
-          <a href='lutris:{{ installer.slug }}' class="pull-right btn btn-inverse btn-large">Install</a>
-          {% if installer.user == user %}
-          {% url 'edit_installer' slug=installer.slug as edit_url %}
-          <a href="{{ edit_url }}">Edit installer </a>
-          {% endif %}
-          {% url 'serve_installer' slug=installer.slug as download_url %}
-          <a href="{{ download_url }}">Download raw installer</a>
-        </div>
-        {% if forloop.last %}
-        <div>
-          <a href="{{ installer_url }}" class="btn btn-small btn-inverse">Write a new installer</a>
-        </div>
-        {% endif %}
-      {% empty %}
-        Oh noes! No installer has been written for this game.
-        Why don't you <a href="{{ installer_url }}" class="btn btn-small btn-inverse">write one</a> ?
-      {% endfor %}
+      <div class="installer-list">
+        <ul>
+          {% for installer in game.installer_set.all %}
+            <li>
+              <span class='filter-link'>{{ installer.runner }}</span>
+              <span class='installer-name'>{{ installer.slug }}</span>
+              <div class="right">
+                {% if installer.user == user %}
+                  {% url 'edit_installer' slug=installer.slug as edit_url %}
+                  <a href="{{ edit_url }}" class="btn btn-mini"><i class="icon-edit"></i> Edit installer </a>
+                {% endif %}
+
+                {% url 'serve_installer' slug=installer.slug as download_url %}
+                <a href="{{ download_url }}" class="btn btn-mini"><i class="icon-download"></i> Download</a>
+
+                <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+              </div>
+              <p>
+                {% if installer.description %}
+                  {{ installer.description }} skvjxkl
+                  <br />
+                {% endif %}
+                Submitted by {{ installer.user.username }}
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+        <a href="{% url "new_installer" slug=game.slug %}" class="btn btn-small btn-inverse">Write a new installer</a>
+      </div>
     </div>
     <div class="span3">
       <div class="game-info">

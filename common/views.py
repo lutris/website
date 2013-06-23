@@ -2,15 +2,12 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 
 from common.models import News
-from games.models import Game
 
 
 def home(request):
     """Homepage view"""
     news = News.objects.all()[:5]
-    latest_games = Game.objects.published().order_by('-created')[:5]
     return render(request, 'home.html', {
-        'latest_games': latest_games,
         'news': news,
     })
 

@@ -1,4 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-Bye!
+<div class="message-view">
+  <h4>You have logged out</h4>
+  <p><a href="{% url "homepage" %}">Return to homepage</a></p>
+</div>
 {% endblock %}

@@ -1,21 +1,21 @@
 import json
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import AuthToken
+from . import forms
 
 
 def register(request):
-    form = UserCreationForm(request.POST or None)
+    form = forms.RegistrationForm(request.POST or None)
+    print form
     if request.method == "POST" and form.is_valid():
         form.save()
         return HttpResponseRedirect('/')
-    else:
-        form = UserCreationForm()
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'registration/registration_form.html',
+                  {'form': form})
 
 
 def get_client_ip(request):

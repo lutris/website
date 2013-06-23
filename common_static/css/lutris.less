@@ -8,15 +8,17 @@
 @linkColor: #ff9900;
 
 /* == Defaults */
-body {
+html, body {
   background-color: #121211;
   font-size: 16px;
   color: #EFEFEF;
   font-family: @sansSerif;
+  margin:0;
+  padding:0;
+  height:100%;
 }
 
 article {
-  margin-bottom: 2em;
   color: #ccc;
   font-size: .9em;
   font-weight: 400;
@@ -55,17 +57,26 @@ a {
     text-decoration: underline;
   }
 }
+.wrapper {
+  min-height: 100%;
+  display: block;
+  position: relative;
+}
 footer {
-  margin-top: 40px;
-  background-color: @darkBackground;
-  min-height: 100px;
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height: 200px;   /* Height of the footer */
+
+  background-color: @darkerBackground;
   color: #AAA;
   font-size: .8em;
-  padding: 30px;
   a {
     display: block;
   }
 }
+
+
 
 /* == Helpers */
 .rounded-corners (@radius: 5px) {
@@ -101,6 +112,9 @@ footer {
 /* == Page Layout */
 .content {
   width: @siteWidth;
+}
+.page {
+  padding-bottom: 250px;
 }
 .navbar {
   margin: auto;
@@ -158,27 +172,11 @@ footer {
   color: #DEDEDE;
   text-shadow: none;
   &:hover {
-    background-color: #222; 
+    background-color: #222;
     color: #BEBEBE;
   }
 }
 
-[class^="icon-"],
-[class*=" icon-"] {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  *margin-right: .3em;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-image: url("/static/images/glyphicons-halflings-white.png");
-  background-position: 14px 14px;
-  background-repeat: no-repeat;
-  margin-top: 1px;
-}
-.icon-search {
-  background-position: -48px 0;
-}
 .docs {
   max-height: 840px;
   overflow:auto;
@@ -307,14 +305,17 @@ footer {
   }
 }
 
-.form-view {
+.message-view {
   margin: 21px auto;
   border: 1px solid @darkBackground;
   border-radius: 4px;
   background-color: @darkerBackground;
   padding: 30px;
   width: 500px;
+}
 
+.form-view {
+  .message-view;
 }
 
 .screenshots {
@@ -360,7 +361,6 @@ footer {
   }
 }
 
-
 /* == Forms */
 form  {
   margin: 0;
@@ -380,6 +380,10 @@ form  {
   .select2-container {
     min-width: 400px;
     margin-bottom: 10px;
+  }
+  .help-block {
+    font-size: .8em;
+    color: #999;
   }
 }
 
@@ -519,6 +523,36 @@ form  {
   }
   img {
     margin-right: 4px;
+  }
+}
+
+.installer-list {
+  background-color: @darkerBackground;
+  padding: 14px 7px;
+  .installer-name {
+    border-radius: 2px;
+    background-color: #666;
+    padding: 3px 7px;
+    font-family: monospace;
+    font-size: .8em;
+  }
+  i {
+    vertical-align: text-bottom;
+  }
+  p {
+    margin-left: 7px;
+    margin-bottom: 0;
+    color: #999;
+    font-size: .8em;
+  }
+  ul {
+    list-style-type: none;
+    margin: 10px 0;
+  }
+  li {
+    .clearfix;
+    padding: 7px 0;
+    border-bottom: 1px solid #555;
   }
 }
 
