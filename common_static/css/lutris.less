@@ -596,3 +596,28 @@ form  {
     background-color: @darkerBackground;
   }
 }
+
+.user-library {
+  .right-button {
+    position: relative;
+    top: -90px;   
+    right: 20px;
+    float: right;
+    &:hover {
+      .help {
+        display: block;
+      }
+    }
+    .help {
+      display: none;
+      position: absolute;
+      white-space:nowrap;
+      top: -5px;
+      right: 16px;
+      font-size: .9em;
+      background-color: #555;
+      padding: 3px 7px;
+      border-radius: 2px;
+    }
+  }
+}
