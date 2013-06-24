@@ -24,7 +24,7 @@ def get_links(user_agent):
 @register.inclusion_tag('includes/download_links.html', takes_context=True)
 def download_links(context):
     request = context['request']
-    user_agent = request.META['HTTP_USER_AGENT'].lower()
+    user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
     context['main_download'], context['downloads'] = get_links(user_agent)
     return context
 
