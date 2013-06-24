@@ -232,6 +232,7 @@ def library_add(request, slug):
     return redirect(game.get_absolute_url())
 
 
+@login_required
 def library_remove(request, slug):
     user = request.user
     library = GameLibrary.objects.get(user=user)

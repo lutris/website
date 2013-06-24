@@ -95,7 +95,7 @@ class InstallerForm(forms.ModelForm):
     class Meta:
         """Form configuration"""
         model = models.Installer
-        exclude = ("user", "slug", "game")
+        fields = ('runner', 'version', 'description', 'content')
         widgets = {
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
@@ -105,7 +105,7 @@ class InstallerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
-        self.fields['runner'].empty_label = None
+        #self.fields['runner'].empty_label = None
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""

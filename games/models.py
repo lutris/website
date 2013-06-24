@@ -188,6 +188,7 @@ class Installer(models.Model):
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
+    description = models.CharField(max_length=512, blank=True, null=True)
     content = models.TextField(default=yaml.safe_dump(
         DEFAULT_INSTALLER, default_flow_style=False
     ))
