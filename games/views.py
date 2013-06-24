@@ -91,10 +91,15 @@ def game_detail(request, slug):
     game = get_object_or_404(Game, slug=slug)
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
+    user = request.user
+    in_library = False
+    if user.is_authenticated():
+        in_library = game in user.gamelibrary.games.all()
     return render(request, 'games/detail.html',
                   {'game': game,
                    'banner_options': banner_options,
-                   'banner_size': banner_size})
+                   'banner_size': banner_size,
+                   'in_library': in_library})
 
 
 @login_required
@@ -218,12 +223,13 @@ def library_show(request, username):
                   {'profile': profile, 'library': library})
 
 
+@login_required
 def library_add(request, slug):
     user = request.user
     library = GameLibrary.objects.get(user=user)
     game = get_object_or_404(Game, slug=slug)
     library.games.add(game)
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect(game.get_absolute_url())
 
 
 def library_remove(request, slug):

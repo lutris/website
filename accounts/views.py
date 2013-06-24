@@ -10,7 +10,6 @@ from . import forms
 
 def register(request):
     form = forms.RegistrationForm(request.POST or None)
-    print form
     if request.method == "POST" and form.is_valid():
         form.save()
         return HttpResponseRedirect('/')

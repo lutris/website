@@ -115,7 +115,13 @@
             Get it on Steam
           </a>
           {% endif %}
-          <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
+          {% if not in_library %}
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
+          {% else %}
+            <p>
+            {{ game }} is in your library
+            </p>
+          {% endif %}
         </div>
       </div>
     </div>
