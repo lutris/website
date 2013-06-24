@@ -1,10 +1,7 @@
 """Admin configuration for Lutris games"""
 from django.contrib import admin
-from django.db import models as db_models
 
 from . import models
-from . import forms
-from django_select2.widgets import Select2MultipleWidget
 
 
 class PlatformAdmin(admin.ModelAdmin):
@@ -18,9 +15,6 @@ class GameAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
     search_fields = ('name', )
-    formfield_overrides = {
-        db_models.ManyToManyField: {'widget': Select2MultipleWidget},
-    }
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
