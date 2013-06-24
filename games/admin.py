@@ -4,6 +4,11 @@ from django.contrib import admin
 from . import models
 
 
+class CompanyAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ("name", )}
+    ordering = ('name', )
+
+
 class PlatformAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('name', )
@@ -36,7 +41,7 @@ admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre)
 admin.site.register(models.Runner)
 admin.site.register(models.Platform, PlatformAdmin)
-admin.site.register(models.Company)
+admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)
