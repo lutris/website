@@ -64,7 +64,7 @@ class Runner(models.Model):
     '''Model definition for the runners.'''
     name = models.CharField(_("Name"), max_length=127)
     slug = models.SlugField(unique=True)
-    website = models.CharField(_("Website"), max_length=127)
+    website = models.CharField(_("Website"), max_length=127, blank=True)
     icon = models.ImageField(upload_to='runners/icons', blank=True)
     platforms = models.ManyToManyField(Platform)
 
