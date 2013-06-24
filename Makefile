@@ -4,6 +4,7 @@ run:
 db:
 	./manage.py syncdb --noinput
 	./manage.py migrate
+	./manage.py loaddata accounts/fixtures/superadmin.json
 
 clean:
 	find . -name "*.pyc" -delete

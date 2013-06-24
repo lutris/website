@@ -195,16 +195,5 @@
       "title_logo": "games/banners/quake.jpg",
       "developer": 1
     }
-  },
-  {
-    "pk": 1,
-    "model": "games.screenshot",
-    "fields": {
-      "description": "cv",
-      "game": 1,
-      "uploaded_at": "2013-01-19T23:01:14.868Z",
-      "image": "games/screenshots/dp000005.jpg",
-      "uploaded_by": 1
-    }
   }
 ]

@@ -1,7 +1,7 @@
 PyYAML
 Django>=1.5
 Pillow
-south
+South>=0.8.1
 nose
 sphinx
 django-compressor>=1.2

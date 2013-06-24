@@ -120,7 +120,7 @@ THUMBNAIL_COLORSPACE = "sRGB"
 
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/account/login/"
+LOGIN_URL = "/user/login/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
 DOWNLOADS = {
