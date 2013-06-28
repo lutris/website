@@ -14,6 +14,11 @@ class PlatformAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
+class GenreAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+    ordering = ('name', )
+
+
 class GameAdmin(admin.ModelAdmin):
     ordering = ("name", )
     prepopulated_fields = {"slug": ("name",)}
@@ -38,7 +43,7 @@ class FeaturedAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
-admin.site.register(models.Genre)
+admin.site.register(models.Genre, GenreAdmin)
 admin.site.register(models.Runner)
 admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company, CompanyAdmin)
