@@ -9,6 +9,7 @@ django-crispy-forms
 django_select2
 django-grappelli
 django-nose
+django-tastypie
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop

@@ -98,6 +98,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'compressor',
     'south',
+    'tastypie',
     'django_jcrop',
     'mithril',
     'crispy_forms',
