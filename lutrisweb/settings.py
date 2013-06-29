@@ -124,10 +124,11 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
 
+RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
-    'ubuntu': "lutris.deb",
-    'fedora': "lutris.rpm",
-    'linux': "lutris.tar.gz"
+    'ubuntu': RELEASES_URL + "lutris_0.3.0_all.deb",
+    'fedora': RELEASES_URL + "lutris-0.3.0-2.noarch.rpm",
+    'linux': RELEASES_URL + "lutris_0.3.0.tar.gz"
 }
 
 
