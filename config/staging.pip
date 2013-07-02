@@ -1,0 +1,3 @@
+-r requirements.pip
+django-mithril
+MySQL-python

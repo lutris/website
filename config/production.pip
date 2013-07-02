@@ -1,0 +1,4 @@
+-r requirements.pip
+pylibmc
+#psycopg2
+MySQL-python

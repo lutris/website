@@ -81,9 +81,11 @@ def initial_setup():
 
 
 def requirements():
+    require('environment', provided_by=('staging', 'production'))
     with cd(env.code_root):
         with activate():
-            run('pip install -r config/requirements.pip --exists-action=s')
+            run('pip install -r config/%s.pip --exists-action=s'
+                % env.environment)
 
 
 def update_vhost():

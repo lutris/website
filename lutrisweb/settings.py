@@ -199,8 +199,3 @@ try:
     from local_settings import *
 except ImportError:
     pass
-
-if ENVIRONMENT == "staging":
-    MITHRIL_STRATEGY = 'common.strategy.PrivateBetaStrategy'
-    MIDDLEWARE_CLASSES = (list(MIDDLEWARE_CLASSES)
-                          + ['mithril.middleware.WhitelistMiddleware'])
