@@ -14,9 +14,10 @@ def get_links(user_agent):
     main_download = None
     for system in systems:
         if system in user_agent:
-            main_download = {system: settings.DOWNLOADS[system]}
+            main_download = {system: downloads[system]}
             downloads.pop(system)
-    if not main_download:
+            break
+    if main_download is None:
         main_download = {'linux': downloads.pop('linux')}
     return (main_download, downloads)
 

@@ -137,6 +137,16 @@ def syncdb():
             "python manage.py syncdb --noinput")
 
 
+def clone():
+    with cd(env.root):
+        run("git clone /srv/git/lutrisweb")
+
+
+def pull():
+    with cd(env.code_root):
+        run("git pull")
+
+
 def collect_static():
     require('code_root', provided_by=('stating', 'production'))
     with cd(env.code_root):
