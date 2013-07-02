@@ -1,4 +1,5 @@
 -r requirements.pip
-pylibmc
+#pylibmc
+python-memcached
 #psycopg2
 MySQL-python
