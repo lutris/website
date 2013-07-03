@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 
 from games import managers
 from games.util import steam
@@ -51,6 +52,9 @@ class Company(models.Model):
         """Additional configuration for model"""
         verbose_name_plural = "companies"
         ordering = ['name']
+
+    def get_absolute_url(self):
+        return reverse("games_by_company", args=(self.slug, ))
 
     def __unicode__(self):
         return "%s" % self.name

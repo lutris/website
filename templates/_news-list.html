@@ -3,7 +3,7 @@
       <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
     </h4>
     <article>
-    {{ article.content|striptags|truncatewords:100 }}…
+    {{ article.content|striptags|truncatewords:100 }}
     </article>
     <div>
       <a href='{{ article.get_absolute_url }}'>Read more</a>

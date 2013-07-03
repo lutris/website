@@ -89,14 +89,18 @@
               {{ platform }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </li>
+          {% if game.developer %}
           <li>
             <strong>Developer: </strong>
-            {% firstof game.developer "Unknown" %}
+            <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
           </li>
+          {% endif %}
+          {% if game.publisher %}
           <li>
             <strong>Publisher: </strong>
-            {% firstof game.publisher "Unknown" %}
+            <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
           </li>
+          {% endif %}
           <li>
             <strong>Release date: </strong>
             {% firstof game.year "Unknown" %}
@@ -104,7 +108,7 @@
           {% if game.website %}
           <li>
               <strong>Website: </strong>
-              <a href='{{ game.website }}' >{{ game.website }}</a>
+              <a href='{{ game.website }}'>{{ game.website }}</a>
           </li>
           {% endif %}
         </ul>
