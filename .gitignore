@@ -8,3 +8,6 @@ templates/docs/*.html
 lutris_client/
 local_settings.py
 .ropeproject
+nosetests.xml
+coverage.xml
+.coverage
