@@ -7,3 +7,4 @@ static/CACHE
 templates/docs/*.html
 lutris_client/
 local_settings.py
+.ropeproject

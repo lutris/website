@@ -10,6 +10,7 @@ django_select2
 django-grappelli
 django-nose
 django-tastypie
+-e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop

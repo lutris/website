@@ -149,51 +149,5 @@
       "name": "Real time strategy",
       "slug": "rts"
     }
-  },
-  {
-    "pk": 2,
-    "model": "games.game",
-    "fields": {
-      "website": "",
-      "publisher": 4,
-      "updated": "2013-01-19T23:44:11.395Z",
-      "name": "Prince of Persia: The sands of time",
-      "created": "2013-01-19T23:44:11.395Z",
-      "description": "Prince of Persia: The Sands of Time is a third-person action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989.",
-      "genres": [
-        2
-      ],
-      "platforms": [
-        1
-      ],
-      "year": 2003,
-      "icon": "games/icons/quake_1.png",
-      "slug": "prince-persia-sands-time",
-      "title_logo": "games/banners/POP_Logo_Black_Background_1.gif",
-      "developer": null
-    }
-  },
-  {
-    "pk": 1,
-    "model": "games.game",
-    "fields": {
-      "website": "http://www.idsoftware.com/games/quake/quake/",
-      "publisher": 2,
-      "updated": "2013-01-19T21:54:37.356Z",
-      "name": "Quake",
-      "created": "2013-01-19T21:54:37.356Z",
-      "description": "",
-      "genres": [
-        1
-      ],
-      "platforms": [
-        2
-      ],
-      "year": 1996,
-      "icon": "games/icons/quake.png",
-      "slug": "quake",
-      "title_logo": "games/banners/quake.jpg",
-      "developer": 1
-    }
   }
 ]

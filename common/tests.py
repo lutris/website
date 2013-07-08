@@ -1,10 +1,7 @@
 from django.test import TestCase
-from django.test.client import Client
 
 
 class PagesTest(TestCase):
-    def setUp(self):
-        self.client = Client()
 
     def test_get_homepage(self):
         response = self.client.get("/")

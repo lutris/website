@@ -15,7 +15,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	./manage.py test
+	./manage.py test --noinput $(test)
 
 deps:
 	pip install -r config/requirements.pip --exists-action=s
