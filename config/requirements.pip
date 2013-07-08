@@ -3,6 +3,9 @@ Django>=1.5
 Pillow
 South>=0.8.1
 nose
+coverage
+nose-exclude
+nosexcover
 sphinx
 django-compressor>=1.2
 django-crispy-forms
