@@ -111,11 +111,6 @@ INSTALLED_APPS = (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ("--cover-erase", "--with-xunit", "--xunit-file=nosetests.xml",
-             "--with-xcoverage",
-             "--cover-package=games", "--cover-package=accounts",
-             "--cover-package=common"
-             "--xcoverage-file=coverage.xml")
 
 SOUTH_TESTS_MIGRATE = False
 
