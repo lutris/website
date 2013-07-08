@@ -183,6 +183,11 @@ LOGGING = {
             'propagate': False,
             'level': 'INFO',
         },
+        'factory': {
+            'handlers': ['null'],
+            'propagate': False,
+            'level': 'INFO',
+        },
         'django.request': {
             'handlers': LOGGING_HANDLERS,
             'level': 'WARNING',
