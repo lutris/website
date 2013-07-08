@@ -22,5 +22,6 @@ class TestGameLibrary(TestCase):
         self.assertEqual(len(library.games.all()), 5)
 
     def test_library_generated_by_factory(self):
-        library = factories.GameLibraryFactory()
+        games = [factories.GameFactory() for i in range(5)]
+        library = factories.GameLibraryFactory(games=games)
         self.assertEqual(len(library.games.all()), 5)

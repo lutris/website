@@ -17,7 +17,7 @@ class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = User
     first_name = "Tester"
     last_name = "Testing"
-    username = factory.LazyAttribute(lambda u: u.first_name.lower())
+    username = factory.Sequence(lambda n: 'user%d' % n)
     email = "tester@lutris.net"
     is_active = True
 
@@ -40,5 +40,6 @@ class GameLibraryFactory(factory.DjangoModelFactory):
     def games(self, create, extracted, **kwargs):
         if not create:
             return
-        for i in range(5):
-            self.games.add(GameFactory())
+        if extracted:
+            for game in extracted:
+                self.games.add(game)
