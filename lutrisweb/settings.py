@@ -118,7 +118,6 @@ NOSE_ARGS = ("--cover-erase", "--with-xunit", "--xunit-file=nosetests.xml",
              "--xcoverage-file=coverage.xml")
 
 SOUTH_TESTS_MIGRATE = False
-LATEST_LUSTRIS_DEB = "http://lutris.net/releases/lutris_0.2.8_all.deb"
 
 BANNER_SIZE = "184x69"
 ICON_SIZE = "256x256"
