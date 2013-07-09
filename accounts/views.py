@@ -32,9 +32,7 @@ def client_auth(request):
     password = request.POST.get('password')
     user = authenticate(username=username, password=password)
     if user and user.is_active:
-        auth_token = AuthToken(user=user, ip_address=get_client_ip(request))
-        auth_token.save()
-        response_data = {'token': auth_token.token}
+        response_data = {'token': user.api_key.key}
     else:
         response_data = {'error': "Bad credentials"}
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
