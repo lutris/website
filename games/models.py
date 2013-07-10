@@ -1,4 +1,5 @@
 """Models for main lutris app"""
+# pylint: disable=E1002
 import yaml
 from django.db import models
 from django.contrib.auth.models import User
@@ -30,6 +31,7 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ('name', )
 
@@ -48,6 +50,7 @@ class Company(models.Model):
     logo = models.ImageField(upload_to='companies/logos', blank=True)
     website = models.CharField(max_length=128, blank=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         """Additional configuration for model"""
         verbose_name_plural = "companies"
@@ -72,6 +75,7 @@ class Runner(models.Model):
     icon = models.ImageField(upload_to='runners/icons', blank=True)
     platforms = models.ManyToManyField(Platform)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
 
@@ -88,6 +92,7 @@ class Genre(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
 
@@ -124,6 +129,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
         permissions = (
@@ -214,6 +220,7 @@ class GameLibrary(models.Model):
     user = models.OneToOneField(User)
     games = models.ManyToManyField(Game)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         verbose_name_plural = "game libraries"
 
@@ -229,6 +236,7 @@ class Featured(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         verbose_name = "Featured content"
 
