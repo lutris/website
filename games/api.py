@@ -8,6 +8,9 @@ from . import models
 
 
 class GameLibraryAuthorization(Authorization):
+    def create_list(self, object_list, bundle):
+        raise Unauthorized()
+
     def read_list(self, object_list, bundle):
         return object_list.filter(user=bundle.request.user)
 
