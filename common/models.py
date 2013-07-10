@@ -15,6 +15,7 @@ class News(models.Model):
     image = models.ImageField(upload_to='news', null=True, blank=True)
     user = models.ForeignKey(User)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['-publish_date']
         verbose_name_plural = "news"
@@ -35,5 +36,6 @@ class SiteACL(models.Model):
     site = models.OneToOneField(Site)
     whitelist = models.ForeignKey(Whitelist, related_name='site_acl')
 
+    # pylint: disable=W0232, R0903
     class Meta:
         db_table = 'site_acl'

@@ -1,5 +1,5 @@
 """Views for lutris main app"""
-# pylint: disable=E1101
+# pylint: disable=E1101, R0901
 import yaml
 
 from django.conf import settings
@@ -141,8 +141,8 @@ def installer_complete(request, slug):
     return render(request, 'games/installer-complete.html', {'game': game})
 
 
-def serve_installer(request, slug):
-    """Serve the content of an installer in yaml format"""
+def serve_installer(_request, slug):
+    """ Serve the content of an installer in yaml format. """
     try:
         installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
@@ -155,7 +155,8 @@ def serve_installer(request, slug):
     return HttpResponse(content, content_type="application/yaml")
 
 
-def serve_installer_banner(request, slug):
+def serve_installer_banner(_request, slug):
+    """ Serve game title in an appropriate format for the client. """
     try:
         installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
@@ -168,7 +169,7 @@ def serve_installer_banner(request, slug):
     return redirect(banner_thumbnail.url)
 
 
-def serve_installer_icon(request, slug):
+def serve_installer_icon(_request, slug):
     try:
         installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:

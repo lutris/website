@@ -1,3 +1,4 @@
+# pylint: disable=E1120, C0103
 from django.conf.urls.defaults import patterns, url
 from django.views.generic import TemplateView
 from games.views import (GameList, GameListByYear,
