@@ -177,7 +177,8 @@ class InstallerManager(models.Manager):
             installer = self.get_query_set().get(slug=slug)
             return installer
         except ObjectDoesNotExist:
-            installers = self.get_query_set().filter(game__slug=slug)
+            installers = self.get_query_set().filter(game__slug=slug,
+                                                     published=True)
             if not installers:
                 raise
             else:
@@ -196,8 +197,9 @@ class Installer(models.Model):
     content = models.TextField(default=yaml.safe_dump(
         DEFAULT_INSTALLER, default_flow_style=False
     ))
-    created_at = models.DateTimeField(auto_now=True, null=True)
-
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=False)
     objects = InstallerManager()
 
     def __unicode__(self):
