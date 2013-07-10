@@ -1,3 +1,4 @@
+# pylint: disable=W0613
 from mithril.strategy import Strategy
 from django.conf import settings
 from common.models import SiteACL
