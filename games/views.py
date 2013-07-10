@@ -114,7 +114,8 @@ def new_installer(request, slug):
 
         return redirect("installer_complete", slug=game.slug)
     return render(request, 'games/installer-form.html',
-                  {'form': form, 'game': game})
+                  {'form': form, 'game': game,
+                   'installer': installer})
 
 
 def validate(game, request, form):
@@ -127,7 +128,7 @@ def validate(game, request, form):
 
 @login_required
 def edit_installer(request, slug):
-    installer = get_object_or_404(Installer, slug=slug)
+    installer = get_object_or_404(Installer, slug=slug, user=request.user)
     form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         form.save()
