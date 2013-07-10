@@ -178,6 +178,9 @@ class Screenshot(models.Model):
 
 
 class InstallerManager(models.Manager):
+    def published(self):
+        return self.get_query_set().filter(published=True)
+
     def fuzzy_get(self, slug):
         try:
             installer = self.get_query_set().get(slug=slug)

@@ -42,7 +42,7 @@
       </article>
       <div class="installer-list">
         <ul>
-          {% for installer in game.installer_set.all %}
+          {% for installer in game.installer_set.published %}
             <li>
               <span class='filter-link'>{{ installer.runner }}</span>
               <span class='installer-name'>{{ installer.slug }}</span>
