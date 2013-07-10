@@ -2,6 +2,7 @@ PyYAML
 Django>=1.5
 Pillow
 South>=0.8.1
+pylint
 nose
 coverage
 nose-exclude
