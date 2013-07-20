@@ -79,7 +79,8 @@ class Runner(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        if not self.slug:
+            self.slug = slugify(self.name)
         return super(Runner, self).save(*args, **kwargs)
 
 
