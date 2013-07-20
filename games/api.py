@@ -8,6 +8,9 @@ from . import models
 
 
 class GameLibraryAuthorization(Authorization):
+    def create_list(self, object_list, bundle):
+        raise Unauthorized()
+
     def read_list(self, object_list, bundle):
         return object_list.filter(user=bundle.request.user)
 
@@ -16,6 +19,7 @@ class GameLibraryAuthorization(Authorization):
 
 
 class GameResource(ModelResource):
+    # pylint: disable=W0232, R0903
     class Meta:
         queryset = models.Game.objects.published()
         fields = ['name', 'slug', 'year', 'platforms', 'title_logo', 'icon']
@@ -34,6 +38,7 @@ class GameResource(ModelResource):
 class GameLibraryResource(ModelResource):
     games = fields.ManyToManyField(GameResource, 'games', full=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         queryset = models.GameLibrary.objects.all()
         resource_name = 'library'

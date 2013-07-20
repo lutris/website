@@ -14,6 +14,14 @@ class PlatformAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
+class InstallerAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'user', 'updated_at', 'published')
+    list_filter = ('published', )
+    list_editable = ('published', )
+    ordering = ('-updated_at', )
+    search_fields = ('slug', 'user__username')
+
+
 class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('name', )
@@ -47,6 +55,6 @@ admin.site.register(models.Genre, GenreAdmin)
 admin.site.register(models.Runner)
 admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company, CompanyAdmin)
-admin.site.register(models.Installer)
+admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)

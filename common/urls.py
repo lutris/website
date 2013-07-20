@@ -1,3 +1,4 @@
+# pylint: disable=E1120
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
@@ -9,7 +10,8 @@ urlpatterns = patterns(
         name="homepage"),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
-    url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(), name='news_details'),
+    url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(),
+        name='news_details'),
     url(r'news/all/?$', 'news_archives',
         name='news_archives'),
 )

@@ -1,4 +1,5 @@
 """Models for main lutris app"""
+# pylint: disable=E1002
 import yaml
 from django.db import models
 from django.contrib.auth.models import User
@@ -30,6 +31,7 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ('name', )
 
@@ -48,6 +50,7 @@ class Company(models.Model):
     logo = models.ImageField(upload_to='companies/logos', blank=True)
     website = models.CharField(max_length=128, blank=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         """Additional configuration for model"""
         verbose_name_plural = "companies"
@@ -72,6 +75,7 @@ class Runner(models.Model):
     icon = models.ImageField(upload_to='runners/icons', blank=True)
     platforms = models.ManyToManyField(Platform)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
 
@@ -89,6 +93,7 @@ class Genre(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
 
@@ -125,6 +130,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
+    # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']
         permissions = (
@@ -173,12 +179,16 @@ class Screenshot(models.Model):
 
 
 class InstallerManager(models.Manager):
+    def published(self):
+        return self.get_query_set().filter(published=True)
+
     def fuzzy_get(self, slug):
         try:
             installer = self.get_query_set().get(slug=slug)
             return installer
         except ObjectDoesNotExist:
-            installers = self.get_query_set().filter(game__slug=slug)
+            installers = self.get_query_set().filter(game__slug=slug,
+                                                     published=True)
             if not installers:
                 raise
             else:
@@ -197,8 +207,9 @@ class Installer(models.Model):
     content = models.TextField(default=yaml.safe_dump(
         DEFAULT_INSTALLER, default_flow_style=False
     ))
-    created_at = models.DateTimeField(auto_now=True, null=True)
-
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=False)
     objects = InstallerManager()
 
     def __unicode__(self):
@@ -213,6 +224,7 @@ class GameLibrary(models.Model):
     user = models.OneToOneField(User)
     games = models.ManyToManyField(Game)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         verbose_name_plural = "game libraries"
 
@@ -228,6 +240,7 @@ class Featured(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # pylint: disable=W0232, R0903
     class Meta:
         verbose_name = "Featured content"
 
