@@ -92,14 +92,20 @@ def game_detail(request, slug):
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
     user = request.user
-    in_library = False
+
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()
+        installers = game.installer_set.published(user=user)
+    else:
+        in_library = False
+        installers = game.installer_set.published()
+
     return render(request, 'games/detail.html',
                   {'game': game,
                    'banner_options': banner_options,
                    'banner_size': banner_size,
-                   'in_library': in_library})
+                   'in_library': in_library,
+                   'installers': installers})
 
 
 @login_required
