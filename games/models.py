@@ -179,8 +179,12 @@ class Screenshot(models.Model):
 
 
 class InstallerManager(models.Manager):
-    def published(self):
-        return self.get_query_set().filter(published=True)
+    def published(self, user=None):
+        if user:
+            return self.get_query_set().filter(models.Q(published=True)
+                                               | models.Q(user=user))
+        else:
+            return self.get_query_set().filter(published=True)
 
     def fuzzy_get(self, slug):
         try:

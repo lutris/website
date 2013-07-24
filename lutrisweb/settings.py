@@ -127,9 +127,9 @@ AUTH_PROFILE_MODULE = "accounts.Profile"
 
 RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
-    'ubuntu': RELEASES_URL + "lutris_0.3.0_all.deb",
-    'fedora': RELEASES_URL + "lutris-0.3.0-2.noarch.rpm",
-    'linux': RELEASES_URL + "lutris_0.3.0.tar.gz"
+    'ubuntu': RELEASES_URL + "lutris_0.3.1_all.deb",
+    'fedora': RELEASES_URL + "lutris-0.3.1-2.noarch.rpm",
+    'linux': RELEASES_URL + "lutris_0.3.1.tar.gz"
 }
 
 
