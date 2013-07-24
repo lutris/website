@@ -11,7 +11,7 @@
        {% endthumbnail %}
     {% endif %}
     <article>
-      {{ article.content|striptags|truncatewords:100 }}
+      {{ article.content|striptags|truncatewords:50 }}
     </article>
     <div>
       <a href='{{ article.get_absolute_url }}'>Read more</a>

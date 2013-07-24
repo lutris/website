@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
@@ -12,7 +13,7 @@ class News(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     content = MarkupField(markup_type='restructuredtext')
-    publish_date = models.DateTimeField(auto_now=True)
+    publish_date = models.DateTimeField(default=datetime.datetime.now)
     image = models.ImageField(upload_to='news', null=True, blank=True)
     user = models.ForeignKey(User)
 
