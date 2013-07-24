@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from markupfield.fields import MarkupField
 
 from mithril.models import Whitelist
 
@@ -10,7 +11,7 @@ from mithril.models import Whitelist
 class News(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    content = models.TextField()
+    content = MarkupField(markup_type='restructuredtext')
     publish_date = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='news', null=True, blank=True)
     user = models.ForeignKey(User)
