@@ -2,12 +2,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<form action="" method='post' class='full-form form-horizontal'>
-  {% csrf_token %}
   {{ form.media }}
-  {{ form|crispy }}
-  <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
+  {% crispy form %}
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
 {% endblock %}
