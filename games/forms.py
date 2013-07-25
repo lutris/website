@@ -22,8 +22,7 @@ class GameForm(forms.ModelForm):
     class Meta:
         model = models.Game
         fields = ('name', 'year', 'website',
-                  'platforms', 'genres', 'description',
-                  'title_logo')
+                  'platforms', 'genres', 'description', 'title_logo')
         widgets = {
             'platforms': Select2MultipleWidget,
             'genres': Select2MultipleWidget,
@@ -47,6 +46,21 @@ class GameForm(forms.ModelForm):
                 os.remove(current_abspath)
             return clean_field
         return None
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        slug = slugify(name)
+        try:
+            game = models.Game.objects.get(slug=slug)
+        except models.Game.DoesNotExist:
+            return name
+        else:
+            if game.is_public:
+                msg = "This game is already in our database"
+            else:
+                msg = ("This game has already been submitted, please wait for "
+                       "a moderator to publish it.")
+            raise forms.ValidationError(msg)
 
     def clean(self):
         cleaned_data = super(GameForm, self).clean()
