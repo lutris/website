@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'django_select2',
     'django_nose',
     'markupfield',
+    'django_openid_auth',
 
     'common',
     'games',
@@ -124,7 +125,11 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
 AUTH_PROFILE_MODULE = "accounts.Profile"
-
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
     'ubuntu': RELEASES_URL + "lutris_0.3.1_all.deb",

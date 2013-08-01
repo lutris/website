@@ -10,4 +10,6 @@ urlpatterns = patterns(
     url(r'^register/$', 'register', name="register"),
     url(r'^auth/$', 'client_auth', name="client_auth"),
     url(r'^verify/$', 'client_verify'),
+    url(r'^associate-steam/', 'associate_steam', name="associate_steam"),
+    url(r'(.*)/$', 'user_account', name="user_account"),
 )

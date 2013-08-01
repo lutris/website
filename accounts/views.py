@@ -1,8 +1,12 @@
 import json
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.core.urlresolvers import reverse
+
+from django_openid_auth.views import parse_openid_response, login_complete
+from django_openid_auth.auth import OpenIDBackend
 
 from .models import AuthToken
 from . import forms
@@ -48,3 +52,19 @@ def client_verify(request):
     except AuthToken.DoesNotExist:
         response_data = {'error': 'invalid token'}
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
+
+
+def user_account(request, *args):
+    print args
+    return HttpResponse("user account")
+
+
+@csrf_exempt
+def associate_steam(request):
+    if not request.user.is_authenticated():
+        return login_complete(request)
+    else:
+        openid_response = parse_openid_response(request)
+        openid_backend = OpenIDBackend()
+        openid_backend.associate_openid(request.user, openid_response)
+        return redirect(reverse("user_account", args=(request.user.username, )))

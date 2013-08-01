@@ -20,3 +20,4 @@ django-markupfield
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
+-e bzr+lp:django-openid-auth#egg=django-openid-auth
