@@ -15,6 +15,7 @@ django-grappelli
 django-nose
 django-tastypie
 django-markupfield
+python-openid
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
