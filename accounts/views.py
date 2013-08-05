@@ -13,6 +13,7 @@ from django_openid_auth.auth import OpenIDBackend
 from .models import AuthToken
 from . import forms
 import games.models
+import games.util.steam
 
 
 def register(request):
@@ -59,7 +60,7 @@ def client_verify(request):
 
 def user_account(request, *args):
     print args
-    return HttpResponse("user account")
+    return render(request, "accounts/profile.html")
 
 
 @csrf_exempt
@@ -101,4 +102,23 @@ def library_remove(request, slug):
 
 @login_required
 def library_steam_sync(request):
-    return redirect(reverse("library_show"))
+    user = request.user
+    steam_games = games.util.steam.steam_sync("bliblu")
+    for game in steam_games:
+        try:
+            steam_game = games.models.Game.objects.get(steamid=game['appid'])
+        except games.models.Game.DoesNotExist:
+            if not game['img_icon_url']:
+                continue
+            steam_game = games.models.Game(
+                name=game['name'],
+                steamid=game['appid'],
+            )
+            if game['img_logo_url']:
+                steam_game.get_steam_logo(game['img_logo_url'])
+            steam_game.get_steam_icon(game['img_icon_url'])
+            steam_game.save()
+        library = games.models.GameLibrary.objects.get(user=user)
+        library.games.add(steam_game)
+    return redirect(reverse("library_show",
+                            kwargs={'username': user.username}))

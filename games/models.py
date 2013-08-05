@@ -155,10 +155,18 @@ class Game(models.Model):
             self.title_logo = ContentFile(steam.get_capsule(self.steamid),
                                           "%d.jpg" % self.steamid)
 
+    def get_steam_logo(self, img_url):
+        self.title_logo = ContentFile(steam.get_image(self.steamid, img_url),
+                                      "%d.jpg" % self.steamid)
+
+    def get_steam_icon(self, img_url):
+        self.icon = ContentFile(steam.get_image(self.steamid, img_url),
+                                "%d.jpg" % self.steamid)
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        self.download_steam_capsule()
+        #self.download_steam_capsule()
         return super(Game, self).save(*args, **kwargs)
 
 
