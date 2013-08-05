@@ -13,7 +13,7 @@ django-crispy-forms
 django_select2
 django-grappelli
 django-nose
-django-tastypie
+django-tastypie==0.9.16
 django-markupfield
 python-openid
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy

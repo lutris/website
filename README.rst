@@ -43,7 +43,7 @@ Getting the site up and running for development
 
 * Install the required system dependencies
 
-    sudo apt-get install imagemagick memcached libmemcached-dev
+    sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
 
 * Install a recent version of nodejs and LessCSS 1.3.3. On Fedora, you can
   install the nodejs from the repos.
