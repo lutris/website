@@ -1,15 +1,18 @@
 import json
-from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
 
 from .models import AuthToken
 from . import forms
+import games.models
 
 
 def register(request):
@@ -68,3 +71,34 @@ def associate_steam(request):
         openid_backend = OpenIDBackend()
         openid_backend.associate_openid(request.user, openid_response)
         return redirect(reverse("user_account", args=(request.user.username, )))
+
+
+def library_show(request, username):
+    user = User.objects.get(username=username)
+    profile = user.get_profile()
+    library = games.models.GameLibrary.objects.get(user=user)
+    return render(request, 'games/library_show.html',
+                  {'profile': profile, 'library': library})
+
+
+@login_required
+def library_add(request, slug):
+    user = request.user
+    library = games.models.GameLibrary.objects.get(user=user)
+    game = get_object_or_404(games.models.Game, slug=slug)
+    library.games.add(game)
+    return redirect(game.get_absolute_url())
+
+
+@login_required
+def library_remove(request, slug):
+    user = request.user
+    library = games.models.GameLibrary.objects.get(useg=user)
+    game = get_object_or_404(games.models.Game, slug=slug)
+    library.games.remove(game)
+    return redirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def library_steam_sync(request):
+    return redirect(reverse("library_show"))

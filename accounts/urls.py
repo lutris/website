@@ -11,5 +11,13 @@ urlpatterns = patterns(
     url(r'^auth/$', 'client_auth', name="client_auth"),
     url(r'^verify/$', 'client_verify'),
     url(r'^associate-steam/', 'associate_steam', name="associate_steam"),
+    url(r'^(?P<username>[\w-]+)/library/$', 'library_show',
+        name="library_show"),
+    url(r'^library/add/(?P<slug>[\w-]+)/$', 'library_add',
+        name="add_to_library"),
+    url(r'^library/remove/(?P<slug>[\w-]+)/$', 'library_remove',
+        name="remove_from_library"),
+    url(r'^library/steam-sync/', 'library_steam_sync',
+        name="library_steam_sync"),
     url(r'(.*)/$', 'user_account', name="user_account"),
 )
