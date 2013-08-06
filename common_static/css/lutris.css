@@ -5129,7 +5129,7 @@ body {
 article {
   color: #ccc;
   font-weight: 400;
-  padding: 14px 15px;
+  padding: 14px 7px;
 }
 h1,
 h2,
@@ -5202,6 +5202,7 @@ footer a {
 }
 .navbar {
   margin: auto;
+  margin-bottom: 10px;
   font-family: "Roboto", Arial, sans;
 }
 .navbar .container {
@@ -5375,7 +5376,7 @@ footer a {
 }
 .game-header {
   position: relative;
-  height: 130px;
+  height: 120px;
   width: 940px;
   background-repeat: no-repeat;
   margin-bottom: 20px;
@@ -5386,12 +5387,14 @@ footer a {
   left: 0;
   right: 0;
   bottom: 20px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border-radius: 5px;
   font-size: 25px;
   line-height: 50px;
   background: #222222;
-  background: -webkit-gradient(linear, left top, left bottom, from(#3a3a3a), to(#222222));
-  background: -moz-linear-gradient(top, #3a3a3a, #222222);
+  background: -webkit-gradient(linear, left top, left bottom, from(#424242), to(#222222));
+  background: -moz-linear-gradient(top, #424242, #222222);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@start', endColorstr='@end');
   color: #EEE;
 }
