@@ -103,7 +103,7 @@ def library_remove(request, slug):
 @login_required
 def library_steam_sync(request):
     user = request.user
-    steam_games = games.util.steam.steam_sync("bliblu")
+    steam_games = games.util.steam.steam_sync(user.get_profile().steamid)
     for game in steam_games:
         try:
             steam_game = games.models.Game.objects.get(steamid=game['appid'])

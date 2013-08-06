@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
-from accounts import signals
+#from accounts import signals
 
 
 class Profile(models.Model):
@@ -12,6 +12,10 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return "%s's profile" % self.user.username
+
+    @property
+    def steamid(self):
+        return ""
 
 
 class AuthToken(models.Model):
