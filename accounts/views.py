@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,7 @@ from django_openid_auth.auth import OpenIDBackend
 
 from .models import AuthToken
 from . import forms
+from . import tasks
 import games.models
 import games.util.steam
 
@@ -71,7 +73,8 @@ def associate_steam(request):
         openid_response = parse_openid_response(request)
         openid_backend = OpenIDBackend()
         openid_backend.associate_openid(request.user, openid_response)
-        return redirect(reverse("user_account", args=(request.user.username, )))
+        return redirect(reverse("user_account",
+                                args=(request.user.username, )))
 
 
 def library_show(request, username):
@@ -103,22 +106,10 @@ def library_remove(request, slug):
 @login_required
 def library_steam_sync(request):
     user = request.user
-    steam_games = games.util.steam.steam_sync(user.get_profile().steamid)
-    for game in steam_games:
-        try:
-            steam_game = games.models.Game.objects.get(steamid=game['appid'])
-        except games.models.Game.DoesNotExist:
-            if not game['img_icon_url']:
-                continue
-            steam_game = games.models.Game(
-                name=game['name'],
-                steamid=game['appid'],
-            )
-            if game['img_logo_url']:
-                steam_game.get_steam_logo(game['img_logo_url'])
-            steam_game.get_steam_icon(game['img_icon_url'])
-            steam_game.save()
-        library = games.models.GameLibrary.objects.get(user=user)
-        library.games.add(steam_game)
+    tasks.sync_steam_library(user.id)
+    messages.success(
+        request,
+        'Your Steam library is being synced with your Lutris account'
+    )
     return redirect(reverse("library_show",
                             kwargs={'username': user.username}))
