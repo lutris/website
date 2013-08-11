@@ -303,20 +303,20 @@ footer {
 
 .game-header {
   position: relative;
-  height: 352px;
+  height: 120px;
   width: 940px;
   background-repeat: no-repeat;
-  background-color: #000;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   .title {
     position: absolute;
     height: 50px;
     left: 0;
     right: 0;
     bottom: 20px;
+    .rounded-corners;
     font-size: 25px;
     line-height: 50px;
-    .top-down-gradient(rgba(0,0,0,.7), rgba(22, 22, 22, 0.5));
+    .top-down-gradient(@darkerBackground + #202020, @darkerBackground);
     color: #EEE;
     span {
       color: #EDEDED;

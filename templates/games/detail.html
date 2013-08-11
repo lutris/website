@@ -9,10 +9,7 @@
 
 
 {% block content %}
-  <div class="game-header"
-    {% thumbnail game.title_logo banner_size options=banner_options as banner %}
-       style="background-image: url('{{ banner.url }}')"
-    {% endthumbnail %}>
+  <div class="game-header">
     <div class='title'>
       {% if game.icon %}
         <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' />
