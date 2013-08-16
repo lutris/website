@@ -1,3 +1,4 @@
+setup-tools>=0.8
 PyYAML
 Django>=1.5
 Pillow
