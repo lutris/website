@@ -1,4 +1,4 @@
-@import "less/bootstrap.less";
+@import "bootstrap";
 
 /* == Variables */
 @siteWidth: 960px;
@@ -74,8 +74,16 @@ footer {
     display: block;
   }
 }
+@screen-sm: 480px;
+@grid-float-breakpoint:     @screen-phone;
 
+@container-tablet:            ((940px + @grid-gutter-width));
 
+// Medium screen / desktop
+@container-desktop:           ((940px + @grid-gutter-width));
+
+// Large screen / wide desktop
+@container-lg-desktop:        ((940px + @grid-gutter-width));
 
 /* == Helpers */
 .rounded-corners (@radius: 5px) {
@@ -204,11 +212,11 @@ footer {
   }
 }
 .news-image-preview {
-  float: left; 
+  float: left;
   padding: 15px;
 }
 .news-header {
-  p { 
+  p {
     color: #999;
     font-size: .8em;
   }

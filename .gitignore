@@ -11,3 +11,7 @@ local_settings.py
 nosetests.xml
 coverage.xml
 .coverage
+components
+public/js
+public/css
+node_modules

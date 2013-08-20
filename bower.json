@@ -1,0 +1,16 @@
+{
+  "name": "lutris",
+  "version": "0.1.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0",
+    "jquery": "~1.10",
+    "modernizr": "~2.6.2"
+  }
+}
