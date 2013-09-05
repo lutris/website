@@ -47,12 +47,14 @@ Getting the site up and running for development
 
 * Install a recent version of nodejs and grunt. On Fedora, you can
   install the nodejs from the repos. When nodejs and grunt are installed, you 
-  can install grunt dependencies for the project.
+  can install grunt dependencies for the project. 
+  Install bower components.
 
     sudo add-apt-repository ppa:chris-lea/node.js
     sudo apt-get install nodejs
     sudo npm install grunt-cli -g
     npm install
+    bower install
 
 * Make the SQLite database
 
