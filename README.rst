@@ -45,11 +45,14 @@ Getting the site up and running for development
 
     sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
 
-* Install a recent version of nodejs and LessCSS 1.3.3. On Fedora, you can
-  install the nodejs from the repos.
+* Install a recent version of nodejs and grunt. On Fedora, you can
+  install the nodejs from the repos. When nodejs and grunt are installed, you 
+  can install grunt dependencies for the project.
 
     sudo add-apt-repository ppa:chris-lea/node.js
-    sudo npm install less@1.3.3 -g
+    sudo apt-get install nodejs
+    sudo npm install grunt-cli -g
+    npm install
 
 * Make the SQLite database
 
@@ -63,7 +66,9 @@ Getting the site up and running for development
 
     make test
 
-* Run the dev server and start coding
+* Run the dev server and tell grunt to watch for changes in less / coffeescript
+  files and start coding
 
     make run
+    grunt watch
     firefox http://localhost:8000
