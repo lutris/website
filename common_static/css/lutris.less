@@ -56,34 +56,34 @@ a {
     text-decoration: underline;
   }
 }
+
+code {
+  color: #aaa;
+  background-color: #222;
+}
+form {
+  label {
+    .asteriskField {
+      color: #bada55;
+    }
+  }
+}
 .wrapper {
   min-height: 100%;
   display: block;
   position: relative;
 }
-footer {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height: 200px;   /* Height of the footer */
 
-  background-color: @darkerBackground;
-  color: #AAA;
-  font-size: .8em;
-  a {
-    display: block;
-  }
-}
-@screen-sm: 480px;
-@grid-float-breakpoint:     @screen-phone;
-
-@container-tablet:            ((940px + @grid-gutter-width));
-
-// Medium screen / desktop
-@container-desktop:           ((940px + @grid-gutter-width));
-
-// Large screen / wide desktop
-@container-lg-desktop:        ((940px + @grid-gutter-width));
+//@screen-sm: 480px;
+//@grid-float-breakpoint:     @screen-phone;
+//
+//@container-tablet:            ((940px + @grid-gutter-width));
+//
+//// Medium screen / desktop
+//@container-desktop:           ((940px + @grid-gutter-width));
+//
+//// Large screen / wide desktop
+//@container-lg-desktop:        ((940px + @grid-gutter-width));
 
 /* == Helpers */
 .rounded-corners (@radius: 5px) {
@@ -124,6 +124,7 @@ footer {
   padding-bottom: 250px;
 }
 .navbar {
+  font-weight: 300;
   margin: auto;
   margin-bottom: 10px;
   font-family: @sansSerif;
@@ -297,6 +298,7 @@ footer {
     color: #999999;
   }
 }
+
 /* == Classes */
 .overlay {
   position: relative;
@@ -397,33 +399,6 @@ footer {
   }
 }
 
-/* == Forms */
-form  {
-  margin: 0;
-  label {
-    display: block;
-    line-height: 1.6em;
-  }
-  input[type=text], input[type=password], textarea {
-    width: auto;
-    background-color: #FFF;
-    border-color: #aaa;
-    border-radius: 0px;
-    -webkit-border-radius: 0px;
-  }
-  textarea {
-  }
-  .select2-container {
-    min-width: 400px;
-    margin-bottom: 10px;
-  }
-  .help-block {
-    font-size: .8em;
-    color: #999;
-  }
-}
-
-
 .big-button {
   color: #FFFFFF;
   border-color: #a84300;
@@ -491,18 +466,24 @@ form  {
 
 .mini-game-list {
   margin: 10px auto;
+  text-align: center;
   a {
     color: #EEE;
-    margin: 7px 14px;
     padding: 7px;
     background-color: #222;
     display: inline-block;
     font-size: .8em;
     font-weight: 500;
+    width: 184px + 2 * 7px;
+    margin: 14px;
     &:hover {
       background-color: #444;
       text-decoration: none;
     }
+  }
+  .game-title {
+    height: 4em;
+    padding: 7px 0;
   }
 }
 
@@ -542,6 +523,7 @@ form  {
   list-style-type: none;
   li {
     margin: 10px 20px 3px 0px;
+    min-width: 130px;
   }
   a {
     background-color: #222;

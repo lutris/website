@@ -7,7 +7,7 @@ class RegistrationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.attrs = {'class': "form-horizontal"}
+        self.helper.attrs = {'class': "form-horizontal", 'role': "form"}
         self.helper.add_input(Submit('submit', "Register"))
 
 
@@ -16,4 +16,4 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.attrs = {'class': "form-horizontal"}
-        self.helper.add_input(Submit('submit', "Register"))
+        self.helper.add_input(Submit('submit', "Sign in"))

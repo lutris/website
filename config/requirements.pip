@@ -10,7 +10,7 @@ nose-exclude
 nosexcover
 sphinx
 django-compressor>=1.2
-django-crispy-forms
+django-crispy-forms>=1.4.0
 django_select2
 django-grappelli
 django-nose
