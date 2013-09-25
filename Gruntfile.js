@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'public/js/app.js': 'main/static/scripts/main.coffee'
+          'public/js/app.js': 'common_static/js/app.coffee'
         }
       }
     },
@@ -38,7 +38,20 @@ module.exports = function(grunt) {
       },
       bootstrap: {
         files: {
-          'public/js/bootstrap.min.js': ['components/bootstrap/js/*.js']
+          'public/js/bootstrap.min.js': [
+            'components/bootstrap/js/transition.js',
+            'components/bootstrap/js/alert.js',
+            'components/bootstrap/js/button.js',
+            'components/bootstrap/js/carousel.js',
+            'components/bootstrap/js/collapse.js',
+            'components/bootstrap/js/dropdown.js',
+            'components/bootstrap/js/modal.js',
+            'components/bootstrap/js/tooltip.js',
+            //'components/bootstrap/js/popover.js',
+            'components/bootstrap/js/scrollspy.js',
+            'components/bootstrap/js/tab.js',
+            'components/bootstrap/js/affix.js'
+          ]
         }
       },
       modernizr: {
@@ -61,8 +74,8 @@ module.exports = function(grunt) {
         tasks: ['less:css']
       },
       coffee: {
-        files: ['main/static/scripts/main.coffee'],
-        tasks: ['coffee']
+        files: ['common_static/js/app.coffee'],
+        tasks: ['coffee', 'uglify:app']
       }
     }
   });

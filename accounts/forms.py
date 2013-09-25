@@ -38,3 +38,4 @@ class LoginForm(AuthenticationForm):
         self.helper = get_bootstrap_helper(
             ['username', 'password'], 'signin', "Sign in"
         )
+        print self.fields

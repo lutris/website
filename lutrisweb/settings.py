@@ -131,7 +131,10 @@ DOWNLOADS = {
     'fedora': RELEASES_URL + "lutris-0.3.1-2.noarch.rpm",
     'linux': RELEASES_URL + "lutris_0.3.1.tar.gz"
 }
+
+## Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 ## Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
