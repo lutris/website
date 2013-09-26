@@ -4,6 +4,15 @@
 
 
 {% block content %}
+<div class='row'>
+  <div class="featured col-md-9">
+    {% featured_slider %}
+  </div>
+  <div class="col-md-3">
+    {% download_links %}
+  </div>
+</div>
+
 <div class="row presentation">
   <div class="col-md-4 centered">
     <h2>What is Lutris?</h2>

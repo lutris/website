@@ -3,7 +3,7 @@
 <div class="carousel slide" id="featured-slider">
   <div class="carousel-inner featured-slider" >
     {% for featured in featured_contents %}
-      <a href="{{ featured.content_object.get_absolute_url }}" class="item active">
+    <a href="{{ featured.content_object.get_absolute_url }}" class="item {% if forloop.first %}active{% endif %}">
         {% thumbnail featured.image "680x220" crop="top" as img %}
           <img src="{{ img.url }}" width=680 height=220 title="{{ featured.description }}" alt="{{ featured.description }}">
         {% endthumbnail %}
@@ -24,7 +24,7 @@
 {% block scripts %}
   <script>
     $(function(){
-      $("#featured-slider").carousel({interval: 1000});
+        $("#featured-slider").carousel('cycle');
     })
   </script>
 {% endblock %}
