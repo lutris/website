@@ -1,25 +1,9 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load lutris %}
-{% load url from future %}
-
-{% block stylesheets %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
-
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
-{% endblock %}
 
 
 {% block content %}
-<div class='row'>
-  <div class="featured col-md-9">
-    {% featured_slider %}
-  </div>
-  <div class="col-md-3">
-    {% download_links %}
-  </div>
-</div>
-
 <div class="row presentation">
   <div class="col-md-4 centered">
     <h2>What is Lutris?</h2>
@@ -64,8 +48,4 @@
     {% latest_games %}
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-   {% include "includes/_nivoslider.html" %}
 {% endblock %}

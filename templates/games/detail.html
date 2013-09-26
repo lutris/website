@@ -2,12 +2,6 @@
 {% load thumbnail %}
 
 
-{% block stylesheets %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
-{% endblock %}
-
-
 {% block content %}
   <div class="game-header">
     <div class='title'>
@@ -21,9 +15,9 @@
   <div class="row">
     <div class="col-md-9">
       {% with game.screenshot_set.published as screenshots %}
-        <div class="slider-wrapper theme-dark clearfix">
+        <div class="carousel slide">
           {% if screenshots %}
-            <div class='screenshots nivoSlider'>
+            <div class='screenshots carousel-inner'>
               {% for screenshot in game.screenshot_set.published %}
                 {% thumbnail screenshot.image '640x480' crop="center" as img %}
                   <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
@@ -127,8 +121,4 @@
       </div>
     </div>
   </div>
-
-{% endblock %}
-{% block scripts %}
-   {% include "includes/_nivoslider.html" %}
 {% endblock %}

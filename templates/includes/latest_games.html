@@ -1,6 +1,7 @@
 {% load thumbnail %}
 
 <h3>Latest games</h3>
+{% spaceless %}
 <div class="mini-game-list">
 {% for game in latest_games %}
 <a href="{{ game.get_absolute_url }}">
@@ -9,7 +10,10 @@
   {% empty %}
     <span class='game-cover'>no image</span>
   {% endthumbnail %}
+  <span class='game-title'>
   {{ game.name }}
+  </span>
   </a>
 {% endfor %}
 </div>
+{% endspaceless %}

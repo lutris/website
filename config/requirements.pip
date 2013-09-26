@@ -1,23 +1,24 @@
 setuptools>=0.8
 PyYAML
-Django>=1.5
-Pillow
-South>=0.8.1
-pylint
+Django>=1.5.4
+Pillow==2.1.0
+South>=0.8.2
+pylint>=1.0.0
 nose
 coverage
 nose-exclude
 nosexcover
-sphinx
-django-crispy-forms
-django_select2
-django-grappelli
-django-nose
+Sphinx>=1.2b2
+django-compressor>=1.2
+django-crispy-forms>=1.4.0
+django_select2==4.2.1
+django-grappelli==2.4.6
+django-nose==1.2
 django-tastypie==0.9.16
 django-markupfield
 python-openid
-requests
-Celery
+requests==2.0.0
+Celery==3.0.23
 django-celery
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
