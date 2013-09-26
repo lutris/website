@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'django_nose',
     'markupfield',
     'django_openid_auth',
+    'djcelery',
 
     'common',
     'games',

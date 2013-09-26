@@ -9,7 +9,6 @@ coverage
 nose-exclude
 nosexcover
 sphinx
-django-compressor>=1.2
 django-crispy-forms
 django_select2
 django-grappelli
@@ -19,6 +18,7 @@ django-markupfield
 python-openid
 requests
 Celery
+django-celery
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
