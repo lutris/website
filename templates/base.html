@@ -38,7 +38,7 @@
             <li><a href='{% url "about" %}'>About</a></li>
             <li><a href="{% url "game_list" %}">Games</a></li>
             {% if user.is_authenticated %}
-              <li><a href="{% url "library_show" username=user.username %}">My Library</a></li>
+              <li><a href="{% url "user_account" user.username %}">My account</a></li>
               <li><a href="{% url "auth_logout" %}">Logout</a></li>
             {% else %}
               <li><a href="{% url "login" %}">Login</a></li>

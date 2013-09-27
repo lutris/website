@@ -19,5 +19,6 @@ urlpatterns = patterns(
         name="remove_from_library"),
     url(r'^library/steam-sync/', 'library_steam_sync',
         name="library_steam_sync"),
-    url(r'(.*)/$', 'user_account', name="user_account"),
+    url(r'([\w-]+)/$', 'user_account',
+        name="user_account"),
 )

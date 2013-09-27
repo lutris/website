@@ -60,9 +60,9 @@ def client_verify(request):
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
 
-def user_account(request, *args):
-    print args
-    return render(request, "accounts/profile.html")
+def user_account(request, username):
+    user = User.objects.get(username=username)
+    return render(request, "accounts/profile.html", {'user': user})
 
 
 @csrf_exempt
