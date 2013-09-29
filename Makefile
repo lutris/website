@@ -42,3 +42,9 @@ client:
 
 docs:
 	rst2html.py --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html
+
+shell:
+	./manage.py shell --traceback
+
+worker:
+	./manage.py celery worker --loglevel=debug --autoreload -E -Q celery,lutris

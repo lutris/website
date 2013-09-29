@@ -106,7 +106,7 @@ def library_remove(request, slug):
 @login_required
 def library_steam_sync(request):
     user = request.user
-    tasks.sync_steam_library(user.id)
+    tasks.sync_steam_library.delay(user.id)
     messages.success(
         request,
         'Your Steam library is being synced with your Lutris account'

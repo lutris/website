@@ -2,6 +2,7 @@
 
 {% block content %}
   <h3>Games in library</h3>
+  <span>{{ library.games.count }} games in library</span>
   <ul class="game-list user-library">
     {% for game in library.games.all %}
       {% include "includes/game_preview.html" %}
