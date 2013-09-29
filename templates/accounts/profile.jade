@@ -1,0 +1,14 @@
+extends "base.html"
+
+
+block content
+    .row
+        .game-header
+            .title
+                img(src='{{ user.get_avatar_url }}', width='128', height='128')
+                span {{ user }}
+                .buttons
+                    a.btn(href="#") Edit Profile
+        div
+            a.btn(href="{% url 'library_steam_sync' %}") Steam sync
+            a.btn(href="{% url 'library_show' username=user.username %}") Library

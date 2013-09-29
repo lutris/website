@@ -2,7 +2,7 @@
 # pylint: disable=E1002
 import yaml
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
@@ -175,7 +175,7 @@ class Screenshot(models.Model):
     game = models.ForeignKey(Game)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now=True)
-    uploaded_by = models.ForeignKey(User)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
 
@@ -210,7 +210,7 @@ class InstallerManager(models.Manager):
 class Installer(models.Model):
     """Game installer model"""
     game = models.ForeignKey(Game)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     runner = models.ForeignKey(Runner)
 
     slug = models.SlugField(unique=True)
@@ -233,7 +233,7 @@ class Installer(models.Model):
 
 
 class GameLibrary(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     games = models.ManyToManyField(Game)
 
     # pylint: disable=W0232, R0903

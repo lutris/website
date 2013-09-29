@@ -76,6 +76,9 @@ module.exports = function(grunt) {
       coffee: {
         files: ['common_static/js/app.coffee'],
         tasks: ['coffee', 'uglify:app']
+      },
+      templates: {
+        files: ['templates/**/*.jade'],
       }
     }
   });

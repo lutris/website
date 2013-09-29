@@ -119,10 +119,11 @@ ICON_SIZE = "256x256"
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_COLORSPACE = "sRGB"
 
+AUTH_USER_MODEL = 'accounts.User'
+AUTH_PROFILE_MODULE = "accounts.Profile"
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
-AUTH_PROFILE_MODULE = "accounts.Profile"
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',

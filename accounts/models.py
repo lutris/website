@@ -1,25 +1,27 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
-#from accounts import signals
+
+class User(AbstractUser):
+    avatar = models.ImageField(upload_to='avatars', blank=True)
+    steamid = models.CharField("Steam id", max_length=32, blank=True)
+    website = models.URLField(blank=True)
+
+    def get_avatar_url(self):
+        return "/media/avatar.png"
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User)
-    avatar = models.ImageField(upload_to='avatars', blank=True)
-    website = models.URLField(blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
 
     def __unicode__(self):
         return "%s's profile" % self.user.username
 
-    @property
-    def steamid(self):
-        return ""
-
 
 class AuthToken(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     ip_address = models.IPAddressField()
     token = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)

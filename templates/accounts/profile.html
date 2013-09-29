@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-profile
-<a href="{% url "library_steam_sync" %}">Steam sync</a>
-
-<a href="{% url "library_show" username=user.username %}">Library</a>
-{% endblock %}

@@ -62,7 +62,7 @@ def client_verify(request):
 
 def user_account(request, username):
     user = User.objects.get(username=username)
-    return render(request, "accounts/profile.html", {'user': user})
+    return render(request, "accounts/profile.jade", {'user': user})
 
 
 @csrf_exempt
