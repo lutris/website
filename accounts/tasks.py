@@ -1,10 +1,10 @@
 import logging
 
 from celery import task
-from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
 import games.models
+from accounts.models import User
 
 LOGGER = logging.getLogger()
 
