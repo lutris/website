@@ -8,7 +8,9 @@
   <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+  <!--
   <link href='http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+  -->
   <link type="text/css" href="{{ STATIC_URL }}css/lutris.css" rel="stylesheet" />
   {% block stylesheets %}
   {% endblock %}
@@ -39,7 +41,7 @@
             <li><a href="{% url "game_list" %}">Games</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url "user_account" user.username %}">My account</a></li>
-              <li><a href="{% url "auth_logout" %}">Logout</a></li>
+              <li><a href="{% url "logout" %}">Logout</a></li>
             {% else %}
               <li><a href="{% url "login" %}">Login</a></li>
               <li><a href="{% url "register" %}">Register</a></li>

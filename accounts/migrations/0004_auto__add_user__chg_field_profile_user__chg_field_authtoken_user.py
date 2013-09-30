@@ -45,12 +45,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['user_id', 'permission_id'])
 
-        # Deleting field 'Profile.website'
-        db.delete_column(u'accounts_profile', 'website')
-
-        # Deleting field 'Profile.avatar'
-        db.delete_column(u'accounts_profile', 'avatar')
-
 
         # Changing field 'Profile.user'
         db.alter_column(u'accounts_profile', 'user_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.User'], unique=True))
@@ -67,16 +61,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field user_permissions on 'User'
         db.delete_table(db.shorten_name(u'accounts_user_user_permissions'))
-
-        # Adding field 'Profile.website'
-        db.add_column(u'accounts_profile', 'website',
-                      self.gf('django.db.models.fields.URLField')(default='', max_length=200, blank=True),
-                      keep_default=False)
-
-        # Adding field 'Profile.avatar'
-        db.add_column(u'accounts_profile', 'avatar',
-                      self.gf('django.db.models.fields.files.ImageField')(default='', max_length=100, blank=True),
-                      keep_default=False)
 
 
         # Changing field 'Profile.user'

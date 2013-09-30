@@ -18,7 +18,6 @@ urlpatterns = patterns(
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^openid/', include('django_openid_auth.urls')),
-    url(r'^account/', include('registration.urls')),
     url(r'^user/', include('accounts.urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls')),

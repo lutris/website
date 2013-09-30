@@ -5,10 +5,13 @@ block content
     .row
         .game-header
             .title
+                {{ user.get_avatar_url }}
                 img(src='{{ user.get_avatar_url }}', width='128', height='128')
                 span {{ user }}
                 .buttons
-                    a.btn(href="#") Edit Profile
+                    a.btn(href="{% url 'profile_edit' user.username %}") Edit Profile
         div
+            if user.website
+                a(href="{{ user.website }}") Website
             a.btn(href="{% url 'library_steam_sync' %}") Steam sync
             a.btn(href="{% url 'library_show' username=user.username %}") Library

@@ -10,7 +10,10 @@ class User(AbstractUser):
     website = models.URLField(blank=True)
 
     def get_avatar_url(self):
-        return "/media/avatar.png"
+        if self.avatar:
+            return settings.MEDIA_URL + self.avatar
+        else:
+            return "nope"
 
 
 class Profile(models.Model):

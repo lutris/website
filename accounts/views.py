@@ -1,17 +1,16 @@
 import json
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
 
-from .models import AuthToken
+from .models import AuthToken, User
 from . import forms
 from . import tasks
 import games.models
@@ -61,8 +60,20 @@ def client_verify(request):
 
 
 def user_account(request, username):
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
     return render(request, "accounts/profile.jade", {'user': user})
+
+
+def profile_edit(request, username):
+    user = get_object_or_404(User, username=username)
+    if user != request.user:
+        raise Http404
+    form = forms.ProfileForm(request.POST or None, request.FILES or None,
+                             instance=user)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('user_account', args=(username, )))
+    return render(request, 'accounts/profile_edit.jade', {'form': form})
 
 
 @csrf_exempt
