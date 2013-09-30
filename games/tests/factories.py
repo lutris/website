@@ -3,7 +3,7 @@ import factory
 from django.db.models.signals import post_save
 from games import models
 from accounts.models import User
-from accounts.signals import create_profile
+from accounts.signals import create_library
 
 
 class GameFactory(factory.DjangoModelFactory):
@@ -26,9 +26,9 @@ class UserNoLibraryFactory(UserFactory):
 
     @classmethod
     def _create(cls, target_class, *args, **kwargs):
-        post_save.disconnect(create_profile, User)
+        post_save.disconnect(create_library, User)
         user = super(UserFactory, cls)._create(target_class, *args, **kwargs)
-        post_save.connect(create_profile, User)
+        post_save.connect(create_library, User)
         return user
 
 
