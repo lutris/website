@@ -5,13 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
 
-from .models import AuthToken
+from .models import AuthToken, User
 from . import forms
 from . import tasks
 import games.models
