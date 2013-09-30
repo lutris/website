@@ -1,8 +1,8 @@
 import factory
 
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from games import models
+from accounts.models import User
 from accounts.signals import create_profile
 
 
