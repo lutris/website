@@ -15,6 +15,16 @@
   <meta name="viewport" content="width=device-width">
 </head>
 <body>
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ message }}
+          </li>
+          {% endfor %}
+      </ul>
+      {% endif %}
   <div class="wrapper">
     <div class="navbar navbar-inverse">
       <div class="container">
@@ -49,6 +59,7 @@
     </div>
 
     <div id="content" class="page container">
+
       {% block content %}{% endblock %}
       <footer class=footer>
           <div class="col-md-4">
@@ -74,13 +85,7 @@
       </footer>
     </div>
   </div>
-  {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
-  {% endif %}
+
   {% block scripts %}
 
   {% endblock %}

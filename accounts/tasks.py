@@ -24,7 +24,7 @@ def create_game(game):
 @task
 def sync_steam_library(user_id):
     user = User.objects.get(pk=user_id)
-    steamid = user.get_profile().steamid
+    steamid = user.steamid
     steam_games = games.util.steam.steam_sync(steamid)
     for game in steam_games:
         print game['name']

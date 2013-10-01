@@ -72,6 +72,10 @@ def profile_edit(request, username):
                              instance=user)
     if form.is_valid():
         form.save()
+        messages.success(
+            request,
+            'Your account info has been updated.'
+        )
         return redirect(reverse('user_account', args=(username, )))
     return render(request, 'accounts/profile_edit.jade', {'form': form})
 
