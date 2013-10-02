@@ -30,7 +30,7 @@ def download_links(context):
     return context
 
 
-@register.inclusion_tag('includes/featured_slider.html', takes_context=True)
+@register.inclusion_tag('includes/featured_slider.jade', takes_context=True)
 def featured_slider(context):
     context['featured_contents'] = models.Featured.objects.all()
     return context
