@@ -5,7 +5,6 @@ block content
     .row
         .game-header
             .title
-                {{ user.get_avatar_url }}
                 img(src='{{ user.get_avatar_url }}', width='128', height='128')
                 span {{ user }}
                 .buttons

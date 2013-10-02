@@ -13,7 +13,7 @@ class User(AbstractUser):
         if self.avatar:
             return settings.MEDIA_URL + self.avatar
         else:
-            return "nope"
+            return settings.STATIC_URL + "images/default-avatar.png"
 
 
 class Profile(models.Model):
