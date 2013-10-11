@@ -35,7 +35,7 @@ urlpatterns = patterns(
         name="add_to_library"),
     url(r'^library/remove/(?P<slug>[\w-]+)/$', 'library_remove',
         name="remove_from_library"),
-    url(r'^library/steam-sync/', 'library_steam_sync',
+    url(r'^library/steam-sync/([\w]+)/', 'library_steam_sync',
         name="library_steam_sync"),
     url(r'([\w-]+)/edit/$', 'profile_edit', name='profile_edit'),
     url(r'([\w-]+)/$', 'user_account', name="user_account"),

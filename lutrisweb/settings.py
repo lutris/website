@@ -146,6 +146,14 @@ GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
+## Celery
+CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERY_ROUTES = {
+    'accounts.tasks.sync_steam_library': {'queue': 'lutris'},
+}
+import djcelery
+djcelery.setup_loader()
+
 ## Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins']

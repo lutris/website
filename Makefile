@@ -47,4 +47,4 @@ shell:
 	./manage.py shell --traceback
 
 worker:
-	./manage.py celery worker --loglevel=debug --autoreload -E -Q celery,lutris
+	./manage.py celery worker --loglevel=debug --autoreload --hostname=lutris.net -E -Q lutris 

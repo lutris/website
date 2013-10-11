@@ -18,7 +18,7 @@ block content
             h2 Import your Steam library
             p You can automatically import the list of your Steam games and add
                 them to your Lutris library.
-            a.btn(href="{% url 'associate_steam' %}") Steam sync
+            a.btn(href="{% url 'steam_login' %}") Steam sync
         .col-md-4
             if user.website
                 a(href="{{ user.website }}") Website

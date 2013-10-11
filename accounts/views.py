@@ -88,7 +88,9 @@ def associate_steam(request):
         openid_response = parse_openid_response(request)
         if openid_response.status == 'failure':
             messages.error(request, "Failed to associate Steam account")
-            return redirect(request.META['HTTP_REFERER'])
+            return redirect(
+                reverse('user_account', args=(request.user.username, ))
+            )
         openid_backend = OpenIDBackend()
         openid_backend.associate_openid(request.user, openid_response)
         return redirect(reverse("library_steam_sync",
@@ -122,7 +124,7 @@ def library_remove(request, slug):
 
 
 @login_required
-def library_steam_sync(request):
+def library_steam_sync(request, username):
     user = request.user
     tasks.sync_steam_library.delay(user.id)
     messages.success(

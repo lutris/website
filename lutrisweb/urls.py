@@ -22,7 +22,7 @@ urlpatterns = patterns(
     url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls')),
     url(r'^steam-login/', login_begin, kwargs={
-        'login_complete_view': 'associate_steam'}),
+        'login_complete_view': 'associate_steam'}, name='steam_login'),
     url(r'^', include('common.urls')),
 )
 
