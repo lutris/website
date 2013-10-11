@@ -93,6 +93,8 @@ def associate_steam(request):
             )
         openid_backend = OpenIDBackend()
         openid_backend.associate_openid(request.user, openid_response)
+        request.user.set_steamid()
+        request.user.save()
         return redirect(reverse("library_steam_sync",
                                 args=(request.user.username, )))
 

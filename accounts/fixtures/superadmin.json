@@ -1,7 +1,7 @@
 [
   {
     "pk": 1,
-    "model": "auth.user",
+    "model": "accounts.user",
     "fields": {
       "username": "admin",
       "first_name": "",

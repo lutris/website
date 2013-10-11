@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django_openid_auth.models import UserOpenID
 
 
 class User(AbstractUser):
@@ -14,6 +15,13 @@ class User(AbstractUser):
             return settings.MEDIA_URL + self.avatar
         else:
             return settings.STATIC_URL + "images/default-avatar.png"
+
+    def set_steamid(self):
+        try:
+            user_openid = UserOpenID.objects.get(user=self)
+        except UserOpenID.DoesNotExists:
+            return False
+        self.steamid = user_openid.claimed_id.split('/')[-1]
 
 
 class Profile(models.Model):

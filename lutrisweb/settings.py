@@ -154,6 +154,9 @@ CELERY_ROUTES = {
 import djcelery
 djcelery.setup_loader()
 
+## API Keys
+STEAM_API_KEY = "FEC1EEECA360B64106F36656332A9B73"
+
 ## Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins']
