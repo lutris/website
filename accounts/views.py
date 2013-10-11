@@ -86,9 +86,12 @@ def associate_steam(request):
         return login_complete(request)
     else:
         openid_response = parse_openid_response(request)
+        if openid_response.status == 'failure':
+            messages.error(request, "Failed to associate Steam account")
+            return redirect(request.META['HTTP_REFERER'])
         openid_backend = OpenIDBackend()
         openid_backend.associate_openid(request.user, openid_response)
-        return redirect(reverse("user_account",
+        return redirect(reverse("library_steam_sync",
                                 args=(request.user.username, )))
 
 

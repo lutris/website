@@ -9,8 +9,17 @@ block content
                 span {{ user }}
                 .buttons
                     a.btn(href="{% url 'profile_edit' user.username %}") Edit Profile
-        div
+        .col-md-8
+            h2 Library
+            p Your library is synced on all your Lutris clients when you
+                connect them to the website.
+            a.btn(href="{% url 'library_show' username=user.username %}") View my library
+
+            h2 Import your Steam library
+            p You can automatically import the list of your Steam games and add
+                them to your Lutris library.
+            a.btn(href="{% url 'associate_steam' %}") Steam sync
+        .col-md-4
             if user.website
                 a(href="{{ user.website }}") Website
-            a.btn(href="{% url 'library_steam_sync' %}") Steam sync
-            a.btn(href="{% url 'library_show' username=user.username %}") Library
+
