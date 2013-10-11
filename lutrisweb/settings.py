@@ -49,7 +49,7 @@ STATICFILES_FINDERS = (
 SECRET_KEY = 'f8uok&amp;mchb26x5w6w+8nsa$+4zowxf09dayl3wk7(7l95+ppk1'
 
 TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader',(
+    ('pyjade.ext.django.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
     )),
