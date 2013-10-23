@@ -24,13 +24,6 @@ class User(AbstractUser):
         self.steamid = user_openid.claimed_id.split('/')[-1]
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-
-    def __unicode__(self):
-        return "%s's profile" % self.user.username
-
-
 class AuthToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     ip_address = models.IPAddressField()

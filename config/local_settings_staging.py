@@ -1,12 +1,14 @@
 DEBUG = False
 ENVIRONMENT = "staging"
 ALLOWED_HOSTS = ('dev.lutris.net',)
+SECRET_KEY = 'zaZeiwiejeto1zoo7iluH5beequai9ienie9aipoz4aih8ouJe7ON0kuche2ea5t'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'lutris_staging',
         'USER': 'lutris_staging',
-        'PASSWORD': 'admin'
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
     }
 }
 

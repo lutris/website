@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'News.user'
         db.add_column('news', 'user',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['auth.User']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['accounts.User']),
                       keep_default=False)
 
 

@@ -46,8 +46,8 @@ Getting the site up and running for development
     sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
 
 * Install a recent version of nodejs and grunt. On Fedora, you can
-  install the nodejs from the repos. When nodejs and grunt are installed, you 
-  can install grunt dependencies for the project. 
+  install the nodejs from the repos. When nodejs and grunt are installed, you
+  can install grunt dependencies for the project.
   Install bower components.
 
     sudo add-apt-repository ppa:chris-lea/node.js
@@ -74,3 +74,27 @@ Getting the site up and running for development
     make run
     grunt watch
     firefox http://localhost:8000
+
+Postgresql configuriguration
+============================
+
+Creating a database:
+
+    create database lutris_staging with owner lutris_staging;
+
+or (in shell)
+
+    createdb lutris_staging -O lutris_staging
+
+Modify database's owner:
+
+    alter database lutris_staging owner to lutris_staging;
+
+Change user's password:
+
+    alter user lutris_staging with password 'admin';
+
+Dropping all tables from the database
+    
+    drop schema public cascade;
+    create schema public;
