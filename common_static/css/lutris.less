@@ -5,7 +5,8 @@
 @darkBackground: #444;
 @darkerBackground: #222;
 @sansSerif: "Roboto", Arial, sans;
-@linkColor: #ff9900;
+@brandColor: #ff9900;
+@linkColor: @brandColor;
 
 /* == Defaults */
 html, body {
@@ -23,15 +24,15 @@ article {
   font-weight: 400;
   padding: 14px 7px;
 }
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
   font-weight: normal;
   word-spacing: .1em;
   margin-bottom: .8em;
+  font-family: @sansSerif;
 }
 
 h1 {
   font-size: 1.8em;
-  font-family: @sansSerif;
 }
 h2 { font-size: 1.4em; }
 h3 {
@@ -39,7 +40,6 @@ h3 {
   font-size: 1.2em;
   background-color: #444;
   padding: 7px 14px;
-  font-family: @sansSerif;
   font-weight: 300;
 }
 h4 {
@@ -237,9 +237,17 @@ form {
   }
 }
 
-.presentation {
-  p {
-    padding: 0 14px;
+.content-box {
+  border-bottom: 2px solid @brandColor;
+  background-color: #222;
+  height: 360px;
+  font-weight: 300;
+  text-align: center;
+  padding: 20px;
+  margin: 35px 0;
+  line-height: 1.8em;
+  h2 {
+    font-weight: 300;
   }
 }
 
