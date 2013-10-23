@@ -180,7 +180,6 @@ def deploy():
     fix_perms(user='django')
     pull()
     requirements()
-    copy_local_settings()
     collect_static()
     syncdb()
     migrate()

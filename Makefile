@@ -47,4 +47,25 @@ shell:
 	./manage.py shell --traceback
 
 worker:
-	./manage.py celery worker --loglevel=debug --autoreload --hostname=lutris.net -E -Q lutris 
+	./manage.py celery worker --loglevel=debug --autoreload --hostname=lutris.net -E -Q lutris
+
+legacydump:
+	./manage.py dumpdata --indent=2 -e accounts.Profile -e registration > lutrisweb.json
+	sed -i 's/auth.user/accounts.user/' lutrisweb.json
+
+sqlflush:
+	./manage.py sqlflush | psql -U lutris_staging -h localhost lutris_staging
+
+sqlsequencereset:
+	./manage.py sqlsequencereset auth > sqlsequencereset.sql
+	./manage.py sqlsequencereset thumbnail >> sqlsequencereset.sql
+	./manage.py sqlsequencereset accounts >> sqlsequencereset.sql
+	./manage.py sqlsequencereset admin >> sqlsequencereset.sql
+	./manage.py sqlsequencereset django_openid_auth >> sqlsequencereset.sql
+	./manage.py sqlsequencereset django_select2 >> sqlsequencereset.sql
+	./manage.py sqlsequencereset djcelery >> sqlsequencereset.sql
+	./manage.py sqlsequencereset games >> sqlsequencereset.sql
+	./manage.py sqlsequencereset mithril >> sqlsequencereset.sql
+	./manage.py sqlsequencereset south >> sqlsequencereset.sql
+	./manage.py sqlsequencereset tastypie >> sqlsequencereset.sql
+	cat sqlsequencereset.sql | psql -U lutris_staging -h localhost lutris_staging
