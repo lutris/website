@@ -178,11 +178,9 @@ def docs():
 
 def deploy():
     fix_perms(user='django')
-    if env.environment == 'production':
-        pull()
-    else:
-        rsync()
+    pull()
     requirements()
+    copy_local_settings()
     collect_static()
     syncdb()
     migrate()
@@ -194,9 +192,6 @@ def deploy():
 
 
 def fastdeploy():
-    if env.environment == 'production':
-        pull()
-    else:
-        rsync()
+    pull()
     collect_static()
     apache_reload()
