@@ -101,10 +101,9 @@ def associate_steam(request):
 
 def library_show(request, username):
     user = User.objects.get(username=username)
-    profile = user.get_profile()
     library = games.models.GameLibrary.objects.get(user=user)
     return render(request, 'games/library_show.html',
-                  {'profile': profile, 'library': library})
+                  {'user': user, 'library': library})
 
 
 @login_required
