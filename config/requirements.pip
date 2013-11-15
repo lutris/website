@@ -28,3 +28,6 @@ pyjade
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
 -e bzr+lp:~strycore/django-openid-auth/trunk#egg=django-openid-auth
+
+
+simplejson  # necessary until pull request in django-mithril gets accepted
