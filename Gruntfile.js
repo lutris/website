@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'public/js/app.js': 'common_static/js/app.coffee'
+          'public/js/app.js': 'common_static/js/*.coffee'
         }
       }
     },
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
         tasks: ['less:css']
       },
       coffee: {
-        files: ['common_static/js/app.coffee'],
+        files: ['common_static/js/*.coffee'],
         tasks: ['coffee', 'uglify:app']
       },
       templates: {

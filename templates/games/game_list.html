@@ -48,10 +48,12 @@
     <div class="pane">
       <a href="{% url "submit_game" %}" class=main-button>Submit a new game</a>
       <h4>Search games</h4>
-      <form action="." method=get class="form-search centered">
-        <div class="input-append">
-          <input type="text" name="q" id="search-entry" class="search-query" />
-          <button class=btn type="submit"><i class='icon-search'></i></button>
+      <form action="." method=get class="form-inline">
+        <div class="form-group">
+          <div class="col-lg-8 col-md-8">
+            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" />
+          </div>
+          <input class="btn btn-sm" type="submit" value="Search" />
         </div>
       </form>
       <h4>Filter by platform</h4>
