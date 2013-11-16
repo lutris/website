@@ -100,6 +100,8 @@ class ScreenshotForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.game = models.Game.objects.get(pk=kwargs.pop('game_id'))
         super(ScreenshotForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', "Submit"))
 
     def save(self, *args, **kwargs):
         self.instance.game = self.game

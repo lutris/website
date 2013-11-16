@@ -8,5 +8,5 @@ $ () ->
         list_elem.hide()
       else
         list_elem.show()
-    ) 
+    )
   )
