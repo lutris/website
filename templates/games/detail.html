@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-xs-9">
       {% with game.screenshot_set.published as screenshots %}
         <div class="carousel slide">
           {% if screenshots %}
@@ -61,7 +61,7 @@
         <a href="{% url "new_installer" slug=game.slug %}" class="btn btn-small btn-inverse">Write a new installer</a>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-3">
       <div class="game-info">
         {% thumbnail game.title_logo "184" as img %}
           <img src="{{ img.url }}" class="banner" />
