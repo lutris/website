@@ -128,6 +128,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
+
+# Modify temporarily the session serializer because the json serializer in
+# Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
 RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
     'ubuntu': RELEASES_URL + "lutris_0.3.1_all.deb",
