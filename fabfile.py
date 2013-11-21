@@ -120,7 +120,8 @@ def copy_local_settings():
     require('code_root', provided_by=('staging', 'production'))
     put('config/local_settings_%(environment)s.py' % env, env.code_root)
     with cd(env.code_root):
-        run('mv local_settings_%(environment)s.py local_settings_template.py' % env)
+        run('mv local_settings_%(environment)s.py local_settings_template.py'
+            % env)
 
 
 def migrate():
@@ -145,6 +146,11 @@ def clone():
 def pull():
     with cd(env.code_root):
         run("git pull")
+
+
+def grunt():
+    with cd(env.code_root):
+        run("grunt")
 
 
 def collect_static():
@@ -179,6 +185,7 @@ def docs():
 def deploy():
     fix_perms(user='django')
     pull()
+    grunt()
     requirements()
     collect_static()
     syncdb()
@@ -192,5 +199,6 @@ def deploy():
 
 def fastdeploy():
     pull()
+    grunt()
     collect_static()
     apache_reload()
