@@ -198,7 +198,12 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
             'filename': 'lutrisweb.log'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
         'django': {
@@ -217,6 +222,11 @@ LOGGING = {
             'propagate': False,
         },
         'lutrisweb': {
+            'handlers': LOGGING_HANDLERS,
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'accounts': {
             'handlers': LOGGING_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
