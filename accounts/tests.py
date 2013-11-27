@@ -20,6 +20,7 @@ class TestRegistration(TestCase):
         created_user = User.objects.get(username="testuser")
         self.assertTrue(created_user)
         self.assertEqual(created_user.email, "admin@lutris.net")
+        self.assertTrue(created_user.gamelibrary)
 
 
 class TestProfileView(TestCase):
