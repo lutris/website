@@ -46,7 +46,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-SECRET_KEY = 'f8uok&amp;mchb26x5w6w+8nsa$+4zowxf09dayl3wk7(7l95+ppk1'
+SECRET_KEY = '******************************************************'
 
 TEMPLATE_LOADERS = (
     ('pyjade.ext.django.Loader', (
@@ -160,7 +160,7 @@ import djcelery
 djcelery.setup_loader()
 
 ## API Keys
-STEAM_API_KEY = "FEC1EEECA360B64106F36656332A9B73"
+STEAM_API_KEY = "********************************"
 
 ## Logging
 SEND_BROKEN_LINK_EMAILS = False
