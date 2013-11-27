@@ -44,6 +44,9 @@ class RegistrationForm(forms.ModelForm):
                         "@/./+/-/_ characters.")
         }
     )
+    email = forms.EmailField(
+        label="Email address"
+    )
     password1 = forms.CharField(
         label="Password",
         widget=forms.PasswordInput, max_length=64
@@ -57,12 +60,13 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ("username", "email")
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.helper = get_bootstrap_helper(
-            ['username', 'password1', 'password2'], 'register', "Register"
+            ['username', 'email', 'password1', 'password2'],
+            'register', "Register"
         )
 
     def clean_username(self):
