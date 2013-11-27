@@ -29,10 +29,10 @@ def register(request):
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
+        ip_address = x_forwarded_for.split(',')[0]
     else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+        ip_address = request.META.get('REMOTE_ADDR')
+    return ip_address
 
 
 @csrf_exempt
@@ -95,8 +95,7 @@ def associate_steam(request):
         openid_backend.associate_openid(request.user, openid_response)
         request.user.set_steamid()
         request.user.save()
-        return redirect(reverse("library_steam_sync",
-                                args=(request.user.username, )))
+        return redirect(reverse("library_steam_sync"))
 
 
 def library_show(request, username):
@@ -126,7 +125,7 @@ def library_remove(request, slug):
 
 
 @login_required
-def library_steam_sync(request, username):
+def library_steam_sync(request):
     user = request.user
     tasks.sync_steam_library.delay(user.id)
     messages.success(
