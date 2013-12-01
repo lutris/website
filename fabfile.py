@@ -102,8 +102,8 @@ def update_vhost():
     local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
     put('/tmp/%(project)s.conf' % env, '%(root)s' % env)
     sudo('cp %(root)s/%(project)s.conf ' % env +
-         '/etc/apache2/sites-available/%(domain)s' % env, shell=False)
-    sudo('a2ensite %(domain)s' % env, shell=False)
+         '/etc/apache2/sites-available/%(domain)s.conf' % env, shell=False)
+    sudo('a2ensite %(domain)s.conf' % env, shell=False)
 
 
 def update_celery():
@@ -215,12 +215,13 @@ def deploy():
     update_vhost()
     configtest()
     apache_reload()
+    update_celery()
+    supervisor_restart()
 
 
 def fastdeploy():
-    fix_perms(user='django')
     pull()
     grunt()
     collect_static()
-    fix_perms()
     apache_reload()
+    supervisor_restart()
