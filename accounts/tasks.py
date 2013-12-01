@@ -18,7 +18,11 @@ def create_game(game):
     if game['img_logo_url']:
         steam_game.get_steam_logo(game['img_logo_url'])
     steam_game.get_steam_icon(game['img_icon_url'])
-    steam_game.save()
+    try:
+        steam_game.save()
+    except Exception as ex:
+        LOGGER.error("Error while saving game %s: %s", game, ex)
+        raise
     return steam_game
 
 
@@ -35,7 +39,7 @@ def sync_steam_library(user_id):
                 continue
 
             existing_game = games.models.Game.objects.filter(
-                slug=slugify(game['name'])
+                slug=slugify(game['name'])[50:]
             )
             if not existing_game:
                 steam_game = create_game(game)
