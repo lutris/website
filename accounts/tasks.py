@@ -10,6 +10,7 @@ LOGGER = logging.getLogger()
 
 
 def create_game(game):
+    LOGGER.info("Adding %s to library" % game['name'])
     steam_game = games.models.Game(
         name=game['name'],
         steamid=game['appid'],
@@ -27,7 +28,6 @@ def sync_steam_library(user_id):
     steamid = user.steamid
     steam_games = games.util.steam.steam_sync(steamid)
     for game in steam_games:
-        print game['name']
         try:
             steam_game = games.models.Game.objects.get(steamid=game['appid'])
         except games.models.Game.DoesNotExist:
