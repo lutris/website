@@ -198,7 +198,9 @@ def deploy():
 
 
 def fastdeploy():
+    fix_perms(user='django')
     pull()
     grunt()
     collect_static()
+    fix_perms()
     apache_reload()

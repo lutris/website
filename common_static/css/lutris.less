@@ -80,12 +80,37 @@ form {
 }
 
 .footer {
-  margin-top: 200px;
+  border-top: 2px solid @brandColor;
+  background-color: #222;
+  margin-top: 20px;
+  padding: 30px 0;
+  font-size: .8em;
   ul {
     list-style-type:none;
     padding: 0;
   }
+  .icon-list {
+    li {
+      display: inline
+    }
+    a {
+      display: inline-block;
+      width: 38px;
+      height: 38px;
+      border-radius: 4px;
+      text-decoration: none;
+      img {
+        margin: 3px;
+      }
+      &:hover {
+        background-color: #666;
+      }
+    }
+  }
 }
+
+
+
 .wrapper {
   min-height: 100%;
   display: block;
@@ -129,7 +154,6 @@ form {
   width: @siteWidth;
 }
 .page {
-  padding-bottom: 250px;
 }
 
 .navbar {

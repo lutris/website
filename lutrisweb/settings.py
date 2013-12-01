@@ -102,7 +102,6 @@ INSTALLED_APPS = (
     'django_nose',
     'markupfield',
     'django_openid_auth',
-    'djcelery',
 
     'common',
     'games',
@@ -153,11 +152,9 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 ## Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
-CELERY_ROUTES = {
-    'accounts.tasks.sync_steam_library': {'queue': 'lutris'},
-}
-import djcelery
-djcelery.setup_loader()
+#CELERY_ROUTES = {
+#    'accounts.tasks.sync_steam_library': {'queue': 'lutris'},
+#}
 
 ## API Keys
 STEAM_API_KEY = "********************************"
