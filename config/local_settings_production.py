@@ -4,11 +4,11 @@ ALLOWED_HOSTS = ('lutris.net', 'www.lutris.net', 'api.lutris.net')
 SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'xxxxxxxxxxxxxxxxxxxx',
-        'USER': 'xxxxxxxxxxxxxxxxxxxx',
-        'PASSWORD': 'xxxxxxxxxxxxxxxxxxxx'
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lutris',
+        'USER': 'lutris',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
     }
 }
 

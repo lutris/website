@@ -1,8 +1,8 @@
 import datetime
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from markupfield.fields import MarkupField
 
@@ -15,7 +15,7 @@ class News(models.Model):
     content = MarkupField(markup_type='restructuredtext')
     publish_date = models.DateTimeField(default=datetime.datetime.now)
     image = models.ImageField(upload_to='news', null=True, blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     # pylint: disable=W0232, R0903
     class Meta:

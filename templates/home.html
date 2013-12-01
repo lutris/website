@@ -1,58 +1,56 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load lutris %}
-{% load url from future %}
-
-{% block stylesheets %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
-
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
-{% endblock %}
 
 
 {% block content %}
 <div class='row'>
-  <div class="featured span9">
+  <div class="featured col-xs-9">
     {% featured_slider %}
   </div>
-  <div class="span3">
+  <div class="col-xs-3">
     {% download_links %}
   </div>
 </div>
 
-<div class="row presentation">
-  <div class="span4 centered">
-    <h2>What is Lutris?</h2>
-    <p>
-    Lutris is a gaming platform for Linux.<br/>
-    Thanks to community-provided installers, you spend less time setting games
-    up, and more time playing.<br/>
-    Free and Open-Source games are available right from this website.
-    </p>
+<div class="row">
+  <div class="col-xs-4">
+    <div class="content-box">
+      <h2>What is Lutris?</h2>
+      <p>
+      Lutris is a gaming platform for Linux.<br/>
+      Thanks to community-provided installers, you spend less time setting games
+      up, and more time playing.<br/>
+      Free and Open-Source games are available right from this website.
+      </p>
+    </div>
   </div>
-  <div class="span4 centered">
-    <h2>Lutris is open!</h2>
-    <p>
-      Lutris offers you a completely Open-Source client and enforces absolutely
-      no vendor lock-in.<br/>
-      The client stays completely usable when offline or without access to the
-      website.
-    </p>
+  <div class="col-xs-4">
+    <div class="content-box">
+      <h2>Lutris is open!</h2>
+      <p>
+        Lutris offers you a completely Open-Source client and enforces absolutely
+        no vendor lock-in.<br/>
+        The client stays completely usable when offline or without access to the
+        website.
+      </p>
+    </div>
   </div>
-  <div class="span4 centered">
-    <h2>Thousands of games!</h2> 
-    <p>
-      From the first games of your childhood to the latest indie game, 
-      games for Linux, Windows, Amiga, Super Nintendo and many more are 
-      supported, if it's able to run on Linux, it can
-      be run with Lutris. This is a project meant to help video game
-      preservation!
-    </p>
+  <div class="col-xs-4">
+    <div class="content-box">
+      <h2>Thousands of games!</h2>
+      <p>
+        From the first games of your childhood to the latest indie game,
+        games for Linux, Windows, Amiga, Super Nintendo and many more are
+        supported, if it's able to run on Linux, it can
+        be run with Lutris. This is a project meant to help video game
+        preservation!
+      </p>
+    </div>
   </div>
 </div>
-
 <div class="row">
-  <div class="span9">
+  <div class="col-xs-9">
     {% block main %}
     <h3>News</h3>
     <div class=pane>
@@ -61,12 +59,8 @@
     </div>
     {% endblock %}
   </div>
-  <div class="span3">
+  <div class="col-xs-3">
     {% latest_games %}
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-   {% include "includes/_nivoslider.html" %}
 {% endblock %}

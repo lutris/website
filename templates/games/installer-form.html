@@ -7,7 +7,7 @@
 <h1>Edit installer for {{ game }}</h1>
 {% endif %}
 <div class="row">
-  <div class="span7">
+  <div class="col-xs-7">
     <div class="well">
     <form action="" method="post">
       {% csrf_token %}
@@ -21,7 +21,7 @@
     </form>
     </div>
   </div>
-  <div class="span5">
+  <div class="col-xs-5">
     <div class="well docs">
     {% include "docs/installers.html" %}
     </div>

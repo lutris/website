@@ -38,23 +38,21 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = join(PROJECT_PATH, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    join(PROJECT_PATH, "common_static"),
+    join(PROJECT_PATH, "public"),
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-COMPRESS_PRECOMPILERS = (
-    ('text/coffeescript', 'coffee --compile --stdio'),
-    ('text/less', 'lessc {infile} {outfile}'),
-)
 
-SECRET_KEY = 'f8uok&amp;mchb26x5w6w+8nsa$+4zowxf09dayl3wk7(7l95+ppk1'
+SECRET_KEY = '******************************************************'
 
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+    ('pyjade.ext.django.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -94,9 +92,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
 
-    'registration',
     'sorl.thumbnail',
-    'compressor',
     'south',
     'tastypie',
     'django_jcrop',
@@ -105,6 +101,8 @@ INSTALLED_APPS = (
     'django_select2',
     'django_nose',
     'markupfield',
+    'django_openid_auth',
+    'djcelery',
 
     'common',
     'games',
@@ -120,10 +118,20 @@ ICON_SIZE = "256x256"
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_COLORSPACE = "sRGB"
 
+AUTH_USER_MODEL = 'accounts.User'
+AUTH_PROFILE_MODULE = "accounts.Profile"
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
-AUTH_PROFILE_MODULE = "accounts.Profile"
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
+
+# Modify temporarily the session serializer because the json serializer in
+# Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
@@ -132,6 +140,9 @@ DOWNLOADS = {
     'linux': RELEASES_URL + "lutris_0.3.1.tar.gz"
 }
 
+## Crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 ## Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
@@ -139,6 +150,17 @@ GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 ## Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
+
+## Celery
+CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERY_ROUTES = {
+    'accounts.tasks.sync_steam_library': {'queue': 'lutris'},
+}
+import djcelery
+djcelery.setup_loader()
+
+## API Keys
+STEAM_API_KEY = "********************************"
 
 ## Logging
 SEND_BROKEN_LINK_EMAILS = False
@@ -176,7 +198,12 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
             'filename': 'lutrisweb.log'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
         'django': {
@@ -195,6 +222,11 @@ LOGGING = {
             'propagate': False,
         },
         'lutrisweb': {
+            'handlers': LOGGING_HANDLERS,
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'accounts': {
             'handlers': LOGGING_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,

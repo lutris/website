@@ -1,11 +1,12 @@
-@import "less/bootstrap.less";
+@import "bootstrap";
 
 /* == Variables */
 @siteWidth: 960px;
 @darkBackground: #444;
 @darkerBackground: #222;
 @sansSerif: "Roboto", Arial, sans;
-@linkColor: #ff9900;
+@brandColor: #ff9900;
+@linkColor: @brandColor;
 
 /* == Defaults */
 html, body {
@@ -23,15 +24,15 @@ article {
   font-weight: 400;
   padding: 14px 7px;
 }
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
   font-weight: normal;
   word-spacing: .1em;
   margin-bottom: .8em;
+  font-family: @sansSerif;
 }
 
 h1 {
   font-size: 1.8em;
-  font-family: @sansSerif;
 }
 h2 { font-size: 1.4em; }
 h3 {
@@ -39,7 +40,6 @@ h3 {
   font-size: 1.2em;
   background-color: #444;
   padding: 7px 14px;
-  font-family: @sansSerif;
   font-weight: 300;
 }
 h4 {
@@ -56,25 +56,41 @@ a {
     text-decoration: underline;
   }
 }
+
+ul {
+  padding: 0;
+}
+
+code {
+  color: #aaa;
+  background-color: #222;
+}
+
+form {
+  label {
+    .asteriskField {
+      color: #bada55;
+    }
+  }
+}
+
+.container{
+  max-width: none !important;
+  width: @siteWidth;
+}
+
+.footer {
+  margin-top: 200px;
+  ul {
+    list-style-type:none;
+    padding: 0;
+  }
+}
 .wrapper {
   min-height: 100%;
   display: block;
   position: relative;
 }
-footer {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height: 200px;   /* Height of the footer */
-
-  background-color: @darkerBackground;
-  color: #AAA;
-  font-size: .8em;
-  a {
-    display: block;
-  }
-}
-
 
 
 /* == Helpers */
@@ -115,13 +131,12 @@ footer {
 .page {
   padding-bottom: 250px;
 }
+
 .navbar {
+  font-weight: 300;
   margin: auto;
   margin-bottom: 10px;
   font-family: @sansSerif;
-  .container {
-    width: @siteWidth;
-  }
   .brand {
     width: 350px;
     color: #ccc;
@@ -154,7 +169,6 @@ footer {
 }
 
 .form-actions {
-  background-color: transparent;
   border-top: none;
   margin-top: 0;
   margin-bottom: 0;
@@ -174,6 +188,7 @@ footer {
   padding: 20px;
   color: #222;
 }
+
 .well {
   color: #333;
 }
@@ -190,6 +205,12 @@ footer {
   }
 }
 
+.alert {
+  ul {
+    list-style-type: none;
+  }
+}
+
 .docs {
   max-height: 840px;
   overflow:auto;
@@ -203,12 +224,14 @@ footer {
     padding: 1px 3px;
   }
 }
+
 .news-image-preview {
-  float: left; 
+  float: left;
   padding: 15px;
 }
+
 .news-header {
-  p { 
+  p {
     color: #999;
     font-size: .8em;
   }
@@ -218,9 +241,17 @@ footer {
   }
 }
 
-.presentation {
-  p {
-    padding: 0 14px;
+.content-box {
+  border-bottom: 2px solid @brandColor;
+  background-color: #222;
+  height: 360px;
+  font-weight: 300;
+  text-align: center;
+  padding: 20px;
+  margin: 35px 0;
+  line-height: 1.8em;
+  h2 {
+    font-weight: 300;
   }
 }
 
@@ -289,6 +320,7 @@ footer {
     color: #999999;
   }
 }
+
 /* == Classes */
 .overlay {
   position: relative;
@@ -301,14 +333,16 @@ footer {
   color: #EEE;
 }
 
-.game-header {
+.game-header, .page-header {
   position: relative;
-  height: 352px;
+  height: 120px;
   width: 940px;
   background-repeat: no-repeat;
-  background-color: #000;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  border: 0;
   .title {
+    .rounded-corners();
+    .top-down-gradient(@darkerBackground + #202020, @darkerBackground);
     position: absolute;
     height: 50px;
     left: 0;
@@ -316,20 +350,32 @@ footer {
     bottom: 20px;
     font-size: 25px;
     line-height: 50px;
-    .top-down-gradient(rgba(0,0,0,.7), rgba(22, 22, 22, 0.5));
     color: #EEE;
-    span {
-      color: #EDEDED;
-      padding-left: 10px;
-    }
+    span { color: #EDEDED; }
     img {
       position: relative;
       float: left;
-      top: -48px;
-      vertical-align: middle;
-      margin: 0 14px;
-      opacity: 1;
+      top: -40px;
+      margin: 0 28px;
     }
+  }
+  .buttons {
+    float: right;
+    margin-top: -2px;
+    padding-right: 7px;
+  }
+}
+
+.messages {
+  position: fixed;
+  top: 100px;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  list-style-type: none;
+  z-index: 1010;
+  li {
+    margin: 0 150px;
   }
 }
 
@@ -389,33 +435,6 @@ footer {
   }
 }
 
-/* == Forms */
-form  {
-  margin: 0;
-  label {
-    display: block;
-    line-height: 1.6em;
-  }
-  input[type=text], input[type=password], textarea {
-    width: auto;
-    background-color: #FFF;
-    border-color: #aaa;
-    border-radius: 0px;
-    -webkit-border-radius: 0px;
-  }
-  textarea {
-  }
-  .select2-container {
-    min-width: 400px;
-    margin-bottom: 10px;
-  }
-  .help-block {
-    font-size: .8em;
-    color: #999;
-  }
-}
-
-
 .big-button {
   color: #FFFFFF;
   border-color: #a84300;
@@ -429,6 +448,31 @@ form  {
   border: 2px solid #C85000;
   text-decoration: none;
   -moz-border-radius: 15px;
+}
+
+.game-list-header {
+  background-color: #222;
+  color: #777;
+  font-size: .8em;
+  padding: 6px;
+  border-bottom: 2px solid @brandColor;
+  h2 {
+    display: inline;
+  }
+  span {
+    display: inline-block;
+    padding-left: 100px;
+  }
+}
+
+.game-filter {
+  float: right;
+  input {
+    background-color: #444;
+    color: #CCC;
+    border: 1px solid #666;
+    padding: 0 4px;
+  }
 }
 
 .game-list {
@@ -483,23 +527,29 @@ form  {
 
 .mini-game-list {
   margin: 10px auto;
+  text-align: center;
   a {
     color: #EEE;
-    margin: 7px 14px;
     padding: 7px;
     background-color: #222;
     display: inline-block;
     font-size: .8em;
     font-weight: 500;
+    width: 184px + 2 * 7px;
+    margin: 14px;
     &:hover {
       background-color: #444;
       text-decoration: none;
     }
   }
+  .game-title {
+    height: 4em;
+    padding: 7px 0;
+  }
 }
 
 .pane {
-  padding: 7px 14px;
+  padding: 0px 14px;
   p {
     padding: 10px;
     color: #ACACAC;
@@ -534,6 +584,7 @@ form  {
   list-style-type: none;
   li {
     margin: 10px 20px 3px 0px;
+    min-width: 130px;
   }
   a {
     background-color: #222;

@@ -2,17 +2,8 @@
 {% load thumbnail %}
 
 
-{% block stylesheets %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/nivo-slider.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/dark/dark.css" />
-{% endblock %}
-
-
 {% block content %}
-  <div class="game-header"
-    {% thumbnail game.title_logo banner_size options=banner_options as banner %}
-       style="background-image: url('{{ banner.url }}')"
-    {% endthumbnail %}>
+  <div class="page-header">
     <div class='title'>
       {% if game.icon %}
         <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' />
@@ -22,11 +13,11 @@
   </div>
 
   <div class="row">
-    <div class="span9">
+    <div class="col-xs-9">
       {% with game.screenshot_set.published as screenshots %}
-        <div class="slider-wrapper theme-dark clearfix">
+        <div class="carousel slide">
           {% if screenshots %}
-            <div class='screenshots nivoSlider'>
+            <div class='screenshots carousel-inner'>
               {% for screenshot in game.screenshot_set.published %}
                 {% thumbnail screenshot.image '640x480' crop="center" as img %}
                   <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
@@ -70,7 +61,7 @@
         <a href="{% url "new_installer" slug=game.slug %}" class="btn btn-small btn-inverse">Write a new installer</a>
       </div>
     </div>
-    <div class="span3">
+    <div class="col-xs-3">
       <div class="game-info">
         {% thumbnail game.title_logo "184" as img %}
           <img src="{{ img.url }}" class="banner" />
@@ -130,8 +121,4 @@
       </div>
     </div>
   </div>
-
-{% endblock %}
-{% block scripts %}
-   {% include "includes/_nivoslider.html" %}
 {% endblock %}

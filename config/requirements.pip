@@ -1,22 +1,33 @@
+setuptools>=1.1.0
 PyYAML
-Django>=1.5
-Pillow
-South>=0.8.1
-pylint
+Django>=1.6
+Pillow==2.2.1
+South>=0.8.3
+pylint>=1.0.0
+ipython>=1.1.0
 nose
-coverage
+coverage==3.7
 nose-exclude
 nosexcover
-sphinx
+Sphinx>=1.2b3
 django-compressor>=1.2
-django-crispy-forms
-django_select2
-django-grappelli
-django-nose
-django-tastypie
+django-crispy-forms>=1.4.0
+django_select2==4.2.2
+django-grappelli==2.5.0
+django-nose==1.2
+django-tastypie==0.10.0
 django-markupfield
+python-openid
+requests==2.0.1
+Celery==3.1.4
+django-celery==3.1.1
+pyjade==2.0.3
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
+-e bzr+lp:~strycore/django-openid-auth/trunk#egg=django-openid-auth
+
+
+simplejson  # necessary until pull request in django-mithril gets accepted

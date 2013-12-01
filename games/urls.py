@@ -1,5 +1,5 @@
 # pylint: disable=E1120, C0103
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 from games.views import (GameList, GameListByYear,
                          GameListByGenre, GameListByPlatform,
@@ -38,12 +38,6 @@ urlpatterns = patterns(
         name='installer_complete'),
     url(r'([\w\-]+)/screenshot/add/', 'screenshot_add',
         name='screenshot_add'),
-    url(r'^library/(?P<username>[^\/]+)/$', 'library_show',
-        name="library_show"),
-    url(r'^library/add/(?P<slug>[\w-]+)/$', 'library_add',
-        name="add_to_library"),
-    url(r'^library/remove/(?P<slug>[\w-]+)/$', 'library_remove',
-        name="remove_from_library"),
     url(r'(?P<slug>[\w\-]+)/$', "game_detail",
         name="game_detail"),
 )

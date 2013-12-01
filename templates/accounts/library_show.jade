@@ -1,0 +1,14 @@
+extends "base.html"
+
+block content
+    div.game-list-header 
+        h2 Your games
+        span.centered {{ games.count }} games in library
+        form.game-filter
+            input(type='text',placeholder='filter games',id='game-filter')
+    ul.game-list.user-library
+        for game in games
+            {% include "includes/game_preview.jade" %}
+            a.right-button(href='{% url "remove_from_library" slug=game.slug %}')
+                i.icon-trash
+                span.help Remove from library
