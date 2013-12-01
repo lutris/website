@@ -161,31 +161,35 @@ def serve_installer(_request, slug):
     return HttpResponse(content, content_type="application/yaml")
 
 
-def serve_installer_banner(_request, slug):
-    """ Serve game title in an appropriate format for the client. """
+def get_game_by_slug(slug):
+    game = None
     try:
         installer = Installer.objects.fuzzy_get(slug)
+        game = installer.game
     except Installer.DoesNotExist:
+        try:
+            game = Game.objects.get(slug=slug)
+        except Game.DoesNotExist:
+            pass
+    return game
+
+
+def serve_installer_banner(_request, slug):
+    """ Serve game title in an appropriate format for the client. """
+    game = get_game_by_slug(slug)
+    if not game or not game.title_logo:
         raise Http404
-    if not installer.game.title_logo:
-        raise Http404
-    banner_thumbnail = get_thumbnail(installer.game.title_logo,
-                                     settings.BANNER_SIZE,
-                                     crop="top")
-    return redirect(banner_thumbnail.url)
+    thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE,
+                              crop="top")
+    return redirect(thumbnail.url)
 
 
 def serve_installer_icon(_request, slug):
-    try:
-        installer = Installer.objects.fuzzy_get(slug)
-    except Installer.DoesNotExist:
+    game = get_game_by_slug(slug)
+    if not game or not game.icon:
         raise Http404
-    if not installer.game.icon:
-        raise Http404
-    banner_thumbnail = get_thumbnail(installer.game.icon,
-                                     settings.ICON_SIZE,
-                                     crop="top")
-    return redirect(banner_thumbnail.url)
+    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="top")
+    return redirect(thumbnail.url)
 
 
 def game_list(request):
