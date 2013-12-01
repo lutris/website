@@ -163,6 +163,18 @@ class Game(models.Model):
         self.icon = ContentFile(steam.get_image(self.steamid, img_url),
                                 "%d.jpg" % self.steamid)
 
+    def steam_support(self):
+        """ Return the platform supported by Steam """
+        if not self.steamid:
+            return False
+        platforms = [p.slug for p in self.platforms.all()]
+        if 'linux' in platforms:
+            return 'linux'
+        elif 'windows' in platforms:
+            return 'windows'
+        else:
+            return True
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[50:]
@@ -216,9 +228,7 @@ class Installer(models.Model):
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
-    content = models.TextField(default=yaml.safe_dump(
-        DEFAULT_INSTALLER, default_flow_style=False
-    ))
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
@@ -226,6 +236,15 @@ class Installer(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    def set_default_installer(self):
+        if self.game and self.game.steam_support():
+            installer_data = {'game': {'appid': self.game.steamid}}
+            self.version = 'steam'
+        else:
+            installer_data = DEFAULT_INSTALLER
+        yaml_data = yaml.safe_dump(installer_data, default_flow_style=False)
+        self.content = yaml_data
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.game.name + "-" + self.version)

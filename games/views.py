@@ -110,11 +110,13 @@ def game_detail(request, slug):
 @login_required
 def new_installer(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    form = InstallerForm(request.POST or None)
+    installer = Installer(game=game)
+    installer.set_default_installer()
+    form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         installer = form.save(commit=False)
         installer.game_id = game.id
-        installer.user_id = request.user.id
+        installer.user = request.user
         installer.save()
         return redirect("installer_complete", slug=game.slug)
     return render(request, 'games/installer-form.html',
