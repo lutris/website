@@ -47,7 +47,7 @@ shell:
 	./manage.py shell --traceback
 
 worker:
-	./manage.py celery worker --loglevel=debug --autoreload --hostname=lutris.net -E -Q lutris
+	celery -A lutrisweb worker --loglevel=debug --autoreload --hostname=lutris.net -E
 
 legacydump:
 	./manage.py dumpdata --indent=2 -e accounts.Profile -e registration > lutrisweb.json

@@ -2,7 +2,7 @@ setuptools>=1.1.0
 PyYAML
 Django>=1.6
 Pillow==2.2.1
-South>=0.8.3
+South>=0.8.4
 pylint>=1.0.0
 ipython>=1.1.0
 nose
@@ -19,8 +19,7 @@ django-tastypie==0.10.0
 django-markupfield
 python-openid
 requests==2.0.1
-Celery==3.1.4
-django-celery==3.1.1
+Celery==3.1.5
 pyjade==2.0.3
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
