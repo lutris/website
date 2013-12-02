@@ -359,28 +359,24 @@ form {
 
 .game-header, .page-header {
   position: relative;
-  height: 120px;
   width: 940px;
-  background-repeat: no-repeat;
   margin-bottom: 20px;
   border: 0;
   .title {
-    .rounded-corners();
-    .top-down-gradient(@darkerBackground + #202020, @darkerBackground);
-    position: absolute;
-    height: 50px;
-    left: 0;
-    right: 0;
-    bottom: 20px;
-    font-size: 25px;
-    line-height: 50px;
+    .top-down-gradient(#111, @darkerBackground);
     color: #EEE;
-    span { color: #EDEDED; }
+    padding: 5px 0;
+    span { 
+      color: #EDEDED;
+      font-weight: 200;
+      padding-left: 15px;
+      font-size: 2em;
+    }
     img {
       position: relative;
       float: left;
-      top: -40px;
-      margin: 0 28px;
+      top: 7px;
+      margin-left: 20px;
     }
   }
   .buttons {
