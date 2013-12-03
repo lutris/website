@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
-from .models import Game, Runner, Installer, Platform
+from .models import Game, Runner, Installer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 
@@ -57,7 +57,10 @@ class GameListByGenre(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByGenre, self).get_context_data(**kwargs)
-        context['genre'] = models.Genre.objects.get(slug=self.args[0])
+        try:
+            context['genre'] = models.Genre.objects.get(slug=self.args[0])
+        except models.Genre.DoesNotExist:
+            raise Http404
         return context
 
 
@@ -70,7 +73,10 @@ class GameListByCompany(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByCompany, self).get_context_data(**kwargs)
-        context['company'] = models.Company.objects.get(slug=self.args[0])
+        try:
+            context['company'] = models.Company.objects.get(slug=self.args[0])
+        except models.Company.DoesNotExist:
+            raise Http404
         return context
 
 
@@ -82,7 +88,12 @@ class GameListByPlatform(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByPlatform, self).get_context_data(**kwargs)
-        context['platform'] = Platform.objects.get(slug=self.kwargs['slug'])
+        try:
+            context['platform'] = models.Platform.objects.get(
+                slug=self.kwargs['slug']
+            )
+        except models.Platform.DoesNotExist:
+            raise Http404
         return context
 
 
