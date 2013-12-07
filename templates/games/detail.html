@@ -34,19 +34,29 @@
       <div class="installer-list">
         <ul>
           {% for installer in installers %}
-            <li>
+            <li class="installer-details">
               <span class='filter-link'>{{ installer.runner }}</span>
               <span class='installer-name'>{{ installer.slug }}</span>
               <div class="right">
-                {% if installer.user == user %}
-                  {% url 'edit_installer' slug=installer.slug as edit_url %}
-                  <a href="{{ edit_url }}" class="btn btn-mini"><i class="icon-edit"></i> Edit installer </a>
-                {% endif %}
-
-                {% url 'serve_installer' slug=installer.slug as download_url %}
-                <a href="{{ download_url }}" class="btn btn-mini"><i class="icon-download"></i> Download</a>
-
-                <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+                <div class="btn-group">
+                  <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    {% if installer.user == user %}
+                      <li>
+                        {% url 'edit_installer' slug=installer.slug as edit_url %}
+                        <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
+                      </li>
+                    {% endif %}
+                    <li>
+                      {% url 'serve_installer' slug=installer.slug as download_url %}
+                      <a href="{{ download_url }}"><i class="icon-download"></i> Download installer</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <p>
                 {% if installer.description %}

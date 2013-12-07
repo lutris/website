@@ -224,7 +224,7 @@ form {
   color: #DEDEDE;
   text-shadow: none;
   &:hover {
-    background-color: #222;
+    background-color: #333;
     color: #BEBEBE;
   }
 }
@@ -366,7 +366,7 @@ form {
     .top-down-gradient(#111, @darkerBackground);
     color: #EEE;
     padding: 5px 0;
-    span { 
+    span {
       color: #EDEDED;
       font-weight: 200;
       padding-left: 15px;
@@ -627,15 +627,13 @@ form {
 .installer-list {
   background-color: @darkerBackground;
   padding: 14px 7px;
+
   .installer-name {
     border-radius: 2px;
     background-color: #666;
     padding: 3px 7px;
     font-family: monospace;
     font-size: .8em;
-  }
-  i {
-    vertical-align: text-bottom;
   }
   p {
     margin-left: 7px;
@@ -645,11 +643,10 @@ form {
   }
   ul {
     list-style-type: none;
-    margin: 10px 0;
   }
-  li {
+  .installer-details {
     .clearfix;
-    padding: 7px 0;
+    padding: 14px 0;
     border-bottom: 1px solid #555;
   }
 }
