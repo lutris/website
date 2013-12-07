@@ -6,7 +6,7 @@
 {% for game in latest_games %}
 <a href="{{ game.get_absolute_url }}">
   {% thumbnail game.title_logo '184x69' crop="top" as img %}
-    <img class='game-cover' src='{{ img.url }}' />
+    <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
   {% empty %}
     <span class='game-cover'>no image</span>
   {% endthumbnail %}
