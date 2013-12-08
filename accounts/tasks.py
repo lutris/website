@@ -42,14 +42,14 @@ def sync_steam_library(user_id):
                 LOGGER.info("Game %s has no icon" % game['name'])
                 continue
 
-            steam_games = games.models.Game.objects.filter(
+            existing_games = games.models.Game.objects.filter(
                 slug=slugify(game['name'])[50:]
             )
-            if not steam_game:
-                steam_game = create_game(game)
-            else:
-                steam_game = steam_games[0]
+            try:
+                steam_game = existing_games[0]
                 LOGGER.info("%s already in database", steam_game)
                 steam_game.appid = game['appid']
                 steam_game.save()
+            except IndexError:
+                steam_game = create_game(game)
         library.games.add(steam_game)
