@@ -10,11 +10,12 @@ LOGGER = logging.getLogger()
 
 
 def create_game(game):
+    slug = slugify(game['name'])[:50]
     LOGGER.info("Adding %s to library" % game['name'])
     steam_game = games.models.Game(
         name=game['name'],
         steamid=game['appid'],
-        slug=slugify(game['name'])[50:],
+        slug=slug,
     )
     if game['img_logo_url']:
         steam_game.get_steam_logo(game['img_logo_url'])
@@ -44,7 +45,7 @@ def sync_steam_library(user_id):
             LOGGER.info("No game with steam id %s", game['appid'])
             try:
                 steam_game = games.models.Game.objects.get(
-                    slug=slugify(game['name'])[50:]
+                    slug=slugify(game['name'])[:50]
                 )
                 steam_game.appid = game['appid']
                 steam_game.save()
