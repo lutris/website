@@ -164,6 +164,11 @@ def pull():
         run("git pull")
 
 
+def bower():
+    with cd(env.code_root):
+        run("bower install")
+
+
 def grunt():
     with cd(env.code_root):
         run("grunt")
@@ -205,6 +210,7 @@ def docs():
 def deploy():
     fix_perms(user='django')
     pull()
+    bower()
     grunt()
     requirements()
     collect_static()
@@ -221,6 +227,7 @@ def deploy():
 
 def fastdeploy():
     pull()
+    bower()
     grunt()
     collect_static()
     apache_reload()
