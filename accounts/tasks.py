@@ -50,7 +50,5 @@ def sync_steam_library(user_id):
                 steam_game.appid = game['appid']
                 steam_game.save()
             except games.models.Game.DoesNotExist:
-                pass
-            else:
                 steam_game = create_game(game)
         library.games.add(steam_game)
