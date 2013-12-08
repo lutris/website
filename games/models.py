@@ -177,7 +177,7 @@ class Game(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)[50:]
+            self.slug = slugify(self.name)[:50]
         #self.download_steam_capsule()
         return super(Game, self).save(*args, **kwargs)
 
