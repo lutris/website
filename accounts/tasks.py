@@ -14,6 +14,7 @@ def create_game(game):
     steam_game = games.models.Game(
         name=game['name'],
         steamid=game['appid'],
+        slug=slugify(game['name'])[50:],
     )
     if game['img_logo_url']:
         steam_game.get_steam_logo(game['img_logo_url'])
@@ -31,6 +32,7 @@ def sync_steam_library(user_id):
     user = User.objects.get(pk=user_id)
     steamid = user.steamid
     steam_games = games.util.steam.steam_sync(steamid)
+    library = games.models.GameLibrary.objects.get(user=user)
     for game in steam_games:
         LOGGER.info("Adding %s to %s's library", game['name'], user.username)
         try:
@@ -40,13 +42,14 @@ def sync_steam_library(user_id):
                 LOGGER.info("Game %s has no icon" % game['name'])
                 continue
 
-            existing_game = games.models.Game.objects.filter(
+            steam_games = games.models.Game.objects.filter(
                 slug=slugify(game['name'])[50:]
             )
-            if not existing_game:
+            if not steam_game:
                 steam_game = create_game(game)
             else:
-                existing_game[0].appid = game['appid']
-                existing_game[0].save()
-        library = games.models.GameLibrary.objects.get(user=user)
+                steam_game = steam_games[0]
+                LOGGER.info("%s already in database", steam_game)
+                steam_game.appid = game['appid']
+                steam_game.save()
         library.games.add(steam_game)
