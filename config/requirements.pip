@@ -1,6 +1,6 @@
 setuptools>=1.1.0
 PyYAML
-Django>=1.6
+Django>=1.6.1
 Pillow==2.2.1
 South>=0.8.4
 pylint>=1.0.0
