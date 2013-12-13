@@ -21,8 +21,8 @@ li.clearfix
                     a(href="{ url 'games_by_year' game.year %}") {{ game.year }}
                     br
                 if game.developer
-                    Developed by
+                    | Developed by
                     a(href="{ url 'games_by_company' game.developer.slug %}") {{ game.developer }}
                 if game.publisher
-                    Published by
+                    | Published by
                     a(href="{ url 'games_by_company' game.publisher.slug %}") {{ game.publisher }}
