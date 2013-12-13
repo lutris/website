@@ -57,9 +57,9 @@ def activate():
 
 def touch_wsgi():
     """Touch wsgi file to trigger reload."""
-    conf_dir = join(env.code_root, env.project)
+    conf_dir = join(env.code_root, 'config')
     with cd(conf_dir):
-        run('touch wsgi.py')
+        run('touch lutrisweb.wsgi')
 
 
 def apache_reload():
