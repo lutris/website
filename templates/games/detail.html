@@ -17,7 +17,7 @@
       {% with game.screenshot_set.published as screenshots %}
       {% include "includes/screenshots_slider.jade" %}
       {% endwith %}
-          <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-mini pull-right'>Submit screenshot</a>
+          <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-xs'>Submit screenshot</a>
       <article>
         {{ game.description|linebreaks }}
       </article>
