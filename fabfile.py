@@ -55,12 +55,11 @@ def activate():
     return prefix('. %s/bin/activate' % env.root)
 
 
-def touch():
+def touch_wsgi():
     """Touch wsgi file to trigger reload."""
-    require('code_root', provided_by=('staging', 'production'))
-    conf_dir = join(env.code_root, 'config')
+    conf_dir = join(env.code_root, env.project)
     with cd(conf_dir):
-        run('touch %s.wsgi' % env.project)
+        run('touch wsgi.py')
 
 
 def apache_reload():
@@ -230,5 +229,4 @@ def fastdeploy():
     bower()
     grunt()
     collect_static()
-    apache_reload()
-    supervisor_restart()
+    touch_wsgi()
