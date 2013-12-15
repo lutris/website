@@ -134,9 +134,9 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
 DOWNLOADS = {
-    'ubuntu': RELEASES_URL + "lutris_0.3.1_all.deb",
-    'fedora': RELEASES_URL + "lutris-0.3.1-2.noarch.rpm",
-    'linux': RELEASES_URL + "lutris_0.3.1.tar.gz"
+    'ubuntu': RELEASES_URL + "lutris_0.3.2_all.deb",
+    'fedora': RELEASES_URL + "lutris-0.3.2-2.noarch.rpm",
+    'linux': RELEASES_URL + "lutris_0.3.2.tar.gz"
 }
 
 ## Crispy forms
