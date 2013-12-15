@@ -4,8 +4,8 @@
     .carousel-inner.featured-slider
         for featured in featured_contents
             a(href='{{ featured.content_object.get_absolute_url }}',class='item {% if forloop.first %}active{% endif %}')
-                {% thumbnail featured.image "877x220" crop="top" as img %}
-                img(src="{{ img.url }}",width=877,height=220,title="{{ featured.description }}",alt="{{ featured.description }}")
+                {% thumbnail featured.image "877x280" crop="top" as img %}
+                img(src="{{ img.url }}",width=877,height=280,title="{{ featured.description }}",alt="{{ featured.description }}")
                 {% endthumbnail %}
                 span(class="carousel-caption") {{ featured.description }}
     a(class='left carousel-control',href='#featured-slider',data-slide='prev')
