@@ -40,4 +40,8 @@ def steam_sync(steamid):
         LOGGER.error("Error decoding response %s as json: %s",
                      response.content, ex)
         raise
-    return json_data['response']['games']
+    response = json_data['response']
+    if 'games' in response:
+        return response['games']
+    else:
+        LOGGER.error("No games in response: %s", response)
