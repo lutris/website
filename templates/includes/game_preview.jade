@@ -17,7 +17,7 @@ li.clearfix
                 for genre in game.genres.all
                     a(href="{% url 'games_by_genre' genre.slug %}") {{ genre }}
                 if game.year
-                    Released in
+                    | Released in
                     a(href="{% url 'games_by_year' game.year %}") {{ game.year }}
                     br
                 if game.developer
