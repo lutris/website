@@ -42,6 +42,10 @@ class Platform(models.Model):
         self.slug = slugify(self.name)
         return super(Platform, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
 
 class Company(models.Model):
     """Gaming company"""
@@ -66,6 +70,10 @@ class Company(models.Model):
         self.slug = slugify(self.name)
         return super(Company, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', 'slug__icontains')
+
 
 class Runner(models.Model):
     '''Model definition for the runners.'''
@@ -87,6 +95,10 @@ class Runner(models.Model):
             self.slug = slugify(self.name)
         return super(Runner, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
 
 class Genre(models.Model):
     """Gaming genre"""
@@ -99,6 +111,10 @@ class Genre(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
 
 
 class GameManager(models.Manager):
