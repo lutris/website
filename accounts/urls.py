@@ -13,8 +13,10 @@ urlpatterns = patterns(
         {'template_name': 'accounts/logout.jade'},
         name='logout'),
     url(r'^password/change/$', auth_views.password_change,
+        kwargs={'template_name': "accounts/password_change.jade"},
         name='password_change'),
     url(r'^password/change/done/$', auth_views.password_change_done,
+        kwargs={'template_name': "accounts/password_change_done.jade"},
         name='password_change_done'),
     url(r'^password/reset/$', auth_views.password_reset,
         kwargs={'template_name': "accounts/password_reset.jade"},
@@ -41,6 +43,7 @@ urlpatterns = patterns(
         name="remove_from_library"),
     url(r'^library/steam-sync/', 'library_steam_sync',
         name="library_steam_sync"),
+    url(r'profile/$', 'profile', name="profile"),
     url(r'(.*)/edit/$', 'profile_edit', name='profile_edit'),
     url(r'(.*)/$', 'user_account', name="user_account"),
 )

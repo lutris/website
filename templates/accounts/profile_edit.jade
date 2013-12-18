@@ -2,4 +2,9 @@ extends "base.html"
 {% load crispy_forms_tags %}
 
 block content
-    {% crispy form %}
+    div
+        {% crispy form %}
+    div
+        a.btn.btn-sm(href="{% url 'password_change' %}") Modify your password
+
+

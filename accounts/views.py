@@ -59,11 +59,20 @@ def client_verify(request):
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
 
+@login_required
+def profile(request):
+    user = request.user
+    return HttpResponseRedirect(reverse('user_account',
+                                        args=(user.username, )))
+
+
+@login_required
 def user_account(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, "accounts/profile.jade", {'user': user})
 
 
+@login_required
 def profile_edit(request, username):
     user = get_object_or_404(User, username=username)
     if user != request.user:
