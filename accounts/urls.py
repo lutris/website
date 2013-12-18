@@ -24,7 +24,7 @@ urlpatterns = patterns(
     url(r'^password/reset/complete/$', auth_views.password_reset_complete,
         name='auth_password_reset_complete'),
     url(r'^password/reset/done/$', auth_views.password_reset_done,
-        name='auth_password_reset_done'),
+        name='password_reset_done'),
     url(r'^register/$', 'register', name="register"),
     url(r'^auth/$', 'client_auth', name="client_auth"),
     url(r'^verify/$', 'client_verify'),
@@ -37,6 +37,6 @@ urlpatterns = patterns(
         name="remove_from_library"),
     url(r'^library/steam-sync/', 'library_steam_sync',
         name="library_steam_sync"),
-    url(r'([\w-]+)/edit/$', 'profile_edit', name='profile_edit'),
-    url(r'([\w-]+)/$', 'user_account', name="user_account"),
+    url(r'([\w-_\.]+)/edit/$', 'profile_edit', name='profile_edit'),
+    url(r'([\w-_\.]+)/$', 'user_account', name="user_account"),
 )
