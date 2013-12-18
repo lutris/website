@@ -66,7 +66,6 @@ def profile(request):
                                         args=(user.username, )))
 
 
-@login_required
 def user_account(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, "accounts/profile.jade", {'user': user})

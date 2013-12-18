@@ -1,3 +1,7 @@
+setup:
+	npm install
+	bower install
+	grunt
 run:
 	./manage.py runserver
 
