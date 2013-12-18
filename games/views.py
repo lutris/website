@@ -20,6 +20,7 @@ from .forms import InstallerForm, ScreenshotForm, GameForm
 class GameList(ListView):
     model = Game
     context_object_name = "games"
+    paginate_by = 25
 
     def get_queryset(self):
         queryset = Game.objects.published()
