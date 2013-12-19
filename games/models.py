@@ -263,7 +263,9 @@ class Installer(models.Model):
         self.content = yaml_data
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.game.name + "-" + self.version)
+        self.slug = "%s-%s" % (
+            slugify(self.game.name)[:30], slugify(self.version)[:20]
+        )
         return super(Installer, self).save(*args, **kwargs)
 
 
