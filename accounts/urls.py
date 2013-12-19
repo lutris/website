@@ -35,7 +35,7 @@ urlpatterns = patterns(
     url(r'^auth/$', 'client_auth', name="client_auth"),
     url(r'^verify/$', 'client_verify'),
     url(r'^associate-steam/', 'associate_steam', name="associate_steam"),
-    url(r'^(?P<username>[\w-]+)/library/$', 'library_show',
+    url(r'^(?P<username>.*)/library/$', 'library_show',
         name="library_show"),
     url(r'^library/add/(?P<slug>[\w-]+)/$', 'library_add',
         name="add_to_library"),
