@@ -53,6 +53,7 @@ Getting the site up and running for development
     sudo add-apt-repository ppa:chris-lea/node.js
     sudo apt-get install nodejs
     sudo npm install grunt-cli -g
+    sudo npm install bower -g
     npm install
     bower install
 
@@ -72,6 +73,7 @@ Getting the site up and running for development
   files and start coding
 
     make run
+    # in a separate shell
     grunt watch
     firefox http://localhost:8000
 
