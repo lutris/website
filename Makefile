@@ -21,6 +21,10 @@ cleanthumbs:
 test:
 	./manage.py test --noinput $(test)
 
+sysdeps:
+	sudo apt-get install postgresql-server-dev-9.1
+	pip install -r config/production.pip --exists-action=s
+
 deps:
 	pip install -r config/requirements.pip --exists-action=s
 
