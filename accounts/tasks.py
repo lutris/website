@@ -32,8 +32,11 @@ def create_game(game):
 def sync_steam_library(user_id):
     user = User.objects.get(pk=user_id)
     steamid = user.steamid
-    steam_games = games.util.steam.steam_sync(steamid)
     library = games.models.GameLibrary.objects.get(user=user)
+    steam_games = games.util.steam.steam_sync(steamid)
+    if not steam_games:
+        LOGGER.info("Steam user %s has no steam games")
+        return
     for game in steam_games:
         LOGGER.info("Adding %s to %s's library", game['name'], user.username)
         if not game['img_icon_url']:
