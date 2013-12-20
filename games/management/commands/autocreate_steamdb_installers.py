@@ -11,7 +11,7 @@ class Command(BaseCommand):
         steam_runner = models.Runner.objects.get(slug='steam')
         user = User.objects.get(username='strider')
         for steamapp in steamdb:
-            if steamapp['linux_status'] == 'Game Works':
+            if steamapp['linux_status'].startswith('Game Works'):
                 appid = steamapp['appid']
                 name = steamapp['name']
                 try:
