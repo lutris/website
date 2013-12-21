@@ -1,5 +1,5 @@
-@import "bootstrap";
-@import "select2-bootstrap";
+@import "../../components/bootstrap/less/bootstrap";
+@import "../../components/select2-bootstrap-css/select2-bootstrap.css";
 
 /* == Variables */
 @siteWidth: 960px;
@@ -178,17 +178,25 @@ form {
   text-align: center;
 }
 
+.left-aligned {
+  text-align: justify;
+}
+
 /* == Page Layout */
-.content {
+.content { /* not used in code? */
   width: @siteWidth;
+}
+#content {
+  background-color: #2f2f2f;
+  padding-top: 30px;
 }
 .page {
 }
 
 .navbar {
+  box-shadow: 0 0 10px #000;
   font-weight: 300;
   margin: auto;
-  margin-bottom: 10px;
   font-family: @sansSerif;
   .brand {
     width: 350px;
@@ -247,14 +255,14 @@ form {
 }
 
 .btn {
-  background-color: #444;
+  background-color: #555;
   background-image: none;
   border-radius: 2px;
   color: #DEDEDE;
   text-shadow: none;
   &:hover {
-    background-color: #333;
-    color: #BEBEBE;
+    background-color: #666;
+    color: #FFF;
   }
 }
 
@@ -297,6 +305,7 @@ form {
 .content-box {
   border-bottom: 2px solid @brandColor;
   background-color: #222;
+  box-shadow: inset 0 0 30px #111;
   height: 360px;
   font-weight: 300;
   text-align: center;
@@ -388,8 +397,7 @@ form {
 
 .game-header, .page-header {
   position: relative;
-  width: 940px;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
   border: 0;
   .title {
     .top-down-gradient(#111, @darkerBackground);
