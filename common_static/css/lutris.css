@@ -6009,9 +6009,6 @@ a:hover {
   color: #b36b00;
   text-decoration: underline;
 }
-ul {
-  padding: 0;
-}
 code {
   color: #aaa;
   background-color: #222;
@@ -6085,6 +6082,10 @@ form label .asteriskField {
 }
 .left-aligned {
   text-align: justify;
+}
+.ul-reset {
+  padding: 0;
+  list-style-type: none;
 }
 /* == Page Layout */
 .content {
@@ -6367,6 +6368,7 @@ form label .asteriskField {
   margin-bottom: 14px;
 }
 .game-info ul {
+  padding: 0;
   list-style-type: none;
   margin: 0;
 }
@@ -6422,9 +6424,10 @@ form label .asteriskField {
 }
 .game-list {
   margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 .game-list li {
-  list-style-type: none;
   padding: 8px;
   margin: 10px 0;
   background-color: #222222;
@@ -6518,6 +6521,7 @@ form label .asteriskField {
   text-decoration: none;
 }
 .choice-list {
+  padding: 0;
   list-style-type: none;
 }
 .choice-list li {
@@ -6558,6 +6562,7 @@ form label .asteriskField {
   font-size: .8em;
 }
 .installer-list ul {
+  padding: 0;
   list-style-type: none;
 }
 .installer-list .installer-details {
@@ -6581,6 +6586,7 @@ form label .asteriskField {
   clear: both;
 }
 .filter-list {
+  padding: 0;
   list-style-type: none;
   list-style-position: inside;
   margin: 0;
