@@ -1,5 +1,5 @@
-@import "bootstrap";
-@import "select2-bootstrap";
+@import "../../components/bootstrap/less/bootstrap";
+@import "../../components/select2-bootstrap-css/select2-bootstrap.css";
 
 /* == Variables */
 @siteWidth: 960px;
@@ -30,7 +30,7 @@ html, body {
 article {
   color: #ccc;
   font-weight: 400;
-  padding: 14px 7px;
+  padding: 14px 15px;
 }
 h1, h2, h3, h4, h5 {
   font-weight: normal;
@@ -63,10 +63,6 @@ a {
     color: darken(@linkColor, 15%);
     text-decoration: underline;
   }
-}
-
-ul {
-  padding: 0;
 }
 
 code {
@@ -108,6 +104,7 @@ form {
 .footer {
   border-top: 2px solid @brandColor;
   background-color: #222;
+  box-shadow: inset 0 5px 20px #181818;
   margin-top: 20px;
   padding: 30px 0;
   font-size: .8em;
@@ -178,17 +175,30 @@ form {
   text-align: center;
 }
 
+.left-aligned {
+  text-align: justify;
+}
+
+.ul-reset {
+  padding: 0;
+  list-style-type: none;
+}
+
 /* == Page Layout */
-.content {
+.content { /* not used in code? */
   width: @siteWidth;
+}
+#content {
+  background-color: #2f2f2f;
+  padding-top: 30px;
 }
 .page {
 }
 
 .navbar {
+  box-shadow: 0 0 10px #000;
   font-weight: 300;
   margin: auto;
-  margin-bottom: 10px;
   font-family: @sansSerif;
   .brand {
     width: 350px;
@@ -247,14 +257,14 @@ form {
 }
 
 .btn {
-  background-color: #444;
+  background-color: #555;
   background-image: none;
   border-radius: 2px;
   color: #DEDEDE;
   text-shadow: none;
   &:hover {
-    background-color: #333;
-    color: #BEBEBE;
+    background-color: #666;
+    color: #FFF;
   }
 }
 
@@ -297,9 +307,10 @@ form {
 .content-box {
   border-bottom: 2px solid @brandColor;
   background-color: #222;
+  box-shadow: inset 0 0 30px #111;
   height: 360px;
   font-weight: 300;
-  text-align: center;
+  text-align: left;
   padding: 20px;
   margin: 35px 0;
   line-height: 1.8em;
@@ -388,8 +399,7 @@ form {
 
 .game-header, .page-header {
   position: relative;
-  width: 940px;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
   border: 0;
   .title {
     .top-down-gradient(#111, @darkerBackground);
@@ -410,7 +420,7 @@ form {
   }
   .buttons {
     float: right;
-    margin-top: -2px;
+    margin-top: 6px;
     padding-right: 7px;
   }
 }
@@ -466,7 +476,7 @@ form {
     margin-bottom: 14px;
   }
   ul {
-    list-style-type: none;
+    .ul-reset;
     margin: 0;
   }
   li {
@@ -526,8 +536,8 @@ form {
 
 .game-list {
   margin: 0;
+  .ul-reset;
   li {
-    list-style-type: none;
     padding: 8px;
     margin: 10px 0;
     background-color: @darkerBackground;
@@ -630,7 +640,7 @@ form {
 }
 
 .choice-list {
-  list-style-type: none;
+  .ul-reset;
   li {
     margin: 10px 20px 3px 0px;
     min-width: 130px;
@@ -671,7 +681,7 @@ form {
     font-size: .8em;
   }
   ul {
-    list-style-type: none;
+    .ul-reset;
   }
   .installer-details {
     .clearfix;
@@ -681,7 +691,7 @@ form {
 }
 
 .filter-list {
-  list-style-type: none;
+  .ul-reset;
   list-style-position: inside;
   margin: 0;
   li {
