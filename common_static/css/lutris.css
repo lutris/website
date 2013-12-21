@@ -6199,7 +6199,7 @@ form label .asteriskField {
   box-shadow: inset 0 0 30px #111;
   height: 360px;
   font-weight: 300;
-  text-align: center;
+  text-align: left;
   padding: 20px;
   margin: 35px 0;
   line-height: 1.8em;
