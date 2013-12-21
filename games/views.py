@@ -145,7 +145,9 @@ def validate(game, request, form):
 
 @login_required
 def edit_installer(request, slug):
-    installer = get_object_or_404(Installer, slug=slug, user=request.user)
+    installer = get_object_or_404(Installer, slug=slug)
+    if installer.user is not request.user and not request.user.is_staff:
+        raise Http404
     form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         form.save()

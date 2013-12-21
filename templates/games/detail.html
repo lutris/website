@@ -36,7 +36,7 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    {% if installer.user == user %}
+                    {% if installer.user == user or user.is_staff %}
                       <li>
                         {% url 'edit_installer' slug=installer.slug as edit_url %}
                         <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
