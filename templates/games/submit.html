@@ -8,4 +8,9 @@
 
 {% block scripts %}
   {{ block.super }}
+  <script>
+    $(function () {
+      $('input[type=file]').JCropFileInput();
+    }) 
+  </script>
 {% endblock %}

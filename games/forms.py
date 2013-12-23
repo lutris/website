@@ -32,7 +32,15 @@ class GameForm(forms.ModelForm):
     class Media:
         js = (
             settings.STATIC_URL + "/js/jquery.select2.min.js",
+            settings.STATIC_URL + "/js/jquery.Jcrop.min.js",
+            settings.STATIC_URL + "/js/jcrop-fileinput.js",
         )
+        css = {
+            'all': (
+                settings.STATIC_URL + "/css/jquery.Jcrop.min.css",
+                settings.STATIC_URL + "/css/jcrop-fileinput.css"
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
