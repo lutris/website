@@ -53,6 +53,7 @@ Getting the site up and running for development
     sudo add-apt-repository ppa:chris-lea/node.js
     sudo apt-get install nodejs
     sudo npm install grunt-cli -g
+    sudo npm install bower -g
     npm install
     bower install
 
@@ -72,29 +73,37 @@ Getting the site up and running for development
   files and start coding
 
     make run
+    # in a separate shell
     grunt watch
     firefox http://localhost:8000
 
 Postgresql configuriguration
 ============================
 
+Create a user:
+    
+    sudo -u postgres create user lutris
+
 Creating a database:
 
-    create database lutris_staging with owner lutris_staging;
+    sudo -u postgres psql
+    create database lutris_staging with owner lutris;
 
 or (in shell)
 
-    createdb lutris_staging -O lutris_staging
+    createdb lutris -O lutris
 
 Modify database's owner:
 
-    alter database lutris_staging owner to lutris_staging;
+    sudo -u postgres psql
+    alter database lutris_staging owner to lutris;
 
 Change user's password:
 
-    alter user lutris_staging with password 'admin';
+    sudo -u postgres psql
+    alter user lutris with password 'admin';
 
 Dropping all tables from the database
-    
+
     drop schema public cascade;
     create schema public;

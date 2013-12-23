@@ -38,6 +38,11 @@ class GameAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
     search_fields = ('name', )
+    raw_id_fields = ('publisher', 'developer', 'genres', 'platforms')
+    autocomplete_lookup_fields = {
+        'fk': ['publisher', 'developer'],
+        'm2m': ['genres', 'platforms']
+    }
 
 
 class ScreenshotAdmin(admin.ModelAdmin):

@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
-from .models import Game, Runner, Installer, Platform
+from .models import Game, Runner, Installer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 
@@ -20,6 +20,7 @@ from .forms import InstallerForm, ScreenshotForm, GameForm
 class GameList(ListView):
     model = Game
     context_object_name = "games"
+    paginate_by = 25
 
     def get_queryset(self):
         queryset = Game.objects.published()
@@ -57,7 +58,10 @@ class GameListByGenre(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByGenre, self).get_context_data(**kwargs)
-        context['genre'] = models.Genre.objects.get(slug=self.args[0])
+        try:
+            context['genre'] = models.Genre.objects.get(slug=self.args[0])
+        except models.Genre.DoesNotExist:
+            raise Http404
         return context
 
 
@@ -70,7 +74,10 @@ class GameListByCompany(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByCompany, self).get_context_data(**kwargs)
-        context['company'] = models.Company.objects.get(slug=self.args[0])
+        try:
+            context['company'] = models.Company.objects.get(slug=self.args[0])
+        except models.Company.DoesNotExist:
+            raise Http404
         return context
 
 
@@ -82,7 +89,12 @@ class GameListByPlatform(GameList):
 
     def get_context_data(self, **kwargs):
         context = super(GameListByPlatform, self).get_context_data(**kwargs)
-        context['platform'] = Platform.objects.get(slug=self.kwargs['slug'])
+        try:
+            context['platform'] = models.Platform.objects.get(
+                slug=self.kwargs['slug']
+            )
+        except models.Platform.DoesNotExist:
+            raise Http404
         return context
 
 
@@ -110,11 +122,13 @@ def game_detail(request, slug):
 @login_required
 def new_installer(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    form = InstallerForm(request.POST or None)
+    installer = Installer(game=game)
+    installer.set_default_installer()
+    form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         installer = form.save(commit=False)
         installer.game_id = game.id
-        installer.user_id = request.user.id
+        installer.user = request.user
         installer.save()
         return redirect("installer_complete", slug=game.slug)
     return render(request, 'games/installer-form.html',
@@ -131,7 +145,9 @@ def validate(game, request, form):
 
 @login_required
 def edit_installer(request, slug):
-    installer = get_object_or_404(Installer, slug=slug, user=request.user)
+    installer = get_object_or_404(Installer, slug=slug)
+    if installer.user is not request.user and not request.user.is_staff:
+        raise Http404
     form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         form.save()
@@ -159,31 +175,35 @@ def serve_installer(_request, slug):
     return HttpResponse(content, content_type="application/yaml")
 
 
-def serve_installer_banner(_request, slug):
-    """ Serve game title in an appropriate format for the client. """
+def get_game_by_slug(slug):
+    game = None
     try:
         installer = Installer.objects.fuzzy_get(slug)
+        game = installer.game
     except Installer.DoesNotExist:
+        try:
+            game = Game.objects.get(slug=slug)
+        except Game.DoesNotExist:
+            pass
+    return game
+
+
+def serve_installer_banner(_request, slug):
+    """ Serve game title in an appropriate format for the client. """
+    game = get_game_by_slug(slug)
+    if not game or not game.title_logo:
         raise Http404
-    if not installer.game.title_logo:
-        raise Http404
-    banner_thumbnail = get_thumbnail(installer.game.title_logo,
-                                     settings.BANNER_SIZE,
-                                     crop="top")
-    return redirect(banner_thumbnail.url)
+    thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE,
+                              crop="top")
+    return redirect(thumbnail.url)
 
 
 def serve_installer_icon(_request, slug):
-    try:
-        installer = Installer.objects.fuzzy_get(slug)
-    except Installer.DoesNotExist:
+    game = get_game_by_slug(slug)
+    if not game or not game.icon:
         raise Http404
-    if not installer.game.icon:
-        raise Http404
-    banner_thumbnail = get_thumbnail(installer.game.icon,
-                                     settings.ICON_SIZE,
-                                     crop="top")
-    return redirect(banner_thumbnail.url)
+    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="top")
+    return redirect(thumbnail.url)
 
 
 def game_list(request):
@@ -201,7 +221,7 @@ def games_by_runner(request, runner_slug):
 
 
 def submit_game(request):
-    form = GameForm(request.POST or None)
+    form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect(reverse("game-submitted"))

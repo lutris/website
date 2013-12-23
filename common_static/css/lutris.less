@@ -1,4 +1,5 @@
 @import "bootstrap";
+@import "select2-bootstrap";
 
 /* == Variables */
 @siteWidth: 960px;
@@ -7,6 +8,13 @@
 @sansSerif: "Roboto", Arial, sans;
 @brandColor: #ff9900;
 @linkColor: @brandColor;
+
+@pagination-bg: #222;
+@pagination-border: #444;
+@pagination-hover-bg: #444;
+@pagination-active-bg: #FFF;
+@pagination-active-color: #666;
+@pagination-disabled-color: #888;
 
 /* == Defaults */
 html, body {
@@ -74,18 +82,64 @@ form {
   }
 }
 
+.simple-form {
+  label {
+    font-weight: normal;
+    display: block;
+    color: #AAA;
+    font-size: .9em;
+  }
+  input[type=text],input[type=password],input[type=email] {
+    border-radius: 4px;
+    padding: 4px;
+    width: 100%;
+    display: block;
+    border: 1px solid #444;
+    background-color: #EEE;
+    color: #222;
+  }
+}
+
 .container{
   max-width: none !important;
   width: @siteWidth;
 }
 
 .footer {
-  margin-top: 200px;
+  border-top: 2px solid @brandColor;
+  background-color: #222;
+  margin-top: 20px;
+  padding: 30px 0;
+  font-size: .8em;
   ul {
     list-style-type:none;
     padding: 0;
   }
+  .icon-list {
+    li {
+      display: inline
+    }
+    a {
+      display: inline-block;
+      width: 38px;
+      height: 38px;
+      border-radius: 4px;
+      text-decoration: none;
+      img {
+        margin: 3px;
+      }
+      &:hover {
+        background-color: #666;
+      }
+    }
+  }
 }
+
+.warning-message {
+  color: #FD3750;
+}
+
+
 .wrapper {
   min-height: 100%;
   display: block;
@@ -129,7 +183,6 @@ form {
   width: @siteWidth;
 }
 .page {
-  padding-bottom: 250px;
 }
 
 .navbar {
@@ -200,7 +253,7 @@ form {
   color: #DEDEDE;
   text-shadow: none;
   &:hover {
-    background-color: #222;
+    background-color: #333;
     color: #BEBEBE;
   }
 }
@@ -335,28 +388,24 @@ form {
 
 .game-header, .page-header {
   position: relative;
-  height: 120px;
   width: 940px;
-  background-repeat: no-repeat;
   margin-bottom: 20px;
   border: 0;
   .title {
-    .rounded-corners();
-    .top-down-gradient(@darkerBackground + #202020, @darkerBackground);
-    position: absolute;
-    height: 50px;
-    left: 0;
-    right: 0;
-    bottom: 20px;
-    font-size: 25px;
-    line-height: 50px;
+    .top-down-gradient(#111, @darkerBackground);
     color: #EEE;
-    span { color: #EDEDED; }
+    padding: 5px 0;
+    span {
+      color: #EDEDED;
+      font-weight: 200;
+      padding-left: 15px;
+      font-size: 2em;
+    }
     img {
       position: relative;
       float: left;
-      top: -40px;
-      margin: 0 28px;
+      top: 7px;
+      margin-left: 20px;
     }
   }
   .buttons {
@@ -607,15 +656,13 @@ form {
 .installer-list {
   background-color: @darkerBackground;
   padding: 14px 7px;
+
   .installer-name {
     border-radius: 2px;
     background-color: #666;
     padding: 3px 7px;
     font-family: monospace;
     font-size: .8em;
-  }
-  i {
-    vertical-align: text-bottom;
   }
   p {
     margin-left: 7px;
@@ -625,11 +672,10 @@ form {
   }
   ul {
     list-style-type: none;
-    margin: 10px 0;
   }
-  li {
+  .installer-details {
     .clearfix;
-    padding: 7px 0;
+    padding: 14px 0;
     border-bottom: 1px solid #555;
   }
 }

@@ -1,8 +1,9 @@
+import logging
 import urllib2
 import requests
 from django.conf import settings
 
-
+LOGGER = logging.getLogger(__name__)
 STEAM_API_URL = "http://api.steampowered.com/"
 
 
@@ -31,4 +32,16 @@ def steam_sync(steamid):
         )
     )
     response = requests.get(STEAM_API_URL + get_owned_games)
-    return response.json()['response']['games']
+    if response.status_code > 400:
+        raise ValueError("Invalid response from steam: %s", response)
+    try:
+        json_data = response.json()
+    except Exception as ex:
+        LOGGER.error("Error decoding response %s as json: %s",
+                     response.content, ex)
+        raise
+    response = json_data['response']
+    if 'games' in response:
+        return response['games']
+    else:
+        LOGGER.error("No games in response: %s", response)

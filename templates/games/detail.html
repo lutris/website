@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
+{% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
   <div class="page-header">
     <div class='title'>
       {% if game.icon %}
-        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='128' height='128' />
+        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
       {% endif %}
       <span>{{ game.name }}</span>
     </div>
@@ -15,38 +16,38 @@
   <div class="row">
     <div class="col-xs-9">
       {% with game.screenshot_set.published as screenshots %}
-        <div class="carousel slide">
-          {% if screenshots %}
-            <div class='screenshots carousel-inner'>
-              {% for screenshot in game.screenshot_set.published %}
-                {% thumbnail screenshot.image '640x480' crop="center" as img %}
-                  <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}" />
-                {% endthumbnail %}
-              {% endfor %}
-            </div>
-          {% endif %}
-          <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-mini pull-right'>Submit screenshot</a>
-        </div>
+      {% include "includes/screenshots_slider.jade" %}
       {% endwith %}
+          <a href='{% url 'screenshot_add' game.slug %}' class='btn btn-xs'>Submit screenshot</a>
       <article>
         {{ game.description|linebreaks }}
       </article>
       <div class="installer-list">
         <ul>
           {% for installer in installers %}
-            <li>
+            <li class="installer-details">
               <span class='filter-link'>{{ installer.runner }}</span>
               <span class='installer-name'>{{ installer.slug }}</span>
               <div class="right">
-                {% if installer.user == user %}
-                  {% url 'edit_installer' slug=installer.slug as edit_url %}
-                  <a href="{{ edit_url }}" class="btn btn-mini"><i class="icon-edit"></i> Edit installer </a>
-                {% endif %}
-
-                {% url 'serve_installer' slug=installer.slug as download_url %}
-                <a href="{{ download_url }}" class="btn btn-mini"><i class="icon-download"></i> Download</a>
-
-                <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+                <div class="btn-group">
+                  <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    {% if installer.user == user or user.is_staff %}
+                      <li>
+                        {% url 'edit_installer' slug=installer.slug as edit_url %}
+                        <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
+                      </li>
+                    {% endif %}
+                    <li>
+                      {% url 'serve_installer' slug=installer.slug as download_url %}
+                      <a href="{{ download_url }}"><i class="icon-download"></i> Download installer</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <p>
                 {% if installer.description %}

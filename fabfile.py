@@ -55,17 +55,21 @@ def activate():
     return prefix('. %s/bin/activate' % env.root)
 
 
-def touch():
+def touch_wsgi():
     """Touch wsgi file to trigger reload."""
-    require('code_root', provided_by=('staging', 'production'))
     conf_dir = join(env.code_root, 'config')
     with cd(conf_dir):
-        run('touch %s.wsgi' % env.project)
+        run('touch lutrisweb.wsgi')
 
 
 def apache_reload():
     """ reload Apache on remote host """
     sudo('service apache2 reload', shell=False)
+
+
+def supervisor_restart():
+    """ Reload Supervisor service """
+    sudo('service supervisor restart', shell=False)
 
 
 def test():
@@ -89,15 +93,26 @@ def requirements():
 
 
 def update_vhost():
-    local('cp config/%(project)s.conf /tmp' % env)
-    local('sed -i s#%%ROOT%%#%(root)s#g /tmp/%(project)s.conf' % env)
-    local('sed -i s/%%PROJECT%%/%(project)s/g /tmp/%(project)s.conf' % env)
-    local('sed -i s/%%ENV%%/%(environment)s/g /tmp/%(project)s.conf' % env)
-    local('sed -i s/%%DOMAIN%%/%(domain)s/g /tmp/%(project)s.conf' % env)
+    tempfile = "/tmp/%(project)s.conf" % env
+    local('cp config/lutrisweb.conf ' + tempfile)
+    local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
+    local('sed -i s/%%PROJECT%%/%(project)s/g ' % env + tempfile)
+    local('sed -i s/%%ENV%%/%(environment)s/g ' % env + tempfile)
+    local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
     put('/tmp/%(project)s.conf' % env, '%(root)s' % env)
     sudo('cp %(root)s/%(project)s.conf ' % env +
-         '/etc/apache2/sites-available/%(domain)s' % env, shell=False)
-    sudo('a2ensite %(domain)s' % env, shell=False)
+         '/etc/apache2/sites-available/%(domain)s.conf' % env, shell=False)
+    sudo('a2ensite %(domain)s.conf' % env, shell=False)
+
+
+def update_celery():
+    tempfile = "/tmp/%(project)s-celery.conf" % env
+    local('cp config/lutrisweb-celery.conf ' + tempfile)
+    local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
+    local('sed -i s/%%PROJECT%%/%(project)s/g ' % env + tempfile)
+    put(tempfile, '%(root)s' % env)
+    sudo('cp %(root)s/lutrisweb-celery.conf ' % env
+         + '/etc/supervisor/conf.d/', shell=False)
 
 
 def rsync():
@@ -148,6 +163,11 @@ def pull():
         run("git pull")
 
 
+def bower():
+    with cd(env.code_root):
+        run("bower install")
+
+
 def grunt():
     with cd(env.code_root):
         run("grunt")
@@ -159,10 +179,14 @@ def collect_static():
         run('source ../bin/activate; python manage.py collectstatic --noinput')
 
 
-def fix_perms(user='www-data'):
+def fix_perms(user='www-data', group=None):
+    if not group:
+        group = env.user
     with cd(env.code_root):
-        sudo('chown -R %s:%s static' % (user, user))
-        sudo('chown -R %s:%s media' % (user, user))
+        sudo('chown -R %s:%s static' % (user, group))
+        sudo('chmod -R ug+w static')
+        sudo('chown -R %s:%s media' % (user, group))
+        sudo('chmod -R ug+w media')
 
 
 def configtest():
@@ -185,6 +209,7 @@ def docs():
 def deploy():
     fix_perms(user='django')
     pull()
+    bower()
     grunt()
     requirements()
     collect_static()
@@ -195,10 +220,13 @@ def deploy():
     update_vhost()
     configtest()
     apache_reload()
+    update_celery()
+    supervisor_restart()
 
 
 def fastdeploy():
     pull()
+    bower()
     grunt()
     collect_static()
-    apache_reload()
+    touch_wsgi()

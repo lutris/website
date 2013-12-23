@@ -36,12 +36,29 @@
       {% endif %}
     </ul>
 
-
     <ul class='game-list'>
       {% for game in games %}
         {% include "includes/game_preview.jade" %}
       {% endfor %}
     </ul>
+
+    {% if is_paginated %}
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-links">
+          <a href=".?page={{ page_obj.previous_page_number }}">&laquo;</a>
+        </li>
+      {% endif %}
+        <li>
+          <a>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+        </li>
+      {% if page_obj.has_next %}
+        <li>
+          <a href=".?page={{ page_obj.next_page_number }}">&raquo;</a>
+        </li>
+      {% endif %}
+    </ul>
+    {% endif %}
     </div>
   </div>
   <div class="col-xs-4">

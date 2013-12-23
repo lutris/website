@@ -1,3 +1,7 @@
+setup:
+	npm install
+	bower install
+	grunt
 run:
 	./manage.py runserver
 
@@ -16,6 +20,10 @@ cleanthumbs:
 
 test:
 	./manage.py test --noinput $(test)
+
+sysdeps:
+	sudo apt-get install postgresql-server-dev-9.1
+	pip install -r config/production.pip --exists-action=s
 
 deps:
 	pip install -r config/requirements.pip --exists-action=s
@@ -47,7 +55,7 @@ shell:
 	./manage.py shell --traceback
 
 worker:
-	./manage.py celery worker --loglevel=debug --autoreload --hostname=lutris.net -E -Q lutris
+	celery -A lutrisweb worker --loglevel=debug --autoreload --hostname=lutris.net -E
 
 legacydump:
 	./manage.py dumpdata --indent=2 -e accounts.Profile -e registration > lutrisweb.json

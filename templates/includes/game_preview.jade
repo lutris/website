@@ -3,7 +3,7 @@
 
 li.clearfix
     a(href="{{ game.get_absolute_url }}")
-        {% thumbnail game.title_logo "184x69" as img %}
+        {% thumbnail game.title_logo "184x69" crop="center" as img %}
         img.game-cover(src="{{ img.url }}",alt="{{ game.name }}")
         {% empty %}
         span.game-cover no image
@@ -15,14 +15,14 @@ li.clearfix
         .info
             div
                 for genre in game.genres.all
-                    a(href="{ url 'games_by_genre' genre.slug %}") {{ genre }}
+                    a(href="{% url 'games_by_genre' genre.slug %}") {{ genre }}
                 if game.year
-                    Released in 
-                    a(href="{ url 'games_by_year' game.year %}") {{ game.year }}
+                    | Released in
+                    a(href="{% url 'games_by_year' game.year %}") {{ game.year }}
                     br
                 if game.developer
-                    Developed by 
-                    a(href="{ url 'games_by_company' game.developer.slug %}") {{ game.developer }}
+                    | Developed by
+                    a(href="{% url 'games_by_company' game.developer.slug %}") {{ game.developer }}
                 if game.publisher
-                    Published by 
-                    a(href="{ url 'games_by_company' game.publisher.slug %}") {{ game.publisher }}
+                    | Published by
+                    a(href="{% url 'games_by_company' game.publisher.slug %}") {{ game.publisher }}

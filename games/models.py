@@ -42,6 +42,10 @@ class Platform(models.Model):
         self.slug = slugify(self.name)
         return super(Platform, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
 
 class Company(models.Model):
     """Gaming company"""
@@ -66,6 +70,10 @@ class Company(models.Model):
         self.slug = slugify(self.name)
         return super(Company, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', 'slug__icontains')
+
 
 class Runner(models.Model):
     '''Model definition for the runners.'''
@@ -87,6 +95,10 @@ class Runner(models.Model):
             self.slug = slugify(self.name)
         return super(Runner, self).save(*args, **kwargs)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
 
 class Genre(models.Model):
     """Gaming genre"""
@@ -100,6 +112,10 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
 
 class GameManager(models.Manager):
     def published(self):
@@ -109,7 +125,7 @@ class GameManager(models.Manager):
 class Game(models.Model):
     """Game model"""
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=False)
     year = models.IntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform, null=True, blank=True)
     genres = models.ManyToManyField(Genre, null=True, blank=True)
@@ -163,9 +179,21 @@ class Game(models.Model):
         self.icon = ContentFile(steam.get_image(self.steamid, img_url),
                                 "%d.jpg" % self.steamid)
 
+    def steam_support(self):
+        """ Return the platform supported by Steam """
+        if not self.steamid:
+            return False
+        platforms = [p.slug for p in self.platforms.all()]
+        if 'linux' in platforms:
+            return 'linux'
+        elif 'windows' in platforms:
+            return 'windows'
+        else:
+            return True
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.name)[:50]
         #self.download_steam_capsule()
         return super(Game, self).save(*args, **kwargs)
 
@@ -216,9 +244,7 @@ class Installer(models.Model):
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
-    content = models.TextField(default=yaml.safe_dump(
-        DEFAULT_INSTALLER, default_flow_style=False
-    ))
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
@@ -227,8 +253,19 @@ class Installer(models.Model):
     def __unicode__(self):
         return self.slug
 
+    def set_default_installer(self):
+        if self.game and self.game.steam_support():
+            installer_data = {'game': {'appid': self.game.steamid}}
+            self.version = 'steam'
+        else:
+            installer_data = DEFAULT_INSTALLER
+        yaml_data = yaml.safe_dump(installer_data, default_flow_style=False)
+        self.content = yaml_data
+
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.game.name + "-" + self.version)
+        self.slug = "%s-%s" % (
+            slugify(self.game.name)[:30], slugify(self.version)[:20]
+        )
         return super(Installer, self).save(*args, **kwargs)
 
 
