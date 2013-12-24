@@ -9,17 +9,12 @@ from django.template.defaultfilters import slugify
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django_jcrop.forms import JCropImageWidget
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 
 from games import models
 
 
 class GameForm(forms.ModelForm):
-    title_logo = forms.ImageField(
-        widget=JCropImageWidget, required=False
-    )
-
     class Meta:
         model = models.Game
         fields = ('name', 'year', 'website',
@@ -31,14 +26,14 @@ class GameForm(forms.ModelForm):
 
     class Media:
         js = (
-            settings.STATIC_URL + "/js/jquery.select2.min.js",
-            settings.STATIC_URL + "/js/jquery.Jcrop.min.js",
-            settings.STATIC_URL + "/js/jcrop-fileinput.js",
+            settings.STATIC_URL + "js/jquery.select2.min.js",
+            settings.STATIC_URL + "js/jquery.Jcrop.min.js",
+            settings.STATIC_URL + "js/jcrop-fileinput.js",
         )
         css = {
             'all': (
-                settings.STATIC_URL + "/css/jquery.Jcrop.min.css",
-                settings.STATIC_URL + "/css/jcrop-fileinput.css"
+                settings.STATIC_URL + "css/jquery.Jcrop.min.css",
+                settings.STATIC_URL + "css/jcrop-fileinput.css"
             )
         }
 
@@ -76,27 +71,13 @@ class GameForm(forms.ModelForm):
                        "a moderator to publish it.")
             raise forms.ValidationError(msg)
 
-    def clean(self):
-        cleaned_data = super(GameForm, self).clean()
-        slug = cleaned_data.get('slug', self.instance.slug)
-        name = cleaned_data.get('name', self.instance.name)
-        if not slug:
-            slug = slugify(name)
-        # Modify only if title_logo has been posted
-        for file_field in ('title_logo', 'icon'):
-            cleaned_data[file_field] = self.rename_uploaded_file(file_field,
-                                                                 cleaned_data,
-                                                                 slug)
-        cleaned_data['slug'] = slug
-        return cleaned_data
-
 
 class FeaturedForm(forms.ModelForm):
     class Meta:
         model = models.Featured
-        widgets = {
-            'image': JCropImageWidget(attrs={'ratio': '3.09'})
-        }
+        #widgets = {
+        #    'image': JCropImageWidget(attrs={'ratio': '3.09'})
+        #}
 
 
 class ScreenshotForm(forms.ModelForm):

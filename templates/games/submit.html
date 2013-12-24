@@ -10,7 +10,10 @@
   {{ block.super }}
   <script>
     $(function () {
-      $('input[type=file]').JCropFileInput();
-    }) 
+      $('input[type=file]').JCropFileInput({
+        debug: true,
+        ratio: 2.6667
+      });
+    })
   </script>
 {% endblock %}

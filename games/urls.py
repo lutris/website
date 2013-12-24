@@ -19,7 +19,7 @@ urlpatterns = patterns(
         name='games_by_company'),
     url(r'^platform/(?P<slug>[\w\-]+)/$', GameListByPlatform.as_view(),
         name="games_by_plaform"),
-    url(r'^add-game', 'submit_game',
+    url(r'^add-game/$', 'submit_game',
         name='submit_game'),
     url(r'^game-submitted',
         TemplateView.as_view(template_name='games/submitted.html'),

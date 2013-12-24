@@ -23,7 +23,8 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'public/js/app.js': 'common_static/js/*.coffee'
+          'public/js/app.js': 'common_static/js/*.coffee',
+          'public/js/jcrop-fileinput.js': 'components/jcrop-fileinput/src/jcrop-fileinput.coffee'
         }
       }
     },
@@ -84,7 +85,10 @@ module.exports = function(grunt) {
         tasks: ['less:css']
       },
       coffee: {
-        files: ['common_static/js/*.coffee'],
+        files: [
+          'common_static/js/*.coffee',
+          'components/jcrop-fileinput/src/*.coffee'
+        ],
         tasks: ['coffee', 'uglify:app']
       },
       templates: {

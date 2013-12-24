@@ -12,7 +12,7 @@
     "bootstrap": "~3.0",
     "jquery": "~1.10",
     "modernizr": "~2.6.2",
-    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.1",
+    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#master",
     "select2-bootstrap-css": "git://github.com/fk/select2-bootstrap-css.git#master"
   }
 }
