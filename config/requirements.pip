@@ -17,6 +17,7 @@ django-grappelli==2.5.0
 django-nose==1.2
 django-tastypie==0.10.0
 django-markupfield
+django-bitfield
 python-openid
 requests==2.0.1
 Celery==3.1.7
