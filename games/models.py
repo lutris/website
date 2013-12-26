@@ -10,6 +10,7 @@ from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
+from bitfield import BitField
 
 from games import managers
 from games.util import steam
@@ -143,6 +144,11 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
+    flags = BitField(flags=(
+        'open_source',
+        'open_engine',
+        'freeware',
+    ))
 
     objects = GameManager()
 

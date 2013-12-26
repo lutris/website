@@ -1,4 +1,6 @@
 """Admin configuration for Lutris games"""
+from bitfield import BitField
+from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
 
 from . import models
@@ -42,6 +44,9 @@ class GameAdmin(admin.ModelAdmin):
     autocomplete_lookup_fields = {
         'fk': ['publisher', 'developer'],
         'm2m': ['genres', 'platforms']
+    }
+    formfield_overrides = {
+        BitField: {'widget': BitFieldCheckboxSelectMultiple}
     }
 
 
