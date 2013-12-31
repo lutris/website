@@ -44,6 +44,9 @@ def sync_steam_library(user_id):
             continue
         try:
             steam_game = games.models.Game.objects.get(steamid=game['appid'])
+        except games.models.Game.MultipleObjectsReturned:
+            LOGGER.error("Multiple games with appid '%s'", game['appid'])
+            continue
         except games.models.Game.DoesNotExist:
             LOGGER.info("No game with steam id %s", game['appid'])
             try:
