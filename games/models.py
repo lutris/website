@@ -166,6 +166,9 @@ class Game(models.Model):
     def autocomplete_search_fields():
         return ("name__icontains",)
 
+    def has_installer(self):
+        return self.installer_set.count() > 0
+
     def get_absolute_url(self):
         """Return the absolute url for a game"""
         return "/games/%s/" % self.slug

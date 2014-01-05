@@ -1,0 +1,31 @@
+{% load thumbnail %}
+
+<li class="clearfix {% if game.has_installer %} with-installer{% endif%}">
+	<a href="{{ game.get_absolute_url }}">
+	{% thumbnail game.title_logo "184x69" crop="center" as img %}
+		<img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
+	{% empty %}
+		<span class="game-cover">no image</span>
+	{% endthumbnail %}
+
+    <div>
+    	<a href="{{ game.get_absolute_url }}" class="game-title">{{ game.name }}</a>
+    	{% for platform in game.platforms.all %}
+	    	<a href="{% url "games_by_plaform" slug=platform.slug %}" class="filter-link">{{ platform }}</a>
+	    {% endfor %}
+  	<div class="info">
+        {% for genre in game.genres.all|__pyjade_iter:1 %}
+        	<a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
+        {% endfor %}
+        {% if  game.year %}
+        	Released in <a href="{% url 'games_by_year' game.year %}">{{ game.year }}</a><br/>
+        {% endif %}
+        {% if  game.developer %}
+        	Developed by <a href="{% url 'games_by_company' game.developer.slug %}">{{ game.developer }}</a>
+        {% endif %}
+        {% if  game.publisher %}
+			Published by <a href="{% url 'games_by_company' game.publisher.slug %}">{{ game.publisher }}</a>
+		{% endif %}
+      </div>
+    </div></a>
+</li>
