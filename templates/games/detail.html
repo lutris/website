@@ -10,6 +10,11 @@
         <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
       {% endif %}
       <span>{{ game.name }}</span>
+      {% if user.is_staff %}
+        <div class="buttons">
+          <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 

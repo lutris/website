@@ -163,6 +163,11 @@ def pull():
         run("git pull")
 
 
+def npm():
+    with cd(env.code_root):
+        run("npm install")
+
+
 def bower():
     with cd(env.code_root):
         run("bower install")

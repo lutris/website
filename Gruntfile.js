@@ -23,7 +23,8 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'public/js/app.js': 'common_static/js/*.coffee'
+          'public/js/app.js': 'common_static/js/*.coffee',
+          'public/js/jcrop-fileinput.js': 'components/jcrop-fileinput/src/jcrop-fileinput.coffee'
         }
       }
     },
@@ -65,6 +66,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    copy: {
+      main: {
+        files: [
+          {flatten: true, expand: true, cwd: 'components/jcrop/css/', src: '**', dest: 'public/css/'},
+          {flatten: true, expand: true, cwd: 'components/jcrop/js/', src: '**', dest: 'public/js/'},
+          {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.css', dest: 'public/css/'},
+          {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.js', dest: 'public/js/'},
+        ]
+      }
+    },
     watch: {
       options: {
         livereload: true
@@ -74,7 +85,10 @@ module.exports = function(grunt) {
         tasks: ['less:css']
       },
       coffee: {
-        files: ['common_static/js/*.coffee'],
+        files: [
+          'common_static/js/*.coffee',
+          'components/jcrop-fileinput/src/*.coffee'
+        ],
         tasks: ['coffee', 'uglify:app']
       },
       templates: {
@@ -87,7 +101,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['less', 'coffee', 'uglify']);
+  grunt.registerTask('default', ['less', 'coffee', 'copy','uglify']);
 };
 
