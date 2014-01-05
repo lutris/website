@@ -540,7 +540,10 @@ form {
     text-decoration: none;
   }
   .with-installer {
-    background-color: @darkBackground;
+    background-color: @darkBackground - #111;
+    &:hover {
+      background-color: @darkBackground + #111;
+    }
     .game-title {
       color: @brandColor;
     }
