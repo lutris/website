@@ -35,9 +35,10 @@ class RunnerAdmin(admin.ModelAdmin):
 class GameAdmin(admin.ModelAdmin):
     ordering = ("name", )
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('__unicode__', 'year', 'created', 'updated', 'is_public')
+    list_display = ('__unicode__', 'year', 'steamid',
+                    'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
-    search_fields = ('name', )
+    search_fields = ('name', 'steamid')
     raw_id_fields = ('publisher', 'developer', 'genres', 'platforms')
     autocomplete_lookup_fields = {
         'fk': ['publisher', 'developer'],
