@@ -111,7 +111,8 @@ def library_show(request, username):
     library = games.models.GameLibrary.objects.get(user=user)
     library_games = library.games.all()
     return render(request, 'accounts/library_show.jade',
-                  {'user': user, 'games': library_games})
+                  {'user': user, 'games': library_games,
+                   'is_library': True})
 
 
 @login_required
@@ -126,7 +127,7 @@ def library_add(request, slug):
 @login_required
 def library_remove(request, slug):
     user = request.user
-    library = games.models.GameLibrary.objects.get(useg=user)
+    library = games.models.GameLibrary.objects.get(user=user)
     game = get_object_or_404(games.models.Game, slug=slug)
     library.games.remove(game)
     return redirect(request.META['HTTP_REFERER'])

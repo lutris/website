@@ -9,6 +9,3 @@ block content
     ul.game-list.user-library
         for game in games
             {% include "includes/game_preview.html" %}
-            a.right-button(href='{% url "remove_from_library" slug=game.slug %}')
-                i.icon-trash
-                span.help Remove from library

@@ -743,24 +743,22 @@ form {
 .user-library {
   .right-button {
     position: relative;
-    top: -90px;
-    right: 20px;
+    top: 0px;
     float: right;
-    &:hover {
-      .help {
-        display: block;
-      }
-    }
     .help {
-      display: none;
       position: absolute;
       white-space:nowrap;
       top: -5px;
-      right: 16px;
+      right: 7px;
       font-size: .9em;
-      background-color: #555;
+      background-color: #4c4c4c;
       padding: 3px 7px;
       border-radius: 2px;
+      color: #333;
+      &:hover {
+        background-color: #777;
+        color: #DEDEDE;
+      }
     }
   }
 }
