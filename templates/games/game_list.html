@@ -68,10 +68,12 @@
       <form action="." method=get class="form-inline">
         <div class="form-group">
           <div class="col-xs-8">
-            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" /><br />
-			<input type="checkbox" name="with_installer" checked /> With installer
+            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" />
           </div>
-          <input class="btn btn-sm" type="submit" value="Search" />
+          <input class="btn btn-sm" type="submit" value="Search" />          
+          <div class="col-xs-10">
+			<input type="checkbox" name="without_installer" /> Without installer
+          </div>
         </div>
       </form>
       <h4>Filter by platform</h4>
