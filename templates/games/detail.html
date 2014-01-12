@@ -30,7 +30,7 @@
       <div class="installer-list">
         <ul>
           {% for installer in installers %}
-            <li class="installer-details">
+          <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
               <span class='filter-link'>{{ installer.runner }}</span>
               <span class='installer-name'>{{ installer.slug }}</span>
               <div class="right">
@@ -45,6 +45,12 @@
                       <li>
                         {% url 'edit_installer' slug=installer.slug as edit_url %}
                         <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
+                      </li>
+                    {% endif %}
+                    {% if not installer.published and user.is_staff %}
+                      <li>
+                        {% url 'publish_installer' slug=installer.slug as publish_installer %}
+                        <a href="{{ publish_installer }}"><i class="icon-edit"></i> Publish installer </a>
                       </li>
                     {% endif %}
                     <li>

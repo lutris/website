@@ -135,6 +135,16 @@ def new_installer(request, slug):
                   {'form': form, 'game': game})
 
 
+@login_required
+def publish_installer(request, slug):
+    installer = get_object_or_404(Installer, slug=slug)
+    if not request.user.is_staff:
+        raise Http404
+    installer.published = True
+    installer.save()
+    return redirect('game_detail', slug=installer.game.slug)
+
+
 def validate(game, request, form):
     if request.method == 'POST' and form.is_valid():
         installer = form.save(commit=False)
