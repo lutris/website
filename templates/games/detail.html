@@ -28,6 +28,7 @@
         {{ game.description|linebreaks }}
       </article>
       <div class="installer-list">
+      {% if installers %}
         <ul>
           {% for installer in installers %}
           <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
@@ -70,6 +71,7 @@
             </li>
           {% endfor %}
         </ul>
+      {% endif %}
         <a href="{% url "new_installer" slug=game.slug %}" class="btn btn-small btn-inverse">Write a new installer</a>
       </div>
     </div>
