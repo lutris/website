@@ -171,12 +171,14 @@ form {
 }
 .right {float: right;}
 
-.centered {
+.centering {
+  display: table-cell; 
+  vertical-align: middle;
   text-align: center;
 }
 
-.left-aligned {
-  text-align: justify;
+.centered {
+  text-align: center;
 }
 
 .ul-reset {
@@ -462,6 +464,36 @@ form {
       font-size: 2.1em;
       color: #777;
       display: block;
+    }
+  }
+}
+
+.screenshots-slider .centering {
+  background-color: #111;
+  height: 430px;
+  width: 690px;
+  box-shadow: inset 0 0 60px #000;
+}
+
+.carousel-control, .carousel-control:focus {
+  opacity: 0;
+}
+.carousel-control:hover {
+  opacity: 1;
+}
+.carousel-control .icon-next {
+  right: 25px;
+}
+
+.carousel-control {
+  .icon-prev {
+    &:before {
+      content: '\25C0'; /* Left pointing arrow (U+25C0) */
+    }
+  }
+  .icon-next {
+    &:before {
+      content: '\25B6'; /* Right pointing arrow (U+25B6) */
     }
   }
 }
