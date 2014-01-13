@@ -21,16 +21,15 @@ class GameList(ListView):
     model = Game
     context_object_name = "games"
     paginate_by = 25
-    with_installer = True
 
     def get_queryset(self):
         queryset = Game.objects.published()
-        installers = Installer.objects.published()
+        installers = Installer.objects.published().values("game_id")
         search_terms = self.request.GET.get('q')
-        with_installer = self.request.GET.get('with_installer')
+        without_installer = self.request.GET.get('without_installer')
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
-        if with_installer:
+        if not without_installer:
             queryset = queryset.filter(id__in=installers)
         return queryset
 

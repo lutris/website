@@ -68,12 +68,23 @@
       <form action="." method=get class="form-inline">
         <div class="form-group">
           <div class="col-xs-8">
-            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" /><br />
-            <!-- 
-            <input type="checkbox" name="with_installer" checked /> With installer
-            -->
+            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" />
           </div>
           <input class="btn btn-sm" type="submit" value="Search" />
+          {% comment %}
+
+          Still needs some further discussion on this.
+          - The "with installer" filter has become "without installer", 
+            this is mainly useful for the sites moderators, not the users.
+          - Noticed that most of the published games have an installer. 
+            Having published games without installer is a bug, not a feature :p
+          - I quickly tested this and didn't work as expected, would need 
+            functionnal tests to ensure the filter does what it's meant to do.
+
+          <div class="col-xs-10">
+            <input type="checkbox" name="without_installer" /> Without installer
+          </div>
+          {% endcomment %}
         </div>
       </form>
       <h4>Filter by platform</h4>
