@@ -43,3 +43,7 @@ class GameLibraryFactory(factory.DjangoModelFactory):
         if extracted:
             for game in extracted:
                 self.games.add(game)
+
+
+class InstallerFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = models.Installer

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from . import factories
+from games import models
 
 
 class TestGame(TestCase):
@@ -7,6 +8,11 @@ class TestGame(TestCase):
         game = factories.GameFactory(name="Quake 3 Arena")
         self.assertEqual(game.slug, "quake-3-arena")
         self.assertFalse(game.is_public)
+
+    def test_game_list_filters_game_with_no_installers(self):
+        doom = factories.GameFactory(name="Doom", is_public=True)
+        game_list = models.Game.objects.published()
+        self.assertNotIn(doom, game_list)
 
 
 class TestGameLibrary(TestCase):

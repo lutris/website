@@ -81,8 +81,14 @@ Postgresql configuriguration
 ============================
 
 Create a user:
-    
+
     sudo -u postgres create user lutris
+
+Note that the user will need to be able to create databases in order to run 
+tests. If you have created an user without this permission, run:
+
+    sudo -u postgres psql
+    ALTER USER lutris CREATEDB;
 
 Creating a database:
 
