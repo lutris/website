@@ -48,7 +48,7 @@ class GameLibraryResource(ModelResource):
 
     def get_object_list(self, request):
         self._meta.queryset = models.GameLibrary.objects.filter(
-            user=request.user
+            user=request.user, game__installer__isnull=False
         )
         return super(GameLibraryResource, self).get_object_list(request)
 
