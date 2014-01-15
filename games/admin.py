@@ -35,7 +35,7 @@ class RunnerAdmin(admin.ModelAdmin):
 
 
 class GameAdmin(admin.ModelAdmin):
-    ordering = ("-updated", )
+    ordering = ("-created", )
     prepopulated_fields = {"slug": ("name",)}
     list_display = ('__unicode__', 'year', 'steamid',
                     'created', 'updated', 'is_public')
