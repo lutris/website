@@ -142,8 +142,8 @@ class Game(models.Model):
     title_logo = models.ImageField(upload_to='games/banners', blank=True)
     description = models.TextField(blank=True)
     is_public = models.BooleanField("Published on website", default=False)
-    created = models.DateTimeField(auto_now=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     flags = BitField(flags=(
         'open_source',
