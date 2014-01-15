@@ -45,5 +45,13 @@ class GameLibraryFactory(factory.DjangoModelFactory):
                 self.games.add(game)
 
 
+class RunnerFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = models.Runner
+    name = factory.Sequence(lambda n: 'runner%s' % n)
+
+
 class InstallerFactory(factory.DjangoModelFactory):
     FACTORY_FOR = models.Installer
+    runner = factory.SubFactory(RunnerFactory)
+    version = 'test'
+    user = factory.SubFactory(UserNoLibraryFactory)

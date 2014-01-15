@@ -102,6 +102,16 @@ class GameListByPlatform(GameList):
         return context
 
 
+def game_for_installer(request, slug):
+    """ Redirects to the game details page from a valid installer slug """
+    try:
+        installer = models.Installer.objects.fuzzy_get(slug)
+    except Installer.DoesNotExist:
+        raise Http404
+    game_slug = installer.game.slug
+    return redirect(reverse('game_detail', kwargs={'slug': game_slug}))
+
+
 def game_detail(request, slug):
     game = get_object_or_404(Game, slug=slug)
     banner_options = {'crop': 'top', 'blur': '14x6'}
