@@ -14,6 +14,16 @@ class TestGame(TestCase):
         game_list = models.Game.objects.published()
         self.assertNotIn(doom, game_list)
 
+    def test_published_games_only_gets_with_installers(self):
+        doom = factories.GameFactory(name="Doom", is_public=True)
+        factories.InstallerFactory(game=doom, version="test")
+        game_list = models.Game.objects.published()
+        self.assertIn(doom, game_list)
+
+        game_list = models.Game.objects.published()
+        factories.InstallerFactory(game=doom, version="test2")
+        self.assertEqual(len(game_list), 1)
+
 
 class TestGameLibrary(TestCase):
     def test_library_generated_by_user(self):

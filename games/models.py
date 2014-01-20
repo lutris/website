@@ -120,8 +120,9 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return self.get_query_set().filter(is_public=True,
-                                           installer__isnull=False)
+        return (self.get_query_set()
+                .filter(is_public=True)
+                .exclude(installer__isnull=True))
 
 
 class Game(models.Model):
