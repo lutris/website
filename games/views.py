@@ -195,6 +195,7 @@ def serve_installer(_request, slug):
     yaml_content['version'] = installer.version
     yaml_content['name'] = installer.game.name
     yaml_content['runner'] = installer.runner.slug
+    yaml_content['installer_slug'] = installer.slug
     content = yaml.safe_dump(yaml_content)
     return HttpResponse(content, content_type="application/yaml")
 
