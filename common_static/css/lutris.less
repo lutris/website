@@ -96,9 +96,18 @@ form {
   }
 }
 
+.page {
+  background-color: #2f2f2f;
+}
+
 .container{
   max-width: none !important;
   width: @siteWidth;
+  padding: 0;
+}
+
+.row {
+  margin: 0;
 }
 
 .footer {
@@ -172,7 +181,7 @@ form {
 .right {float: right;}
 
 .centering {
-  display: table-cell; 
+  display: table-cell;
   vertical-align: middle;
   text-align: center;
 }
@@ -187,16 +196,6 @@ form {
 }
 
 /* == Page Layout */
-.content { /* not used in code? */
-  width: @siteWidth;
-}
-#content {
-  background-color: #2f2f2f;
-  padding-top: 30px;
-}
-.page {
-}
-
 .navbar {
   box-shadow: 0 0 10px #000;
   font-weight: 300;
@@ -306,16 +305,15 @@ form {
   }
 }
 
-.content-box {
+.sunken-box {
   border-bottom: 2px solid @brandColor;
   background-color: #222;
   box-shadow: inset 0 0 30px #111;
-  height: 360px;
   font-weight: 300;
   text-align: left;
   padding: 20px;
-  margin: 35px 0;
   line-height: 1.8em;
+  display: block;
   h2 {
     font-weight: 300;
   }
@@ -657,25 +655,27 @@ form {
 }
 
 .main-button {
-  @backgroundColor: #DAF042;
-  @textColor: @linkColor;
-  color: darken(@linkColor, 10%);
-  display: block;
-  padding: 12px;
+  @backgroundColor: @brandColor;
+  @textColor: #222;
+  color: @textColor;
+  padding: 7px;
   background-color: @backgroundColor;
   text-align: center;
   font-size: .95em;
   font-weight: 500;
-  border: 1px solid darken(@backgroundColor, 30%);
-  border-radius: 3px;
+  #gradient > .vertical(@backgroundColor, lighten(@backgroundColor, 25%));
+  border-radius: 5px;
+  display: block;
+  box-shadow: 0 2px 3px #000;
   span {
     display: block;
     font-size: .95em;
-    color: #555;
+    color: #444;
     text-transform: capitalize;
   }
   &:hover {
-    background-color: lighten(@backgroundColor, 10%);
+    #gradient > .vertical(lighten(@backgroundColor, 5%), lighten(@backgroundColor, 30%));
+    color: #444;
     text-decoration: none;
   }
 }
