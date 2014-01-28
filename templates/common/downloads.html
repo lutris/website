@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-xs-9">
+    <h1>Downloads</h1>
+    <ul>
+      <li>
+        Ubuntu / Debian
+      </li>
+      <li>
+        Fedora / OpenSuse
+      </li>
+      <li>
+        ArchLinux
+      </li>
+      <li>
+        Gentoo
+      </li>
+      <li>
+        Generic Linux package
+      </li>
+      <li>
+        Development version
+        <p>
+        PS: Lutris is under heavy development, if you encounter issues please report them on
+        <a href="https://github.com/lutris/lutris/issues"><img src="{{ STATIC_URL }}images/icons/github-32.png" title="Github"></a>
+          or
+        <a href="irc://irc.freenode.org:6667/lutris"><img src="{{ STATIC_URL }}images/icons/chat-32.png" title="IRC (#lutris on Freenode)"></a>
+        </p>
+      </li>
+    </ul>
+
+  </div>
+</div>
+{% endblock %}

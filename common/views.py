@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 
 from common.models import News
 
@@ -10,6 +10,10 @@ def home(request):
     return render(request, 'home.html', {
         'news': news,
     })
+
+
+class Downloads(TemplateView):
+    template_name = "common/downloads.html"
 
 
 def news_archives(request):
