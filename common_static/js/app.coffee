@@ -5,12 +5,13 @@ set_active_menu = () ->
     menu_index = 0
   else if url.substr(0, 6) == '/about'
     menu_index = 1
+  else if url.substr(0, 10) == '/downloads'
+    menu_index = 2
   else if url.substr(0, 6) == '/games'
-     menu_index = 2
+    menu_index = 3
   else if url.substr(0, 5) == '/user'
-      menu_index = 3
+    menu_index = 4
   $('#main-nav li').eq(menu_index).addClass('active')
-
 
 $ ()->
   set_active_menu()
