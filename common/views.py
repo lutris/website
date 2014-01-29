@@ -15,6 +15,12 @@ def home(request):
 class Downloads(TemplateView):
     template_name = "common/downloads.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(Downloads, self).get_context_data(**kwargs)
+        context['version'] = '0.3.3'
+        context['download_url'] = 'http://lutris.net/releases/'
+        return context
+
 
 def news_archives(request):
     news = News.objects.all()

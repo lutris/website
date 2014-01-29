@@ -40,8 +40,12 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 1.8em;
+  border-bottom: 1px solid #444;
+  font-weight: 300;
+  box-shadow: 0 2px 2px rgba(0,0,0,.3);
+  padding: 3px 28px;
 }
+
 h2 { font-size: 1.4em; }
 h3 {
   color: #BBB;
@@ -334,6 +338,34 @@ form {
   }
 }
 
+.download-list {
+  padding: 0;
+  li {
+    list-style-type: none;
+  }
+  &>li {
+    padding: 15px 20px;
+    border-bottom: 2px solid @brandColor;
+    &:last-child {
+      border-bottom: none;
+    }
+    ul {
+      width: 200px;
+      border-right: 1px solid #444;
+      display: table-cell;
+    }
+    p {
+      display: table-cell;
+      padding: 7px 34px;
+      font-size: .9em;
+      color: #AEAEAE;
+    }
+  }
+  img {
+    margin: 7px;
+  }
+}
+
 .breadcrumb {
   margin: 0 0 20px;
   list-style: none;
@@ -382,6 +414,21 @@ form {
   }
   & > .active {
     color: #999999;
+  }
+}
+
+.footnote {
+  text-align: right;
+  font-size: .7em;
+  color: #888;
+  a {
+    color: #aaa;
+    border-bottom: 1px dotted rgba(150, 150, 150, .3);
+    &:hover {
+      text-decoration: none;
+      border-bottom-color: #aaa;
+
+    }
   }
 }
 
@@ -657,6 +704,7 @@ form {
 .main-button {
   @backgroundColor: @brandColor;
   @textColor: #222;
+  margin: auto;
   color: @textColor;
   padding: 7px;
   background-color: @backgroundColor;
@@ -666,6 +714,7 @@ form {
   #gradient > .vertical(@backgroundColor, lighten(@backgroundColor, 25%));
   border-radius: 5px;
   display: block;
+  width: 230px;
   box-shadow: 0 2px 3px #000;
   span {
     display: block;
