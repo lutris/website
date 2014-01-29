@@ -92,7 +92,7 @@ module.exports = function(grunt) {
         tasks: ['coffee', 'uglify:app']
       },
       templates: {
-        files: ['templates/**/*.jade']
+        files: ['templates/**/*.html']
       }
     }
   });

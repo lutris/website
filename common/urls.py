@@ -10,6 +10,7 @@ urlpatterns = patterns(
         name="homepage"),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
+    url(r'^downloads/$', views.Downloads.as_view(), name='downloads'),
     url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(),
         name='news_details'),
     url(r'news/all/?$', 'news_archives',

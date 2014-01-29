@@ -3,13 +3,11 @@
 {% load url from future %}
 
 {% block content %}
+<h1>Games</h1>
 <div class="row">
   <div class="col-xs-8">
     <div class="pane">
     <ul class='breadcrumb'>
-      <li>
-        <a href='{% url "game_list" %}'>Games</a>
-      </li>
       {% if genre %}
         <li>
           <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
@@ -74,11 +72,11 @@
           {% comment %}
 
           Still needs some further discussion on this.
-          - The "with installer" filter has become "without installer", 
+          - The "with installer" filter has become "without installer",
             this is mainly useful for the sites moderators, not the users.
-          - Noticed that most of the published games have an installer. 
+          - Noticed that most of the published games have an installer.
             Having published games without installer is a bug, not a feature :p
-          - I quickly tested this and didn't work as expected, would need 
+          - I quickly tested this and didn't work as expected, would need
             functionnal tests to ensure the filter does what it's meant to do.
 
           <div class="col-xs-10">

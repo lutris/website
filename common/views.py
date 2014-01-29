@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 
 from common.models import News
 
@@ -10,6 +10,16 @@ def home(request):
     return render(request, 'home.html', {
         'news': news,
     })
+
+
+class Downloads(TemplateView):
+    template_name = "common/downloads.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(Downloads, self).get_context_data(**kwargs)
+        context['version'] = '0.3.3'
+        context['download_url'] = 'http://lutris.net/releases/'
+        return context
 
 
 def news_archives(request):

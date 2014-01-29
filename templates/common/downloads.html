@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>Downloads</h1>
+<div class="row">
+  <div class="col-xs-12">
+    <p>
+      Lutris should be compatible with any up-to-date Linux distribution, it 
+      relies on the Python language and Gnome 3 libraries (but will run fine under 
+      any desktop environmment).
+    </p>
+    <ul class='download-list'>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/ubuntu.png'>Ubuntu
+          </li>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/debian.png'>Debian
+          </li>
+        </ul>
+        <p>
+        Download 
+        <a href='{{ download_url }}lutris_{{ version }}_all.deb'>lutris_{{ version }}_all.deb</a> 
+        and install it with the Software Center or gdebi.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/fedora.png'>Fedora
+          </li>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/open_suse.png'>OpenSuse
+          </li>
+        </ul>
+        <p>
+          Download 
+          <a href='{{ download_url }}lutris-{{ version }}-2.noarch.rpm'>lutris-{{ version }}-2.noarch.rpm</a> 
+          and install it with rpm.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/arch_linux.png'>ArchLinux
+          </li>
+        </ul>
+        <p>
+        You can get Lutris from the AUR repositories: 
+        <a href="https://aur.archlinux.org/packages/lutris/">https://aur.archlinux.org/packages/lutris/</a>.<br/>
+        or get the version from git:
+        <a href="https://aur.archlinux.org/packages/lutris-git/">https://aur.archlinux.org/packages/lutris-git/</a>.
+        (may be unstable, use with caution)
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src="{{ STATIC_URL }}images/icons/gentoo_linux.png">Gentoo
+          </li>
+        </ul>
+        <p>
+        Lutris is available in the official Gentoo repositories: 
+        <a href="http://packages.gentoo.org/package/games-util/lutris">http://packages.gentoo.org/package/games-util/lutris</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src="{{ STATIC_URL }}images/icons/package.png" alt="tar.gz package">tar.gz
+          </li>
+        </ul>
+        <p>
+        Lutris is available as a <a href="{{ download_url }}lutris_{{ version }}.tar.gz">tar.gz package</a>.
+        Install it by extracting the archive and running as root: <code>python setup.py install</code>
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src="{{ STATIC_URL }}images/icons/github-32.png" title="Github">Github
+          </li>
+        </ul>
+        <p>
+        Lutris is constantly evolving. If you want to try out the latest 
+        features or help with the development, you can get Lutris from Github:
+        <code>git clone http://github.com/lutris/lutris.git</code><br/>
+        Please report all problems on the 
+        <a href="https://github.com/lutris/lutris/issues">bugtracker</a>
+          or on
+        <a href="irc://irc.freenode.org:6667/lutris">IRC (#lutris on Freenode)</a>
+        </p>
+      </li>
+    </ul>
+    <p class="footnote">
+    Icons by 
+    <a href='http://www.fatcow.com/free-icons'>FatCow</a> under
+    <a href="http://creativecommons.org/licenses/by/3.0/us/">CC-BY-3.0-US</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

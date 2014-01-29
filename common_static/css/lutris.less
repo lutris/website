@@ -40,8 +40,12 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 1.8em;
+  border-bottom: 1px solid #444;
+  font-weight: 300;
+  box-shadow: 0 2px 2px rgba(0,0,0,.3);
+  padding: 3px 28px;
 }
+
 h2 { font-size: 1.4em; }
 h3 {
   color: #BBB;
@@ -96,9 +100,18 @@ form {
   }
 }
 
+.page {
+  background-color: #2f2f2f;
+}
+
 .container{
   max-width: none !important;
   width: @siteWidth;
+  padding: 0;
+}
+
+.row {
+  margin: 0;
 }
 
 .footer {
@@ -172,7 +185,7 @@ form {
 .right {float: right;}
 
 .centering {
-  display: table-cell; 
+  display: table-cell;
   vertical-align: middle;
   text-align: center;
 }
@@ -187,16 +200,6 @@ form {
 }
 
 /* == Page Layout */
-.content { /* not used in code? */
-  width: @siteWidth;
-}
-#content {
-  background-color: #2f2f2f;
-  padding-top: 30px;
-}
-.page {
-}
-
 .navbar {
   box-shadow: 0 0 10px #000;
   font-weight: 300;
@@ -306,16 +309,15 @@ form {
   }
 }
 
-.content-box {
+.sunken-box {
   border-bottom: 2px solid @brandColor;
   background-color: #222;
   box-shadow: inset 0 0 30px #111;
-  height: 360px;
   font-weight: 300;
   text-align: left;
   padding: 20px;
-  margin: 35px 0;
   line-height: 1.8em;
+  display: block;
   h2 {
     font-weight: 300;
   }
@@ -333,6 +335,34 @@ form {
   color: red;
   li {
     list-style-type: none;
+  }
+}
+
+.download-list {
+  padding: 0;
+  li {
+    list-style-type: none;
+  }
+  &>li {
+    padding: 15px 20px;
+    border-bottom: 2px solid @brandColor;
+    &:last-child {
+      border-bottom: none;
+    }
+    ul {
+      width: 200px;
+      border-right: 1px solid #444;
+      display: table-cell;
+    }
+    p {
+      display: table-cell;
+      padding: 7px 34px;
+      font-size: .9em;
+      color: #AEAEAE;
+    }
+  }
+  img {
+    margin: 7px;
   }
 }
 
@@ -384,6 +414,21 @@ form {
   }
   & > .active {
     color: #999999;
+  }
+}
+
+.footnote {
+  text-align: right;
+  font-size: .7em;
+  color: #888;
+  a {
+    color: #aaa;
+    border-bottom: 1px dotted rgba(150, 150, 150, .3);
+    &:hover {
+      text-decoration: none;
+      border-bottom-color: #aaa;
+
+    }
   }
 }
 
@@ -657,25 +702,29 @@ form {
 }
 
 .main-button {
-  @backgroundColor: #DAF042;
-  @textColor: @linkColor;
-  color: darken(@linkColor, 10%);
-  display: block;
-  padding: 12px;
+  @backgroundColor: @brandColor;
+  @textColor: #222;
+  margin: auto;
+  color: @textColor;
+  padding: 7px;
   background-color: @backgroundColor;
   text-align: center;
   font-size: .95em;
   font-weight: 500;
-  border: 1px solid darken(@backgroundColor, 30%);
-  border-radius: 3px;
+  #gradient > .vertical(@backgroundColor, lighten(@backgroundColor, 25%));
+  border-radius: 5px;
+  display: block;
+  width: 230px;
+  box-shadow: 0 2px 3px #000;
   span {
     display: block;
     font-size: .95em;
-    color: #555;
+    color: #444;
     text-transform: capitalize;
   }
   &:hover {
-    background-color: lighten(@backgroundColor, 10%);
+    #gradient > .vertical(lighten(@backgroundColor, 5%), lighten(@backgroundColor, 30%));
+    color: #444;
     text-decoration: none;
   }
 }
