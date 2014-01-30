@@ -317,6 +317,12 @@ form {
   }
 }
 
+.news-list {
+  article {
+    margin-left: 140px;
+  }
+}
+
 .news-image-preview {
   float: left;
   padding: 15px;
@@ -678,6 +684,9 @@ form {
     color :#DDD;
     text-decoration: none;
   }
+  .filter-link {
+    background-color: #666;
+  }
   .with-installer {
     background-color: @darkBackground;
     &:hover {
@@ -758,7 +767,7 @@ form {
   border-radius: 5px;
   display: block;
   width: 230px;
-  box-shadow: 0 2px 3px #000;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.5);
   span {
     display: block;
     font-size: .95em;
