@@ -5,7 +5,7 @@
         .carousel-inner.screenshots-slider
             for screenshot in screenshots
                 div(class="item {% if forloop.first %}active{% endif %}")
-                    div(class="centering")
+                    div(class="centered-vertical centered")
                         a(href="/media/{{ screenshot.image }}")
                             {% thumbnail screenshot.image '690x431' as img %}
                             img(src="{{ MEDIA_URL }}/{{ img }}", title="{{ screenshot.description }}")
