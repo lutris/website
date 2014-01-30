@@ -14,6 +14,9 @@
                 span(class="icon-prev") &nbsp;
             a(class='right carousel-control',href='#screenshots',data-slide='next')
                 span(class="icon-next") &nbsp;
+        ol(class="carousel-indicators")
+            for screenshot in screenshots
+                li(class="{% if forloop.first %}active{% endif %}", data-target="#screenshots", data-slide-to="{{ forloop.counter0 }}")
 
 block scripts
     script

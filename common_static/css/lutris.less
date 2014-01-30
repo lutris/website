@@ -536,29 +536,45 @@ form {
   padding-top: 4px;
 }
 
-.carousel-control, .carousel-control:focus {
-  opacity: 0;
-}
-.carousel-control:hover {
-  opacity: 1;
-}
-.carousel-control .icon-next {
-  right: 25px;
-}
-
 .carousel-control {
+  opacity: 0;
+  &:focus {
+    opacity: 0;
+    outline: none;
+  }
+  &:hover { opacity: 1; }
   .icon-prev {
+    left: 35px;
     &:before {
       content: '\25C0'; /* Left pointing arrow (U+25C0) */
     }
   }
   .icon-next {
+    right: 13px;
     &:before {
       content: '\25B6'; /* Right pointing arrow (U+25B6) */
     }
   }
 }
 
+.carousel-indicators {
+  bottom: auto;
+  left: 0;
+  margin-left: 10px;
+  text-align: left;
+  .active {
+    background-color: #cc6600;
+    box-shadow: 0 0 1px 2px #000 inset;
+    margin-right: 1px;
+  }
+  li {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #555;
+    height: 12px;
+    margin: 0 1px 0 0;
+    width: 12px;
+  }
+}
 .game-info {
   font-size: .8em;
   color: #DDD;
