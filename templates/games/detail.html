@@ -31,11 +31,7 @@
         <ul>
           {% for installer in installers %}
             <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
-              <span class='filter-link'>{{ installer.runner }}</span>
-              <span class='installer-name'>{{ installer.slug }}</span>
-              <span class="discreet-text">by {{ installer.user.username }}</span>
-              <div class="right">
-                <div class="btn-group">
+                <div class="btn-group right">
                   <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
                   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
@@ -60,13 +56,17 @@
                     </li>
                   </ul>
                 </div>
+              <div class="centering">
+                <span class='filter-link'>{{ installer.runner }}</span>
+                <span class='installer-name'>{{ installer.slug }}</span>
+                <span class="discreet-text">by {{ installer.user.username }}</span>
               </div>
+              {% if installer.description %}
               <p class="discreet-text">
-                {% if installer.description %}
                   {{ installer.description }}
                   <br />
-                {% endif %}
               </p>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>
