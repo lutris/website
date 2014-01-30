@@ -6,7 +6,7 @@
             for screenshot in screenshots
                 div(class="item {% if forloop.first %}active{% endif %}")
                     div(class="centering")
-                        {% thumbnail screenshot.image '690x430' as img %}
+                        {% thumbnail screenshot.image '690x431' as img %}
                         img(src="{{ MEDIA_URL }}/{{ img }}", title="{{ screenshot.description }}")
                         {% endthumbnail %}
         if screenshots.count > 1
