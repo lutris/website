@@ -666,8 +666,9 @@ form {
   margin: 0;
   .ul-reset;
   li {
+    border-bottom: 2px solid #252525;
     padding: 8px;
-    margin: 10px 0;
+    margin-bottom: 5px;
     background-color: @darkerBackground;
     &:hover {
       background-color: @darkBackground;
@@ -678,7 +679,7 @@ form {
     text-decoration: none;
   }
   .with-installer {
-    background-color: @darkBackground - #111;
+    background-color: @darkBackground;
     &:hover {
       background-color: @darkBackground + #111;
     }
@@ -687,20 +688,15 @@ form {
     }
   }
   .game-cover {
-    @width: 184px;
-    @height: 69px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
     float: left;
-    width: 184px;
-    height: @height;
     text-transform: uppercase;
-    line-height: @height;
+    line-height: 69px;
     background-color: #666;
     text-align: center;
     margin-right: 15px;
     color: #AAA;
     font-size: 1.5em;
-    border: 1px solid #AAA;
-    padding: 2px;
   }
   .game-title {
     font-size: 1.1em;
