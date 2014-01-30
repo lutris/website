@@ -9,10 +9,11 @@
                         {% thumbnail screenshot.image '690x430' as img %}
                         img(src="{{ MEDIA_URL }}/{{ img }}", title="{{ screenshot.description }}")
                         {% endthumbnail %}
-        a(class='left carousel-control',href='#screenshots',data-slide='prev')
-            span(class="icon-prev") &nbsp;
-        a(class='right carousel-control',href='#screenshots',data-slide='next')
-            span(class="icon-next") &nbsp;
+        if screenshots.count > 1
+            a(class='left carousel-control',href='#screenshots',data-slide='prev')
+                span(class="icon-prev") &nbsp;
+            a(class='right carousel-control',href='#screenshots',data-slide='next')
+                span(class="icon-next") &nbsp;
 
 block scripts
     script
