@@ -14,7 +14,7 @@ urlpatterns = patterns(
         name='games_by_year'),
     url(r'^genre/([\w-]+)/$', GameListByGenre.as_view(),
         name='games_by_genre'),
-    url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
+    #url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
     url(r'^by/([\w-]+)/$', GameListByCompany.as_view(),
         name='games_by_company'),
     url(r'^platform/(?P<slug>[\w\-]+)/$', GameListByPlatform.as_view(),
