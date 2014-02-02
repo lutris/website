@@ -115,7 +115,7 @@ form {
 }
 
 .footer {
-  border-top: 2px solid @brandColor;
+  border-top: 1px solid @brandColor;
   background-color: #222;
   box-shadow: inset 0 5px 20px #181818;
   margin-top: 20px;
@@ -145,10 +145,14 @@ form {
   }
 }
 
+.discreet-text {
+  color: #888;
+  font-size: .8em;
+}
+
 .warning-message {
   color: #FD3750;
 }
-
 
 .wrapper {
   min-height: 100%;
@@ -176,22 +180,27 @@ form {
   box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
 }
 
-.top-down-gradient(@start: #555, @end: #EEE) {
-  background: @end;
-  background: -webkit-gradient(linear, left top, left bottom, from(@start), to(@end));
-  background: -moz-linear-gradient(top,  @start,  @end);
-  filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@start', endColorstr='@end')");
+.four-colors-gradient(@1, @2, @3, @4) {
+  background: @1;
+  background: linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
+  background: -webkit-linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
+  background: -moz-linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
+  filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@1', endColorstr='@3')");
 }
+
 .right {float: right;}
 
-.centering {
+.centered-vertical {
   display: table-cell;
   vertical-align: middle;
-  text-align: center;
 }
 
 .centered {
   text-align: center;
+}
+
+.margin-auto {
+ margin: auto;
 }
 
 .ul-reset {
@@ -232,6 +241,21 @@ form {
     &:hover {
       color: #ccc;
       background-color: #555;
+    }
+  }
+}
+
+.dropdown-menu {
+  background-color: #555;
+  border: 0;
+  border-radius: 0 2px 2px 2px; 
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5);
+  margin-top: -1px;
+  li a {
+    color: #ccc;
+    &:hover {
+      background-color: #666;
+      color: #ddd;
     }
   }
 }
@@ -293,6 +317,12 @@ form {
   }
 }
 
+.news-list {
+  article {
+    margin-left: 140px;
+  }
+}
+
 .news-image-preview {
   float: left;
   padding: 15px;
@@ -310,7 +340,7 @@ form {
 }
 
 .sunken-box {
-  border-bottom: 2px solid @brandColor;
+  border-bottom: 1px solid @brandColor;
   background-color: #222;
   box-shadow: inset 0 0 30px #111;
   font-weight: 300;
@@ -345,7 +375,7 @@ form {
   }
   &>li {
     padding: 15px 20px;
-    border-bottom: 2px solid @brandColor;
+    border-bottom: 1px solid #555;
     &:last-child {
       border-bottom: none;
     }
@@ -446,15 +476,15 @@ form {
 
 .game-header, .page-header {
   position: relative;
-  margin: 0 0 20px;
+  margin: 0 0 5px;
   border: 0;
   .title {
-    .top-down-gradient(#111, @darkerBackground);
+    #gradient > .vertical(#111, @darkerBackground);
     color: #EEE;
     padding: 5px 0;
     span {
       color: #EDEDED;
-      font-weight: 200;
+      font-weight: 300;
       padding-left: 15px;
       font-size: 2em;
     }
@@ -469,6 +499,16 @@ form {
     float: right;
     margin-top: 7px;
     padding-right: 7px;
+  }
+}
+
+.home-description {
+  height: 290px;
+  .centered-vertical;
+  h2 { margin-top: 0; }
+  img {
+    cursor: zoom-in;
+    cursor: -webkit-zoom-in;
   }
 }
 
@@ -498,55 +538,72 @@ form {
   .message-view;
 }
 
-.screenshots {
-  .no-screenshots {
-    padding-top: 80px;
-    line-height: 80px;
-    background: rgba(0,0,0,.7);
-    text-align: center;
-    strong {
-      text-transform: uppercase;
-      font-size: 2.1em;
-      color: #777;
-      display: block;
-    }
+#screenshots {
+  box-shadow: 0 5px 5px -2px rgba(0,0,0,.6);
+  img {
+    cursor: zoom-in;
+    cursor: -webkit-zoom-in;
   }
 }
 
-.screenshots-slider .centering {
+.screenshots-slider .centered-vertical {
   background-color: #111;
   height: 430px;
   width: 690px;
   box-shadow: inset 0 0 60px #000;
 }
 
-.carousel-control, .carousel-control:focus {
-  opacity: 0;
-}
-.carousel-control:hover {
-  opacity: 1;
-}
-.carousel-control .icon-next {
-  right: 25px;
+.screenshots-bar {
+  background-color: #151515;
+  border-bottom: 1px solid #444;
+  height: 26px;
+  padding-right: 4px;
+  padding-top: 4px;
 }
 
 .carousel-control {
+  opacity: 0;
+  &:focus {
+    opacity: 0;
+    outline: none;
+  }
+  &:hover { opacity: 1; }
   .icon-prev {
+    left: 35px;
     &:before {
       content: '\25C0'; /* Left pointing arrow (U+25C0) */
     }
   }
   .icon-next {
+    right: 13px;
     &:before {
       content: '\25B6'; /* Right pointing arrow (U+25B6) */
     }
   }
 }
 
+.carousel-indicators {
+  bottom: auto;
+  left: 0;
+  margin-left: 10px;
+  text-align: left;
+  .active {
+    background-color: #cc6600;
+    box-shadow: 0 0 1px 2px #000 inset;
+    margin-right: 1px;
+  }
+  li {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #555;
+    height: 12px;
+    margin: 0 1px 0 0;
+    width: 12px;
+  }
+}
 .game-info {
   font-size: .8em;
   color: #DDD;
-  padding: 7px 14px;
+  padding: 0 14px;
   .banner {
     margin: 0 auto;
     display: block;
@@ -554,7 +611,7 @@ form {
   }
   ul {
     .ul-reset;
-    margin: 0;
+    margin-bottom: 10px;
   }
   li {
     padding: 7px 0;
@@ -615,8 +672,9 @@ form {
   margin: 0;
   .ul-reset;
   li {
+    border-bottom: 2px solid #252525;
     padding: 8px;
-    margin: 10px 0;
+    margin-bottom: 5px;
     background-color: @darkerBackground;
     &:hover {
       background-color: @darkBackground;
@@ -626,8 +684,11 @@ form {
     color :#DDD;
     text-decoration: none;
   }
+  .filter-link {
+    background-color: #666;
+  }
   .with-installer {
-    background-color: @darkBackground - #111;
+    background-color: @darkBackground;
     &:hover {
       background-color: @darkBackground + #111;
     }
@@ -636,20 +697,15 @@ form {
     }
   }
   .game-cover {
-    @width: 184px;
-    @height: 69px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
     float: left;
-    width: 184px;
-    height: @height;
     text-transform: uppercase;
-    line-height: @height;
+    line-height: 69px;
     background-color: #666;
     text-align: center;
     margin-right: 15px;
     color: #AAA;
     font-size: 1.5em;
-    border: 1px solid #AAA;
-    padding: 2px;
   }
   .game-title {
     font-size: 1.1em;
@@ -681,16 +737,14 @@ form {
     font-size: .8em;
     font-weight: 500;
     width: 184px + 2 * 7px;
-    margin: 14px;
+    margin-bottom: 20px;
     &:hover {
       background-color: #444;
       text-decoration: none;
     }
   }
-  .game-title {
-    height: 4em;
-    padding: 7px 0;
-  }
+  .game-cover { margin-bottom: 5px; }
+  .game-title { .discreet-text }
 }
 
 .pane {
@@ -703,19 +757,17 @@ form {
 
 .main-button {
   @backgroundColor: @brandColor;
-  @textColor: #222;
-  margin: auto;
-  color: @textColor;
+  color: #111;
   padding: 7px;
   background-color: @backgroundColor;
   text-align: center;
   font-size: .95em;
   font-weight: 500;
-  #gradient > .vertical(@backgroundColor, lighten(@backgroundColor, 25%));
+  .four-colors-gradient(#FF9900, #FFC433, #DD7700, #CC4400);
   border-radius: 5px;
   display: block;
   width: 230px;
-  box-shadow: 0 2px 3px #000;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.5);
   span {
     display: block;
     font-size: .95em;
@@ -723,8 +775,8 @@ form {
     text-transform: capitalize;
   }
   &:hover {
-    #gradient > .vertical(lighten(@backgroundColor, 5%), lighten(@backgroundColor, 30%));
-    color: #444;
+    .four-colors-gradient(#FF9900, #FFDF3D, #F29000, #CC4400);
+    color: #222;
     text-decoration: none;
   }
 }
@@ -755,32 +807,42 @@ form {
 
 .installer-list {
   background-color: @darkerBackground;
-  padding: 14px 7px;
 
   .installer-name {
     border-radius: 2px;
-    background-color: #666;
-    padding: 3px 7px;
+    background-color: #777;
+    color: #000;
     font-family: monospace;
     font-size: .8em;
+    padding: 3px 7px;
+    .rounded-corners(4px);
   }
   p {
-    margin-left: 7px;
-    margin-bottom: 0;
-    color: #999;
-    font-size: .8em;
+    margin: 7px 7px 0;
+    width: 80%;
   }
   ul {
     .ul-reset;
+    margin-bottom: 0;
   }
   .installer-details {
     .clearfix;
-    padding: 14px 0;
-    border-bottom: 1px solid #555;
+    padding: 14px 7px;
+    border-bottom: 1px solid #444;
+    .centered-vertical {
+      height: 33px;
+    }
   }
   .installer-unpublished {
     border-left: 2px solid #700;
     background-color: #333;
+  }
+  .new-installer {
+    background-color: #151515;
+    height: 25px;
+    a {
+      padding: 4px 4px 0;
+    }
   }
 }
 

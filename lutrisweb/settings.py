@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'common',
     'games',
     'accounts',
+    'tosec',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

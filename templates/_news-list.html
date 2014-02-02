@@ -1,20 +1,20 @@
 {% load thumbnail %}
 {% for article in news %}
-    <h4>{{ article.title }}
-      <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
-    </h4>
-    {% if article.image %}
-       {% thumbnail article.image '125x125' as image %}
-         <a href="{{ article.get_absolute_url }}">
-          <img src="{{ image.url }}" class="news-image-preview" />
-         </a>
-       {% endthumbnail %}
-    {% endif %}
-    <article>
-      {{ article.content|striptags|truncatewords:50 }}
-    </article>
-    <div>
-      <a href='{{ article.get_absolute_url }}'>Read more</a>
+    <div class="news-list">
+      <h4>{{ article.title }}
+        <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
+      </h4>
+      {% if article.image %}
+         {% thumbnail article.image '125x125' as image %}
+           <a href="{{ article.get_absolute_url }}">
+            <img src="{{ image.url }}" class="news-image-preview" />
+           </a>
+         {% endthumbnail %}
+      {% endif %}
+      <article>
+        {{ article.content|striptags|truncatewords:50 }}<br />
+        <a href='{{ article.get_absolute_url }}'>Read more</a>
+      </article>
     </div>
 {% empty %}
   <p>
