@@ -15,7 +15,7 @@ framework.
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lutrisweb.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lutrisweb.settings.production")
 os.environ.setdefault("PYTHONHASHSEED", "random")
 
 # This application object is used by any WSGI server configured to use this
