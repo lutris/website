@@ -19,7 +19,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	./manage.py test --noinput $(test)
+	DJANGO_SETTINGS_MODULE=lutrisweb.settings.tests ./manage.py test --noinput $(test)
 
 sysdeps:
 	sudo apt-get install postgresql-server-dev-9.1
