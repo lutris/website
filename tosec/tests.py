@@ -19,3 +19,9 @@ class TestTosecParser(TestCase):
         parser = TosecParser(self.dat_content)
         parser.parse()
         self.assertEqual(parser.headers['name'], parser.headers['category'])
+
+    def test_can_parse_games(self):
+        parser = TosecParser(self.dat_content)
+        parser.parse()
+        self.assertEqual(len(parser.games), 3)
+        self.assertIn('Blacjack', parser.games[0]['name'])
