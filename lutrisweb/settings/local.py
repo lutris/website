@@ -1,3 +1,4 @@
+import os
 from base import *  # noqa
 
 DATABASES = {
@@ -11,4 +12,4 @@ DATABASES = {
 }
 
 
-STEAM_API_KEY = os.environ['STEAM_API_KEY']
+STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
