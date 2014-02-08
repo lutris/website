@@ -5,7 +5,7 @@ TEMPLATE_DEBUG = DEBUG
 ENVIRONMENT = "dev"
 THUMBNAIL_DEBUG = False
 
-PROJECT_PATH = dirname(dirname(abspath(__file__)))
+PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
     ('Mathieu Comandon', 'strider@strycore.com'),
