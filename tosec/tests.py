@@ -24,4 +24,4 @@ class TestTosecParser(TestCase):
         parser = TosecParser(self.dat_content)
         parser.parse()
         self.assertEqual(len(parser.games), 3)
-        self.assertIn('Blacjack', parser.games[0]['name'])
+        self.assertIn('Blackjack', parser.games[0]['name'])
