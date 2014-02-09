@@ -134,11 +134,8 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
-DOWNLOADS = {
-    'ubuntu': RELEASES_URL + "lutris_0.3.3_all.deb",
-    'fedora': RELEASES_URL + "lutris-0.3.3-2.noarch.rpm",
-    'linux': RELEASES_URL + "lutris_0.3.3.tar.gz"
-}
+CLIENT_VERSION = "0.3.4"
+
 
 ## Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

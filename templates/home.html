@@ -4,17 +4,6 @@
 
 
 {% block content %}
-{% comment %}
-
-<div class='row'>
-  <div class="featured col-xs-9">
-    {% featured_slider %}
-  </div>
-  <div class="col-xs-3">
-  </div>
-
-</div>
-{% endcomment %}
 
 <div class="row sunken-box">
   <div class="col-xs-6">
@@ -26,7 +15,7 @@
   </div>
   <div class="col-xs-6">
     <div class="home-description">
-      <h2>Lutris 0.3.3</h2>
+      <h2>Lutris {{ client_version }}</h2>
       <p>
       Lutris is an open gaming platform for Linux. It helps you
       install and manage your games in a unified interface.<br />
@@ -35,7 +24,9 @@
       browser games. The desktop application and the website<br />
       are libre software, your contributions are welcome!
       </p>
-      {% download_links %}
+      <a href="{% url "downloads" %}" class='main-button'>
+        Get Lutris {{ client_version }}
+      </a>
     </div>
   </div>
 </div>

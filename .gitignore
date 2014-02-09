@@ -2,7 +2,7 @@
 tags
 lutris.db
 lutrisweb.log
-media/*
+media
 static/CACHE
 templates/docs/*.html
 lutris_client/

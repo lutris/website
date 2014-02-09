@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 from django.views.generic import DetailView, TemplateView
 
 from common.models import News
@@ -9,6 +10,7 @@ def home(request):
     news = News.objects.all()[:5]
     return render(request, 'home.html', {
         'news': news,
+        'client_version': settings.CLIENT_VERSION
     })
 
 
@@ -17,7 +19,7 @@ class Downloads(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Downloads, self).get_context_data(**kwargs)
-        context['version'] = '0.3.3'
+        context['version'] = settings.CLIENT_VERSION
         context['download_url'] = 'http://lutris.net/releases/'
         return context
 
