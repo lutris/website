@@ -243,6 +243,9 @@ form {
       background-color: #555;
     }
   }
+  .nav > .active > a {
+    color: @brandColor;
+  }
 }
 
 .dropdown-menu {
@@ -507,6 +510,7 @@ form {
   .centered-vertical;
   h2 { margin-top: 0; }
   img {
+    box-shadow: 0 1px 16px rgba(0, 0, 0, 0.7);
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
   }
@@ -743,7 +747,10 @@ form {
       text-decoration: none;
     }
   }
-  .game-cover { margin-bottom: 5px; }
+  .game-cover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 5px;
+  }
   .game-title { .discreet-text }
 }
 
