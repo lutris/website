@@ -219,7 +219,7 @@ def serve_installer_banner(_request, slug):
     if not game or not game.title_logo:
         raise Http404
     thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE,
-                              crop="top")
+                              crop="center")
     return redirect(thumbnail.url)
 
 
@@ -227,7 +227,8 @@ def serve_installer_icon(_request, slug):
     game = get_game_by_slug(slug)
     if not game or not game.icon:
         raise Http404
-    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="top")
+    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
+                              format="PNG")
     return redirect(thumbnail.url)
 
 
