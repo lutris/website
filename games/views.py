@@ -8,6 +8,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
@@ -248,7 +249,13 @@ def games_by_runner(request, runner_slug):
 def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        game = form.save()
+        # Notify admins a game has been submitted
+        body = """The game %s has been added""" % game.name
+        send_mail("New game submitted", body,
+                  settings.DEFAULT_FROM_EMAIL,
+                  settings.MANAGERS)
+
         return redirect(reverse("game-submitted"))
     return render(request, 'games/submit.html', {'form': form})
 
