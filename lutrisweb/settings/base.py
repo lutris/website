@@ -96,7 +96,6 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
     'django_jcrop',
-    'mithril',
     'crispy_forms',
     'django_select2',
     'django_nose',

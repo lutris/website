@@ -24,10 +24,6 @@ Celery==3.1.7
 pyjade==2.0.3
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
--e git+https://github.com/urbanairship/django-mithril.git#egg=django-mithril
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
 -e bzr+lp:~strycore/django-openid-auth/trunk#egg=django-openid-auth
-
-
-simplejson  # necessary until pull request in django-mithril gets accepted

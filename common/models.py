@@ -2,11 +2,8 @@ import datetime
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from markupfield.fields import MarkupField
-
-from mithril.models import Whitelist
 
 
 class News(models.Model):
@@ -32,12 +29,3 @@ class News(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super(News, self).save(*args, **kwargs)
-
-
-class SiteACL(models.Model):
-    site = models.OneToOneField(Site)
-    whitelist = models.ForeignKey(Whitelist, related_name='site_acl')
-
-    # pylint: disable=W0232, R0903
-    class Meta:
-        db_table = 'site_acl'

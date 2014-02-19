@@ -76,7 +76,6 @@ sqlsequencereset:
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset django_select2 >> sqlsequencereset.sql
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset djcelery >> sqlsequencereset.sql
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset games >> sqlsequencereset.sql
-	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset mithril >> sqlsequencereset.sql
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset south >> sqlsequencereset.sql
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py sqlsequencereset tastypie >> sqlsequencereset.sql
 	cat sqlsequencereset.sql | psql -U lutris_staging -h localhost lutris_staging
