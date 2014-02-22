@@ -6,6 +6,7 @@ from fabric.contrib import console
 from fabric.context_managers import prefix
 
 
+LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 RSYNC_EXCLUDE = (
     '.bzr',
     '.bzrignore',
@@ -38,7 +39,8 @@ def staging():
     env.user = 'django'
     env.environment = 'staging'
     env.domain = 'dev.lutris.net'
-    env.hosts = [env.domain]
+    env.port = '22101'
+    env.hosts = [env.domain + ':' + env.port]
     _setup_path()
 
 
@@ -81,7 +83,8 @@ def initial_setup():
     """Setup virtualenv"""
     run("mkdir -p %s" % env.root)
     with cd(env.root):
-        run('virtualenv --no-site-packages .')
+        run('virtualenv .')
+        run('git clone %s' % LUTRIS_REMOTE)
 
 
 def requirements():
