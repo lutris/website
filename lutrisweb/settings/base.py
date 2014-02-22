@@ -149,10 +149,7 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 ## Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
-#CELERY_ROUTES = {
-#    'accounts.tasks.sync_steam_library': {'queue': 'lutris'},
-#}
-
+BROKER_URL = 'amqp://guest:guest@localhost//'
 ## API Keys
 STEAM_API_KEY = "********************************"
 

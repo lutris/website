@@ -10,6 +10,7 @@ run:
 
 db:
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py syncdb --noinput
+	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py migrate accounts
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py migrate
 	DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py loaddata accounts/fixtures/superadmin.json
 

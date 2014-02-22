@@ -22,22 +22,11 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'common', ['News'])
 
-        # Adding model 'SiteACL'
-        db.create_table('site_acl', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('site', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['sites.Site'], unique=True)),
-            ('whitelist', self.gf('django.db.models.fields.related.ForeignKey')(related_name='site_acl', to=orm['mithril.Whitelist'])),
-        ))
-        db.send_create_signal(u'common', ['SiteACL'])
 
 
     def backwards(self, orm):
         # Deleting model 'News'
         db.delete_table('news')
-
-        # Deleting model 'SiteACL'
-        db.delete_table('site_acl')
-
 
     models = {
         u'accounts.user': {
@@ -84,24 +73,12 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"})
         },
-        u'common.siteacl': {
-            'Meta': {'object_name': 'SiteACL', 'db_table': "'site_acl'"},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'site': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['sites.Site']", 'unique': 'True'}),
-            'whitelist': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'site_acl'", 'to': u"orm['mithril.Whitelist']"})
-        },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'mithril.whitelist': {
-            'Meta': {'object_name': 'Whitelist'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         u'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},

@@ -80,11 +80,22 @@ Getting the site up and running for development
 Postgresql configuriguration
 ============================
 
+Quickstart:
+
+    sudo -u postgres psql
+    create user lutris;
+    create database lutris with owner lutris;
+    alter user lutris createdb;
+    alter database lutris owner to lutris;
+    alter user lutris with password 'admin';
+
+    
+
 Create a user:
 
     sudo -u postgres create user lutris
 
-Note that the user will need to be able to create databases in order to run 
+Note that the user will need to be able to create databases in order to run
 tests. If you have created an user without this permission, run:
 
     sudo -u postgres psql
@@ -93,7 +104,7 @@ tests. If you have created an user without this permission, run:
 Creating a database:
 
     sudo -u postgres psql
-    create database lutris_staging with owner lutris;
+    create database lutris with owner lutris;
 
 or (in shell)
 
@@ -102,7 +113,7 @@ or (in shell)
 Modify database's owner:
 
     sudo -u postgres psql
-    alter database lutris_staging owner to lutris;
+    alter database lutris owner to lutris;
 
 Change user's password:
 
