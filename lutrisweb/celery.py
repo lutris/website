@@ -5,7 +5,7 @@ import os
 from celery import Celery
 from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lutrisweb.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lutrisweb.settings.local')
 
 app = Celery('lutrisweb')
 app.config_from_object('django.conf:settings')

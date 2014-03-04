@@ -89,8 +89,6 @@ Quickstart:
     alter database lutris owner to lutris;
     alter user lutris with password 'admin';
 
-    
-
 Create a user:
 
     sudo -u postgres create user lutris
