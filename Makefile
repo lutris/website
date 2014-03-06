@@ -26,7 +26,7 @@ test:
 	DJANGO_SETTINGS_MODULE=lutrisweb.settings.tests ./manage.py test --noinput $(test)
 
 sysdeps:
-	sudo apt-get install postgresql-server-dev-9.1
+	sudo apt-get install libpq-dev python-dev nginx supervisord rabbitmq-server
 	pip install -r config/production.pip --exists-action=s
 
 deps:
