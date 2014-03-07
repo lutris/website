@@ -15,6 +15,9 @@ cd $DJANGODIR
 source ../bin/activate
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+export SECRET_KEY="the.secret.key"
+export DATABASE_PASSWORD="the.password"
+export STEAM_API_KEY="the.steam.key"
 
 RUNDIR=$(dirname $SOCKFILE)
 test -d $RUNDIR || mkdir -p $RUNDIR

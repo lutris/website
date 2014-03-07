@@ -9,7 +9,7 @@ server {
     client_max_body_size 4G;
 
     access_log /srv/lutris/logs/nginx-access.log;
-    error_log /src/lutris/logs/nginx-error.log;
+    error_log /srv/lutris/logs/nginx-error.log;
 
     location /static/ {
         alias /srv/lutris/lutris.net/static/;
