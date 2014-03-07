@@ -122,3 +122,11 @@ Dropping all tables from the database
 
     drop schema public cascade;
     create schema public;
+
+Backing up the database
+
+    pg_dump lutris > lutris.sql
+
+Restoring a backup
+
+    psql lutris < lutris.sql 
