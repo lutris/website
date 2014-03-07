@@ -4,7 +4,7 @@ from base import *  # noqa
 DEBUG = False
 MEDIA_URL = 'http://lutris.net/media/'
 
-ALLOWED_HOSTS = ('lutris.net', 'www.lutris.net', 'api.lutris.net')
+ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', ]
 
 SECRET_KEY = os.environ['SECRET_KEY']
 DATABASES = {
