@@ -2,3 +2,4 @@
 python-memcached
 psycopg2
 gunicorn
+setproctitle
