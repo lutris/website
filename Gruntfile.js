@@ -73,6 +73,7 @@ module.exports = function(grunt) {
           {flatten: true, expand: true, cwd: 'components/jcrop/js/', src: '**', dest: 'public/js/'},
           {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.css', dest: 'public/css/'},
           {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.js', dest: 'public/js/'},
+          {expand: true, cwd: 'components/select2-bootstrap-css/', src: '*.css', 'dest': 'public/css/'}
         ]
       }
     },
