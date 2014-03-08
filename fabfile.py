@@ -26,12 +26,13 @@ RSYNC_EXCLUDE = (
 )
 
 env.project = 'lutrisweb'
-env.home = '/srv/django'
+env.home = '/srv'
+env.name = 'lutris'
 
 
 def _setup_path():
-    env.root = join(env.home, env.domain)
-    env.code_root = join(env.root, env.project)
+    env.root = join(env.home, env.name)
+    env.code_root = join(env.root, env.domain)
 
 
 def staging():
@@ -49,6 +50,7 @@ def production():
     env.user = 'django'
     env.environment = 'production'
     env.domain = 'lutris.net'
+    env.port = '22101'
     env.hosts = [env.domain]
     _setup_path()
 
@@ -64,9 +66,9 @@ def touch_wsgi():
         run('touch lutrisweb.wsgi')
 
 
-def apache_reload():
+def nginx_reload():
     """ reload Apache on remote host """
-    sudo('service apache2 reload', shell=False)
+    sudo('service nginx reload', shell=False)
 
 
 def supervisor_restart():
@@ -198,7 +200,7 @@ def fix_perms(user='www-data', group=None):
 
 
 def configtest():
-    sudo("apache2ctl configtest")
+    sudo("service nginx configtest")
 
 
 def authorize(ip):
@@ -227,7 +229,7 @@ def deploy():
     fix_perms()
     update_vhost()
     configtest()
-    apache_reload()
+    nginx_reload()
     update_celery()
     supervisor_restart()
 
@@ -237,4 +239,4 @@ def fastdeploy():
     bower()
     grunt()
     collect_static()
-    touch_wsgi()
+    supervisor_restart()
