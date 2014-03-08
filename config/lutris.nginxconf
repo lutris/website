@@ -10,7 +10,7 @@ server {
 
 server {
     listen 80;
-    server_name *.lutris.net;
+    server_name lutris.net;
 
     client_max_body_size 4G;
 
