@@ -28,6 +28,7 @@ RSYNC_EXCLUDE = (
 env.project = 'lutrisweb'
 env.home = '/srv'
 env.name = 'lutris'
+env.settings_module = 'lutrisweb.settings.production'
 
 
 def _setup_path():
@@ -56,7 +57,12 @@ def production():
 
 
 def activate():
-    return prefix('. %s/bin/activate' % env.root)
+    return prefix(
+        'export DJANGO_SETTINGS_MODULE=%s && '
+        '. %s/bin/envvars && '
+        '. %s/bin/activate'
+        % (env.settings_module, env.root, env.root)
+    )
 
 
 def touch_wsgi():
@@ -186,7 +192,8 @@ def grunt():
 def collect_static():
     require('code_root', provided_by=('stating', 'production'))
     with cd(env.code_root):
-        run('source ../bin/activate; python manage.py collectstatic --noinput')
+        with activate():
+            run('./manage.py collectstatic --noinput')
 
 
 def fix_perms(user='www-data', group=None):
