@@ -4,7 +4,13 @@ upstream lutris_server {
 
 server {
     listen 80;
-    server_name dev.lutris.net;
+    server_name www.lutris.net;
+    return 301 $scheme://lutris.net$request_uri;
+}
+
+server {
+    listen 80;
+    server_name *.lutris.net;
 
     client_max_body_size 4G;
 
@@ -17,6 +23,16 @@ server {
 
     location /media/ {
         alias /srv/lutris/lutris.net/media/;
+    }
+
+    location /files {
+        alias /srv/files/;
+        autoindex on;
+    }
+
+    location /releases {
+        alias /srv/releases/;
+        autoindex on;
     }
 
     location / {
