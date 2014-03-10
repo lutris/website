@@ -29,7 +29,7 @@ urlpatterns = patterns(
         name='serve_installer'),
     url(r'install/(?P<slug>[\w\-]+).jpg', 'serve_installer_banner',
         name='serve_installer_banner'),
-    url(r'install/icon/(?P<slug>[\w\-]+).jpg', 'serve_installer_icon',
+    url(r'install/icon/(?P<slug>[\w\-]+).png', 'serve_installer_icon',
         name='serve_installer_icon'),
     url(r'(?P<slug>[\w\-]+)/installer/new/$', "new_installer",
         name="new_installer"),

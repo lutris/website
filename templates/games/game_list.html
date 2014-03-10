@@ -8,6 +8,9 @@
   <div class="col-xs-8">
     <div class="pane">
     <ul class='breadcrumb'>
+      <li>
+        <a href='/games'>All</a>
+      </li>
       {% if genre %}
         <li>
           <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
