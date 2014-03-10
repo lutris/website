@@ -5,7 +5,7 @@
         <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
       </h4>
       {% if article.image %}
-         {% thumbnail article.image '125x125' as image %}
+         {% thumbnail article.image '125x125' format='PNG' upscale=False as image %}
            <a href="{{ article.get_absolute_url }}">
             <img src="{{ image.url }}" class="news-image-preview" />
            </a>
