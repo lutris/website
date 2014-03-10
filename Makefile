@@ -23,7 +23,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	DJANGO_SETTINGS_MODULE=lutrisweb.settings.tests ./manage.py test --noinput $(test)
+	DJANGO_SETTINGS_MODULE=lutrisweb.settings.test ./manage.py test --noinput $(test)
 
 sysdeps:
 	sudo apt-get install libpq-dev python-dev nginx supervisor rabbitmq-server
