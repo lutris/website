@@ -89,8 +89,6 @@ Quickstart:
     alter database lutris owner to lutris;
     alter user lutris with password 'admin';
 
-    
-
 Create a user:
 
     sudo -u postgres create user lutris
@@ -124,3 +122,11 @@ Dropping all tables from the database
 
     drop schema public cascade;
     create schema public;
+
+Backing up the database
+
+    pg_dump lutris > lutris.sql
+
+Restoring a backup
+
+    psql lutris < lutris.sql 

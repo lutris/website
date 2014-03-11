@@ -26,7 +26,6 @@ class GameForm(forms.ModelForm):
 
     class Media:
         js = (
-            settings.STATIC_URL + "js/jquery.select2.min.js",
             settings.STATIC_URL + "js/jquery.Jcrop.min.js",
             settings.STATIC_URL + "js/jcrop-fileinput.js",
         )
