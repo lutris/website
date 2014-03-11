@@ -270,8 +270,7 @@ class Installer(models.Model):
             self.version = 'steam'
         else:
             installer_data = DEFAULT_INSTALLER
-        yaml_data = yaml.safe_dump(installer_data, default_flow_style=False)
-        self.content = yaml_data
+        self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
     def save(self, *args, **kwargs):
         self.slug = "%s-%s" % (
