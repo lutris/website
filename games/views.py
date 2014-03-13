@@ -256,7 +256,7 @@ def submit_game(request):
         body = """The game %s has been added""" % game.name
         send_mail("New game submitted", body,
                   settings.DEFAULT_FROM_EMAIL,
-                  settings.MANAGERS)
+                  settings.MANAGERS[0][1])
 
         return redirect(reverse("game-submitted"))
     return render(request, 'games/submit.html', {'form': form})
