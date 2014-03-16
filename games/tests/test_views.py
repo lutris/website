@@ -25,3 +25,7 @@ class TestInstallerViews(TestCase):
         self.assertRedirects(
             response, reverse('game_detail', kwargs={'slug': game.slug})
         )
+
+    def test_can_access_installer_feed(self):
+        response = self.client.get('/games/installer/feed/')
+        self.assertEqual(response.status_code, 200)

@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
+from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
@@ -200,6 +201,25 @@ def serve_installer(_request, slug):
     yaml_content['installer_slug'] = installer.slug
     content = yaml.safe_dump(yaml_content)
     return HttpResponse(content, content_type="application/yaml")
+
+
+class InstallerFeed(Feed):
+    title = "Lutris installers"
+    link = '/games/'
+    description = u"Latest lutris installers"
+    feed_size = 20
+
+    def items(self):
+        return Installer.objects.order_by("-created_at")[:self.feed_size]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.content
+
+    def item_link(self, item):
+        return item.get_absolute_url()
 
 
 def get_game_by_slug(slug):

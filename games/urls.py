@@ -1,23 +1,21 @@
 # pylint: disable=E1120, C0103
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
-from games.views import (GameList, GameListByYear,
-                         GameListByGenre, GameListByPlatform,
-                         GameListByCompany)
+from games import views
 
 
 urlpatterns = patterns(
     'games.views',
-    url(r'^$', GameList.as_view(),
+    url(r'^$', views.GameList.as_view(),
         name='game_list'),
-    url(r'^year/(\d+)/$', GameListByYear.as_view(),
+    url(r'^year/(\d+)/$', views.GameListByYear.as_view(),
         name='games_by_year'),
-    url(r'^genre/([\w-]+)/$', GameListByGenre.as_view(),
+    url(r'^genre/([\w-]+)/$', views.GameListByGenre.as_view(),
         name='games_by_genre'),
     #url(r'^runner/(?P<runner_slug>[\w\-]+)$', 'games_by_runner'),
-    url(r'^by/([\w-]+)/$', GameListByCompany.as_view(),
+    url(r'^by/([\w-]+)/$', views.GameListByCompany.as_view(),
         name='games_by_company'),
-    url(r'^platform/(?P<slug>[\w\-]+)/$', GameListByPlatform.as_view(),
+    url(r'^platform/(?P<slug>[\w\-]+)/$', views.GameListByPlatform.as_view(),
         name="games_by_plaform"),
     url(r'^add-game/$', 'submit_game',
         name='submit_game'),
@@ -39,6 +37,7 @@ urlpatterns = patterns(
         name='publish_installer'),
     url(r'(?P<slug>[\w\-]+)/installer/complete/$', 'installer_complete',
         name='installer_complete'),
+    url(r'installer/feed/$', views.InstallerFeed(), name='installer_feed'),
 
     url(r'([\w\-]+)/screenshot/add/', 'screenshot_add',
         name='screenshot_add'),
