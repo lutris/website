@@ -1,7 +1,5 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, R0901
-import yaml
-
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
@@ -269,7 +267,7 @@ def submit_game(request):
         body = """The game %s has been added""" % game.name
         send_mail("New game submitted", body,
                   settings.DEFAULT_FROM_EMAIL,
-                  settings.MANAGERS[0][1])
+                  settings.MANAGERS[0])
 
         return redirect(reverse("game-submitted"))
     return render(request, 'games/submit.html', {'form': form})

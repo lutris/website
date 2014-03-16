@@ -12,6 +12,7 @@ from crispy_forms.layout import Submit
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 
 from games import models
+from games.util.installer import ScriptValidator
 
 
 class GameForm(forms.ModelForm):
@@ -140,3 +141,16 @@ class InstallerForm(forms.ModelForm):
         except yaml.parser.ParserError:
             raise forms.ValidationError("Invalid YAML data (parse error)")
         return yaml.safe_dump(yaml_data, default_flow_style=False)
+
+    def clean(self):
+        dummy_installer = models.Installer(game=self.instance.game,
+                                           **self.cleaned_data)
+        validator = ScriptValidator(dummy_installer.as_dict())
+        if not validator.is_valid():
+            if not 'content' in self.errors:
+                self.errors['content'] = []
+            for error in validator.errors:
+                self.errors['content'].append(error)
+            raise forms.ValidationError("Invalid installer script")
+        else:
+            return self.cleaned_data
