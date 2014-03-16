@@ -118,6 +118,18 @@ class InstallerForm(forms.ModelForm):
         super(InstallerForm, self).__init__(*args, **kwargs)
         #self.fields['runner'].empty_label = None
 
+    def clean_version(self):
+        version = self.cleaned_data['version']
+        slug = self.instance.build_slug(version)
+        installer_exists = (models.Installer.objects
+                            .filter(slug=slug)
+                            .exclude(pk=self.instance.pk)
+                            .exists())
+        if installer_exists:
+            message = u"Installer for this version already exists"
+            raise forms.ValidationError(message)
+        return version
+
     def clean_content(self):
         """Verify that the content field is valid yaml"""
         yaml_data = self.cleaned_data["content"]

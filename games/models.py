@@ -283,10 +283,12 @@ class Installer(models.Model):
     def as_yaml(self):
         return yaml.safe_dump(self.as_dict())
 
+    def build_slug(self, version):
+        return "%s-%s" % (slugify(self.game.name)[:30],
+                          slugify(version)[:20])
+
     def save(self, *args, **kwargs):
-        self.slug = "%s-%s" % (
-            slugify(self.game.name)[:30], slugify(self.version)[:20]
-        )
+        self.slug = self.build_slug(self.version)
         return super(Installer, self).save(*args, **kwargs)
 
 
