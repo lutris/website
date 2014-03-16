@@ -272,6 +272,17 @@ class Installer(models.Model):
             installer_data = DEFAULT_INSTALLER
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
+    def as_dict(self):
+        yaml_content = yaml.safe_load(self.content) or {}
+        yaml_content['version'] = self.version
+        yaml_content['name'] = self.game.name
+        yaml_content['runner'] = self.runner.slug
+        yaml_content['self_slug'] = self.slug
+        return yaml_content
+
+    def as_yaml(self):
+        return yaml.safe_dump(self.as_dict())
+
     def save(self, *args, **kwargs):
         self.slug = "%s-%s" % (
             slugify(self.game.name)[:30], slugify(self.version)[:20]

@@ -11,6 +11,7 @@ class GameFactory(factory.DjangoModelFactory):
     name = factory.Iterator(['Doom', 'Quake', 'Unreal',
                              'Serious Sam', 'Duke 3D'])
     year = 1999
+    is_public = True
 
 
 class UserFactory(factory.DjangoModelFactory):

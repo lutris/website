@@ -193,14 +193,7 @@ def serve_installer(_request, slug):
         installer = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
-    # FIXME GTFO
-    yaml_content = yaml.safe_load(installer.content)
-    yaml_content['version'] = installer.version
-    yaml_content['name'] = installer.game.name
-    yaml_content['runner'] = installer.runner.slug
-    yaml_content['installer_slug'] = installer.slug
-    content = yaml.safe_dump(yaml_content)
-    return HttpResponse(content, content_type="application/yaml")
+    return HttpResponse(installer.as_yaml(), content_type="application/yaml")
 
 
 class InstallerFeed(Feed):
