@@ -15,8 +15,9 @@ urlpatterns = patterns(
     url(r'^contact/$',
         TemplateView.as_view(template_name='common/contact.html'),
         name='contact'),
+    url(r'news/$', 'news_archives',
+        name='news_archives'),
+    url(r'news/feed/$', views.NewsFeed()),
     url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(),
         name='news_details'),
-    url(r'news/all/?$', 'news_archives',
-        name='news_archives'),
 )

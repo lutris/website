@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.views.generic import DetailView, TemplateView
 
@@ -37,3 +38,22 @@ class NewsDetails(DetailView):
     def get_object(self):
         obj = super(NewsDetails, self).get_object()
         return obj
+
+
+class NewsFeed(Feed):
+    title = "Lutris news"
+    link = '/news/'
+    description = u"Latest news about Lutris"
+    feed_size = 20
+
+    def items(self):
+        return News.objects.order_by("-publish_date")[:self.feed_size]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.content
+
+    def item_link(self, item):
+        return item.get_absolute_url()
