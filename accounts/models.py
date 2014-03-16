@@ -10,11 +10,13 @@ class User(AbstractUser):
     steamid = models.CharField("Steam id", max_length=32, blank=True)
     website = models.URLField(blank=True)
 
-    def get_avatar_url(self):
+    @property
+    def avatar_url(self):
         if self.avatar:
-            return settings.MEDIA_URL + self.avatar
+            url = self.avatar.url
         else:
-            return settings.STATIC_URL + "images/default-avatar.png"
+            url = settings.STATIC_URL + "images/default-avatar.png"
+        return url
 
     def set_steamid(self):
         try:

@@ -5,7 +5,7 @@ block content
     .row
         .game-header
             .title
-                img(src='{{ user.get_avatar_url }}', width='128', height='128')
+                img(src='{{ user.avatar_url }}', width='128', height='128')
                 span {{ user }}
                 .buttons
                     a.btn(href="{% url 'profile_edit' user.username %}") Edit Profile
