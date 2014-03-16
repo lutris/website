@@ -80,6 +80,12 @@ Getting the site up and running for development
 Postgresql configuriguration
 ============================
 
+Note: If you don't want to setup PostgreSQL on your development machine, set the
+environment variable USE_SQLITE to any value.
+
+    export USE_SQLITE=1
+    make db
+
 Quickstart:
 
     sudo -u postgres psql
@@ -129,4 +135,4 @@ Backing up the database
 
 Restoring a backup
 
-    psql lutris < lutris.sql 
+    psql lutris < lutris.sql
