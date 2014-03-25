@@ -264,7 +264,7 @@ def submit_game(request):
     if request.method == "POST" and form.is_valid():
         game = form.save()
         # Notify admins a game has been submitted
-        body = """The game %s has been added""" % game.name
+        body = "The game %s has been added by %s" % (game.name, request.user)
         send_mail("New game submitted", body,
                   settings.DEFAULT_FROM_EMAIL,
                   settings.MANAGERS[0])
