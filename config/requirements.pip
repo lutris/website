@@ -23,6 +23,7 @@ requests==2.0.1
 Celery==3.1.7
 pyjade==2.0.3
 mimeparse
+mock>=1.0.1
 -e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop

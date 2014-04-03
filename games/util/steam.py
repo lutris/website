@@ -31,17 +31,16 @@ def steam_sync(steamid):
             settings.STEAM_API_KEY, steamid
         )
     )
-    response = requests.get(STEAM_API_URL + get_owned_games)
+    steam_games_url = STEAM_API_URL + get_owned_games
+    print steam_games_url
+    response = requests.get(steam_games_url)
     if response.status_code > 400:
+        print response.status_code
         raise ValueError("Invalid response from steam: %s", response)
-    try:
-        json_data = response.json()
-    except Exception as ex:
-        LOGGER.error("Error decoding response %s as json: %s",
-                     response.content, ex)
-        raise
+    json_data = response.json()
     response = json_data['response']
     if 'games' in response:
         return response['games']
     else:
         LOGGER.error("No games in response: %s", response)
+        return []
