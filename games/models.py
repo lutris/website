@@ -56,7 +56,7 @@ class Company(models.Model):
     website = models.CharField(max_length=128, blank=True)
 
     # pylint: disable=W0232, R0903
-    class Meta:
+    class Meta(object):
         """Additional configuration for model"""
         verbose_name_plural = "companies"
         ordering = ['name']
@@ -85,15 +85,14 @@ class Runner(models.Model):
     platforms = models.ManyToManyField(Platform)
 
     # pylint: disable=W0232, R0903
-    class Meta:
+    class Meta(object):
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        self.slug = slugify(self.name)
         return super(Runner, self).save(*args, **kwargs)
 
     @staticmethod
@@ -118,6 +117,11 @@ class Genre(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super(Genre, self).save()
 
     @staticmethod
     def autocomplete_search_fields():

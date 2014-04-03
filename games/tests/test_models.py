@@ -61,3 +61,30 @@ class TestInstallers(TestCase):
         installer_dict = installer.as_dict()
         self.assertEqual(installer_dict['name'], "Doom")
         self.assertEqual(installer_dict['runner'], "linux")
+
+
+class TestPlatform(TestCase):
+    def test_instanciation(self):
+        platform = models.Platform()
+        platform.name = 'Linux'
+        platform.save()
+        self.assertEqual(platform.slug, 'linux')
+        self.assertEqual(platform.__unicode__(), 'Linux')
+
+
+class TestCompany(TestCase):
+    def test_instanciation(self):
+        company = models.Company()
+        company.name = 'id Software'
+        company.save()
+        self.assertEqual(company.slug, 'id-software')
+        self.assertEqual(company.__unicode__(), 'id Software')
+
+
+class TestGenre(TestCase):
+    def test_instanciation(self):
+        genre = models.Genre()
+        genre.name = 'Platformer'
+        genre.save()
+        self.assertEqual(genre.slug, 'platformer')
+        self.assertEqual(genre.__unicode__(), 'Platformer')
