@@ -160,8 +160,8 @@ def migrate():
 def syncdb():
     require('code_root', provided_by=('staging', 'production'))
     with cd(env.code_root):
-        run("source ../bin/activate; "
-            "python manage.py syncdb --noinput")
+        with activate():
+            run("./manage.py syncdb --noinput")
 
 
 def clone():
