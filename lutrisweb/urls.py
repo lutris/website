@@ -32,3 +32,22 @@ if settings.DEBUG:
         (r'^media/(?P<path>.*)$', 'serve',
          {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     )
+
+import logging
+
+from importlib import import_module
+
+from django.conf import settings
+
+logger = logging.getLogger(__name__)
+
+signal_modules = {}
+
+for app in settings.INSTALLED_APPS:
+    signals_module = '%s.signals' % app
+    try:
+        logger.debug('loading "%s" ..' % signals_module)
+        signal_modules[app] = import_module(signals_module)
+    except ImportError as e:
+        logger.warning(
+            'failed to import "%s", reason: %s' % (signals_module, str(e)))
