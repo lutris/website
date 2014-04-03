@@ -103,19 +103,6 @@ def requirements():
                 % env.environment)
 
 
-def update_vhost():
-    tempfile = "/tmp/%(project)s.conf" % env
-    local('cp config/lutrisweb.conf ' + tempfile)
-    local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
-    local('sed -i s/%%PROJECT%%/%(project)s/g ' % env + tempfile)
-    local('sed -i s/%%ENV%%/%(environment)s/g ' % env + tempfile)
-    local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
-    put('/tmp/%(project)s.conf' % env, '%(root)s' % env)
-    sudo('cp %(root)s/%(project)s.conf ' % env +
-         '/etc/apache2/sites-available/%(domain)s.conf' % env, shell=False)
-    sudo('a2ensite %(domain)s.conf' % env, shell=False)
-
-
 def update_celery():
     tempfile = "/tmp/%(project)s-celery.conf" % env
     local('cp config/lutrisweb-celery.conf ' + tempfile)
@@ -234,8 +221,6 @@ def deploy():
     migrate()
     docs()
     fix_perms()
-    update_vhost()
-    configtest()
     nginx_reload()
     update_celery()
     supervisor_restart()
