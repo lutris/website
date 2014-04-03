@@ -29,6 +29,8 @@ class UserNoLibraryFactory(UserFactory):
     def _create(cls, target_class, *args, **kwargs):
         post_save.disconnect(create_library, User)
         user = super(UserFactory, cls)._create(target_class, *args, **kwargs)
+        user.set_password('password')
+        user.save()
         post_save.connect(create_library, User)
         return user
 
