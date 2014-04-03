@@ -153,8 +153,8 @@ def copy_local_settings():
 def migrate():
     require('code_root', provided_by=('staging', 'production'))
     with cd(env.code_root):
-        run("source ../bin/activate; "
-            "python manage.py migrate --no-initial-data")
+        with activate():
+            run("./manage.py migrate --no-initial-data")
 
 
 def syncdb():
