@@ -77,7 +77,7 @@ class Company(models.Model):
 
 
 class Runner(models.Model):
-    '''Model definition for the runners.'''
+    """ Model definition for the runners """
     name = models.CharField(_("Name"), max_length=127)
     slug = models.SlugField(unique=True)
     website = models.CharField(_("Website"), max_length=127, blank=True)
@@ -99,6 +99,12 @@ class Runner(models.Model):
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )
+
+
+class RunnerVersion(models.Model):
+    runner = models.ForeignKey(Runner)
+    version = models.CharField(max_length=32)
+    path = models.CharField(max_length=128, blank=True)
 
 
 class Genre(models.Model):

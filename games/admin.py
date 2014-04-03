@@ -29,9 +29,16 @@ class GenreAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
+class RunnerVersionInline(admin.TabularInline):
+    model = models.RunnerVersion
+
+
 class RunnerAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ("name", )}
     list_display = ('name', 'slug', 'website')
+    inlines = [
+        RunnerVersionInline,
+    ]
 
 
 class GameAdmin(admin.ModelAdmin):
