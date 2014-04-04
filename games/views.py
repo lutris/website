@@ -259,6 +259,7 @@ def games_by_runner(request, runner_slug):
                   {'games': games})
 
 
+@login_required
 def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
