@@ -4,28 +4,10 @@ from celery import task
 from django.template.defaultfilters import slugify
 
 import games.models
+from games.util.steam import create_game
 from accounts.models import User
 
 LOGGER = logging.getLogger()
-
-
-def create_game(game):
-    slug = slugify(game['name'])[:50]
-    LOGGER.info("Adding %s to library" % game['name'])
-    steam_game = games.models.Game(
-        name=game['name'],
-        steamid=game['appid'],
-        slug=slug,
-    )
-    if game['img_logo_url']:
-        steam_game.get_steam_logo(game['img_logo_url'])
-    steam_game.get_steam_icon(game['img_icon_url'])
-    try:
-        steam_game.save()
-    except Exception as ex:
-        LOGGER.error("Error while saving game %s: %s", game, ex)
-        raise
-    return steam_game
 
 
 @task

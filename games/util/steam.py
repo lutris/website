@@ -1,7 +1,9 @@
 import logging
 import urllib2
 import requests
+from django.template.defaultfilters import slugify
 from django.conf import settings
+from games.models import Game
 
 LOGGER = logging.getLogger(__name__)
 STEAM_API_URL = "http://api.steampowered.com/"
@@ -42,3 +44,23 @@ def steam_sync(steamid):
     else:
         LOGGER.error("No games in response: %s", response)
         return []
+
+
+def create_game(game):
+    """ Create game object from Steam API call """
+    slug = slugify(game['name'])[:50]
+    LOGGER.info("Adding %s to library" % game['name'])
+    steam_game = Game(
+        name=game['name'],
+        steamid=game['appid'],
+        slug=slug,
+    )
+    if game['img_logo_url']:
+        steam_game.get_steam_logo(game['img_logo_url'])
+    steam_game.get_steam_icon(game['img_icon_url'])
+    try:
+        steam_game.save()
+    except Exception as ex:
+        LOGGER.error("Error while saving game %s: %s", game, ex)
+        raise
+    return steam_game
