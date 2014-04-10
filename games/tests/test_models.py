@@ -49,18 +49,23 @@ class TestInstallers(TestCase):
         self.runner = factories.RunnerFactory(name='Linux')
         self.user = factories.UserFactory(first_name="test")
 
-    def test_can_access_full_dit_representation(self):
-        installer = models.Installer()
-        installer.slug = 'doom-shareware'
-        installer.version = 'shareware'
-        installer.game = self.game
-        installer.runner = self.runner
-        installer.user = self.user
-        installer.save()
+        self.installer = models.Installer()
+        self.installer.slug = 'doom-shareware'
+        self.installer.version = 'shareware'
+        self.installer.game = self.game
+        self.installer.runner = self.runner
+        self.installer.user = self.user
+        self.installer.save()
 
-        installer_dict = installer.as_dict()
+    def test_can_access_full_dit_representation(self):
+        installer_dict = self.installer.as_dict()
         self.assertEqual(installer_dict['name'], "Doom")
         self.assertEqual(installer_dict['runner'], "linux")
+
+    def test_installer_can_be_rendered_as_json(self):
+        json_data = self.installer.as_json()
+        self.assertIn("\"runner\": \"linux\"", json_data)
+        self.assertIn("\"slug\": \"doom-shareware\"", json_data)
 
 
 class TestPlatform(TestCase):

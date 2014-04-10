@@ -1,6 +1,7 @@
 """Models for main lutris app"""
 # pylint: disable=E1002
 import yaml
+import json
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -287,11 +288,14 @@ class Installer(models.Model):
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
         yaml_content['runner'] = self.runner.slug
-        yaml_content['self_slug'] = self.slug
+        yaml_content['slug'] = self.slug
         return yaml_content
 
     def as_yaml(self):
         return yaml.safe_dump(self.as_dict())
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
 
     def build_slug(self, version):
         return "%s-%s" % (slugify(self.game.name)[:30],
