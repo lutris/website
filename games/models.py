@@ -245,16 +245,20 @@ class InstallerManager(models.Manager):
             return self.get_query_set().filter(published=True)
 
     def fuzzy_get(self, slug):
+        """Return either the installer that matches exactly 'slug' or the
+        installers with game matching slug.
+        Installers are always returned in a list.
+        """
         try:
             installer = self.get_query_set().get(slug=slug)
-            return installer
+            return [installer]
         except ObjectDoesNotExist:
             installers = self.get_query_set().filter(game__slug=slug,
                                                      published=True)
             if not installers:
                 raise
             else:
-                return installers[0]
+                return installers
 
 
 class Installer(models.Model):

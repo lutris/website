@@ -105,9 +105,10 @@ class GameListByPlatform(GameList):
 def game_for_installer(request, slug):
     """ Redirects to the game details page from a valid installer slug """
     try:
-        installer = models.Installer.objects.fuzzy_get(slug)
+        installers = models.Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
+    installer = installers[0]
     game_slug = installer.game.slug
     return redirect(reverse('game_detail', kwargs={'slug': game_slug}))
 
@@ -188,9 +189,10 @@ def installer_complete(request, slug):
 def serve_installer(_request, slug):
     """ Serve the content of an installer in yaml format. """
     try:
-        installer = Installer.objects.fuzzy_get(slug)
+        installers = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
+    installer = installers[0]
     return HttpResponse(installer.as_yaml(), content_type="application/yaml")
 
 
@@ -214,9 +216,11 @@ class InstallerFeed(Feed):
 
 
 def get_game_by_slug(slug):
+    """Return game matching an installer slug or game slug"""
     game = None
     try:
-        installer = Installer.objects.fuzzy_get(slug)
+        installers = Installer.objects.fuzzy_get(slug)
+        installer = installers[0]
         game = installer.game
     except Installer.DoesNotExist:
         try:
@@ -227,7 +231,7 @@ def get_game_by_slug(slug):
 
 
 def serve_installer_banner(_request, slug):
-    """ Serve game title in an appropriate format for the client. """
+    """Serve game title in an appropriate format for the client."""
     game = get_game_by_slug(slug)
     if not game or not game.title_logo:
         raise Http404
