@@ -260,6 +260,10 @@ class InstallerManager(models.Manager):
             else:
                 return installers
 
+    def get_json(self, slug):
+        installers = self.fuzzy_get(slug)
+        return json.dumps([installer.as_dict() for installer in installers])
+
 
 class Installer(models.Model):
     """Game installer model"""

@@ -196,6 +196,14 @@ def serve_installer(_request, slug):
     return HttpResponse(installer.as_yaml(), content_type="application/yaml")
 
 
+def get_installers(request, slug):
+    try:
+        installers_json = Installer.objects.get_json(slug)
+    except Installer.DoesNotExist:
+        raise Http404
+    return HttpResponse(installers_json, content_type='application/json')
+
+
 class InstallerFeed(Feed):
     title = "Lutris installers"
     link = '/games/'

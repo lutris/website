@@ -25,6 +25,8 @@ urlpatterns = patterns(
 
     url(r'install/(?P<slug>[\w\-]+).yml', 'serve_installer',
         name='serve_installer'),
+    url(r'install/(?P<slug>[\w\-]+)/', 'get_installers',
+        name='get_installers'),
     url(r'install/(?P<slug>[\w\-]+).jpg', 'serve_installer_banner',
         name='serve_installer_banner'),
     url(r'install/icon/(?P<slug>[\w\-]+).png', 'serve_installer_icon',
