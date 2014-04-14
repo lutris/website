@@ -187,13 +187,13 @@ def installer_complete(request, slug):
 
 
 def serve_installer(_request, slug):
-    """ Serve the content of an installer in yaml format. """
+    """Serve the content of an installer in yaml format."""
     try:
         installers = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
     installer = installers[0]
-    return HttpResponse(installer.as_yaml(), content_type="application/yaml")
+    return HttpResponse(installer.as_yaml(), content_type='application/yaml')
 
 
 def get_installers(request, slug):

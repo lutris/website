@@ -8,8 +8,8 @@ from accounts.signals import create_library
 
 class GameFactory(factory.DjangoModelFactory):
     FACTORY_FOR = models.Game
-    name = factory.Iterator(['Doom', 'Quake', 'Unreal',
-                             'Serious Sam', 'Duke 3D'])
+    name = factory.Iterator(['Quake', 'Unreal', 'Serious Sam',
+                             'Duke 3D', 'Deus Ex'])
     year = 1999
     is_public = True
 
@@ -57,4 +57,5 @@ class InstallerFactory(factory.DjangoModelFactory):
     FACTORY_FOR = models.Installer
     runner = factory.SubFactory(RunnerFactory)
     version = 'test'
+    published = True
     user = factory.SubFactory(UserNoLibraryFactory)
