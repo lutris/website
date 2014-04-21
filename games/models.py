@@ -33,7 +33,7 @@ class Platform(models.Model):
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
-    default_installer = JSONField()
+    default_installer = JSONField(null=True)
 
     # pylint: disable=W0232, R0903
     class Meta:
