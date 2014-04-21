@@ -3,7 +3,6 @@ from os.path import join, dirname, abspath
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ENVIRONMENT = "dev"
 THUMBNAIL_DEBUG = False
 
 PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
@@ -12,10 +11,7 @@ ADMINS = (
     ('Mathieu Comandon', 'strider@strycore.com'),
 )
 MANAGERS = ADMINS
-INTERNAL_IPS = (
-    '127.0.0.1',
-    '192.168.0.10',
-)
+INTERNAL_IPS = ('127.0.0.1',)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -137,24 +133,24 @@ RELEASES_URL = "http://lutris.net/releases/"
 CLIENT_VERSION = "0.3.4"
 
 
-## Crispy forms
+# Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
-## Admin
+# Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
-## Email
+# Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
-## Celery
+# Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
 BROKER_URL = 'amqp://guest:guest@localhost//'
-## API Keys
+# API Keys
 STEAM_API_KEY = "********************************"
 
-## Logging
+# Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins']
 LOGGING = {
