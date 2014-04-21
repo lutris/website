@@ -251,6 +251,7 @@ def get_banner(request, slug):
 def serve_installer_banner(request, slug):
     return get_banner(request, slug)
 
+
 def get_icon(request, slug):
     game = get_game_by_slug(slug)
     if not game or not game.icon:

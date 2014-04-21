@@ -276,13 +276,19 @@ class InstallerManager(models.Manager):
                 return installers
 
     def get_json(self, slug):
-        installers = self.fuzzy_get(slug)
-        installer_data = [installer.as_dict() for installer in installers]
+        try:
+            installers = self.fuzzy_get(slug)
+        except ObjectDoesNotExist:
+            installer_data = []
+        else:
+            installer_data = [installer.as_dict() for installer in installers]
         try:
             game = Game.objects.get(slug=slug)
             installer_data += game.get_default_installers()
         except ObjectDoesNotExist:
             pass
+        if not installer_data:
+            raise Installer.ObjectDoesNotExist
         return json.dumps(installer_data)
 
 
