@@ -73,7 +73,7 @@ def touch_wsgi():
 
 
 def nginx_reload():
-    """ reload Apache on remote host """
+    """ reload Nginx on remote host """
     sudo('service nginx reload', shell=False)
 
 

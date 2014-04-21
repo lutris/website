@@ -23,14 +23,21 @@ urlpatterns = patterns(
         TemplateView.as_view(template_name='games/submitted.html'),
         name="game-submitted"),
 
-    url(r'install/(?P<slug>[\w\-]+).yml', 'serve_installer',
-        name='serve_installer'),
     url(r'install/(?P<slug>[\w\-]+)/', 'get_installers',
         name='get_installers'),
+    url(r'banner/?(<slug>[\w\-]+).jpg', 'get_banner',
+        name='get_banner'),
+    url(r'icon/?(<slug>[\w\-]+).png', 'get_icon',
+        name='get_icon'),
+
+    # Legacy URLs, do be removed with Lutris 0.4
+    url(r'install/(?P<slug>[\w\-]+).yml', 'serve_installer',
+        name='serve_installer'),  # Legacy yaml installer url
     url(r'install/(?P<slug>[\w\-]+).jpg', 'serve_installer_banner',
-        name='serve_installer_banner'),
+        name='serve_installer_banner'),  # Legacy banner url
     url(r'install/icon/(?P<slug>[\w\-]+).png', 'serve_installer_icon',
-        name='serve_installer_icon'),
+        name='serve_installer_icon'),  # Legacy icon url
+
     url(r'(?P<slug>[\w\-]+)/installer/new/$', "new_installer",
         name="new_installer"),
     url(r'(?P<slug>[\w\-]+)/installer/edit/$', 'edit_installer',

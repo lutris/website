@@ -238,7 +238,7 @@ def get_game_by_slug(slug):
     return game
 
 
-def serve_installer_banner(_request, slug):
+def get_banner(request, slug):
     """Serve game title in an appropriate format for the client."""
     game = get_game_by_slug(slug)
     if not game or not game.title_logo:
@@ -248,13 +248,21 @@ def serve_installer_banner(_request, slug):
     return redirect(thumbnail.url)
 
 
-def serve_installer_icon(_request, slug):
+def serve_installer_banner(request, slug):
+    return get_banner(request, slug)
+
+def get_icon(request, slug):
     game = get_game_by_slug(slug)
     if not game or not game.icon:
         raise Http404
     thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
                               format="PNG")
     return redirect(thumbnail.url)
+
+
+def serve_installer_icon(request, slug):
+    """ Legacy url, remove by Lutris 0.4 """
+    return get_icon(request, slug)
 
 
 def game_list(request):
