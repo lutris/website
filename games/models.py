@@ -12,6 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from bitfield import BitField
+from jsonfield import JSONField
 
 from games import managers
 from games.util import steam
@@ -32,6 +33,7 @@ class Platform(models.Model):
     name = models.CharField(_('Name'), max_length=127)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
+    default_installer = JSONField()
 
     # pylint: disable=W0232, R0903
     class Meta:
