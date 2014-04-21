@@ -6,6 +6,11 @@ from accounts.models import User
 from accounts.signals import create_library
 
 
+class PlatformFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = models.Platform
+    name = 'Amiga'
+
+
 class GameFactory(factory.DjangoModelFactory):
     FACTORY_FOR = models.Game
     name = factory.Iterator(['Quake', 'Unreal', 'Serious Sam',

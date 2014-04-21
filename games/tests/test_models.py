@@ -24,6 +24,20 @@ class TestGame(TestCase):
         factories.InstallerFactory(game=doom, version="test2")
         self.assertEqual(len(game_list), 1)
 
+    def test_game_can_return_a_default_installer(self):
+        snes = factories.PlatformFactory(name='SNES')
+        snes.default_installer = {
+            'main_file': 'rom',
+            'files': [{'rom': 'N/A'}],
+            'installer': [{'merge': {'src': 'rom', 'dst': '$GAMEDIR'}}]
+        }
+        snes.save()
+        super_mario_world = factories.GameFactory(name="Super Mario World")
+        super_mario_world.platforms.add(snes)
+        default_installers = super_mario_world.get_default_installers()
+        self.assertTrue(default_installers)
+        self.assertEqual(default_installers[0]['slug'], 'super-mario-world-snes')
+
 
 class TestGameLibrary(TestCase):
     def test_library_generated_by_user(self):

@@ -215,6 +215,17 @@ class Game(models.Model):
         else:
             return True
 
+    def get_default_installers(self):
+        installers = []
+        for platform in self.platforms.all():
+            if platform.default_installer:
+                installer = platform.default_installer
+                installer['name'] = self.name
+                installer['version'] = platform.slug
+                installer['slug'] = "-".join((self.slug, platform.slug))
+                installers.append(installer)
+        return installers
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
