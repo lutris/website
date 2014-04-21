@@ -182,7 +182,8 @@ class Game(models.Model):
         return ("name__icontains",)
 
     def has_installer(self):
-        return self.installer_set.count() > 0 or self.get_default_installers()
+        return self.installer_set.count() > 0 \
+            or bool(self.get_default_installers())
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
