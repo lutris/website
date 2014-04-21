@@ -288,7 +288,7 @@ class InstallerManager(models.Manager):
         except ObjectDoesNotExist:
             pass
         if not installer_data:
-            raise Installer.ObjectDoesNotExist
+            raise Installer.DoesNotExist
         return json.dumps(installer_data)
 
 
