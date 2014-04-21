@@ -6,7 +6,6 @@ MEDIA_URL = 'http://lutris.net/media/'
 
 ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', ]
 
-SECRET_KEY = os.environ['SECRET_KEY']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

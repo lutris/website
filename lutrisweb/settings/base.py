@@ -1,3 +1,4 @@
+import os
 from os.path import join, dirname, abspath
 
 DEBUG = True
@@ -45,7 +46,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SECRET_KEY = '******************************************************'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 TEMPLATE_LOADERS = (
     ('pyjade.ext.django.Loader', (
