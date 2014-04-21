@@ -182,7 +182,7 @@ class Game(models.Model):
         return ("name__icontains",)
 
     def has_installer(self):
-        return self.installer_set.count() > 0
+        return self.installer_set.count() > 0 or self.get_default_installers()
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
@@ -222,7 +222,8 @@ class Game(models.Model):
                 installer = platform.default_installer
                 installer['name'] = self.name
                 installer['version'] = platform.slug
-                installer['slug'] = "-".join((self.slug, platform.slug))
+                installer['slug'] = "-".join((self.slug[:30],
+                                              platform.slug[:20]))
                 installers.append(installer)
         return installers
 
@@ -275,7 +276,13 @@ class InstallerManager(models.Manager):
 
     def get_json(self, slug):
         installers = self.fuzzy_get(slug)
-        return json.dumps([installer.as_dict() for installer in installers])
+        installer_data = [installer.as_dict() for installer in installers]
+        try:
+            game = Game.objects.get(slug=slug)
+            installer_data += game.get_default_installers()
+        except ObjectDoesNotExist:
+            pass
+        return json.dumps(installer_data)
 
 
 class Installer(models.Model):

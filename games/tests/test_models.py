@@ -38,6 +38,8 @@ class TestGame(TestCase):
         self.assertTrue(default_installers)
         self.assertEqual(default_installers[0]['slug'], 'super-mario-world-snes')
 
+        self.assertTrue(super_mario_world.has_installer())
+
 
 class TestGameLibrary(TestCase):
     def test_library_generated_by_user(self):
