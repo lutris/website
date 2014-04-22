@@ -11,7 +11,7 @@ class TestGame(TestCase):
 
     def test_game_list_filters_game_with_no_installers(self):
         doom = factories.GameFactory(name="Doom")
-        game_list = models.Game.objects.published()
+        game_list = models.Game.objects.with_installer()
         self.assertNotIn(doom, game_list)
 
     def test_published_games_only_gets_with_installers(self):

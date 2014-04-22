@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -23,14 +23,14 @@ class GameList(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        queryset = Game.objects.published()
-        installers = Installer.objects.published().values("game_id")
-        search_terms = self.request.GET.get('q')
         without_installer = self.request.GET.get('without_installer')
+        if without_installer:
+            queryset = Game.objects.published()
+        else:
+            queryset = Game.objects.with_installer()
+        search_terms = self.request.GET.get('q')
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
-        if not without_installer:
-            queryset = queryset.filter(id__in=installers)
         return queryset
 
     def get_context_data(self, **kwargs):

@@ -3,6 +3,7 @@
 import yaml
 import json
 from django.db import models
+from django.db.models import Q, Count
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
@@ -133,9 +134,18 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return (self.get_query_set()
-                .filter(is_public=True)
-                .exclude(installer__isnull=True))
+        return self.get_query_set().filter(is_public=True)
+
+    def with_installer(self):
+        return (
+            self.get_query_set().filter(
+                Q(installer__isnull=False) |
+                Q(platforms__default_installer__isnull=False)
+            )
+            .order_by('name')
+            .annotate(installer_count=Count('installer'))
+            .annotate(default_installer_count=Count('platforms'))
+        )
 
 
 class Game(models.Model):
