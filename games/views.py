@@ -27,7 +27,7 @@ class GameList(ListView):
         if without_installer:
             queryset = Game.objects.published()
         else:
-            queryset = Game.objects.with_installer()
+            queryset = Game.objects.published().with_installer()
         search_terms = self.request.GET.get('q')
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
