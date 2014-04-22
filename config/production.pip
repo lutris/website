@@ -1,5 +1,4 @@
 -r requirements.pip
 python-memcached
-psycopg2
 gunicorn
 setproctitle
