@@ -1,15 +1,16 @@
 
 Getting the site up and running for development
 
-* Install virtualenvwrapper
+* Install virtualenvwrapper::
 
     sudo pip install virtualenvwrapper
 
-  If you run into problems with recent versions of Ubuntu, install it from the repos:
+  If you run into problems with recent versions of Ubuntu, install it from
+  the repos::
 
     sudo apt-get install virtualenvwrapper
 
-* Configure your zshrc / bashrc to support virtualenvwrapper, add:
+* Configure your zshrc / bashrc to support virtualenvwrapper, add::
 
     ubuntu_venvwrapper="/etc/bash_completion.d/virtualenvwrapper"
     if [ -f $ubuntu_venvwrapper ]; then
@@ -21,34 +22,34 @@ Getting the site up and running for development
         fi
     fi
 
-* Create a virtualenv
+* Create a virtualenv::
 
     mkvirtualenv lutrisweb
 
-* cd in the directory and set the virtualenv project path
+* cd in the directory and set the virtualenv project path::
 
     cd lutrisweb
     setvirtualenvproject
 
-* Right after creating the lutris virtualenv, it should be activated (it should
-  show the virtualenv name at the beginning of your bash / zsh prompt). Latter
-  on to activate the environment, run:
+* Right after creating the lutris virtualenv, it should be activated (it
+  should show the virtualenv name at the beginning of your bash / zsh
+  prompt). Latter on to activate the environment, run::
 
     workon lutrisweb
 
-* Once the virtualenv is activated, install the dependencies
+* Once the virtualenv is activated, install the dependencies::
 
     cdproject
     make deps
 
-* Install the required system dependencies
+* Install the required system dependencies::
 
     sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
 
-* Install a recent version of nodejs and grunt. On Fedora, you can
-  install the nodejs from the repos. When nodejs and grunt are installed, you
-  can install grunt dependencies for the project.
-  Install bower components.
+* Install a recent version of nodejs and grunt. On Fedora, you can install
+  the nodejs from the repos. When nodejs and grunt are installed, you can
+  install grunt dependencies for the project. 
+  Install bower components::
 
     sudo add-apt-repository ppa:chris-lea/node.js
     sudo apt-get install nodejs
@@ -57,20 +58,21 @@ Getting the site up and running for development
     npm install
     bower install
 
-* Make the SQLite database
+* Make the SQLite database::
 
     make db
 
-* Get the source code for the Lutris client, this will allow to build the installer's docs.
+* Get the source code for the Lutris client, this will allow to build the
+  installer's docs::
 
     make client
 
-* Make sure that everything is in order and run the test suite.
+* Make sure that everything is in order and run the test suite::
 
     make test
 
-* Run the dev server and tell grunt to watch for changes in less / coffeescript
-  files and start coding
+* Run the dev server and tell grunt to watch for changes in less /
+  coffeescript files and start coding::
 
     make run
     # in a separate shell
@@ -80,13 +82,13 @@ Getting the site up and running for development
 Postgresql configuriguration
 ============================
 
-Note: If you don't want to setup PostgreSQL on your development machine, set the
-environment variable USE_SQLITE to any value.
+Note: If you don't want to setup PostgreSQL on your development machine,
+set the environment variable USE_SQLITE to any value::
 
     export USE_SQLITE=1
     make db
 
-Quickstart:
+Quickstart::
 
     sudo -u postgres psql
     create user lutris;
@@ -95,44 +97,44 @@ Quickstart:
     alter database lutris owner to lutris;
     alter user lutris with password 'admin';
 
-Create a user:
+Create a user::
 
     sudo -u postgres create user lutris
 
-Note that the user will need to be able to create databases in order to run
-tests. If you have created an user without this permission, run:
+Note that the user will need to be able to create databases in order to
+run tests. If you have created an user without this permission, run::
 
     sudo -u postgres psql
     ALTER USER lutris CREATEDB;
 
-Creating a database:
+Creating a database::
 
     sudo -u postgres psql
     create database lutris with owner lutris;
 
-or (in shell)
+or (in shell)::
 
     createdb lutris -O lutris
 
-Modify database's owner:
+Modify database's owner::
 
     sudo -u postgres psql
     alter database lutris owner to lutris;
 
-Change user's password:
+Change user's password::
 
     sudo -u postgres psql
     alter user lutris with password 'admin';
 
-Dropping all tables from the database
+Dropping all tables from the database::
 
     drop schema public cascade;
     create schema public;
 
-Backing up the database
+Backing up the database::
 
     pg_dump lutris > lutris.sql
 
-Restoring a backup
+Restoring a backup::
 
     psql lutris < lutris.sql
