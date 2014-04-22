@@ -138,7 +138,9 @@ class GameManager(models.Manager):
 
     def with_installer(self):
         return (
-            self.get_query_set().filter(
+            self.get_query_set()
+            .filter(is_public=True)
+            .filter(
                 Q(installer__isnull=False) |
                 Q(platforms__default_installer__isnull=False)
             )
