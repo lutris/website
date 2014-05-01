@@ -1,5 +1,5 @@
 """Views for lutris main app"""
-# pylint: disable=E1101, R0901, W0613
+# pylint: disable=E1101, W0613
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView

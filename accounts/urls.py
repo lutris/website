@@ -1,4 +1,4 @@
-# pylint: diasble=C0103, C0301
+# pylint: disable=C0103, C0301
 from django.conf.urls import patterns, url
 from django.contrib.auth import views as auth_views
 
