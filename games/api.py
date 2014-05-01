@@ -1,3 +1,4 @@
+# pylint: disable=W0232
 from django.conf.urls import url
 from tastypie.resources import ModelResource
 from tastypie.authentication import ApiKeyAuthentication

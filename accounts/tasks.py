@@ -22,7 +22,7 @@ def sync_steam_library(user_id):
     for game in steam_games:
         LOGGER.info("Adding %s to %s's library", game['name'], user.username)
         if not game['img_icon_url']:
-            LOGGER.info("Game %s has no icon" % game['name'])
+            LOGGER.info("Game %s has no icon", game['name'])
             continue
         try:
             steam_game = games.models.Game.objects.get(steamid=game['appid'])

@@ -1,9 +1,9 @@
 setuptools>=1.1.0
 PyYAML
 Django>=1.6.2
-Pillow==2.2.2
+Pillow==2.4.0
 South>=0.8.4
-pylint>=1.0.0
+pylint>=1.2.1
 ipython>=1.1.0
 nose
 coverage==3.7

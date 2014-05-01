@@ -7,7 +7,7 @@ from django.conf import settings
 
 from tastypie.models import create_api_key
 
-import models
+from . import models
 LOGGER = logging.getLogger(__name__)
 
 

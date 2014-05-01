@@ -122,10 +122,10 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save()
+        return super(Genre, self).save(*args, **kwargs)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -180,7 +180,7 @@ class Game(models.Model):
     objects = GameManager()
 
     # pylint: disable=W0232, R0903
-    class Meta:
+    class Meta(object):
         ordering = ['name']
         permissions = (
             ('can_publish_game', "Can make the game visible"),

@@ -1,9 +1,9 @@
 """Views for lutris main app"""
-# pylint: disable=E1101, R0901
+# pylint: disable=E1101, R0901, W0613
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
