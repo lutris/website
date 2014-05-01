@@ -1,4 +1,4 @@
-# pylint: diasble=W0232, R0903
+# pylint: disable=W0232, R0903
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
