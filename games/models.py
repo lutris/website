@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=E1002
+# pylint: disable=E1002, E0202
 import yaml
 import json
 from django.db import models
