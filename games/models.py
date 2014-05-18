@@ -249,6 +249,12 @@ class Game(models.Model):
         return super(Game, self).save(*args, **kwargs)
 
 
+class GameMetadata(models.Model):
+    game = models.ForeignKey(Game)
+    key = models.CharField(max_length=16)
+    value = models.CharField(max_length=255)
+
+
 class Screenshot(models.Model):
     """Screenshots for games"""
     game = models.ForeignKey(Game)
