@@ -49,6 +49,16 @@ class TosecParser(object):
         key, raw_value = line.split(' ', 1)
         return key, raw_value.strip("\"")
 
+    def extract_rom(self, line):
+        line = line[1:-1]  # Strip of parenthesis
+        parts = smart_split(line, sep='"')
+        game_dict = {}
+        for i in range(0, len(parts) - 1, 2):
+            key = parts[i]
+            value = parts[i + 1].strip('"')
+            game_dict[key] = value
+        return game_dict
+
     def extract_line(self, line, item):
         if line == ')':
             return True
@@ -56,7 +66,10 @@ class TosecParser(object):
             parts = self.parse_line(line)
             if parts[1] == '(':
                 return
-            item[parts[0]] = parts[1]
+            if parts[0] == 'rom':
+                item['rom'] = self.extract_rom(parts[1])
+            else:
+                item[parts[0]] = parts[1]
 
     def parse(self):
         headers_ok = False

@@ -13,9 +13,6 @@ class Command(BaseCommand):
             with open(filename, 'r') as tosec_dat:
                 dat_contents = tosec_dat.readlines()
 
-            for l in dat_contents:
-                print l
-
             tosec_parser = TosecParser(dat_contents)
             tosec_parser.parse()
 
