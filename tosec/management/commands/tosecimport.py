@@ -1,4 +1,5 @@
 from pprint import pprint
+from tosec import models
 from tosec.parser import TosecParser
 from django.core.management.base import BaseCommand
 
@@ -16,5 +17,29 @@ class Command(BaseCommand):
             tosec_parser = TosecParser(dat_contents)
             tosec_parser.parse()
 
+            category = models.Category(
+                name=tosec_parser.headers['name'],
+                description=tosec_parser.headers['description'],
+                category=tosec_parser.headers['category'],
+                version=tosec_parser.headers['version'],
+                author=tosec_parser.headers['author'],
+            )
+            category.save()
+
             for game in tosec_parser.games:
-                pprint(game)
+                game_row = models.Game(
+                    category=category,
+                    name=game['name'],
+                    description=game['description'],
+                )
+                game_row.save()
+                rom = game['rom']
+                rom_row = models.Rom(
+                    game=game_row,
+                    name=rom['name'],
+                    size=rom['size'],
+                    crc=rom['crc'],
+                    md5=rom['md5'],
+                    sha1=rom['sha1'],
+                )
+                rom_row.save()

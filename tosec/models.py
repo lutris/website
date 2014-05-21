@@ -11,6 +11,9 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta(object):
+        verbose_name_plural = 'Categories'
+
 
 class Game(models.Model):
     category = models.ForeignKey(Category)

@@ -50,7 +50,7 @@ class TosecParser(object):
         return key, raw_value.strip("\"")
 
     def extract_rom(self, line):
-        line = line[1:-1]  # Strip of parenthesis
+        line = line[1:-1]  # Strip parenthesis
         parts = smart_split(line, sep='"')
         game_dict = {}
         for i in range(0, len(parts) - 1, 2):
