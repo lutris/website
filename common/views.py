@@ -35,9 +35,8 @@ class NewsDetails(DetailView):
     template_name = 'common/news_details.html'
     context_object_name = 'news'
 
-    def get_object(self):
-        obj = super(NewsDetails, self).get_object()
-        return obj
+    def get_object(self, queryset=None):
+        return super(NewsDetails, self).get_object()
 
 
 class NewsFeed(Feed):

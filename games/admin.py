@@ -41,6 +41,10 @@ class RunnerAdmin(admin.ModelAdmin):
     ]
 
 
+class GameMetadataInline(admin.TabularInline):
+    model = models.GameMetadata
+
+
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     prepopulated_fields = {"slug": ("name",)}
@@ -57,6 +61,9 @@ class GameAdmin(admin.ModelAdmin):
     formfield_overrides = {
         BitField: {'widget': BitFieldCheckboxSelectMultiple}
     }
+    inlines = [
+        GameMetadataInline,
+    ]
 
 
 class ScreenshotAdmin(admin.ModelAdmin):

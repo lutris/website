@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=E1002
+# pylint: disable=E1002, E0202
 import yaml
 import json
 from django.db import models
@@ -122,10 +122,10 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save()
+        return super(Genre, self).save(*args, **kwargs)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -180,7 +180,7 @@ class Game(models.Model):
     objects = GameManager()
 
     # pylint: disable=W0232, R0903
-    class Meta:
+    class Meta(object):
         ordering = ['name']
         permissions = (
             ('can_publish_game', "Can make the game visible"),
@@ -247,6 +247,12 @@ class Game(models.Model):
             self.slug = slugify(self.name)[:50]
         self.download_steam_capsule()
         return super(Game, self).save(*args, **kwargs)
+
+
+class GameMetadata(models.Model):
+    game = models.ForeignKey(Game)
+    key = models.CharField(max_length=16)
+    value = models.CharField(max_length=255)
 
 
 class Screenshot(models.Model):

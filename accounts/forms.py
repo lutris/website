@@ -1,3 +1,4 @@
+# pylint: disable=W0232, R0903
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
@@ -58,7 +59,7 @@ class RegistrationForm(forms.ModelForm):
         help_text="Enter the same password as above, for verification."
     )
 
-    class Meta:
+    class Meta(object):
         model = User
         fields = ("username", "email")
 
@@ -74,7 +75,7 @@ class RegistrationForm(forms.ModelForm):
         # but it sets a nicer error message than the ORM. See #13147.
         username = self.cleaned_data["username"]
         try:
-            User._default_manager.get(username=username)
+            User.objects.get(username=username)
         except User.DoesNotExist:
             return username
         raise forms.ValidationError(self.error_messages['duplicate_username'])
@@ -104,7 +105,7 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = User
         fields = ('website', 'avatar', 'email')
 

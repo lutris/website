@@ -16,7 +16,7 @@ from games.util.installer import ScriptValidator
 
 
 class GameForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = models.Game
         fields = ('name', 'year', 'website',
                   'platforms', 'genres', 'description', 'title_logo')
@@ -25,7 +25,8 @@ class GameForm(forms.ModelForm):
             'genres': Select2MultipleWidget,
         }
 
-    class Media:
+    class Media(object):
+        # pylint: disable=C0103
         js = (
             settings.STATIC_URL + "js/jquery.Jcrop.min.js",
             settings.STATIC_URL + "js/jcrop-fileinput.js",
@@ -79,14 +80,10 @@ class GameForm(forms.ModelForm):
 class FeaturedForm(forms.ModelForm):
     class Meta:
         model = models.Featured
-        #widgets = {
-        #    'image': JCropImageWidget(attrs={'ratio': '3.09'})
-        #}
 
 
 class ScreenshotForm(forms.ModelForm):
-
-    class Meta:
+    class Meta(object):
         model = models.Screenshot
         fields = ('image', 'description')
 
@@ -117,7 +114,6 @@ class InstallerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
-        #self.fields['runner'].empty_label = None
 
     def clean_version(self):
         version = self.cleaned_data['version']
@@ -147,7 +143,7 @@ class InstallerForm(forms.ModelForm):
                                            **self.cleaned_data)
         validator = ScriptValidator(dummy_installer.as_dict())
         if not validator.is_valid():
-            if not 'content' in self.errors:
+            if 'content' not in self.errors:
                 self.errors['content'] = []
             for error in validator.errors:
                 self.errors['content'].append(error)
