@@ -5,7 +5,8 @@ def is_separator(char):
 def smart_split(string, sep=None):
     sep_map = {
         '(': ')',
-        '<': '>',
+        '( ': ' )',
+        '<': '/>',
         '{': '}',
         '[': ']',
     }
@@ -13,11 +14,13 @@ def smart_split(string, sep=None):
     word = ''
     in_word = False
     end_sep = sep_map.get(sep, sep)
-    for char in string:
-        if char == sep and not in_word:
-            in_word = True
-        elif char == end_sep and in_word:
-            in_word = False
+    for i in range(len(string)):
+        if sep:
+            if string[i:i + len(sep)] == sep and not in_word:
+                in_word = True
+            elif string[i - len(sep) + 1:i + 1] == end_sep and in_word:
+                in_word = False
+        char = string[i]
         if is_separator(char) and not in_word:
             if word:
                 splits.append(word)

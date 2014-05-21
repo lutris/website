@@ -42,3 +42,11 @@ class TestSplitter(TestCase):
         string = "rom (bli blu) foo bar"
         expected = ['rom', '(bli blu)', 'foo', 'bar']
         self.assertEqual(smart_split(string, sep="("), expected)
+
+    def test_can_split_multiple_chars(self):
+        string = 'rom ( name "Atlantis (1983)(Imagic)(EU-US).bin" size 4096 )'
+        expected = [
+            'rom',
+            '( name "Atlantis (1983)(Imagic)(EU-US).bin" size 4096 )'
+        ]
+        self.assertEqual(smart_split(string, sep='( '), expected)
