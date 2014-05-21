@@ -1,6 +1,6 @@
 import os
 from django.test import TestCase
-from .parser import TosecParser
+from .parser import TosecParser, smart_split
 
 
 class TestTosecParser(TestCase):
@@ -25,3 +25,15 @@ class TestTosecParser(TestCase):
         parser.parse()
         self.assertEqual(len(parser.games), 3)
         self.assertIn('Blackjack', parser.games[0]['name'])
+
+
+class TestSplitter(TestCase):
+    def test_can_normally_split_strings(self):
+        string = "aaa bbb   ccc      ddd\t\teee"
+        expected = ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
+        self.assertEqual(smart_split(string), expected)
+
+    def test_can_split_with_special_delimiter(self):
+        string = "name \"aaa bbb ccc\" id 1"
+        expected = ['name', '"aaa bbb ccc"', 'id', '1']
+        self.assertEqual(smart_split(string, sep='"'), expected)

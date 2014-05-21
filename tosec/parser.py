@@ -1,10 +1,35 @@
+def is_separator(char):
+    return char == ' ' or char == '\t'
+
+
+def smart_split(string, sep=None):
+    splits = []
+    word = ''
+    in_word = False
+    #end_sep = sep
+    for char in string:
+        if char == sep:
+            in_word = not in_word
+        if is_separator(char) and not in_word:
+            if word:
+                splits.append(word)
+                word = ''
+        else:
+            word += char
+    if word:
+        splits.append(word)
+    return splits
+
+
 class TosecParser(object):
     def __init__(self, contents):
+        """contents is an list containing the lines of a Tosec dat file"""
         self.contents = contents
         self.headers = {}
         self.games = []
 
     def _iter_contents(self):
+        """Iterate over the dat's contents"""
         for line in self.contents:
             yield line
 
