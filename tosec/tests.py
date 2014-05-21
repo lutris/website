@@ -37,3 +37,8 @@ class TestSplitter(TestCase):
         string = "name \"aaa bbb ccc\" id 1"
         expected = ['name', '"aaa bbb ccc"', 'id', '1']
         self.assertEqual(smart_split(string, sep='"'), expected)
+
+    def test_can_split_with_dual_separator(self):
+        string = "rom (bli blu) foo bar"
+        expected = ['rom', '(bli blu)', 'foo', 'bar']
+        self.assertEqual(smart_split(string, sep="("), expected)

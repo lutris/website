@@ -3,13 +3,21 @@ def is_separator(char):
 
 
 def smart_split(string, sep=None):
+    sep_map = {
+        '(': ')',
+        '<': '>',
+        '{': '}',
+        '[': ']',
+    }
     splits = []
     word = ''
     in_word = False
-    #end_sep = sep
+    end_sep = sep_map.get(sep, sep)
     for char in string:
-        if char == sep:
-            in_word = not in_word
+        if char == sep and not in_word:
+            in_word = True
+        elif char == end_sep and in_word:
+            in_word = False
         if is_separator(char) and not in_word:
             if word:
                 splits.append(word)
