@@ -95,6 +95,7 @@ class TosecNamingConvention(object):
         r'(?P<title>.*?) '
         r'(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*'
         r'\((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)'
+        r'\((?P<publisher>.*?)\)'
     )
 
     def __init__(self, name):
