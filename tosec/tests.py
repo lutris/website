@@ -1,6 +1,6 @@
 import os
 from django.test import TestCase
-from .parser import TosecParser, smart_split
+from .parser import TosecParser, TosecNamingConvention, smart_split
 
 
 class TestTosecParser(TestCase):
@@ -50,3 +50,60 @@ class TestSplitter(TestCase):
             '( name "Atlantis (1983)(Imagic)(EU-US).bin" size 4096 )'
         ]
         self.assertEqual(smart_split(string, sep='( '), expected)
+
+
+class TestNamingConvention(TestCase):
+
+    def test_can_parse_demo(self):
+        name = "Legend of TOSEC, The (demo-playable) (1986)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.demo, 'demo-playable')
+
+        name = "Legend of TOSEC, The (demo) (1986)(Devstudio)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.demo, 'demo')
+
+    def test_can_parse_date(self):
+        name = "Legend of TOSEC, The (19xx)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '19xx')
+
+        name = "Legend of TOSEC, The (200x)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '200x')
+
+        name = "Legend of TOSEC, The (1986)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '1986')
+
+        name = "Legend of TOSEC, The (199x)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '199x')
+
+        name = "Legend of TOSEC, The (2001-01)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '2001-01')
+
+        name = "Legend of TOSEC, The (1986-06-21)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '1986-06-21')
+
+        name = "Legend of TOSEC, The (19xx-12)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '19xx-12')
+
+        name = "Legend of TOSEC, The (19xx-12-25)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '19xx-12-25')
+
+        name = "Legend of TOSEC, The (19xx-12-2x)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.date, '19xx-12-2x')
+
+        name = "Legend of TOSEC, The (19xx-12-2abc)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertFalse(tosec_name.date)
+
+        name = "Legend of TOSEC, The (99)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertFalse(tosec_name.date)

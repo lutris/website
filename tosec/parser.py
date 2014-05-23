@@ -1,3 +1,6 @@
+import re
+
+
 def is_separator(char):
     return char == ' ' or char == '\t'
 
@@ -85,3 +88,31 @@ class TosecParser(object):
                 if game_ok:
                     self.games.append(game)
                     game = {}
+
+
+class TosecNamingConvention(object):
+    def __init__(self, name):
+        self.name = name
+        self.demo = None
+        self.date = None
+        self.parse()
+
+    def parse(self):
+        parsers = [
+            self.parse_demo,
+            self.parse_date,
+        ]
+        for parser in parsers:
+            parser()
+
+    def parse_demo(self):
+        demo_re = r' \((?P<demo>demo(?:-[a-z]{5,9})*)\) '
+        demo_match = re.search(demo_re, self.name)
+        if demo_match:
+            self.demo = demo_match.group('demo')
+
+    def parse_date(self):
+        date_re = r' \((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)'
+        date_match = re.search(date_re, self.name)
+        if date_match:
+            self.date = date_match.group('date')
