@@ -117,3 +117,16 @@ class TestNamingConvention(TestCase):
         name = "Legend of TOSEC, The (1986)(Devstudio)"
         tosec_name = TosecNamingConvention(name)
         self.assertEqual(tosec_name.publisher, 'Devstudio')
+
+    def test_can_get_system(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(+ 2)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.system, '+ 2')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(A4000)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.system, 'A4000')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(XBox360)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertFalse(tosec_name.system)

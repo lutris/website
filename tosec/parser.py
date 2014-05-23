@@ -1,4 +1,5 @@
 import re
+from . import constants
 
 
 def is_separator(char):
@@ -91,14 +92,18 @@ class TosecParser(object):
 
 
 class TosecNamingConvention(object):
+    systems = [s.replace('+', '\+') for s in constants.SYSTEMS_FLAGS]
     tosec_re = (
         r'(?P<title>.*?) '
         r'(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*'
         r'\((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)'
         r'\((?P<publisher>.*?)\)'
+        r'(?:\((?P<system>%s)\))*' % '|'.join(systems)
     )
 
+
     def __init__(self, name):
+        print self.tosec_re
         self.matches = re.search(self.tosec_re, name)
 
     def __getattr__(self, name):
