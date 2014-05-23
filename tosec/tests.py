@@ -107,3 +107,8 @@ class TestNamingConvention(TestCase):
         name = "Legend of TOSEC, The (99)"
         tosec_name = TosecNamingConvention(name)
         self.assertFalse(tosec_name.date)
+
+    def test_can_get_title(self):
+        name = "Legend of TOSEC, The (199x)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.title, "Legend of TOSEC, The")
