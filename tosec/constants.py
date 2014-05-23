@@ -65,3 +65,20 @@ SYSTEMS_FLAGS = {
     'VS DualSystem': "Nintendo NES",
     'VS UniSystem': "Nintendo NES",
 }
+
+
+VIDEO_FLAGS = {
+    'CGA': "?",
+    'EGA': "?",
+    'HGC': "?",
+    'MCGA': "?",
+    'MDA': "?",
+    'NTSC': "?",
+    'NTSC-PAL': "?",
+    'PAL': "?",
+    'PAL-60': "?",
+    'PAL-NTSC': "?",
+    'SVGA': "?",
+    'VGA': "?",
+    'XGA': "?",
+}
