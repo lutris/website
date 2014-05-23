@@ -7,9 +7,9 @@ DEMO_FLAGS = {
 }
 
 SYSTEMS_FLAGS = {
-    '+': "2 Sinclair ZX Spectrum",
-    '+': "2a Sinclair ZX Spectrum",
-    '+': "3 Sinclair ZX Spectrum",
+    '+ 2': "Sinclair ZX Spectrum",
+    '+ 2a': "Sinclair ZX Spectrum",
+    '+ 3': "Sinclair ZX Spectrum",
     '130XE': "Atari 8-bit",
     'A1000': "Commodore Amiga",
     'A1200': "Commodore Amiga",
@@ -38,11 +38,11 @@ SYSTEMS_FLAGS = {
     'CD32': "Commodore Amiga",
     'CDTV': "Commodore Amiga",
     'Computrainer': "Nintendo NES",
-    'Doctor': "PC Jr. Nintendo NES",
+    'Doctor PC Jr.': "Nintendo NES",
     'ECS': "Commodore Amiga",
     'ECS-AGA': "Commodore Amiga",
     'Executive': "Osborne OSBORNE 1 & Executive",
-    'Mega': "ST Atari ST",
+    'Mega ST': "Atari ST",
     'Mega-STE': "Atari ST",
     'OCS': "Commodore Amiga",
     'OCS-AGA': "Commodore Amiga",
@@ -62,6 +62,6 @@ SYSTEMS_FLAGS = {
     'TT': "Atari ST",
     'TURBO-R': "GT MSX",
     'TURBO-R': "ST MSX",
-    'VS': "DualSystem Nintendo NES",
-    'VS': "UniSystem Nintendo NES",
+    'VS DualSystem': "Nintendo NES",
+    'VS UniSystem': "Nintendo NES",
 }
