@@ -1,4 +1,3 @@
-from pprint import pprint
 from tosec import models
 from tosec.parser import TosecParser
 from django.core.management.base import BaseCommand
@@ -40,6 +39,6 @@ class Command(BaseCommand):
                     size=rom['size'],
                     crc=rom['crc'],
                     md5=rom['md5'],
-                    sha1=rom['sha1'],
+                    sha1=rom.get('sha1', ''),
                 )
                 rom_row.save()
