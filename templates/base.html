@@ -12,6 +12,7 @@
   <link type="text/css" href="{{ STATIC_URL }}css/lutris.css" rel="stylesheet" />
   {% block stylesheets %}
   {% endblock %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 </head>
 <body>
       {% if messages %}
@@ -111,7 +112,6 @@
   {% block scripts %}
 
   {% endblock %}
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
   <script src={{ STATIC_URL }}js/bootstrap.min.js></script>
   <script src={{ STATIC_URL }}js/app.js></script>
   <script>
