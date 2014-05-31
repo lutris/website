@@ -71,6 +71,7 @@ class TosecParser(object):
             if parts[1] == '(':
                 return
             if parts[0] == 'rom':
+                # FIXME there can be multiple roms in one entry
                 item['rom'] = self.extract_rom(parts[1])
             else:
                 item[parts[0]] = parts[1]
