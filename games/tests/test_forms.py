@@ -30,3 +30,11 @@ class TestInstallerForm(TestCase):
         form = forms.InstallerForm(form_data, instance=self.installer)
         self.assertFalse(form.is_valid())
         self.assertIn('already exists', form.errors['version'][0])
+
+    def test_form_requires_runner(self):
+        form_data = {
+            'version': 'zdoom',
+            'content': "exe: doom.x86",
+        }
+        form = forms.InstallerForm(form_data, instance=self.installer)
+        self.assertFalse(form.is_valid())
