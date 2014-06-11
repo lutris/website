@@ -2,7 +2,7 @@ import os
 from base import *  # noqa
 
 DEBUG = False
-MEDIA_URL = 'http://lutris.net/media/'
+MEDIA_URL = '//lutris.net/media/'
 
 ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', ]
 
