@@ -126,12 +126,14 @@ def game_detail(request, slug):
         in_library = False
         installers = game.installer_set.published()
 
+    auto_installers = game.get_default_installers()
     return render(request, 'games/detail.html',
                   {'game': game,
                    'banner_options': banner_options,
                    'banner_size': banner_size,
                    'in_library': in_library,
-                   'installers': installers})
+                   'installers': installers,
+                   'auto_installers': auto_installers})
 
 
 @login_required
