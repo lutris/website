@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>
-Game has been submitted.
-</p>
-<a href="{% url "game_list" %}">Back to game list</a>
+<div class="form-view">
+  <p>
+    Game submitted, thank you!<br />
+    We will review and publish it as soon as possible.
+  </p>
+  <a href="{% url "game_list" %}">Back to game list</a>
+</div>
 {% endblock %}

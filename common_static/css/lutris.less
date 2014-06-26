@@ -251,7 +251,7 @@ form {
 .dropdown-menu {
   background-color: #555;
   border: 0;
-  border-radius: 0 2px 2px 2px; 
+  border-radius: 0 2px 2px 2px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5);
   margin-top: -1px;
   li a {
@@ -540,6 +540,14 @@ form {
 
 .form-view {
   .message-view;
+  & > h1 {
+    margin-top: 0;
+  }
+}
+
+.form-view-wide {
+  .form-view;
+  width: 650px;
 }
 
 #screenshots {

@@ -4,6 +4,6 @@ extends "base.html"
 
 block content
     .form-view
-        h4 Sign in
+        h1 Sign in
         {% crispy form %}
         a(href="{% url 'password_reset' %}") Password forgotten

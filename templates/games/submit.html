@@ -2,8 +2,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  {{ form.media }}
-  {% crispy form %}
+  <div class="form-view-wide">
+    <h1>Submit new game</h1>
+    {{ form.media }}
+    {% crispy form %}
+  </div>
 {% endblock %}
 
 {% block scripts %}
