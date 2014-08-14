@@ -71,6 +71,7 @@ class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("game__slug", "description")
     list_display = ("__unicode__", "uploaded_at", "published")
     list_editable = ("published", )
+    search_fields = ['game__name']
 
 
 class FeaturedAdmin(admin.ModelAdmin):
