@@ -4,6 +4,7 @@ from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
 
 from . import models
+from . import forms
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -47,7 +48,7 @@ class GameMetadataInline(admin.TabularInline):
 
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
-    prepopulated_fields = {"slug": ("name",)}
+    form = forms.BaseGameForm
     list_display = ('__unicode__', 'year', 'steamid',
                     'created', 'updated', 'is_public')
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
@@ -74,11 +75,6 @@ class ScreenshotAdmin(admin.ModelAdmin):
 
 class FeaturedAdmin(admin.ModelAdmin):
     list_display = ("__unicode__", "created_at")
-    #form = forms.FeaturedForm
-    #raw_id_fields = ('game', )
-    #autocomplete_lookup_fields = {
-    #    'fk': ['game']
-    #}
 
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
