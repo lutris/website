@@ -121,7 +121,8 @@ def game_detail(request, slug):
 
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()
-        installers = game.installer_set.published(user=user)
+        installers = game.installer_set.published(user=user,
+                                                  is_staff=user.is_staff)
     else:
         in_library = False
         installers = game.installer_set.published()

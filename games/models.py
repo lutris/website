@@ -273,8 +273,10 @@ class Screenshot(models.Model):
 
 
 class InstallerManager(models.Manager):
-    def published(self, user=None):
-        if user:
+    def published(self, user=None, is_staff=False):
+        if is_staff:
+            return self.get_query_set()
+        elif user:
             return self.get_query_set().filter(models.Q(published=True)
                                                | models.Q(user=user))
         else:
