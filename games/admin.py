@@ -68,7 +68,7 @@ class GameAdmin(admin.ModelAdmin):
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
-    ordering = ("game__slug", "description")
+    ordering = ("-uploaded_at", )
     list_display = ("__unicode__", "uploaded_at", "published")
     list_editable = ("published", )
     search_fields = ['game__name']
