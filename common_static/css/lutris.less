@@ -695,22 +695,17 @@ form {
     padding: 8px;
     margin-bottom: 5px;
     background-color: @darkerBackground;
-    &:hover {
-      background-color: @darkBackground;
-    }
   }
   a {
     color :#DDD;
     text-decoration: none;
+    &:hover { text-decoration: underline; }
   }
   .filter-link {
     background-color: #666;
   }
   .with-installer {
     background-color: @darkBackground;
-    &:hover {
-      background-color: @darkBackground + #111;
-    }
     .game-title {
       color: @brandColor;
     }
@@ -725,6 +720,9 @@ form {
     margin-right: 15px;
     color: #AAA;
     font-size: 1.5em;
+    position: relative;
+    &:hover { bottom: 1px; }
+    &:active { bottom: -1px; }
   }
   .game-title {
     font-size: 1.1em;
@@ -757,14 +755,17 @@ form {
     font-weight: 500;
     width: 184px + 2 * 7px;
     margin-bottom: 20px;
-    &:hover {
+    text-decoration: none;
+    &:hover, &:focus {
       background-color: #444;
-      text-decoration: none;
+      outline: 0;
     }
   }
   .game-cover {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 5px;
+    position: relative;
+    &:active { bottom: -2px; }
   }
   .game-title { .discreet-text }
 }
