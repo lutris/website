@@ -85,9 +85,9 @@
             {% firstof game.year "Unknown" %}
           </li>
           {% if game.website %}
-          <li>
+          <li class="ellipse-text">
               <strong>Website: </strong>
-              <a href='{{ game.website }}'>{{ game.website }}</a>
+              <a href='{{ game.website }}'>{{ game.website.strip|cut:'http://'|cut:'https://' }}</a>
           </li>
           {% endif %}
         </ul>
