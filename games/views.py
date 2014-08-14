@@ -118,6 +118,7 @@ def game_detail(request, slug):
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
     user = request.user
+    game.website_text = game.website.strip('htps:').strip('/')
 
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()

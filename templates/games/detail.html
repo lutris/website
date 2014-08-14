@@ -87,7 +87,7 @@
           {% if game.website %}
           <li class="ellipse-text">
               <strong>Website: </strong>
-              <a href='{{ game.website }}'>{{ game.website.strip|cut:'http://'|cut:'https://' }}</a>
+              <a href='{{ game.website }}'>{{ game.website_text }}</a>
           </li>
           {% endif %}
         </ul>
