@@ -12,6 +12,12 @@
             <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
           </li>
         {% endif %}
+        {% if user.is_staff %}
+          <li>
+            {% url 'admin:games_installer_change' installer.id as admin_url %}
+            <a href="{{ admin_url }}"><i class="icon-edit"></i> Admin installer </a>
+          </li>
+        {% endif %}
         {% if not installer.published and user.is_staff %}
           <li>
             {% url 'publish_installer' slug=installer.slug as publish_installer %}
