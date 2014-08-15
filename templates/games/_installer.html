@@ -30,7 +30,7 @@
     </div>
   <div class="centered-vertical">
     <span class='filter-link'>{{ installer.runner }}</span>
-    <span class='installer-name'>{{ installer.slug }}</span>
+    <span class='installer-name'>{{ installer.version|capfirst }} version</span>
     <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
   </div>
   {% if installer.description %}
