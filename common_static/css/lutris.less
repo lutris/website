@@ -619,16 +619,19 @@ form {
     width: 12px;
   }
 }
+
 .game-info {
   font-size: .8em;
   color: #DDD;
   padding: 0 14px;
+
   .banner {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
     margin: 0 auto;
     display: block;
     margin-bottom: 14px;
   }
+
   ul {
     .ul-reset;
     margin-bottom: 10px;
@@ -645,6 +648,14 @@ form {
   }
   a {
     color: #DDD;
+  }
+
+  .in-library {
+    width: 112px;
+    background-color: #365278;
+    &:hover { background-color: #7e2b2b; }
+    &:hover span { display: none; }
+    &:hover:before { content: "Remove it"; }
   }
 }
 
