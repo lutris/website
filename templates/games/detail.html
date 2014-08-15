@@ -57,36 +57,36 @@
 
         <ul>
           <li>
-            <strong>Genre: </strong>
+            <span class="info-label">Genre: </span>
             {% for genre in game.genres.all %}
               {{ genre }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </li>
           <li>
-            <strong>Platform: </strong>
+            <span class="info-label">Platform: </span>
             {% for platform in game.platforms.all %}
               {{ platform }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </li>
           {% if game.developer %}
           <li>
-            <strong>Developer: </strong>
+            <span class="info-label">Developer: </span>
             <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
           </li>
           {% endif %}
           {% if game.publisher %}
           <li>
-            <strong>Publisher: </strong>
+            <span class="info-label">Publisher: </span>
             <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
           </li>
           {% endif %}
           <li>
-            <strong>Release date: </strong>
+            <span class="info-label">Release year: </span>
             {% firstof game.year "Unknown" %}
           </li>
           {% if game.website %}
           <li class="ellipse-text">
-              <strong>Website: </strong>
+              <span class="info-label">Website: </span>
               <a href='{{ game.website }}'>{{ game.website_text }}</a>
           </li>
           {% endif %}
