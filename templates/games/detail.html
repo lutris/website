@@ -92,18 +92,18 @@
           {% endif %}
         </ul>
         <div class="centered">
-          {% if game.steamid %}
-          <a href="http://store.steampowered.com/app/{{ game.steamid }}/" class="box-link">
-            <img src="{{ STATIC_URL }}images/steam.png" alt="" />
-            Get it on Steam
-          </a>
-          {% endif %}
           {% if not in_library %}
             <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
           {% else %}
             <p>
             {{ game }} is in your library
             </p>
+          {% endif %}
+          {% if game.steamid %}
+          <a href="http://store.steampowered.com/app/{{ game.steamid }}/" class="box-link">
+            <img src="{{ STATIC_URL }}images/steam.png" alt="" />
+            Get it on Steam
+          </a>
           {% endif %}
         </div>
       </div>
