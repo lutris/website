@@ -261,7 +261,7 @@ class Screenshot(models.Model):
     """Screenshots for games"""
     game = models.ForeignKey(Game)
     image = models.ImageField(upload_to="games/screenshots")
-    uploaded_at = models.DateTimeField(auto_now=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
