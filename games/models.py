@@ -240,6 +240,7 @@ class Game(models.Model):
                 installer['platform'] = platform.slug
                 installer['description'] = platform.name + " version"
                 installer['published'] = True
+                installer['auto'] = True
                 installers.append(installer)
         return installers
 
