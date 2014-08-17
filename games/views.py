@@ -124,9 +124,12 @@ def game_detail(request, slug):
         in_library = game in user.gamelibrary.games.all()
         installers = game.installer_set.published(user=user,
                                                   is_staff=user.is_staff)
+        screenshots = game.screenshot_set.published(user=user,
+                                                    is_staff=user.is_staff)
     else:
         in_library = False
         installers = game.installer_set.published()
+        screenshots = game.screenshot_set.published()
 
     auto_installers = game.get_default_installers()
     return render(request, 'games/detail.html',
@@ -135,7 +138,8 @@ def game_detail(request, slug):
                    'banner_size': banner_size,
                    'in_library': in_library,
                    'installers': installers,
-                   'auto_installers': auto_installers})
+                   'auto_installers': auto_installers,
+                   'screenshots': screenshots})
 
 
 @login_required

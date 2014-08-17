@@ -4,7 +4,7 @@
     if screenshots
         .carousel-inner.screenshots-slider
             for screenshot in screenshots
-                div(class="item {% if forloop.first %}active{% endif %}")
+                div(class="item {% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}")
                     div(class="centered-vertical centered")
                         a(href="/media/{{ screenshot.image }}")
                             {% thumbnail screenshot.image '690x431' as img %}
@@ -17,7 +17,9 @@
                 span(class="icon-next") &nbsp;
         ol(class="carousel-indicators")
             for screenshot in screenshots
-                li(class="{% if forloop.first %}active{% endif %}", data-target="#screenshots", data-slide-to="{{ forloop.counter0 }}")
+                li(class="{% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}",
+                    data-target="#screenshots",
+                    data-slide-to="{{ forloop.counter0 }}")
 
 block scripts
     script

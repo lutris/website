@@ -563,13 +563,16 @@ form {
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
   }
-}
 
-.screenshots-slider .centered-vertical {
-  background-color: #111;
-  height: 431px;
-  width: 690px;
-  box-shadow: inset 0 0 60px #000;
+  .screenshots-slider {
+    background-color: #111;
+    height: 431px;
+    width: 690px;
+    box-shadow: inset 0 0 60px #000;
+    .unpublished {
+      border-left: 2px solid #C50000;
+    }
+  }
 }
 
 .screenshots-bar {
@@ -606,17 +609,24 @@ form {
   left: 0;
   margin-left: 10px;
   text-align: left;
-  .active {
-    background-color: #cc6600;
-    box-shadow: 0 0 1px 2px #000 inset;
-    margin-right: 1px;
-  }
+
   li {
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid #555;
     height: 12px;
     margin: 0 1px 0 0;
     width: 12px;
+
+    &.active {
+      background-color: #cc6600;
+      box-shadow: 0 0 1px 2px #000 inset;
+      margin-right: 1px;
+    }
+
+    &.unpublished {
+      border: 2px solid #C50000;
+      &.active { background-color: #C50000; }
+    }
   }
 }
 

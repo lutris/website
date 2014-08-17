@@ -20,9 +20,7 @@
 
   <div class="row">
     <div class="col-xs-9">
-      {% with game.screenshot_set.published as screenshots %}
       {% include "includes/screenshots_slider.jade" %}
-      {% endwith %}
       <div class="screenshots-bar">
         <a href='{% url 'screenshot_add' game.slug %}' class='discreet-text right'>Submit screenshot</a>
       </div>
