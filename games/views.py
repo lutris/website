@@ -313,3 +313,13 @@ def screenshot_add(request, slug):
         form.save()
         return redirect(reverse("game_detail", kwargs={'slug': slug}))
     return render(request, 'games/screenshot/add.html', {'form': form})
+
+
+@login_required
+def publish_screenshot(request, id):
+    screenshot = get_object_or_404(models.Screenshot, id=id)
+    if not request.user.is_staff:
+        raise Http404
+    screenshot.published = True
+    screenshot.save()
+    return redirect('game_detail', slug=screenshot.game.slug)

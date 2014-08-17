@@ -49,6 +49,9 @@ urlpatterns = patterns(
 
     url(r'([\w\-]+)/screenshot/add/', 'screenshot_add',
         name='screenshot_add'),
+    url(r'screenshot/(?P<id>\d+)/publish/$', 'publish_screenshot',
+        name='publish_screenshot'),
+
     url(r'game-for-installer/(?P<slug>[\w\-]+)/', 'game_for_installer',
         name='game_for_installer'),
     url(r'(?P<slug>[\w\-]+)/$', "game_detail",
