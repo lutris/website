@@ -23,7 +23,8 @@ class GameResource(ModelResource):
     # pylint: disable=W0232, R0903
     class Meta:
         queryset = models.Game.objects.published()
-        fields = ['name', 'slug', 'year', 'platforms', 'title_logo', 'icon']
+        fields = ['name', 'slug', 'year', 'platforms', 'title_logo', 'icon',
+                  'is_public']
         allowed_methods = ['get']
         detail_uri_name = 'slug'
 
