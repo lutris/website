@@ -22,7 +22,7 @@ class GameLibraryAuthorization(Authorization):
 class GameResource(ModelResource):
     # pylint: disable=W0232, R0903
     class Meta:
-        queryset = models.Game.objects.published()
+        queryset = models.Game.objects.all()
         fields = ['name', 'slug', 'year', 'platforms', 'title_logo', 'icon',
                   'is_public', 'updated']
         allowed_methods = ['get']
