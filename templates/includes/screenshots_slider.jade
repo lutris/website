@@ -5,20 +5,20 @@
         .carousel-inner.screenshots-slider
             for screenshot in screenshots
                 div(class="item {% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}")
-                    div(class="centered-vertical centered")
 
-                        // Screenshot admin menu
-                        if user.is_staff
-                            div.screenshot-menu
-                                if not screenshot.published
-                                    {% url 'publish_screenshot' id=screenshot.id as publish_url %}
-                                    a.btn(href=publish_url) Publish
-                                {% url 'admin:games_screenshot_change' screenshot.id as admin_url %}
-                                a.btn(href=admin_url) Admin
+                    // Screenshot admin menu
+                    if user.is_staff
+                        div.screenshot-menu
+                            if not screenshot.published
+                                {% url 'publish_screenshot' id=screenshot.id as publish_url %}
+                                a.btn(href=publish_url) Publish
+                            {% url 'admin:games_screenshot_change' screenshot.id as admin_url %}
+                            a.btn(href=admin_url) Admin
 
-                        // Screenshot
-                        a(href="/media/{{ screenshot.image }}")
-                            {% thumbnail screenshot.image '690x431' as img %}
+                    // Screenshot
+                    div.screenshot
+                        a.screenshot(href="/media/{{ screenshot.image }}")
+                            {% thumbnail screenshot.image '690x388' as img %}
                             img(src="{{ MEDIA_URL }}/{{ img }}", title="{{ screenshot.description }}")
                             {% endthumbnail %}
 
