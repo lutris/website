@@ -3,7 +3,6 @@ import urllib2
 import requests
 from django.template.defaultfilters import slugify
 from django.conf import settings
-import games.models
 
 LOGGER = logging.getLogger(__name__)
 STEAM_API_URL = "http://api.steampowered.com/"
@@ -48,9 +47,10 @@ def steam_sync(steamid):
 
 def create_game(game):
     """ Create game object from Steam API call """
+    from games.models import Game
     slug = slugify(game['name'])[:50]
     LOGGER.info("Adding %s to library" % game['name'])
-    steam_game = games.models.Game(
+    steam_game = Game(
         name=game['name'],
         steamid=game['appid'],
         slug=slug,
