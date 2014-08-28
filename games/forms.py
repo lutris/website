@@ -11,12 +11,12 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 
-from common.forms import AutoSlugForm
+import common.forms
 from games import models
 from games.util.installer import ScriptValidator
 
 
-class BaseGameForm(AutoSlugForm):
+class BaseGameForm(common.forms.AutoSlugForm):
     class Meta:
         model = models.Game
         fields = '__all__'
