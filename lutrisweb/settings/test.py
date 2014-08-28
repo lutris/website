@@ -1,4 +1,3 @@
-import os
 from base import *  # noqa
 
 DEBUG = False
@@ -9,12 +8,18 @@ DATABASES = {
     }
 }
 
-if not os.environ.get('NOCOVER'):
-    NOSE_ARGS = (
-        "--with-xcoverage", "--xcoverage-file=coverage.xml",
-        "--with-xunit", "--xunit-file=nosetests.xml",
-        "--cover-erase",
-        "--cover-package=games",
-        "--cover-package=accounts",
-        "--cover-package=common",
-    )
+INSTALLED_APPS += (
+    'django_jenkins',
+)
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.run_pylint',
+    'django_jenkins.tasks.run_pep8',
+)
+
+PROJECT_APPS = (
+    'games',
+    'accounts',
+    'common'
+)
