@@ -1,4 +1,4 @@
--r requirements.pip
+-r base.pip
 python-memcached
 gunicorn
 setproctitle

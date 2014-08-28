@@ -27,10 +27,10 @@ test:
 
 sysdeps:
 	sudo apt-get install libpq-dev python-dev nginx supervisor rabbitmq-server
-	pip install -r config/production.pip --exists-action=s
+	pip install -r config/requirements/production.pip --exists-action=s
 
 deps:
-	pip install -r config/requirements.pip --exists-action=s
+	pip install -r config/requirements/devel.pip --exists-action=s
 
 migration:
 	-DJANGO_SETTINGS_MODULE=${SETTINGS} ./manage.py schemamigration games --auto
