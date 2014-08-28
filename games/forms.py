@@ -11,12 +11,48 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 
-import common.forms
 from games import models
 from games.util.installer import ScriptValidator
 
 
-class BaseGameForm(common.forms.AutoSlugForm):
+class AutoSlugForm(forms.ModelForm):
+    SLUG_LENGTH = 50
+
+    def __init__(self, *args, **kwargs):
+        super(AutoSlugForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+
+    def get_slug(self, name, slug=None):
+        if not slug:
+            original_slug = slugify(name)[:self.SLUG_LENGTH]
+            slug = original_slug
+        else:
+            original_slug = slug
+        slug_exists = True
+        counter = 1
+        while slug_exists:
+            pk = self.instance.pk if self.instance else 0
+            slug_exists = (
+                self.Meta.model.objects
+                .exclude(pk=pk)
+                .filter(slug=slug)
+                .exists()
+            )
+            if slug_exists:
+                suffix = "-%d" % counter
+                slug = original_slug[:self.SLUG_LENGTH - len(suffix)] + suffix
+                counter += 1
+        return slug
+
+    def clean(self):
+        self.cleaned_data['slug'] = self.get_slug(
+            self.cleaned_data['name'],
+            self.cleaned_data['slug']
+        )
+        return self.cleaned_data
+
+
+class BaseGameForm(AutoSlugForm):
     class Meta:
         model = models.Game
         fields = '__all__'
