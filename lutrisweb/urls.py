@@ -47,5 +47,4 @@ for app in settings.INSTALLED_APPS:
         logger.debug('loading "%s" ..', signals_module)
         signal_modules[app] = import_module(signals_module)
     except ImportError as e:
-        logger.warning(
-            'failed to import "%s", reason: %s', signals_module, str(e))
+        pass
