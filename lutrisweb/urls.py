@@ -44,7 +44,6 @@ signal_modules = {}
 for app in settings.INSTALLED_APPS:
     signals_module = '%s.signals' % app
     try:
-        logger.debug('loading "%s" ..', signals_module)
         signal_modules[app] = import_module(signals_module)
     except ImportError as e:
         pass
