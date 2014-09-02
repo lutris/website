@@ -152,7 +152,7 @@ STEAM_API_KEY = "********************************"
 
 # Logging
 SEND_BROKEN_LINK_EMAILS = False
-LOGGING_HANDLERS = ['file', 'mail_admins']
+LOGGING_HANDLERS = ['file', 'mail_admins', 'console']
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -219,5 +219,10 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'games': {
+            'handlers': LOGGING_HANDLERS,
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
