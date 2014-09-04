@@ -1,6 +1,9 @@
 import os
 from base import *  # noqa
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 if not os.environ.get('USE_SQLITE'):
     DATABASES = {
         'default': {

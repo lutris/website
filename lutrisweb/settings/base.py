@@ -1,7 +1,7 @@
 import os
 from os.path import join, dirname, abspath
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = False
 
