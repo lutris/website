@@ -56,3 +56,7 @@ class NewsFeed(Feed):
 
     def item_link(self, item):
         return item.get_absolute_url()
+
+
+def error_testing(request):
+    raise ValueError("Making things crash")
