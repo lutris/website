@@ -195,8 +195,8 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['null'],
-            'propagate': False,
+            'handlers': [LOGGING_HANDLERS],
+            'propagate': True,
             'level': 'INFO',
         },
         'factory': {
@@ -207,7 +207,7 @@ LOGGING = {
         'django.request': {
             'handlers': LOGGING_HANDLERS,
             'level': 'WARNING',
-            'propagate': False,
+            'propagate': True,
         },
         'lutrisweb': {
             'handlers': LOGGING_HANDLERS,
@@ -215,6 +215,11 @@ LOGGING = {
             'propagate': True,
         },
         'accounts': {
+            'handlers': LOGGING_HANDLERS,
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'common': {
             'handlers': LOGGING_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
