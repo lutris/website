@@ -83,6 +83,7 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
+        self.fields['name'].label = "Title"
         self.fields['year'].label = "Release year"
         self.fields['website'].help_text = (
             "The official website. If it doesn't exist, leave blank."
@@ -99,6 +100,7 @@ class GameForm(forms.ModelForm):
         )
         self.fields['title_logo'].label = "Banner icon"
         self.fields['title_logo'].help_text = (
+            "The banner should include the full title in readable size (big). "
             "You'll be able to crop the uploaded image to the right format. "
             "If you can't make a good banner, don't worry. Somebody will "
             "eventually make a better one... probably."
