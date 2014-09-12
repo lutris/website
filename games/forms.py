@@ -83,12 +83,25 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
+        self.fields['year'].label = "Release year"
+        self.fields['website'].help_text = (
+            "The official website. If it doesn't exist, leave blank."
+        )
         self.fields['platforms'].help_text = (
             "Only select platforms expected to have an installer, "
             "not all platforms the game was released on. For example, Windows "
             "is not needed for Linux native games."
         )
-        self.fields['genres'].help_text = ""
+        self.fields['description'].help_text = (
+            "Copy the official description of the game if you can find "
+            "it. Don't write your own."
+        )
+        self.fields['title_logo'].label = "Banner icon"
+        self.fields['title_logo'].help_text = (
+            "You'll be able to crop the uploaded image to the right format. "
+            "If you can't make a good banner, don't worry. Somebody will "
+            "eventually make a better one... probably."
+        )
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', "Submit"))
 
