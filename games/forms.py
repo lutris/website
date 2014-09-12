@@ -92,6 +92,7 @@ class GameForm(forms.ModelForm):
             "not all platforms the game was released on. For example, Windows "
             "is not needed for Linux native games."
         )
+        self.fields['genres'].help_text = ""
         self.fields['description'].help_text = (
             "Copy the official description of the game if you can find "
             "it. Don't write your own."
