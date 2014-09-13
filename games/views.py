@@ -131,7 +131,8 @@ def game_detail(request, slug):
         installers = game.installer_set.published()
         screenshots = game.screenshot_set.published()
 
-    auto_installers = game.get_default_installers()
+    # auto_installers = game.get_default_installers()
+    auto_installers = []
     return render(request, 'games/detail.html',
                   {'game': game,
                    'banner_options': banner_options,
