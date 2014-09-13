@@ -8,7 +8,6 @@ THUMBNAIL_DEBUG = False
 PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
-    #('Mathieu Comandon', 'strider@strycore.com'),
     ('Mathieu Comandon', 'strycore@gmail.com'),
 )
 MANAGERS = ADMINS
@@ -132,7 +131,7 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
-CLIENT_VERSION = "0.3.4"
+CLIENT_VERSION = "0.3.5"
 
 
 # Crispy forms
