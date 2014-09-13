@@ -1,15 +1,16 @@
 {% load thumbnail %}
+{% load humanize %}
 {% for article in news %}
     <div class="news-list">
       <h4>{{ article.title }}
-        <small>Posted by {{ article.user }}, {{ article.publish_date }}</small>
+        <small>By {{ article.user }}, {{ article.publish_date|naturaltime }}</small>
       </h4>
       {% if article.image %}
-         {% thumbnail article.image '125x125' format='PNG' upscale=False as image %}
-           <a href="{{ article.get_absolute_url }}">
+          {% thumbnail article.image '125x125' format='PNG' upscale=False as image %}
+            <a href="{{ article.get_absolute_url }}">
             <img src="{{ image.url }}" class="news-image-preview" />
-           </a>
-         {% endthumbnail %}
+            </a>
+          {% endthumbnail %}
       {% endif %}
       <article>
         {{ article.content|striptags|truncatewords:50 }}<br />
