@@ -296,8 +296,12 @@ def submit_game(request):
         game = form.save()
         # Notify managers a game has been submitted
         subject = "New game submitted: {0}".format(game.name)
-        body = "The game {0} has been added by {1}".format(game.name,
-                                                           request.user)
+        admin_url = reverse("admin:games_game_change", args=(game.id, ))
+        body = """
+        The game {0} has been added by {1}.
+
+        It can be modified and published at https://lutris.net{2}
+        """.format(game.name, request.user, admin_url)
         mail_managers(subject, body)
 
         return redirect(reverse("game-submitted"))
