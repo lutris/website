@@ -295,7 +295,7 @@ def submit_game(request):
     if request.method == "POST" and form.is_valid():
         game = form.save()
         # Notify managers a game has been submitted
-        subject = "[Lutris] New game submitted: {0}".format(game.name)
+        subject = "New game submitted: {0}".format(game.name)
         body = "The game {0} has been added by {1}".format(game.name,
                                                            request.user)
         mail_managers(subject, body)
