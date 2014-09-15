@@ -1,5 +1,4 @@
 import logging
-import urllib2
 import requests
 from django.template.defaultfilters import slugify
 from django.conf import settings
@@ -11,7 +10,8 @@ STEAM_API_URL = "http://api.steampowered.com/"
 def get_capsule(steamid):
     steam_cdn = "http://cdn2.steampowered.com"
     capsule_url = steam_cdn + "/v/gfx/apps/%d/capsule_184x69.jpg"
-    return urllib2.urlopen(capsule_url % steamid).read()
+    response = requests.get(capsule_url % steamid)
+    return response.content
 
 
 def get_image(appid, img_logo_url):
@@ -21,7 +21,8 @@ def get_image(appid, img_logo_url):
             appid, img_logo_url
         )
     )
-    return urllib2.urlopen(img_url).read()
+    response = requests.get(img_url)
+    return response.content
 
 
 def steam_sync(steamid):
@@ -38,10 +39,13 @@ def steam_sync(steamid):
         raise ValueError("Invalid response from steam: %s", response)
     json_data = response.json()
     response = json_data['response']
+    if not response:
+        LOGGER.info("No games in response of %s", steam_games_url)
+        return []
     if 'games' in response:
         return response['games']
     else:
-        LOGGER.error("No games in response: %s", response)
+        LOGGER.error("Weird response: %s", json_data)
         return []
 
 

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
+from django_openid_auth.exceptions import IdentityAlreadyClaimed
 
 from .models import AuthToken, User
 from . import forms
@@ -94,13 +95,22 @@ def associate_steam(request):
         return login_complete(request)
     else:
         openid_response = parse_openid_response(request)
+        account_url = reverse('user_account', args=(request.user.username, ))
         if openid_response.status == 'failure':
-            messages.error(request, "Failed to associate Steam account")
-            return redirect(
-                reverse('user_account', args=(request.user.username, ))
-            )
+            messages.warning(request, "Failed to associate Steam account")
+            return redirect(account_url)
         openid_backend = OpenIDBackend()
-        openid_backend.associate_openid(request.user, openid_response)
+        try:
+            openid_backend.associate_openid(request.user, openid_response)
+        except IdentityAlreadyClaimed:
+            messages.warning(
+                request,
+                "This Steam account is already claimed by another Lutris "
+                "account.\nPlease contact an administrator if you want "
+                "to reattribute your Steam account to this current account."
+            )
+            return redirect(account_url)
+
         request.user.set_steamid()
         request.user.save()
         return redirect(reverse("library_steam_sync"))
