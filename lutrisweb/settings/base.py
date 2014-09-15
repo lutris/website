@@ -9,6 +9,7 @@ PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
+    ('Pascal', 'pascal@xod.me'),
 )
 MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)

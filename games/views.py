@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
+from django.core.mail import mail_managers
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
 
@@ -294,11 +294,11 @@ def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()
-        # Notify admins a game has been submitted
-        body = "The game %s has been added by %s" % (game.name, request.user)
-        send_mail("New game submitted", body,
-                  settings.DEFAULT_FROM_EMAIL,
-                  settings.MANAGERS[0])
+        # Notify managers a game has been submitted
+        subject = "[Lutris] New game submitted: {0}".format(game.name)
+        body = "The game {0} has been added by {1}".format(game.name,
+                                                           request.user)
+        mail_managers(subject, body)
 
         return redirect(reverse("game-submitted"))
     return render(request, 'games/submit.html', {'form': form})
