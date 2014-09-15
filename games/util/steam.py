@@ -38,10 +38,13 @@ def steam_sync(steamid):
         raise ValueError("Invalid response from steam: %s", response)
     json_data = response.json()
     response = json_data['response']
+    if not response:
+        LOGGER.info("No games in response of %s", steam_games_url)
+        return []
     if 'games' in response:
         return response['games']
     else:
-        LOGGER.error("No games in response: %s", response)
+        LOGGER.error("Weird response: %s", json_data)
         return []
 
 
