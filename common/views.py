@@ -8,9 +8,12 @@ from common.models import News
 
 def home(request):
     """Homepage view"""
-    news = News.objects.all()[:5]
+    try:
+        article = News.objects.latest('pk')
+    except News.DoesNotExist:
+        article = None
     return render(request, 'home.html', {
-        'news': news,
+        'article': article,
         'client_version': settings.CLIENT_VERSION
     })
 

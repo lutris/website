@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load humanize %}
 {% load lutris %}
 
 
@@ -33,12 +34,17 @@
 <div class="row">
   <div class="col-xs-9">
     {% block main %}
-    <h3>News</h3>
-    <div class=pane>
-      {% include "_news-list.html" %}
-      <a href="{% url "news_archives" %}" class="right archives">Older news</a>
-    </div>
+    <h3>{{ article.title }}</h3>
+    <p>
+      <small>Published by {{ article.user }}, {{ article.publish_date|naturaltime }}</small>
+    </p>
+    <article>
+      {{ article.content }}
+    </article>
+    
+    <a href="{% url "news_archives" %}" class="right archives">Older news</a>
     {% endblock %}
+
   </div>
   <div class="col-xs-3">
     {% latest_games %}
