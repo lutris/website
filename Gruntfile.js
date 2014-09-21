@@ -34,7 +34,7 @@ module.exports = function(grunt) {
           'components/jcrop/css/jquery.Jcrop.css',
           'components/jcrop-fileinput/dist/jcrop-fileinput.css',
           'components/select2/select2.css',
-          'components/select2-bootstrap-css/select2-bootstrap.css'
+          'components/select2-bootstrap3-css/select2-bootstrap.css'
         ],
         dest: 'public/css/libs.css',
         nonull: true
