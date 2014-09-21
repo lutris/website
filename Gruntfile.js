@@ -36,18 +36,19 @@ module.exports = function(grunt) {
           'components/select2/select2.css',
           'components/select2-bootstrap-css/select2-bootstrap.css'
         ],
-        dest: 'public/css/libs.css'
+        dest: 'public/css/libs.css',
+        nonull: true
       },
-
       js: {
         src: [
           'components/jquery/jquery.js',
           'components/modernizr/modernizr.js',
-          'components/bootstrap/dist/bootstrap.js',
+          'components/bootstrap/dist/js/bootstrap.js',
           'components/jcrop-fileinput/dist/jcrop-fileinput.js',
           'components/select2/select2.js',
         ],
-        dest: 'public/js/libs.js'
+        dest: 'public/js/libs.js',
+        nonull: true
       }
     },
     cssmin: {

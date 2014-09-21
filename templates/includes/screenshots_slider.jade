@@ -35,9 +35,3 @@
                 li(class="{% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}",
                     data-target="#screenshots",
                     data-slide-to="{{ forloop.counter0 }}")
-
-block scripts
-    script
-        $(function(){
-            $("#screenshots").carousel('cycle');
-        })
