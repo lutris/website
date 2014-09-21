@@ -10,11 +10,13 @@ from . import forms
 class CompanyAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ("name", )}
     ordering = ('name', )
+    search_fields = ('name', )
 
 
 class PlatformAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('name', )
+    search_fields = ('name', )
 
 
 class InstallerAdmin(admin.ModelAdmin):
