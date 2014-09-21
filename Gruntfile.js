@@ -28,53 +28,44 @@ module.exports = function(grunt) {
         }
       }
     },
+    concat: {
+      css: {
+        src: [
+          'components/jcrop/css/jquery.Jcrop.css',
+          'components/jcrop-fileinput/dist/jcrop-fileinput.css',
+          'components/select2/select2.css',
+          'components/select2-bootstrap-css/select2-bootstrap.css'
+        ],
+        dest: 'public/css/libs.css'
+      },
+
+      js: {
+        src: [
+          'components/jquery/jquery.js',
+          'components/modernizr/modernizr.js',
+          'components/bootstrap/dist/bootstrap.js',
+          'components/jcrop-fileinput/dist/jcrop-fileinput.js',
+          'components/select2/select2.js',
+        ],
+        dest: 'public/js/libs.js'
+      }
+    },
+    cssmin: {
+      dist: {
+        files: {
+          'public/css/libs.min.css': ['public/css/libs.css']
+        }
+      }
+    },
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
       },
-      jquery: {
+      dist: {
         files: {
-          'public/js/jquery.min.js': ['components/jquery/jquery.js']
-        }
-      },
-      bootstrap: {
-        files: {
-          'public/js/bootstrap.min.js': [
-            'components/bootstrap/js/transition.js',
-            'components/bootstrap/js/alert.js',
-            'components/bootstrap/js/button.js',
-            'components/bootstrap/js/carousel.js',
-            'components/bootstrap/js/collapse.js',
-            'components/bootstrap/js/dropdown.js',
-            'components/bootstrap/js/modal.js',
-            'components/bootstrap/js/tooltip.js',
-            //'components/bootstrap/js/popover.js',
-            'components/bootstrap/js/scrollspy.js',
-            'components/bootstrap/js/tab.js',
-            'components/bootstrap/js/affix.js'
-          ]
-        }
-      },
-      modernizr: {
-        files: {
-          'public/js/modernizr.min.js': ['components/modernizr/modernizr.js']
-        }
-      },
-      app: {
-        files: {
+          'public/js/libs.min.js': ['public/js/libs.js'],
           'public/js/app.min.js': ['public/js/app.js']
         }
-      }
-    },
-    copy: {
-      main: {
-        files: [
-          {flatten: true, expand: true, cwd: 'components/jcrop/css/', src: '**', dest: 'public/css/'},
-          {flatten: true, expand: true, cwd: 'components/jcrop/js/', src: '**', dest: 'public/js/'},
-          {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.css', dest: 'public/css/'},
-          {flatten: true, expand: true, cwd: 'components/jcrop-fileinput/dist/', src: '*.js', dest: 'public/js/'},
-          {expand: true, cwd: 'components/select2-bootstrap-css/', src: '*.css', 'dest': 'public/css/'}
-        ]
       }
     },
     watch: {
@@ -98,12 +89,13 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
-  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['less', 'coffee', 'copy','uglify']);
+  grunt.registerTask('default', ['less', 'coffee', 'concat', 'cssmin', 'uglify']);
 };
 
