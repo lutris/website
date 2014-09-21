@@ -8,8 +8,6 @@ from fabric.context_managers import prefix
 
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 RSYNC_EXCLUDE = (
-    '.bzr',
-    '.bzrignore',
     '.git',
     '.gitignore',
     '*.pyc',
@@ -22,7 +20,6 @@ RSYNC_EXCLUDE = (
     'bootstrap.py',
     'tags',
     'lutris_client',
-    'PYSMELL*'
 )
 
 env.project = 'lutrisweb'
