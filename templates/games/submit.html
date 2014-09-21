@@ -12,7 +12,6 @@
       know!<br />
       Thanks for your efforts!<br /><br />
     </p>
-    {{ form.media }}
     {% crispy form %}
   </div>
 {% endblock %}
@@ -21,6 +20,8 @@
   {{ block.super }}
   <script>
     $(function () {
+      $("#id_platforms").select2({'closeOnSelect': false, 'placeholder': ''});
+      $("#id_genres").select2({'closeOnSelect': false, 'placeholder': ''});
       $('input[type=file]').JCropFileInput({
         debug: true,
         ratio: 8/3,
@@ -28,4 +29,5 @@
       });
     })
   </script>
+
 {% endblock %}

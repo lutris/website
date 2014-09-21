@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     less: {
       css: {
         options: {
-            paths: ['components/bootstrap/less/', 'components/select2-bootstrap-css/lib/']
+            paths: ['components/bootstrap/less/']
         },
         files: {
           'public/css/lutris.css': ['common_static/css/lutris.less']
@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       min: {
         options: {
             yuicompress: true,
-            paths: ['components/bootstrap/less/', 'components/select2-bootstrap-css/lib/']
+            paths: ['components/bootstrap/less/']
         },
         files: {
             'public/css/lutris.min.css': ['common_static/css/lutris.less']

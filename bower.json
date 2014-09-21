@@ -9,7 +9,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.0",
+    "bootstrap": "~3.2.0",
     "jquery": "~1.10",
     "modernizr": "~2.6.2",
     "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#master",
