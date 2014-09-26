@@ -1,5 +1,6 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
+import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
@@ -15,6 +16,8 @@ from sorl.thumbnail import get_thumbnail
 from .models import Game, Runner, Installer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
+
+LOGGER = logging.getLogger(__name__)
 
 
 class GameList(ListView):
@@ -303,8 +306,14 @@ def submit_game(request):
         It can be modified and published at https://lutris.net{2}
         """.format(game.name, request.user, admin_url)
         mail_managers(subject, body)
+        redirect_url = request.build_absolute_uri(reverse("game-submitted"))
 
-        return redirect(reverse("game-submitted"))
+        # Enforce https
+        if not settings.DEBUG:
+            redirect_url.replace('http:', 'https:')
+
+        LOGGER.info('Game submitted, redirecting to %s', redirect_url)
+        return redirect(redirect_url)
     return render(request, 'games/submit.html', {'form': form})
 
 
