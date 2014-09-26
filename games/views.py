@@ -310,7 +310,7 @@ def submit_game(request):
 
         # Enforce https
         if not settings.DEBUG:
-            redirect_url.replace('http:', 'https:')
+            redirect_url = redirect_url.replace('http:', 'https:')
 
         LOGGER.info('Game submitted, redirecting to %s', redirect_url)
         return redirect(redirect_url)
