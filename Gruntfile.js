@@ -44,6 +44,7 @@ module.exports = function(grunt) {
           'components/jquery/jquery.js',
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
+          'components/jcrop/js/jquery.Jcrop.js',
           'components/jcrop-fileinput/dist/jcrop-fileinput.js',
           'components/select2/select2.js',
         ],
