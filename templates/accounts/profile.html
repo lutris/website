@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}My account - Lutris{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="game-header">
+    <div class="title"><img src="{{ user.avatar_url }}" width="128" height="128"/><span>{{ user }}</span>
+      <div class="buttons"><a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-8">
+    <h2>Library</h2>
+    <p>Your library is synced on all your Lutris clients when you connect them
+    to the website.
+    </p>
+    <a href="{% url 'library_show' username=user.username %}" class="btn">View my library</a>
+  
+    {% if submissions %}
+    <h2>Submissions</h2>
+    <p>
+      The following games you submitted are awaiting approval from a moderator.
+    </p>
+    <ul class="game-list">
+      {% for submission in submissions %}
+      {% with submission.game as game %}
+        {% include "includes/game_preview.html" %}
+      {% endwith %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2>Import your Steam library</h2>
+    <p>
+    You can automatically import the list of your Steam games and add them to
+    your Lutris library.  
+    </p>
+    <p class="warning-message">
+    Your steam profile must be public during the sync process.You can set it
+    back to private after that.
+    </p>
+    <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+  </div>
+  <div class="col-xs-4">{% if  user.website %}<a href="{{ user.website }}">Website</a>{% endif %}
+  </div>
+</div>
+{% endblock %}

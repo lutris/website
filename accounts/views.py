@@ -69,7 +69,11 @@ def profile(request):
 
 def user_account(request, username):
     user = get_object_or_404(User, username=username)
-    return render(request, "accounts/profile.jade", {'user': user})
+    submissions = games.models.GameSubmission.objects.filter(
+        user=user, game__is_public=False
+    )
+    return render(request, "accounts/profile.html",
+                  {'user': user, 'submissions': submissions})
 
 
 @login_required
