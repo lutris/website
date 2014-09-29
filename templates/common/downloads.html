@@ -7,9 +7,11 @@
   <div class="col-xs-12">
     <article>
       <p>
-        Lutris should be compatible with any up-to-date Linux distribution, it
-        relies on the Python language and Gnome 3 libraries (but will run fine under
-        any desktop environmment).
+        Lutris should be compatible with most up-to-date Linux distributions,
+        it relies on the Python language and Gnome 3 libraries (but will run
+        fine under any desktop environmment). The following distributions are
+        currently supported: Ubuntu 14.04, Debian 8 (Jessie), Fedora 20,
+        OpenSUSE 13.1, ArchLinux and Gentoo.
       </p>
     </article>
     <ul class='download-list'>
@@ -76,7 +78,11 @@
         </ul>
         <p>
         Lutris is available as a <a href="{{ download_url }}lutris_{{ version }}.tar.gz">tar.gz package</a>.
-        Install it by extracting the archive and running as root: <code>python setup.py install</code>
+        Install it by extracting the archive and running as root: <code>python setup.py install</code><br/>
+        You'll need to make sure you have the necessary dependencies: PyGObject3 and PyYAML. <br/>
+        On Slackware systems, you can get those at:<br/>
+        <code>http://slackbuilds.org/repository/14.1/python/pygobject3/</code><br/>
+        <code>http://slackbuilds.org/repository/14.1/libraries/PyYAML/</code>
         </p>
       </li>
       <li>

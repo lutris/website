@@ -9,7 +9,6 @@ from django.template.defaultfilters import slugify
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django_select2.widgets import Select2MultipleWidget, Select2Widget
 
 from games import models
 from games.util.installer import ScriptValidator
@@ -63,23 +62,6 @@ class GameForm(forms.ModelForm):
         model = models.Game
         fields = ('name', 'year', 'website',
                   'platforms', 'genres', 'description', 'title_logo')
-        widgets = {
-            'platforms': Select2MultipleWidget,
-            'genres': Select2MultipleWidget,
-        }
-
-    class Media(object):
-        # pylint: disable=C0103
-        js = (
-            settings.STATIC_URL + "js/jquery.Jcrop.min.js",
-            settings.STATIC_URL + "js/jcrop-fileinput.js",
-        )
-        css = {
-            'all': (
-                settings.STATIC_URL + "css/jquery.Jcrop.min.css",
-                settings.STATIC_URL + "css/jcrop-fileinput.css"
-            )
-        }
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
@@ -102,8 +84,9 @@ class GameForm(forms.ModelForm):
         self.fields['title_logo'].help_text = (
             "The banner should include the full title in readable size (big). "
             "You'll be able to crop the uploaded image to the right format. "
+            "The image format is JPG, so no transparency. "
             "If you can't make a good banner, don't worry. Somebody will "
-            "eventually make a better one... probably."
+            "eventually make a better one. Probably."
         )
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', "Submit"))
@@ -167,8 +150,7 @@ class InstallerForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
-            ),
-            'runner': Select2Widget,
+            )
         }
 
     def __init__(self, *args, **kwargs):

@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     less: {
       css: {
         options: {
-            paths: ['components/bootstrap/less/', 'components/select2-bootstrap-css/lib/']
+            paths: ['components/bootstrap/less/']
         },
         files: {
           'public/css/lutris.css': ['common_static/css/lutris.less']
@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       min: {
         options: {
             yuicompress: true,
-            paths: ['components/bootstrap/less/', 'components/select2-bootstrap-css/lib/']
+            paths: ['components/bootstrap/less/']
         },
         files: {
             'public/css/lutris.min.css': ['common_static/css/lutris.less']
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
           'components/jcrop/css/jquery.Jcrop.css',
           'components/jcrop-fileinput/dist/jcrop-fileinput.css',
           'components/select2/select2.css',
-          'components/select2-bootstrap-css/select2-bootstrap.css'
+          'components/select2-bootstrap3-css/select2-bootstrap.css'
         ],
         dest: 'public/css/libs.css',
         nonull: true
@@ -44,6 +44,7 @@ module.exports = function(grunt) {
           'components/jquery/jquery.js',
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
+          'components/jcrop/js/jquery.Jcrop.js',
           'components/jcrop-fileinput/dist/jcrop-fileinput.js',
           'components/select2/select2.js',
         ],

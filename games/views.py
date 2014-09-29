@@ -1,12 +1,13 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
+import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
+from django.core.mail import mail_managers
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
 
@@ -15,6 +16,8 @@ from sorl.thumbnail import get_thumbnail
 from .models import Game, Runner, Installer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
+
+LOGGER = logging.getLogger(__name__)
 
 
 class GameList(ListView):
@@ -131,7 +134,8 @@ def game_detail(request, slug):
         installers = game.installer_set.published()
         screenshots = game.screenshot_set.published()
 
-    auto_installers = game.get_default_installers()
+    # auto_installers = game.get_default_installers()
+    auto_installers = []
     return render(request, 'games/detail.html',
                   {'game': game,
                    'banner_options': banner_options,
@@ -293,13 +297,23 @@ def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()
-        # Notify admins a game has been submitted
-        body = "The game %s has been added by %s" % (game.name, request.user)
-        send_mail("New game submitted", body,
-                  settings.DEFAULT_FROM_EMAIL,
-                  settings.MANAGERS[0])
+        # Notify managers a game has been submitted
+        subject = "New game submitted: {0}".format(game.name)
+        admin_url = reverse("admin:games_game_change", args=(game.id, ))
+        body = """
+        The game {0} has been added by {1}.
 
-        return redirect(reverse("game-submitted"))
+        It can be modified and published at https://lutris.net{2}
+        """.format(game.name, request.user, admin_url)
+        mail_managers(subject, body)
+        redirect_url = request.build_absolute_uri(reverse("game-submitted"))
+
+        # Enforce https
+        if not settings.DEBUG:
+            redirect_url = redirect_url.replace('http:', 'https:')
+
+        LOGGER.info('Game submitted, redirecting to %s', redirect_url)
+        return redirect(redirect_url)
     return render(request, 'games/submit.html', {'form': form})
 
 

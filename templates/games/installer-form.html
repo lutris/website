@@ -28,3 +28,18 @@
   </div>
 </div>
 {% endblock %}
+
+
+{% block scripts %}
+<script>
+jQuery(function ($) {
+  $("#id_runner").select2({
+    'minimumResultsForSearch': 6, 
+    'allowClear': false, 
+    'closeOnSelect': false, 
+    'placeholder': ''
+  });
+});
+</script>
+  
+{% endblock %}

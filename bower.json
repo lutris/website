@@ -1,6 +1,10 @@
 {
   "name": "lutris",
-  "version": "0.1.0",
+  "version": "0.3.5",
+  "homepage": "https://github.com/lutris/website",
+  "authors": [
+    "Mathieu Comandon <strycore@gmail.com>"
+  ],
   "ignore": [
     "**/.*",
     "node_modules",
@@ -9,10 +13,11 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.0",
+    "bootstrap": "~3.2.0",
     "jquery": "~1.10",
-    "modernizr": "~2.6.2",
-    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.2",
-    "select2-bootstrap-css": "git://github.com/fk/select2-bootstrap-css.git#master"
+    "modernizr": "~2.8.3",
+    "select2": "~3.5.1",
+    "select2-bootstrap3-css": "~1.4.1",
+    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.2"
   }
 }

@@ -9,6 +9,7 @@ PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
+    ('Pascal', 'pascal@xod.me'),
 )
 MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
@@ -144,6 +145,7 @@ GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
 # Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
+SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 # Celery

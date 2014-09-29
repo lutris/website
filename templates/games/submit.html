@@ -7,10 +7,10 @@
     <h1>Submit a game</h1>
     <p>
       Please be as accurate as possible with the information you provide.
-      Wikipedia is generally a reliable source. If you know a more accurate
-      one, let us know! Thanks for your efforts!<br /><br />
+      Wikipedia or <a href="http://www.mobygames.com/search/quick">Mobygames</a>
+      are generally reliable sources. If you know more accurate ones, let us
+      know! Thanks for your efforts!<br /><br />
     </p>
-    {{ form.media }}
     {% crispy form %}
   </div>
 {% endblock %}
@@ -19,6 +19,8 @@
   {{ block.super }}
   <script>
     $(function () {
+      $("#id_platforms").select2({'closeOnSelect': false, 'placeholder': ''});
+      $("#id_genres").select2({'closeOnSelect': false, 'placeholder': ''});
       $('input[type=file]').JCropFileInput({
         debug: true,
         ratio: 8/3,
@@ -26,4 +28,5 @@
       });
     })
   </script>
+
 {% endblock %}
