@@ -2,6 +2,8 @@
 # pylint: disable=E1002, E0202
 import yaml
 import json
+import datetime
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
@@ -244,10 +246,30 @@ class Game(models.Model):
                 installers.append(installer)
         return installers
 
+    def check_for_submission(self):
+
+        # Skip freshly created and unpublished objects
+        if not self.pk or not self.is_public:
+            return
+
+        # Skip objects that were already published
+        original = Game.objects.get(pk=self.pk)
+        if original.is_public:
+            return
+
+        try:
+            submission = GameSubmission.objects.get(game=self,
+                                                    accepted_at__isnull=True)
+        except GameSubmission.DoesNotExist:
+            pass
+        else:
+            submission.accept()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
         self.download_steam_capsule()
+        self.check_for_submission()
         return super(Game, self).save(*args, **kwargs)
 
 
@@ -397,14 +419,10 @@ class Featured(models.Model):
 
 
 class GameSubmission(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    game = models.OneToOneField(Game)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    game = models.ForeignKey(Game)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    @property
-    def accepted(self):
-        return self.game.is_public
+    accepted_at = models.DateTimeField(null=True)
 
     class Meta:
         verbose_name = "User submitted game"
@@ -412,3 +430,31 @@ class GameSubmission(models.Model):
     def __unicode__(self):
         return u"{0} submitted {1} on {2}".format(self.user, self.game,
                                                   self.created_at)
+
+    def accept(self):
+        self.accepted_at = datetime.datetime.now()
+        self.save()
+        subject = u"{} Your game submission for '{}' as been accepted!".format(
+            settings.EMAIL_SUBJECT_PREFIX,
+            self.game.name
+        )
+        body = u"""
+Hello {0}!
+
+Your submission for {1} as been reviewed by a moderator and approved!
+
+The is available at https://lutris.net{2}, you can now write an installer script for it.
+The scripting details are explained on the installer submission page, you can
+have a look at other scripts to see how they are written. If you get confised
+or have any questions about the scripting process, please drop us a line at
+admin@lutris.net or on IRC: #lutris on Freenode.
+
+Have a great day!
+
+The Lutris team
+        """.format(
+            self.user.username,
+            self.game.name,
+            self.game.get_absolute_url()
+        )
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [self.user.email])

@@ -70,7 +70,7 @@ def profile(request):
 def user_account(request, username):
     user = get_object_or_404(User, username=username)
     submissions = games.models.GameSubmission.objects.filter(
-        user=user, game__is_public=False
+        user=user, accepted_at__isnull=True
     )
     return render(request, "accounts/profile.html",
                   {'user': user, 'submissions': submissions})
