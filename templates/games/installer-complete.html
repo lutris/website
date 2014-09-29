@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="message-view">
-  <p> 
-    Your installer has been saved.<br/>
+  <p>
+    Installer submitted, thank you!<br/>
     It will be made public after moderator review.
   </p>
-  <a href="{{ game.get_absolute_url }}">Return to game</a>
+  <a href="{{ game.get_absolute_url }}">Return to {{ game.name }}</a>
 </div>
 {% endblock %}

@@ -53,7 +53,7 @@ docs:
 	rst2html.py --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html
 
 shell:
-	./manage.py shell --traceback
+	./manage.py shell_plus --traceback
 
 worker:
 	celery -A lutrisweb worker --loglevel=debug --autoreload --hostname=lutris.net -E

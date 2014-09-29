@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'django_nose',
     'markupfield',
     'django_openid_auth',
+    'django_extensions',
 
     'common',
     'games',
