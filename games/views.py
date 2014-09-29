@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
-from .models import Game, Runner, Installer
+from .models import Game, Runner, Installer, GameSubmission
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 
@@ -297,6 +297,9 @@ def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()
+        submission = GameSubmission(user=request.user, game=game)
+        submission.save()
+
         # Notify managers a game has been submitted
         subject = "New game submitted: {0}".format(game.name)
         admin_url = reverse("admin:games_game_change", args=(game.id, ))
