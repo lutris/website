@@ -1,6 +1,7 @@
 """Admin configuration for Lutris games"""
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 
 from . import models
@@ -79,6 +80,26 @@ class ScreenshotAdmin(admin.ModelAdmin):
 class FeaturedAdmin(admin.ModelAdmin):
     list_display = ("__unicode__", "created_at")
 
+
+class GameSubmissionAdmin(admin.ModelAdmin):
+    list_display = ("game_link", "user_link", "created_at", "accepted")
+
+    def game_link(self, obj):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(obj.game.id, )),
+            obj.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game"
+
+    def user_link(self, obj):
+        return u"<a href='{0}'>{1}</a>".format(
+            reverse("admin:accounts_user_change", args=(obj.user.id, )),
+            obj.user
+        )
+    user_link.allow_tags = True
+    user_link.short_description = "User"
+
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
@@ -88,3 +109,4 @@ admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)
+admin.site.register(models.GameSubmission, GameSubmissionAdmin)

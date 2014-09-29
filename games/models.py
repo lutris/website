@@ -394,3 +394,21 @@ class Featured(models.Model):
 
     def __unicode__(self):
         return "[%s] %s" % (self.content_type, str(self.content_object), )
+
+
+class GameSubmission(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    game = models.OneToOneField(Game)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def accepted(self):
+        return self.game.is_public
+
+    class Meta:
+        verbose_name = "User submitted game"
+
+    def __unicode__(self):
+        return u"{0} submitted {1} on {2}".format(self.user, self.game,
+                                                  self.created_at)
