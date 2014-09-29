@@ -84,8 +84,9 @@ class GameForm(forms.ModelForm):
         self.fields['title_logo'].help_text = (
             "The banner should include the full title in readable size (big). "
             "You'll be able to crop the uploaded image to the right format. "
+            "The image format is JPG, so no transparency. "
             "If you can't make a good banner, don't worry. Somebody will "
-            "eventually make a better one... probably."
+            "eventually make a better one. Probably."
         )
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', "Submit"))
