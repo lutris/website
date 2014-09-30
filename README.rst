@@ -1,92 +1,70 @@
 
 Getting the site up and running for development
 
-* Install virtualenvwrapper::
+If you haven't done it already, install and configure virtualenvwrapper.
+If you are unfamiliar with virtualenvwrapper, see their documentation on
+their website: http://virtualenvwrapper.readthedocs.org/en/latest/
 
-    sudo pip install virtualenvwrapper
-
-  If you run into problems with recent versions of Ubuntu, install it from
-  the repos::
-
-    sudo apt-get install virtualenvwrapper
-
-* Configure your zshrc / bashrc to support virtualenvwrapper, add::
-
-    ubuntu_venvwrapper="/etc/bash_completion.d/virtualenvwrapper"
-    if [ -f $ubuntu_venvwrapper ]; then
-        source $ubuntu_venvwrapper
-    else
-        virtualenv=$(which virtualenvwrapper.sh)
-        if [ "$virtualenv" != "" ]; then
-            source $virtualenv
-        fi
-    fi
-
-* Create a virtualenv::
-
+Create a virtualenv::
     mkvirtualenv lutrisweb
-
-* cd in the directory and set the virtualenv project path::
-
     cd lutrisweb
     setvirtualenvproject
 
-* Right after creating the lutris virtualenv, it should be activated (it
-  should show the virtualenv name at the beginning of your bash / zsh
-  prompt). Latter on to activate the environment, run::
+Once the virtualenv is created, you need to make sure that some
+environment variables are exported and are set to valid values, the
+simplest way to achieve that is to edit the postactivate script in
+`$VIRTUAL_ENV/lutrisweb/bin/postactivate` and add your exports here. 
+The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
-    workon lutrisweb
+    export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 
-* Once the virtualenv is activated, install the dependencies::
 
-    cdproject
-    make deps
+Optionnaly, if you don't want to setup a PostgreSQL database, you can
+also tell the project to fallback to SQLite::
 
-* Install the required system dependencies::
+    export USE_SQLITE=1
+
+Once your virtualenv is created, you can install the system and pyhton
+dependencies::
 
     sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
+    make deps
 
-* Install a recent version of nodejs and grunt. On Fedora, you can install
-  the nodejs from the repos. When nodejs and grunt are installed, you can
-  install grunt dependencies for the project. 
-  Install bower components::
+In order to build the frontend code (javascript and css files), you'll
+need nodejs, npm, grunt and bower installed on your system. If you are
+running Ubuntu, it is advised to used a PPA to get the most recent
+version of node::
 
     sudo add-apt-repository ppa:chris-lea/node.js
-    sudo apt-get install nodejs
-    sudo npm install grunt-cli -g
-    sudo npm install bower -g
-    npm install
-    bower install
 
-* Make the SQLite database::
+Once you have grunt and bower installed, you can use the following::
 
-    make db
+    bower install  # Install the frontend dependencies
+    grunt  # Launch the default build process for frontend code
+    grunt coffee  # Only compile coffeescript code
+    grunt less  # Only compile less stylesheets
+    grunt watch  # Watch for JS/CSS changes and compile them
 
-* Get the source code for the Lutris client, this will allow to build the
-  installer's docs::
+The installer scripting documentation is not shipped with the website but
+with the client, if you want to build the docs, you'll need to get the
+client and compile the rst files into HTML. All this process is
+automated::
 
     make client
+    make docs
 
-* Make sure that everything is in order and run the test suite::
+Once everything is set up correctly, you should be able to run the test
+suite without any failures::
 
     make test
 
-* Run the dev server and tell grunt to watch for changes in less /
-  coffeescript files and start coding::
+You can now start developing on the website. Open your favorite editor and
+run Django's internal web server::
 
     make run
-    # in a separate shell
-    grunt watch
-    firefox http://localhost:8000
 
 Postgresql configuriguration
 ============================
-
-Note: If you don't want to setup PostgreSQL on your development machine,
-set the environment variable USE_SQLITE to any value::
-
-    export USE_SQLITE=1
-    make db
 
 Quickstart::
 
