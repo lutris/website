@@ -441,12 +441,13 @@ class GameSubmission(models.Model):
         body = u"""
 Hello {0}!
 
-Your submission for {1} as been reviewed by a moderator and approved!
+Your submission for {1} has been reviewed by a moderator and approved!
 
-The is available at https://lutris.net{2}, you can now write an installer script for it.
-The scripting details are explained on the installer submission page, you can
-have a look at other scripts to see how they are written. If you get confised
-or have any questions about the scripting process, please drop us a line at
+The game's page is available at https://lutris.net{2}
+You can submit an installer script for it if you haven't done so already. The
+scripting details are explained on the installer submission page, you can have
+a look at other scripts to see how they are written. If you get confused or
+have any questions about the scripting process, please drop us a line at
 admin@lutris.net or on IRC: #lutris on Freenode.
 
 Have a great day!
