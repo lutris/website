@@ -10,12 +10,6 @@
     </div>
   </div>
   <div class="col-xs-8">
-    <h2>Library</h2>
-    <p>Your library is synced on all your Lutris clients when you connect them
-    to the website.
-    </p>
-    <a href="{% url 'library_show' username=user.username %}" class="btn">View my library</a>
-  
     {% if submissions %}
     <h2>Submissions</h2>
     <p>
@@ -33,7 +27,7 @@
     <h2>Import your Steam library</h2>
     <p>
     You can automatically import the list of your Steam games and add them to
-    your Lutris library.  
+    your Lutris library.
     </p>
     <p class="warning-message">
     Your steam profile must be public during the sync process.You can set it
