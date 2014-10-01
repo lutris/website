@@ -104,7 +104,7 @@ def update_celery():
     tempfile = "/tmp/%(project)s-celery.conf" % env
     local('cp config/lutrisweb-celery.conf ' + tempfile)
     local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
-    local('sed -i s/%%PROJECT%%/%(project)s/g ' % env + tempfile)
+    local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
     put(tempfile, '%(root)s' % env)
     sudo('cp %(root)s/lutrisweb-celery.conf ' % env
          + '/etc/supervisor/conf.d/', shell=False)

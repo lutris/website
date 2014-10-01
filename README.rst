@@ -65,7 +65,7 @@ run Django's internal web server::
     make run
 
 Postgresql configuration
-============================
+========================
 
 Quickstart::
 
