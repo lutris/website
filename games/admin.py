@@ -38,8 +38,8 @@ class RunnerVersionInline(admin.TabularInline):
 
 
 class RunnerAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ("name", )}
     list_display = ('name', 'slug', 'website')
+    form = forms.RunnerForm
     inlines = [
         RunnerVersionInline,
     ]
