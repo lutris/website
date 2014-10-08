@@ -6,6 +6,7 @@ import yaml
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import slugify
+from django.utils.safestring import mark_safe
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -112,11 +113,13 @@ class GameForm(forms.ModelForm):
             return name
         else:
             if game.is_public:
-                msg = "This game is already in our database"
+                msg = ("This game is <a href='games/%s'>already in our "
+                       "database</a>.") % slug
             else:
-                msg = ("This game has already been submitted, please wait for "
-                       "a moderator to publish it.")
-            raise forms.ValidationError(msg)
+                msg = ("This game has <a href='games/%s'>already been "
+                       "submitted</a>, you're welcome to nag us so we "
+                       "publish it faster.") % slug
+            raise forms.ValidationError(mark_safe(msg))
 
 
 class FeaturedForm(forms.ModelForm):

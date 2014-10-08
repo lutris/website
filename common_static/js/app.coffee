@@ -9,8 +9,14 @@ set_active_menu = () ->
     menu_index = 2
   else if url.substr(0, 6) == '/games'
     menu_index = 3
-  else if url.substr(0, 5) == '/user'
+  else if url.slice(-8) == 'library/'
     menu_index = 4
+  else if url.slice(-6) == 'login/'
+    menu_index = 4
+  else if url.slice(-9) == 'register/'
+    menu_index = 5
+  else if url.substr(0, 5) == '/user'
+    menu_index = 5
   $('#main-nav li').eq(menu_index).addClass('active')
 
 $ ()->
