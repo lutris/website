@@ -4,9 +4,17 @@
 {% block content %}
 <div class="form-view">
   <p>
-    Game submitted, thank you!<br />
-    We will review and publish it as soon as possible.
+    Game submitted, thank you!
   </p>
-  <a href="{% url "game_list" %}">Back to game list</a>
+  <p>
+    We will review it as soon as possible. You will receive a
+    notification by e-mail when your game is ready for publication.
+  </p>
+  <p>
+    All your submissions are listed on your
+    <a href="{% url "user_account" user.username %}">account</a> page.
+    You can preview this game there and submit an installer right away.
+  </p>
+  <a href="{% url "game_list" %}">Back to the games list</a>
 </div>
 {% endblock %}
