@@ -1,5 +1,5 @@
 import factory
-
+from django.utils.text import slugify
 from django.db.models.signals import post_save
 from games import models
 from accounts.models import User
@@ -56,6 +56,12 @@ class GameLibraryFactory(factory.DjangoModelFactory):
 class RunnerFactory(factory.DjangoModelFactory):
     FACTORY_FOR = models.Runner
     name = factory.Sequence(lambda n: 'runner%s' % n)
+
+    @factory.post_generation
+    def set_slug(self, create, extracted, **kwargs):
+        if not create:
+            return
+        self.slug = slugify(unicode(self.name))
 
 
 class InstallerFactory(factory.DjangoModelFactory):
