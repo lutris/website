@@ -24,7 +24,7 @@ class GameResource(ModelResource):
     class Meta:
         queryset = models.Game.objects.all()
         fields = ['name', 'slug', 'year', 'platforms', 'title_logo', 'icon',
-                  'is_public', 'updated']
+                  'is_public', 'updated', 'steamid']
         allowed_methods = ['get']
         detail_uri_name = 'slug'
 
