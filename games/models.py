@@ -367,6 +367,8 @@ class Installer(models.Model):
         yaml_content = yaml.safe_load(self.content) or {}
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
+        yaml_content['year'] = self.game.year
+        yaml_content['steamid'] = self.game.steamid
         try:
             yaml_content['runner'] = self.runner.slug
         except Runner.DoesNotExist:
