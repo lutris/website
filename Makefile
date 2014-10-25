@@ -77,3 +77,6 @@ sqlsequencereset:
 	./manage.py sqlsequencereset south >> sqlsequencereset.sql
 	./manage.py sqlsequencereset tastypie >> sqlsequencereset.sql
 	cat sqlsequencereset.sql | psql -U lutris_staging -h localhost lutris_staging
+
+start: deps setup test run
+	echo "running"
