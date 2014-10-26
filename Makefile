@@ -1,6 +1,6 @@
 setup:
 	npm install
-	bower install
+	bower install --allow-root
 	grunt
 run:
 	./manage.py runserver
@@ -78,5 +78,5 @@ sqlsequencereset:
 	./manage.py sqlsequencereset tastypie >> sqlsequencereset.sql
 	cat sqlsequencereset.sql | psql -U lutris_staging -h localhost lutris_staging
 
-start: deps setup test run
-	echo "running"
+start: deps setup run
+	echo "Running Lutris Website"

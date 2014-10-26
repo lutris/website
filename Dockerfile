@@ -1,10 +1,10 @@
-FROM python:3.4.2
+FROM python:2.7
 
 # Dependencies
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 RUN apt-get install -y build-essential apt-utils
-RUN apt-get install -y imagemagick memcached
+RUN apt-get install -y imagemagick memcached mercurial bzr
 
 # virtualenvwrapper
 RUN pip install virtualenvwrapper
@@ -21,8 +21,10 @@ RUN curl -sL https://deb.nodesource.com/setup | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g bower grunt-cli
 
+# Mount the application directory
 VOLUME ["/app"]
 WORKDIR /app
 
+# Set up the command interface
 CMD ["-"]
 ENTRYPOINT ["make"]
