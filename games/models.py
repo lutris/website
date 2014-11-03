@@ -293,6 +293,14 @@ class Screenshot(models.Model):
         desc = self.description if self.description else self.game.name
         return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
+    def game_link(self):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(self.game.id, )),
+            self.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
+
 
 class InstallerManager(models.Manager):
     def published(self, user=None, is_staff=False):
@@ -354,6 +362,14 @@ class Installer(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    def game_link(self):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(self.game.id, )),
+            self.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
 
     def set_default_installer(self):
         if self.game and self.game.steam_support():
