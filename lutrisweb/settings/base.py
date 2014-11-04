@@ -42,6 +42,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+TOSEC_DAT_PACK = join(MEDIA_ROOT, "tosec",
+                      "TOSEC - DAT Pack - Complete (2292) (TOSEC-v2014-10-31)")
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
