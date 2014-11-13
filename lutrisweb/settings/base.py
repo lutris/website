@@ -42,6 +42,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+FILES_ROOT = join(MEDIA_ROOT, 'files')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
