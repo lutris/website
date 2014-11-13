@@ -381,6 +381,10 @@ class Installer(models.Model):
 
     def as_dict(self):
         yaml_content = yaml.safe_load(self.content) or {}
+
+        # If yaml content evaluates to a string return an empty dict
+        if isinstance(yaml_content, basestring):
+            return {}
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year
