@@ -399,7 +399,7 @@ class Installer(models.Model):
         return json.dumps(self.as_dict())
 
     def build_slug(self, version):
-        return "%s-%s" % (slugify(self.game.name)[:30],
+        return "%s-%s" % (slugify(self.game.name)[:29],
                           slugify(version)[:20])
 
     def save(self, *args, **kwargs):
