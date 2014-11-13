@@ -30,3 +30,13 @@ class News(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super(News, self).save(*args, **kwargs)
+
+
+class Upload(models.Model):
+    uploaded_file = models.FileField(upload_to='uploads')
+    destination = models.CharField(max_length=256)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    def __unicode__(self):
+        return self.uploaded_file.name
