@@ -28,7 +28,7 @@ class GameList(ListView):
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = Game.objects.published()
+            queryset = Game.objects.all()
         else:
             queryset = Game.objects.with_installer()
 
