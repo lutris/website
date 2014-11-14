@@ -32,17 +32,21 @@ class GameList(ListView):
         else:
             queryset = Game.objects.with_installer()
 
+        filters = []
         open_source_filter = self.request.GET.get('open-source-filter')
         if open_source_filter:
-            queryset = queryset.filter(flags=Game.flags.open_source)
+            filters.append(Game.flags.open_source)
 
         open_engine_filter = self.request.GET.get('open-engine-filter')
         if open_engine_filter:
-            queryset = queryset.filter(flags=Game.flags.open_engine)
+            filters.append(Game.flags.open_engine)
 
         freeware_filter = self.request.GET.get('freeware-filter')
         if freeware_filter:
-            queryset = queryset.filter(flags=Game.flags.freeware)
+            filters.append(Game.flags.open_engine)
+
+        if filters:
+            queryset = queryset.filter(flags__in=filters)
 
         search_terms = self.request.GET.get('q')
         if search_terms:
