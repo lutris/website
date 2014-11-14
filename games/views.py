@@ -26,11 +26,24 @@ class GameList(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        without_installer = self.request.GET.get('without_installer')
-        if without_installer:
+        unpublished_filter = self.request.GET.get('unpublished-filter')
+        if unpublished_filter:
             queryset = Game.objects.published()
         else:
             queryset = Game.objects.with_installer()
+
+        open_source_filter = self.request.GET.get('open-source-filter')
+        if open_source_filter:
+            queryset = queryset.filter(flags=Game.flags.open_source)
+
+        open_engine_filter = self.request.GET.get('open-engine-filter')
+        if open_engine_filter:
+            queryset = queryset.filter(flags=Game.flags.open_engine)
+
+        freeware_filter = self.request.GET.get('freeware-filter')
+        if freeware_filter:
+            queryset = queryset.filter(flags=Game.flags.freeware)
+
         search_terms = self.request.GET.get('q')
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
@@ -38,11 +51,18 @@ class GameList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(GameList, self).get_context_data(**kwargs)
-        search_terms = self.request.GET.get('q')
+        get_args = self.request.GET
+        context['search_terms'] = get_args.get('q')
+        context['unpublished_filter'] = get_args.get('unpublished-filter')
+        context['open_source_filter'] = get_args.get('open-source-filter')
+        context['open_engine_filter'] = get_args.get('open-engine-filter')
+        context['freeware_filter'] = get_args.get('freeware-filter')
+        for key in context:
+            if key.endswith('_filter'):
+                context['show_advanced'] = True
+                break
         context['platforms'] = models.Platform.objects.all()
         context['genres'] = models.Genre.objects.all()
-        if search_terms:
-            context['search_terms'] = search_terms
         return context
 
 
