@@ -58,7 +58,7 @@ class GameList(ListView):
         context['open_engine_filter'] = get_args.get('open-engine-filter')
         context['freeware_filter'] = get_args.get('freeware-filter')
         for key in context:
-            if key.endswith('_filter'):
+            if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True
                 break
         context['platforms'] = models.Platform.objects.all()
