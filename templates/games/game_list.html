@@ -75,6 +75,20 @@
           <div class="col-xs-4">
             <input class="btn btn-sm" type="submit" value="Search" />
           </div>
+        </div>
+        <div id="advanced-search-panel" class='search-options form-group'>
+          <a href="#advanced-search" class="fold-btn"><span class='fold-indicator'>&#9658;</span> Advanced Search</a>
+          <div class="col-xs-10 collapsable-panel">
+            <input type="checkbox" id="unpublished-filter" name="unpublished-filter" />
+            <label for="unpublished-filter"><span></span>Include unpublished games</label>
+
+            <input type="checkbox" id="open-source-filter" name="open-source-filter" />
+            <label for="open-source-filter"><span></span>Only open source games</label>
+
+            <input type="checkbox" id="freeware-filter" name="freeware-filter" />
+            <label for="freeware-filter"><span></span>Only free games</label>
+          </div>
+        </div>
           {% comment %}
 
           Still needs some further discussion on this.
@@ -85,11 +99,7 @@
           - I quickly tested this and didn't work as expected, would need
             functionnal tests to ensure the filter does what it's meant to do.
 
-          <div class="col-xs-10">
-            <input type="checkbox" name="without_installer" /> Without installer
-          </div>
           {% endcomment %}
-        </div>
       </form>
       <h4>Filter by platform</h4>
       <ul class="filter-list">

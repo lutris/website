@@ -105,6 +105,17 @@ figure {
   }
 }
 
+a:focus, a:active, 
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+select::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: 0;
+    outline : 0;
+}
+
 .simple-form {
   label {
     font-weight: normal;
@@ -508,6 +519,51 @@ figure {
 }
 
 /* == Classes */
+
+.fold-btn {
+  color: #888;
+  font-size: .8em;
+  &:hover, &:focus {
+    text-decoration: none;
+    color: #AAA;
+  }
+}
+
+.fold-indicator {
+  color: #aaa;
+}
+
+.collapsable-panel {
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+
+.search-options {
+  font-size: 0.8em;
+  margin: 7px 0 0 14px;
+
+  input[type="checkbox"] {
+    display:none;
+  }
+  color: #aaa;
+  input[type="checkbox"] + label span {
+      display:inline-block;
+      width:10px;
+      height:10px;
+      margin: 0 4px 0 0;
+      background:url("../images/checkboxes.png") left top no-repeat;
+      cursor: pointer;
+  }
+  input[type="checkbox"]:checked + label span {
+      background:url("../images/checkboxes.png") left -11px no-repeat;
+  }
+  input[type="checkbox"]:checked + label {
+    color: #EEE;
+  }
+}
+
 .overlay {
   position: relative;
   display: block;

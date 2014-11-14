@@ -10,3 +10,11 @@ $ () ->
         list_elem.show()
     )
   )
+
+  $(".fold-btn").click((e)->
+    $("#advanced-search-panel .collapsable-panel").toggleClass('active')
+    if $("#advanced-search-panel .collapsable-panel").hasClass('active')
+      $("#advanced-search-panel .fold-indicator").html("&#9660;")
+    else
+      $("#advanced-search-panel .fold-indicator").html("&#9658;")
+  )
