@@ -16,6 +16,7 @@ from sorl.thumbnail import get_thumbnail
 from .models import Game, Runner, Installer, GameSubmission
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
+from .util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
 
@@ -53,8 +54,21 @@ class GameList(ListView):
             queryset = queryset.filter(name__icontains=search_terms)
         return queryset
 
+    def get_pages(self, context):
+        page = context['page_obj']
+        paginator = page.paginator
+        page_indexes = get_page_range(paginator.num_pages, page.number)
+        pages = []
+        for i in page_indexes:
+            if i:
+                pages.append(paginator.page(i))
+            else:
+                pages.append(None)
+        return pages
+
     def get_context_data(self, **kwargs):
         context = super(GameList, self).get_context_data(**kwargs)
+        context['page_range'] = self.get_pages(context)
         get_args = self.request.GET
         context['search_terms'] = get_args.get('q')
         context['unpublished_filter'] = get_args.get('unpublished-filter')

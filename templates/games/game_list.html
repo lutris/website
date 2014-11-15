@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load append_to_get %}
 {% load url from future %}
 {% block title %}Games - Lutris{% endblock %}
 
@@ -44,25 +45,30 @@
       {% endfor %}
     </ul>
 
-    {% if is_paginated %}
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="page-links">
-          <a href=".?page={{ page_obj.previous_page_number }}">&laquo;</a>
-        </li>
-      {% endif %}
-        <li>
-          <a>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
-        </li>
-      {% if page_obj.has_next %}
-        <li>
-          <a href=".?page={{ page_obj.next_page_number }}">&raquo;</a>
-        </li>
-      {% endif %}
-    </ul>
-    {% endif %}
+    <div class="pagination-block">
+      <div class="pagination-pager">
+        {% if page_obj.has_previous %}
+          <a href="{% append_to_get page=page_obj.previous_page_number %}">&laquo;</a>
+        {% endif %}
+        {% for page in page_range %}
+          {% if not page %}
+          …
+          {% elif page.number = page_obj.number %}
+            {{ page.number }}
+          {% else %}
+            <a href="{% append_to_get page=page.number %}">{{ page.number }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="{% append_to_get page=page_obj.next_page_number %}">&raquo;</a>
+        {% endif %}
+      </div>
+      <div class='pagination-info'>
+        {{ page_obj.start_index }}-{{ page_obj.end_index}} of {{ page_obj.paginator.count }}
+      </div>
     </div>
   </div>
+</div>
   <div class="col-xs-4">
     <div class="pane">
       <a href="{% url "submit_game" %}" class="main-button margin-auto">Submit a new game</a>
