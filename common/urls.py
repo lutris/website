@@ -20,5 +20,6 @@ urlpatterns = patterns(
     url(r'news/feed/$', views.NewsFeed()),
     url(r'^news/(?P<slug>[\w-]+)', views.NewsDetails.as_view(),
         name='news_details'),
+    url(r'upload/', views.upload_file, name='upload_file'),
     url(r'^error-testing/', views.error_testing),
 )

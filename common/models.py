@@ -1,3 +1,5 @@
+import os
+import shutil
 import datetime
 from django.db import models
 from django.conf import settings
@@ -30,3 +32,23 @@ class News(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super(News, self).save(*args, **kwargs)
+
+
+class Upload(models.Model):
+    uploaded_file = models.FileField(upload_to='uploads')
+    destination = models.CharField(max_length=256)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    def __unicode__(self):
+        return self.uploaded_file.name
+
+    def validate(self):
+        destination = os.path.join(settings.FILES_ROOT, self.destination)
+        if os.path.exists(destination):
+            raise IOError("Can't overwrite files")
+        if not os.path.exists(os.path.dirname(destination)):
+            os.makedirs(os.path.dirname(destination))
+        source = os.path.join(settings.MEDIA_ROOT, self.uploaded_file.name)
+        shutil.move(source, destination)
+        self.delete()

@@ -149,11 +149,19 @@ class InstallerForm(forms.ModelForm):
     class Meta:
         """Form configuration"""
         model = models.Installer
-        fields = ('runner', 'version', 'description', 'content')
+        fields = ('runner', 'version', 'description', 'notes', 'content')
         widgets = {
+            'notes': forms.Textarea(attrs={'class': 'installer-notes'}),
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
             )
+        }
+        help_texts = {
+            'version': "Installer identifier (lowercase alphanumeric "
+                       "characters + dashes)",
+            'description': "Human readable short description of the installer",
+            'notes': "Add any known issues or manual task required to run "
+                     "the game properly",
         }
 
     def __init__(self, *args, **kwargs):

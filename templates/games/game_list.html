@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load append_to_get %}
 {% load url from future %}
 {% block title %}Games - Lutris{% endblock %}
 
@@ -44,25 +45,30 @@
       {% endfor %}
     </ul>
 
-    {% if is_paginated %}
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="page-links">
-          <a href=".?page={{ page_obj.previous_page_number }}">&laquo;</a>
-        </li>
-      {% endif %}
-        <li>
-          <a>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
-        </li>
-      {% if page_obj.has_next %}
-        <li>
-          <a href=".?page={{ page_obj.next_page_number }}">&raquo;</a>
-        </li>
-      {% endif %}
-    </ul>
-    {% endif %}
+    <div class="pagination-block">
+      <div class="pagination-pager">
+        {% if page_obj.has_previous %}
+          <a href="{% append_to_get page=page_obj.previous_page_number %}">&laquo;</a>
+        {% endif %}
+        {% for page in page_range %}
+          {% if not page %}
+          …
+          {% elif page.number = page_obj.number %}
+            {{ page.number }}
+          {% else %}
+            <a href="{% append_to_get page=page.number %}">{{ page.number }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="{% append_to_get page=page_obj.next_page_number %}">&raquo;</a>
+        {% endif %}
+      </div>
+      <div class='pagination-info'>
+        {{ page_obj.start_index }}-{{ page_obj.end_index}} of {{ page_obj.paginator.count }}
+      </div>
     </div>
   </div>
+</div>
   <div class="col-xs-4">
     <div class="pane">
       <a href="{% url "submit_game" %}" class="main-button margin-auto">Submit a new game</a>
@@ -70,11 +76,28 @@
       <form action="." method=get class="form-inline">
         <div class="form-group">
           <div class="col-xs-8">
-            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" />
+            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" value="{{ search_term|default:"" }}" />
           </div>
           <div class="col-xs-4">
             <input class="btn btn-sm" type="submit" value="Search" />
           </div>
+        </div>
+        <div id="advanced-search-panel" class='search-options form-group'>
+          <a href="#advanced-search" class="fold-btn"><span class='fold-indicator'>&#9658;</span> Advanced Search</a>
+          <div class="col-xs-10 collapsable-panel {% if show_advanced %}active{% endif %}">
+            <input type="checkbox" id="unpublished-filter" name="unpublished-filter" {% if unpublished_filter %}checked{% endif %}/>
+            <label for="unpublished-filter"><span></span>Include unpublished games</label>
+
+            <input type="checkbox" id="open-source-filter" name="open-source-filter" {% if open_source_filter %}checked{% endif %}/>
+            <label for="open-source-filter"><span></span>Only Libre games</label>
+
+            <input type="checkbox" id="open-engine-filter" name="open-engine-filter" {% if open_engine_filter %}checked{% endif %}/>
+            <label for="open-engine-filter"><span></span>Only open engine games</label>
+
+            <input type="checkbox" id="freeware-filter" name="freeware-filter" {% if freeware_filter %}checked{% endif %}/>
+            <label for="freeware-filter"><span></span>Only free games</label>
+          </div>
+        </div>
           {% comment %}
 
           Still needs some further discussion on this.
@@ -85,11 +108,7 @@
           - I quickly tested this and didn't work as expected, would need
             functionnal tests to ensure the filter does what it's meant to do.
 
-          <div class="col-xs-10">
-            <input type="checkbox" name="without_installer" /> Without installer
-          </div>
           {% endcomment %}
-        </div>
       </form>
       <h4>Filter by platform</h4>
       <ul class="filter-list">

@@ -173,9 +173,9 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     flags = BitField(flags=(
-        'open_source',
-        'open_engine',
-        'freeware',
+        ('open_source', 'Open Source'),
+        ('open_engine', 'OpenEngine'),
+        ('freeware', 'Freeware'),
     ))
 
     objects = GameManager()
@@ -354,6 +354,7 @@ class Installer(models.Model):
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.CharField(max_length=512, blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -381,6 +382,10 @@ class Installer(models.Model):
 
     def as_dict(self):
         yaml_content = yaml.safe_load(self.content) or {}
+
+        # If yaml content evaluates to a string return an empty dict
+        if isinstance(yaml_content, basestring):
+            return {}
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year

@@ -16,7 +16,7 @@
         {{ field.errors }}
       {% endfor %}
       {{ form.as_p }}
-      <input type="submit" class="btn btn-primary"/>
+      <input type="submit" class="btn btn-primary" value="Save"/>
       <a class='btn' href="">Cancel</a>
     </form>
     </div>
@@ -34,12 +34,12 @@
 <script>
 jQuery(function ($) {
   $("#id_runner").select2({
-    'minimumResultsForSearch': 6, 
-    'allowClear': false, 
-    'closeOnSelect': false, 
+    'minimumResultsForSearch': 6,
+    'allowClear': false,
+    'closeOnSelect': false,
     'placeholder': ''
   });
 });
 </script>
-  
+
 {% endblock %}
