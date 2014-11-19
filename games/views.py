@@ -16,6 +16,7 @@ from sorl.thumbnail import get_thumbnail
 from .models import Game, Runner, Installer, GameSubmission
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
+from .util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,23 +27,60 @@ class GameList(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        without_installer = self.request.GET.get('without_installer')
-        if without_installer:
-            queryset = Game.objects.published()
+        unpublished_filter = self.request.GET.get('unpublished-filter')
+        if unpublished_filter:
+            queryset = Game.objects.all()
         else:
             queryset = Game.objects.with_installer()
+
+        filters = []
+        open_source_filter = self.request.GET.get('open-source-filter')
+        if open_source_filter:
+            filters.append(Game.flags.open_source)
+
+        open_engine_filter = self.request.GET.get('open-engine-filter')
+        if open_engine_filter:
+            filters.append(Game.flags.open_engine)
+
+        freeware_filter = self.request.GET.get('freeware-filter')
+        if freeware_filter:
+            filters.append(Game.flags.open_engine)
+
+        if filters:
+            queryset = queryset.filter(flags__in=filters)
+
         search_terms = self.request.GET.get('q')
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
         return queryset
 
+    def get_pages(self, context):
+        page = context['page_obj']
+        paginator = page.paginator
+        page_indexes = get_page_range(paginator.num_pages, page.number)
+        pages = []
+        for i in page_indexes:
+            if i:
+                pages.append(paginator.page(i))
+            else:
+                pages.append(None)
+        return pages
+
     def get_context_data(self, **kwargs):
         context = super(GameList, self).get_context_data(**kwargs)
-        search_terms = self.request.GET.get('q')
+        context['page_range'] = self.get_pages(context)
+        get_args = self.request.GET
+        context['search_terms'] = get_args.get('q')
+        context['unpublished_filter'] = get_args.get('unpublished-filter')
+        context['open_source_filter'] = get_args.get('open-source-filter')
+        context['open_engine_filter'] = get_args.get('open-engine-filter')
+        context['freeware_filter'] = get_args.get('freeware-filter')
+        for key in context:
+            if key.endswith('_filter') and context[key]:
+                context['show_advanced'] = True
+                break
         context['platforms'] = models.Platform.objects.all()
         context['genres'] = models.Genre.objects.all()
-        if search_terms:
-            context['search_terms'] = search_terms
         return context
 
 
@@ -301,9 +339,9 @@ def submit_game(request):
         submission.save()
 
         # Notify managers a game has been submitted
-        subject = "New game submitted: {0}".format(game.name)
+        subject = u"New game submitted: {0}".format(game.name)
         admin_url = reverse("admin:games_game_change", args=(game.id, ))
-        body = """
+        body = u"""
         The game {0} has been added by {1}.
 
         It can be modified and published at https://lutris.net{2}

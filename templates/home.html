@@ -40,9 +40,8 @@
       <small>Published by {{ article.user }}, {{ article.publish_date|naturaltime }}</small>
     </p>
     <article>
-      {{ article.content }}
+      {{ article.content.rendered|safe }}
     </article>
-
     <a href="{% url "news_archives" %}" class="right archives">Older news</a>
     {% endblock %}
 

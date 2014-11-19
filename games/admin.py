@@ -21,10 +21,11 @@ class PlatformAdmin(admin.ModelAdmin):
 
 
 class InstallerAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'user', 'updated_at', 'published')
+    list_display = ('__unicode__', 'game_link', 'user', 'updated_at', 'published')
     list_filter = ('published', )
     list_editable = ('published', )
     ordering = ('-updated_at', )
+    readonly_fields = ('game_link',)
     search_fields = ('slug', 'user__username')
 
 
@@ -72,8 +73,9 @@ class GameAdmin(admin.ModelAdmin):
 
 class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("-uploaded_at", )
-    list_display = ("__unicode__", "uploaded_at", "published")
+    list_display = ("__unicode__", "game_link", "uploaded_at", "published")
     list_editable = ("published", )
+    readonly_fields = ('game_link',)
     search_fields = ['game__name']
 
 

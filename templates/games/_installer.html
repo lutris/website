@@ -40,9 +40,12 @@
     <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
   </div>
   {% if installer.description %}
-  <p class="discreet-text">
-    {{ installer.description }}
-    <br />
-  </p>
+  <p class="discreet-text"><strong>{{ installer.description }}</strong></p>
   {% endif %}
+  {% if installer.notes %}
+  <div class="discreet-text">
+    {{ installer.notes|linebreaks }}
+  </div>
+  {% endif %}
+
 </li>
