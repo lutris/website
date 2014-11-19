@@ -7,12 +7,14 @@ from accounts.signals import create_library
 
 
 class PlatformFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = models.Platform
+    class Meta:
+        model = models.Platform
     name = 'Amiga'
 
 
 class GameFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = models.Game
+    class Meta:
+        model = models.Game
     name = factory.Iterator(['Quake', 'Unreal', 'Serious Sam',
                              'Duke 3D', 'Deus Ex'])
     year = 1999
@@ -20,7 +22,8 @@ class GameFactory(factory.DjangoModelFactory):
 
 
 class UserFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = User
+    class Meta:
+        model = User
     first_name = "Tester"
     last_name = "Testing"
     username = factory.Sequence(lambda n: 'user%d' % n)
@@ -41,7 +44,8 @@ class UserNoLibraryFactory(UserFactory):
 
 
 class GameLibraryFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = models.GameLibrary
+    class Meta:
+        model = models.GameLibrary
     user = factory.SubFactory(UserNoLibraryFactory)
 
     @factory.post_generation
@@ -54,7 +58,8 @@ class GameLibraryFactory(factory.DjangoModelFactory):
 
 
 class RunnerFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = models.Runner
+    class Meta:
+        model = models.Runner
     name = factory.Sequence(lambda n: 'runner%s' % n)
 
     @factory.post_generation
@@ -65,7 +70,8 @@ class RunnerFactory(factory.DjangoModelFactory):
 
 
 class InstallerFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = models.Installer
+    class Meta:
+        model = models.Installer
     runner = factory.SubFactory(RunnerFactory)
     version = 'test'
     published = True
