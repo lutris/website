@@ -7,6 +7,10 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ('accounts', '0001_initial'),
+    )
+
     def forwards(self, orm):
         # Adding model 'Upload'
         db.create_table(u'common_upload', (
