@@ -52,7 +52,7 @@ class Command(BaseCommand):
                     name=rom['name'],
                     size=rom['size'],
                     crc=rom['crc'],
-                    md5=rom['md5'],
+                    md5=rom.get('md5', ''),
                     sha1=rom.get('sha1', ''),
                 )
                 rom_row.save()

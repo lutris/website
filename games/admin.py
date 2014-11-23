@@ -21,7 +21,8 @@ class PlatformAdmin(admin.ModelAdmin):
 
 
 class InstallerAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'game_link', 'user', 'updated_at', 'published')
+    list_display = ('__unicode__', 'game_link', 'user', 'updated_at',
+                    'published')
     list_filter = ('published', )
     list_editable = ('published', )
     ordering = ('-updated_at', )
