@@ -23,6 +23,7 @@ mock>=1.0.1
 jsonfield
 psycopg2
 factory_boy==2.4.1
+djangorestframework==2.4.4
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
