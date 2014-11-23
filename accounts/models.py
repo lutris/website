@@ -1,4 +1,6 @@
 import uuid
+import hmac
+from hashlib import sha1
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -9,6 +11,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars', blank=True)
     steamid = models.CharField("Steam id", max_length=32, blank=True)
     website = models.URLField(blank=True)
+    key = models.CharField(max_length=256, blank=True, default='')
 
     @property
     def avatar_url(self):
@@ -24,6 +27,13 @@ class User(AbstractUser):
         except UserOpenID.DoesNotExists:
             return False
         self.steamid = user_openid.claimed_id.split('/')[-1]
+
+    def generate_key(self):
+        """API key generation from TastyPie"""
+        # Get a random UUID.
+        new_uuid = uuid.uuid4()
+        # Hmac that beast.
+        return hmac.new(new_uuid.bytes, digestmod=sha1).hexdigest()
 
 
 class AuthToken(models.Model):
