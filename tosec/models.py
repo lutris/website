@@ -14,6 +14,7 @@ class Category(models.Model):
 
     class Meta(object):
         verbose_name_plural = 'Categories'
+        ordering = ('name', )
 
 
 class Game(models.Model):
@@ -23,6 +24,9 @@ class Game(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta(object):
+        ordering = ('category', 'name')
 
 
 class Rom(models.Model):
