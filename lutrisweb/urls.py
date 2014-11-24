@@ -24,6 +24,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^user/', include('accounts.urls')),
+    url(r'^api/1.1/tosec/', include('tosec.urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls')),
     url(r'^steam-login/', login_begin, kwargs={

@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'south',
     'tastypie',
+    'rest_framework',
     'django_jcrop',
     'crispy_forms',
     'django_select2',
