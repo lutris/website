@@ -89,23 +89,81 @@ class TosecParser(object):
 
 
 class TosecNamingConvention(object):
-    systems = [s.replace('+', '\+') for s in constants.SYSTEMS_FLAGS]
     tosec_re = (
         r'(?P<title>.*?) '
         r'(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*'
         r'\((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)'
         r'\((?P<publisher>.*?)\)'
-        r'(?:\((?P<system>%s)\))*' % '|'.join(systems)
     )
+    flags_re = r'\((.*?)\)*'
+
+    parts = [
+        'title',
+        'version',
+        'demo',
+        'date',
+        'publisher',
+        'system',
+        'video',
+        'country',
+        'language',
+        'copyright',
+        'development',
+        'media',
+        'dump',
+        'cracked',
+        'fixed',
+        'hacked',
+        'modified',
+        'pirated',
+        'trained',
+        'translated',
+        'over_dump',
+        'under_dump',
+        'virus',
+        'bad_dump',
+        'alternate',
+        'known_verified',
+    ]
+
+    empty = {
+        'title': None,
+        'demo': None,
+        'date': None,
+        'publisher': None
+    }
 
     def __init__(self, name):
         print self.tosec_re
+        self.filename = name
         self.matches = re.search(self.tosec_re, name)
+        groupdict = self.matches.groupdict() if self.matches else self.empty
+        self.title = groupdict['title']
+        self.demo = groupdict['demo']
+        self.date = groupdict['date']
+        self.publisher = groupdict['publisher']
 
-    def __getattr__(self, name):
-        if not self.matches:
-            return
-        try:
-            return self.matches.group(name)
-        except IndexError:
-            pass
+        if self.matches:
+            remainder = self.filename[self.matches.end():]
+            self.flags = [s for s in re.split(r'(\(.*?\))', remainder) if s]
+            self.set_flags()
+
+    def set_flags(self):
+        current_flag_index = self.parts.index('publisher') + 1
+        for flag in self.flags:
+            if not flag.startswith('('):
+                return
+            flag_value = flag.strip('()')
+            flag_type = self.parts[current_flag_index]
+            flag_method = getattr(self, 'set_' + flag_type)
+            flag_set = False
+            last_index = self.parts.index('cracked')
+            while current_flag_index < last_index and not flag_set:
+                flag_set = flag_method(flag_value)
+                current_flag_index += 1
+
+    def set_system(self, value):
+        self.system = None
+        if value in constants.SYSTEMS_FLAGS:
+            self.system = value
+            return True
