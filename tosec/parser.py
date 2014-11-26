@@ -2,10 +2,6 @@ import re
 from . import constants
 
 
-def is_separator(char):
-    return char == ' ' or char == '\t'
-
-
 def smart_split(string, sep=None):
     sep_map = {
         '(': ')',
@@ -22,10 +18,10 @@ def smart_split(string, sep=None):
         if sep:
             if string[i:i + len(sep)] == sep and not in_word:
                 in_word = True
-            elif string[i - len(sep) + 1:i + 1] == end_sep and in_word:
+            elif string[i - len(end_sep) + 1:i + 1] == end_sep and in_word:
                 in_word = False
         char = string[i]
-        if is_separator(char) and not in_word:
+        if char in (' ', '\t') and not in_word:
             if word:
                 splits.append(word)
                 word = ''
@@ -101,7 +97,6 @@ class TosecNamingConvention(object):
         r'\((?P<publisher>.*?)\)'
         r'(?:\((?P<system>%s)\))*' % '|'.join(systems)
     )
-
 
     def __init__(self, name):
         print self.tosec_re
