@@ -21,7 +21,7 @@ class User(AbstractUser):
     def set_steamid(self):
         try:
             user_openid = UserOpenID.objects.get(user=self)
-        except UserOpenID.DoesNotExists:
+        except UserOpenID.DoesNotExist:
             return False
         self.steamid = user_openid.claimed_id.split('/')[-1]
 
