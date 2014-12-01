@@ -375,7 +375,7 @@ class Installer(models.Model):
     def set_default_installer(self):
         if self.game and self.game.steam_support():
             installer_data = {'game': {'appid': self.game.steamid}}
-            self.version = 'steam'
+            self.version = 'Steam'
         else:
             installer_data = DEFAULT_INSTALLER
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)

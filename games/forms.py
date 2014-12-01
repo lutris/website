@@ -151,21 +151,31 @@ class InstallerForm(forms.ModelForm):
         model = models.Installer
         fields = ('runner', 'version', 'description', 'notes', 'content')
         widgets = {
-            'notes': forms.Textarea(attrs={'class': 'installer-notes'}),
+            'description': forms.Textarea(
+                attrs={'class': 'installer-textarea'}
+                ),
+            'notes': forms.Textarea(attrs={'class': 'installer-textarea'}),
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
             )
         }
         help_texts = {
-            'version': "Installer identifier (lowercase alphanumeric "
-                       "characters + dashes)",
-            'description': "Human readable short description of the installer",
-            'notes': "Add any known issues or manual task required to run "
-                     "the game properly",
+            'version': (
+                "Short version name describing the release of the game "
+                "targeted by the installer. It can be the release name (e.g. "
+                "GOTY, Gold...) or format (CD...) or platform (Amiga "
+                "500...), or the vendor version (e.g. GOG, Steam...) or "
+                "the actual software version of the game... Whatever makes "
+                "the most sense."
+                ),
+            'description': "Additionnal details.",
+            'notes': ("Describe any known issues or manual tasks required "
+                      "to run the game properly."),
         }
 
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
+        self.fields['notes'].label = "Technical notes"
 
     def clean_version(self):
         version = self.cleaned_data['version']
