@@ -163,7 +163,86 @@ class TosecNamingConvention(object):
                 current_flag_index += 1
 
     def set_system(self, value):
+        """This field is reserved for collections that require multiple system
+        support, such as Amiga, which could require (A500), (A1000) etc., to
+        address compatibility issues.
+        """
         self.system = None
         if value in constants.SYSTEMS_FLAGS:
             self.system = value
+            return True
+
+    def set_video(self, value):
+        """The video field is only used in cases where the images cannot be
+        classified by countries or languages, but for example only the PAL or
+        NTSC video formats they were released in.
+        """
+        self.video = None
+        if value in constants.VIDEO_FLAGS:
+            self.video = value
+            return True
+
+    def set_country(self, value):
+        """This field is used to classify the country of origin. The codes used
+        are defined by the international ISO 3166-1 alpha-2 standard.
+        In the case of two countries being required, both are given,
+        alphabetised and separated by a hyphen:
+
+        For example: (DE-GB) - Released in Germany and the United Kingdom
+
+        For example: (DE-FR) - Released in France and Germany
+
+        For example: (EU-US) - Released in Europe and the US
+        """
+        self.country = None
+        countries = value.split('-')
+        if all([c in constants.COUNTRY_FLAGS for c in countries]):
+            self.country = value
+            return True
+
+    def set_language(self, value):
+        """The language used in the software. The codes used are defined by the
+        international ISO 639-1 standard.
+
+        Language flags usage has to obey a few basic rules for reasons of
+        enforced simplicity:
+
+        English is seen as the default language, in other words when no
+        language or country flag is used it is taken that the software is in
+        English.
+
+        On the other hand if a country flag is used, we assume that the
+        software language is the official country language, so there is no need
+        to use "(JP)(ja) ", "(DE)(de)" or "(PT)(pt)" only the country code.
+        Conversely, software released in Japan but using English language
+        should be "(JP)(en)" for example.
+
+        When two languages are used they should be alphabetically ordered,
+        unless if one is in English then it always comes first, e.g. (en-de).
+
+        In cases of more than two languages or countries being required, (Mx)
+        is used to represent multiple languages, where x is the number of
+        languages:
+        """
+        self.language = None
+        languages = value.split('-')
+        if all([l in constants.LANGUAGE_FLAGS for l in languages]):
+            self.language = value
+            return True
+        if re.match(r'^M\d$', value):
+            self.language = value
+            return True
+
+    def set_copyright(self, value):
+        """This field is used to denote the copyright status of software if
+        applicable. If the software has been realised to the Public Domain by
+        the copyright holder or if it is Freeware or Shareware for example,
+        this is the place to note it.
+
+        If a Shareware title is registered, -R is appended to the field. This
+        can also be used for Cardware and Giftware titles.
+        """
+        self.copyright = None
+        if value in constants.COPYRIGHT_FLAGS:
+            self.copyright = value
             return True
