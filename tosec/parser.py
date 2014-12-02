@@ -137,7 +137,10 @@ class TosecNamingConvention(object):
     }
 
     def __init__(self, name):
-        print self.tosec_re
+        for part in self.parts:
+            setattr(self, part, None)
+        self.media_numbers = []
+        self.media_total = None
         self.filename = name
         self.matches = re.search(self.tosec_re, name)
         groupdict = self.matches.groupdict() if self.matches else self.empty
@@ -148,24 +151,24 @@ class TosecNamingConvention(object):
 
         if self.matches:
             remainder = self.filename[self.matches.end():]
-            self.flags = [s for s in re.split(r'(\(.*?\))', remainder) if s]
-            self.set_flags()
+            flag_match = re.search(r'\(.*\)', remainder)
+            if flag_match:
+                flag_part = remainder[flag_match.start():flag_match.end()]
+                flags = [s for s in re.split(r'(\(.*?\))', flag_part) if s]
+                self.set_flags(flags)
+                remainder = remainder[flag_match.end():]
 
-    def set_flags(self):
-        self.system = None
-        self.video = None
-        self.country = None
-        self.language = None
-        self.copyright = None
-        self.development = None
-        self.media = None
-        self.media_numbers = []
-        self.media_total = None
-        self.media_additional = None
+            dump_match = re.search(r'\[.*\]', remainder)
+            if dump_match:
+                dump_part = remainder[dump_match.start(), dump_match.end()]
+                dump_flags = [d for d in re.split(r'(\[.*?\])', dump_part) if d]
+                self.set_dump_flags(dump_flags)
+
+    def set_flags(self, flags):
         current_flag_index = self.parts.index('publisher') + 1
-        for flag in self.flags:
-            if not flag.startswith('('):
-                return
+        for flag in flags:
+            # if not flag.startswith('('):
+            #     return
             flag_value = flag.strip('()')
             flag_set = False
             last_index = self.parts.index('cracked')
@@ -174,6 +177,32 @@ class TosecNamingConvention(object):
                 flag_method = getattr(self, 'set_' + flag_type)
                 flag_set = flag_method(flag_value)
                 current_flag_index += 1
+
+    def set_dump_flags(self, dump_flags):
+        dump_flags_attrs = {
+            'cr': 'cracked',
+            'f': 'fixed',
+            'h': 'hacked',
+            'm': 'modified',
+            'p': 'pirated',
+            't': 'trained',
+            'tr': 'translated',
+            'o': 'over_dump',
+            'u': 'under_dump',
+            'v': 'virus',
+            'b': 'bad_dump',
+            'a': 'alternate',
+            '!': 'known_verified',
+        }
+        for flag in dump_flags:
+            flag_parts = flag.split()
+            flag_name = flag_parts[0]
+            if flag_name in dump_flags_attrs:
+                if len(flag_parts) == 1:
+                    value = True
+                else:
+                    value = ' '.join(flag_parts[1:])
+                setattr(self, dump_flags_attrs[flag_name], value)
 
     def set_system(self, value):
         """This field is reserved for collections that require multiple system
