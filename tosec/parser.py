@@ -246,3 +246,30 @@ class TosecNamingConvention(object):
         if value in constants.COPYRIGHT_FLAGS:
             self.copyright = value
             return True
+
+    def set_development(self, value):
+        """This field is for marking alpha, beta, preview, prototype or
+        pre-release versions of software titles.
+        """
+        self.development = None
+        if value in constants.DEVELOPMENT_FLAGS:
+            self.development = value
+            return True
+
+    def set_media(self, value):
+        """This field is used if the software spans more than one
+        CD/DVD/GD-ROM, diskette, tape or file. Note that apart from the normal
+        possibilities (Disk, Disc, Tape …), "Side x of y" is also allowed.
+
+        For example, where there are 9 or less disks, the format of "(Disk x of
+        y)" is used, if there are 10 or more disks then (Disk xx of yy) should
+        be used, there can also be the case where more than one volume is
+        grouped in a single image, so something like (Part 1-2 of 3) is also
+        allowed.
+        """
+        self.media = None
+        first_value = value.split()
+        if first_value in constants.MEDIA_FLAGS:
+            self.media = value
+            # TODO Store 'x of x' part
+            return True

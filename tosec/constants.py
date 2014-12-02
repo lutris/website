@@ -215,20 +215,20 @@ COPYRIGHT_FLAGS = {
 }
 
 DEVELOPMENT_FLAGS = {
-    'alph': 'Early test build',
-    'bet': 'Later, feature complete test build',
+    'alpha': 'Early test build',
+    'beta': 'Later, feature complete test build',
     'preview': 'Near complete build',
-    'pre-releas': 'Near complete build',
-    'prot': 'Unreleased, prototype software',
+    'pre-release': 'Near complete build',
+    'proto': 'Unreleased, prototype software',
 }
 
 MEDIA_FLAGS = {
-    'Dis': 'Optical disc based media',
-    'Dis': 'Magnetic disk based media',
-    'Fil': 'Individual files',
-    'Par': 'Individual parts',
-    'Sid': 'Side of media',
-    'Tap': 'Magnetic tape based media',
+    'Disc': 'Optical disc based media',
+    'Disk': 'Magnetic disk based media',
+    'File': 'Individual files',
+    'Part': 'Individual parts',
+    'Side': 'Side of media',
+    'Tape': 'Magnetic tape based media',
 }
 
 DUMP_INFO_FLAGS = {
