@@ -231,3 +231,26 @@ class TestNamingConvention(TestCase):
         self.assertEqual(tosec_name.media, 'Part')
         self.assertEqual(tosec_name.media_numbers, ['1', '2'])
         self.assertEqual(tosec_name.media_total, '3')
+
+    def test_media_label(self):
+        name = "TOSEC, The (1986)(Devstudio)(US)(Disk 3 of 3)(Character Disk)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Disk')
+        self.assertEqual(tosec_name.media_total, '3')
+        self.assertEqual(tosec_name.media_label, 'Character Disk')
+
+        name = "TOSEC, The (1986)(Devstudio)(US)(Disk 1 of 2)(Program)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Disk')
+        self.assertEqual(tosec_name.media_total, '2')
+        self.assertEqual(tosec_name.media_label, 'Program')
+
+        name = "TOSEC, The (1986)(Devstudio)(US)(Disk 2 of 2)(Data)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Disk')
+        self.assertEqual(tosec_name.media_total, '2')
+        self.assertEqual(tosec_name.media_label, 'Data')
+
+        name = "TOSEC, The (1986)(Devstudio)(US)(Bonus Disc)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media_label, 'Bonus Disc')

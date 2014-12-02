@@ -113,7 +113,7 @@ class TosecNamingConvention(object):
         'copyright',
         'development',
         'media',
-        'dump',
+        'media_label',
         'cracked',
         'fixed',
         'hacked',
@@ -286,3 +286,15 @@ class TosecNamingConvention(object):
             if len(media_info) > 4:
                 self.media_additional = ' '.join(media_info[4:])
             return True
+
+    def set_media_label(self, value):
+        """If the disk label is required, this field should contain it. This
+        field is always the last flag using ( ) brackets, just before any
+        existent [ ] flags.
+
+        This is mainly used when a "Save Disk", "Program Disk", "Scenery Disk"
+        etc.  might be requested by the software when running. For example
+        (Disk 2 of 2) is not useful by itself when the program asks you to
+        "Insert Character Disk".
+        """
+        self.media_label = value
