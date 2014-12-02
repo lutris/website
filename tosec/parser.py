@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 from . import constants
 
@@ -154,11 +155,11 @@ class TosecNamingConvention(object):
             if not flag.startswith('('):
                 return
             flag_value = flag.strip('()')
-            flag_type = self.parts[current_flag_index]
-            flag_method = getattr(self, 'set_' + flag_type)
             flag_set = False
             last_index = self.parts.index('cracked')
             while current_flag_index < last_index and not flag_set:
+                flag_type = self.parts[current_flag_index]
+                flag_method = getattr(self, 'set_' + flag_type)
                 flag_set = flag_method(flag_value)
                 current_flag_index += 1
 
@@ -268,7 +269,7 @@ class TosecNamingConvention(object):
         allowed.
         """
         self.media = None
-        first_value = value.split()
+        first_value = value.split()[0]
         if first_value in constants.MEDIA_FLAGS:
             self.media = value
             # TODO Store 'x of x' part

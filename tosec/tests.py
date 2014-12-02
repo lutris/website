@@ -127,6 +127,7 @@ class TestNamingConvention(TestCase):
         tosec_name = TosecNamingConvention(name)
         self.assertEqual(tosec_name.system, 'A4000')
 
-        name = "Legend of TOSEC, The (1986)(Devstudio)(XBox360)"
+    def test_can_get_video(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(PAL)"
         tosec_name = TosecNamingConvention(name)
-        self.assertFalse(tosec_name.system)
+        self.assertEqual(tosec_name.video, 'PAL')

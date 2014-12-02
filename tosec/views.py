@@ -8,3 +8,4 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', )
+    paginate_by = 100
