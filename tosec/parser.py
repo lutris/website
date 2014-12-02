@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
+import logging
 from . import constants
 
+LOGGER = logging.getLogger(__name__)
 
 def smart_split(string, sep=None):
     sep_map = {
@@ -150,6 +152,16 @@ class TosecNamingConvention(object):
             self.set_flags()
 
     def set_flags(self):
+        self.system = None
+        self.video = None
+        self.country = None
+        self.language = None
+        self.copyright = None
+        self.development = None
+        self.media = None
+        self.media_numbers = []
+        self.media_total = None
+        self.media_additional = None
         current_flag_index = self.parts.index('publisher') + 1
         for flag in self.flags:
             if not flag.startswith('('):
@@ -168,7 +180,6 @@ class TosecNamingConvention(object):
         support, such as Amiga, which could require (A500), (A1000) etc., to
         address compatibility issues.
         """
-        self.system = None
         if value in constants.SYSTEMS_FLAGS:
             self.system = value
             return True
@@ -178,7 +189,6 @@ class TosecNamingConvention(object):
         classified by countries or languages, but for example only the PAL or
         NTSC video formats they were released in.
         """
-        self.video = None
         if value in constants.VIDEO_FLAGS:
             self.video = value
             return True
@@ -195,7 +205,6 @@ class TosecNamingConvention(object):
 
         For example: (EU-US) - Released in Europe and the US
         """
-        self.country = None
         countries = value.split('-')
         if all([c in constants.COUNTRY_FLAGS for c in countries]):
             self.country = value
@@ -225,7 +234,6 @@ class TosecNamingConvention(object):
         is used to represent multiple languages, where x is the number of
         languages:
         """
-        self.language = None
         languages = value.split('-')
         if all([l in constants.LANGUAGE_FLAGS for l in languages]):
             self.language = value
@@ -243,7 +251,6 @@ class TosecNamingConvention(object):
         If a Shareware title is registered, -R is appended to the field. This
         can also be used for Cardware and Giftware titles.
         """
-        self.copyright = None
         if value in constants.COPYRIGHT_FLAGS:
             self.copyright = value
             return True
@@ -252,7 +259,6 @@ class TosecNamingConvention(object):
         """This field is for marking alpha, beta, preview, prototype or
         pre-release versions of software titles.
         """
-        self.development = None
         if value in constants.DEVELOPMENT_FLAGS:
             self.development = value
             return True
@@ -268,9 +274,15 @@ class TosecNamingConvention(object):
         grouped in a single image, so something like (Part 1-2 of 3) is also
         allowed.
         """
-        self.media = None
-        first_value = value.split()[0]
-        if first_value in constants.MEDIA_FLAGS:
-            self.media = value
-            # TODO Store 'x of x' part
+        media_info = value.split()
+        if media_info[0] in constants.MEDIA_FLAGS:
+            self.media = media_info[0]
+            self.media_numbers = media_info[1].split('-')
+            if len(media_info) > 2:
+                if media_info[2] != 'of':
+                    LOGGER.warning('Invalid value for media in %s',
+                                   self.filename)
+                self.media_total = media_info[3]
+            if len(media_info) > 4:
+                self.media_additional = ' '.join(media_info[4:])
             return True

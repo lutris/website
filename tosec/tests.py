@@ -152,3 +152,82 @@ class TestNamingConvention(TestCase):
         name = "Legend of TOSEC, The (1986)(Devstudio)(DE-FR)"
         tosec_name = TosecNamingConvention(name)
         self.assertEqual(tosec_name.country, 'DE-FR')
+
+    def test_can_get_language(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(pt)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.language, 'pt')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(JP)(en)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'JP')
+        self.assertEqual(tosec_name.language, 'en')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(M3)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.language, 'M3')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(M4)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.language, 'M4')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(de-fr)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.language, 'de-fr')
+
+    def test_can_get_copyright(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(PD)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.copyright, 'PD')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(FR)(SW)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'FR')
+        self.assertEqual(tosec_name.copyright, 'SW')
+
+    def test_can_test_development(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(beta)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.development, 'beta')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(proto)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.development, 'proto')
+
+    def test_can_get_media(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(File 1 of 2)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'File')
+        self.assertEqual(tosec_name.media_numbers, ['1'])
+        self.assertEqual(tosec_name.media_total, '2')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(Disc 1 of 6)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Disc')
+        self.assertEqual(tosec_name.media_numbers, ['1'])
+        self.assertEqual(tosec_name.media_total, '6')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(Disk 06 of 13)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Disk')
+        self.assertEqual(tosec_name.media_numbers, ['06'])
+        self.assertEqual(tosec_name.media_total, '13')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(Side A)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Side')
+        self.assertEqual(tosec_name.media_numbers, ['A'])
+        self.assertEqual(tosec_name.media_total, None)
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(Tape 2 of 2 Side B)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Tape')
+        self.assertEqual(tosec_name.media_numbers, ['2'])
+        self.assertEqual(tosec_name.media_total, '2')
+        self.assertEqual(tosec_name.media_additional, 'Side B')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)(Part 1-2 of 3)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.media, 'Part')
+        self.assertEqual(tosec_name.media_numbers, ['1', '2'])
+        self.assertEqual(tosec_name.media_total, '3')
