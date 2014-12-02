@@ -131,3 +131,24 @@ class TestNamingConvention(TestCase):
         name = "Legend of TOSEC, The (1986)(Devstudio)(PAL)"
         tosec_name = TosecNamingConvention(name)
         self.assertEqual(tosec_name.video, 'PAL')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(NTSC)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.video, 'NTSC')
+
+    def test_can_get_country(self):
+        name = "Legend of TOSEC, The (1986)(Devstudio)(US)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'US')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(JP)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'JP')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(DE)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'DE')
+
+        name = "Legend of TOSEC, The (1986)(Devstudio)(DE-FR)"
+        tosec_name = TosecNamingConvention(name)
+        self.assertEqual(tosec_name.country, 'DE-FR')
