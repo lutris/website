@@ -173,9 +173,11 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     flags = BitField(flags=(
-        ('open_source', 'Open Source'),
-        ('open_engine', 'OpenEngine'),
-        ('freeware', 'Freeware'),
+        ('fully_libre', 'Fully libre'),
+        ('open_engine', 'Open engine only'),
+        ('free', 'Free'),
+        ('freetoplay', 'Free-to-play'),
+        ('pwyw', 'Pay what you want'),
     ))
 
     objects = GameManager()
