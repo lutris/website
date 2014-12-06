@@ -142,8 +142,9 @@ class GameManager(models.Manager):
             self.get_query_set()
             .filter(is_public=True)
             .filter(
-                Q(installer__published=True) |
-                Q(platforms__default_installer__isnull=False)
+                Q(installer__published=True)
+                # Disable auto-installer stuff until switch to DRF
+                # | Q(platforms__default_installer__isnull=False)
             )
             .order_by('name')
             .annotate(installer_count=Count('installer'))
