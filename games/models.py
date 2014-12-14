@@ -142,8 +142,9 @@ class GameManager(models.Manager):
             self.get_query_set()
             .filter(is_public=True)
             .filter(
-                Q(installer__published=True) |
-                Q(platforms__default_installer__isnull=False)
+                Q(installer__published=True)
+                # Disable auto-installer stuff until switch to DRF
+                # | Q(platforms__default_installer__isnull=False)
             )
             .order_by('name')
             .annotate(installer_count=Count('installer'))
@@ -173,9 +174,11 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     flags = BitField(flags=(
-        ('open_source', 'Open Source'),
-        ('open_engine', 'OpenEngine'),
-        ('freeware', 'Freeware'),
+        ('fully_libre', 'Fully libre'),
+        ('open_engine', 'Open engine only'),
+        ('free', 'Free'),
+        ('freetoplay', 'Free-to-play'),
+        ('pwyw', 'Pay what you want'),
     ))
 
     objects = GameManager()
@@ -375,7 +378,7 @@ class Installer(models.Model):
     def set_default_installer(self):
         if self.game and self.game.steam_support():
             installer_data = {'game': {'appid': self.game.steamid}}
-            self.version = 'steam'
+            self.version = 'Steam'
         else:
             installer_data = DEFAULT_INSTALLER
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)

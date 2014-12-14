@@ -33,21 +33,43 @@ class GameList(ListView):
         else:
             queryset = Game.objects.with_installer()
 
-        filters = []
-        open_source_filter = self.request.GET.get('open-source-filter')
-        if open_source_filter:
-            filters.append(Game.flags.open_source)
+        statement = ''
 
+        # Filter open source
+        filters = []
+        fully_libre_filter = self.request.GET.get('fully-libre-filter')
+        if fully_libre_filter:
+            filters.append('fully_libre')
         open_engine_filter = self.request.GET.get('open-engine-filter')
         if open_engine_filter:
-            filters.append(Game.flags.open_engine)
-
-        freeware_filter = self.request.GET.get('freeware-filter')
-        if freeware_filter:
-            filters.append(Game.flags.open_engine)
+            filters.append('open_engine')
 
         if filters:
-            queryset = queryset.filter(flags__in=filters)
+            for flag in filters:
+                statement += "Q(flags=Game.flags.%s) | " % flag
+            statement = statement.strip('| ')
+
+        # Filter free
+        filters = []
+        free_filter = self.request.GET.get('free-filter')
+        if free_filter:
+            filters.append('free')
+        freetoplay_filter = self.request.GET.get('freetoplay-filter')
+        if freetoplay_filter:
+            filters.append('freetoplay')
+        pwyw_filter = self.request.GET.get('pwyw-filter')
+        if pwyw_filter:
+            filters.append('pwyw')
+
+        if filters:
+            if statement:
+                statement = statement + ', '
+            for flag in filters:
+                statement += "Q(flags=Game.flags.%s) | " % flag
+            statement = statement.strip('| ')
+
+        if statement:
+            queryset = eval("queryset.filter(%s)" % statement)
 
         search_terms = self.request.GET.get('q')
         if search_terms:
@@ -71,10 +93,14 @@ class GameList(ListView):
         context['page_range'] = self.get_pages(context)
         get_args = self.request.GET
         context['search_terms'] = get_args.get('q')
-        context['unpublished_filter'] = get_args.get('unpublished-filter')
-        context['open_source_filter'] = get_args.get('open-source-filter')
+        context['all_open_source'] = get_args.get('all-open-source')
+        context['fully_libre_filter'] = get_args.get('fully-libre-filter')
         context['open_engine_filter'] = get_args.get('open-engine-filter')
-        context['freeware_filter'] = get_args.get('freeware-filter')
+        context['all_free'] = get_args.get('all-free')
+        context['free_filter'] = get_args.get('free-filter')
+        context['freetoplay_filter'] = get_args.get('freetoplay-filter')
+        context['pwyw_filter'] = get_args.get('pwyw-filter')
+        context['unpublished_filter'] = get_args.get('unpublished-filter')
         for key in context:
             if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True

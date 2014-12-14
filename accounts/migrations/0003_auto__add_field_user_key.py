@@ -7,28 +7,27 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ('accounts', '0001_initial'),
-    )
-
     def forwards(self, orm):
-        # Adding model 'Upload'
-        db.create_table(u'common_upload', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('uploaded_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('destination', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('uploaded_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('uploaded_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.User'])),
-        ))
-        db.send_create_signal(u'common', ['Upload'])
+        # Adding field 'User.key'
+        db.add_column(u'accounts_user', 'key',
+                      self.gf('django.db.models.fields.CharField')(default='', max_length=256, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Upload'
-        db.delete_table(u'common_upload')
+        # Deleting field 'User.key'
+        db.delete_column(u'accounts_user', 'key')
 
 
     models = {
+        u'accounts.authtoken': {
+            'Meta': {'object_name': 'AuthToken'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip_address': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
+            'token': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"})
+        },
         u'accounts.user': {
             'Meta': {'object_name': 'User'},
             'avatar': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
@@ -40,6 +39,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'key': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '256', 'blank': 'True'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -61,26 +61,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        u'common.news': {
-            'Meta': {'ordering': "['-publish_date']", 'object_name': 'News', 'db_table': "'news'"},
-            '_content_rendered': ('django.db.models.fields.TextField', [], {}),
-            'content': ('markupfield.fields.MarkupField', [], {'rendered_field': 'True'}),
-            'content_markup_type': ('django.db.models.fields.CharField', [], {'default': "'restructuredtext'", 'max_length': '30'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"})
-        },
-        u'common.upload': {
-            'Meta': {'object_name': 'Upload'},
-            'destination': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'uploaded_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"}),
-            'uploaded_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
-        },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -90,4 +70,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['common']
+    complete_apps = ['accounts']

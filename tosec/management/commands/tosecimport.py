@@ -19,8 +19,11 @@ class Command(BaseCommand):
                 return
             filenames = [os.path.join(basepath, f)
                          for f in os.listdir(basepath)]
-        for filename in filenames:
-            self.stdout.write("Importing %s" % filename)
+        total_files = len(filenames)
+        for index, filename in enumerate(filenames, start=1):
+            self.stdout.write("Importing {} [{} of {}]".format(filename,
+                                                               index,
+                                                               total_files))
             with open(filename, 'r') as tosec_dat:
                 dat_contents = tosec_dat.readlines()
 
@@ -49,7 +52,7 @@ class Command(BaseCommand):
                     name=rom['name'],
                     size=rom['size'],
                     crc=rom['crc'],
-                    md5=rom['md5'],
+                    md5=rom.get('md5', ''),
                     sha1=rom.get('sha1', ''),
                 )
                 rom_row.save()
