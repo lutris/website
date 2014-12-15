@@ -41,7 +41,7 @@
         </ul>
         <p>
           Packages and repositories for current versions of Fedora and openSUSE
-          are available from the 
+          are available from the
           <a href="http://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>
         </p>
       </li>
@@ -73,16 +73,24 @@
       <li>
         <ul>
           <li>
+            <img src='{{ STATIC_URL }}images/icons/slackware.png' alt='Slackware'>Slackware
+          </li>
+        </ul>
+        <p>
+        Lutris is available from the SlackBuilds repositories:
+        <a href="http://slackbuilds.org/apps/lutris/">http://slackbuilds.org/apps/lutris/</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
             <img src='{{ STATIC_URL }}images/icons/package.png' alt='tar.gz package'>tar.gz
           </li>
         </ul>
         <p>
         Lutris is available as a <a href="{{ download_url }}lutris_{{ version }}.tar.gz">tar.gz package</a>.
         Install it by extracting the archive and running as root: <code>python setup.py install</code><br/>
-        You'll need to make sure you have the necessary dependencies: PyGObject3 and PyYAML. <br/>
-        On Slackware systems, you can get those at:<br/>
-        <code>http://slackbuilds.org/repository/14.1/python/pygobject3/</code><br/>
-        <code>http://slackbuilds.org/repository/14.1/libraries/PyYAML/</code>
+        You'll need to make sure you have the necessary dependencies: PyGObject3, pyxdg and PyYAML. <br/>
         </p>
       </li>
       <li>
