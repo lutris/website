@@ -76,7 +76,7 @@
       <form action="." method=get class="form-inline">
         <div class="form-group">
           <div class="col-xs-8">
-            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" value="{{ search_term|default:"" }}" />
+            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" value="{{ search_terms|default:"" }}" />
           </div>
           <div class="col-xs-4">
             <input class="btn btn-sm" type="submit" value="Search" />
@@ -86,40 +86,40 @@
           <a href="#advanced-search" class="fold-btn"><span class='fold-indicator'>&#9658;</span> Advanced Search</a>
           <div class="col-xs-11 collapsable-panel {% if show_advanced %}active{% endif %}">
             <ul>
-			  <li>
-				<input type="checkbox" id="all-open-source" name="all-open-source" {% if all_open_source %}checked{% endif %} />
-				<label for="all-open-source"><span></span>Only open source games</label>
-				<ul>
-				  <li>
-					<input type="checkbox" id="fully-libre-filter" name="fully-libre-filter" {% if fully_libre_filter %}checked{% endif %}/>
-					<label for="fully-libre-filter"><span></span>Fully libre</label>
-				  </li>
-				  <li>
-					<input type="checkbox" id="open-engine-filter" name="open-engine-filter" {% if open_engine_filter %}checked{% endif %}/>
-					<label for="open-engine-filter"><span></span>Libre engine only</label>
-				  </li>
-				</ul>
-			  </li>
+              <li>
+                <input type="checkbox" id="all-open-source" name="all-open-source" {% if all_open_source %}checked{% endif %} />
+                <label for="all-open-source"><span></span>Only open source games</label>
+                <ul>
+                  <li>
+                    <input type="checkbox" id="fully-libre-filter" name="fully-libre-filter" {% if fully_libre_filter %}checked{% endif %}/>
+                    <label for="fully-libre-filter"><span></span>Fully libre</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="open-engine-filter" name="open-engine-filter" {% if open_engine_filter %}checked{% endif %}/>
+                    <label for="open-engine-filter"><span></span>Libre engine only</label>
+                  </li>
+                </ul>
+              </li>
             </ul>
             <ul>
-			  <li>
-				<input type="checkbox" id="all-free" name="all-free" {% if all_free %}checked{% endif %} />
-				<label for="all-free"><span></span>Only 'free' games</label>
-				<ul>
-				  <li>
-					<input type="checkbox" id="free-filter" name="free-filter" {% if free_filter %}checked{% endif %}/>
-					<label for="free-filter"><span></span>Free</label>
-				  </li>
-				  <li>
-					<input type="checkbox" id="freetoplay-filter" name="freetoplay-filter" {% if freetoplay_filter %}checked{% endif %}/>
-					<label for="freetoplay-filter"><span></span>Free-to-play</label>
-				  </li>
-				  <li>
-					<input type="checkbox" id="pwyw-filter" name="pwyw-filter" {% if pwyw_filter %}checked{% endif %}/>
-					<label for="pwyw-filter"><span></span>Pay what you want</label>
-				  </li>
-				</ul>
-			  </li>
+              <li>
+                <input type="checkbox" id="all-free" name="all-free" {% if all_free %}checked{% endif %} />
+                <label for="all-free"><span></span>Only 'free' games</label>
+                <ul>
+                  <li>
+                    <input type="checkbox" id="free-filter" name="free-filter" {% if free_filter %}checked{% endif %}/>
+                    <label for="free-filter"><span></span>Free</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="freetoplay-filter" name="freetoplay-filter" {% if freetoplay_filter %}checked{% endif %}/>
+                    <label for="freetoplay-filter"><span></span>Free-to-play</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="pwyw-filter" name="pwyw-filter" {% if pwyw_filter %}checked{% endif %}/>
+                    <label for="pwyw-filter"><span></span>Pay what you want</label>
+                  </li>
+                </ul>
+              </li>
             </ul>
             <ul>
               <input type="checkbox" id="unpublished-filter" name="unpublished-filter" {% if unpublished_filter %}checked{% endif %}/>
