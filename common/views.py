@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.views.generic import DetailView, TemplateView
 
+from common.forms import UploadForm
 from common.models import News
 
 
@@ -55,10 +57,22 @@ class NewsFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.content
+        return item.content.rendered
 
     def item_link(self, item):
         return item.get_absolute_url()
+
+
+def upload_file(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    form = UploadForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST' and form.is_valid():
+        upload = form.save(commit=False)
+        upload.uploaded_by = request.user
+        upload.save()
+        return HttpResponseRedirect('/')
+    return render(request, 'common/upload.html', {'form': form})
 
 
 def error_testing(request):

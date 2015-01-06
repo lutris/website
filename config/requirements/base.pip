@@ -1,6 +1,6 @@
 setuptools>=1.1.0
 PyYAML
-Django==1.6.6
+Django==1.6.8
 Pillow==2.4.0
 South>=0.8.4
 ipython>=1.1.0
@@ -12,7 +12,7 @@ django_select2==4.2.2
 django-grappelli==2.5.0
 django-tastypie==0.10.0
 django-markupfield
-django-bitfield
+django-bitfield==1.7.1
 python-openid
 django-extensions==1.4.0
 requests==2.0.1
@@ -22,7 +22,8 @@ mimeparse
 mock>=1.0.1
 jsonfield
 psycopg2
--e git+http://github.com/rbarrois/factory_boy.git#egg=factory_boy
+factory_boy==2.4.1
+djangorestframework==2.4.4
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail

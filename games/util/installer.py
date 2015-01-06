@@ -1,8 +1,9 @@
 class ScriptValidator(object):
     def __init__(self, script):
-        self.rules = []
-        self.rules.append(FilesShouldBeArray())
-        self.rules.append(ScummVMGameHasGameID())
+        self.rules = [
+            FilesShouldBeArray(),
+            ScummVMGameHasGameID(),
+        ]
         self.script = script
         self.errors = []
         self.valid = True
@@ -27,9 +28,13 @@ class FilesShouldBeArray(object):
 class ScummVMGameHasGameID(object):
     def is_valid(self, script):
         runner = script.get('runner')
-        if runner == 'scummvm':
-            if not 'game_id' in script['game']:
-                self.message = ("ScummVM game should have a "
-                                "game identifier in the 'game' section")
-                return False
+        if runner != 'scummvm':
+            return True
+        if 'game' not in script:
+            self.message = ("Missing section 'game'")
+            return False
+        if 'game_id' not in script['game']:
+            self.message = ("ScummVM game should have a "
+                            "game identifier in the 'game' section")
+            return False
         return True

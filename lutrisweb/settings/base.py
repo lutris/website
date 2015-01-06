@@ -42,6 +42,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+TOSEC_DAT_PACK = join(MEDIA_ROOT, "tosec",
+                      "TOSEC - DAT Pack - Complete (2292) (TOSEC-v2014-10-31)")
+FILES_ROOT = join(MEDIA_ROOT, 'files')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
@@ -93,6 +96,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'south',
     'tastypie',
+    'rest_framework',
     'django_jcrop',
     'crispy_forms',
     'django_select2',
@@ -133,7 +137,7 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
-CLIENT_VERSION = "0.3.5"
+CLIENT_VERSION = "0.3.6.3"
 
 
 # Crispy forms

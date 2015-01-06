@@ -15,6 +15,6 @@
     {% endif %}
   </header>
   <article>
-    {{ news.content }}
+    {{ news.content.rendered|safe }}
   </article>
 {% endblock %}

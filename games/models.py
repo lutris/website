@@ -142,8 +142,9 @@ class GameManager(models.Manager):
             self.get_query_set()
             .filter(is_public=True)
             .filter(
-                Q(installer__published=True) |
-                Q(platforms__default_installer__isnull=False)
+                Q(installer__published=True)
+                # Disable auto-installer stuff until switch to DRF
+                # | Q(platforms__default_installer__isnull=False)
             )
             .order_by('name')
             .annotate(installer_count=Count('installer'))
@@ -173,9 +174,11 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     flags = BitField(flags=(
-        'open_source',
-        'open_engine',
-        'freeware',
+        ('fully_libre', 'Fully libre'),
+        ('open_engine', 'Open engine only'),
+        ('free', 'Free'),
+        ('freetoplay', 'Free-to-play'),
+        ('pwyw', 'Pay what you want'),
     ))
 
     objects = GameManager()
@@ -293,6 +296,14 @@ class Screenshot(models.Model):
         desc = self.description if self.description else self.game.name
         return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
+    def game_link(self):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(self.game.id, )),
+            self.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
+
 
 class InstallerManager(models.Manager):
     def published(self, user=None, is_staff=False):
@@ -346,6 +357,7 @@ class Installer(models.Model):
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.CharField(max_length=512, blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -355,16 +367,28 @@ class Installer(models.Model):
     def __unicode__(self):
         return self.slug
 
+    def game_link(self):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(self.game.id, )),
+            self.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
+
     def set_default_installer(self):
         if self.game and self.game.steam_support():
             installer_data = {'game': {'appid': self.game.steamid}}
-            self.version = 'steam'
+            self.version = 'Steam'
         else:
             installer_data = DEFAULT_INSTALLER
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
     def as_dict(self):
         yaml_content = yaml.safe_load(self.content) or {}
+
+        # If yaml content evaluates to a string return an empty dict
+        if isinstance(yaml_content, basestring):
+            return {}
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year
@@ -383,7 +407,7 @@ class Installer(models.Model):
         return json.dumps(self.as_dict())
 
     def build_slug(self, version):
-        return "%s-%s" % (slugify(self.game.name)[:30],
+        return "%s-%s" % (slugify(self.game.name)[:29],
                           slugify(version)[:20])
 
     def save(self, *args, **kwargs):

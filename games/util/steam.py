@@ -8,8 +8,8 @@ STEAM_API_URL = "http://api.steampowered.com/"
 
 
 def get_capsule(steamid):
-    steam_cdn = "http://cdn2.steampowered.com"
-    capsule_url = steam_cdn + "/v/gfx/apps/%d/capsule_184x69.jpg"
+    steam_cdn = "http://cdn.akamai.steamstatic.com"
+    capsule_url = steam_cdn + "/steam/apps/%d/capsule_184x69.jpg"
     response = requests.get(capsule_url % steamid)
     return response.content
 

@@ -82,6 +82,13 @@ form {
       color: #bada55;
     }
   }
+  textarea, input {
+    border-radius: 0;
+    border: 1px solid #999;
+  }
+  textarea {
+    padding: 5px 10px;
+  }
 }
 
 figure {
@@ -96,6 +103,16 @@ figure {
     text-align: center;
     font-style: italic;
   }
+}
+
+a:focus, a:active,
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+select::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    outline : 0;
 }
 
 .simple-form {
@@ -158,6 +175,19 @@ figure {
         background-color: #666;
       }
     }
+  }
+}
+
+.pagination-block {
+  font-size: .85em;
+  a {
+    color: #AAA;
+  }
+  .pagination-pager {
+    float: right;
+  }
+  .pagination-info {
+    float: left;
   }
 }
 
@@ -379,6 +409,18 @@ figure {
   }
 }
 
+.helptext {
+  border: 1px solid #DEDEDE;
+  font-size: 0.8em;
+  display: block;
+  padding: .5em;
+}
+
+.installer-textarea {
+  width: 100%;
+  height: 100px;
+}
+
 .code-editor {
   font-family: monospace;
   color: #EEE;
@@ -488,6 +530,62 @@ figure {
 }
 
 /* == Classes */
+
+.fold-btn {
+  color: #888;
+  font-size: .8em;
+  &:hover, &:focus {
+    text-decoration: none;
+    color: #AAA;
+  }
+}
+
+.fold-indicator {
+  color: #aaa;
+}
+
+.collapsable-panel {
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+
+#advanced-search-panel ul {
+    list-style-type: none;
+    padding-left: 0;
+    ul {
+      padding-left: 17px;
+    }
+}
+
+.search-options {
+  font-size: 0.8em;
+  margin: 7px 0 0 14px;
+
+  input[type="checkbox"] {
+    display:none;
+  }
+  color: #aaa;
+  input[type="checkbox"] + label span {
+      display:inline-block;
+      width:10px;
+      height:10px;
+      margin: 0 4px 0 0;
+      background:url("../images/checkboxes.png") left top no-repeat;
+      cursor: pointer;
+  }
+  input[type="checkbox"]:checked + label span {
+      background:url("../images/checkboxes.png") left -11px no-repeat;
+  }
+  input[type="checkbox"]:indeterminate + label span {
+      background:url("../images/checkboxes.png") left -22px no-repeat;
+  }
+  input[type="checkbox"]:checked + label {
+    color: #EEE;
+  }
+}
+
 .overlay {
   position: relative;
   display: block;
@@ -849,7 +947,7 @@ figure {
 .pane {
   padding: 0px 14px;
   p {
-    padding: 10px;
+    margin-top: 15px;
     color: #ACACAC;
   }
 }

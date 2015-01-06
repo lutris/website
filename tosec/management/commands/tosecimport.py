@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 from tosec import models
 from tosec.parser import TosecParser
 from django.core.management.base import BaseCommand
@@ -8,8 +10,20 @@ class Command(BaseCommand):
     help = "Import Tosec catalog files in the database"
 
     def handle(self, *args, **kwargs):
-        for filename in args:
-            self.stdout.write("Importing %s" % filename)
+        if args:
+            filenames = args
+        else:
+            basepath = os.path.join(settings.TOSEC_DAT_PACK, 'TOSEC')
+            if not os.path.exists(basepath):
+                self.stderr.write("No TOSEC database found in %s" % basepath)
+                return
+            filenames = [os.path.join(basepath, f)
+                         for f in os.listdir(basepath)]
+        total_files = len(filenames)
+        for index, filename in enumerate(filenames, start=1):
+            self.stdout.write("Importing {} [{} of {}]".format(filename,
+                                                               index,
+                                                               total_files))
             with open(filename, 'r') as tosec_dat:
                 dat_contents = tosec_dat.readlines()
 
@@ -38,7 +52,7 @@ class Command(BaseCommand):
                     name=rom['name'],
                     size=rom['size'],
                     crc=rom['crc'],
-                    md5=rom['md5'],
+                    md5=rom.get('md5', ''),
                     sha1=rom.get('sha1', ''),
                 )
                 rom_row.save()

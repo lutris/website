@@ -14,6 +14,8 @@ class RomInline(admin.StackedInline):
 
 class GameAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
+    search_fields = ('name', )
+    list_filter = ('category', )
     inlines = [
         RomInline,
     ]
