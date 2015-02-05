@@ -29,6 +29,14 @@ class InstallerAdmin(admin.ModelAdmin):
     readonly_fields = ('game_link',)
     search_fields = ('slug', 'user__username')
 
+    def game_link(self, obj):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(obj.game.id, )),
+            obj.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
+
 
 class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
@@ -78,6 +86,14 @@ class ScreenshotAdmin(admin.ModelAdmin):
     list_editable = ("published", )
     readonly_fields = ('game_link',)
     search_fields = ['game__name']
+
+    def game_link(self, obj):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(obj.game.id, )),
+            obj.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
 
 
 class FeaturedAdmin(admin.ModelAdmin):
