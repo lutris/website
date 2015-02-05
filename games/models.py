@@ -374,6 +374,7 @@ class Installer(models.Model):
         # If yaml content evaluates to a string return an empty dict
         if isinstance(yaml_content, basestring):
             return {}
+        yaml_content['game_slug'] = self.game.slug
         yaml_content['version'] = self.version
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year
