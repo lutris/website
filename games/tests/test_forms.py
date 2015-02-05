@@ -13,23 +13,26 @@ class TestInstallerForm(TestCase):
         form_data = {
             'version': 'demo',
             'content': "exe: doom.x86",
-            'runner': '1'
+            'runner': str(self.runner.id)
         }
         form = forms.InstallerForm(form_data, instance=self.installer)
+        self.assertFalse(form.errors)
+        self.assertTrue(form.is_valid())
         installer = form.save()
         self.assertEqual(installer.slug, 'doom-demo')
 
-    def test_catches_duplicate_installer_slug(self):
+    def test_auto_increment_installer_slug(self):
         factories.InstallerFactory(version='zdoom', slug='doom-zdoom',
                                    game=self.game)
         form_data = {
             'version': 'zdoom',
             'content': "exe: doom.x86",
-            'runner': '1'
+            'runner': str(self.runner.id)
         }
         form = forms.InstallerForm(form_data, instance=self.installer)
-        self.assertFalse(form.is_valid())
-        self.assertIn('already exists', form.errors['version'][0])
+        self.assertTrue(form.is_valid())
+        installer = form.save()
+        self.assertEqual(installer.slug, 'doom-zdoom-1')
 
     def test_form_requires_runner(self):
         form_data = {

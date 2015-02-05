@@ -17,6 +17,7 @@ from django.core.urlresolvers import reverse
 from bitfield import BitField
 from jsonfield import JSONField
 
+from common.util import get_auto_increment_slug
 from games import managers
 from games.util import steam
 
@@ -391,8 +392,9 @@ class Installer(models.Model):
         return json.dumps(self.as_dict())
 
     def build_slug(self, version):
-        return "%s-%s" % (slugify(self.game.name)[:29],
+        slug = "%s-%s" % (slugify(self.game.name)[:29],
                           slugify(version)[:20])
+        return get_auto_increment_slug(self.__class__, self, slug)
 
     def save(self, *args, **kwargs):
         self.slug = self.build_slug(self.version)

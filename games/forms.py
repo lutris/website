@@ -11,38 +11,20 @@ from django.utils.safestring import mark_safe
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+from common.util import get_auto_increment_slug
 from games import models
 from games.util.installer import ScriptValidator
 
 
 class AutoSlugForm(forms.ModelForm):
-    SLUG_LENGTH = 50
 
     def __init__(self, *args, **kwargs):
         super(AutoSlugForm, self).__init__(*args, **kwargs)
         self.fields['slug'].required = False
 
     def get_slug(self, name, slug=None):
-        if not slug:
-            original_slug = slugify(name)[:self.SLUG_LENGTH]
-            slug = original_slug
-        else:
-            original_slug = slug
-        slug_exists = True
-        counter = 1
-        while slug_exists:
-            pk = self.instance.pk if self.instance else 0
-            slug_exists = (
-                self.Meta.model.objects
-                .exclude(pk=pk)
-                .filter(slug=slug)
-                .exists()
-            )
-            if slug_exists:
-                suffix = "-%d" % counter
-                slug = original_slug[:self.SLUG_LENGTH - len(suffix)] + suffix
-                counter += 1
-        return slug
+        return get_auto_increment_slug(self.Meta.model,
+                                       self.instance, name, slug)
 
     def clean(self):
         self.cleaned_data['slug'] = self.get_slug(
@@ -176,18 +158,6 @@ class InstallerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
         self.fields['notes'].label = "Technical notes"
-
-    def clean_version(self):
-        version = self.cleaned_data['version']
-        slug = self.instance.build_slug(version)
-        installer_exists = (models.Installer.objects
-                            .filter(slug=slug)
-                            .exclude(pk=self.instance.pk)
-                            .exists())
-        if installer_exists:
-            message = u"Installer for this version already exists"
-            raise forms.ValidationError(message)
-        return version
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
