@@ -416,6 +416,13 @@ class GameLibrary(models.Model):
         return "%s's library" % self.user.username
 
 
+class Bundle(models.Model):
+    games = models.ManyToManyField(Game)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class Featured(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
