@@ -376,6 +376,8 @@ class Installer(models.Model):
             return {}
         yaml_content['game_slug'] = self.game.slug
         yaml_content['version'] = self.version
+        yaml_content['description'] = self.description
+        yaml_content['notes'] = self.notes
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year
         yaml_content['steamid'] = self.game.steamid
