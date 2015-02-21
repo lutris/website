@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Bundles</h1>  
+  {% for bundle in bundles %}
+    <a href="{{ bundle.get_absolute_url }}">{{ bundle }}</a>
+  {% endfor %}
+{% endblock %}

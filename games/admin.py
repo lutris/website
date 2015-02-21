@@ -119,6 +119,7 @@ class GameSubmissionAdmin(admin.ModelAdmin):
     user_link.allow_tags = True
     user_link.short_description = "User"
 
+
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)

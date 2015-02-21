@@ -204,7 +204,7 @@ class Game(models.Model):
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
-        return "/games/%s/" % self.slug
+        return reverse("game_detail", kwargs={'slug': self.slug})
 
     def download_steam_capsule(self):
         if self.title_logo or not self.steamid:
