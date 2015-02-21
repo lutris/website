@@ -1,3 +1,5 @@
-{% for game in bundle.games %}
+<ul class='game-list'>
+{% for game in bundle.games.all %}
 {% include "includes/game_preview.html" %}
 {% endfor %}
+</ul>

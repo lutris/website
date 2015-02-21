@@ -204,7 +204,7 @@ class Game(models.Model):
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
-        return "/games/%s/" % self.slug
+        return reverse("game_detail", kwargs={'slug': self.slug})
 
     def download_steam_capsule(self):
         if self.title_logo or not self.steamid:
@@ -421,6 +421,12 @@ class Bundle(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('bundle_detail', kwargs={'slug': self.slug})
 
 
 class Featured(models.Model):

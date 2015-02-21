@@ -22,6 +22,9 @@ urlpatterns = patterns(
         TemplateView.as_view(template_name='games/submitted.html'),
         name="game-submitted"),
 
+    url(r'bundles$', views.BundleList.as_view(), name='bundle_list'),
+    url(r'bundles/(?P<slug>[\w\-]+)$', views.BundleDetail.as_view(), name='bundle_detail'),
+
     url(r'banner/(?P<slug>[\w\-]+).jpg', 'get_banner',
         name='get_banner'),
     url(r'icon/(?P<slug>[\w\-]+).png', 'get_icon',

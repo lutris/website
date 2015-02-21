@@ -3,7 +3,7 @@
 import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -22,16 +22,16 @@ LOGGER = logging.getLogger(__name__)
 
 
 class GameList(ListView):
-    model = Game
+    model = models.Game
     context_object_name = "games"
     paginate_by = 25
 
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = Game.objects.all()
+            queryset = models.Game.objects.all()
         else:
-            queryset = Game.objects.with_installer()
+            queryset = models.Game.objects.with_installer()
 
         statement = ''
 
@@ -181,7 +181,7 @@ def game_for_installer(request, slug):
 
 
 def game_detail(request, slug):
-    game = get_object_or_404(Game, slug=slug)
+    game = get_object_or_404(models.Game, slug=slug)
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
     user = request.user
@@ -212,7 +212,7 @@ def game_detail(request, slug):
 
 @login_required
 def new_installer(request, slug):
-    game = get_object_or_404(Game, slug=slug)
+    game = get_object_or_404(models.Game, slug=slug)
     installer = Installer(game=game)
     installer.set_default_installer()
     form = InstallerForm(request.POST or None, instance=installer)
@@ -258,7 +258,7 @@ def edit_installer(request, slug):
 
 
 def installer_complete(request, slug):
-    game = get_object_or_404(Game, slug=slug)
+    game = get_object_or_404(models.Game, slug=slug)
     return render(request, 'games/installer-complete.html', {'game': game})
 
 
@@ -308,8 +308,8 @@ def get_game_by_slug(slug):
         game = installer.game
     except Installer.DoesNotExist:
         try:
-            game = Game.objects.get(slug=slug)
-        except Game.DoesNotExist:
+            game = models.Game.objects.get(slug=slug)
+        except models.Game.DoesNotExist:
             pass
     return game
 
@@ -344,14 +344,14 @@ def serve_installer_icon(request, slug):
 
 def game_list(request):
     """View for all games"""
-    games = Game.objects.all()
+    games = models.Game.objects.all()
     return render(request, 'games/game_list.html', {'games': games})
 
 
 def games_by_runner(request, runner_slug):
     """View for games filtered by runner"""
     runner = get_object_or_404(Runner, slug=runner_slug)
-    games = Game.objects.filter(runner__slug=runner.slug)
+    games = models.Game.objects.filter(runner__slug=runner.slug)
     return render(request, 'games/game_list.html',
                   {'games': games})
 
@@ -404,3 +404,14 @@ def publish_screenshot(request, id):
     screenshot.published = True
     screenshot.save()
     return redirect('game_detail', slug=screenshot.game.slug)
+
+
+class BundleList(ListView):
+    model = models.Bundle
+    context_object_name = 'bundles'
+    paginate_by = 25
+
+
+class BundleDetail(DetailView):
+    model = models.Bundle
+    context_object_name = 'bundle'

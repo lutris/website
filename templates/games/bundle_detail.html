@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bundle.name }} - Lutris{% endblock %}
+
+{% block content %}
+  <h1>
+  {{ bundle.name }}
+  </h1>
+  {% include "includes/bundle_game_list.html" %}
+{% endblock %}
