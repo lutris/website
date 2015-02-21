@@ -404,14 +404,3 @@ def publish_screenshot(request, id):
     screenshot.published = True
     screenshot.save()
     return redirect('game_detail', slug=screenshot.game.slug)
-
-
-class BundleList(ListView):
-    model = models.Bundle
-    context_object_name = 'bundles'
-    paginate_by = 25
-
-
-class BundleDetail(DetailView):
-    model = models.Bundle
-    context_object_name = 'bundle'

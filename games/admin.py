@@ -120,14 +120,6 @@ class GameSubmissionAdmin(admin.ModelAdmin):
     user_link.short_description = "User"
 
 
-class BundleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
-    raw_id_fields = ('games', )
-    autocomplete_lookup_fields = {
-        'm2m': ['games']
-    }
-
-
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
@@ -138,4 +130,3 @@ admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)
-admin.site.register(models.Bundle, BundleAdmin)

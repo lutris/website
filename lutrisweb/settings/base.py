@@ -107,6 +107,7 @@ INSTALLED_APPS = (
 
     'common',
     'games',
+    'bundles',
     'accounts',
     'tosec',
 )
