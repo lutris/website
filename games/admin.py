@@ -121,7 +121,11 @@ class GameSubmissionAdmin(admin.ModelAdmin):
 
 
 class BundleAdmin(admin.ModelAdmin):
-    list_display = ("name", "created_at")
+    list_display = ('name', 'created_at')
+    raw_id_fields = ('games', )
+    autocomplete_lookup_fields = {
+        'm2m': ['games']
+    }
 
 
 admin.site.register(models.Game, GameAdmin)
