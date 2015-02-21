@@ -119,6 +119,11 @@ class GameSubmissionAdmin(admin.ModelAdmin):
     user_link.allow_tags = True
     user_link.short_description = "User"
 
+
+class BundleAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at")
+
+
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
@@ -129,3 +134,4 @@ admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)
+admin.site.register(models.Bundle, BundleAdmin)
