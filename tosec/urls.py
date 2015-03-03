@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = patterns(
     '',
-    url('^categories/', views.CategoryListView.as_view(),
-        name='tosec_category_search'),
+    url(r'^categories$', views.CategoryListView.as_view(),
+        name='tosec_categories'),
+    url(r'^games$', views.GameListView.as_view(),
+        name='tosec_games'),
 )
