@@ -28,6 +28,15 @@ class Runner(models.Model):
 
 
 class RunnerVersion(models.Model):
+    ARCH_CHOICES = (
+        ('i386', '32 bit'),
+        ('x86_64', '64 bit'),
+        ('arm', 'ARM'),
+    )
+
     runner = models.ForeignKey(Runner, related_name='versions')
     version = models.CharField(max_length=32)
+    architecture = models.CharField(max_length=8,
+                                    choices=ARCH_CHOICES,
+                                    default='x86_64')
     url = models.URLField(blank=True)
