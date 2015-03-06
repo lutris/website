@@ -29,7 +29,7 @@ class Runner(models.Model):
 
 class RunnerVersion(models.Model):
     class Meta(object):
-        ordering = ('version', 'arch')
+        ordering = ('version', 'architecture')
 
     ARCH_CHOICES = (
         ('i386', '32 bit'),
