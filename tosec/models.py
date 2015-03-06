@@ -30,7 +30,7 @@ class Game(models.Model):
 
 
 class Rom(models.Model):
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, related_name='roms')
     name = models.CharField(max_length=255)
     size = models.IntegerField()
     crc = models.CharField(max_length=16)

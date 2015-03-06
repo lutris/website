@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Game
+from .models import Category, Game, Rom
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -9,7 +9,15 @@ class CategorySerializer(serializers.ModelSerializer):
                   'version', 'author', 'section')
 
 
+class RomSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Rom
+
+
 class GameSerializer(serializers.ModelSerializer):
+    roms = RomSerializer(many=True)
+    category = CategorySerializer()
+
     class Meta(object):
         model = Game
-        fields = ('name', 'description', 'category')
+        fields = ('name', 'description', 'category', 'roms')
