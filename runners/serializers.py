@@ -5,7 +5,7 @@ from .models import Runner, RunnerVersion
 class RunnerVersionSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = RunnerVersion
-        fields = ('version', 'path')
+        fields = ('version', 'url')
 
 
 class RunnerSerializer(serializers.ModelSerializer):
