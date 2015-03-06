@@ -30,4 +30,4 @@ class Runner(models.Model):
 class RunnerVersion(models.Model):
     runner = models.ForeignKey(Runner, related_name='versions')
     version = models.CharField(max_length=32)
-    path = models.CharField(max_length=128, blank=True)
+    url = models.URLField(blank=True)
