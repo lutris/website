@@ -83,35 +83,6 @@ class Company(models.Model):
         return ('name__icontains', 'slug__icontains')
 
 
-class Runner(models.Model):
-    """ Model definition for the runners """
-    name = models.CharField(_("Name"), max_length=127)
-    slug = models.SlugField(unique=True)
-    website = models.CharField(_("Website"), max_length=127, blank=True)
-    icon = models.ImageField(upload_to='runners/icons', blank=True)
-    platforms = models.ManyToManyField(Platform)
-
-    # pylint: disable=W0232, R0903
-    class Meta(object):
-        ordering = ['name']
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        return super(Runner, self).save(*args, **kwargs)
-
-    @staticmethod
-    def autocomplete_search_fields():
-        return ('name__icontains', )
-
-
-class RunnerVersion(models.Model):
-    runner = models.ForeignKey(Runner)
-    version = models.CharField(max_length=32)
-    path = models.CharField(max_length=128, blank=True)
-
-
 class Genre(models.Model):
     """Gaming genre"""
     name = models.CharField(max_length=50)
@@ -343,6 +314,7 @@ class InstallerManager(models.Manager):
 
 class Installer(models.Model):
     """Game installer model"""
+    from runners.models import Runner
     game = models.ForeignKey(Game)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     runner = models.ForeignKey(Runner)
@@ -369,6 +341,7 @@ class Installer(models.Model):
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
     def as_dict(self):
+        from runners.models import Runner
         yaml_content = yaml.safe_load(self.content) or {}
 
         # If yaml content evaluates to a string return an empty dict

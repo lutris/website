@@ -182,10 +182,3 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError("Invalid installer script")
         else:
             return self.cleaned_data
-
-
-class RunnerForm(AutoSlugForm):
-
-    class Meta:
-        model = models.Runner
-        fields = '__all__'

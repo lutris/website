@@ -43,18 +43,6 @@ class GenreAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
-class RunnerVersionInline(admin.TabularInline):
-    model = models.RunnerVersion
-
-
-class RunnerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'website')
-    form = forms.RunnerForm
-    inlines = [
-        RunnerVersionInline,
-    ]
-
-
 class GameMetadataInline(admin.TabularInline):
     model = models.GameMetadata
 
@@ -123,7 +111,6 @@ class GameSubmissionAdmin(admin.ModelAdmin):
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
-admin.site.register(models.Runner, RunnerAdmin)
 admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)

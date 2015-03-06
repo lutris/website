@@ -3,7 +3,7 @@
 import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView  # , DetailView
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
-from .models import Game, Runner, Installer, GameSubmission
+from .models import Game, Installer, GameSubmission
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 from .util.pagination import get_page_range
@@ -348,12 +348,12 @@ def game_list(request):
     return render(request, 'games/game_list.html', {'games': games})
 
 
-def games_by_runner(request, runner_slug):
-    """View for games filtered by runner"""
-    runner = get_object_or_404(Runner, slug=runner_slug)
-    games = models.Game.objects.filter(runner__slug=runner.slug)
-    return render(request, 'games/game_list.html',
-                  {'games': games})
+# def games_by_runner(request, runner_slug):
+#     """View for games filtered by runner"""
+#     runner = get_object_or_404(Runner, slug=runner_slug)
+#     games = models.Game.objects.filter(runner__slug=runner.slug)
+#     return render(request, 'games/game_list.html',
+#                   {'games': games})
 
 
 @login_required
