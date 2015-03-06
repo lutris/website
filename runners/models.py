@@ -28,11 +28,19 @@ class Runner(models.Model):
 
 
 class RunnerVersion(models.Model):
+    class Meta(object):
+        ordering = ('version', 'arch')
+
     ARCH_CHOICES = (
         ('i386', '32 bit'),
         ('x86_64', '64 bit'),
         ('arm', 'ARM'),
     )
+
+    def __unicode__(self):
+        return u"{} v{} ({})".format(self.runner.name,
+                                     self.version,
+                                     self.architecture)
 
     runner = models.ForeignKey(Runner, related_name='versions')
     version = models.CharField(max_length=32)
