@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'django_extensions',
 
     'common',
+    'platforms',
     'games',
     'bundles',
     'runners',

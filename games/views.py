@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 from sorl.thumbnail import get_thumbnail
 
+from platforms.models import Platform
 from .models import Game, Installer, GameSubmission
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
@@ -105,7 +106,7 @@ class GameList(ListView):
             if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True
                 break
-        context['platforms'] = models.Platform.objects.all()
+        context['platforms'] = Platform.objects.all()
         context['genres'] = models.Genre.objects.all()
         return context
 
@@ -161,10 +162,10 @@ class GameListByPlatform(GameList):
     def get_context_data(self, **kwargs):
         context = super(GameListByPlatform, self).get_context_data(**kwargs)
         try:
-            context['platform'] = models.Platform.objects.get(
+            context['platform'] = Platform.objects.get(
                 slug=self.kwargs['slug']
             )
-        except models.Platform.DoesNotExist:
+        except Platform.DoesNotExist:
             raise Http404
         return context
 

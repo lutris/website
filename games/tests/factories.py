@@ -1,6 +1,8 @@
 import factory
 from django.utils.text import slugify
 from django.db.models.signals import post_save
+from platforms.models import Platform
+from runners.models import Runner
 from games import models
 from accounts.models import User
 from accounts.signals import create_library
@@ -8,7 +10,7 @@ from accounts.signals import create_library
 
 class PlatformFactory(factory.DjangoModelFactory):
     class Meta:
-        model = models.Platform
+        model = Platform
     name = 'Amiga'
 
 
@@ -59,7 +61,7 @@ class GameLibraryFactory(factory.DjangoModelFactory):
 
 class RunnerFactory(factory.DjangoModelFactory):
     class Meta:
-        model = models.Runner
+        model = Runner
     name = factory.Sequence(lambda n: 'runner%s' % n)
 
     @factory.post_generation

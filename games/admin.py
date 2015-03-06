@@ -14,12 +14,6 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', )
 
 
-class PlatformAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
-    ordering = ('name', )
-    search_fields = ('name', )
-
-
 class InstallerAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'game_link', 'user', 'updated_at',
                     'published')
@@ -111,7 +105,6 @@ class GameSubmissionAdmin(admin.ModelAdmin):
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
-admin.site.register(models.Platform, PlatformAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.GameLibrary)

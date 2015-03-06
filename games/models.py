@@ -15,9 +15,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from bitfield import BitField
-from jsonfield import JSONField
 
 from common.util import get_auto_increment_slug
+from platforms.models import Platform
 from games import managers
 from games.util import steam
 
@@ -30,29 +30,6 @@ DEFAULT_INSTALLER = {
         {'move': {'src': 'file_id', 'dst': '$GAMEDIR'}}
     ]
 }
-
-
-class Platform(models.Model):
-    """Gaming platform"""
-    name = models.CharField(_('Name'), max_length=127)
-    slug = models.SlugField(unique=True)
-    icon = models.ImageField(upload_to='platforms/icons', blank=True)
-    default_installer = JSONField(null=True, blank=True)
-
-    # pylint: disable=W0232, R0903
-    class Meta:
-        ordering = ('name', )
-
-    def __unicode__(self):
-        return "%s" % self.name
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        return super(Platform, self).save(*args, **kwargs)
-
-    @staticmethod
-    def autocomplete_search_fields():
-        return ('name__icontains', )
 
 
 class Company(models.Model):

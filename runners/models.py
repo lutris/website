@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
-from games.models import Platform
+from platforms.models import Platform
 
 
 class Runner(models.Model):
