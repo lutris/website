@@ -9,11 +9,8 @@ class RunnerVersionSerializer(serializers.ModelSerializer):
 
 
 class RunnerSerializer(serializers.ModelSerializer):
-    # platforms = serializers.HyperlinkedIdentityField(
-    #     view_name='platform_detail'
-    # )
     versions = RunnerVersionSerializer(many=True)
 
     class Meta(object):
         model = Runner
-        fields = ('name', 'slug', 'icon', 'website', 'platforms', 'versions')
+        fields = ('name', 'slug', 'icon', 'website', 'versions')

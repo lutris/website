@@ -12,3 +12,5 @@ class RunnerListView(generics.ListAPIView):
 
 class RunnerDetailView(generics.RetrieveAPIView):
     serializer_class = RunnerSerializer
+    lookup_field = 'slug'
+    queryset = Runner.objects.all()
