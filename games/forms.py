@@ -51,23 +51,25 @@ class GameForm(forms.ModelForm):
         self.fields['name'].label = "Title"
         self.fields['year'].label = "Release year"
         self.fields['website'].help_text = (
-            "The official website. If it doesn't exist, leave blank."
+            "The official website (full address). If it doesn't exist, leave "
+            "blank."
         )
         self.fields['platforms'].help_text = (
             "Only select platforms expected to have an installer, "
-            "not all platforms the game was released on. For example, Windows "
+            "not all platforms the game was released for. E.g.: Windows "
             "is not needed for Linux native games."
         )
         self.fields['genres'].help_text = ""
         self.fields['description'].help_text = (
             "Copy the official description of the game if you can find "
-            "it. Don't write your own."
+            "it. Don't write your own. For old games, check Mobygame's Ad "
+            "Blurbs, look for the English back cover text."
         )
         self.fields['title_logo'].label = "Banner icon"
         self.fields['title_logo'].help_text = (
             "The banner should include the full title in readable size (big). "
             "You'll be able to crop the uploaded image to the right format. "
-            "The image format is JPG, so no transparency. "
+            "The image will be converted to JPG (no transparency). "
             "If you can't make a good banner, don't worry. Somebody will "
             "eventually make a better one. Probably."
         )
