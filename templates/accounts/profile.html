@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+
+
 {% block title %}My account - Lutris{% endblock %}
+
+
 {% block content %}
 <div class="row">
   <div class="game-header">
-    <div class="title"><img src="{{ user.avatar_url }}" width="128" height="128"/><span>{{ user }}</span>
-      <div class="buttons"><a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
+    <div class="title">
+      <img src="{{ user.avatar_url }}" width="128" height="128"/>
+      <span>{{ user }}</span>
+      <div class="buttons">
+        <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
       </div>
     </div>
   </div>
