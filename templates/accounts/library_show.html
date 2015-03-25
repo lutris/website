@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}My games - Lutris{% endblock %}
+{% block content %}
+<div class="game-list-header">
+  <h2>Your games</h2><span class="centered">{{ games.count }} games in library</span>
+  <form class="game-filter">
+    <input type="text" placeholder="filter games" id="game-filter"/>
+  </form>
+</div>
+<ul class="game-list user-library">{% for game in games|__pyjade_iter:1 %}{% include "includes/game_preview.html" %}
+{% endfor %}
+</ul>{% endblock %}

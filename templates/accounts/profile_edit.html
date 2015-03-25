@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Edit profile - Lutris{% endblock %}
+{% block content %}
+<div class="form-view">
+  <h1>Account details</h1>
+  {% crispy form %}
+</div>
+<div class="form-view">
+  <a href="{% url 'password_change' %}" class="btn btn-sm">Modify your password</a>
+</div>
+{% endblock %}
