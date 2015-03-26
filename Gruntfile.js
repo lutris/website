@@ -71,9 +71,6 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      options: {
-        livereload: true
-      },
       less: {
         files: 'common_static/css/lutris.less',
         tasks: ['less:css']
@@ -88,6 +85,20 @@ module.exports = function(grunt) {
       templates: {
         files: ['templates/**/*.html']
       }
+    },
+    browserSync: {
+      dev: {
+        bsFiles: {
+          src: [
+            'templates/**',
+            'public/**'
+          ]
+        },
+        options: {
+          proxy: 'localhost:8000',
+          watchTask: true
+        }
+      }
     }
   });
 
@@ -95,9 +106,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
 
-  grunt.registerTask('default', ['less', 'coffee', 'concat', 'cssmin', 'uglify']);
+  grunt.registerTask('build', ['less', 'coffee', 'concat', 'cssmin', 'uglify']);
+  grunt.registerTask('default', ['browserSync', 'watch']);
 };
 
