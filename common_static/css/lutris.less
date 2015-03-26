@@ -353,6 +353,50 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
   }
 }
 
+.avatar {
+  border: 2px solid #555;
+  border-radius: 3px;
+  position: relative;
+  display: inline-block;
+  img {
+    width: 128px;
+    height: 128px;
+  }
+  &:hover {
+    .avatar-upload-link {
+      display: block;
+    }
+    .avatar-upload-hint {
+      display: none;
+    }
+  }
+  .avatar-upload-base {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: .4em;
+    font-size: .8em;
+    color: #FFF;
+  }
+  .avatar-upload-hint {
+    .avatar-upload-base;
+    display: block;
+  }
+  .avatar-upload-link {
+    .avatar-upload-base;
+    display: none;
+    background-color: rgba(0,0,0,.3);
+    padding: .4em;
+    font-size: .8em;
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+      background-color: rgba(0,0,0,.6);
+    }
+  }
+}
+
 .alert {
   ul {
     list-style-type: none;

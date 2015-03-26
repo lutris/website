@@ -9,7 +9,15 @@
 <div class="row">
   <div class="col-xs-2">
       <br/>
-      <img src="{{ user.avatar_url }}" width="128" height="128"/>
+      <div class="avatar">
+        <img src="{{ user.avatar_url }}"/>
+        <a href="#" class="avatar-upload-link">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
+          Update avatar</a>
+        <div class="avatar-upload-hint">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
+        </div>
+      </div>
   </div>
   <div class="col-xs-8">
     <h1>{{ user }}

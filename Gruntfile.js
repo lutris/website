@@ -1,6 +1,18 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: ['components/bootstrap/dist/fonts/*'],
+            dest: 'public/fonts/'
+          }
+        ]
+      }
+    },
     less: {
       css: {
         options: {
@@ -102,6 +114,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-copy'); 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -110,7 +123,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
 
-  grunt.registerTask('build', ['less', 'coffee', 'concat', 'cssmin', 'uglify']);
+  grunt.registerTask('build', ['copy', 'less', 'coffee', 'concat', 'cssmin', 'uglify']);
   grunt.registerTask('default', ['browserSync', 'watch']);
 };
 
