@@ -335,7 +335,7 @@ class Installer(models.Model):
             yaml_content['runner'] = self.runner.slug
         except Runner.DoesNotExist:
             yaml_content['runner'] = ''
-        yaml_content['slug'] = self.slug
+        yaml_content['installer_slug'] = self.slug
         return yaml_content
 
     def as_yaml(self):
