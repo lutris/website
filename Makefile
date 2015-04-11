@@ -20,6 +20,9 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
+	./manage.py test $(test)
+
+jenkins:
 	./manage.py jenkins $(test)
 
 sysdeps:
