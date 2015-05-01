@@ -100,7 +100,6 @@ INSTALLED_APPS = (
     'django_jcrop',
     'crispy_forms',
     'django_select2',
-    'django_nose',
     'markupfield',
     'django_openid_auth',
     'django_extensions',
@@ -113,8 +112,6 @@ INSTALLED_APPS = (
     'accounts',
     'tosec',
 )
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 SOUTH_TESTS_MIGRATE = False
 
