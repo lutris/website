@@ -81,7 +81,7 @@ class TestInstallers(TestCase):
     def test_installer_can_be_rendered_as_json(self):
         json_data = self.installer.as_json()
         self.assertIn("\"runner\": \"linux\"", json_data)
-        self.assertIn("\"slug\": \"doom-shareware\"", json_data)
+        self.assertIn("\"installer_slug\": \"doom-shareware\"", json_data)
 
 
 class TestPlatform(TestCase):

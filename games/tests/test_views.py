@@ -18,7 +18,7 @@ class TestInstallerViews(TestCase):
         self.assertIn("user/login", response.redirect_chain[0][0])
 
     def test_logged_in_user_can_create_installer(self):
-        user = factories.UserFactory()
+        factories.UserFactory()
 
     def test_can_redirect_to_game_page_from_installer_slug(self):
         installer = factories.InstallerFactory(game=self.game)
@@ -50,6 +50,6 @@ class TestInstallerViews(TestCase):
         self.assertEqual(response.status_code, 200)
         installers = json.loads(response.content)
         self.assertEqual(len(installers), 2)
-        installer_slugs = [i['slug'] for i in installers]
+        installer_slugs = [i['installer_slug'] for i in installers]
         self.assertIn('doom-zdoom', installer_slugs)
         self.assertIn('doom-dos', installer_slugs)
