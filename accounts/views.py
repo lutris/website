@@ -1,4 +1,5 @@
 import json
+import logging
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -6,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
@@ -16,6 +18,8 @@ from . import forms
 from . import tasks
 import games.models
 import games.util.steam
+
+LOGGER = logging.getLogger(__name__)
 
 
 def register(request):
@@ -134,7 +138,10 @@ def library_add(request, slug):
     user = request.user
     library = games.models.GameLibrary.objects.get(user=user)
     game = get_object_or_404(games.models.Game, slug=slug)
-    library.games.add(game)
+    try:
+        library.games.add(game)
+    except IntegrityError:
+        LOGGER.debug('Game already in library')
     return redirect(game.get_absolute_url())
 
 
