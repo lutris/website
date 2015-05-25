@@ -50,6 +50,6 @@ class TestInstallerViews(TestCase):
         self.assertEqual(response.status_code, 200)
         installers = json.loads(response.content)
         self.assertEqual(len(installers), 2)
-        installer_slugs = [i['slug'] for i in installers]
+        installer_slugs = [i['installer_slug'] for i in installers]
         self.assertIn('doom-zdoom', installer_slugs)
         self.assertIn('doom-dos', installer_slugs)

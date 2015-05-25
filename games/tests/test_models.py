@@ -36,7 +36,8 @@ class TestGame(TestCase):
         super_mario_world.platforms.add(snes)
         default_installers = super_mario_world.get_default_installers()
         self.assertTrue(default_installers)
-        self.assertEqual(default_installers[0]['slug'], 'super-mario-world-snes')
+        self.assertEqual(default_installers[0]['installer_slug'],
+                         'super-mario-world-snes')
 
         self.assertTrue(super_mario_world.has_installer())
 
@@ -81,7 +82,7 @@ class TestInstallers(TestCase):
     def test_installer_can_be_rendered_as_json(self):
         json_data = self.installer.as_json()
         self.assertIn("\"runner\": \"linux\"", json_data)
-        self.assertIn("\"slug\": \"doom-shareware\"", json_data)
+        self.assertIn("\"installer_slug\": \"doom-shareware\"", json_data)
 
 
 class TestPlatform(TestCase):
