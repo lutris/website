@@ -18,7 +18,7 @@ class TestInstallerViews(TestCase):
         self.assertIn("user/login", response.redirect_chain[0][0])
 
     def test_logged_in_user_can_create_installer(self):
-        user = factories.UserFactory()
+        factories.UserFactory()
 
     def test_can_redirect_to_game_page_from_installer_slug(self):
         installer = factories.InstallerFactory(game=self.game)
@@ -53,3 +53,34 @@ class TestInstallerViews(TestCase):
         installer_slugs = [i['installer_slug'] for i in installers]
         self.assertIn('doom-zdoom', installer_slugs)
         self.assertIn('doom-dos', installer_slugs)
+
+
+class TestGameApi(TestCase):
+    def setUp(self):
+        self.num_games = 10
+        self.games = []
+        for n in range(self.num_games):
+            self.games.append(
+                factories.GameFactory(name='game_%d' % n, slug='game-%d' % n)
+            )
+
+    def test_can_get_games(self):
+        game_list_url = reverse('api_game_list')
+        response = self.client.get(game_list_url)
+        self.assertEqual(response.status_code, 200)
+        games = json.loads(response.content)
+        self.assertEqual(len(games), self.num_games)
+
+    def test_can_get_subset_of_games(self):
+        game_slugs = {'games': ['game-1', 'game-2', 'game-4']}
+        game_list_url = reverse('api_game_list')
+        response = self.client.get(game_list_url, data=game_slugs,
+                                   extra={"Content-Type": "application/json"})
+        self.assertEqual(response.status_code, 200)
+        games = json.loads(response.content)
+        self.assertEqual(len(games), len(game_slugs['games']))
+
+    def test_can_query_game_details(self):
+        response = self.client.get(reverse('api_game_detail',
+                                           kwargs={'slug': 'game-1'}))
+        self.assertEqual(response.status_code, 200)

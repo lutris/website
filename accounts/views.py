@@ -94,7 +94,7 @@ def profile_edit(request, username):
             'Your account info has been updated.'
         )
         return redirect(reverse('user_account', args=(username, )))
-    return render(request, 'accounts/profile_edit.jade', {'form': form})
+    return render(request, 'accounts/profile_edit.html', {'form': form})
 
 
 @csrf_exempt
@@ -128,7 +128,7 @@ def library_show(request, username):
     user = User.objects.get(username=username)
     library = games.models.GameLibrary.objects.get(user=user)
     library_games = library.games.all()
-    return render(request, 'accounts/library_show.jade',
+    return render(request, 'accounts/library_show.html',
                   {'user': user, 'games': library_games,
                    'is_library': True})
 

@@ -14,5 +14,6 @@ coverage.xml
 components
 public/js
 public/css
+public/fonts
 node_modules
 reports

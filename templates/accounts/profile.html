@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+
+
 {% block title %}My account - Lutris{% endblock %}
+
+
 {% block content %}
 <div class="row">
-  <div class="game-header">
-    <div class="title"><img src="{{ user.avatar_url }}" width="128" height="128"/><span>{{ user }}</span>
-      <div class="buttons"><a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
+  <div class="col-xs-2">
+      <br/>
+      <div class="avatar">
+        <img src="{{ user.avatar_url }}"/>
+        <a href="#" class="avatar-upload-link">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
+          Update avatar</a>
+        <div class="avatar-upload-hint">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
+        </div>
       </div>
-    </div>
   </div>
   <div class="col-xs-8">
-    {% if submissions %}
-    <h2>Submissions</h2>
-    <p>
-      The following games you submitted are awaiting approval from a moderator.
-    </p>
-    <ul class="game-list">
-      {% for submission in submissions %}
-      {% with submission.game as game %}
-        {% include "includes/game_preview.html" %}
-      {% endwith %}
-      {% endfor %}
-    </ul>
-    {% endif %}
+    <h1>{{ user }}
+      <a href="{% url 'profile_edit' user.username %}" class="btn right">Edit Profile</a>
+    </h1>
 
     <h2>Import your Steam library</h2>
     <p>
@@ -34,6 +34,25 @@
     back to private after that.
     </p>
     <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+
+    <h2>Submissions</h2>
+    {% if submissions %}
+    <p>
+      The following games you submitted are awaiting approval from a moderator.
+    </p>
+    <ul class="game-list">
+      {% for submission in submissions %}
+      {% with submission.game as game %}
+        {% include "includes/game_preview.html" %}
+      {% endwith %}
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>
+      You have no submitted games awaiting approval.
+    </p>
+    {% endif %}
+
   </div>
   <div class="col-xs-4">{% if  user.website %}<a href="{{ user.website }}">Website</a>{% endif %}
   </div>

@@ -11,10 +11,12 @@ from django.core.mail import mail_managers
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
 
+from rest_framework import generics, filters
 from sorl.thumbnail import get_thumbnail
 
 from platforms.models import Platform
 from .models import Game, Installer, GameSubmission
+from .serializers import GameSerializer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
 from .util.pagination import get_page_range
@@ -168,6 +170,29 @@ class GameListByPlatform(GameList):
         except Platform.DoesNotExist:
             raise Http404
         return context
+
+
+class GameListView(generics.ListAPIView):
+    serializer_class = GameSerializer
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('slug', )
+
+    def get_queryset(self):
+        if 'games' in self.request.GET:
+            game_slugs = self.request.GET.getlist('games')
+        elif 'games' in self.request.data:
+            game_slugs = self.request.data['games']
+        else:
+            game_slugs = []
+        if game_slugs:
+            return Game.objects.filter(slug__in=game_slugs)
+        return Game.objects.all()
+
+
+class GameDetailView(generics.RetrieveAPIView):
+    serializer_class = GameSerializer
+    lookup_field = 'slug'
+    queryset = Game.objects.all()
 
 
 def game_for_installer(request, slug):

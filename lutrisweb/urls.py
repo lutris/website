@@ -26,6 +26,7 @@ urlpatterns = patterns(
     url(r'^user/', include('accounts.urls')),
     url(r'^api/tosec', include('tosec.urls')),
     url(r'^api/runners', include('runners.urls')),
+    url(r'^api/games', include('games.drf_urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls')),
     url(r'^bundles', include('bundles.urls')),
