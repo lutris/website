@@ -114,7 +114,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-copy'); 
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -123,7 +123,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
 
-  grunt.registerTask('build', ['copy', 'less', 'coffee', 'concat', 'cssmin', 'uglify']);
-  grunt.registerTask('default', ['browserSync', 'watch']);
+  grunt.registerTask('default', ['copy', 'less', 'coffee', 'concat', 'cssmin', 'uglify']);
+  grunt.registerTask('watch', ['browserSync', 'watch']);
 };
 
