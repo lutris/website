@@ -14,6 +14,7 @@ DATABASES = {
         'USER': 'lutris',
         'PASSWORD': os.environ['DATABASE_PASSWORD'],
         'HOST': 'localhost',
+        'CONN_MAX_AGE': 600,
     }
 }
 
