@@ -20,7 +20,7 @@
       <a href="{% url "games_by_plaform" slug=platform.slug %}" class="filter-link">{{ platform }}</a>
     {% endfor %}
     <div class="info">
-      {% for genre in game.genres.all|__pyjade_iter:1 %}
+      {% for genre in game.genres.all %}
         <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
       {% endfor %}
       {% if  game.year %}

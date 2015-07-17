@@ -49,10 +49,8 @@ FILES_ROOT = join(MEDIA_ROOT, 'files')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
