@@ -354,6 +354,13 @@ class Installer(models.Model):
         return super(Installer, self).save(*args, **kwargs)
 
 
+class InstallerIssue(models.Model):
+    """Model to store problems about installers or update requests"""
+    installer = models.ForeignKey(Installer)
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    description = models.TextField()
+
+
 class GameLibrary(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     games = models.ManyToManyField(Game)
