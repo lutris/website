@@ -49,7 +49,8 @@ def client_auth(request):
         response_data = {'token': user.api_key.key}
     else:
         response_data = {'error': "Bad credentials"}
-    return HttpResponse(json.dumps(response_data), mimetype="application/json")
+    return HttpResponse(json.dumps(response_data),
+                        content_type="application/json")
 
 
 @csrf_exempt
@@ -61,7 +62,8 @@ def client_verify(request):
         response_data = {'username': auth_token.user.username}
     except AuthToken.DoesNotExist:
         response_data = {'error': 'invalid token'}
-    return HttpResponse(json.dumps(response_data), mimetype="application/json")
+    return HttpResponse(json.dumps(response_data),
+                        content_type="application/json")
 
 
 @login_required

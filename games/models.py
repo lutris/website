@@ -252,7 +252,7 @@ class InstallerManager(models.Manager):
             return self.get_queryset()
         elif user:
             return self.get_queryset().filter(models.Q(published=True)
-                                               | models.Q(user=user))
+                                              | models.Q(user=user))
         else:
             return self.get_queryset().filter(published=True)
 
@@ -266,7 +266,7 @@ class InstallerManager(models.Manager):
             return [installer]
         except ObjectDoesNotExist:
             installers = self.get_queryset().filter(game__slug=slug,
-                                                     published=True)
+                                                    published=True)
             if not installers:
                 raise
             else:
