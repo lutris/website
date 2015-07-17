@@ -14,7 +14,7 @@ DATABASES = {
         'USER': 'lutris',
         'PASSWORD': os.environ['DATABASE_PASSWORD'],
         'HOST': 'localhost',
-        'CONN_MAX_AGE': 600,
+        #'CONN_MAX_AGE': 600,
     }
 }
 
@@ -28,7 +28,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 CACHES = {
     'default': {
