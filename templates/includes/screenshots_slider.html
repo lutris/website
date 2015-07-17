@@ -1,0 +1,44 @@
+{% load thumbnail %}
+
+<div id="screenshots" class="carousel slide cross-fade">{% if  screenshots %}
+  <div class="carousel-inner screenshots-slider">{% for screenshot in screenshots|__pyjade_iter:1 %}
+    <div class="item {% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}">
+
+      <!-- Screenshot admin menu-->
+      {% if  user.is_staff %}
+      <div class="screenshot-menu">
+        {% if  not screenshot.published %}
+          {% url 'publish_screenshot' id=screenshot.id as publish_url %}
+          <a href="{{ publish_url }}" class="btn">Publish</a>
+        {% endif %}
+        {% url 'admin:games_screenshot_change' screenshot.id as admin_url %}
+        <a href='{{admin_url}}' class="btn">Admin</a>
+      </div>
+      {% endif %}
+
+      <!-- Screenshot-->
+      <div class="screenshot"><a href="/media/{{ screenshot.image }}" class="screenshot">
+          {% thumbnail screenshot.image '690x388' as img %}
+          <img src="{{ MEDIA_URL }}/{{ img }}" title="{{ screenshot.description }}"/>
+          {% endthumbnail %}
+      </a>
+      </div>
+    </div>{% endfor %}
+  </div>
+  <!-- Next and Previous arrows-->
+  {% if  screenshots.count > 1 %}
+  <a href="#screenshots" data-slide="prev" class="left carousel-control">
+    <span class="icon-prev">&nbsp;</span>
+  </a>
+  <a href="#screenshots" data-slide="next" class="right carousel-control">
+    <span class="icon-next">&nbsp;</span>
+  </a>
+  {% endif %}
+  <!-- Indicators-->
+  <ol class="carousel-indicators">
+    {% for screenshot in screenshots|__pyjade_iter:1 %}
+      <li data-target="#screenshots" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}
+      {% if not screenshot.published %} unpublished{% endif %}"></li>
+    {% endfor %}
+  </ol>{% endif %}
+</div>
