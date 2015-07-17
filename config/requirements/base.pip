@@ -10,7 +10,7 @@ django-compressor>=1.2
 django-crispy-forms>=1.4.0
 django_select2==4.2.2
 django-grappelli==2.5.0
-django-tastypie==0.10.0
+django-tastypie==0.12.2
 django-markupfield
 django-bitfield==1.7.1
 python-openid
