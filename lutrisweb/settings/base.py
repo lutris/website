@@ -5,18 +5,17 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = False
 
-PROJECT_PATH = dirname(dirname(dirname(abspath(__file__))))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
     ('Pascal', 'dev@xod.me'),
 )
-MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(PROJECT_PATH, 'lutris.db'),
+        'NAME': join(BASE_DIR, 'lutris.db'),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -31,12 +30,12 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-MEDIA_ROOT = join(PROJECT_PATH, 'media')
+MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-STATIC_ROOT = join(PROJECT_PATH, 'static')
+STATIC_ROOT = join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    join(PROJECT_PATH, "public"),
+    join(BASE_DIR, "public"),
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -59,13 +58,15 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
 )
 
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
 
 TEMPLATE_DIRS = (
-    join(PROJECT_PATH, "templates"),
+    join(BASE_DIR, "templates"),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -92,7 +93,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'sorl.thumbnail',
-    'south',
     'tastypie',
     'rest_framework',
     'django_jcrop',
@@ -110,8 +110,6 @@ INSTALLED_APPS = (
     'accounts',
     'tosec',
 )
-
-SOUTH_TESTS_MIGRATE = False
 
 BANNER_SIZE = "184x69"
 ICON_SIZE = "32x32"

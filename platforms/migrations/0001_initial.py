@@ -1,30 +1,28 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import jsonfield.fields
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Platform'
-        db.rename_table('games_platform', 'platforms_platform')
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        db.rename_table('platforms_platform', 'games_platform')
-
-
-    models = {
-        u'platforms.platform': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Platform'},
-            'default_installer': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'icon': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '127'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'})
-        }
-    }
-
-    complete_apps = ['platforms']
+    operations = [
+        migrations.CreateModel(
+            name='Platform',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=127, verbose_name='Name')),
+                ('slug', models.SlugField(unique=True)),
+                ('icon', models.ImageField(upload_to=b'platforms/icons', blank=True)),
+                ('default_installer', jsonfield.fields.JSONField(null=True, blank=True)),
+            ],
+            options={
+                'ordering': ('name',),
+            },
+            bases=(models.Model,),
+        ),
+    ]
