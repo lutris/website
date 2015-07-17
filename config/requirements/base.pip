@@ -24,7 +24,7 @@ jsonfield
 psycopg2
 factory_boy==2.4.1
 djangorestframework==3.0.5
+sorl-thumbnail==12.3
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
--e git+https://github.com/strycore/sorl-thumbnail.git#egg=sorl-thumbnail
 -e bzr+lp:~strycore/django-openid-auth/trunk#egg=django-openid-auth
