@@ -49,7 +49,7 @@ class Company(models.Model):
         return reverse("games_by_company", args=(self.slug, ))
 
     def __unicode__(self):
-        return "%s" % self.name
+        return u"%s" % self.name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -243,7 +243,7 @@ class Screenshot(models.Model):
 
     def __unicode__(self):
         desc = self.description if self.description else self.game.name
-        return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
+        return u"%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
 
 class InstallerManager(models.Manager):
@@ -370,7 +370,7 @@ class GameLibrary(models.Model):
         verbose_name_plural = "game libraries"
 
     def __unicode__(self):
-        return "%s's library" % self.user.username
+        return u"%s's library" % self.user.username
 
 
 class Featured(models.Model):
