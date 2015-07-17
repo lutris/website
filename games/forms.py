@@ -109,6 +109,7 @@ class GameForm(forms.ModelForm):
 class FeaturedForm(forms.ModelForm):
     class Meta:
         model = models.Featured
+        exclude = ()
 
 
 class ScreenshotForm(forms.ModelForm):

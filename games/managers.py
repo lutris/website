@@ -4,7 +4,7 @@ from django.db.models import Q
 
 class ScreenshotManager(Manager):
     def published(self, user=None, is_staff=False):
-        query = self.get_query_set()
+        query = self.get_queryset()
         query = query.order_by('uploaded_at')
         if is_staff:
             return query

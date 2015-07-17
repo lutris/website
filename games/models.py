@@ -84,11 +84,11 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return self.get_query_set().filter(is_public=True)
+        return self.get_queryset().filter(is_public=True)
 
     def with_installer(self):
         return (
-            self.get_query_set()
+            self.get_queryset()
             .filter(is_public=True)
             .filter(
                 Q(installer__published=True)
@@ -106,8 +106,8 @@ class Game(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=False)
     year = models.IntegerField(null=True, blank=True)
-    platforms = models.ManyToManyField(Platform, null=True, blank=True)
-    genres = models.ManyToManyField(Genre, null=True, blank=True)
+    platforms = models.ManyToManyField(Platform)
+    genres = models.ManyToManyField(Genre)
     publisher = models.ForeignKey(
         Company, related_name='published_game', null=True, blank=True
     )
@@ -249,12 +249,12 @@ class Screenshot(models.Model):
 class InstallerManager(models.Manager):
     def published(self, user=None, is_staff=False):
         if is_staff:
-            return self.get_query_set()
+            return self.get_queryset()
         elif user:
-            return self.get_query_set().filter(models.Q(published=True)
+            return self.get_queryset().filter(models.Q(published=True)
                                                | models.Q(user=user))
         else:
-            return self.get_query_set().filter(published=True)
+            return self.get_queryset().filter(published=True)
 
     def fuzzy_get(self, slug):
         """Return either the installer that matches exactly 'slug' or the
@@ -262,10 +262,10 @@ class InstallerManager(models.Manager):
         Installers are always returned in a list.
         """
         try:
-            installer = self.get_query_set().get(slug=slug)
+            installer = self.get_queryset().get(slug=slug)
             return [installer]
         except ObjectDoesNotExist:
-            installers = self.get_query_set().filter(game__slug=slug,
+            installers = self.get_queryset().filter(game__slug=slug,
                                                      published=True)
             if not installers:
                 raise

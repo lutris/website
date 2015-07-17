@@ -38,7 +38,7 @@ class User(AbstractUser):
 
 class AuthToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    ip_address = models.IPAddressField()
+    ip_address = models.GenericIPAddressField()
     token = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
 
