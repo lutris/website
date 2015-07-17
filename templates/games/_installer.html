@@ -26,11 +26,7 @@
         {% endif %}
         <li>
           {% url 'get_installers' slug=installer.slug as installer_url %}
-          <a href="{{ installer_url }}"><i class='icon-download'></i> Download installer</a>
-        </li>
-        <li>
-          {% url 'serve_installer' slug=installer.slug as download_url %}
-          <a href="{{ download_url }}"><i class="icon-download"></i> Download installer (Legacy)</a>
+          <a href="{{ installer_url }}"><i class='icon-download'></i> Download install script</a>
         </li>
       </ul>
     </div>
