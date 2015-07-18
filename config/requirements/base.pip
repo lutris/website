@@ -7,7 +7,6 @@ Sphinx>=1.2b3
 django-compressor>=1.2
 django-crispy-forms>=1.4.0
 django_select2==4.3.1
-django-grappelli==2.6.5
 django-tastypie==0.12.2
 django-markupfield==1.3.5
 django-bitfield==1.8.0
@@ -25,3 +24,8 @@ sorl-thumbnail==12.3
 -e hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 -e bzr+lp:~strycore/django-openid-auth/trunk#egg=django-openid-auth
+
+# Using a temporary branch until a patch get merged and published.
+# See: https://github.com/strycore/django-grappelli/commit/edcb1201c17177243d21200bae31437049c5ef4c
+# django-grappelli==2.6.5
+-e git+https://github.com/strycore/django-grappelli.git#egg=django-grappelli
