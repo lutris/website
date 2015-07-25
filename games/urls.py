@@ -17,10 +17,13 @@ urlpatterns = patterns(
     url(r'^platform/(?P<slug>[\w\-]+)/$', views.GameListByPlatform.as_view(),
         name="games_by_plaform"),
     url(r'^add-game/$', 'submit_game',
-        name='submit_game'),
+        name='game-submit'),
     url(r'^game-submitted',
         TemplateView.as_view(template_name='games/submitted.html'),
         name="game-submitted"),
+
+    url('^game-issue', 'submit_issue',
+        name='game-submit-issue'),
 
     url(r'banner/(?P<slug>[\w\-]+).jpg', 'get_banner',
         name='get_banner'),

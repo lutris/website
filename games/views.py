@@ -1,9 +1,11 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
+import json
 import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView  # , DetailView
+from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -15,7 +17,7 @@ from rest_framework import generics, filters
 from sorl.thumbnail import get_thumbnail
 
 from platforms.models import Platform
-from .models import Game, Installer, GameSubmission
+from .models import Game, Installer, GameSubmission, InstallerIssue
 from .serializers import GameSerializer
 from . import models
 from .forms import InstallerForm, ScreenshotForm, GameForm
@@ -430,3 +432,31 @@ def publish_screenshot(request, id):
     screenshot.published = True
     screenshot.save()
     return redirect('game_detail', slug=screenshot.game.slug)
+
+
+@require_POST
+@login_required
+def submit_issue(request):
+    response = {'status': 'ok'}
+    try:
+        installer = Installer.objects.get(slug=request.POST.get('installer'))
+    except Installer.DoesNotExist:
+        response['status'] = 'error'
+        response['message'] = 'Could not find the installer'
+        return HttpResponse(json.dumps(response))
+
+    content = request.POST.get('content')
+    if not content:
+        response['status'] = 'error'
+        response['message'] = 'The issue content is empty'
+        return HttpResponse(json.dumps(response))
+
+    user = request.user
+    installer_issue = InstallerIssue(
+        installer=installer,
+        submitted_by=user,
+        description=content
+    )
+    installer_issue.save()
+
+    return HttpResponse(json.dumps(response))

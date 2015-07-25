@@ -28,6 +28,11 @@
           {% url 'get_installers' slug=installer.slug as installer_url %}
           <a href="{{ installer_url }}"><i class='icon-download'></i> Download install script</a>
         </li>
+        {% if user.is_authenticated %}
+        <li>
+          <a href="#" onclick="submitInstallerIssue(event)" data-slug="{{installer.slug}}">Report issue</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   <div class="centered-vertical">

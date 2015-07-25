@@ -63,7 +63,7 @@
     }
   });
 
-  var setActiveMenu = function() {
+  function setActiveMenu() {
     var menuIndex, url;
     url = window.location.pathname;
     $('#main-nav li').removeClass('active');

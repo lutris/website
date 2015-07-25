@@ -358,7 +358,11 @@ class InstallerIssue(models.Model):
     """Model to store problems about installers or update requests"""
     installer = models.ForeignKey(Installer)
     submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
+
+    def __unicode__(self):
+        return "Issue for {}".format(self.installer.slug)
 
 
 class GameLibrary(models.Model):

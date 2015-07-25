@@ -13,11 +13,14 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.2.0",
-    "jquery": "~1.10",
+    "bootstrap": "~3.3.5",
+    "jquery": "~1.11.3",
     "modernizr": "~2.8.3",
     "select2": "~3.5.1",
     "select2-bootstrap3-css": "~1.4.1",
     "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.2"
+  },
+  "resolutions": {
+    "jquery": "~1.11.3"
   }
 }

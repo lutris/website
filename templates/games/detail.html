@@ -108,14 +108,75 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id='installer-issue-modal'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Report a problem or an outdated installer</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            Report any problem you might encounter with the installer. You can 
+            also report here outdated installers. If you have problems 
+            installing or running the game, don't forget to specify your 
+            distribution, (+ version and architecture), your graphics chipset 
+            model and the driver used.
+          </p>
+          <p>
+            <label for="issue-content">Describe your issue:</label>
+          </p>
+          <textarea id="issue-content" class="issue-content"></textarea>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="issue-submit">Submit</button>
+        </div>
+      </div> 
+    </div>
+  </div>
 {% endblock %}
 
 
 {% block scripts %}
 <script>
-$(function() {
-  $("#screenshots").carousel('cycle');
-})
+  function submitInstallerIssue(event) {
+    event.preventDefault();
+    var installerSlug = event.target.getAttribute('data-slug');
+    var $issueModal = $('#installer-issue-modal');
+    $issueModal.attr('data-slug', installerSlug);
+    $issueModal.modal();
+  }
+  (function () {
+    $("#screenshots").carousel('cycle');
+
+    var issueSubmit = document.getElementById('issue-submit');
+    issueSubmit.addEventListener('click', function (event) {
+
+      var issueModal = document.getElementById('installer-issue-modal');
+      var issueContent = document.getElementById('issue-content');
+      var issueData = {
+        content: issueContent.value,
+        installer: issueModal.getAttribute('data-slug')
+      };
+      $.ajax({
+        url: "{% url "game-submit-issue" %}",
+        method: "POST",
+        data: issueData,
+        dataType: "json",
+        success: function (response) {
+          if(response.status === 'error') {
+            alert(response.message);
+          } else {
+            issueContent.value = "";
+            $('#installer-issue-modal').modal('toggle');
+            alert("Thank you for your feedback");
+          }
+        }
+      })
+    });
+  })();
 </script>
 
 {% endblock %}

@@ -32,6 +32,10 @@ class InstallerAdmin(admin.ModelAdmin):
     game_link.short_description = "Game (link)"
 
 
+class InstallerIssueAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'submitted_by', 'submitted_on', 'installer')
+
+
 class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ('name', )
@@ -107,6 +111,7 @@ admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
+admin.site.register(models.InstallerIssue, InstallerIssueAdmin)
 admin.site.register(models.GameLibrary)
 admin.site.register(models.Featured, FeaturedAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)
