@@ -18,6 +18,10 @@
 @pagination-active-color: #666;
 @pagination-disabled-color: #888;
 
+@modal-content-bg: @darkerBackground;
+@modal-header-border-color: #666;
+
+
 /* == Defaults */
 html, body {
   background-color: #121211;
@@ -1148,6 +1152,19 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
       }
     }
   }
+}
+
+.modal-title {
+  border-bottom: 0;
+}
+
+.issue-content {
+  width: 100%;
+  height: 5em;
+  background-color: #e3e3e3;
+  color: #222;
+  border: 1px solid @darkBackground;
+  padding: .2em;
 }
 
 /*Submit game form: banner thumbnail*/

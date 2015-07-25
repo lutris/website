@@ -32,14 +32,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    coffee: {
-      compile: {
-        files: {
-          'public/js/app.js': 'common_static/js/*.coffee',
-          'public/js/jcrop-fileinput.js': 'components/jcrop-fileinput/src/jcrop-fileinput.coffee'
-        }
-      }
-    },
     concat: {
       css: {
         src: [
@@ -51,9 +43,14 @@ module.exports = function(grunt) {
         dest: 'public/css/libs.css',
         nonull: true
       },
+      app: {
+        src: ['common_static/js/*.js'],
+        dest: 'public/js/app.js',
+        nonull: true
+      },
       js: {
         src: [
-          'components/jquery/jquery.js',
+          'components/jquery/dist/jquery.js',
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
           'components/jcrop/js/jquery.Jcrop.js',
@@ -87,13 +84,6 @@ module.exports = function(grunt) {
         files: 'common_static/css/lutris.less',
         tasks: ['less:css']
       },
-      coffee: {
-        files: [
-          'common_static/js/*.coffee',
-          'components/jcrop-fileinput/src/*.coffee'
-        ],
-        tasks: ['coffee', 'uglify:app']
-      },
       templates: {
         files: ['templates/**/*.html']
       }
@@ -121,9 +111,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-coffee');
 
-  grunt.registerTask('default', ['copy', 'less', 'coffee', 'concat', 'cssmin', 'uglify']);
-  grunt.registerTask('watch', ['browserSync', 'watch']);
+  grunt.registerTask('default', ['copy', 'less', 'concat', 'cssmin', 'uglify']);
+  grunt.registerTask('serve', ['browserSync', 'watch']);
 };
 

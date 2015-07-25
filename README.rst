@@ -3,7 +3,7 @@ Getting the site up and running for development
 
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
-their website: http://virtualenvwrapper.readthedocs.org/en/latest/ 
+their website: http://virtualenvwrapper.readthedocs.org/en/latest/
 
 ::
 
@@ -14,7 +14,7 @@ their website: http://virtualenvwrapper.readthedocs.org/en/latest/
 Once the virtualenv is created, you need to make sure that some
 environment variables are exported and are set to valid values, the
 simplest way to achieve that is to edit the postactivate script in
-`$VIRTUAL_ENV/lutrisweb/bin/postactivate` and add your exports here. 
+`$VIRTUAL_ENV/lutrisweb/bin/postactivate` and add your exports here.
 The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
@@ -42,7 +42,6 @@ Once you have grunt and bower installed, you can use the following::
 
     bower install  # Install the frontend dependencies
     grunt  # Launch the default build process for frontend code
-    grunt coffee  # Only compile coffeescript code
     grunt less  # Only compile less stylesheets
     grunt watch  # Watch for JS/CSS changes and compile them
 
