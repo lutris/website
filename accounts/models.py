@@ -26,6 +26,10 @@ class User(AbstractUser):
             user_openid = UserOpenID.objects.get(user=self)
         except UserOpenID.DoesNotExist:
             return False
+        except UserOpenID.MultipleObjectsReturned:
+            # TODO: Handle properly the case when a user has connected to
+            # multiple Steam accounts.
+            user_openid = UserOpenID.objects.filter(user=self)[0]
         self.steamid = user_openid.claimed_id.split('/')[-1]
 
     def generate_key(self):
