@@ -321,6 +321,10 @@ class Installer(models.Model):
         from runners.models import Runner
         yaml_content = yaml.safe_load(self.content) or {}
 
+        # Allow pasting raw install scripts (which are served as lists)
+        if type(yaml_content) == list:
+            yaml_content = yaml_content[0]
+
         # If yaml content evaluates to a string return an empty dict
         if isinstance(yaml_content, basestring):
             return {}
