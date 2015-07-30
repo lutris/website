@@ -22,9 +22,21 @@
       $("#id_platforms").select2({'closeOnSelect': false, 'placeholder': ''});
       $("#id_genres").select2({'closeOnSelect': false, 'placeholder': ''});
       $('input[type=file]').JCropFileInput({
-        debug: true,
+        debug: false,
         ratio: 8/3,
-        thumb_max_width: 184
+        thumbMaxWidth: 184,
+        onSubmit: function (event) {
+          console.log(event);
+          console.log(event.target);
+          if(event.target.responseURL == window.location.href) {
+            document.open()
+-           document.write(event.target.responseText)
+-           document.close()
+          } else {
+            window.location = event.target.responseURL;
+          }
+
+        }
       });
     })
   </script>
