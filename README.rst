@@ -116,3 +116,14 @@ Backing up the database::
 Restoring a backup::
 
     psql lutris < lutris.sql
+
+
+Development through Docker
+==========================
+
+[Docker](https://www.docker.com/) is an open platform for distributed
+applications for developers and sysadmins. The following commands
+allow running the Lutris website locally through Docker.
+
+    docker build -t lutris/website .
+    docker run -p 8000:80 -v $(pwd):/app lutris/website start
