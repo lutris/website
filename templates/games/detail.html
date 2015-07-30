@@ -90,6 +90,7 @@
         </ul>
         <div class="centered">
           <p>
+            <span>{{ library_count }} users have this game</span>
             {% if not in_library %}
             <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
             {% else %}
@@ -117,10 +118,10 @@
         </div>
         <div class="modal-body">
           <p>
-            Report any problem you might encounter with the installer. You can 
-            also report here outdated installers. If you have problems 
-            installing or running the game, don't forget to specify your 
-            distribution, (+ version and architecture), your graphics chipset 
+            Report any problem you might encounter with the installer. You can
+            also report here outdated installers. If you have problems
+            installing or running the game, don't forget to specify your
+            distribution, (+ version and architecture), your graphics chipset
             model and the driver used.
           </p>
           <p>
@@ -133,7 +134,7 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" id="issue-submit">Submit</button>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 {% endblock %}

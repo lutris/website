@@ -226,6 +226,9 @@ def game_detail(request, slug):
         installers = game.installer_set.published()
         screenshots = game.screenshot_set.published()
 
+    library_count = (models.GameLibrary.objects
+                     .filter(games__in=[game.id]).count())
+
     # auto_installers = game.get_default_installers()
     auto_installers = []
     return render(request, 'games/detail.html',
@@ -233,6 +236,7 @@ def game_detail(request, slug):
                    'banner_options': banner_options,
                    'banner_size': banner_size,
                    'in_library': in_library,
+                   'library_count': library_count,
                    'installers': installers,
                    'auto_installers': auto_installers,
                    'screenshots': screenshots})
