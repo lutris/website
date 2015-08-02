@@ -154,6 +154,11 @@ BROKER_URL = 'amqp://guest:guest@localhost//'
 # API Keys
 STEAM_API_KEY = "********************************"
 
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.StandardResultsSetPagination'
+}
+
 # Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins', 'console']
