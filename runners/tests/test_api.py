@@ -2,18 +2,8 @@ import os
 import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.contrib.auth import get_user_model
 from runners import models
-
-
-def create_admin(username='admin', password='admin'):
-    user = get_user_model().objects.create(username=username,
-                                           is_superuser=True,
-                                           is_staff=True,
-                                           is_active=True)
-    user.set_password(password)
-    user.save()
-    return user
+from common.util import create_admin
 
 
 class TestApi(TestCase):
