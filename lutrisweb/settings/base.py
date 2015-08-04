@@ -37,6 +37,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     join(BASE_DIR, "public"),
 )
+FILES_ROOT = join('MEDIA_ROOT', 'files')
+FILES_URL = 'http://localhost:8000/media/files/'
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
