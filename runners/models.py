@@ -47,3 +47,4 @@ class RunnerVersion(models.Model):
                                     choices=ARCH_CHOICES,
                                     default='x86_64')
     url = models.URLField(blank=True)
+    default = models.BooleanField(default=False)
