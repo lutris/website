@@ -41,7 +41,7 @@ class TestApi(TestCase):
             json.dumps(self.runner_version_data),
             format='multipart'
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_can_upload_a_new_version(self):
         authenticated = self.client.login(username='admin', password='admin')

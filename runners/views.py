@@ -45,7 +45,7 @@ class RunnerUploadView(generics.CreateAPIView):
 
     def post(self, request, slug):
         try:
-            runner = self.get_queryset()[0]
+            runner = Runner.objects.get(slug=slug)
         except KeyError:
             return Response(status=404)
         serializer = RunnerSerializer(runner)
