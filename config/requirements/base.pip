@@ -13,7 +13,7 @@ django-bitfield==1.8.0
 python-openid
 django-extensions==1.4.0
 requests==2.0.1
-Celery==3.1.7
+Celery==3.1.18
 mimeparse
 mock>=1.0.1
 jsonfield==1.0.3
