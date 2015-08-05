@@ -1,14 +1,13 @@
 from django.db import models
-from django.utils.translation import ugettext as _
 
 from platforms.models import Platform
 
 
 class Runner(models.Model):
     """ Model definition for the runners """
-    name = models.CharField(_("Name"), max_length=127)
+    name = models.CharField(max_length=127)
     slug = models.SlugField(unique=True)
-    website = models.CharField(_("Website"), max_length=127, blank=True)
+    website = models.CharField(max_length=127, blank=True)
     icon = models.ImageField(upload_to='runners/icons', blank=True)
     platforms = models.ManyToManyField(Platform, related_name='runners')
 

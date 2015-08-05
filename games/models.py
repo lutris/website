@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
-from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
@@ -34,7 +33,7 @@ DEFAULT_INSTALLER = {
 
 class Company(models.Model):
     """Gaming company"""
-    name = models.CharField(_('Name'), max_length=127)
+    name = models.CharField(max_length=127)
     slug = models.SlugField(unique=True)
     logo = models.ImageField(upload_to='companies/logos', blank=True)
     website = models.CharField(max_length=128, blank=True)
