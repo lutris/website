@@ -31,8 +31,11 @@ class RunnerDetailView(generics.RetrieveUpdateAPIView):
     queryset = Runner.objects.all()
 
     def get(self, request, slug):
-        queryset = self.get_queryset()[0]
-        serializer = RunnerSerializer(queryset)
+        try:
+            runner = Runner.objects.get(slug=slug)
+        except KeyError:
+            return Response(status=404)
+        serializer = RunnerSerializer(runner)
         return Response(serializer.data)
 
 
