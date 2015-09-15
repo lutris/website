@@ -11,6 +11,7 @@ ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
     ('Pascal', 'dev@xod.me'),
 )
+MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
 DATABASES = {
     'default': {
