@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 SLUG_MAX_LENGTH = 50
 
@@ -34,3 +35,13 @@ def get_auto_increment_slug(model, instance, text, slug=None):
             slug = original_slug[:SLUG_MAX_LENGTH - len(suffix)] + suffix
             counter += 1
     return slug
+
+
+def create_admin(username='admin', password='admin'):
+    user = get_user_model().objects.create(username=username,
+                                           is_superuser=True,
+                                           is_staff=True,
+                                           is_active=True)
+    user.set_password(password)
+    user.save()
+    return user

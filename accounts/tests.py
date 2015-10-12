@@ -1,7 +1,8 @@
+import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-
 from accounts.models import User
+from common.util import create_admin
 
 
 class TestRegistration(TestCase):
@@ -29,3 +30,18 @@ class TestProfileView(TestCase):
         response = self.client.get(reverse("user_account",
                                            args=(user.username, )))
         self.assertEqual(response.status_code, 200)
+
+
+class TestApiAuth(TestCase):
+    def setUp(self):
+        self.admin = create_admin()
+
+    def test_user_can_get_token(self):
+        payload = {
+            'username': 'admin',
+            'password': 'admin'
+        }
+        response = self.client.post(reverse('accounts_get_token'), payload)
+        self.assertEqual(response.status_code, 200)
+        response_data = json.loads(response.content)
+        self.assertIn('token', response_data)

@@ -1,12 +1,11 @@
 from django.db import models
-from django.utils.translation import ugettext as _
 from django.utils.text import slugify
 from jsonfield import JSONField
 
 
 class Platform(models.Model):
     """Gaming platform"""
-    name = models.CharField(_('Name'), max_length=127)
+    name = models.CharField(max_length=127)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)

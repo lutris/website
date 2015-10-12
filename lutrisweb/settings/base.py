@@ -11,6 +11,7 @@ ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
     ('Pascal', 'dev@xod.me'),
 )
+MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
 DATABASES = {
     'default': {
@@ -37,6 +38,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     join(BASE_DIR, "public"),
 )
+FILES_ROOT = join('MEDIA_ROOT', 'files')
+FILES_URL = 'http://localhost:8000/media/files/'
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -95,6 +99,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'tastypie',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_jcrop',
     'crispy_forms',
     'django_select2',
@@ -156,7 +161,10 @@ STEAM_API_KEY = "********************************"
 
 # Rest Framework
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'common.pagination.StandardResultsSetPagination'
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
 
 # Logging

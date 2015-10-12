@@ -15,3 +15,4 @@ class RunnerAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(models.Runner, RunnerAdmin)
+admin.site.register(models.Runtime)
