@@ -5,8 +5,8 @@ from rest_framework import generics, filters
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Runner, RunnerVersion
-from .serializers import RunnerSerializer
+from .models import Runner, RunnerVersion, Runtime
+from .serializers import RunnerSerializer, RuntimeSerializer
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -76,3 +76,19 @@ class RunnerUploadView(generics.CreateAPIView):
             serializer.data,
             status=status.HTTP_201_CREATED
         )
+
+
+class RuntimeView(generics.ListCreateAPIView):
+    serializer_class = RuntimeSerializer
+    queryset = Runtime.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAdminOrReadOnly, )
+
+    def get(self, request):
+        queryset = self.get_queryset()
+        serializer = RuntimeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        print request.data
+        return Response({'ok': 'ok'})

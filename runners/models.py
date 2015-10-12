@@ -2,6 +2,12 @@ from django.db import models
 
 from platforms.models import Platform
 
+ARCH_CHOICES = (
+    ('i386', '32 bit'),
+    ('x86_64', '64 bit'),
+    ('arm', 'ARM'),
+)
+
 
 class Runner(models.Model):
     """ Model definition for the runners """
@@ -30,12 +36,6 @@ class RunnerVersion(models.Model):
     class Meta(object):
         ordering = ('version', 'architecture')
 
-    ARCH_CHOICES = (
-        ('i386', '32 bit'),
-        ('x86_64', '64 bit'),
-        ('arm', 'ARM'),
-    )
-
     def __unicode__(self):
         return u"{} v{} ({})".format(self.runner.name,
                                      self.version,
@@ -48,3 +48,18 @@ class RunnerVersion(models.Model):
                                     default='x86_64')
     url = models.URLField(blank=True)
     default = models.BooleanField(default=False)
+
+
+class Runtime(models.Model):
+    architecture = models.CharField(max_length=8,
+                                    choices=ARCH_CHOICES,
+                                    default='x86_64')
+    created_at = models.DateTimeField(auto_now=True)
+    url = models.URLField()
+
+    class Meta(object):
+        ordering = ('-created_at', )
+
+    def __unicode__(self):
+        return u"{} runtime (uploaded on {})".format(self.architecture,
+                                                     self.created_at)
