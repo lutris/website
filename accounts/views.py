@@ -153,7 +153,11 @@ def library_remove(request, slug):
     library = games.models.GameLibrary.objects.get(user=user)
     game = get_object_or_404(games.models.Game, slug=slug)
     library.games.remove(game)
-    return redirect(request.META['HTTP_REFERER'])
+    redirect_url = request.META.get('HTTP_REFERER')
+    if not redirect_url:
+        username = user.username
+        redirect_url = reverse('library_show', kwargs={'username': username})
+    return redirect(redirect_url)
 
 
 @login_required
