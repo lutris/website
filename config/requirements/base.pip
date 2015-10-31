@@ -1,6 +1,6 @@
 setuptools>=1.1.0
 PyYAML
-Django==1.8.3
+Django==1.8.5
 Pillow==2.4.0
 ipython>=1.1.0
 Sphinx>=1.2b3
