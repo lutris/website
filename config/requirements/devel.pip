@@ -2,4 +2,4 @@
 django-jenkins==0.18.1
 pylint>=1.2.1
 pep8==1.6.2
-coverage==3.7
+coverage==4.0.1
