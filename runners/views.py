@@ -33,7 +33,7 @@ class RunnerDetailView(generics.RetrieveUpdateAPIView):
     def get(self, request, slug):
         try:
             runner = Runner.objects.get(slug=slug)
-        except KeyError:
+        except Runner.DoesNotExist:
             return Response(status=404)
         serializer = RunnerSerializer(runner)
         return Response(serializer.data)
@@ -49,7 +49,7 @@ class RunnerUploadView(generics.CreateAPIView):
     def post(self, request, slug):
         try:
             runner = Runner.objects.get(slug=slug)
-        except (KeyError, Runner.DoesNotExist):
+        except Runner.DoesNotExist:
             return Response(status=404)
         serializer = RunnerSerializer(runner)
         runner_file = request.data['file']
