@@ -49,7 +49,7 @@ class RunnerUploadView(generics.CreateAPIView):
     def post(self, request, slug):
         try:
             runner = Runner.objects.get(slug=slug)
-        except KeyError:
+        except (KeyError, Runner.DoesNotExist):
             return Response(status=404)
         serializer = RunnerSerializer(runner)
         runner_file = request.data['file']
