@@ -64,6 +64,8 @@ class Genre(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
 
+    objects = managers.GenreManager()
+
     # pylint: disable=W0232, R0903
     class Meta:
         ordering = ['name']

@@ -108,8 +108,8 @@ class GameList(ListView):
             if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True
                 break
-        context['platforms'] = Platform.objects.all()
-        context['genres'] = models.Genre.objects.all()
+        context['platforms'] = Platform.objects.with_games()
+        context['genres'] = models.Genre.objects.with_games()
         return context
 
 

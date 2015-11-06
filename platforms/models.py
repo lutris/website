@@ -1,6 +1,20 @@
 from django.db import models
+from django.db.models import Count
 from django.utils.text import slugify
 from jsonfield import JSONField
+
+
+class PlatformManager(models.Manager):
+    def with_games(self):
+        from games.models import Game
+        platform_list = (
+            Game.objects.with_installer()
+            .values_list('platforms')
+            .annotate(p_count=Count('platforms'))
+            .filter(p_count__gt=0)
+        )
+        platform_ids = [platform[0] for platform in platform_list]
+        return self.get_queryset().filter(id__in=platform_ids)
 
 
 class Platform(models.Model):
@@ -9,6 +23,8 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)
+
+    objects = PlatformManager()
 
     # pylint: disable=W0232, R0903
     class Meta:
