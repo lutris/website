@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     concat: {
       css: {
         src: [
-          'components/jcrop/css/jquery.Jcrop.css',
+          'components/jcrop/css/Jcrop.css',
           'components/jcrop-fileinput/dist/jcrop-fileinput.css',
           'components/select2/select2.css',
           'components/select2-bootstrap3-css/select2-bootstrap.css'
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
           'components/jquery/dist/jquery.js',
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
-          'components/jcrop/js/jquery.Jcrop.js',
+          'components/jcrop/js/Jcrop.js',
           'components/jcrop-fileinput/dist/jcrop-fileinput.js',
           'components/select2/select2.js'
         ],
