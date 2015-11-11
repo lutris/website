@@ -51,9 +51,7 @@ class RunnerVersion(models.Model):
 
 
 class Runtime(models.Model):
-    architecture = models.CharField(max_length=8,
-                                    choices=ARCH_CHOICES,
-                                    default='x86_64')
+    name = models.CharField(max_length=8)
     created_at = models.DateTimeField(auto_now=True)
     url = models.URLField()
 
@@ -61,5 +59,4 @@ class Runtime(models.Model):
         ordering = ('-created_at', )
 
     def __unicode__(self):
-        return u"{} runtime (uploaded on {})".format(self.architecture,
-                                                     self.created_at)
+        return u"{} runtime (uploaded on {})".format(self.name, self.created_at)

@@ -52,13 +52,11 @@ class RunnerUploadView(generics.CreateAPIView):
         except Runner.DoesNotExist:
             return Response(status=404)
         serializer = RunnerSerializer(runner)
-        runner_file = request.data['file']
+        uploaded_file = request.data['file']
         runner_dir = os.path.join(settings.FILES_ROOT, 'runners/')
         if not os.path.isdir(runner_dir):
             os.makedirs(runner_dir)
-        dest_file_path = os.path.join(runner_dir, runner_file.name)
-
-        uploaded_file = request.data['file']
+        dest_file_path = os.path.join(runner_dir, uploaded_file.name)
 
         with open(dest_file_path, 'wb') as runner_file:
             for chunk in uploaded_file.chunks():
@@ -90,5 +88,24 @@ class RuntimeView(generics.ListCreateAPIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print request.data
-        return Response({'ok': 'ok'})
+        uploaded_file = request.data['file']
+        runtime_dir = os.path.join(settings.FILES_ROOT, 'runtime/')
+        if not os.path.isdir(runtime_dir):
+            os.makedirs(runtime_dir)
+        dest_file_path = os.path.join(runtime_dir, uploaded_file.name)
+
+        with open(dest_file_path, 'wb') as runtime_file:
+            for chunk in uploaded_file.chunks():
+                runtime_file.write(chunk)
+
+        runtime = Runtime.objects.create(
+            name=request.data['name'],
+            url=settings.FILES_URL + 'runtime/' + uploaded_file.name
+        )
+        runtime.save()
+        serializer = RuntimeSerializer(runtime)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
