@@ -98,14 +98,16 @@ class RuntimeView(generics.ListCreateAPIView):
             for chunk in uploaded_file.chunks():
                 runtime_file.write(chunk)
 
-        runtime = Runtime.objects.create(
+        runtime, created = Runtime.objects.get_or_create(
             name=request.data['name'],
             url=settings.FILES_URL + 'runtime/' + uploaded_file.name
         )
         runtime.save()
         serializer = RuntimeSerializer(runtime)
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+        if created:
+            response_status = status.HTTP_201_CREATED
+        else:
+            response_status = status.HTTP_200_OK
+
+        return Response(serializer.data, status=response_status)
