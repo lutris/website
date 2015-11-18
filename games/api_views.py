@@ -42,3 +42,9 @@ class GameDetailView(generics.RetrieveAPIView):
     serializer_class = GameSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.all()
+
+
+class GameBannersView(generics.RetrieveAPIView):
+
+    def get(self, request):
+        return Response({'status': 'not implemented'})
