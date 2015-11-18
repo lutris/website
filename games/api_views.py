@@ -16,7 +16,7 @@ class GameListView(APIView):
         if 'games' in self.request.GET:
             game_slugs = self.request.GET.getlist('games')
         elif 'games' in self.request.data:
-            game_slugs = self.request.data['games']
+            game_slugs = self.request.data.getlist('games')
         else:
             game_slugs = []
         if game_slugs:
