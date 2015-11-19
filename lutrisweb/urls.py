@@ -5,17 +5,18 @@ from django.contrib import admin
 from django.conf import settings
 from django_openid_auth.views import login_begin
 from importlib import import_module
-from games import api
-
-from tastypie.api import Api
 
 logger = logging.getLogger(__name__)
-
-v1_api = Api(api_name='v1')
-v1_api.register(api.GameLibraryResource())
-v1_api.register(api.GameResource())
-
 admin.autodiscover()
+
+
+# Tastypie API will be deprecated in lutris 0.4.0
+from games import deprecated_api
+from tastypie.api import Api
+v1_api = Api(api_name='v1')
+v1_api.register(deprecated_api.GameLibraryResource())
+v1_api.register(deprecated_api.GameResource())
+
 
 urlpatterns = patterns(
     '',
