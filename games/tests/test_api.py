@@ -80,8 +80,16 @@ class TestGameLibraryApi(TestCase):
         other_games = [game(name="Metroid"), game(name="Mario")]
         self.other_library = factories.GameLibraryFactory(games=other_games)
 
+    def test_anonymous_requests_are_rejected(self):
+        user = self.library.user
+        library_url = reverse('api_game_library',
+                              kwargs={'username': user.username})
+        response = self.client.get(library_url)
+        self.assertEqual(response.status_code, 401)
+
     def test_can_get_library(self):
         user = self.library.user
+        self.client.login(username=user.username, password='password')
         library_url = reverse('api_game_library',
                               kwargs={'username': user.username})
         response = self.client.get(library_url)

@@ -1,3 +1,4 @@
+from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, filters
@@ -40,6 +41,7 @@ class GameListView(APIView):
 
 class GameLibraryView(generics.RetrieveAPIView):
     serializer_class = GameLibrarySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, username):
         try:
