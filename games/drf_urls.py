@@ -6,6 +6,8 @@ urlpatterns = patterns(
     '',
     url(r'^$', views.GameListView.as_view(),
         name='api_game_list'),
+    url(r'/library/(?P<username>[\w\-]+)$', views.GameLibraryView.as_view(),
+        name='api_game_library'),
     url(r'^/(?P<slug>[\w\-]+)$', views.GameDetailView.as_view(),
         name='api_game_detail')
 )

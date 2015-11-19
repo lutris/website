@@ -70,3 +70,19 @@ class TestGameApi(TestCase):
         response = self.client.get(reverse('api_game_detail',
                                            kwargs={'slug': 'game-1'}))
         self.assertEqual(response.status_code, 200)
+
+
+class TestGameLibraryApi(TestCase):
+    def setUp(self):
+        game = factories.GameFactory
+        games = [game() for i in range(5)]
+        self.library = factories.GameLibraryFactory(games=games)
+        other_games = [game(name="Metroid"), game(name="Mario")]
+        self.other_library = factories.GameLibraryFactory(games=other_games)
+
+    def test_can_get_library(self):
+        user = self.library.user
+        library_url = reverse('api_game_library',
+                              kwargs={'username': user.username})
+        response = self.client.get(library_url)
+        self.assertEqual(response.status_code, 200)

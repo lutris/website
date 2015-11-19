@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, filters
-from .serializers import GameSerializer
+from .serializers import GameSerializer, GameLibrarySerializer
 
 from . import models
 
@@ -36,6 +36,18 @@ class GameListView(APIView):
         # support a limited number of characters (depending on the web server or
         # the browser used) whereas POST request do not have this limitation.
         return self.get(request)
+
+
+class GameLibraryView(generics.RetrieveAPIView):
+    serializer_class = GameLibrarySerializer
+
+    def get(self, request, username):
+        try:
+            library = models.GameLibrary.objects.get(user__username=username)
+        except models.GameLibrary.DoesNotExist:
+            return Response(status=404)
+        serializer = GameLibrarySerializer(library)
+        return Response(serializer.data)
 
 
 class GameDetailView(generics.RetrieveAPIView):
