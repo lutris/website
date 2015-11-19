@@ -40,3 +40,7 @@ class Platform(models.Model):
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )
+
+    def has_auto_installer(self):
+        return bool(self.default_installer)
+    has_auto_installer.boolean = True  # Display icon in admin
