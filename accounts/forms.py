@@ -2,6 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from accounts.models import User
+from rest_framework.authtoken.models import Token
 from common.forms import get_bootstrap_helper
 
 
@@ -71,6 +72,7 @@ class RegistrationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
+        Token.objects.create(user=user)
         return user
 
 
