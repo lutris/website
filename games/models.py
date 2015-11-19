@@ -93,7 +93,7 @@ class GameManager(models.Manager):
             .filter(is_public=True)
             .filter(
                 Q(installer__published=True)
-                | Q(platforms__default_installer__isnull=False)
+                | Q(platforms__default_installer__startswith='{')
             )
             .order_by('name')
             .annotate(installer_count=Count('installer'))
