@@ -5,4 +5,7 @@ import models
 class GameSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = models.Game
-        fields = ('name', 'slug', 'year', 'platforms', 'genres')
+        fields = (
+            'name', 'slug', 'year', 'platforms', 'genres',
+            'banner_url', 'icon_url'
+        )

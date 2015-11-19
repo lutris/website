@@ -147,6 +147,16 @@ class Game(models.Model):
     def autocomplete_search_fields():
         return ("name__icontains",)
 
+    @property
+    def banner_url(self):
+        if self.title_logo:
+            return settings.MEDIA_URL + self.title_logo.name
+
+    @property
+    def icon_url(self):
+        if self.icon:
+            return settings.MEDIA_URL + self.icon.name
+
     def has_installer(self):
         return self.installer_set.count() > 0 \
             or bool(self.get_default_installers())
