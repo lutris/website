@@ -367,6 +367,10 @@ class Installer(models.Model):
                           slugify(version)[:20])
         return get_auto_increment_slug(self.__class__, self, slug)
 
+    @property
+    def game_slug(self):
+        return self.game.slug
+
     def save(self, *args, **kwargs):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save(*args, **kwargs)
