@@ -197,9 +197,10 @@ class Game(models.Model):
             if platform.default_installer:
                 installer = platform.default_installer
                 installer['name'] = self.name
+                installer['game_slug'] = self.slug
                 installer['version'] = platform.slug
-                installer['installer_slug'] = "-".join((self.slug[:30],
-                                                        platform.slug[:20]))
+                installer['slug'] = "-".join((self.slug[:30],
+                                              platform.slug[:20]))
                 installer['platform'] = platform.slug
                 installer['description'] = platform.name + " version"
                 installer['published'] = True
