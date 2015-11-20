@@ -1,4 +1,6 @@
 import os
+
+from django.utils import timezone
 from django.conf import settings
 from rest_framework import status
 from rest_framework import generics, filters
@@ -102,6 +104,7 @@ class RuntimeView(generics.ListCreateAPIView):
             name=request.data['name'],
             url=settings.FILES_URL + 'runtime/' + uploaded_file.name
         )
+        runtime.created_at = timezone.now()
         runtime.save()
         serializer = RuntimeSerializer(runtime)
 
