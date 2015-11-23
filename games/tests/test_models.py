@@ -36,7 +36,7 @@ class TestGame(TestCase):
         super_mario_world.platforms.add(snes)
         default_installers = super_mario_world.get_default_installers()
         self.assertTrue(default_installers)
-        self.assertEqual(default_installers[0]['installer_slug'],
+        self.assertEqual(default_installers[0]['slug'],
                          'super-mario-world-snes')
 
         self.assertTrue(super_mario_world.has_installer())
