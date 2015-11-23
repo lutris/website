@@ -18,7 +18,7 @@
     "modernizr": "~2.8.3",
     "select2": "~3.5.1",
     "select2-bootstrap3-css": "~1.4.1",
-    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.6"
+    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.7"
   },
   "resolutions": {
     "jquery": "~1.11.3"
