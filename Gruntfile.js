@@ -51,6 +51,7 @@ module.exports = function(grunt) {
       js: {
         src: [
           'components/jquery/dist/jquery.js',
+          'components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
           'components/jcrop/js/Jcrop.js',
