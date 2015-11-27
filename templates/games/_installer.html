@@ -1,6 +1,6 @@
 <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
     <div class="btn-group right">
-      <a href='lutris:{{ installer.game_slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
+      <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
@@ -27,7 +27,7 @@
           {% endif %}
         {% endif %}
         <li>
-          {% url 'get_installers' slug=installer.game_slug as installer_url %}
+          {% url 'get_installers' slug=installer.slug as installer_url %}
           <a href="{{ installer_url }}"><i class='icon-download'></i> Download install script</a>
         </li>
         {% if user.is_authenticated %}
