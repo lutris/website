@@ -279,6 +279,20 @@ class InstallerManager(models.Manager):
             installers = self.get_queryset().filter(game__slug=slug,
                                                     published=True)
             if not installers:
+                # Try auto installers
+                platforms = Platform.objects.exclude(
+                    default_installer__exact=""
+                )
+                for platform in platforms:
+                    suffix = "-" + platform.slug
+                    if slug.endswith(suffix):
+                        game_slug = slug[:-len(suffix)]
+                        games = Game.objects.filter(slug__startswith=game_slug)
+                        for game in games:
+                            auto_installers = game.get_default_installers()
+                            for auto_installer in auto_installers:
+                                if auto_installer['slug'] == slug:
+                                    return [auto_installer]
                 raise
             else:
                 return installers
@@ -289,7 +303,11 @@ class InstallerManager(models.Manager):
         except ObjectDoesNotExist:
             installer_data = []
         else:
-            installer_data = [installer.as_dict() for installer in installers]
+            if installers and type(installers[0]) is dict:
+                installer_data = installers
+            else:
+                installer_data = [installer.as_dict()
+                                  for installer in installers]
         try:
             game = Game.objects.get(slug=slug)
             installer_data += game.get_default_installers()
