@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, filters
 from .serializers import GameSerializer, GameLibrarySerializer
@@ -7,7 +6,7 @@ from .serializers import GameSerializer, GameLibrarySerializer
 from . import models
 
 
-class GameListView(APIView):
+class GameListView(generics.GenericAPIView):
     serializer_class = GameSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', )
@@ -28,7 +27,11 @@ class GameListView(APIView):
 
     def get(self, request):
         queryset = self.get_queryset()
-        serializer = GameSerializer(queryset, many=True)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_pagination_serializer(page)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
