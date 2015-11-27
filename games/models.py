@@ -281,7 +281,7 @@ class InstallerManager(models.Manager):
             if not installers:
                 # Try auto installers
                 platforms = Platform.objects.exclude(
-                    default_installer__exact=""
+                    default_installer__isnull=True
                 )
                 for platform in platforms:
                     suffix = "-" + platform.slug
