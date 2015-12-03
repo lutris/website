@@ -43,7 +43,7 @@ class TestGameApi(TestCase):
         response = self.client.get(game_list_url)
         self.assertEqual(response.status_code, 200)
         games = json.loads(response.content)
-        self.assertEqual(len(games), self.num_games)
+        self.assertEqual(len(games['results']), self.num_games)
 
     def test_can_get_subset_of_games(self):
         game_slugs = {'games': ['game-1', 'game-2', 'game-4']}
@@ -52,7 +52,7 @@ class TestGameApi(TestCase):
                                    extra={"Content-Type": "application/json"})
         self.assertEqual(response.status_code, 200)
         games = json.loads(response.content)
-        self.assertEqual(len(games), len(game_slugs['games']))
+        self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_post_subset_of_games(self):
         game_slugs = {'games': ['game-1', 'game-2', 'game-4']}
@@ -64,7 +64,7 @@ class TestGameApi(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         games = json.loads(response.content)
-        self.assertEqual(len(games), len(game_slugs['games']))
+        self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_query_game_details(self):
         response = self.client.get(reverse('api_game_detail',
