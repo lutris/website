@@ -138,7 +138,7 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 RELEASES_URL = "http://lutris.net/releases/"
-CLIENT_VERSION = "0.3.6.3"
+CLIENT_VERSION = "0.3.7"
 
 
 # Crispy forms
