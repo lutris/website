@@ -41,6 +41,9 @@ migration:
 fixtures:
 	./manage.py dumpdata --indent=2 games > games/fixtures/initial_data.json
 
+check-deps-update:
+	pip list --outdated
+
 ctags:
 	ctags -R --languages=python --python-kinds=-v ${VIRTUAL_ENV}/lib/python2.7
 	ctags -R -a --languages=python --python-kinds=-v ${VIRTUAL_ENV}/src

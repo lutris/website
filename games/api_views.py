@@ -10,7 +10,6 @@ class GameListView(generics.GenericAPIView):
     serializer_class = GameSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', )
-    paginate_by = 100
 
     def get_queryset(self):
         if 'games' in self.request.GET:
@@ -29,9 +28,10 @@ class GameListView(generics.GenericAPIView):
         queryset = self.get_queryset()
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(queryset, many=True)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
