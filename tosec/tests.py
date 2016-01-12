@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 import os
 from django.test import TestCase
 from .parser import TosecParser, TosecNamingConvention, smart_split

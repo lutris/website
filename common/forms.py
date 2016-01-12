@@ -41,6 +41,7 @@ class NewsForm(forms.ModelForm):
 
 
 class UploadForm(Bootstrap3ModelForm):
-    class Meta:
+    # pylint: disable=W0232, R0903
+    class Meta(object):
         model = models.Upload
         fields = ('uploaded_file', 'destination')

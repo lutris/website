@@ -1,6 +1,6 @@
 from rest_framework import generics, filters
-from .models import Category, Game
-from .serializers import CategorySerializer, GameSerializer
+from tosec.models import Category, Game
+from tosec.serializers import CategorySerializer, GameSerializer
 
 
 class CategoryListView(generics.ListAPIView):

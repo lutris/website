@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 from django.db import models
 from django.db.models import Count
 from django.utils.text import slugify

@@ -1,3 +1,4 @@
+# pylint: disable=W0232,R0903
 from django.db import models
 
 from platforms.models import Platform

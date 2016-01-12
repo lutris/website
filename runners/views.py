@@ -32,6 +32,7 @@ class RunnerDetailView(generics.RetrieveUpdateAPIView):
     lookup_field = 'slug'
     queryset = Runner.objects.all()
 
+    # pylint: disable=W0221
     def get(self, request, slug):
         try:
             runner = Runner.objects.get(slug=slug)
@@ -48,6 +49,7 @@ class RunnerUploadView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminOrReadOnly, )
 
+    # pylint: disable=W0221
     def post(self, request, slug):
         try:
             runner = Runner.objects.get(slug=slug)

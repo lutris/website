@@ -1,4 +1,5 @@
 """Admin configuration for Lutris games"""
+# pylint: disable=R0201
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.core.urlresolvers import reverse

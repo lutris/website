@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from platforms.models import Platform
-import models
+from . import models
 
 
 class PlatformSerializer(serializers.ModelSerializer):

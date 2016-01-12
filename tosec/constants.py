@@ -22,7 +22,6 @@ SYSTEMS_FLAGS = {
     'A4000': "Commodore Amiga",
     'A4000T': "Commodore Amiga",
     'A500': "Commodore Amiga",
-    'A500': "Commodore Amiga",
     'A500-A1000-A2000': "Commodore Amiga",
     'A500-A1000-A2000-CDTV': "Commodore Amiga",
     'A500-A1200': "Commodore Amiga",
@@ -61,7 +60,6 @@ SYSTEMS_FLAGS = {
     'STE-Falcon': "???",
     'TT': "Atari ST",
     'TURBO-R': "GT MSX",
-    'TURBO-R': "ST MSX",
     'VS DualSystem': "Nintendo NES",
     'VS UniSystem': "Nintendo NES",
 }

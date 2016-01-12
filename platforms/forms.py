@@ -1,3 +1,4 @@
+# pylint: disable=W0232,R0903
 from games.forms import AutoSlugForm
 from . import models
 

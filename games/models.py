@@ -1,8 +1,9 @@
 """Models for main lutris app"""
 # pylint: disable=E1002, E0202
-import yaml
 import json
 import datetime
+
+import yaml
 from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q, Count
@@ -303,7 +304,7 @@ class InstallerManager(models.Manager):
         except ObjectDoesNotExist:
             installer_data = []
         else:
-            if installers and type(installers[0]) is dict:
+            if installers and isinstance(installers[0], dict):
                 installer_data = installers
             else:
                 installer_data = [installer.as_dict()
@@ -351,7 +352,7 @@ class Installer(models.Model):
         yaml_content = yaml.safe_load(self.content) or {}
 
         # Allow pasting raw install scripts (which are served as lists)
-        if type(yaml_content) == list:
+        if isinstance(yaml_content, list):
             yaml_content = yaml_content[0]
 
         # If yaml content evaluates to a string return an empty dict

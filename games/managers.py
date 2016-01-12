@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 from django.db.models import Manager
 from django.db.models import Q, Count
 

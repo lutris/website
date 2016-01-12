@@ -10,6 +10,7 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
 
 
+# pylint: disable=W0613
 def validate_upload(modeladmin, request, queryset):
     for upload in queryset.all():
         upload.validate()

@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 from rest_framework import serializers
 from .models import Runner, RunnerVersion, Runtime
 

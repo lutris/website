@@ -5,6 +5,7 @@ from . import constants
 
 LOGGER = logging.getLogger(__name__)
 
+
 def smart_split(string, sep=None):
     sep_map = {
         '(': ')',
@@ -17,13 +18,12 @@ def smart_split(string, sep=None):
     word = ''
     in_word = False
     end_sep = sep_map.get(sep, sep)
-    for i in range(len(string)):
+    for i, char in enumerate(string):
         if sep:
             if string[i:i + len(sep)] == sep and not in_word:
                 in_word = True
             elif string[i - len(end_sep) + 1:i + 1] == end_sep and in_word:
                 in_word = False
-        char = string[i]
         if char in (' ', '\t') and not in_word:
             if word:
                 splits.append(word)
@@ -52,7 +52,8 @@ class TosecParser(object):
         key, raw_value = line.split(' ', 1)
         return key, raw_value.strip("\"")
 
-    def extract_rom(self, line):
+    @staticmethod
+    def extract_rom(line):
         line = line[1:-1]  # Strip parenthesis
         parts = smart_split(line, sep='"')
         game_dict = {}
