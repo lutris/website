@@ -36,9 +36,7 @@ module.exports = function(grunt) {
       css: {
         src: [
           'components/jcrop/css/jquery.Jcrop.css',
-          'components/jcrop-fileinput/dist/jcrop-fileinput.css',
-          'components/select2/select2.css',
-          'components/select2-bootstrap3-css/select2-bootstrap.css'
+          'components/jcrop-fileinput/dist/jcrop-fileinput.css'
         ],
         dest: 'public/css/libs.css',
         nonull: true
@@ -55,10 +53,24 @@ module.exports = function(grunt) {
           'components/modernizr/modernizr.js',
           'components/bootstrap/dist/js/bootstrap.js',
           'components/jcrop/js/jquery.Jcrop.js',
-          'components/jcrop-fileinput/dist/jcrop-fileinput.js',
-          'components/select2/select2.js'
+          'components/jcrop-fileinput/dist/jcrop-fileinput.js'
         ],
         dest: 'public/js/libs.js',
+        nonull: true
+      },
+      select2Js: {
+        src: [
+          'components/select2/dist/js/select2.full.min.js',
+        ],
+        dest: 'public/js/select2.min.js',
+        nonull: true
+      },
+      select2Css: {
+        src: [
+          'components/select2/dist/css/select2.min.css',
+          'components/select2-bootstrap-theme/dist/select2-bootstrap.min.css'
+        ],
+        dest: 'public/css/select2.min.css',
         nonull: true
       }
     },

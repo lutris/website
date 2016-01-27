@@ -14,13 +14,10 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "jquery": "~1.11.3",
+    "jquery": "~2.2.0",
     "modernizr": "~2.8.3",
-    "select2": "~3.5.1",
-    "select2-bootstrap3-css": "~1.4.1",
-    "jcrop-fileinput": "https://github.com/strycore/jcrop-fileinput.git#0.1.7"
-  },
-  "resolutions": {
-    "jquery": "~1.11.3"
+    "select2": "~4.0.1",
+    "select2-bootstrap-theme": "git://github.com/select2/select2-bootstrap-theme#0.1.0-beta.4",
+    "jcrop-fileinput": "git://github.com/strycore/jcrop-fileinput.git#0.1.8"
   }
 }

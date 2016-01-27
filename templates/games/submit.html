@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block title %}Submit a game - Lutris{% endblock %}
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock %}
 
 {% block content %}
   <div class="form-view-wide">
@@ -17,6 +20,7 @@
 
 {% block scripts %}
   {{ block.super }}
+  {{ form.media.js }}
   <script>
     $(function () {
       $("#id_platforms").select2({'closeOnSelect': false, 'placeholder': ''});

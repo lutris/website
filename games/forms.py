@@ -11,6 +11,8 @@ from django.utils.safestring import mark_safe
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+from django_select2.forms import Select2MultipleWidget
+
 from common.util import get_auto_increment_slug
 from games import models
 from games.util.installer import ScriptValidator
@@ -45,6 +47,10 @@ class GameForm(forms.ModelForm):
         model = models.Game
         fields = ('name', 'year', 'website',
                   'platforms', 'genres', 'description', 'title_logo')
+        widgets = {
+            'platforms': Select2MultipleWidget,
+            'genres': Select2MultipleWidget
+        }
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)

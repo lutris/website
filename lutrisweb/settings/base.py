@@ -148,6 +148,10 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
+# Select2
+SELECT2_JS = '/static/js/select2.min.js'
+SELECT2_CSS = '/static/css/select2.min.css'
+
 # Email
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 SERVER_EMAIL = "admin@lutris.net"
