@@ -2,6 +2,7 @@
 # pylint: disable=W0232, R0903
 import os
 import yaml
+from collections import OrderedDict
 
 from django import forms
 from django.conf import settings
@@ -11,7 +12,7 @@ from django.utils.safestring import mark_safe
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from django_select2.forms import Select2MultipleWidget
+from django_select2.forms import Select2MultipleWidget, HeavySelect2Widget
 
 from common.util import get_auto_increment_slug
 from games import models
@@ -54,6 +55,12 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
+        self.fields['search'] = forms.CharField(
+            widget=HeavySelect2Widget(
+                data_view='tgd.search_json'
+            )
+        )
+
         self.fields['name'].label = "Title"
         self.fields['year'].label = "Release year"
         self.fields['website'].help_text = (
@@ -79,6 +86,12 @@ class GameForm(forms.ModelForm):
             "If you can't make a good banner, don't worry. Somebody will "
             "eventually make a better one. Probably."
         )
+        fields_order = [
+            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description',
+            'title_logo',
+        ]
+        self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
+
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', "Submit"))
 

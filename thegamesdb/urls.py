@@ -5,6 +5,6 @@ from thegamesdb import views
 
 urlpatterns = [
     url(r'^$', views.search, name='tgb.search'),
-    url(r'^search.json', views.search_json, name='tgb.search_json'),
-    url(r'^(\d+)$', views.detail, name='tgb.detail'),
+    url(r'^search.json', views.search_json, name='tgd.search_json'),
+    url(r'^(\d+).json$', views.detail, name='tgd.detail'),
 ]

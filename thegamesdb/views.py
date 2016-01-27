@@ -23,7 +23,7 @@ def search_json(request):
     return JsonResponse({
         'results': [
             {
-                'text': "{} ({}, {})".format(
+                'text': u"{} ({}, {})".format(
                     result['game_title'], result['release_date'], result['platform']
                 ),
                 'id': result['id']
@@ -35,5 +35,4 @@ def search_json(request):
 
 def detail(request, game_id):
     game = get_game(game_id)
-    print game
-    return render(request, 'thegamesdb/detail.html', {'game': game})
+    return JsonResponse(game)

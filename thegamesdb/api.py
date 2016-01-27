@@ -58,7 +58,9 @@ def get_tags_with_attrs(soup, tag_name, value_name='value'):
 
 
 def get_games_list(query):
-    soup = api_request('GetGamesList.php?name=' + query)
+    # soup = api_request('GetGamesList.php?name=' + query)
+    content = open('/home/strider/GetGamesList.xml').read()
+    soup = BeautifulSoup(content, 'xml')
     game_list = []
     games = soup.find_all('Game')
     for game in games:
@@ -72,7 +74,9 @@ def get_games_list(query):
 
 
 def get_game(game_id):
-    soup = api_request('GetGame.php?id={}'.format(game_id))
+    # soup = api_request('GetGame.php?id={}'.format(game_id))
+    content = open("/home/strider/crysis.xml").read()
+    soup = BeautifulSoup(content, 'xml')
     game_data = soup.find('Game')
     game_info = {
         'id': get_value(game_data, 'id'),
