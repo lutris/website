@@ -40,6 +40,7 @@ urlpatterns = patterns(
     url(r'^bundles', include('bundles.urls')),
     url(r'^steam-login/', login_begin, kwargs={
         'login_complete_view': 'associate_steam'}, name='steam_login'),
+    url(r'thegamesdb/', include('thegamesdb.urls')),
     url(r'^', include('common.urls')),
 )
 

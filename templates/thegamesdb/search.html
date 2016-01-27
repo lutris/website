@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='main-search-form'>
+  <form action="." method="GET">
+    <input type="text" name="q" placeholder="Search TheGamesDB" value="{{query}}"/>
+    <input type="submit" value="Search" />
+  </form>
+</div>
+  {% for game in results %}
+  <div>
+    <a href="{% url "tgb.detail" game.id %}">{{ game.game_title }}</a><br/>
+    <span>Release date: {{game.release_date}}</span>
+    <span>Platform: {{game.platform}}</span>
+  </div>
+  {% endfor %}
+{% endblock %}
