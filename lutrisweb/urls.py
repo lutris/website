@@ -24,6 +24,7 @@ urlpatterns = patterns(
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^select2/', include('django_select2.urls')),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^user/', include('accounts.urls')),
     url(r'^api/accounts/token',
