@@ -19,7 +19,7 @@ def search(request):
 
 def search_json(request):
     query = request.GET.get('term')
-    results = _get_games_db_results(query)
+    results = _get_games_db_results(query) or []
     return JsonResponse({
         'results': [
             {
