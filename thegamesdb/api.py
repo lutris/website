@@ -1,8 +1,11 @@
+import os
 import re
 import logging
 
 import requests
 from bs4 import BeautifulSoup
+from PIL import Image
+from django.conf import settings
 
 from games.models import Company
 from platforms.models import Platform
@@ -33,6 +36,52 @@ PLATFORM_MAP = {
     'Nintendo 64': 'nintendo-64',
     'Atari Jaguar': 'atari-jaguar',
 }
+
+
+def download_image(media_type, url):
+    """Download an image from TheGamesDB (is necessary) and return its local path"""
+    media_type_map = {
+        'clearlogo': settings.TGD_CLEAR_LOGO_PATH,
+        'banner': settings.TGD_BANNER_PATH,
+        'screenshot': settings.TGD_SCREENSHOT_PATH,
+        'fanart': settings.TGD_FANART_PATH
+    }
+    dest_path = os.path.join(media_type_map[media_type], os.path.basename(url))
+    if not os.path.exists(dest_path):
+        response = requests.get(url)
+        with open(dest_path, 'w') as dest_file:
+            dest_file.write(response.content)
+    return dest_path
+
+
+def convert_clearlogo_to_banner(logo_path):
+    base_width, base_height = settings.BANNER_SIZE.split('x')
+    base_ratio = float(base_width) / float(base_height)
+
+    logo = Image.open(logo_path)
+    logo_width = float(logo.width)
+    logo_height = float(logo.height)
+    logo_ratio = logo_width / logo_height
+
+    margin_factor = 0.1
+    if logo_ratio < base_ratio:
+        new_h = logo_height + (logo_height * margin_factor)
+        new_w = new_h * base_ratio
+    else:
+        new_w = logo_width + (logo_width * margin_factor)
+        new_h = new_w / base_ratio
+
+    new_image = Image.new("RGBA", (int(new_w), int(new_h)), (0, 0, 0, 255))
+    if logo.mode == 'RGBA':
+        mask = logo
+    else:
+        mask = None
+    offset = (int((new_w - logo_width) / 2), int((new_h - logo_height) / 2))
+    new_image.paste(logo, offset, mask)
+    dest_path = os.path.join(settings.TGD_LUTRIS_BANNER_PATH,
+                             os.path.basename(logo_path))
+    new_image.save(dest_path)
+    return dest_path
 
 
 def api_request(url):
@@ -157,4 +206,10 @@ def to_lutris(game):
     platform = get_lutris_platform(game['platform'])
     if platform:
         lutris_game['platforms'] = [platform.id]
+    if game['clearlogo']:
+        clearlogo_url = game['base_img_url'] + game['clearlogo']['value']
+        logo_path = download_image('clearlogo', clearlogo_url)
+        banner_path = convert_clearlogo_to_banner(logo_path)
+        banner_url = banner_path[len(settings.MEDIA_ROOT):].strip('/')
+        game['banner'] = settings.MEDIA_URL + banner_url
     return lutris_game
