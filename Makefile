@@ -33,9 +33,7 @@ deps:
 	pip install -r config/requirements/devel.pip --exists-action=s
 
 migration:
-	-./manage.py schemamigration games --auto
-	-./manage.py schemamigration common --auto
-	-./manage.py schemamigration accounts --auto
+	-./manage.py makemigrations
 	./manage.py migrate
 
 fixtures:

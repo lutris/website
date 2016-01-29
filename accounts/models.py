@@ -12,6 +12,7 @@ class User(AbstractUser):
     steamid = models.CharField("Steam id", max_length=32, blank=True)
     website = models.URLField(blank=True)
     key = models.CharField(max_length=256, blank=True, default='')
+    email_confirmed = models.BooleanField(default=False)
 
     @property
     def avatar_url(self):
