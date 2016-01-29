@@ -93,6 +93,7 @@ class GameForm(forms.ModelForm):
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
         self.helper = FormHelper()
+        self.helper.include_media = False
         self.helper.add_input(Submit('submit', "Submit"))
 
     def rename_uploaded_file(self, file_field, cleaned_data, slug):
