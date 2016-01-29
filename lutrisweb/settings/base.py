@@ -1,5 +1,16 @@
 import os
-from os.path import join, dirname, abspath
+from os.path import dirname, abspath
+
+
+def media_directory(path):
+    """Return absolute path to subdirectory of MEDIA_ROOT.
+    The directory will be created if it doesn't exist.
+    """
+    abs_path = os.path.join(MEDIA_ROOT, path)
+    if not os.path.isdir(abs_path):
+        os.makedirs(abs_path)
+    return abs_path
+
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -16,7 +27,7 @@ INTERNAL_IPS = ('127.0.0.1',)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(BASE_DIR, 'lutris.db'),
+        'NAME': os.path.join(BASE_DIR, 'lutris.db'),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -31,23 +42,35 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-MEDIA_ROOT = join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-STATIC_ROOT = join(BASE_DIR, 'static')
+# Static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    join(BASE_DIR, "public"),
+    os.path.join(BASE_DIR, "public"),
 )
-FILES_ROOT = join('MEDIA_ROOT', 'files')
-FILES_URL = 'http://localhost:8000/media/files/'
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-TOSEC_DAT_PACK = join(MEDIA_ROOT, "tosec",
-                      "TOSEC - DAT Pack - Complete (2292) (TOSEC-v2014-10-31)")
-FILES_ROOT = join(MEDIA_ROOT, 'files')
+
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+FILES_ROOT = media_directory('files')
+FILES_URL = 'http://localhost:8000/media/files/'
+
+TOSEC_PATH = media_directory('tosec')
+TOSEC_CURRENT = "TOSEC - DAT Pack - Complete (2292) (TOSEC-v2014-10-31)"
+TOSEC_DAT_PACK = os.path.join(TOSEC_PATH, TOSEC_CURRENT)
+
+# TheGamesDB directories
+TGD_ROOT = media_directory('thegamesdb')
+TGD_CLEAR_LOGO_PATH = media_directory('thegamesdb/clearlogo')
+TGD_BANNER_PATH = media_directory('thegamesdb/banners')
+TGD_SCREENSHOT_PATH = media_directory('thegamesdb/screenshot')
+TGD_FANART_PATH = media_directory('thegamesdb/fanart')
+TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
@@ -70,7 +93,7 @@ ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
 
 TEMPLATE_DIRS = (
-    join(BASE_DIR, "templates"),
+    os.path.join(BASE_DIR, "templates"),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
