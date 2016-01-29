@@ -9,6 +9,12 @@ module.exports = function(grunt) {
             flatten: true,
             src: ['components/bootstrap/dist/fonts/*'],
             dest: 'public/fonts/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['components/jcrop/css/Jcrop.gif'],
+            dest: 'public/css/'
           }
         ]
       }

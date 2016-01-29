@@ -26,7 +26,7 @@ jenkins:
 	./manage.py jenkins $(test)
 
 sysdeps:
-	sudo apt-get install libpq-dev python-dev nginx supervisor rabbitmq-server
+	sudo apt-get -y install libpq-dev python-dev nginx supervisor rabbitmq-server libjpeg-dev libxml2-dev libxslt1-dev
 	pip install -r config/requirements/production.pip --exists-action=s
 
 deps:
