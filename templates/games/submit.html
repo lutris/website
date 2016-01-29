@@ -23,9 +23,9 @@
   {{ form.media.js }}
   <script>
     $(function () {
-      $("#id_platforms").select2({'closeOnSelect': false, 'placeholder': ''});
-      $("#id_genres").select2({'closeOnSelect': false, 'placeholder': ''});
-      $('input[type=file]').JCropFileInput({
+      $('#id_platforms').select2({'closeOnSelect': false, 'placeholder': ''});
+      $('#id_genres').select2({'closeOnSelect': false, 'placeholder': ''});
+      $('#id_title_logo').JCropFileInput({
         debug: false,
         ratio: 8/3,
         thumbMaxWidth: 184,
@@ -48,11 +48,13 @@
           url: '/thegamesdb/' + game_id + '.json',
           dataType: "json",
           success: function (response) {
-            console.log(response);
             $('#id_name').val(response.name);
             $('#id_year').val(response.year);
             $('#id_description').html(response.description);
             $('#id_platforms').val(response.platforms).trigger('change');
+            if(response.banner) {
+              $('#id_title_logo').JCropFileInput('setImage', response.banner);
+            }
           }
         });
       });

@@ -71,7 +71,7 @@ def convert_clearlogo_to_banner(logo_path):
         new_w = logo_width + (logo_width * margin_factor)
         new_h = new_w / base_ratio
 
-    new_image = Image.new("RGBA", (int(new_w), int(new_h)), (0, 0, 0, 255))
+    new_image = Image.new('RGBA', (int(new_w), int(new_h)), (0, 0, 0, 255))
     if logo.mode == 'RGBA':
         mask = logo
     else:
@@ -211,5 +211,5 @@ def to_lutris(game):
         logo_path = download_image('clearlogo', clearlogo_url)
         banner_path = convert_clearlogo_to_banner(logo_path)
         banner_url = banner_path[len(settings.MEDIA_ROOT):].strip('/')
-        game['banner'] = settings.MEDIA_URL + banner_url
+        lutris_game['banner'] = settings.MEDIA_URL + banner_url
     return lutris_game
