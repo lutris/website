@@ -141,13 +141,6 @@ def migrate():
             run("./manage.py migrate --no-initial-data")
 
 
-def syncdb():
-    require('code_root', provided_by=('staging', 'production'))
-    with cd(env.code_root):
-        with activate():
-            run("./manage.py syncdb --noinput")
-
-
 def clone():
     with cd(env.root):
         run("git clone /srv/git/lutrisweb")
@@ -214,7 +207,6 @@ def deploy():
     grunt()
     requirements()
     collect_static()
-    syncdb()
     migrate()
     docs()
     fix_perms()

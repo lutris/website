@@ -6,8 +6,6 @@ run:
 	./manage.py runserver
 
 db:
-	./manage.py syncdb --noinput
-	./manage.py migrate accounts
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
 
