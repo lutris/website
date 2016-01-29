@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from thegamesdb.api import get_games_list, get_game
+from thegamesdb.api import get_games_list, get_game, to_lutris
 
 
 def _get_games_db_results(query):
@@ -35,4 +35,10 @@ def search_json(request):
 
 def detail(request, game_id):
     game = get_game(game_id)
+    return JsonResponse(game)
+
+
+def detail_to_lutris(request, game_id):
+    game = get_game(game_id)
+    game = to_lutris(game)
     return JsonResponse(game)

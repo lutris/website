@@ -1,8 +1,38 @@
+import re
+import logging
+
 import requests
 from bs4 import BeautifulSoup
 
+from games.models import Company
+from platforms.models import Platform
 
+
+LOGGER = logging.getLogger(__name__)
 API_URL = "http://thegamesdb.net/api/"
+UNSUPPORTED_PLATFORMS = (
+    'Microsoft Xbox',
+    'Microsoft Xbox 360',
+    'Microsoft Xbox One',
+    'Sony Playstation 3',
+    'Sony Playstation 4',
+    'Sony Playstation Vita',
+    'Android',
+    'iOS',
+    'Nintendo 3DS',
+    'N-Gage',
+)
+
+PLATFORM_MAP = {
+    'Arcade': 'arcade',
+    'PC': 'windows',
+    'Sega Genesis': 'sega-genesis',
+    'Sega Mega Drive': 'sega-genesis',
+    'Nintendo Entertainment System (NES)': 'nes',
+    'Super Nintendo (SNES)': 'super-nintendo',
+    'Nintendo 64': 'nintendo-64',
+    'Atari Jaguar': 'atari-jaguar',
+}
 
 
 def api_request(url):
@@ -57,13 +87,14 @@ def get_tags_with_attrs(soup, tag_name, value_name='value'):
         return results
 
 
-def get_games_list(query):
-    # soup = api_request('GetGamesList.php?name=' + query)
-    content = open('/home/strider/GetGamesList.xml').read()
-    soup = BeautifulSoup(content, 'xml')
+def get_games_list(query, remove_unsupported=True):
+    soup = api_request('GetGamesList.php?name=' + query)
     game_list = []
     games = soup.find_all('Game')
     for game in games:
+        platform = get_value(game, 'Platform')
+        if remove_unsupported and platform in UNSUPPORTED_PLATFORMS:
+            continue
         game_list.append({
             'id': get_value(game, 'id'),
             'game_title': get_value(game, 'GameTitle'),
@@ -74,9 +105,7 @@ def get_games_list(query):
 
 
 def get_game(game_id):
-    # soup = api_request('GetGame.php?id={}'.format(game_id))
-    content = open("/home/strider/crysis.xml").read()
-    soup = BeautifulSoup(content, 'xml')
+    soup = api_request('GetGame.php?id={}'.format(game_id))
     game_data = soup.find('Game')
     game_info = {
         'id': get_value(game_data, 'id'),
@@ -97,3 +126,35 @@ def get_game(game_id):
         'clearlogo': get_tags_with_attrs(game_data, 'clearlogo'),
     }
     return game_info
+
+
+def get_lutris_platform(platform_name):
+    try:
+        slug = PLATFORM_MAP[platform_name]
+    except KeyError:
+        LOGGER.error('No map for %s', platform_name)
+        return
+    return Platform.objects.get(slug=slug)
+
+
+def to_lutris(game):
+    lutris_game = {}
+    lutris_game['name'] = game['game_title']
+    if game['release_date']:
+        match = re.search(r'\d{4}', game['release_date'])
+        lutris_game['year'] = match.group(0)
+    if game['publisher']:
+        company, _created = Company.objects.get_or_create(name=game['publisher'])
+        company.save()
+        lutris_game['publisher'] = company.id
+    if game['developer']:
+        if game['publisher'] == game['developer']:
+            lutris_game['developer'] = company.id
+        else:
+            company. _created = Company.objects.get_or_create(name=game['developer'])
+            company.save()
+            lutris_game['developer'] = company.id
+    platform = get_lutris_platform(game['platform'])
+    if platform:
+        lutris_game['platforms'] = [platform.id]
+    return lutris_game

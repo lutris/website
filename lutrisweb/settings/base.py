@@ -176,6 +176,11 @@ REST_FRAMEWORK = {
 # Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins', 'console']
+DEFAULT_LOGGING_CONFIG = {
+    'handlers': LOGGING_HANDLERS,
+    'level': 'DEBUG',
+    'propagate': True,
+}
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -232,25 +237,10 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': True,
         },
-        'lutrisweb': {
-            'handlers': LOGGING_HANDLERS,
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'accounts': {
-            'handlers': LOGGING_HANDLERS,
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'common': {
-            'handlers': LOGGING_HANDLERS,
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'games': {
-            'handlers': LOGGING_HANDLERS,
-            'level': 'DEBUG',
-            'propagate': True,
-        }
+        'lutrisweb': DEFAULT_LOGGING_CONFIG,
+        'accounts': DEFAULT_LOGGING_CONFIG,
+        'common': DEFAULT_LOGGING_CONFIG,
+        'games': DEFAULT_LOGGING_CONFIG,
+        'thegamesdb': DEFAULT_LOGGING_CONFIG
     }
 }

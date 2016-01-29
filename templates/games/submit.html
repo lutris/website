@@ -37,7 +37,6 @@
           } else {
             window.location = event.target.responseURL;
           }
-
         }
       });
       $("#id_search").on('select2:select', function (event) {
@@ -50,8 +49,10 @@
           dataType: "json",
           success: function (response) {
             console.log(response);
-            $('#id_name').val(response.game_title);
-            $('#id_description').html(response.overview);
+            $('#id_name').val(response.name);
+            $('#id_year').val(response.year);
+            $('#id_description').html(response.description);
+            $('#id_platforms').val(response.platforms).trigger('change');
           }
         });
       });
