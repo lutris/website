@@ -2,59 +2,67 @@
 {% load thumbnail %}
 
 
-{% block title %}My account - Lutris{% endblock %}
+{% block title %}Lutris - My account{% endblock %}
 
 
 {% block content %}
 <div class="row">
-  <div class="col-xs-2">
+  <div class="profile-header">
+    <div class="avatar">
+      <img src="{{ user.avatar_url }}"/>
+    </div>
+    <p class="profile-user">{{ user }}</p>
+    <span class="profile-info">Member since {{user.date_joined|date:"d M Y"}}</span>
+  </div>
+  <div class="profile-content">
+    <section>
+      <h4>Profile info</h4>
+      <strong>Email:</strong>
+      <span>{{user.email}}</span><br/>
+      {% if user.website %}
+      <strong>Website:</strong>
+      <a href="{{user.website}}">{{user.website}}</a><br/>
+      {% endif %}
       <br/>
-      <div class="avatar">
-        <img src="{{ user.avatar_url }}"/>
-        <a href="#" class="avatar-upload-link">
-          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
-          Update avatar</a>
-        <div class="avatar-upload-hint">
-          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 
-        </div>
-      </div>
-  </div>
-  <div class="col-xs-8">
-    <h1>{{ user }}
-      <a href="{% url 'profile_edit' user.username %}" class="btn right">Edit Profile</a>
-    </h1>
+      <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
+    </section>
+    <section>
+      <h4>Import your Steam library</h4>
+      <p>You can automatically import the list of your Steam games and add them to
+      your Lutris library.</p>
+      <p class="warning-message">Your steam profile must be public during the sync
+      process.You can set it back to private after that.</p>
+      <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+    </section>
 
-    <h2>Import your Steam library</h2>
-    <p>
-    You can automatically import the list of your Steam games and add them to
-    your Lutris library.
-    </p>
-    <p class="warning-message">
-    Your steam profile must be public during the sync process.You can set it
-    back to private after that.
-    </p>
-    <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
-
-    <h2>Submissions</h2>
-    {% if submissions %}
-    <p>
-      The following games you submitted are awaiting approval from a moderator.
-    </p>
-    <ul class="game-list">
-      {% for submission in submissions %}
-      {% with submission.game as game %}
-        {% include "includes/game_preview.html" %}
-      {% endwith %}
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>
-      You have no submitted games awaiting approval.
-    </p>
-    {% endif %}
-
+    <section>
+      <h2>Game submissions</h2>
+      {% if submissions %}
+      <p>The following games you submitted are awaiting approval from a
+      moderator.</p>
+      <ul class="game-list">
+        {% for submission in submissions %}
+        {% with submission.game as game %}
+          {% include "includes/game_preview.html" %}
+        {% endwith %}
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>
+        You have no submitted games awaiting approval.
+      </p>
+      {% endif %}
+    </section>
   </div>
-  <div class="col-xs-4">{% if  user.website %}<a href="{{ user.website }}">Website</a>{% endif %}
-  </div>
+
 </div>
 {% endblock %}
+
+{% comment %}
+<a href="#" class="avatar-upload-link">
+  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+  Update avatar</a>
+<div class="avatar-upload-hint">
+  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+</div>
+{% endcomment %}

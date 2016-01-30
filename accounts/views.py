@@ -75,11 +75,17 @@ def profile(request):
 
 def user_account(request, username):
     user = get_object_or_404(User, username=username)
-    submissions = games.models.GameSubmission.objects.filter(
-        user=user, accepted_at__isnull=True
-    )
-    return render(request, "accounts/profile.html",
-                  {'user': user, 'submissions': submissions})
+    if request.user.username == username:
+        submissions = games.models.GameSubmission.objects.filter(
+            user=user, accepted_at__isnull=True
+        )
+        return render(request, 'accounts/profile.html',
+                      {'user': user, 'submissions': submissions})
+    else:
+        # TODO We're returning a 404 error until we have a good public profile
+        # page (with worthwhile content)
+        return Http404
+        # return render(request, 'accounts/public_profile.html', {'user': user})
 
 
 @login_required

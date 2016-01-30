@@ -1,0 +1,75 @@
+@avatarHeight: 64px;
+@headerMargin: 12px;
+
+.profile-header {
+    padding: 0 130px;
+    background-color: @darkBackground;
+    height: @avatarHeight + 2 * @headerMargin;
+    .avatar {
+        float: left;
+        margin: @headerMargin;
+    }
+    .profile-user {
+        padding-top: .25em;
+        margin-bottom: 0;
+        font-size: 1.8em;
+        font-family: @sansSerif;
+        font-weight: 300;
+        vertical-align: middle;
+        display: block;
+    }
+    .profile-info {
+        font-weight: 300;
+    }
+}
+.profile-content {
+    margin: 0px 120px;
+    padding: 20px;
+    section {
+        border: 1px solid @darkBackground;
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+}
+.avatar {
+  border: 1px solid #555;
+  position: relative;
+  display: inline-block;
+  img {
+    width: @avatarHeight;
+    height: @avatarHeight;
+  }
+  &:hover {
+    .avatar-upload-link {
+      display: block;
+    }
+    .avatar-upload-hint {
+      display: none;
+    }
+  }
+  .avatar-upload-base {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: .4em;
+    font-size: .8em;
+    color: #FFF;
+  }
+  .avatar-upload-hint {
+    .avatar-upload-base;
+    display: block;
+  }
+  .avatar-upload-link {
+    .avatar-upload-base;
+    display: none;
+    background-color: rgba(0,0,0,.3);
+    padding: .4em;
+    font-size: .8em;
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+      background-color: rgba(0,0,0,.6);
+    }
+  }
+}

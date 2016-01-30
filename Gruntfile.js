@@ -100,7 +100,7 @@ module.exports = function(grunt) {
     },
     watch: {
       less: {
-        files: 'common_static/css/lutris.less',
+        files: 'common_static/css/**/*.less',
         tasks: ['less:css']
       },
       templates: {
