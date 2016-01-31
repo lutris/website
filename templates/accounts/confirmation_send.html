@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="message-box">
+  <p>
+  {% if user.email_confirmed %}
+  Your email address is already confirmed!</p>
+  {% else %}
+  An email was sent with a confirmation link, use it to confirm your email.
+  {% endif %}
+  </p>
+  <a href="{% url "profile" %}">Return to profile</a>
+</div>
+{% endblock %}

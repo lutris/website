@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="message-box">
+  <p>
+  {% if confirmation_token.is_valid %}
+  Your email address is now confirmed.
+  {% else %}
+  The confirmation link has expired, please request another one.
+  {% endif %}
+  </p>
+  <a href="{% url "profile" %}">Return to profile</a>
+</div>
+{% endblock %}

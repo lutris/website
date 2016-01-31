@@ -18,7 +18,18 @@
     <section>
       <h4>Profile info</h4>
       <strong>Email:</strong>
-      <span>{{user.email}}</span><br/>
+      <span>{{user.email}}</span>
+      {% if not user.email_confirmed %}
+      <a href="{% url "user_send_confirmation" %}">Send validation link</a>
+      <br/>
+      <span class='warning-message'>Your email address has not been validated.
+        Some email providers such as Hotmail do not accept messages from
+        Lutris, if this is the case, please change your email address to
+        validate it.
+      </span>
+
+      {% endif %}
+      <br/>
       {% if user.website %}
       <strong>Website:</strong>
       <a href="{{user.website}}">{{user.website}}</a><br/>
@@ -36,7 +47,7 @@
     </section>
 
     <section>
-      <h2>Game submissions</h2>
+      <h4>Game submissions</h4>
       {% if submissions %}
       <p>The following games you submitted are awaiting approval from a
       moderator.</p>

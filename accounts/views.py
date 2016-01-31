@@ -13,7 +13,7 @@ from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 
-from .models import AuthToken, User
+from .models import AuthToken, User, EmailConfirmationToken
 from . import forms
 from . import tasks
 import games.models
@@ -86,6 +86,27 @@ def user_account(request, username):
         # page (with worthwhile content)
         return Http404
         # return render(request, 'accounts/public_profile.html', {'user': user})
+
+
+@login_required
+def user_send_confirmation(request):
+    user = request.user
+    if not user.email_confirmed:
+        token = EmailConfirmationToken(email=user.email)
+        token.create_token()
+        token.save()
+        token.send(request)
+    return render(request, 'accounts/confirmation_send.html', {'user': user})
+
+
+def user_email_confirm(request):
+    token = request.GET.get('token')
+    confirmation_token = get_object_or_404(EmailConfirmationToken, token=token)
+    if confirmation_token.is_valid():
+        confirmation_token.confirm_user()
+        confirmation_token.delete()
+    return render(request, 'accounts/confirmation_received.html',
+                  {'confirmation_token': confirmation_token})
 
 
 @login_required

@@ -47,4 +47,6 @@ urlpatterns = patterns(
     url(r'profile/$', 'profile', name="profile"),
     url(r'(.*)/edit/$', 'profile_edit', name='profile_edit'),
     url(r'(.*)/$', 'user_account', name="user_account"),
+    url(r'send-confirmation$', 'user_send_confirmation', name='user_send_confirmation'),
+    url(r'confirm$', 'user_email_confirm', name='user_email_confirm'),
 )
