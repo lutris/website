@@ -2,7 +2,7 @@ import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from accounts.models import User
-from common.util import create_admin
+from common.util import create_admin, create_user
 
 
 class TestRegistration(TestCase):
@@ -25,11 +25,23 @@ class TestRegistration(TestCase):
 
 
 class TestProfileView(TestCase):
+    def setUp(self):
+        self.username = 'datuser'
+        self.password = 'password'
+        self.user = create_user(username=self.username, password=self.password)
+
     def test_user_can_view_profile(self):
-        user = User.objects.create(username="dat-user")
+        self.client.login(username=self.username, password=self.password)
         response = self.client.get(reverse("user_account",
-                                           args=(user.username, )))
+                                           args=(self.user.username, )))
         self.assertEqual(response.status_code, 200)
+
+    def test_profile_page_is_private(self):
+        create_user(username='another', password='password')
+        self.client.login(username='another', password='password')
+        response = self.client.get(reverse("user_account",
+                                           args=(self.user.username, )))
+        self.assertEqual(response.status_code, 404)
 
 
 class TestApiAuth(TestCase):

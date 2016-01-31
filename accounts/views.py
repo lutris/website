@@ -84,7 +84,7 @@ def user_account(request, username):
     else:
         # TODO We're returning a 404 error until we have a good public profile
         # page (with worthwhile content)
-        return Http404
+        raise Http404
         # return render(request, 'accounts/public_profile.html', {'user': user})
 
 

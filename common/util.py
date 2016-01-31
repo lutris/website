@@ -45,3 +45,11 @@ def create_admin(username='admin', password='admin'):
     user.set_password(password)
     user.save()
     return user
+
+
+def create_user(username='user', password='password'):
+    user = get_user_model().objects.create(username=username,
+                                           is_active=True)
+    user.set_password(password)
+    user.save()
+    return user
