@@ -155,6 +155,9 @@ def associate_steam(request):
 
 def library_show(request, username):
     user = get_object_or_404(User, username=username)
+    if request.user != user:
+        # TODO: Implement a profile setting to set the library public
+        raise Http404
     library = games.models.GameLibrary.objects.get(user=user)
     library_games = library.games.all()
     return render(request, 'accounts/library_show.html',
