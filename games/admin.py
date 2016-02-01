@@ -16,13 +16,13 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class InstallerAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'game_link', 'user', 'updated_at',
-                    'published')
-    list_filter = ('published', )
+    list_display = ('__unicode__', 'runner', 'game_link', 'user',
+                    'created_at', 'updated_at', 'published')
+    list_filter = ('published', 'runner')
     list_editable = ('published', )
-    ordering = ('-updated_at', )
+    ordering = ('-created_at', )
     readonly_fields = ('game_link',)
-    search_fields = ('slug', 'user__username')
+    search_fields = ('slug', 'user__username', 'content')
 
     def game_link(self, obj):
         return u"<a href='{0}'>{1}<a/>".format(
