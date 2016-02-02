@@ -22,11 +22,14 @@ A SSO request handler might look something like
 import base64
 import hmac
 import hashlib
+import logging
+
+LOGGER = logging.getLogger(__name__)
 
 try:  # py3
-    from urllib.parse import unquote, urlencode
+    from urllib.parse import unquote, urlencode, parse_qs
 except ImportError:
-    from urllib import unquote, urlencode
+    from urllib import unquote, urlencode, parse_qs
 
 
 def validate(payload, signature, secret):
@@ -57,8 +60,10 @@ def validate(payload, signature, secret):
     if this_signature != signature:
         raise RuntimeError('Payload does not match signature.')
 
-    nonce = decoded.split('=')[1]
-
+    decoded_info = parse_qs
+    LOGGER.info(decoded_info)
+    nonce = decoded_info['nonce']
+    LOGGER.info(nonce)
     return nonce
 
 
