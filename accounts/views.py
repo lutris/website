@@ -221,4 +221,4 @@ def discourse_sso(request):
 
     url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
                            request.user.id, request.user.username)
-    return redirect(settings.DISCOURCE_URL + url)
+    return redirect(settings.DISCOURSE_URL + url)
