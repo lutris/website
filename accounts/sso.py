@@ -61,9 +61,9 @@ def validate(payload, signature, secret):
     if this_signature != signature:
         raise RuntimeError('Payload does not match signature.')
 
-    decoded_info = parse_qs
-    LOGGER.info(decoded_info)
-    nonce = decoded_info['nonce']
+    query_string = parse_qs(decoded)
+    LOGGER.info(query_string)
+    nonce = query_string['nonce'][0]
     LOGGER.info(nonce)
     return nonce
 
