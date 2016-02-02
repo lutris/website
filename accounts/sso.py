@@ -29,7 +29,8 @@ LOGGER = logging.getLogger(__name__)
 try:  # py3
     from urllib.parse import unquote, urlencode, parse_qs
 except ImportError:
-    from urllib import unquote, urlencode, parse_qs
+    from urllib import unquote, urlencode
+    from urlparse import parse_qs
 
 
 def validate(payload, signature, secret):
