@@ -1,6 +1,9 @@
 import json
 import logging
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import (
+    HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest
+)
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
@@ -8,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.conf import settings
 
 from django_openid_auth.views import parse_openid_response, login_complete
 from django_openid_auth.auth import OpenIDBackend
@@ -16,6 +20,7 @@ from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from .models import AuthToken, User, EmailConfirmationToken
 from . import forms
 from . import tasks
+from . import sso
 import games.models
 import games.util.steam
 
@@ -200,3 +205,20 @@ def library_steam_sync(request):
     )
     return redirect(reverse("library_show",
                             kwargs={'username': user.username}))
+
+
+@login_required
+def discourse_sso(request):
+    user = request.user
+    if not user.email_confirmed:
+        return HttpResponseBadRequest('You must confirm your email to use the forums')
+    payload = request.GET.get('sso')
+    signature = request.GET.get('sig')
+    try:
+        nonce = sso.validate(payload, signature, settings.DISCOURSE_SSO_SECRET)
+    except RuntimeError as e:
+        return HttpResponseBadRequest(e.args[0])
+
+    url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
+                           request.user.id, request.user.username)
+    return redirect(settings.DISCOURCE_URL + url)

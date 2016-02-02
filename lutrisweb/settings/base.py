@@ -156,6 +156,9 @@ AUTHENTICATION_BACKENDS = (
 )
 OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 
+DISCOURSE_SSO_SECRET = os.environ.get('DISCOURSE_SSO_SECRET')
+DISCOURSE_URL = 'https://forums.lutris.net'
+
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
