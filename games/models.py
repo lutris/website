@@ -231,6 +231,8 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
+        if self.slug in ['litil-divil', 'max-payne', 'ufo-afterlight']:
+            raise ValueError('Caught you!')
         self.download_steam_capsule()
         self.check_for_submission()
         return super(Game, self).save(*args, **kwargs)
