@@ -58,7 +58,8 @@ class GameForm(forms.ModelForm):
         self.fields['search'] = forms.CharField(
             widget=HeavySelect2Widget(
                 data_view='tgd.search_json'
-            )
+            ),
+            required=False
         )
 
         self.fields['name'].label = "Title"
