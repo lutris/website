@@ -35,8 +35,9 @@ def sync_steam_library(user_id):
                 steam_game = games.models.Game.objects.get(
                     slug=slugify(game['name'])[:50]
                 )
-                steam_game.appid = game['appid']
-                steam_game.save()
+                if not steam_game.appid:
+                    steam_game.appid = game['appid']
+                    steam_game.save()
             except games.models.Game.DoesNotExist:
                 steam_game = create_game(game)
                 LOGGER.info("Creating game %s", steam_game.slug)
