@@ -1,9 +1,9 @@
-{% extends "home.html" %}
+{% extends "base.html" %}
 {% load thumbnail %}
 {% block title %}{{ news }} - Lutris{% endblock %}
 
-{% block main %}
-  <header class="news-header" id="article">
+{% block content %}
+  <header class="news-header">
     <h3>{{ news }}</h3>
     <p> Posted by {{ news.user }} {{ news.publish_date }} </p>
     {% if news.image %}
