@@ -43,6 +43,7 @@
             <li><a href='{% url "about" %}'>About</a></li>
             <li><a href='{% url "downloads" %}'>Download</a></li>
             <li><a href="{% url "game_list" %}">Games</a></li>
+            <li><a href="https://forums.lutris.net">Forums</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url "library_show" user.username %}">My Library</a></li>
               <li><a href="{% url "user_account" user.username %}">My account</a></li>
