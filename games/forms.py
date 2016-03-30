@@ -174,7 +174,7 @@ class InstallerForm(forms.ModelForm):
                 "the actual software version of the game... Whatever makes "
                 "the most sense."
                 ),
-            'description': "Additionnal details.",
+            'description': "Additional details.",
             'notes': ("Describe any known issues or manual tasks required "
                       "to run the game properly."),
         }
