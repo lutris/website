@@ -33,10 +33,11 @@ dependencies::
 
 In order to build the frontend code (javascript and css files), you'll
 need nodejs, npm, grunt and bower installed on your system. If you are
-running Ubuntu, it is advised to used a PPA to get the most recent
-version of node::
+running Ubuntu, it is advised to use nvm to get the most recent
+version of node, you can install it following the instructions on the github
+page ::
 
-    sudo add-apt-repository ppa:chris-lea/node.js
+    https://github.com/creationix/nvm
 
 Once you have grunt and bower installed, you can use the following::
 
