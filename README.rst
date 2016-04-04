@@ -39,11 +39,15 @@ page ::
 
     https://github.com/creationix/nvm
 
-Once you have grunt and bower installed, you can use the following::
+Then install bower and grunt::
 
-    bower install  # Install the frontend dependencies
-    grunt  # Launch the default build process for frontend code
-    grunt less  # Only compile less stylesheets
+    npm install -g bower
+    npm install -g grunt-cli
+
+Once you have grunt and bower installed, you can run the following commands::
+
+    make setup  # Will install the project's npm and bower dependencies
+                # and build the static files
     grunt watch  # Watch for JS/CSS changes and compile them
 
 The installer scripting documentation is not shipped with the website but
