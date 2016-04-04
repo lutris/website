@@ -19,7 +19,6 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 
-
 Optionnaly, if you don't want to setup a PostgreSQL database, you can
 also tell the project to fallback to SQLite::
 
@@ -49,6 +48,13 @@ Once you have grunt and bower installed, you can run the following commands::
     make setup  # Will install the project's npm and bower dependencies
                 # and build the static files
     grunt watch  # Watch for JS/CSS changes and compile them
+
+You'll need to setup the database, if you want to use a PostgreSQL database,
+follow the instructions found in the next paragraph before running this
+command. The database setup will also create a superuser account with the
+credentials admin/admin::
+
+    make db
 
 The installer scripting documentation is not shipped with the website but
 with the client, if you want to build the docs, you'll need to get the
