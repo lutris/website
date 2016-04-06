@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from django_select2.forms import Select2MultipleWidget, HeavySelect2Widget
+from django_select2.forms import Select2MultipleWidget, HeavySelect2Widget, Select2Widget
 
 from common.util import get_auto_increment_slug
 from games import models
@@ -157,6 +157,7 @@ class InstallerForm(forms.ModelForm):
         model = models.Installer
         fields = ('runner', 'version', 'description', 'notes', 'content')
         widgets = {
+            'runner': Select2Widget,
             'description': forms.Textarea(
                 attrs={'class': 'installer-textarea'}
                 ),

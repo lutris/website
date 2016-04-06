@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Edit installer for {{ game }} - Lutris{% endblock %}
 
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock %}
+
 {% block content %}
 {% if new %}
 <h1>New installer for {{ game }}</h1>
@@ -12,7 +16,7 @@
     <div class="well">
     <form action="" method="post">
       {% csrf_token %}
-      {% for field in field %}
+      {% for field in form %}
         {{ field.errors }}
       {% endfor %}
       {{ form.as_p }}
@@ -31,15 +35,6 @@
 
 
 {% block scripts %}
-<script>
-jQuery(function ($) {
-  $("#id_runner").select2({
-    'minimumResultsForSearch': 6,
-    'allowClear': false,
-    'closeOnSelect': false,
-    'placeholder': ''
-  });
-});
-</script>
-
+  {{ block.super }}
+  {{ form.media.js }}
 {% endblock %}
