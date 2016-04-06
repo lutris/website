@@ -32,8 +32,8 @@
         onSubmit: function (event) {
           if(event.target.responseURL == window.location.href) {
             document.open()
--           document.write(event.target.responseText)
--           document.close()
+            document.write(event.target.responseText)
+            document.close()
           } else {
             window.location = event.target.responseURL;
           }
