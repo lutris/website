@@ -35,8 +35,9 @@
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/Debian_8.0/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
           <strong>For Ubuntu</strong><br/>
-          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$(lsb_release -sr)/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
-          <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$(lsb_release -sr)/Release.key -O- | sudo apt-key add -</code><br/>
+          <code>ver=$(lsb_release -sr); if [ $ver != "14.04" -a $ver != "14.10" -a $ver != "15.10" ]; then ver=15.10; fi</code>
+          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
+          <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
           <strong>After setting up the repository</strong><br/>
           <code>sudo apt-get update</code><br/>
