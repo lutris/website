@@ -138,7 +138,7 @@ def migrate():
     require('code_root', provided_by=('staging', 'production'))
     with cd(env.code_root):
         with activate():
-            run("./manage.py migrate --no-initial-data")
+            run("./manage.py migrate")
 
 
 def clone():
