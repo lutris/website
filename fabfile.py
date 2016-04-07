@@ -183,6 +183,11 @@ def fix_perms(user='www-data', group=None):
         sudo('chmod -R ug+w media')
 
 
+def clean():
+    with cd(env.code_root):
+        run('find . -name "*.pyc" -delete')
+
+
 def configtest():
     sudo("service nginx configtest")
 
