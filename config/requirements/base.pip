@@ -27,3 +27,4 @@ django-registration==2.0.4
 django-grappelli==2.7.3
 beautifulsoup4==4.4.1
 lxml==3.5.0
+django_inlinecss==0.1.1
