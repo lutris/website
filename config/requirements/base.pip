@@ -1,7 +1,7 @@
 pip==8.0.2
 PyYAML==3.11
 Django==1.8.5
-Pillow==3.1.0
+Pillow==3.2.0
 ipython==4.0.1
 Sphinx==1.3.3
 django-compressor==2.0
@@ -12,13 +12,14 @@ django-markupfield==1.4.0
 django-bitfield==1.8.0
 python-openid
 django-extensions==1.4.0
+django_inlinecss==0.1.1
 requests==2.9.1
-Celery==3.1.19
+Celery==3.1.23
 mimeparse==0.1.3
 mock==1.3.0
 jsonfield==1.0.3
 psycopg2==2.6.1
-factory_boy==2.6.0
+factory_boy==2.6.1
 djangorestframework==3.3.2
 sorl-thumbnail==12.3
 django-openid-auth==0.7
@@ -27,4 +28,3 @@ django-registration==2.0.4
 django-grappelli==2.7.3
 beautifulsoup4==4.4.1
 lxml==3.5.0
-django_inlinecss==0.1.1
