@@ -13,7 +13,6 @@ def media_directory(path):
 
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = False
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -74,11 +73,6 @@ TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -92,20 +86,28 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, "templates"),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    'django.core.context_processors.request',
-    "django.contrib.messages.context_processors.messages",
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates"),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.template.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+            ],
+            'debug': True
+        }
+    }
+]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -164,7 +166,6 @@ DISCOURSE_URL = 'https://forums.lutris.net'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 CLIENT_VERSION = "0.3.7.5"
-
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -226,7 +227,7 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'mail_admins': {
             'level': 'ERROR',
