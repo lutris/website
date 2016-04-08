@@ -1,9 +1,11 @@
 """
-Utilities to implement Single Sign On for Discourse with a Python managed authentication DB
+Utilities to implement Single Sign On for Discourse with a Python managed
+authentication DB
 
 https://meta.discourse.org/t/official-single-sign-on-for-discourse/13045
 
-Thanks to James Potter for the heavy lifting, detailed at https://meta.discourse.org/t/sso-example-for-django/14258
+Thanks to James Potter for the heavy lifting, detailed at
+https://meta.discourse.org/t/sso-example-for-django/14258
 
 A SSO request handler might look something like
 
@@ -16,7 +18,8 @@ A SSO request handler might look something like
         except DiscourseError as e:
             return HTTP400(e.args[0])
 
-        url = sso_redirect_url(nonce, SECRET, request.user.email, request.user.id, request.user.username)
+        url = sso_redirect_url(nonce, SECRET, request.user.email,
+                               request.user.id, request.user.username)
         return redirect('http://discuss.example.com' + url)
 """
 import base64
@@ -55,8 +58,8 @@ def validate(payload, signature, secret):
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
-    h = hmac.new(secret, payload, digestmod=hashlib.sha256)
-    this_signature = h.hexdigest()
+    hash = hmac.new(secret, payload, digestmod=hashlib.sha256)
+    this_signature = hash.hexdigest()
 
     if this_signature != signature:
         raise RuntimeError('Payload does not match signature.')
@@ -76,7 +79,8 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
         user_id: the internal id of the logged in user
         user_username: username of the logged in user
 
-        return value: URL to redirect users back to discourse, now logged in as user_username
+        return value: URL to redirect users back to discourse,
+                      now logged in as user_username
     """
     kwargs.update({
         'nonce': nonce,
@@ -86,7 +90,7 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
     })
 
     return_payload = base64.encodestring(urlencode(kwargs))
-    h = hmac.new(secret, return_payload, digestmod=hashlib.sha256)
-    query_string = urlencode({'sso': return_payload, 'sig': h.hexdigest()})
+    hash = hmac.new(secret, return_payload, digestmod=hashlib.sha256)
+    query_string = urlencode({'sso': return_payload, 'sig': hash.hexdigest()})
 
     return '/session/sso_login?%s' % query_string
