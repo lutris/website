@@ -27,13 +27,13 @@ import hmac
 import hashlib
 import logging
 
-LOGGER = logging.getLogger(__name__)
-
 try:  # py3
     from urllib.parse import unquote, urlencode, parse_qs
 except ImportError:
     from urllib import unquote, urlencode
     from urlparse import parse_qs
+
+LOGGER = logging.getLogger(__name__)
 
 
 def validate(payload, signature, secret):
@@ -58,8 +58,8 @@ def validate(payload, signature, secret):
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
-    hash = hmac.new(secret, payload, digestmod=hashlib.sha256)
-    this_signature = hash.hexdigest()
+    hmac_ = hmac.new(secret, payload, digestmod=hashlib.sha256)
+    this_signature = hmac_.hexdigest()
 
     if this_signature != signature:
         raise RuntimeError('Payload does not match signature.')
@@ -90,7 +90,7 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
     })
 
     return_payload = base64.encodestring(urlencode(kwargs))
-    hash = hmac.new(secret, return_payload, digestmod=hashlib.sha256)
-    query_string = urlencode({'sso': return_payload, 'sig': hash.hexdigest()})
+    hmac_ = hmac.new(secret, return_payload, digestmod=hashlib.sha256)
+    query_string = urlencode({'sso': return_payload, 'sig': hmac_.hexdigest()})
 
     return '/session/sso_login?%s' % query_string
