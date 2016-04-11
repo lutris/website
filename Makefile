@@ -28,7 +28,7 @@ sysdeps:
 	pip install -r config/requirements/production.pip --exists-action=s
 
 deps:
-	pip install -r config/requirements/devel.pip --exists-action=s
+	pip install -r config/requirements/devel.pip --exists-action=w
 
 migration:
 	-./manage.py makemigrations
