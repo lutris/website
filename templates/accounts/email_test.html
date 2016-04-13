@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="message-box">
+  <p>
+  <form action="{% url 'email_test' %}" method="post" accept-charset="utf-8">
+      {% csrf_token %}
+      <input type="email" name="email" id="email" value=""/>
+      <input type="submit" value="Continue →">
+    </form>
+  </p>
+</div>
+{% endblock %}

@@ -49,5 +49,6 @@ urlpatterns = patterns(
     url(r'(.*)/$', 'user_account', name="user_account"),
     url(r'send-confirmation$', 'user_send_confirmation', name='user_send_confirmation'),
     url(r'confirm$', 'user_email_confirm', name='user_email_confirm'),
-    url(r'discourse-sso$', 'discourse_sso', name='discourse_sso')
+    url(r'discourse-sso$', 'discourse_sso', name='discourse_sso'),
+    url(r'email-test$', 'email_test', name='email_test'),
 )
