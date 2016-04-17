@@ -35,7 +35,8 @@ PLATFORM_MAP = {
     'Super Nintendo (SNES)': 'super-nintendo',
     'Nintendo 64': 'nintendo-64',
     'Atari Jaguar': 'atari-jaguar',
-    'Sony Playstation': 'sony-playstation'
+    'Sony Playstation': 'sony-playstation',
+    'Sony Playstation 2': 'sony-playstation-2',
 }
 
 
