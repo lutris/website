@@ -28,15 +28,18 @@ UNSUPPORTED_PLATFORMS = (
 
 PLATFORM_MAP = {
     'Arcade': 'arcade',
+    'Atari ST': 'atari-st',
     'PC': 'windows',
     'Sega Genesis': 'sega-genesis',
     'Sega Mega Drive': 'sega-genesis',
+    'Sega Master System': 'sega-master-system',
     'Nintendo Entertainment System (NES)': 'nes',
     'Super Nintendo (SNES)': 'super-nintendo',
     'Nintendo 64': 'nintendo-64',
     'Atari Jaguar': 'atari-jaguar',
     'Sony Playstation': 'sony-playstation',
     'Sony Playstation 2': 'sony-playstation-2',
+    'Sony PSP': 'sony-psp',
 }
 
 
