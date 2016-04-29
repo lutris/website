@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 from django.conf import settings
+from django.utils.text import slugify
 
 from games.models import Company
 from platforms.models import Platform
@@ -198,15 +199,21 @@ def to_lutris(game):
         match = re.search(r'\d{4}', game['release_date'])
         lutris_game['year'] = match.group(0)
     if game['publisher']:
-        company, _created = Company.objects.get_or_create(name=game['publisher'])
-        company.save()
+        publisher_slug = slugify(game['publisher'])
+        company, created = Company.objects.get_or_create(slug=publisher_slug)
+        if created:
+            company.name = game['publisher']
+            company.save()
         lutris_game['publisher'] = company.id
     if game['developer']:
         if game['publisher'] == game['developer']:
             lutris_game['developer'] = company.id
         else:
-            company. _created = Company.objects.get_or_create(name=game['developer'])
-            company.save()
+            developer_slug = slugify(game['developer'])
+            company, created = Company.objects.get_or_create(slug=developer_slug)
+            if created:
+                company.name = game['developer']
+                company.save()
             lutris_game['developer'] = company.id
     platform = get_lutris_platform(game['platform'])
     if platform:
