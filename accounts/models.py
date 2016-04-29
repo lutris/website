@@ -89,6 +89,9 @@ The Lutris Team
         return self.created_at > timezone.now() - datetime.timedelta(days=3)
 
     def confirm_user(self):
-        user = User.objects.get(email=self.email)
+        try:
+            user = User.objects.get(email=self.email)
+        except User.MultipleObjectsReturned:
+            user = User.objects.filter(email=self.email).order_by('-id')[0]
         user.email_confirmed = True
         user.save()
