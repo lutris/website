@@ -128,6 +128,14 @@ Restoring a backup::
 
     psql lutris < lutris.sql
 
+To automate backups, make sure the Unix user has superuser privileges on
+PostgreSQL and run this script with cron::
+
+    cd /srv/backup/sql
+    backup_file="lutris-$(date +%Y-%m-%d-%H-%M).tar"
+    pg_dump --format=tar lutris > $backup_file
+    gzip $backup_file
+
 
 Development through Docker
 ==========================
