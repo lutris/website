@@ -1,8 +1,10 @@
+import datetime
 from os.path import join
 from fabric.api import run, env, local, sudo, put, require, cd
 from fabric.contrib.project import rsync_project
-from fabric import utils
 from fabric.contrib import console
+from fabric.operations import get
+from fabric import utils
 from fabric.context_managers import prefix
 
 
@@ -45,6 +47,7 @@ def staging():
 
 def production():
     """ use production environment on remote host"""
+    env.sql_backup_dir = '/srv/backup/sql/'
     env.user = 'django'
     env.environment = 'production'
     env.domain = 'lutris.net'
@@ -203,6 +206,17 @@ def docs():
         run("make client")
         with activate():
             run("make docs")
+
+
+def sql_dump():
+    with cd(env.sql_backup_dir):
+        backup_file = "lutris-{}.tar".format(
+            datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
+        )
+        run('pg_dump --format=tar lutris > {}'.format(backup_file))
+        run('gzip {}'.format(backup_file))
+        backup_file += '.gz'
+        get(backup_file, backup_file)
 
 
 def deploy():
