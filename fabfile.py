@@ -1,5 +1,7 @@
+import re
+import os
 import datetime
-from os.path import join
+
 from fabric.api import run, env, local, sudo, put, require, cd
 from fabric.contrib.project import rsync_project
 from fabric.contrib import console
@@ -31,8 +33,8 @@ env.settings_module = 'lutrisweb.settings.production'
 
 
 def _setup_path():
-    env.root = join(env.home, env.name)
-    env.code_root = join(env.root, env.domain)
+    env.root = os.path.join(env.home, env.name)
+    env.code_root = os.path.join(env.root, env.domain)
 
 
 def staging():
@@ -67,7 +69,7 @@ def activate():
 
 def touch_wsgi():
     """Touch wsgi file to trigger reload."""
-    conf_dir = join(env.code_root, 'config')
+    conf_dir = os.path.join(env.code_root, 'config')
     with cd(conf_dir):
         run('touch lutrisweb.wsgi')
 
@@ -217,6 +219,21 @@ def sql_dump():
         run('gzip {}'.format(backup_file))
         backup_file += '.gz'
         get(backup_file, backup_file)
+
+
+def sql_restore():
+    db_dump = None
+    for f in os.listdir('.'):
+        if re.match('lutris-.*\.tar.gz', f):
+            db_dump = f
+            break
+    if not db_dump:
+        print "No SQL dump found"
+        return
+    local('gunzip {}'.format(db_dump))
+    db_dump = db_dump[:-3]
+    local('pg_restore --clean --dbname=lutris {}'.format(db_dump))
+    local('rm {}'.format(db_dump))
 
 
 def deploy():
