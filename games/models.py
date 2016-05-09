@@ -131,6 +131,7 @@ class Game(models.Model):
         ('free', 'Free'),
         ('freetoplay', 'Free-to-play'),
         ('pwyw', 'Pay what you want'),
+        ('demo', 'Has a demo'),
     ))
 
     objects = GameManager()
