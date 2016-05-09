@@ -119,10 +119,12 @@ class Game(models.Model):
     icon = models.ImageField(upload_to='games/icons', blank=True)
     title_logo = models.ImageField(upload_to='games/banners', blank=True)
     description = models.TextField(blank=True)
-    is_public = models.BooleanField("Published on website", default=False)
+    is_public = models.BooleanField("Published", default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
+    gogid = models.CharField(max_length=200, blank=True)
+    humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=(
         ('fully_libre', 'Fully libre'),
         ('open_engine', 'Open engine only'),
@@ -365,6 +367,8 @@ class Installer(models.Model):
         yaml_content['name'] = self.game.name
         yaml_content['year'] = self.game.year
         yaml_content['steamid'] = self.game.steamid
+        yaml_content['gogid'] = self.game.gogid
+        yaml_content['humblestoreid'] = self.game.humblestoreid
         try:
             yaml_content['runner'] = self.runner.slug
         except Runner.DoesNotExist:

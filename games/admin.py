@@ -49,8 +49,8 @@ class GameMetadataInline(admin.TabularInline):
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
-    list_display = ('__unicode__', 'year', 'steamid',
-                    'created', 'updated', 'is_public')
+    list_display = ('__unicode__', 'is_public', 'year', 'steamid', 'gogid',
+                    'humblestoreid', 'created', 'updated', )
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
     search_fields = ('name', 'steamid')
