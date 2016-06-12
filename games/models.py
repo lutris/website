@@ -379,10 +379,10 @@ class Installer(models.Model):
         return yaml_content
 
     def as_yaml(self):
-        return yaml.safe_dump(self.as_dict())
+        return yaml.safe_dump(self.as_dict(), default_flow_style=False)
 
     def as_json(self):
-        return json.dumps(self.as_dict())
+        return json.dumps(self.as_dict(), indent=2)
 
     def build_slug(self, version):
         slug = "%s-%s" % (slugify(self.game.name)[:29],

@@ -25,10 +25,14 @@
               <a href="{{ publish_installer }}"><i class="icon-edit"></i> Publish installer </a>
             </li>
           {% endif %}
+          <li>
+            {% url 'view_installer' id=installer.id as view_url %}
+            <a href="{{ view_url }}"><i class='icon-view'></i> View install script</a>
+          </li>
         {% endif %}
         <li>
-          {% url 'get_installers' slug=installer.slug as installer_url %}
-          <a href="{{ installer_url }}"><i class='icon-download'></i> Download install script</a>
+          {% url 'get_installers' slug=installer.slug as download_url %}
+          <a href="{{ download_url }}"><i class='icon-download'></i> Download install script</a>
         </li>
         {% if user.is_authenticated %}
         <li>

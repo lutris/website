@@ -286,6 +286,14 @@ def get_installers(request, slug):
     return HttpResponse(installers_json, content_type='application/json')
 
 
+def view_installer(request, id):
+    try:
+        installer = Installer.objects.get(pk=id)
+    except Installer.DoesNotExist:
+        raise Http404
+    return render(request, 'games/installer-view.html', {'installer': installer})
+
+
 class InstallerFeed(Feed):
     title = "Lutris installers"
     link = '/games/'

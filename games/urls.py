@@ -29,6 +29,8 @@ urlpatterns = patterns(
         name='get_banner'),
     url(r'icon/(?P<slug>[\w\-]+).png', 'get_icon',
         name='get_icon'),
+    url(r'install/(?P<id>[\d]+)/view$', 'view_installer',
+        name='view_installer'),
     url(r'install/(?P<slug>[\w\-]+)/$', 'get_installers',
         name='get_installers'),
 

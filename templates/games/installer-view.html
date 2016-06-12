@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div>
+  <h1>Installer {{installer.slug}}</h1>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#installer-json" aria-controls="home" role="tab" data-toggle="tab">JSON</a>
+    </li>
+    <li role="presentation">
+      <a href="#installer-yaml" aria-controls="profile" role="tab" data-toggle="tab">YAML</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="installer-json">
+      <pre>{{installer.as_json}}</pre>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="installer-yaml">
+      <pre>{{installer.as_yaml}}</pre>
+    </div>
+  </div>
+</div>
+<a class="btn" href="{% url "game_detail" slug=installer.game.slug %}">Back to game</a>
+{% endblock content %}
+
