@@ -39,8 +39,11 @@
           {% endfor %}
         </ul>
         {% endif %}
-        <div class="new-installer">
-          <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text right">Write a new installer</a>
+        <div class="installer-actions">
+          {% if unpublished_installers %}
+            <a href="#" class="discreet-text">Show unpublished installers</a>
+          {% endif %}
+          <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
         </div>
       </div>
       <article>
