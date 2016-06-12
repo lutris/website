@@ -39,9 +39,16 @@
           {% endfor %}
         </ul>
         {% endif %}
+        {% if unpublished_installers %}
+        <ul id="unpublished-installers" class="hide-unpublished">
+          {% for installer in unpublished_installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
         <div class="installer-actions">
           {% if unpublished_installers %}
-            <a href="#" class="discreet-text">Show unpublished installers</a>
+            <a href="#" onclick="toggleUnpublishedInstallers(event)" class="discreet-text">Show unpublished installers</a>
           {% endif %}
           <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
         </div>
@@ -150,7 +157,6 @@
   </div>
 {% endblock %}
 
-
 {% block scripts %}
 <script>
   function submitInstallerIssue(event) {
@@ -159,6 +165,20 @@
     var $issueModal = $('#installer-issue-modal');
     $issueModal.attr('data-slug', installerSlug);
     $issueModal.modal();
+  }
+
+  function toggleUnpublishedInstallers(event) {
+    event.preventDefault();
+    var linkText = event.target.innerHTML;
+    console.log(linkText);
+    if (linkText.indexOf('Show') === 0) {
+      linkText = linkText.replace('Show', 'Hide');
+    } else {
+      linkText = linkText.replace('Hide', 'Show');
+    }
+    event.target.innerHTML = linkText;
+    var unpublishedInstallers = document.getElementById('unpublished-installers');
+    unpublishedInstallers.classList.toggle('hide-unpublished');
   }
   (function () {
     $("#screenshots").carousel('cycle');

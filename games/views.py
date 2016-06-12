@@ -190,10 +190,11 @@ def game_detail(request, slug):
     user = request.user
     game.website_text = game.website[6:].strip('/')
 
+    installers = game.installer_set.published()
+    unpublished_installers = game.installer_set.unpublished()
+
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()
-        installers = game.installer_set.published(user=user,
-                                                  is_staff=user.is_staff)
         screenshots = game.screenshot_set.published(user=user,
                                                     is_staff=user.is_staff)
     else:
@@ -213,6 +214,7 @@ def game_detail(request, slug):
                    'library_count': library_count,
                    'installers': installers,
                    'auto_installers': auto_installers,
+                   'unpublished_installers': unpublished_installers,
                    'screenshots': screenshots})
 
 

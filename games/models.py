@@ -271,6 +271,9 @@ class InstallerManager(models.Manager):
         else:
             return self.get_queryset().filter(published=True)
 
+    def unpublished(self):
+        return self.get_queryset().filter(published=False)
+
     def fuzzy_get(self, slug):
         """Return either the installer that matches exactly 'slug' or the
         installers with game matching slug.
