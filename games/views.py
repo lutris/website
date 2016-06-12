@@ -199,7 +199,6 @@ def game_detail(request, slug):
                                                     is_staff=user.is_staff)
     else:
         in_library = False
-        installers = game.installer_set.published()
         screenshots = game.screenshot_set.published()
 
     library_count = (models.GameLibrary.objects
