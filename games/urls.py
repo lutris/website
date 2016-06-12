@@ -31,6 +31,8 @@ urlpatterns = patterns(
         name='get_icon'),
     url(r'install/(?P<id>[\d]+)/view$', 'view_installer',
         name='view_installer'),
+    url(r'install/(?P<id>[\d]+)/fork$', 'fork_installer',
+        name='fork_installer'),
     url(r'install/(?P<slug>[\w\-]+)/$', 'get_installers',
         name='get_installers'),
 

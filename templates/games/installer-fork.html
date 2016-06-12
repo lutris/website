@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Fork installer {{ installer }}
+{% endblock title %}
+
+
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock extra_head %}
+
+
+{% block content %}
+<div class="message-view">
+  <h4>Fork installer {{installer}}</h4>
+  <p>
+    You can create a new installer based on an existing one by forking it, select the
+    game you want to apply it to and you will be redirected to the newly created installer.
+  </p>
+
+  <div class="well">
+    <form action="{% url "fork_installer" id=installer.id %}" method="post" accept-charset="utf-8">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p class="form-actions">
+      <a href="{% url "game_detail" slug=installer.game.slug %} ">Cancel</a>
+        <input type="submit" class="btn" value="Fork">
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+  {{ block.super }}
+  {{ form.media.js }}
+{% endblock scripts %}

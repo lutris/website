@@ -13,6 +13,12 @@
               <a href="{{ edit_url }}"><i class="icon-edit"></i> Edit installer </a>
             </li>
           {% endif %}
+          {% if user.is_authenticated %}
+            <li>
+              {% url 'fork_installer' id=installer.id as fork_url %}
+              <a href="{{ fork_url }}"><i class="icon-fork"></i>Fork installer</a>
+            </li>
+          {% endif %}
           {% if user.is_staff %}
             <li>
               {% url 'admin:games_installer_change' installer.id as admin_url %}

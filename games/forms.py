@@ -12,7 +12,9 @@ from django.utils.safestring import mark_safe
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from django_select2.forms import Select2MultipleWidget, HeavySelect2Widget, Select2Widget
+from django_select2.forms import (
+    Select2MultipleWidget, HeavySelect2Widget, Select2Widget, ModelSelect2Widget
+)
 
 from common.util import get_auto_increment_slug
 from games import models
@@ -207,3 +209,16 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError("Invalid installer script")
         else:
             return self.cleaned_data
+
+
+class ForkInstallerForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Installer
+        fields = ('game', )
+        widgets = {
+            'game': ModelSelect2Widget(
+                model=models.Game,
+                search_fields=['name__icontains']
+            )
+        }

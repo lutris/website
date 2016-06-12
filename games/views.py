@@ -18,7 +18,7 @@ from sorl.thumbnail import get_thumbnail
 from platforms.models import Platform
 from .models import Game, Installer, GameSubmission, InstallerIssue
 from . import models
-from .forms import InstallerForm, ScreenshotForm, GameForm
+from .forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm
 from .util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
@@ -293,6 +293,27 @@ def view_installer(request, id):
     except Installer.DoesNotExist:
         raise Http404
     return render(request, 'games/installer-view.html', {'installer': installer})
+
+
+def fork_installer(request, id):
+    try:
+        installer = Installer.objects.get(pk=id)
+    except Installer.DoesNotExist:
+        raise Http404
+    form = ForkInstallerForm(request.POST or None, instance=installer)
+    if request.POST and form.is_valid():
+        installer.pk = None
+        installer.game = form.cleaned_data['game']
+        installer.version = 'Change Me'
+        installer.published = False
+        installer.user = request.user
+        installer.save()
+        return redirect(reverse('edit_installer', kwargs={'slug': installer.slug}))
+    context = {
+        'form': form,
+        'installer': installer,
+    }
+    return render(request, 'games/installer-fork.html', context)
 
 
 class InstallerFeed(Feed):
