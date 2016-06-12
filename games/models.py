@@ -324,10 +324,9 @@ class InstallerManager(models.Manager):
 
 class Installer(models.Model):
     """Game installer model"""
-    from runners.models import Runner
     game = models.ForeignKey(Game)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    runner = models.ForeignKey(Runner)
+    runner = models.ForeignKey('runners.Runner')
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
@@ -351,7 +350,6 @@ class Installer(models.Model):
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
     def as_dict(self):
-        from runners.models import Runner
         yaml_content = yaml.safe_load(self.content) or {}
 
         # Allow pasting raw install scripts (which are served as lists)
@@ -372,7 +370,7 @@ class Installer(models.Model):
         yaml_content['humblestoreid'] = self.game.humblestoreid
         try:
             yaml_content['runner'] = self.runner.slug
-        except Runner.DoesNotExist:
+        except ObjectDoesNotExist:
             yaml_content['runner'] = ''
         # Set slug to both slug and installer_slug for backward compatibility
         # reasons with the client. Remove installer_slug sometime in the future
