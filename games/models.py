@@ -322,14 +322,14 @@ class InstallerManager(models.Manager):
 class Installer(models.Model):
     """Game installer model"""
 
-    RATINGS = (
-        ('platinum', 'Platinum: installs and runs flawlessly'),
-        ('gold', 'Gold: works flawlessly with some minor tweaking'),
-        ('silver', ('Silver: works excellently for "normal" use but some '
-                    'features may be broken')),
-        ('bronze', 'Bronze: works, but has some issues, even for normal use'),
-        ('garbage', 'Garbage: game is not playable')
-    )
+    RATINGS = {
+        'platinum': 'Platinum: installs and runs flawlessly',
+        'gold': 'Gold: works flawlessly with some minor tweaking',
+        'silver': ('Silver: works excellently for "normal" use but some '
+                   'features may be broken'),
+        'bronze': 'Bronze: works: but has some issues: even for normal use',
+        'garbage': 'Garbage: game is not playable'
+    }
 
     game = models.ForeignKey(Game)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -343,7 +343,7 @@ class Installer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
-    rating = models.CharField(max_length=24, choices=RATINGS, blank=True)
+    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
     objects = InstallerManager()
 
     def __unicode__(self):

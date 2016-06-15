@@ -1,3 +1,4 @@
+{% load rating %}
 <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
     <div class="btn-group right">
       <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
@@ -52,6 +53,7 @@
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
     <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
   </div>
+  {% if installer.rating %}{% rating %}{% endif %}
   {% if installer.description %}
   <p class="discreet-text"><strong>{{ installer.description }}</strong></p>
   {% endif %}
@@ -60,5 +62,4 @@
     {{ installer.notes|linebreaks }}
   </div>
   {% endif %}
-
 </li>
