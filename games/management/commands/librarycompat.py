@@ -37,7 +37,15 @@ class Command(BaseCommand):
                 library_stats['linux'] += 1
                 continue
             if 'winesteam' in runners:
-                library_stats['wine'] += 1
+                game_works = True
+                for installer in game.installer_set.all():
+                    if(installer.runner.slug == 'winesteam'
+                       and installer.rating == 'garbage'):
+                        game_works = False
+                if game_works:
+                    library_stats['wine'] += 1
+                else:
+                    library_stats['windows_only'] += 1
                 continue
             library_stats['unknown'] += 1
             self.stdout.write(unicode(game))
