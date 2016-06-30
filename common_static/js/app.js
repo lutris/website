@@ -76,13 +76,13 @@
     } else if (url.substr(0, 6) === '/games') {
       menuIndex = 3;
     } else if (url.slice(-8) === 'library/') {
-      menuIndex = 4;
+      menuIndex = 5;
     } else if (url.slice(-6) === 'login/') {
-      menuIndex = 4;
+      menuIndex = 5;
     } else if (url.slice(-9) === 'register/') {
-      menuIndex = 5;
+      menuIndex = 6;
     } else if (url.substr(0, 5) === '/user') {
-      menuIndex = 5;
+      menuIndex = 6;
     }
     return $('#main-nav li').eq(menuIndex).addClass('active');
   };

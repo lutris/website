@@ -35,15 +35,18 @@ PLATFORM_MAP = {
     'Sega Mega Drive': 'sega-genesis',
     'Sega Master System': 'sega-master-system',
     'Sega Saturn': 'sega-saturn',
-    'Super Nintendo (SNES)': 'super-nintendo',
+    'Sega Game Gear': 'sega-game-gear',
+    'Sega Dreamcast': 'sega-dreamcast',
     'Atari Jaguar': 'atari-jaguar',
     'Sony Playstation': 'sony-playstation',
     'Sony Playstation 2': 'sony-playstation-2',
     'Sony PSP': 'sony-psp',
     'Nintendo Entertainment System (NES)': 'nes',
+    'Super Nintendo (SNES)': 'super-nintendo',
     'Nintendo Game Boy': 'game-boy',
     'Nintendo 64': 'nintendo-64',
     'Nintendo GameCube': 'gamecube',
+    'Nintendo DS': 'nintendo-ds',
     'NeoGeo': 'neo-geo',
 }
 
@@ -100,6 +103,9 @@ def api_request(url):
 
 
 def get_value(soup, field):
+    if not soup:
+        LOGGER.warn("No soup provided")
+        return
     tag = soup.find(field)
     if tag:
         return tag.text

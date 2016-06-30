@@ -44,6 +44,8 @@ def steam_sync(steamid):
         return []
     if 'games' in response:
         return response['games']
+    elif 'game_count' in response and response['game_count'] == 0:
+        return []
     else:
         LOGGER.error("Weird response: %s", json_data)
         return []

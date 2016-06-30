@@ -1,6 +1,7 @@
 import uuid
 import hmac
 import datetime
+import logging
 from hashlib import sha1
 from django.db import models
 from django.utils import timezone
@@ -9,6 +10,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django_openid_auth.models import UserOpenID
+
+LOGGER = logging.getLogger(__name__)
 
 
 class User(AbstractUser):
@@ -91,6 +94,9 @@ The Lutris Team
     def confirm_user(self):
         try:
             user = User.objects.get(email=self.email)
+        except User.DoesNotExist:
+            LOGGER.error("%s tried to confirm but does not exist", self.email)
+            return
         except User.MultipleObjectsReturned:
             user = User.objects.filter(email=self.email).order_by('-id')[0]
         user.email_confirmed = True
