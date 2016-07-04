@@ -6,18 +6,18 @@
   <h1>Installer {{installer.slug}}</h1>
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active">
-      <a href="#installer-json" aria-controls="home" role="tab" data-toggle="tab">JSON</a>
+      <a href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
     </li>
     <li role="presentation">
-      <a href="#installer-yaml" aria-controls="profile" role="tab" data-toggle="tab">YAML</a>
+      <a href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
     </li>
   </ul>
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="installer-json">
-      <pre>{{installer.as_json}}</pre>
-    </div>
     <div role="tabpanel" class="tab-pane" id="installer-yaml">
       <pre>{{installer.as_yaml}}</pre>
+    </div>
+    <div role="tabpanel" class="tab-pane active" id="installer-json">
+      <pre>{{installer.as_json}}</pre>
     </div>
   </div>
 </div>
