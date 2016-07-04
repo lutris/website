@@ -357,7 +357,7 @@ class Installer(models.Model):
             installer_data = DEFAULT_INSTALLER
         self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
-    def as_dict(self):
+    def as_dict(self, with_metadata=True):
         yaml_content = yaml.safe_load(self.content) or {}
 
         # Allow pasting raw install scripts (which are served as lists)
@@ -367,23 +367,26 @@ class Installer(models.Model):
         # If yaml content evaluates to a string return an empty dict
         if isinstance(yaml_content, basestring):
             return {}
-        yaml_content['game_slug'] = self.game.slug
-        yaml_content['version'] = self.version
-        yaml_content['description'] = self.description
-        yaml_content['notes'] = self.notes
-        yaml_content['name'] = self.game.name
-        yaml_content['year'] = self.game.year
-        yaml_content['steamid'] = self.game.steamid
-        yaml_content['gogid'] = self.game.gogid
-        yaml_content['humblestoreid'] = self.game.humblestoreid
-        try:
-            yaml_content['runner'] = self.runner.slug
-        except ObjectDoesNotExist:
-            yaml_content['runner'] = ''
-        # Set slug to both slug and installer_slug for backward compatibility
-        # reasons with the client. Remove installer_slug sometime in the future
-        yaml_content['slug'] = self.slug
-        yaml_content['installer_slug'] = self.slug
+
+        # Do not add metadata if the clean argument has been passed
+        if with_metadata:
+            yaml_content['game_slug'] = self.game.slug
+            yaml_content['version'] = self.version
+            yaml_content['description'] = self.description
+            yaml_content['notes'] = self.notes
+            yaml_content['name'] = self.game.name
+            yaml_content['year'] = self.game.year
+            yaml_content['steamid'] = self.game.steamid
+            yaml_content['gogid'] = self.game.gogid
+            yaml_content['humblestoreid'] = self.game.humblestoreid
+            try:
+                yaml_content['runner'] = self.runner.slug
+            except ObjectDoesNotExist:
+                yaml_content['runner'] = ''
+            # Set slug to both slug and installer_slug for backward compatibility
+            # reasons with the client. Remove installer_slug sometime in the future
+            yaml_content['slug'] = self.slug
+            yaml_content['installer_slug'] = self.slug
         return yaml_content
 
     def as_yaml(self):
@@ -391,6 +394,14 @@ class Installer(models.Model):
 
     def as_json(self):
         return json.dumps(self.as_dict(), indent=2)
+
+    def as_cleaned_yaml(self):
+        """Return the YAML installer without the metadata"""
+        return yaml.safe_dump(self.as_dict(with_metadata=False), default_flow_style=False)
+
+    def as_cleaned_json(self):
+        """Return the JSON installer without the metadata"""
+        return json.dumps(self.as_dict(with_metadata=False), indent=2)
 
     def build_slug(self, version):
         slug = "%s-%s" % (slugify(self.game.name)[:29],
