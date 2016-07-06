@@ -82,3 +82,9 @@ sqlsequencereset:
 
 start: deps setup run
 	echo "Running Lutris Website"
+
+sql_restore:
+	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
+	gunzip lutris.tar.gz
+	pg_restore --clean --dbname=lutris lutris.tar
+	rm lutris.tar
