@@ -233,7 +233,7 @@ def to_lutris(game):
 
 
 def get_or_create_company(name):
-    if not name.strip():
+    if not name:
         return
     slug = slugify(name)[:50]
     try:
