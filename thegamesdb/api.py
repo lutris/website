@@ -236,8 +236,11 @@ def get_or_create_company(name):
     if not name.strip():
         return
     slug = slugify(name)[:50]
-    company, created = Company.objects.get_or_create(slug=slug)
-    if created:
-        company.name = name
-        company.save()
+    try:
+        company = Company.objects.get(slug=slug)
+    except Company.DoesNotExist:
+        company = Company.objects.create(
+            slug=slug,
+            name=name
+        )
     return company
