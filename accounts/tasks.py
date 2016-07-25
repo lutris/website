@@ -1,7 +1,7 @@
 import logging
 
 from celery import task
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 
 import games.models
 from games.util.steam import create_game

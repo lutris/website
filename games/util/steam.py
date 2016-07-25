@@ -1,6 +1,6 @@
 import logging
 import requests
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from django.conf import settings
 
 LOGGER = logging.getLogger(__name__)

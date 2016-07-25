@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.conf import settings
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 
 from crispy_forms.helper import FormHelper

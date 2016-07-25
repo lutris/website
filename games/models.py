@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
