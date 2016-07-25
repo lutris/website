@@ -53,6 +53,8 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        if not self.slug:
+            raise ValueError("Tried to save Company without a slug: %s", self)
         return super(Company, self).save(*args, **kwargs)
 
     @staticmethod
