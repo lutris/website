@@ -208,23 +208,18 @@ def to_lutris(game):
     if game['release_date']:
         match = re.search(r'\d{4}', game['release_date'])
         lutris_game['year'] = match.group(0)
-    if game['publisher']:
-        publisher_slug = slugify(game['publisher'])
-        company, created = Company.objects.get_or_create(slug=publisher_slug)
-        if created:
-            company.name = game['publisher']
-            company.save()
-        lutris_game['publisher'] = company.id
-    if game['developer']:
-        if game['publisher'] == game['developer']:
-            lutris_game['developer'] = company.id
-        else:
-            developer_slug = slugify(game['developer'])
-            company, created = Company.objects.get_or_create(slug=developer_slug)
-            if created:
-                company.name = game['developer']
-                company.save()
-            lutris_game['developer'] = company.id
+
+    publisher = get_or_create_company(game['publisher'])
+    if publisher:
+        lutris_game['publisher'] = publisher.id
+
+    if game['developer'] == game['publisher']:
+        developer = publisher
+    else:
+        developer = get_or_create_company(game['developer'])
+    if developer:
+        lutris_game['developer'] = developer.id
+
     platform = get_lutris_platform(game['platform'])
     if platform:
         lutris_game['platforms'] = [platform.id]
@@ -235,3 +230,14 @@ def to_lutris(game):
         banner_url = banner_path[len(settings.MEDIA_ROOT):].strip('/')
         lutris_game['banner'] = settings.MEDIA_URL + banner_url
     return lutris_game
+
+
+def get_or_create_company(name):
+    if not name.strip():
+        return
+    slug = slugify(name)[:50]
+    company, created = Company.objects.get_or_create(slug=slug)
+    if created:
+        company.name = name
+        company.save()
+    return company
