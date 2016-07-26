@@ -39,6 +39,7 @@ urlpatterns = patterns(
     url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls')),
     url(r'^bundles', include('bundles.urls')),
+    url(r'^email/', include('emails.urls')),
     url(r'^steam-login/', login_begin, kwargs={
         'login_complete_view': 'associate_steam'}, name='steam_login'),
     url(r'thegamesdb/', include('thegamesdb.urls')),
