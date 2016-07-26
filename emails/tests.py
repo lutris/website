@@ -18,3 +18,8 @@ class TestEmailRendering(TestCase):
         self.client.login(username='admin', password='password')
         response = self.client.get(reverse('email_sender_test'))
         self.assertEqual(response.status_code, 200)
+
+    def test_regular_users_dont_have_access_to_tester(self):
+        self.client.login(username='user', password='password')
+        response = self.client.get(reverse('email_sender_test'))
+        self.assertEqual(response.status_code, 404)
