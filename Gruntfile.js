@@ -78,12 +78,21 @@ module.exports = function(grunt) {
         ],
         dest: 'public/css/select2.min.css',
         nonull: true
-      }
+      },
+      emailCss: {
+        src: [
+          'common_static/css/email.css'
+        ],
+        dest: 'public/css/email.css',
+        nonull: true
+      },
+
     },
     cssmin: {
       dist: {
         files: {
-          'public/css/libs.min.css': ['public/css/libs.css']
+          'public/css/libs.min.css': ['public/css/libs.css'],
+          'public/css/email.min.css': ['public/css/email.css']
         }
       }
     },
