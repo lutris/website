@@ -7,7 +7,6 @@ from django.http import (
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -223,15 +222,3 @@ def discourse_sso(request):
     url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
                            request.user.id, request.user.username)
     return redirect(settings.DISCOURSE_URL + url)
-
-
-@login_required
-def email_test(request):
-    user = request.user
-    if not user.is_superuser:
-        raise Http404
-    if request.method == 'POST':
-        email = request.POST['email']
-        body = "Mail sent to %s" % email
-        send_mail("Email test", body, settings.DEFAULT_FROM_EMAIL, [email])
-    return render(request, 'accounts/email_test.html')

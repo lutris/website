@@ -3,9 +3,17 @@
 
 {% block content %}
 <div class="message-box">
+  {% if message %}
+    <p class='message'>
+      {{message}}
+    </p>
+  {% endif %}
   <p>
-  <form action="{% url 'email_test' %}" method="post" accept-charset="utf-8">
+  <form action="{% url 'email_sender_test' %}" method="post" accept-charset="utf-8">
       {% csrf_token %}
+      <p>
+        <label for="email">Email address to send to</label>
+      </p>
       <input type="email" name="email" id="email" value=""/>
       <input type="submit" value="Continue →">
     </form>
