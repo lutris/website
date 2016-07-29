@@ -48,6 +48,7 @@ PLATFORM_MAP = {
     'Nintendo GameCube': 'gamecube',
     'Nintendo DS': 'nintendo-ds',
     'NeoGeo': 'neo-geo',
+    'TurboGrafx 16': 'turbografx-16',
 }
 
 
