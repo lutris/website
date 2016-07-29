@@ -29,6 +29,7 @@ UNSUPPORTED_PLATFORMS = (
 
 PLATFORM_MAP = {
     'Arcade': 'arcade',
+    'Atari 2600': 'atari-2600',
     'Atari ST': 'atari-st',
     'PC': 'windows',
     'Sega Genesis': 'sega-genesis',
@@ -49,6 +50,7 @@ PLATFORM_MAP = {
     'Nintendo DS': 'nintendo-ds',
     'NeoGeo': 'neo-geo',
     'TurboGrafx 16': 'turbografx-16',
+    'Vectrex': 'vectrex',
 }
 
 
