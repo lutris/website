@@ -8,8 +8,9 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AbstractUser
-from django.core.mail import send_mail
 from django_openid_auth.models import UserOpenID
+
+from emails import messages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -72,21 +73,7 @@ class EmailConfirmationToken(models.Model):
             reverse('user_email_confirm')
         ) + '?token=' + self.token
         user = request.user
-        subject = u"{} Confirm your email address".format(
-            settings.EMAIL_SUBJECT_PREFIX
-        )
-        body = u"""
-Hello {},
-
-Please click on the following link to confirm your email address:
-
-{}
-
-Best regards,
-
-The Lutris Team
-        """.format(user.username, confirmation_link)
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [user.email])
+        messages.send_confirmation_link(user, confirmation_link)
 
     def is_valid(self):
         return self.created_at > timezone.now() - datetime.timedelta(days=3)

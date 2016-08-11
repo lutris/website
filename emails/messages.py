@@ -11,7 +11,16 @@ def send_game_accepted(user, game):
         'game_url': game.get_absolute_url()
     }
     subject = u"Your game submission for '{}' as been accepted!".format(game.name)
-    return send_email("game_accepted", context, subject, user.email)
+    return send_email('game_accepted', context, subject, user.email)
+
+
+def send_confirmation_link(user, confirmation_link):
+    context = {
+        'username': user.username,
+        'confirmation_link': confirmation_link
+    }
+    subject = 'Confirm your email address'
+    return send_email('email_confirmation', context, subject, user.email)
 
 
 def send_email(template, context, subject, recipients, sender=None):
