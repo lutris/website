@@ -69,7 +69,7 @@ class EmailConfirmationToken(models.Model):
         self.token = str(uuid.uuid4())
 
     def get_token_url(self):
-        reverse('user_email_confirm') + '?token=' + self.token
+        return reverse('user_email_confirm') + '?token=' + self.token
 
     def send(self, request):
         user = request.user
