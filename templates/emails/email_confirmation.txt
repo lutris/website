@@ -5,5 +5,4 @@ Please click on the following link to confirm your email address:
 {{confirmation_link}}
 
 Best regards,
-
 The Lutris Team

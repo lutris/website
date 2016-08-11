@@ -23,6 +23,15 @@ def send_confirmation_link(user, confirmation_link):
     return send_email('email_confirmation', context, subject, user.email)
 
 
+def send_account_creation(user, confirmation_link):
+    context = {
+        'username': user.username,
+        'confirmation_link': confirmation_link
+    }
+    subject = 'Welcome to Lutris.net'
+    return send_email('account_creation', context, subject, user.email)
+
+
 def send_email(template, context, subject, recipients, sender=None):
     context.update({
         'STATIC_URL': settings.STATIC_URL

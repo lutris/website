@@ -68,11 +68,12 @@ class EmailConfirmationToken(models.Model):
     def create_token(self):
         self.token = str(uuid.uuid4())
 
+    def get_token_url(self):
+        reverse('user_email_confirm') + '?token=' + self.token
+
     def send(self, request):
-        confirmation_link = request.build_absolute_uri(
-            reverse('user_email_confirm')
-        ) + '?token=' + self.token
         user = request.user
+        confirmation_link = request.build_absolute_uri(self.get_token_url())
         messages.send_confirmation_link(user, confirmation_link)
 
     def is_valid(self):

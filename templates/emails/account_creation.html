@@ -1,0 +1,30 @@
+{% block content %}
+
+<p>Welcome {{username}},</p>
+
+
+<p>
+You have created an account on Lutris.net.
+If you wish to post on our forums (https://forums.lutris.net) you need to
+confirm your email address by following the link below:
+</p>
+
+<p>
+<a href="{{confirmation_link}}">{{confirmation_link}}</a>
+</p>
+
+<p>
+You can now sync your Steam account with your Lutris library and browse our
+available games to add them to your library.
+</p>
+
+<p>
+Once you enter your login credentials in the Lutris client, your library will
+be available automatically.
+</p>
+
+<p>
+Have fun using Lutris! <br />
+<strong>The Lutris team</strong>
+</p>
+{% endblock content %}
