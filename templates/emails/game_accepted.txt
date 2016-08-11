@@ -1,0 +1,15 @@
+Hello {{username}}!
+
+Thank you for your submission for {{name}}. The game has been reviewed by a
+moderator and approved!
+
+The game's page is available at https://lutris.net{{game_url}}
+You can submit an installer script for it if you haven't done so already.
+The scripting details are explained on the installer submission page,
+you can have a look at other scripts to see how they are written.
+If you get confused or have any questions about the scripting process, 
+please drop us a line at admin@lutris.net or on IRC: #lutris on Freenode.
+
+Have a great day!
+
+The Lutris team

@@ -4,7 +4,6 @@ import json
 import datetime
 
 import yaml
-from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
@@ -20,6 +19,7 @@ from common.util import get_auto_increment_slug
 from platforms.models import Platform
 from games import managers
 from games.util import steam
+from emails import messages
 
 DEFAULT_INSTALLER = {
     'files': [
@@ -474,28 +474,4 @@ class GameSubmission(models.Model):
     def accept(self):
         self.accepted_at = datetime.datetime.now()
         self.save()
-        subject = u"{} Your game submission for '{}' as been accepted!".format(
-            settings.EMAIL_SUBJECT_PREFIX,
-            self.game.name
-        )
-        body = u"""
-Hello {0}!
-
-Your submission for {1} has been reviewed by a moderator and approved!
-
-The game's page is available at https://lutris.net{2}
-You can submit an installer script for it if you haven't done so already. The
-scripting details are explained on the installer submission page, you can have
-a look at other scripts to see how they are written. If you get confused or
-have any questions about the scripting process, please drop us a line at
-admin@lutris.net or on IRC: #lutris on Freenode.
-
-Have a great day!
-
-The Lutris team
-        """.format(
-            self.user.username,
-            self.game.name,
-            self.game.get_absolute_url()
-        )
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [self.user.email])
+        messages.send_game_accepted(self.user, self.game)

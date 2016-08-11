@@ -29,3 +29,4 @@ django-registration==2.0.4
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 beautifulsoup4==4.5.0
 lxml==3.6.1
+premailer==3.0.1

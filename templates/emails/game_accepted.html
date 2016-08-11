@@ -1,0 +1,26 @@
+{% extends "emails/base.html" %}
+
+
+{% block content %}
+<p>Hello {{username}}!</p>
+
+<p>
+Thank you for your submission for {{name}}. The game has been reviewed by a
+moderator and approved!
+</p>
+
+<p>
+The game's page is available at https://lutris.net{{game_url}} You can submit
+an installer script for it if you haven't done so already. The scripting
+details are explained on the installer submission page, you can have a look at
+other scripts to see how they are written. If you get confused or have any
+questions about the scripting process, please drop us a line at
+<a href="mailto:admin@lutris.net?subject=feedback">admin@lutris.net</a> or on
+IRC: #lutris on Freenode.
+</p>
+
+<p>
+Have a great day! <br />
+<strong>>The Lutris team</strong>
+</p>
+{% endblock content %}
