@@ -1,0 +1,9 @@
+Hello {},
+
+Please click on the following link to confirm your email address:
+
+{}
+
+Best regards,
+
+The Lutris Team
