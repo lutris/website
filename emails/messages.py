@@ -46,7 +46,8 @@ def send_daily_mod_mail():
 
 def send_email(template, context, subject, recipients, sender=None):
     context.update({
-        'STATIC_URL': settings.STATIC_URL
+        'STATIC_URL': settings.STATIC_URL,
+        'MEDIA_URL': settings.MEDIA_URL,
     })
     sender = sender or settings.DEFAULT_FROM_EMAIL
     if isinstance(recipients, basestring):
