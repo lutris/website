@@ -1,6 +1,8 @@
 import os
 from os.path import dirname, abspath
 
+from celery.schedules import crontab
+
 
 def media_directory(path):
     """Return absolute path to subdirectory of MEDIA_ROOT.
@@ -185,6 +187,13 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 # Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
+
+CELERYBEAT_SCHEDULE = {
+    'send-daily-mod-mail': {
+        'task': 'accounts.tasks.daily_mod_mail',
+        'schedule': crontab(hour=12, minute=0),
+    }
+}
 BROKER_URL = 'amqp://guest:guest@localhost//'
 # API Keys
 STEAM_API_KEY = "********************************"

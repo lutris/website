@@ -9,4 +9,4 @@ export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 source ../bin/envvars
 
-exec ../bin/celery worker -A lutrisweb.celery.app --loglevel=INFO
+exec ../bin/celery worker -A lutrisweb.celery.app -B --loglevel=INFO

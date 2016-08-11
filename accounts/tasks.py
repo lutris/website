@@ -6,6 +6,7 @@ from django.utils.text import slugify
 import games.models
 from games.util.steam import create_game
 from accounts.models import User
+from emails.messages import send_daily_mod_mail
 
 LOGGER = logging.getLogger()
 
@@ -42,3 +43,8 @@ def sync_steam_library(user_id):
                 steam_game = create_game(game)
                 LOGGER.info("Creating game %s", steam_game.slug)
         library.games.add(steam_game)
+
+
+@task
+def daily_mod_mail():
+    send_daily_mod_mail()
