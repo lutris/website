@@ -32,6 +32,18 @@ def send_account_creation(user, confirmation_link):
     return send_email('account_creation', context, subject, user.email)
 
 
+def send_daily_mod_mail():
+    from games.notifier import get_mod_mail_content
+    from accounts.models import User
+    context = get_mod_mail_content()
+    if settings.DEBUG:
+        moderators = [u[1] for u in settings.MANAGERS]
+    else:
+        moderators = [u.email for u in User.objects.filter(is_staff=True)]
+    subject = 'Your daily moderator mail'
+    return send_email('daily_mod_mail', context, subject, moderators)
+
+
 def send_email(template, context, subject, recipients, sender=None):
     context.update({
         'STATIC_URL': settings.STATIC_URL

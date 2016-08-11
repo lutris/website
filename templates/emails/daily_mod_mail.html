@@ -1,0 +1,46 @@
+{% extends "emails/base.html" %}
+{% load thumbnail %}
+
+
+{% block content %}
+{% if installers %}
+  <h1>Unpublished installers</h1>
+  {% for installer in installers %}
+    {% with installer.game as game %}
+      <a href="{{ game.get_absolute_url }}">
+      {% thumbnail game.title_logo "184x69" crop="center" as img %}
+        <img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
+      {% empty %}
+        <span class="game-cover">no image</span>
+      {% endthumbnail %}
+      </a>
+    {% endwith %}
+  {% endfor %}
+{% endif %}
+
+{% if screenshots %}
+  <h1>Unpublished screenshots</h1>
+  {% for screenshot in screenshots %}
+  <a href="{{ screenshot.game.get_absolute_url }}">
+     {% thumbnail screenshot.image '184x130' as img %}
+        <img src="{{ MEDIA_URL }}{{ img }}" title="{{ screenshot.description }}"/>
+      {% endthumbnail %}
+    </a>
+  {% endfor %}
+{% endif %}
+
+{% if submissions %}
+  <h1>Unpublished submissions</h1>
+  {% for submission in submissions %}
+    {% with submission.game as game %}
+      <a href="{{ game.get_absolute_url }}">
+      {% thumbnail game.title_logo "184x69" crop="center" as img %}
+        <img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
+      {% empty %}
+        <span class="game-cover">no image</span>
+      {% endthumbnail %}
+      </a>
+    {% endwith %}
+  {% endfor %}
+{% endif %}
+{% endblock content %}
