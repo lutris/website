@@ -35,7 +35,7 @@ class InstallerAdmin(admin.ModelAdmin):
 
 class InstallerIssueAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'submitted_by', 'submitted_on', 'installer')
-    readonly_fields = ('game_link',)
+    readonly_fields = ('submitted_on', 'game_link',)
 
     def game_link(self, obj):
         return u"<a href='{0}'>{1}<a/>".format(
