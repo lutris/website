@@ -429,6 +429,9 @@ class InstallerIssue(models.Model):
     def __unicode__(self):
         return "Issue for {}".format(self.installer.slug)
 
+    def get_absolute_url(self):
+        return reverse('admin:games_installerissue_change', args=(self.id, ))
+
 
 class GameLibrary(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)

@@ -43,4 +43,14 @@
     {% endwith %}
   {% endfor %}
 {% endif %}
+
+
+{% if issues %}
+  <h1>Unresolved issues</h1>
+  {% for issue in issues %}
+    <ul>
+      <li><a href="{{issue.get_absolute_url}}">{{issue}}</a></li>
+    </ul>
+  {% endfor %}
+{% endif %}
 {% endblock content %}
