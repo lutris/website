@@ -35,6 +35,15 @@ class InstallerAdmin(admin.ModelAdmin):
 
 class InstallerIssueAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'submitted_by', 'submitted_on', 'installer')
+    readonly_fields = ('game_link',)
+
+    def game_link(self, obj):
+        return u"<a href='{0}'>{1}<a/>".format(
+            reverse("admin:games_game_change", args=(obj.installer.game.id, )),
+            obj.installer.game
+        )
+    game_link.allow_tags = True
+    game_link.short_description = "Game (link)"
 
 
 class GenreAdmin(admin.ModelAdmin):
