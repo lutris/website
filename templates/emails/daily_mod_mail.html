@@ -3,6 +3,33 @@
 
 
 {% block content %}
+
+<p>Hello Lutris moderators!</p>
+
+<p>
+  This is your daily digest of user submitted content to review. <br />
+  Here is a quick reminder of the acceptance guidelines:
+  <ul>
+    <li>All installers that look functionnal should be published.</li>
+    <li>You can't interfere with an installer if you can't test it. It is the
+    author's responsability to make sure it works.</li>
+    <li>If you see an installer fetching content from an unusual and untrusted
+    source, please contact an admin and do not publish the installer.</li>
+    <li>If you have tested an installer and have had issues with it, submit a
+    rating for it and if necessary, submit an installer issue (only if you
+    believe the issue can be fixed). For minor issues, add a technical note in
+    the installer.</li>
+    <li>All games should be published even with incomplete information (you
+    will soon receive notification about incomplete games)</li>
+    <li>All screenshots should be published as long as they display the game in
+    fullscreen</li>
+    <li>All issues must be deleted after they have been fixed. If you have
+    worked on fixing an issue but could achieve the desired result, leave a
+    note in the issue's message.</li>
+  </ul>
+</p>
+
+
 {% if installers %}
   <h1>Unpublished installers</h1>
   {% for installer in installers %}
