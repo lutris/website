@@ -2,13 +2,13 @@ pip==8.1.2
 PyYAML==3.11
 Django==1.9.8
 Pillow==3.3.0
-ipython==5.0.0
+ipython==5.1.0
 Sphinx==1.4.5
-djangorestframework==3.4.0
+djangorestframework==3.4.4
 django-appconf==1.0.2
-django-compressor==2.0
+django-compressor==2.1
 django-crispy-forms==1.6.0
-django_select2==5.8.5
+django_select2==5.8.9
 django-grappelli==2.8.1
 django-tastypie==0.13.3
 django-markupfield==1.4.0
@@ -16,7 +16,7 @@ django-bitfield==1.8.0
 python-openid
 django-extensions==1.6.7
 django_inlinecss==0.1.2
-requests==2.10.0
+requests==2.11.0
 Celery==3.1.23
 mimeparse==0.1.3
 mock==2.0.0
@@ -27,6 +27,7 @@ sorl-thumbnail==12.3
 django-registration==2.0.4
 -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
-beautifulsoup4==4.5.0
+beautifulsoup4==4.5.1
 lxml==3.6.1
 premailer==3.0.1
+Fabric==1.12.0
