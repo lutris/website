@@ -1,5 +1,6 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
+import yaml
 import json
 import logging
 from django.conf import settings
@@ -275,8 +276,14 @@ def serve_installer(_request, slug):
         installers = Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
+
     installer = installers[0]
-    return HttpResponse(installer.as_yaml(), content_type='application/yaml')
+    if type(installer) is dict:
+        yaml_response = yaml.safe_dump(installer, default_flow_style=False)
+    else:
+        yaml_response = installer.as_yaml()
+
+    return HttpResponse(yaml_response, content_type='application/yaml')
 
 
 def get_installers(request, slug):
