@@ -6,7 +6,6 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def rating(context):
     from games.models import Installer
-    print context['installer']
     installer = context['installer']
     if not installer.rating:
         return
