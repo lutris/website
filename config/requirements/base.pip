@@ -25,7 +25,6 @@ jsonfield==1.0.3
 psycopg2==2.6.2
 factory_boy==2.7.0
 sorl-thumbnail==12.3
-django-registration==2.0.4
 -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 beautifulsoup4==4.5.1
