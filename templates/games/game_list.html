@@ -52,7 +52,7 @@
         {% for page in page_range %}
           {% if not page %}
           …
-          {% elif page.number = page_obj.number %}
+          {% elif page.number == page_obj.number %}
             {{ page.number }}
           {% else %}
             <a href="{% append_to_get page=page.number %}">{{ page.number }}</a>
