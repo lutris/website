@@ -355,8 +355,11 @@ def get_banner(request, slug):
     game = get_game_by_slug(slug)
     if not game or not game.title_logo:
         raise Http404
-    thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE,
-                              crop="center")
+    try:
+        thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE, crop="center")
+    except AttributeError:
+        LOGGER.error("Invalid banner for %s", game)
+        raise Http404
     return redirect(thumbnail.url)
 
 
