@@ -18,3 +18,4 @@ public/fonts
 node_modules
 reports
 ENV
+celerybeat-schedule
