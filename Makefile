@@ -60,10 +60,6 @@ shell:
 worker:
 	celery -A lutrisweb worker --loglevel=debug --autoreload --hostname=lutris.net -E
 
-legacydump:
-	./manage.py dumpdata --indent=2 -e accounts.Profile -e registration > lutrisweb.json
-	sed -i 's/auth.user/accounts.user/' lutrisweb.json
-
 sqlflush:
 	./manage.py sqlflush | psql -U lutris_staging -h localhost lutris_staging
 
