@@ -1,11 +1,11 @@
 # pylint: disable=C0103, C0301
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
 from . import forms
+from . import views
 
-urlpatterns = patterns(
-    'accounts.views',
+urlpatterns = [
     url(r'^login/$', auth_views.login,
         {'template_name': 'accounts/login.html',
          'authentication_form': forms.LoginForm},
@@ -32,22 +32,23 @@ urlpatterns = patterns(
     url(r'^password/reset/complete/$', auth_views.password_reset_complete,
         kwargs={'template_name': "accounts/password_reset_complete.html"},
         name='password_reset_complete'),
-    url(r'^register/$', 'register', name="register"),
-    url(r'^auth/$', 'client_auth', name="client_auth"),
-    url(r'^verify/$', 'client_verify'),
-    url(r'^associate-steam/', 'associate_steam', name="associate_steam"),
-    url(r'^(?P<username>.*)/library/$', 'library_show',
+
+    url(r'^register/$', views.register, name="register"),
+    url(r'^auth/$', views.client_auth, name="client_auth"),
+    url(r'^verify/$', views.client_verify),
+    url(r'^associate-steam/', views.associate_steam, name="associate_steam"),
+    url(r'^(?P<username>.*)/library/$', views.library_show,
         name="library_show"),
-    url(r'^library/add/(?P<slug>[\w-]+)/$', 'library_add',
+    url(r'^library/add/(?P<slug>[\w-]+)/$', views.library_add,
         name="add_to_library"),
-    url(r'^library/remove/(?P<slug>[\w-]+)/$', 'library_remove',
+    url(r'^library/remove/(?P<slug>[\w-]+)/$', views.library_remove,
         name="remove_from_library"),
-    url(r'^library/steam-sync/', 'library_steam_sync',
+    url(r'^library/steam-sync/', views.library_steam_sync,
         name="library_steam_sync"),
-    url(r'profile/$', 'profile', name="profile"),
-    url(r'(.*)/edit/$', 'profile_edit', name='profile_edit'),
-    url(r'(.*)/$', 'user_account', name="user_account"),
-    url(r'send-confirmation$', 'user_send_confirmation', name='user_send_confirmation'),
-    url(r'confirm$', 'user_email_confirm', name='user_email_confirm'),
-    url(r'discourse-sso$', 'discourse_sso', name='discourse_sso'),
-)
+    url(r'profile/$', views.profile, name="profile"),
+    url(r'(.*)/edit/$', views.profile_edit, name='profile_edit'),
+    url(r'(.*)/$', views.user_account, name="user_account"),
+    url(r'send-confirmation$', views.user_send_confirmation, name='user_send_confirmation'),
+    url(r'confirm$', views.user_email_confirm, name='user_email_confirm'),
+    url(r'discourse-sso$', views.discourse_sso, name='discourse_sso'),
+]

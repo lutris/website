@@ -1,6 +1,6 @@
 pip==8.1.2
 PyYAML==3.11
-Django==1.9.8
+Django==1.10
 Pillow==3.3.0
 ipython==5.1.0
 Sphinx==1.4.5
@@ -12,7 +12,8 @@ django_select2==5.8.9
 django-grappelli==2.8.1
 django-tastypie==0.13.3
 django-markupfield==1.4.0
-django-bitfield==1.8.0
+# django-bitfield==1.8.0
+-e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
 python-openid
 django-extensions==1.6.7
 django_inlinecss==0.1.2

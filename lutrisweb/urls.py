@@ -1,10 +1,11 @@
 # pylint: disable=C0103
 import logging
 from importlib import import_module
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django_openid_auth.views import login_begin
+from rest_framework.authtoken.views import obtain_auth_token
 
 from games import deprecated_api
 from tastypie.api import Api
@@ -19,17 +20,14 @@ v1_api.register(deprecated_api.GameLibraryResource())
 v1_api.register(deprecated_api.GameResource())
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^user/', include('accounts.urls')),
-    url(r'^api/accounts/token',
-        'rest_framework.authtoken.views.obtain_auth_token',
-        name='accounts_get_token'),
+    url(r'^api/accounts/token', obtain_auth_token, name='accounts_get_token'),
     url(r'^api/accounts/auth',
         include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/tosec', include('tosec.urls')),
@@ -44,14 +42,14 @@ urlpatterns = patterns(
         'login_complete_view': 'associate_steam'}, name='steam_login'),
     url(r'thegamesdb/', include('thegamesdb.urls')),
     url(r'^', include('common.urls')),
-)
+]
 
 if settings.DEBUG:
-    urlpatterns += patterns(
-        'django.views.static',
-        (r'^media/(?P<path>.*)$', 'serve',
-         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-    )
+    from django.views.static import serve
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', serve,
+            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    ]
 
 
 signal_modules = {}

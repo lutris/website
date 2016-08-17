@@ -53,3 +53,9 @@ class TestInstallerViews(TestCase):
         installer_slugs = [i['installer_slug'] for i in installers]
         self.assertIn('doom-zdoom', installer_slugs)
         self.assertIn('doom-dos', installer_slugs)
+
+
+class TestGameViews(TestCase):
+    def test_can_get_game_list(self):
+        response = self.client.get(reverse('game_list'))
+        self.assertEqual(response.status_code, 200)
