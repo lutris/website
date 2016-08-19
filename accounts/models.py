@@ -2,7 +2,8 @@ import uuid
 import hmac
 import datetime
 import logging
-from hashlib import sha1
+import urllib
+import hashlib
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -25,10 +26,14 @@ class User(AbstractUser):
     @property
     def avatar_url(self):
         if self.avatar:
-            url = self.avatar.url
-        else:
-            url = settings.STATIC_URL + "images/default-avatar.png"
-        return url
+            return self.avatar.url
+        default_url = settings.STATIC_URL + "images/default-avatar.png"
+        size = 64
+        return (
+            "https://www.gravatar.com/avatar/"
+            + hashlib.md5(self.email.lower()).hexdigest() + "?"
+            + urllib.urlencode({'d': default_url, 's': str(size)})
+        )
 
     def set_steamid(self):
         try:
@@ -46,7 +51,7 @@ class User(AbstractUser):
         # Get a random UUID.
         new_uuid = uuid.uuid4()
         # Hmac that beast.
-        return hmac.new(new_uuid.bytes, digestmod=sha1).hexdigest()
+        return hmac.new(new_uuid.bytes, digestmod=hashlib.sha1).hexdigest()
 
 
 class AuthToken(models.Model):
