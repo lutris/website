@@ -32,8 +32,7 @@ def register(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         return HttpResponseRedirect('/')
-    return render(request, 'registration/registration_form.html',
-                  {'form': form})
+    return render(request, 'accounts/registration_form.html', {'form': form})
 
 
 def get_client_ip(request):
