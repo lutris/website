@@ -1,4 +1,5 @@
 # pylint: disable=W0232,R0903
+import re
 from django.db import models
 
 from platforms.models import Platform
@@ -32,6 +33,23 @@ class Runner(models.Model):
     def autocomplete_search_fields():
         return ('name__icontains', )
 
+    @property
+    def versions(self):
+        def version_key(runner_version):
+            version = runner_version.version
+            version_match = re.search(r'(\d[\d\.]+\d)', version)
+            if not version_match:
+                return
+            version_number = version_match.groups()[0]
+            prefix = version[0:version_match.span()[0]]
+            suffix = version[version_match.span()[1]:]
+            version = [int(p) for p in version_number.split('.')]
+            version = version + [0] * (10 - len(version))
+            version.append(prefix)
+            version.append(suffix)
+            return version
+        return sorted(self.runner_versions.all(), key=version_key)
+
 
 class RunnerVersion(models.Model):
     class Meta(object):
@@ -42,7 +60,7 @@ class RunnerVersion(models.Model):
                                      self.version,
                                      self.architecture)
 
-    runner = models.ForeignKey(Runner, related_name='versions')
+    runner = models.ForeignKey(Runner, related_name='runner_versions')
     version = models.CharField(max_length=32)
     architecture = models.CharField(max_length=8,
                                     choices=ARCH_CHOICES,
