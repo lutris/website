@@ -142,7 +142,7 @@ class Game(models.Model):
     class Meta(object):
         ordering = ['name']
         permissions = (
-            ('can_publish_game', "Can make the game visible"),
+            ('can_publish_game', "Can publish game"),
         )
 
     def __unicode__(self):

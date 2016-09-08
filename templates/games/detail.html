@@ -12,6 +12,9 @@
       <span>{{ game.name }}</span>
       {% if user.is_staff %}
         <div class="buttons">
+          {% if not game.is_public %}
+            <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+          {% endif %}
           <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
         </div>
       {% endif %}

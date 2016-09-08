@@ -430,6 +430,15 @@ def submit_game(request):
     return render(request, 'games/submit.html', {'form': form})
 
 
+def publish_game(request, id):
+    if not request.user.has_perm('games.can_publish_game'):
+        raise Http404
+    game = get_object_or_404(Game, id=id)
+    game.is_public = True
+    game.save()
+    return redirect(reverse('game_detail', kwargs={'slug': game.slug}))
+
+
 @login_required
 def screenshot_add(request, slug):
     game = get_object_or_404(Game, slug=slug)
