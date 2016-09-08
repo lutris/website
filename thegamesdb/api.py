@@ -29,6 +29,7 @@ UNSUPPORTED_PLATFORMS = (
 
 PLATFORM_MAP = {
     'Arcade': 'arcade',
+    'Amiga': 'amiga',
     'Atari 2600': 'atari-2600',
     'Atari ST': 'atari-st',
     'PC': 'windows',
