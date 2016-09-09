@@ -72,8 +72,10 @@ class GameForm(forms.ModelForm):
         )
         self.fields['platforms'].help_text = (
             "Only select platforms expected to have an installer, "
-            "not all platforms the game was released for. E.g.: Windows "
-            "is not needed for Linux native games."
+            "not all platforms the game was released for. <br/>"
+            "<strong class='obnoxious-warning'>Do not add Windows "
+            "for games with a native version unless there is a very good reason to!"
+            "</strong>"
         )
         self.fields['genres'].help_text = ""
         self.fields['description'].help_text = (
