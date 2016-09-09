@@ -66,18 +66,22 @@
           <img src="{{ img.url }}" class="banner" />
         {% endthumbnail %}
         <ul>
+          {% if game.genres.count %}
           <li>
             <span class="info-label">Genre: </span>
             {% for genre in game.genres.all %}
               {{ genre }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </li>
+          {% endif %}
+          {% if game.platforms.count %}
           <li>
             <span class="info-label">Platform: </span>
             {% for platform in game.platforms.all %}
               {{ platform }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
           </li>
+          {% endif %}
           {% if game.developer %}
           <li>
             <span class="info-label">Developer: </span>
@@ -90,10 +94,12 @@
             <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
           </li>
           {% endif %}
+          {% if game.year %}
           <li>
             <span class="info-label">Release year: </span>
-            {% firstof game.year "Unknown" %}
+            {{ game.year }}
           </li>
+          {% endif %}
           {% if game.website %}
           <li class="ellipse-text">
               <span class="info-label">Website: </span>
