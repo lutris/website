@@ -64,7 +64,7 @@ class NewsFeed(Feed):
 
 
 def upload_file(request):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         return HttpResponseForbidden()
     form = UploadForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
