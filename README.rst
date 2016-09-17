@@ -135,14 +135,3 @@ PostgreSQL and run this script with cron::
     backup_file="lutris-$(date +%Y-%m-%d-%H-%M).tar"
     pg_dump --format=tar lutris > $backup_file
     gzip $backup_file
-
-
-Development through Docker
-==========================
-
-[Docker](https://www.docker.com/) is an open platform for distributed
-applications for developers and sysadmins. The following commands
-allow running the Lutris website locally through Docker.
-
-    docker build -t lutris/website .
-    docker run -p 8000:80 -v $(pwd):/app lutris/website start
