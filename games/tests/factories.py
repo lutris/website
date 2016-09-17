@@ -14,6 +14,12 @@ class PlatformFactory(factory.DjangoModelFactory):
     name = 'Amiga'
 
 
+class GenreFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Genre
+    name = 'Arcade'
+
+
 class GameFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.Game

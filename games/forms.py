@@ -115,7 +115,7 @@ class GameForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data['name']
-        slug = slugify(name)
+        slug = slugify(name)[:50]
         try:
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:

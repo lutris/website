@@ -41,3 +41,31 @@ class TestInstallerForm(TestCase):
         }
         form = forms.InstallerForm(form_data, instance=self.installer)
         self.assertFalse(form.is_valid())
+
+
+class TestGameForm(TestCase):
+    def setUp(self):
+        self.platform = factories.PlatformFactory()
+        self.genre = factories.GenreFactory()
+        self.existing_game = factories.GameFactory(
+            name="Hyperdimension Neptunia Re;Birth2: Sisters Generation"
+        )
+
+    def test_can_validate_basic_data(self):
+        form = forms.GameForm({
+            'name': 'bliblu',
+            'platforms': [self.platform.id],
+            'genres': [self.genre.id],
+
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_catches_duplicate_slugs(self):
+        form = forms.GameForm({
+            'name': 'Hyperdimension Neptunia Re,Birth2: Sisters Generation',
+            'platforms': [self.platform.id],
+            'genres': [self.genre.id],
+
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors)
