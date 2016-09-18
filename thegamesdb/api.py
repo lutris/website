@@ -47,6 +47,7 @@ PLATFORM_MAP = {
     'Nintendo Entertainment System (NES)': 'nes',
     'Super Nintendo (SNES)': 'super-nintendo',
     'Neo Geo': 'neo-geo',
+    'Neo Geo CD': 'neo-geo-cd',
     'Nintendo Game Boy': 'game-boy',
     'Nintendo Game Boy Color': 'nintendo-game-boy-color',
     'Nintendo 64': 'nintendo-64',
