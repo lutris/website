@@ -50,6 +50,7 @@ PLATFORM_MAP = {
     'Neo Geo CD': 'neo-geo-cd',
     'Nintendo Game Boy': 'game-boy',
     'Nintendo Game Boy Color': 'nintendo-game-boy-color',
+    'Nintendo Game Boy Advance': 'nintendo-game-boy-advance',
     'Nintendo 64': 'nintendo-64',
     'Nintendo GameCube': 'gamecube',
     'Nintendo DS': 'nintendo-ds',
