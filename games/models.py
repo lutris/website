@@ -333,7 +333,7 @@ class Installer(models.Model):
         'garbage': 'Garbage: game is not playable'
     }
 
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, related_name='installers')
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     runner = models.ForeignKey('runners.Runner')
 
@@ -404,6 +404,10 @@ class Installer(models.Model):
     def as_cleaned_json(self):
         """Return the JSON installer without the metadata"""
         return json.dumps(self.as_dict(with_metadata=False), indent=2)
+
+    @property
+    def raw_script(self):
+        return self.as_dict(with_metadata=False)
 
     def build_slug(self, version):
         slug = "%s-%s" % (slugify(self.game.name)[:29],

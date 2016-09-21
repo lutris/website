@@ -34,3 +34,35 @@ class GameLibrarySerializer(serializers.ModelSerializer):
     class Meta(object):
         model = models.GameLibrary
         fields = ('user', 'games')
+
+
+class InstallerSerializer(serializers.ModelSerializer):
+    script = serializers.ReadOnlyField(source='raw_script')
+    game = serializers.HyperlinkedRelatedField(
+        view_name='api_game_detail',
+        read_only=True,
+        lookup_field='slug'
+    )
+    user = serializers.StringRelatedField()
+    runner = serializers.HyperlinkedRelatedField(
+        view_name='runner_detail',
+        read_only=True,
+        lookup_field='slug'
+    )
+
+    class Meta(object):
+        model = models.Installer
+        fields = ('game', 'user', 'runner', 'slug', 'version', 'description',
+                  'notes', 'created_at', 'updated_at', 'published', 'rating', 'script')
+
+
+class GameInstallersSerializer(GameSerializer):
+    installers = InstallerSerializer(many=True)
+
+    class Meta(object):
+        model = models.Game
+        fields = (
+            'name', 'slug', 'year', 'platforms', 'genres',
+            'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
+            'gogid', 'humblestoreid', 'installers'
+        )

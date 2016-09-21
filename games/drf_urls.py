@@ -9,5 +9,7 @@ urlpatterns = [
     url(r'/library/(?P<username>.*)$', views.GameLibraryView.as_view(),
         name='api_game_library'),
     url(r'^/(?P<slug>[\w\-]+)$', views.GameDetailView.as_view(),
-        name='api_game_detail')
+        name='api_game_detail'),
+    url(r'^/(?P<slug>[\w\-]+)/installers$', views.GameInstallersView.as_view(),
+        name='api_game_installers'),
 ]

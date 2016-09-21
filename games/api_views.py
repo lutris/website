@@ -1,15 +1,15 @@
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import generics, filters
-from .serializers import GameSerializer, GameLibrarySerializer
+from . import serializers
 
 from . import models
 
 
 class GameListView(generics.GenericAPIView):
-    serializer_class = GameSerializer
+    serializer_class = serializers.GameSerializer
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('slug', )
+    search_fields = ('slug', 'name')
 
     def get_queryset(self):
         if 'games' in self.request.GET:
@@ -25,7 +25,7 @@ class GameListView(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -43,7 +43,7 @@ class GameListView(generics.GenericAPIView):
 
 
 class GameLibraryView(generics.RetrieveAPIView):
-    serializer_class = GameLibrarySerializer
+    serializer_class = serializers.GameLibrarySerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, username):
@@ -51,11 +51,17 @@ class GameLibraryView(generics.RetrieveAPIView):
             library = models.GameLibrary.objects.get(user__username=username)
         except models.GameLibrary.DoesNotExist:
             return Response(status=404)
-        serializer = GameLibrarySerializer(library)
+        serializer = serializers.GameLibrarySerializer(library)
         return Response(serializer.data)
 
 
 class GameDetailView(generics.RetrieveAPIView):
-    serializer_class = GameSerializer
+    serializer_class = serializers.GameSerializer
+    lookup_field = 'slug'
+    queryset = models.Game.objects.all()
+
+
+class GameInstallersView(generics.RetrieveAPIView):
+    serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.all()
