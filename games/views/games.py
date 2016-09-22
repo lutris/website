@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import generics, filters
-from . import serializers
 
-from . import models
+from games import serializers
+from games import models
 
 
 class GameListView(generics.GenericAPIView):
@@ -65,3 +66,8 @@ class GameInstallersView(generics.RetrieveAPIView):
     serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.all()
+
+
+class InstallerListView(generics.ListAPIView):
+    serializer_class = serializers.InstallerSerializer
+    queryset = models.Installer.objects.all()

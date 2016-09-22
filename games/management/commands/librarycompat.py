@@ -29,7 +29,7 @@ class Command(BaseCommand):
             if not game.steamid:
                 library_stats['non_steam'] += 1
                 continue
-            runners = set([i.runner.slug for i in game.installer_set.all()])
+            runners = set([i.runner.slug for i in game.installers.all()])
             if 'steam' in runners:
                 library_stats['linux_steam'] += 1
                 continue
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 continue
             if 'winesteam' in runners:
                 game_works = True
-                for installer in game.installer_set.all():
+                for installer in game.installers.all():
                     if(installer.runner.slug == 'winesteam'
                        and installer.rating == 'garbage'):
                         game_works = False

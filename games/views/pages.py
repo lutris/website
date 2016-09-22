@@ -1,5 +1,6 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
+from __future__ import absolute_import
 import yaml
 import json
 import logging
@@ -17,10 +18,10 @@ from django.contrib.auth.decorators import login_required
 from sorl.thumbnail import get_thumbnail
 
 from platforms.models import Platform
-from .models import Game, Installer, GameSubmission, InstallerIssue
-from . import models
-from .forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm
-from .util.pagination import get_page_range
+from games.models import Game, Installer, GameSubmission, InstallerIssue
+from games import models
+from games.forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm
+from games.util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
 
@@ -191,8 +192,8 @@ def game_detail(request, slug):
     user = request.user
     game.website_text = game.website[6:].strip('/')
 
-    installers = game.installer_set.published()
-    unpublished_installers = game.installer_set.unpublished()
+    installers = game.installers.published()
+    unpublished_installers = game.installers.unpublished()
 
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()

@@ -95,11 +95,11 @@ class GameManager(models.Manager):
             self.get_queryset()
             .filter(is_public=True)
             .filter(
-                Q(installer__published=True)
+                Q(installers__published=True)
                 | Q(platforms__default_installer__startswith='{')
             )
             .order_by('name')
-            .annotate(installer_count=Count('installer'))
+            .annotate(installer_count=Count('installers'))
             .annotate(default_installer_count=Count('platforms'))
         )
 
@@ -163,7 +163,7 @@ class Game(models.Model):
             return settings.MEDIA_URL + self.icon.name
 
     def has_installer(self):
-        return self.installer_set.count() > 0 \
+        return self.installers.count() > 0 \
             or bool(self.get_default_installers())
 
     def get_absolute_url(self):

@@ -18,7 +18,7 @@ class Command(BaseCommand):
                     game = models.Game.objects.get(steamid=int(appid))
                 except models.Game.DoesNotExist:
                     continue
-                current_installer = game.installer_set.all()
+                current_installer = game.installers.all()
                 if current_installer:
                     continue
                 self.stdout.write("Creating installer for %s" % name)

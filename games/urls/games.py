@@ -1,6 +1,7 @@
 # pylint: disable=C0103
+from __future__ import absolute_import
 from django.conf.urls import url
-from . import api_views as views
+from games.views import games as views
 
 
 urlpatterns = [
@@ -12,4 +13,6 @@ urlpatterns = [
         name='api_game_detail'),
     url(r'^/(?P<slug>[\w\-]+)/installers$', views.GameInstallersView.as_view(),
         name='api_game_installers'),
+    url(r'/installers$', views.InstallerListView.as_view(),
+        name='api_installer_list'),
 ]

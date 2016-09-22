@@ -33,9 +33,9 @@ urlpatterns = [
     url(r'^api/tosec', include('tosec.urls')),
     url(r'^api/runners', include('runners.runner_urls')),
     url(r'^api/runtime', include('runners.runtime_urls')),
-    url(r'^api/games', include('games.drf_urls')),
+    url(r'^api/games', include('games.urls.games')),
     url(r'^api/', include(v1_api.urls)),
-    url(r'^games/', include('games.urls')),
+    url(r'^games/', include('games.urls.pages')),
     url(r'^bundles', include('bundles.urls')),
     url(r'^email/', include('emails.urls')),
     url(r'^steam-login/', login_begin, kwargs={
