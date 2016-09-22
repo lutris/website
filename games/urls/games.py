@@ -12,7 +12,5 @@ urlpatterns = [
     url(r'^/(?P<slug>[\w\-]+)$', views.GameDetailView.as_view(),
         name='api_game_detail'),
     url(r'^/(?P<slug>[\w\-]+)/installers$', views.GameInstallersView.as_view(),
-        name='api_game_installers'),
-    url(r'/installers$', views.InstallerListView.as_view(),
-        name='api_installer_list'),
+        name='api_game_installers')
 ]
