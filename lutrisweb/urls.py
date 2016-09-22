@@ -7,17 +7,8 @@ from django.conf import settings
 from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
 
-from games import deprecated_api
-from tastypie.api import Api
-
 logger = logging.getLogger(__name__)
 admin.autodiscover()
-
-
-# Tastypie API will be deprecated in lutris 0.4.0
-v1_api = Api(api_name='v1')
-v1_api.register(deprecated_api.GameLibraryResource())
-v1_api.register(deprecated_api.GameResource())
 
 
 urlpatterns = [
@@ -34,7 +25,6 @@ urlpatterns = [
     url(r'^api/runners', include('runners.runner_urls')),
     url(r'^api/runtime', include('runners.runtime_urls')),
     url(r'^api/games', include('games.urls.games')),
-    url(r'^api/', include(v1_api.urls)),
     url(r'^games/', include('games.urls.pages')),
     url(r'^bundles', include('bundles.urls')),
     url(r'^email/', include('emails.urls')),
