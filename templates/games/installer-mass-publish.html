@@ -23,6 +23,7 @@
       {% endif %}
       <pre>{{ installer.content }}</pre>
       <p class='actions'>
+        <a class='btn' href="{% url 'edit_installer' slug=installer.slug %}" target="_blank">Edit</a>
         <button class='btn' onclick="publishInstaller(this)">Publish</button>
         <button class='btn' onclick="deleteInstaller(this)">Delete</button>
       </p>
