@@ -6,7 +6,7 @@
   {% for installer in installers %}
     <div data-id="{{installer.id}}">
       <h3>
-        {{ installer.game.name }} ({{installer}}) <br />
+        <a href="{{installer.game.get_absolute_url}}" target="_blank">{{ installer.game.name }}</a> ({{installer}}) <br />
         <span class='small'>{{installer.user}} {{installer.created_at}}</span>
       </h3>
       {% if installer.notes %}
