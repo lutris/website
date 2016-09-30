@@ -50,17 +50,6 @@ urlpatterns = [
         views.get_installers,
         name='get_installers'),
 
-    # Legacy URLs, do be removed with Lutris 0.4
-    url(r'install/(?P<slug>[\w\-]+).yml$',
-        views.serve_installer,
-        name='serve_installer'),  # Legacy yaml installer url
-    url(r'install/(?P<slug>[\w\-]+).jpg$',
-        views.serve_installer_banner,
-        name='serve_installer_banner'),  # Legacy banner url
-    url(r'install/icon/(?P<slug>[\w\-]+).png$',
-        views.serve_installer_icon,
-        name='serve_installer_icon'),  # Legacy icon url
-
     url(r'(?P<slug>[\w\-]+)/installer/new/$',
         views.new_installer,
         name="new_installer"),

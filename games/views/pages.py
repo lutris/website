@@ -271,22 +271,6 @@ def installer_complete(request, slug):
     return render(request, 'games/installer-complete.html', {'game': game})
 
 
-def serve_installer(_request, slug):
-    """Serve the content of an installer in yaml format."""
-    try:
-        installers = Installer.objects.fuzzy_get(slug)
-    except Installer.DoesNotExist:
-        raise Http404
-
-    installer = installers[0]
-    if type(installer) is dict:
-        yaml_response = yaml.safe_dump(installer, default_flow_style=False)
-    else:
-        yaml_response = installer.as_yaml()
-
-    return HttpResponse(yaml_response, content_type='application/yaml')
-
-
 def get_installers(request, slug):
     try:
         installers_json = Installer.objects.get_json(slug)
@@ -371,10 +355,6 @@ def get_banner(request, slug):
     return redirect(thumbnail.url)
 
 
-def serve_installer_banner(request, slug):
-    return get_banner(request, slug)
-
-
 def get_icon(request, slug):
     game = get_game_by_slug(slug)
     if not game or not game.icon:
@@ -382,11 +362,6 @@ def get_icon(request, slug):
     thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
                               format="PNG")
     return redirect(thumbnail.url)
-
-
-def serve_installer_icon(request, slug):
-    """ Legacy url, remove by Lutris 0.4 """
-    return get_icon(request, slug)
 
 
 def game_list(request):
