@@ -15,6 +15,12 @@
         {{installer.notes}}
       </p>
       {% endif %}
+      {% if installer.description %}
+      <h5>Description</h5>
+      <p>
+        {{installer.description}}
+      </p>
+      {% endif %}
       <pre>{{ installer.content }}</pre>
       <p class='actions'>
         <button class='btn' onclick="publishInstaller(this)">Publish</button>
