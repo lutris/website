@@ -205,6 +205,14 @@ class InstallerForm(forms.ModelForm):
             )
         return yaml.safe_dump(yaml_data, default_flow_style=False)
 
+    def clean_version(self):
+        version = self.cleaned_data['version']
+        if not version:
+            raise forms.ValidationError('This field is mandatory')
+        if version.lower() == 'change me':
+            raise forms.ValidationError('When we say "change me", we mean it.')
+        return version
+
     def clean(self):
         dummy_installer = models.Installer(game=self.instance.game,
                                            **self.cleaned_data)
