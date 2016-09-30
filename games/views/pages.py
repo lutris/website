@@ -1,7 +1,6 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
 from __future__ import absolute_import
-import yaml
 import json
 import logging
 from django.conf import settings
@@ -14,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.core.mail import mail_managers
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from sorl.thumbnail import get_thumbnail
 
@@ -463,3 +463,11 @@ def submit_issue(request):
     installer_issue.save()
 
     return HttpResponse(json.dumps(response))
+
+
+@staff_member_required
+def installer_mass_publish(request):
+    installers = Installer.objects.filter(published=False)[:50]
+    return render(request, 'games/installer-mass-publish.html', {
+        'installers': installers
+    })

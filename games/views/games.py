@@ -66,8 +66,3 @@ class GameInstallersView(generics.RetrieveAPIView):
     serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.all()
-
-
-class InstallerListView(generics.ListAPIView):
-    serializer_class = serializers.InstallerSerializer
-    queryset = models.Installer.objects.all()

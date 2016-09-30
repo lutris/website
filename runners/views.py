@@ -2,22 +2,15 @@ import os
 
 from django.utils import timezone
 from django.conf import settings
+
 from rest_framework import status
 from rest_framework import generics, filters
 from rest_framework.response import Response
-from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Runner, RunnerVersion, Runtime
-from .serializers import RunnerSerializer, RuntimeSerializer
 
-
-class IsAdminOrReadOnly(permissions.BasePermission):
-    """Permission to allow only admins to make changes."""
-
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return request.user.is_staff is True
+from common.permissions import IsAdminOrReadOnly
+from runners.models import Runner, RunnerVersion, Runtime
+from runners.serializers import RunnerSerializer, RuntimeSerializer
 
 
 class RunnerListView(generics.ListAPIView):

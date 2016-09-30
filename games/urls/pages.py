@@ -65,6 +65,9 @@ urlpatterns = [
     url(r'installer/feed/$',
         views.InstallerFeed(),
         name='installer_feed'),
+    url(r'installer/mass-publish$',
+        views.installer_mass_publish,
+        name='installer_mass_publish'),
 
     url(r'([\w\-]+)/screenshot/add/',
         views.screenshot_add,
