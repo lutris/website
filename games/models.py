@@ -482,3 +482,23 @@ class GameSubmission(models.Model):
         self.accepted_at = datetime.datetime.now()
         self.save()
         messages.send_game_accepted(self.user, self.game)
+
+
+class GameLink(models.Model):
+    WEBSITE_CHOICES = (
+        ('wikipedia', 'Wikipedia'),
+        ('pcgamingwiki', 'PCGamingWiki'),
+        ('mobygames', 'MobyGames'),
+        ('winehq', 'WineHQ AppDB'),
+        ('lemonamiga', 'Lemon Amiga'),
+    )
+    game = models.ForeignKey(Game, related_name='links')
+    website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
+    url = models.URLField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def website_name(self):
+        for website_choice in self.WEBSITE_CHOICES:
+            if website_choice[0] == self.website:
+                return website_choice[1]

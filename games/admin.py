@@ -55,6 +55,10 @@ class GameMetadataInline(admin.TabularInline):
     model = models.GameMetadata
 
 
+class GameLinkAdmin(admin.TabularInline):
+    model = models.GameLink
+
+
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
@@ -73,6 +77,7 @@ class GameAdmin(admin.ModelAdmin):
     }
     inlines = [
         GameMetadataInline,
+        GameLinkAdmin
     ]
 
 
