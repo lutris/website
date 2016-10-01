@@ -106,6 +106,14 @@ class GameManager(models.Manager):
 
 class Game(models.Model):
     """Game model"""
+    GAME_FLAGS = (
+        ('fully_libre', 'Fully libre'),
+        ('open_engine', 'Open engine only'),
+        ('free', 'Free'),
+        ('freetoplay', 'Free-to-play'),
+        ('pwyw', 'Pay what you want'),
+        ('demo', 'Has a demo'),
+    )
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=False)
     year = models.IntegerField(null=True, blank=True)
@@ -127,14 +135,7 @@ class Game(models.Model):
     steamid = models.PositiveIntegerField(null=True, blank=True)
     gogid = models.CharField(max_length=200, blank=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
-    flags = BitField(flags=(
-        ('fully_libre', 'Fully libre'),
-        ('open_engine', 'Open engine only'),
-        ('free', 'Free'),
-        ('freetoplay', 'Free-to-play'),
-        ('pwyw', 'Pay what you want'),
-        ('demo', 'Has a demo'),
-    ))
+    flags = BitField(flags=GAME_FLAGS)
 
     objects = GameManager()
 
@@ -161,6 +162,11 @@ class Game(models.Model):
     def icon_url(self):
         if self.icon:
             return settings.MEDIA_URL + self.icon.name
+
+    @property
+    def flag_labels(self):
+        """Return labels of active flags, suitable for display"""
+        return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
     def has_installer(self):
         return self.installers.count() > 0 \
