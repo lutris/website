@@ -501,9 +501,3 @@ class GameLink(models.Model):
         """Additional configuration for model"""
         verbose_name = "External link"
         ordering = ['website']
-
-    @property
-    def website_name(self):
-        for website_choice in self.WEBSITE_CHOICES:
-            if website_choice[0] == self.website:
-                return website_choice[1]

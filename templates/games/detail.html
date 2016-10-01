@@ -138,7 +138,7 @@
             {% for link in game.links.all %}
             <a href="{{link.url}}" class='external-link'>
               <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
-              <span>{{link.website_name}}</span>
+              <span>{{link.get_website_display}}</span>
             </a>
             {% endfor %}
 
