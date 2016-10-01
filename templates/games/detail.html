@@ -123,13 +123,22 @@
             <span>Get it from:</span><br/>
             {% endif %}
             {% if game.steamid %}
-            <a href="http://store.steampowered.com/app/{{ game.steamid }}" title="Steam"><img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" /></a>
+            <a href="http://store.steampowered.com/app/{{ game.steamid }}" title="Steam" class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
+              <span>Steam</span>
+            </a>
             {% endif %}
             {% if game.humblestoreid %}
-            <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store"><img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" /></a>
+            <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
+              <span>Humble Store</span>
+            </a>
             {% endif %}
             {% if game.gogid %}
-            <a href="http://www.gog.com/game/{{ game.gogid }}" title="GOG.com"><img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" /></a>
+            <a href="http://www.gog.com/game/{{ game.gogid }}" title="GOG.com" class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
+              <span>GOG</span>
+            </a>
             {% endif %}
           </p>
           {% if game.links.count %}
