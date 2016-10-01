@@ -497,6 +497,11 @@ class GameLink(models.Model):
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta(object):
+        """Additional configuration for model"""
+        verbose_name = "External link"
+        ordering = ['website']
+
     @property
     def website_name(self):
         for website_choice in self.WEBSITE_CHOICES:
