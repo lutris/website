@@ -497,6 +497,7 @@ class GameLink(models.Model):
         ('mobygames', 'MobyGames'),
         ('winehq', 'WineHQ AppDB'),
         ('lemonamiga', 'Lemon Amiga'),
+        ('github', 'Github'),
     )
     game = models.ForeignKey(Game, related_name='links')
     website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
