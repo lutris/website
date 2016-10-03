@@ -334,7 +334,7 @@ def get_game_by_slug(slug):
         installers = Installer.objects.fuzzy_get(slug)
         installer = installers[0]
         if isinstance(installer, dict):
-            game = models.Game.objects.get(slug=game['game_slug'])
+            game = models.Game.objects.get(slug=installer['game_slug'])
         else:
             game = installer.game
     except Installer.DoesNotExist:
