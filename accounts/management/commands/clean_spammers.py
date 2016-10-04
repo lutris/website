@@ -9,10 +9,11 @@ class Command(BaseCommand):
             User.objects
             .annotate(game_count=Count('gamelibrary__games'))
             .filter(
-                Q(website__icontains='.ru') | Q(website__icontains='wp-content'),
                 email_confirmed=False,
                 game_count=0
             )
+            .exclude(website__exact='')
+
         )
 
         cleared_users = len(users)
