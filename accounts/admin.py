@@ -5,9 +5,12 @@ from django.core import urlresolvers
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'email', 'email_confirmed', 'is_staff',
-                    'steamid', 'website', 'installers_link')
+                    'steamid', 'website', 'game_count', 'installers_link')
     list_filter = ('is_staff', 'groups')
     search_fields = ('username', 'email')
+
+    def game_count(self, obj):
+        return obj.gamelibrary.games.count()
 
     def installers_link(self, obj):
         installers_url = urlresolvers.reverse('admin:games_installer_changelist')
