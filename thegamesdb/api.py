@@ -81,7 +81,10 @@ def convert_clearlogo_to_banner(logo_path):
     base_width, base_height = settings.BANNER_SIZE.split('x')
     base_ratio = float(base_width) / float(base_height)
 
-    logo = Image.open(logo_path)
+    try:
+        logo = Image.open(logo_path)
+    except IOError:
+        return
     logo_width = float(logo.width)
     logo_height = float(logo.height)
     logo_ratio = logo_width / logo_height
@@ -237,8 +240,9 @@ def to_lutris(game):
         clearlogo_url = game['base_img_url'] + game['clearlogo']['value']
         logo_path = download_image('clearlogo', clearlogo_url)
         banner_path = convert_clearlogo_to_banner(logo_path)
-        banner_url = banner_path[len(settings.MEDIA_ROOT):].strip('/')
-        lutris_game['banner'] = settings.MEDIA_URL + banner_url
+        if banner_path:
+            banner_url = banner_path[len(settings.MEDIA_ROOT):].strip('/')
+            lutris_game['banner'] = settings.MEDIA_URL + banner_url
     return lutris_game
 
 
