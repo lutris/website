@@ -23,6 +23,10 @@ module.exports = function(grunt) {
       css: {
         options: {
             sourceMap: true,
+            strictImports: true,
+            strictMath: true,
+            strictUnits: true,
+            relativeUrls: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
@@ -33,6 +37,10 @@ module.exports = function(grunt) {
         options: {
             yuicompress: true,
             sourceMap: true,
+            strictImports: true,
+            strictMath: true,
+            strictUnits: true,
+            relativeUrls: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
