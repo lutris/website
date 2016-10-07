@@ -22,6 +22,7 @@ module.exports = function(grunt) {
     less: {
       css: {
         options: {
+            sourceMap: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
@@ -31,6 +32,7 @@ module.exports = function(grunt) {
       min: {
         options: {
             yuicompress: true,
+            sourceMap: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
