@@ -680,14 +680,14 @@ input {
   }
 }
 
-.home-description {
-  height: 290px;
-  .centered-vertical;
-  h2 { margin-top: 0; }
+.image-container {
+  min-height: 350px;
+  @media (max-width: @screen-sm-min) {
+    min-height: 100px;
+  }
   img {
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.45);
-    cursor: zoom-in;
-    cursor: -webkit-zoom-in;
+    width: 100%;
+    height: auto;
   }
 }
 
