@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Mathieu Comandon">
   <title>{% block title %}Lutris - Open Gaming Platform{% endblock %}</title>
   <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
@@ -16,20 +18,26 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body>
-      {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ message }}
-          </li>
-          {% endfor %}
-      </ul>
-      {% endif %}
-  <div class="wrapper">
-    <div class="navbar navbar-inverse">
-      <div class="container">
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  <div class="container">
+    <nav class="navbar navbar-default navbar-inverse">
+      <div class="container-fluid">
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand brand" href='/'>
             <img class='logo' src='{{ STATIC_URL }}images/logo.png' alt='Lutris'/>
             <p>
@@ -37,8 +45,8 @@
             </p>
           </a>
         </div>
-        <div>
-          <ul class="nav navbar-nav" id='main-nav'>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav " id='main-nav'>
             <li><a href="{% url "homepage" %}">Home</a></li>
             <li><a href='{% url "about" %}'>About</a></li>
             <li><a href='{% url "downloads" %}'>Download</a></li>
@@ -55,9 +63,9 @@
           </ul>
         </div><!--/.nav-collapse -->
       </div>
-    </div>
+    </nav>
 
-    <div id="content" class="page container">
+    <div id="content" class="page">
 
       {% block content %}{% endblock %}
       <footer class="footer row">
