@@ -994,31 +994,35 @@ input {
   }
 }
 
-.mini-game-list {
-  margin: 10px auto;
-  text-align: center;
-  a {
+.game-banner {
     color: #EEE;
-    padding: 7px;
-    background-color: #222;
-    display: inline-block;
-    font-size: .8em;
-    font-weight: 500;
-    width: 184px + 2 * 7px;
-    margin-bottom: 20px;
-    text-decoration: none;
-    &:hover, &:focus {
-      background-color: #444;
-      outline: 0;
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    a {
+        font-weight: 500;
+        font-size: .8em;
+        display: inline-block;
+        text-decoration: none;
+        padding: 7px;
+        background-color: #222;
+        width: 184px + 14px;
+        &:hover, &:focus {
+            background-color: #444;
+            outline: 0;
+        }
     }
-  }
-  .game-cover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 5px;
-    position: relative;
-    &:active { bottom: -2px; }
-  }
-  .game-title { .discreet-text }
+    .game-cover {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        margin-bottom: 5px;
+        display: block;
+        &:active {
+            bottom: -2px;
+        }
+    }
+    .game-title {
+        .discreet-text
+    }
 }
 
 .pane {
