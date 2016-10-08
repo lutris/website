@@ -6,25 +6,39 @@
 {% endblock %}
 
 {% block content %}
-  <div class="form-view-wide">
-    <h1>Submit a game</h1>
-    <p>
-      Please be as accurate as possible with the information you provide.
-      Wikipedia or <a href="http://www.mobygames.com/search/quick">Mobygames</a>
-      are generally reliable sources. If you know more accurate ones, let us
-      know! Thanks for your efforts!<br /><br />
-    </p>
-    {% crispy form %}
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <div class="form-view">
+      <h1>Submit a game</h1>
+      <p>
+        Please be as accurate as possible with the information you provide.
+        Wikipedia or <a href="http://www.mobygames.com/search/quick">Mobygames</a>
+        are generally reliable sources. If you know more accurate ones, let us
+        know! Thanks for your efforts!<br /><br />
+      </p>
+      {% crispy form %}
+    </div>
   </div>
+</div>
 {% endblock %}
+
 
 {% block scripts %}
   {{ block.super }}
   {{ form.media.js }}
   <script>
     $(function () {
-      $('#id_platforms').select2({'closeOnSelect': false, 'placeholder': ''});
-      $('#id_genres').select2({'closeOnSelect': false, 'placeholder': ''});
+      $('#id_platforms').select2({
+        closeOnSelect: false,
+        placeholder: '',
+        theme: "bootstrap"
+      });
+      $('#id_genres').select2({
+        closeOnSelect: false,
+        placeholder: '',
+        theme: "bootstrap"
+
+      });
       $('#id_title_logo').JCropFileInput({
         debug: false,
         ratio: 8/3,
