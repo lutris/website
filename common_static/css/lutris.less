@@ -317,32 +317,44 @@ input {
 .navbar {
   box-shadow: 0 0 10px #000;
   font-weight: 300;
+  min-height: 84px;
   margin: auto;
   font-family: @sansSerif;
   .brand {
-    display: inline-block;
     color: #ccc;
-    margin-top: 10px;
-    padding: 0;
+    padding: 10px;
     font-size: 2.2em;
     img {
-      padding: 0 15px;
       display: inline-block;
     }
     p {
-        vertical-align: middle;
+      vertical-align: middle;
       display: inline-block;
+      margin-bottom: 0px;
     }
     span {
       font-size: .5em;
     }
   }
-  .nav {
-    float: right;
-  }
   .nav > li > a {
     color: #aaa;
-    padding: 54px 12px 12px 12px;
+
+    @media (min-width: @screen-lg-min) {
+        padding-top: 54px;
+    }
+    @media (max-width: @screen-md-max) {
+        padding-top: 54px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    height: 100%;
+    display: inline-block;
     text-transform: uppercase;
     font-size: .8em;
     font-weight: 400;
