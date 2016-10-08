@@ -782,24 +782,25 @@ input {
 
   .screenshots-slider {
     .centered;
-    height: @screenshotsHeight;
-    width: @screenshotsWidth;
+    max-width: @screenshotsWidth;
   }
   .screenshot-menu {
     opacity: 0;
     padding-bottom: 50px;
     position: absolute;
     width: @screenshotsWidth;
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+    }
   }
   .screenshot {
     .centered-vertical;
     background-color: #000;
-    height: @screenshotsHeight;
     width: @screenshotsWidth;
     img {
       cursor: zoom-in;
-      cursor: -webkit-zoom-in;
+      max-width: 100%;
+      height: auto;
     }
   }
   .unpublished {

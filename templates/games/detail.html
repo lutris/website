@@ -22,7 +22,7 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-9">
+    <div class="col-sm-9">
       {% include "includes/screenshots_slider.html" %}
       <div class="screenshots-bar">
         <a href='{% url 'screenshot_add' game.slug %}' class='discreet-text right'>Submit screenshot</a>
@@ -60,7 +60,7 @@
         {{ game.description|linebreaks }}
       </article>
     </div>
-    <div class="col-xs-3">
+    <div class="col-sm-3">
       <div class="game-info">
         {% thumbnail game.title_logo "184" as img %}
           <img src="{{ img.url }}" class="banner" />

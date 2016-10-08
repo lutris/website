@@ -1,7 +1,8 @@
 {% load thumbnail %}
 
 <div id="screenshots" class="carousel slide cross-fade">{% if  screenshots %}
-  <div class="carousel-inner screenshots-slider">{% for screenshot in screenshots %}
+  <div class="carousel-inner screenshots-slider">
+    {% for screenshot in screenshots %}
     <div class="item {% if forloop.first %}active{% endif %}{% if not screenshot.published %} unpublished{% endif %}">
 
       <!-- Screenshot admin menu-->
@@ -18,12 +19,13 @@
 
       <!-- Screenshot-->
       <div class="screenshot"><a href="{{ MEDIA_URL }}{{ screenshot.image }}" class="screenshot">
-          {% thumbnail screenshot.image '690x388' as img %}
+        {% thumbnail screenshot.image '690x388' as img %}
           <img src="{{ MEDIA_URL }}{{ img }}" title="{{ screenshot.description }}"/>
-          {% endthumbnail %}
+        {% endthumbnail %}
       </a>
       </div>
-    </div>{% endfor %}
+    </div>
+    {% endfor %}
   </div>
   <!-- Next and Previous arrows-->
   {% if  screenshots.count > 1 %}
