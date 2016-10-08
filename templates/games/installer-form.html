@@ -1,18 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Edit installer for {{ game }} - Lutris{% endblock %}
+
+
+{% block title %}
+  {% if new %}
+    Create new installer for {{ game }}
+  {% else %}
+    Edit installer for {{ game }}
+  {% endif %}
+  | Lutris
+{% endblock %}
 
 {% block extra_head %}
-{{ form.media.css }}
+  {{ form.media.css }}
 {% endblock %}
 
 {% block content %}
 {% if new %}
-<h1>New installer for {{ game }}</h1>
+  <h1>New installer for {{ game }}</h1>
 {% else %}
-<h1>Edit installer for {{ game }}</h1>
+  <h1>Edit installer for {{ game }}</h1>
 {% endif %}
 <div class="row">
-  <div class="col-xs-7">
+  <div class="col-sm-7">
     <div class="well">
     <form action="" method="post">
       {% csrf_token %}
@@ -25,7 +34,7 @@
     </form>
     </div>
   </div>
-  <div class="col-xs-5">
+  <div class="col-sm-5">
     <div class="well docs">
     {% include "docs/installers.html" %}
     </div>
