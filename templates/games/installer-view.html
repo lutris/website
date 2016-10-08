@@ -2,25 +2,27 @@
 
 
 {% block content %}
-<div>
-  <h1>Installer {{installer.slug}}</h1>
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active">
-      <a href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
-    </li>
-    <li role="presentation">
-      <a href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
-    </li>
-  </ul>
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="installer-yaml">
-      <pre>{{installer.as_cleaned_yaml}}</pre>
+<h1>Installer {{installer.slug}}</h1>
+<div class='row'>
+  <div class="col-lg-10 col-lg-offset-1">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
+      </li>
+      <li role="presentation">
+        <a href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="installer-yaml">
+        <pre>{{installer.as_cleaned_yaml}}</pre>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="installer-json">
+        <pre>{{installer.as_cleaned_json}}</pre>
+      </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="installer-json">
-      <pre>{{installer.as_cleaned_json}}</pre>
-    </div>
+    <a class="btn" href="{% url "game_detail" slug=installer.game.slug %}">Back to game</a>
   </div>
 </div>
-<a class="btn" href="{% url "game_detail" slug=installer.game.slug %}">Back to game</a>
 {% endblock content %}
 
