@@ -26,7 +26,6 @@ module.exports = function(grunt) {
             strictImports: true,
             strictMath: true,
             strictUnits: true,
-            relativeUrls: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
@@ -40,7 +39,6 @@ module.exports = function(grunt) {
             strictImports: true,
             strictMath: true,
             strictUnits: true,
-            relativeUrls: true,
             paths: ['components/bootstrap/less/']
         },
         files: {
