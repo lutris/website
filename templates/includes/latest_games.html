@@ -1,7 +1,7 @@
 {% load thumbnail %}
 
 <h3>Latest games</h3>
-<div>
+<div class='latest-games'>
 {% for game in latest_games %}
   <div class='game-banner'>
     <a href="{{ game.get_absolute_url }}">
