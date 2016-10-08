@@ -22,45 +22,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-9">
-      {% include "includes/screenshots_slider.html" %}
-      <div class="screenshots-bar">
-        <a href='{% url 'screenshot_add' game.slug %}' class='discreet-text right'>Submit screenshot</a>
-      </div>
-      <div class="installer-list">
-        {% if installers %}
-        <ul>
-          {% for installer in installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% if auto_installers %}
-        <ul>
-          {% for installer in auto_installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% if unpublished_installers %}
-        <ul id="unpublished-installers" class="hide-unpublished">
-          {% for installer in unpublished_installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        <div class="installer-actions">
-          {% if unpublished_installers %}
-            <a href="#" onclick="toggleUnpublishedInstallers(event)" class="discreet-text">Show unpublished installers</a>
-          {% endif %}
-          <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
-        </div>
-      </div>
-      <article>
-        {{ game.description|linebreaks }}
-      </article>
-    </div>
-    <div class="col-sm-3">
+    <div class="col-md-3 col-md-push-9">
       <div class="game-info">
         {% thumbnail game.title_logo "184" as img %}
           <img src="{{ img.url }}" class="banner" />
@@ -162,6 +124,45 @@
           </p>
         </div>
       </div>
+    </div>
+
+    <div class="col-md-9 col-md-pull-3">
+      {% include "includes/screenshots_slider.html" %}
+      <div class="screenshots-bar">
+        <a href='{% url 'screenshot_add' game.slug %}' class='discreet-text right'>Submit screenshot</a>
+      </div>
+      <div class="installer-list">
+        {% if installers %}
+        <ul>
+          {% for installer in installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if auto_installers %}
+        <ul>
+          {% for installer in auto_installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if unpublished_installers %}
+        <ul id="unpublished-installers" class="hide-unpublished">
+          {% for installer in unpublished_installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="installer-actions">
+          {% if unpublished_installers %}
+            <a href="#" onclick="toggleUnpublishedInstallers(event)" class="discreet-text">Show unpublished installers</a>
+          {% endif %}
+          <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
+        </div>
+      </div>
+      <article>
+        {{ game.description|linebreaks }}
+      </article>
     </div>
   </div>
   <div class="modal fade" id='installer-issue-modal'>
