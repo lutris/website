@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="message-view">
+<div class="row">
+<div class="message-view col-md-6 col-md-offset-3">
   <p>
     Installer submitted, thank you!<br/>
     It will be made public after moderator review.
   </p>
   <a href="{{ game.get_absolute_url }}">Return to {{ game.name }}</a>
+</div>
 </div>
 {% endblock %}
