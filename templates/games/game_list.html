@@ -73,17 +73,20 @@
       <a href="{% url "game-submit" %}" class="main-button margin-auto">Submit a new game</a>
       <h4>Search games</h4>
       <form action="." method=get class="form-inline">
-        <div class="form-group">
-          <div class="col-xs-8">
-            <input type="text" name="q" id="search-entry" class="search-query form-control input-sm" value="{{ search_terms|default:"" }}" />
-          </div>
-          <div class="col-xs-4">
-            <input class="btn btn-sm" type="submit" value="Search" />
-          </div>
+        <div class="input-group">
+          <input type="text"
+                 name="q"
+                 id="search-entry"
+                 class="search-query form-control"
+                 placeholder="Search…"
+                 value="{{ search_terms|default:"" }}" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Search</button>
+          </span>
         </div>
         <div id="advanced-search-panel" class='search-options form-group'>
           <a href="#advanced-search" class="fold-btn"><span class='fold-indicator'>&#9658;</span> Advanced Search</a>
-          <div class="col-xs-11 collapsable-panel {% if show_advanced %}active{% endif %}">
+          <div class="collapsable-panel {% if show_advanced %}active{% endif %}">
             <ul>
               <li>
                 <input type="checkbox" id="all-open-source" name="all-open-source" {% if all_open_source %}checked{% endif %} />
