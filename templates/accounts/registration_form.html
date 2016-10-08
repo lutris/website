@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+
+
 {% block title %}Register - Lutris{% endblock %}
 
 
 {% block content %}
-<div class="form-view">
-  <h1>Register account</h4>
-  <p class='warning-message'>
-  Warning: if you use a Microsoft email such as Outlook or Hotmail, you won't
-  be able to receive email from Lutris. This will make it impossible to confirm
-  your email address and to post on the forums. This may affect a few other email
-  providers as well. If you haven't received a confirmation email, you can change
-  it in your profile to a supported provider and confirm your address.
-  </p>
-  {% crispy form %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6 form-view">
+    <h1>Register account</h4>
+    <p class='warning-message'>
+    Warning: if you use a Microsoft email such as Outlook or Hotmail, you won't
+    be able to receive email from Lutris. This will make it impossible to confirm
+    your email address and to post on the forums. This may affect a few other email
+    providers as well. If you haven't received a confirmation email, you can change
+    it in your profile to a supported provider and confirm your address.
+    </p>
+    {% crispy form %}
+  </div>
+  <div class="col-sm-3"></div>
 </div>
 {% endblock %}
