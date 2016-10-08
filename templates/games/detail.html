@@ -70,8 +70,9 @@
           {% endif %}
         </ul>
         <div class="centered">
+
+          <p>{{ library_count }} users have this game</p>
           <p>
-            <span>{{ library_count }} users have this game</span>
             {% if not in_library %}
             <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
             {% else %}
