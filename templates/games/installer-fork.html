@@ -11,7 +11,8 @@ Fork installer {{ installer }}
 
 
 {% block content %}
-<div class="message-view">
+<div class="row">
+<div class="message-view col-md-6 col-md-offset-3">
   <h4>Fork installer {{installer}}</h4>
   <p>
     You can create a new installer based on an existing one by forking it, select the
@@ -29,10 +30,17 @@ Fork installer {{ installer }}
     </form>
   </div>
 </div>
+</div>
 {% endblock content %}
 
 
 {% block scripts %}
+  <script>
+    $(function(){
+      $.fn.select2.defaults.set("width", null);
+      $.fn.select2.defaults.set("theme", 'bootstrap');
+    });
+  </script>
   {{ block.super }}
   {{ form.media.js }}
 {% endblock scripts %}

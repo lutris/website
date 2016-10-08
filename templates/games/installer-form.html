@@ -44,6 +44,13 @@
 
 
 {% block scripts %}
+  <script>
+    $(function(){
+      $.fn.select2.defaults.set("width", null);
+      $.fn.select2.defaults.set("theme", 'bootstrap');
+    });
+  </script>
   {{ block.super }}
   {{ form.media.js }}
+
 {% endblock %}
