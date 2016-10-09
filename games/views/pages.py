@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 import json
 import logging
+from difflib import HtmlDiff
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView  # , DetailView
@@ -20,7 +21,7 @@ from sorl.thumbnail import get_thumbnail
 from platforms.models import Platform
 from games.models import Game, Installer, GameSubmission, InstallerIssue
 from games import models
-from games.forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm
+from games.forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm, DiffInstallerForm
 from games.util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
@@ -473,4 +474,24 @@ def installer_mass_publish(request):
     installers = Installer.objects.filter(published=False)[:50]
     return render(request, 'games/installer-mass-publish.html', {
         'installers': installers
+    })
+
+
+@staff_member_required
+def installer_diff(request):
+
+    form = DiffInstallerForm()
+    diff_table = None
+
+    if request.GET.get('installer_1') and request.GET.get('installer_2'):
+        installer_1 = get_object_or_404(Installer, id=request.GET['installer_1'])
+        installer_2 = get_object_or_404(Installer, id=request.GET['installer_2'])
+        i1_lines = installer_1.content.split('\n')
+        i2_lines = installer_2.content.split('\n')
+        diff = HtmlDiff(tabsize=2, wrapcolumn=64)
+        diff_table = diff.make_table(i1_lines, i2_lines)
+
+    return render(request, 'games/installer-diff.html', {
+        'form': form,
+        'diff_table': diff_table
     })

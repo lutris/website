@@ -68,6 +68,9 @@ urlpatterns = [
     url(r'installer/mass-publish$',
         views.installer_mass_publish,
         name='installer_mass_publish'),
+    url(r'installer/diff$',
+        views.installer_diff,
+        name='installer_diff'),
 
     url(r'([\w\-]+)/screenshot/add/',
         views.screenshot_add,

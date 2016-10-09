@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock extra_head %}
+
+{% block content %}
+
+<style type="text/css" media="screen">
+  .diff-table {
+    background-color: #EDEDED;
+    font-family: monospace;
+    font-size: 0.7em;
+    color: #333;
+
+  }
+  td[nowrap] {
+    min-width: 400px;
+  }
+  .diff_header {
+    font-weight: bold;
+    color: #999;
+  }
+  .diff_next a {
+    border-radius: 20px;
+    background-color: #333;
+    color: #EDEDED;
+    display: block;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    vertical-align: middle;
+  }
+  .diff_add {
+    background-color: green;
+    display: inline-block;
+  }
+  .diff_sub {
+    background-color: red;
+  }
+</style>
+
+
+  <form action="" method="get" accept-charset="utf-8">
+    <div class="row">
+      <div class="col-sm-6">
+        {{form.installer_1}}
+      </div>
+      <div class="col-sm-6">
+        {{form.installer_2}}
+      </div>
+      <div class="col-sm-12 centered">
+        <input type="submit" name="" class="btn btn-lg" value="Diff" />
+      </div>
+    </div>
+  </form>
+  {% if diff_table %}
+    <div class="col-lg-12 diff-table">
+      {{diff_table | safe }}
+    </div>
+  {% endif %}
+{% endblock content %}
+
+
+{% block scripts %}
+  <script type="text/javascript" charset="utf-8">
+    $(function () {
+      $.fn.select2.defaults.set("width", null);
+      $.fn.select2.defaults.set("theme", 'bootstrap');
+    });
+  </script>
+  {{ block.super }}
+  {{ form.media.js }}
+{% endblock scripts %}
