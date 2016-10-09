@@ -15,7 +15,7 @@
 
   }
   td[nowrap] {
-    min-width: 400px;
+    min-width: 450px;
   }
   .diff_header {
     font-weight: bold;
@@ -40,26 +40,41 @@
     background-color: red;
   }
 </style>
-
+<div class="row">
 
   <form action="" method="get" accept-charset="utf-8">
-    <div class="row">
-      <div class="col-sm-6">
-        {{form.installer_1}}
-      </div>
-      <div class="col-sm-6">
-        {{form.installer_2}}
-      </div>
-      <div class="col-sm-12 centered">
-        <input type="submit" name="" class="btn btn-lg" value="Diff" />
-      </div>
+    <div class="col-sm-6">
+      {{form.installer_1}}
+    </div>
+    <div class="col-sm-6">
+      {{form.installer_2}}
+    </div>
+    <div class="col-sm-12 centered">
+      <input type="submit" class="btn btn-lg" value="Diff" />
     </div>
   </form>
+
   {% if diff_table %}
-    <div class="col-lg-12 diff-table">
-      {{diff_table | safe }}
-    </div>
+  <div class="col-sm-6">
+    <h3>
+      <a href="{{installer_1.game.get_absolute_url}}" target="_blank">{{ installer_1.game.name }}</a> ({{installer_1}}) <br />
+      <span class='small'>{{installer_1.user}} {{installer_1.created_at}} for {{installer_1.runner}}</span>
+    </h3>
+  </div>
+
+  <div class="col-sm-6">
+    <h3>
+      <a href="{{installer_2.game.get_absolute_url}}" target="_blank">{{ installer_2.game.name }}</a> ({{installer_2}}) <br />
+      <span class='small'>{{installer_2.user}} {{installer_2.created_at}} for {{installer_2.runner}}</span>
+    </h3>
+  </div>
+
+  <div class="col-lg-12 ">
+    {{diff_table | safe }}
+  </div>
   {% endif %}
+
+</div>
 {% endblock content %}
 
 

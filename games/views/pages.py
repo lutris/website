@@ -483,9 +483,15 @@ def installer_diff(request):
     form = DiffInstallerForm()
     diff_table = None
 
-    if request.GET.get('installer_1') and request.GET.get('installer_2'):
-        installer_1 = get_object_or_404(Installer, id=request.GET['installer_1'])
-        installer_2 = get_object_or_404(Installer, id=request.GET['installer_2'])
+    installer_1_id = request.GET.get('installer_1')
+    installer_2_id = request.GET.get('installer_2')
+
+    installer_1 = None
+    installer_2 = None
+
+    if installer_1_id and installer_2_id:
+        installer_1 = get_object_or_404(Installer, id=installer_1_id)
+        installer_2 = get_object_or_404(Installer, id=installer_2_id)
         i1_lines = installer_1.content.split('\n')
         i2_lines = installer_2.content.split('\n')
         diff = HtmlDiff(tabsize=2, wrapcolumn=64)
@@ -493,5 +499,7 @@ def installer_diff(request):
 
     return render(request, 'games/installer-diff.html', {
         'form': form,
-        'diff_table': diff_table
+        'diff_table': diff_table,
+        'installer_1': installer_1,
+        'installer_2': installer_2
     })
