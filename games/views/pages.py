@@ -21,7 +21,9 @@ from sorl.thumbnail import get_thumbnail
 from platforms.models import Platform
 from games.models import Game, Installer, GameSubmission, InstallerIssue
 from games import models
-from games.forms import InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm, DiffInstallerForm
+from games.forms import (
+    InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm, DiffInstallerForm
+)
 from games.util.pagination import get_page_range
 
 LOGGER = logging.getLogger(__name__)
