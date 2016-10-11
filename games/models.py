@@ -156,12 +156,12 @@ class Game(models.Model):
     @property
     def banner_url(self):
         if self.title_logo:
-            return settings.MEDIA_URL + self.title_logo.name
+            return reverse('get_banner', kwargs={'slug': self.slug})
 
     @property
     def icon_url(self):
         if self.icon:
-            return settings.MEDIA_URL + self.icon.name
+            return reverse('get_icon', kwargs={'slug': self.slug})
 
     @property
     def flag_labels(self):
