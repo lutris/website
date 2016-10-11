@@ -25,6 +25,7 @@ UNSUPPORTED_PLATFORMS = (
     'iOS',
     'Nintendo 3DS',
     'N-Gage',
+    'Mac OS',
 )
 
 PLATFORM_MAP = {
