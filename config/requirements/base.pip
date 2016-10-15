@@ -1,24 +1,24 @@
 pip==8.1.2
 PyYAML==3.12
-Django==1.10.1
-Pillow==3.3.1
+Django==1.10.2
+Pillow==3.4.1
 ipython==5.1.0
-Sphinx==1.4.6
-djangorestframework==3.4.6
+Sphinx==1.4.8
+djangorestframework==3.4.7
 django-appconf==1.0.2
 django-compressor==2.1
 django-crispy-forms==1.6.0
 django_select2==5.8.9
-django-grappelli==2.8.1
+django-grappelli==2.8.2
 django-tastypie==0.13.3
-django-markupfield==1.4.0
+django-markupfield==1.4.1
+django-extensions==1.7.4
+django_inlinecss==0.1.2
 # django-bitfield==1.8.0
 -e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
 python-openid
-django-extensions==1.7.4
-django_inlinecss==0.1.2
 requests==2.11.1
-Celery==3.1.23
+Celery==3.1.24
 mimeparse==0.1.3
 mock==2.0.0
 jsonfield==1.0.3
