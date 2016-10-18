@@ -173,6 +173,7 @@ DISCOURSE_URL = 'https://forums.lutris.net'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 CLIENT_VERSION = "0.4.0"
+CLIENT_VERSION_REAL = "0.4.0ubuntu4"
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
