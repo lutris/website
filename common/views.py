@@ -25,7 +25,7 @@ class Downloads(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Downloads, self).get_context_data(**kwargs)
-        context['version'] = settings.CLIENT_VERSION_REAL
+        context['version'] = settings.CLIENT_VERSION
         context['download_url'] = 'http://lutris.net/releases/'
         return context
 
