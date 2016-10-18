@@ -7,7 +7,7 @@ from platforms.models import Platform
 ARCH_CHOICES = (
     ('i386', '32 bit'),
     ('x86_64', '64 bit'),
-    ('arm', 'ARM'),
+    ('armv7', 'ARM'),
 )
 
 
