@@ -21,7 +21,7 @@ class InstallerAdmin(admin.ModelAdmin):
     list_filter = ('published', 'runner')
     list_editable = ('published', )
     ordering = ('-created_at', )
-    readonly_fields = ('game_link',)
+    readonly_fields = ('game_link', 'created_at', 'updated_at')
     search_fields = ('slug', 'user__username', 'content')
 
     def game_link(self, obj):
