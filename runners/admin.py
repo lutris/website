@@ -14,5 +14,10 @@ class RunnerAdmin(admin.ModelAdmin):
         RunnerVersionInline,
     ]
 
+
+class RuntimeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'architecture', 'created_at')
+    model = models.Runtime
+
 admin.site.register(models.Runner, RunnerAdmin)
-admin.site.register(models.Runtime)
+admin.site.register(models.Runtime, RuntimeAdmin)
