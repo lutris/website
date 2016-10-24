@@ -8,6 +8,7 @@ ARCH_CHOICES = (
     ('i386', '32 bit'),
     ('x86_64', '64 bit'),
     ('armv7', 'ARM'),
+    ('all', 'All'),
 )
 
 
