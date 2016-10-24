@@ -73,6 +73,9 @@ class RunnerVersion(models.Model):
 class Runtime(models.Model):
     name = models.CharField(max_length=8)
     created_at = models.DateTimeField(auto_now=True)
+    architecture = models.CharField(max_length=8,
+                                    choices=ARCH_CHOICES,
+                                    default='all')
     url = models.URLField()
 
     class Meta(object):
