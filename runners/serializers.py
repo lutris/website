@@ -20,4 +20,4 @@ class RunnerSerializer(serializers.ModelSerializer):
 class RuntimeSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Runtime
-        fields = ('name', 'created_at', 'url')
+        fields = ('name', 'created_at', 'architecture', 'url')
