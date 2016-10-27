@@ -126,6 +126,8 @@ def get_value(soup, field):
 
 
 def get_similar(game_data):
+    if not game_data:
+        return
     similar = game_data.find('Similar')
     if similar:
         return [
