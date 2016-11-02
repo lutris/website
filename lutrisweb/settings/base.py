@@ -172,7 +172,7 @@ DISCOURSE_URL = 'https://forums.lutris.net'
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-CLIENT_VERSION = "0.4.1"
+CLIENT_VERSION = "0.4.2"
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
