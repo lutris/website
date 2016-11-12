@@ -3,7 +3,7 @@ Getting the site up and running for development
 
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
-their website: http://virtualenvwrapper.readthedocs.org/en/latest/
+their website: https://virtualenvwrapper.readthedocs.org/en/latest/
 
 ::
 
