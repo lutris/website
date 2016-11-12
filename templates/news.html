@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}News - Lutris{% endblock %}
 
+{% block extra_head %}
+<link href="/news/feed/" rel="alternate" type="application/atom+xml" title="Lutris news - Atom" />
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="col-md-2"></div>
