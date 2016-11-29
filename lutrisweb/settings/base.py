@@ -13,6 +13,7 @@ def media_directory(path):
         os.makedirs(abs_path)
     return abs_path
 
+CLIENT_VERSION = "0.4.3"
 
 DEBUG = False
 THUMBNAIL_DEBUG = False
@@ -171,8 +172,6 @@ DISCOURSE_URL = 'https://forums.lutris.net'
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
-CLIENT_VERSION = "0.4.2"
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
