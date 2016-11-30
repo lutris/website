@@ -18,6 +18,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from sorl.thumbnail import get_thumbnail
 
+from accounts.decorators import user_confirmed_required
 from platforms.models import Platform
 from games.models import Game, Installer, GameSubmission, InstallerIssue
 from games import models
@@ -222,7 +223,7 @@ def game_detail(request, slug):
                    'screenshots': screenshots})
 
 
-@login_required
+@user_confirmed_required
 def new_installer(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
     installer = Installer(game=game)
@@ -238,7 +239,7 @@ def new_installer(request, slug):
                   {'form': form, 'game': game, 'new': True})
 
 
-@login_required
+@user_confirmed_required
 def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if installer.user != request.user and not request.user.is_staff:
