@@ -239,6 +239,19 @@ def new_installer(request, slug):
 
 
 @login_required
+def edit_installer(request, slug):
+    installer = get_object_or_404(Installer, slug=slug)
+    if installer.user != request.user and not request.user.is_staff:
+        raise Http404
+    form = InstallerForm(request.POST or None, instance=installer)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect("installer_complete", slug=installer.game.slug)
+    return render(request, 'games/installer-form.html',
+                  {'form': form, 'game': installer.game, 'new': False})
+
+
+@login_required
 def publish_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if not request.user.is_staff:
@@ -254,19 +267,6 @@ def validate(game, request, form):
         installer.game_id = game.id
         installer.user_id = request.user.id
         installer.save()
-
-
-@login_required
-def edit_installer(request, slug):
-    installer = get_object_or_404(Installer, slug=slug)
-    if installer.user != request.user and not request.user.is_staff:
-        raise Http404
-    form = InstallerForm(request.POST or None, instance=installer)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect("installer_complete", slug=installer.game.slug)
-    return render(request, 'games/installer-form.html',
-                  {'form': form, 'game': installer.game, 'new': False})
 
 
 def installer_complete(request, slug):
