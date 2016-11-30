@@ -19,11 +19,11 @@
 </head>
 <body>
   {% if messages %}
-  <ul class="messages">
+  <ul class="alerts">
       {% for message in messages %}
       <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       </li>
       {% endfor %}
   </ul>

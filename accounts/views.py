@@ -136,7 +136,7 @@ def profile_edit(request, username):
         form.save()
         messages.success(
             request,
-            'Your account info has been updated.'
+            'your account info has been updated.'
         )
         return redirect(reverse('user_account', args=(username, )))
     return render(request, 'accounts/profile_edit.html', {'form': form})

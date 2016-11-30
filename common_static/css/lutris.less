@@ -440,12 +440,6 @@ input {
   }
 }
 
-.alert {
-  ul {
-    list-style-type: none;
-  }
-}
-
 .docs {
   max-height: 840px;
   overflow:auto;
@@ -726,16 +720,22 @@ input {
   }
 }
 
-.messages {
-  position: fixed;
-  top: 100px;
+.alerts {
   margin: auto;
-  width: 100%;
   text-align: center;
   list-style-type: none;
-  z-index: 1010;
+  padding-left: 0;
   li {
-    margin: 0 150px;
+    border-radius: 0;
+    width: 100%;
+    margin: 0px;
+    font-weight: bold;
+  }
+  .alert-error {
+    background-color: red;
+  }
+  .alert-warning {
+    background-color: orange;
   }
 }
 
