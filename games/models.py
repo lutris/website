@@ -351,6 +351,7 @@ class Installer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
+    draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
     objects = InstallerManager()
 
