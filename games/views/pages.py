@@ -10,7 +10,7 @@ from django.views.generic import ListView  # , DetailView
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import mail_managers
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required

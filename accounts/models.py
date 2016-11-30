@@ -7,7 +7,7 @@ import hashlib
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django_openid_auth.models import UserOpenID
 

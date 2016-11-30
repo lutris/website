@@ -8,11 +8,11 @@ from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
 from django.utils.text import slugify
+from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.core.urlresolvers import reverse
 from bitfield import BitField
 
 from common.util import get_auto_increment_slug

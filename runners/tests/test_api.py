@@ -1,7 +1,7 @@
 import os
 import json
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from runners import models
 from common.util import create_admin
 
