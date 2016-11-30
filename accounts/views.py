@@ -103,6 +103,18 @@ def user_send_confirmation(request):
     return render(request, 'accounts/confirmation_send.html', {'user': user})
 
 
+def user_require_confirmation(request):
+    if request.user.is_authenticated:
+        messages.error(
+            request,
+            u"The page you have requested requires that "
+            u"you have confirmed your email address."
+        )
+        return redirect(reverse("user_account", args=(request.user.username,)))
+    else:
+        return reverse(settings.LOGIN_URL)
+
+
 def user_email_confirm(request):
     token = request.GET.get('token')
     confirmation_token = get_object_or_404(EmailConfirmationToken, token=token)

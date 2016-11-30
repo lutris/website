@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'(.*)/edit/$', views.profile_edit, name='profile_edit'),
     url(r'(.*)/$', views.user_account, name="user_account"),
     url(r'send-confirmation$', views.user_send_confirmation, name='user_send_confirmation'),
+    url(r'require-confirmation', views.user_require_confirmation, name='user_require_confirmation'),
     url(r'confirm$', views.user_email_confirm, name='user_email_confirm'),
     url(r'discourse-sso$', views.discourse_sso, name='discourse_sso'),
 ]
