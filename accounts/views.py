@@ -112,7 +112,7 @@ def user_require_confirmation(request):
         )
         return redirect(reverse("user_account", args=(request.user.username,)))
     else:
-        return reverse(settings.LOGIN_URL)
+        return redirect(settings.LOGIN_URL)
 
 
 def user_email_confirm(request):
