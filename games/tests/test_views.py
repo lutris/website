@@ -1,6 +1,7 @@
 import json
 from django.test import TestCase
 from django.urls import reverse
+from django.conf import settings
 from . import factories
 
 
@@ -15,7 +16,7 @@ class TestInstallerViews(TestCase):
                                            kwargs={'slug': 'flashback'}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("user/login", response.redirect_chain[0][0])
+        self.assertEqual(settings.LOGIN_URL, response.redirect_chain[1][0])
 
     def test_logged_in_user_can_create_installer(self):
         factories.UserFactory()
