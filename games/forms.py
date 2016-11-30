@@ -159,7 +159,7 @@ class InstallerForm(forms.ModelForm):
     class Meta:
         """Form configuration"""
         model = models.Installer
-        fields = ('runner', 'version', 'description', 'notes', 'content')
+        fields = ('runner', 'version', 'description', 'notes', 'content', 'draft')
         widgets = {
             'runner': Select2Widget,
             'description': forms.Textarea(
@@ -168,7 +168,8 @@ class InstallerForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'class': 'installer-textarea'}),
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
-            )
+            ),
+            'draft': forms.HiddenInput
         }
         help_texts = {
             'version': (
