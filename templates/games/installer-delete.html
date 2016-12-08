@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+<div class="message-view col-md-6 col-md-offset-3">
+  <p>
+    Are you sure you want to delete <strong>{{installer}}</strong>?<br/>
+  </p>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="submit" name="delete" id="delete" value="Yes, delete it!" class="btn btn-danger" />
+    <a class="btn btn-primary" href="{{ installer.game.get_absolute_url }}">No, cancel that!</a>
+  </form>
+</div>
+</div>
+{% endblock %}

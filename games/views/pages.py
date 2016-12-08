@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.core.mail import mail_managers
+from django.contrib import messages
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -244,12 +245,34 @@ def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if installer.user != request.user and not request.user.is_staff:
         raise Http404
+    if 'delete' in request.POST:
+        return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
     form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
         form.save()
         return redirect("installer_complete", slug=installer.game.slug)
-    return render(request, 'games/installer-form.html',
-                  {'form': form, 'game': installer.game, 'new': False})
+    return render(request, 'games/installer-form.html', {
+        'form': form, 'game': installer.game, 'new': False, 'installer': installer
+    })
+
+
+@user_confirmed_required
+def delete_installer(request, slug):
+    installer = get_object_or_404(Installer, slug=slug)
+    if installer.user != request.user or not installer.draft:
+        raise Http404
+    if request.method == 'POST' and 'delete' in request.POST:
+        game = installer.game
+        installer_name = installer.slug
+        installer.delete()
+        messages.warning(
+            request,
+            u"The installer {} has been deleted.".format(installer_name)
+        )
+        return redirect(game.get_absolute_url())
+    return render(request, 'games/installer-delete.html', {
+        'installer': installer
+    })
 
 
 @login_required

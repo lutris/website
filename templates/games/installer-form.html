@@ -31,6 +31,9 @@
       {{ form.as_p }}
       <input type="submit" class="btn" name="save" value="Save draft">
       <input type="submit" class="btn btn-primary" name="submit" value="Submit to moderation"/>
+      {% if installer.draft %}
+      <input type="submit" class="btn btn-danger" name="delete" value="Delete this draft">
+      {% endif %}
       <a class='btn' href="{{game.get_absolute_url}}">Cancel</a>
     </form>
     </div>
