@@ -314,6 +314,7 @@ def view_installer(request, id):
     return render(request, 'games/installer-view.html', {'installer': installer})
 
 
+@user_confirmed_required
 def fork_installer(request, id):
     try:
         installer = Installer.objects.get(pk=id)
