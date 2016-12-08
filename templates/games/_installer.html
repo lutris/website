@@ -54,6 +54,9 @@
     <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
   </div>
   {% if installer.rating %}{% rating %}{% endif %}
+  {% if installer.draft %}
+  <p class="discreet-text"><strong>This installer is a draft. It hasn't been reviewed and might not be finished.</strong></p>
+  {% endif %}
   {% if installer.description %}
   <p class="discreet-text"><strong>{{ installer.description }}</strong></p>
   {% endif %}
