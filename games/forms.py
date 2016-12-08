@@ -225,6 +225,8 @@ class InstallerForm(forms.ModelForm):
                 self.errors['content'].append(error)
             raise forms.ValidationError("Invalid installer script")
         else:
+            # Draft status depends on the submit button clicked
+            self.cleaned_data['draft'] = 'save' in self.data
             return self.cleaned_data
 
 
