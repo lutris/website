@@ -2,8 +2,8 @@
 # pylint: disable=E1002, E0202
 import json
 import datetime
-
 import yaml
+
 from django.db import models
 from django.db.models import Q, Count
 from django.conf import settings
@@ -14,6 +14,7 @@ from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from bitfield import BitField
+import reversion
 
 from common.util import get_auto_increment_slug
 from platforms.models import Platform
@@ -327,6 +328,7 @@ class InstallerManager(models.Manager):
         return json.dumps(installer_data)
 
 
+@reversion.register()
 class Installer(models.Model):
     """Game installer model"""
 
