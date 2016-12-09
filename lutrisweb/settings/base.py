@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'markupfield',
     'django_openid_auth',
     'django_extensions',
+    'reversion',
 
     'common',
     'platforms',

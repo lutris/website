@@ -14,6 +14,7 @@ django-tastypie==0.13.3
 django-markupfield==1.4.1
 django-extensions==1.7.4
 django_inlinecss==0.1.2
+django-reversion
 # django-bitfield==1.8.0
 -e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
 python-openid
