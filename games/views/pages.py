@@ -243,8 +243,6 @@ def new_installer(request, slug):
 @user_confirmed_required
 def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
-    if installer.user != request.user and not request.user.is_staff:
-        raise Http404
     if 'delete' in request.POST:
         return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
     form = InstallerForm(request.POST or None, instance=installer)
