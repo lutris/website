@@ -12,11 +12,11 @@ class TestInstallerViews(TestCase):
 
     def test_anonymous_user_cant_create_installer(self):
         factories.GameFactory()
-        response = self.client.get(reverse("new_installer",
-                                           kwargs={'slug': 'flashback'}),
-                                   follow=True)
+        installer_url = reverse("new_installer", kwargs={'slug': 'flashback'})
+        response = self.client.get(installer_url, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(settings.LOGIN_URL, response.redirect_chain[1][0])
+        self.assertEqual(settings.LOGIN_URL + '?next=' + installer_url,
+                         response.redirect_chain[1][0])
 
     def test_logged_in_user_can_create_installer(self):
         factories.UserFactory()
