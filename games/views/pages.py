@@ -20,6 +20,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from sorl.thumbnail import get_thumbnail
 import reversion
+from reversion.models import Version
 
 from accounts.decorators import user_confirmed_required
 from platforms.models import Platform
@@ -247,7 +248,16 @@ def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if 'delete' in request.POST:
         return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
-    form = InstallerForm(request.POST or None, instance=installer)
+    versions = Version.objects.get_for_object(installer)
+    initial_data = None
+    for version in versions:
+        if version.revision.user == request.user and version.revision.date_created > installer.updated_at:
+            if not initial_data:
+                initial_data = version.field_dict
+                if 'runner_id' in initial_data:
+                    initial_data['runner'] = initial_data['runner_id']
+                break
+    form = InstallerForm(request.POST or None, instance=installer, initial=initial_data)
     if request.method == 'POST' and form.is_valid():
         with reversion.create_revision():
             installer = form.save(commit=False)
