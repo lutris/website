@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('games', '0015_installer_draft'),
+        ('reversion', '0001_squashed_0004_auto_20160611_1202'),
     ]
 
     operations = [
