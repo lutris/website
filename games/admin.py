@@ -4,6 +4,7 @@ from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.urls import reverse
 from django.contrib import admin
+from reversion.admin import VersionAdmin
 
 from . import models
 from . import forms
@@ -15,7 +16,7 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', )
 
 
-class InstallerAdmin(admin.ModelAdmin):
+class InstallerAdmin(VersionAdmin):
     list_display = ('__unicode__', 'runner', 'game_link', 'user',
                     'created_at', 'updated_at', 'published', 'draft')
     list_filter = ('published', 'runner')
