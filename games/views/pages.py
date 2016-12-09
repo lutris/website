@@ -6,6 +6,7 @@ import logging
 from difflib import HtmlDiff
 from django.conf import settings
 from django.http import HttpResponse, Http404
+from django.utils import timezone
 from django.views.generic import ListView  # , DetailView
 from django.views.decorators.http import require_POST
 from django.db.models import Q
@@ -18,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 from sorl.thumbnail import get_thumbnail
+import reversion
 
 from accounts.decorators import user_confirmed_required
 from platforms.models import Platform
@@ -247,7 +249,16 @@ def edit_installer(request, slug):
         return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
     form = InstallerForm(request.POST or None, instance=installer)
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        with reversion.create_revision():
+            installer = form.save(commit=False)
+            reversion.set_user(request.user)
+            reversion.set_comment("[{}] {} by {} on {}".format(
+                'draft' if installer.draft else 'submission',
+                slug,
+                request.user.username,
+                timezone.now()
+            ))
+            reversion.add_to_revision(installer)
         return redirect("installer_complete", slug=installer.game.slug)
     return render(request, 'games/installer-form.html', {
         'form': form, 'game': installer.game, 'new': False, 'installer': installer
