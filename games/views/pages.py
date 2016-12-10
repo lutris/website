@@ -248,15 +248,30 @@ def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if 'delete' in request.POST:
         return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
+    if 'revision' in request.GET:
+        try:
+            revision_id = int(request.GET['revision'])
+        except ValueError:
+            revision_id = None
+        print revision_id
+    else:
+        revision_id = None
     versions = Version.objects.get_for_object(installer)
     initial_data = None
     for version in versions:
-        if version.revision.user == request.user and version.revision.date_created > installer.updated_at:
-            if not initial_data:
+        if revision_id:
+            if version.id == revision_id:
                 initial_data = version.field_dict
-                if 'runner_id' in initial_data:
-                    initial_data['runner'] = initial_data['runner_id']
                 break
+        else:
+            if(version.revision.user == request.user
+               and version.revision.date_created > installer.updated_at):
+                initial_data = version.field_dict
+                break
+
+    if initial_data and 'runner_id' in initial_data:
+        initial_data['runner'] = initial_data['runner_id']
+
     form = InstallerForm(request.POST or None, instance=installer, initial=initial_data)
     if request.method == 'POST' and form.is_valid():
         with reversion.create_revision():
@@ -271,7 +286,11 @@ def edit_installer(request, slug):
             reversion.add_to_revision(installer)
         return redirect("installer_complete", slug=installer.game.slug)
     return render(request, 'games/installer-form.html', {
-        'form': form, 'game': installer.game, 'new': False, 'installer': installer
+        'form': form,
+        'game': installer.game,
+        'new': False,
+        'installer': installer,
+        'versions': versions
     })
 
 

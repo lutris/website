@@ -23,6 +23,14 @@
 <div class="row">
   <div class="col-sm-7">
     <div class="well">
+    {% if versions %}
+      <p>Load a previous revision </p>
+      <select class='django-select2' id='revision-select'>
+        {% for version in versions %}
+        <option value="{{version.id}}">{{version.revision.comment}}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
     <form action="" method="post">
       {% csrf_token %}
       {% for field in form %}
@@ -52,6 +60,12 @@
     $(function(){
       $.fn.select2.defaults.set("width", null);
       $.fn.select2.defaults.set("theme", 'bootstrap');
+
+      $('#revision-select').on('change', function(event) {
+        const formUrl = "{% url 'edit_installer' slug=installer.slug  %}";
+        const revisionId = event.target.value;
+        window.location.replace(formUrl + "?revision=" + revisionId);
+      })
     });
   </script>
   {{ block.super }}
