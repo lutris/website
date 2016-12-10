@@ -37,6 +37,12 @@ class UserFactory(factory.DjangoModelFactory):
     username = factory.Sequence(lambda n: 'user%d' % n)
     email = "tester@lutris.net"
     is_active = True
+    email_confirmed = True
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        self.set_password("password")
+        self.save()
 
 
 class UserNoLibraryFactory(UserFactory):

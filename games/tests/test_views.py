@@ -12,14 +12,17 @@ class TestInstallerViews(TestCase):
 
     def test_anonymous_user_cant_create_installer(self):
         factories.GameFactory()
-        installer_url = reverse("new_installer", kwargs={'slug': 'flashback'})
+        installer_url = reverse("new_installer", kwargs={'slug': 'doom'})
         response = self.client.get(installer_url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(settings.LOGIN_URL + '?next=' + installer_url,
                          response.redirect_chain[1][0])
 
     def test_logged_in_user_can_create_installer(self):
-        factories.UserFactory()
+        self.client.login(username=self.user.username, password="password")
+        installer_url = reverse("new_installer", kwargs={'slug': 'doom'})
+        response = self.client.get(installer_url)
+        self.assertEqual(response.status_code, 200)
 
     def test_can_redirect_to_game_page_from_installer_slug(self):
         installer = factories.InstallerFactory(game=self.game)
