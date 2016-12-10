@@ -61,11 +61,13 @@
       $.fn.select2.defaults.set("width", null);
       $.fn.select2.defaults.set("theme", 'bootstrap');
 
+      {% if versions %}
       $('#revision-select').on('change', function(event) {
         const formUrl = "{% url 'edit_installer' slug=installer.slug  %}";
         const revisionId = event.target.value;
         window.location.replace(formUrl + "?revision=" + revisionId);
       })
+      {% endif %}
     });
   </script>
   {{ block.super }}
