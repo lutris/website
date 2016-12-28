@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock extra_head %}
+
+{% block content %}
+<ul class="game-list">
+
+{% for submission in submissions %}
+<li>
+<p>
+  <strong>{{ submission }}</strong>
+</p>
+<p>
+<span>{{submission.user}}</span>
+<span>{{submission.date_created}}</span>
+<span><a href="{% url 'installer_review' id=submission.id %}" class="btn">Review</a> </span>
+</p>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -74,7 +74,13 @@ urlpatterns = [
     url(r'installer/diff$',
         views.installer_diff,
         name='installer_diff'),
-
+    url(r'installer/submissions$',
+        views.installer_submissions,
+        name='installer_submissions'),
+    url(r'installer/submissions/(?P<id>\d+)$',
+        views.installer_review,
+        name='installer_review'
+        ),
     url(r'([\w\-]+)/screenshot/add/',
         views.screenshot_add,
         name='screenshot_add'),

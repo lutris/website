@@ -12,7 +12,9 @@ def get_unpublished_screenshots(count=DEFAULT_COUNT):
 
 
 def get_unreviewed_game_submissions(count=DEFAULT_COUNT):
-    return models.GameSubmission.objects.filter(accepted_at__isnull=True).order_by('?')[:count]
+    return models.GameSubmission.objects.filter(
+        accepted_at__isnull=True
+    ).order_by('?')[:count]
 
 
 def get_installer_issues(count=DEFAULT_COUNT):

@@ -20,7 +20,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from sorl.thumbnail import get_thumbnail
 import reversion
-from reversion.models import Version
+from reversion.models import Version, Revision
 
 from accounts.decorators import user_confirmed_required
 from platforms.models import Platform
@@ -567,4 +567,23 @@ def installer_diff(request):
         'diff_table': diff_table,
         'installer_1': installer_1,
         'installer_2': installer_2
+    })
+
+
+@staff_member_required
+def installer_submissions(request):
+    submissions = Revision.objects.filter(comment__startswith="[submission]")
+    return render(request, 'installers/submissions.html', {
+        'submissions': submissions
+    })
+
+
+@staff_member_required
+def installer_review(request, id):
+    revision = get_object_or_404(Revision, id=id)
+    installer = None
+
+    return render(request, 'installers/review.html', {
+        'revision': revision,
+        'installer': installer
     })
