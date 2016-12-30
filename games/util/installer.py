@@ -1,4 +1,5 @@
 import yaml
+from runners.models import Runner
 from games.models import DEFAULT_INSTALLER
 SUCCESS = (True, "")
 
@@ -51,9 +52,12 @@ def files_is_an_array(installer):
 
 
 def scummvm_has_gameid(installer):
-    runner = installer.runner
+    try:
+        runner = installer.runner.name
+    except Runner.DoesNotExist:
+        runner = ""
     script = yaml.safe_load(installer.content)
-    if runner.name != 'scummvm':
+    if runner != 'scummvm':
         return SUCCESS
     if 'game' not in script:
         return (
