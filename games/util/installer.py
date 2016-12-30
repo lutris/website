@@ -1,4 +1,5 @@
 import yaml
+from games.models import DEFAULT_INSTALLER
 SUCCESS = (True, "")
 
 
@@ -6,6 +7,7 @@ def validate_installer(installer):
     errors = []
     is_valid = True
     rules = [
+        script_is_not_the_default_one,
         doesnt_contain_useless_fields,
         files_is_an_array,
         scummvm_has_gameid,
@@ -17,6 +19,16 @@ def validate_installer(installer):
             is_valid = False
 
     return (is_valid, errors)
+
+
+def script_is_not_the_default_one(installer):
+    script = yaml.safe_load(installer.content)
+    if script == DEFAULT_INSTALLER:
+        return (
+            False,
+            "Really? You haven't even modified the default installer"
+        )
+    return SUCCESS
 
 
 def doesnt_contain_useless_fields(installer):
