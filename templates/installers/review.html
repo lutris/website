@@ -2,5 +2,46 @@
 
 
 {% block content %}
-{{revision}}
+<div class="row">
+  <div class="col-sm-12">
+    <h1>{{revision.comment}}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <p>
+      <strong>Version:</strong>
+      <span>{{installer.version}}</span>
+    </p>
+    <pre>{{installer.content}}</pre>
+  </div>
+  <div class="col-sm-6">
+    <p>
+      <strong>Version:</strong>
+      <span>{{version_data.version}}</span>
+    </p>
+    <pre>{{version_data.content}}</pre>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <form action="{% url 'installer_review' id=revision.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" name="delete" id="delete" value="Delete" class="btn btn-danger" />
+      <input type="submit" name="accept" id="accept" value="Accept" class="btn btn-primary" />
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <p>Game: <a href="{{installer.game.get_absolute_url}}">{{installer.game}}</a></p>
+    <p> {% if installer.content == version_data.content %}The installer has not been modified{% endif %} </p>
+    {% for installer in installer.game.installers.all %}
+    <h2>{{installer.slug}}</h2>
+    {% endfor %}
+  </div>
+
+</div>
+
 {% endblock content %}

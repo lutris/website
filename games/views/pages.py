@@ -581,9 +581,23 @@ def installer_submissions(request):
 @staff_member_required
 def installer_review(request, id):
     revision = get_object_or_404(Revision, id=id)
-    installer = None
+    version = revision.version_set.first()
+    installer = version.object
+    version_data = json.loads(version.serialized_data)[0]['fields']
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            revision.delete()
+        if 'accept' in request.POST:
+            version.revert()
+            revision.delete()
+            installer = Installer.objects.get(pk=installer.id)
+            installer.published = True
+            installer.save()
+        return redirect(reverse('installer_submissions'))
 
     return render(request, 'installers/review.html', {
         'revision': revision,
-        'installer': installer
+        'version': version,
+        'installer': installer,
+        'version_data': version_data,
     })
