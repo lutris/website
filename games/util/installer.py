@@ -38,19 +38,18 @@ def files_is_an_array(script):
     return SUCCESS
 
 
-class scummvm_has_gameid(object):
-    def is_valid(self, script):
-        runner = script.get('runner')
-        if runner != 'scummvm':
-            return SUCCESS
-        if 'game' not in script:
-            return (
-                False,
-                "Missing section 'game'"
-            )
-        if 'game_id' not in script['game']:
-            return (
-                False,
-                "ScummVM game should have a game identifier in the 'game' section"
-            )
+def scummvm_has_gameid(script):
+    runner = script.get('runner')
+    if runner != 'scummvm':
         return SUCCESS
+    if 'game' not in script:
+        return (
+            False,
+            "Missing section 'game'"
+        )
+    if 'game_id' not in script['game']:
+        return (
+            False,
+            "ScummVM game should have a game identifier in the 'game' section"
+        )
+    return SUCCESS
