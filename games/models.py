@@ -325,7 +325,7 @@ class InstallerManager(models.Manager):
             pass
         if not installer_data:
             raise Installer.DoesNotExist
-        return json.dumps(installer_data)
+        return json.dumps(installer_data, indent=2)
 
 
 @reversion.register()
