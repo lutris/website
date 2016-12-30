@@ -18,7 +18,7 @@ from django_select2.forms import (
 
 from common.util import get_auto_increment_slug
 from games import models
-from games.util.installer import ScriptValidator
+from games.util.installer import validate_installer
 
 
 class AutoSlugForm(forms.ModelForm):
@@ -217,11 +217,11 @@ class InstallerForm(forms.ModelForm):
     def clean(self):
         dummy_installer = models.Installer(game=self.instance.game,
                                            **self.cleaned_data)
-        validator = ScriptValidator(dummy_installer.as_dict())
-        if not validator.is_valid():
+        is_valid, errors = validate_installer(dummy_installer)
+        if not is_valid:
             if 'content' not in self.errors:
                 self.errors['content'] = []
-            for error in validator.errors:
+            for error in errors:
                 self.errors['content'].append(error)
             raise forms.ValidationError("Invalid installer script")
         else:

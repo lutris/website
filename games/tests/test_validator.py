@@ -1,25 +1,35 @@
+import json
 from django.test import TestCase
-from games.util.installer import ScriptValidator
+from runners.models import Runner
+from games.models import Installer
+from games.util.installer import validate_installer
 
 
 class TestScriptValidator(TestCase):
+    def setUp(self):
+        self.installer = Installer(
+            runner=Runner(name="Linux"),
+            version="test",
+        )
+
     def test_files_must_not_be_dict(self):
-        installer = {'files': {}}
-        validator = ScriptValidator(installer)
-        self.assertFalse(validator.is_valid())
+        self.installer.content = json.dumps({'files': {}})
+        is_valid, errors = validate_installer(self.installer)
+        self.assertFalse(is_valid)
 
     def test_files_should_be_list(self):
-        installer = {'files': []}
-        validator = ScriptValidator(installer)
-        self.assertTrue(validator.is_valid())
+        self.installer.content = json.dumps({'files': []})
+        is_valid, errors = validate_installer(self.installer)
+        self.assertTrue(is_valid)
 
     def test_scummvm_script_requires_game_id(self):
-        installer = {
-            'runner': "scummvm",
-            'game': {}
-        }
-        validator = ScriptValidator(installer)
-        self.assertFalse(validator.is_valid())
+        script = json.dumps({'game': {}})
+        installer = Installer(
+            runner=Runner(name="scummvm"),
+            content=script
+        )
+        is_valid, errors = validate_installer(installer)
+        self.assertFalse(is_valid)
         self.assertIn("ScummVM game should have a "
                       "game identifier in the 'game' section",
-                      validator.errors)
+                      errors)

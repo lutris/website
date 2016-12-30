@@ -1,27 +1,26 @@
+import json
 SUCCESS = (True, "")
 
 
-class ScriptValidator(object):
-    def __init__(self, script):
-        self.rules = [
-            doesnt_contain_useless_fields,
-            files_is_an_array,
-            scummvm_has_gameid,
-        ]
-        self.script = script
-        self.errors = []
-        self.valid = True
+def validate_installer(installer):
+    errors = []
+    is_valid = True
+    rules = [
+        doesnt_contain_useless_fields,
+        files_is_an_array,
+        scummvm_has_gameid,
+    ]
+    for rule in rules:
+        success, message = rule(installer)
+        if not success:
+            errors.append(message)
+            is_valid = False
 
-    def is_valid(self):
-        for rule in self.rules:
-            success, message = rule(self.script)
-            if not success:
-                self.errors.append(message)
-                self.valid = False
-        return self.valid
+    return (is_valid, errors)
 
 
-def doesnt_contain_useless_fields(script):
+def doesnt_contain_useless_fields(installer):
+    script = json.loads(installer.content)
     for field in (
         'version', 'gogid', 'humbleid', 'game_slug', 'description',
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
@@ -31,16 +30,18 @@ def doesnt_contain_useless_fields(script):
     return SUCCESS
 
 
-def files_is_an_array(script):
+def files_is_an_array(installer):
+    script = json.loads(installer.content)
     if 'files' in script:
         if not isinstance(script['files'], list):
             return (False, "'files' section should be an array.")
     return SUCCESS
 
 
-def scummvm_has_gameid(script):
-    runner = script.get('runner')
-    if runner != 'scummvm':
+def scummvm_has_gameid(installer):
+    runner = installer.runner
+    script = json.loads(installer.content)
+    if runner.name != 'scummvm':
         return SUCCESS
     if 'game' not in script:
         return (
