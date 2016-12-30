@@ -419,7 +419,7 @@ def get_banner(request, slug):
     try:
         thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE, crop="center")
     except AttributeError:
-        LOGGER.error("Invalid banner for %s", game)
+        LOGGER.error(u"Invalid banner for %s", slug)
         raise Http404
     return redirect(thumbnail.url)
 
