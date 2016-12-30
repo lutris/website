@@ -1,4 +1,4 @@
-import json
+import yaml
 SUCCESS = (True, "")
 
 
@@ -20,7 +20,7 @@ def validate_installer(installer):
 
 
 def doesnt_contain_useless_fields(installer):
-    script = json.loads(installer.content)
+    script = yaml.safe_load(installer.content)
     for field in (
         'version', 'gogid', 'humbleid', 'game_slug', 'description',
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
@@ -31,7 +31,7 @@ def doesnt_contain_useless_fields(installer):
 
 
 def files_is_an_array(installer):
-    script = json.loads(installer.content)
+    script = yaml.safe_load(installer.content)
     if 'files' in script:
         if not isinstance(script['files'], list):
             return (False, "'files' section should be an array.")
@@ -40,7 +40,7 @@ def files_is_an_array(installer):
 
 def scummvm_has_gameid(installer):
     runner = installer.runner
-    script = json.loads(installer.content)
+    script = yaml.safe_load(installer.content)
     if runner.name != 'scummvm':
         return SUCCESS
     if 'game' not in script:
