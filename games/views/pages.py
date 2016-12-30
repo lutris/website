@@ -269,8 +269,13 @@ def edit_installer(request, slug):
                 initial_data = version.field_dict
                 break
 
-    if initial_data and 'runner_id' in initial_data:
-        initial_data['runner'] = initial_data['runner_id']
+    if initial_data:
+        messages.info(request,
+                      "You are viewing a draft of the installer which does not "
+                      "reflect the currently available installer. Changes will be "
+                      "published once it goes through moderation.")
+        if 'runner_id' in initial_data:
+            initial_data['runner'] = initial_data['runner_id']
 
     form = InstallerForm(request.POST or None, instance=installer, initial=initial_data)
     if request.method == 'POST' and form.is_valid():
