@@ -4,6 +4,7 @@ SUCCESS = (True, "")
 class ScriptValidator(object):
     def __init__(self, script):
         self.rules = [
+            doesnt_contain_useless_fields,
             files_is_an_array,
             scummvm_has_gameid,
         ]
@@ -18,6 +19,16 @@ class ScriptValidator(object):
                 self.errors.append(message)
                 self.valid = False
         return self.valid
+
+
+def doesnt_contain_useless_fields(script):
+    for field in (
+        'version', 'gogid', 'humbleid', 'game_slug', 'description',
+        'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
+    ):
+        if field in script:
+            return (False, "Don't put a '{}' field in the script.".format(field))
+    return SUCCESS
 
 
 def files_is_an_array(script):
