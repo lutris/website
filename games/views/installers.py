@@ -23,13 +23,14 @@ class InstallerRevisionListView(generics.ListAPIView):
     serializer_class = serializers.InstallerRevisionSerializer
 
     def get_queryset(self):
-        print "InstallerRevisionListView"
         installer_id = self.request.parser_context['kwargs']['pk']
-        versions = []
-        for version in Version.objects.filter(content_type__model='installer',
-                                              object_id=installer_id):
-            versions.append(models.InstallerRevision(version.id))
-        return versions
+        return [
+            models.InstallerRevision(version.id)
+            for version
+            in Version.objects.filter(
+                content_type__model='installer', object_id=installer_id
+            )
+        ]
 
 
 class InstallerRevisionDetailView(generics.RetrieveAPIView):
@@ -38,5 +39,4 @@ class InstallerRevisionDetailView(generics.RetrieveAPIView):
 
     def get_object(self):
         revision_id = self.request.parser_context['kwargs']['pk']
-        version = models.InstallerRevision(revision_id)
-        return version
+        return models.InstallerRevision(revision_id)
