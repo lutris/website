@@ -1,7 +1,14 @@
 <link rel="import" href="/static/polymer/polymer.html">
+<link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-pane">
   <template>
+    <iron-ajax
+      auto
+      handle-as="json"
+      verbose="true"
+      method="GET">
+    </iron-ajax>
     <div class="pane">
       <p>{{title}}</p>
       <pre>{{content}}</pre>
