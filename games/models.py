@@ -524,6 +524,9 @@ class InstallerRevision(object):
         self.data = self.get_installer_data()
         self.installer = self.version.object_id
 
+    def __unicode__(self):
+        return self.comment
+
     def get_installer_data(self):
         installer_data = json.loads(self.version.serialized_data)[0]['fields']
         raw_content = installer_data['content']
@@ -531,3 +534,6 @@ class InstallerRevision(object):
         installer_data['raw_content'] = raw_content
         installer_data['content'] = content
         return installer_data
+
+    def delete(self):
+        self.version.delete()

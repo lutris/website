@@ -1,6 +1,9 @@
 from __future__ import absolute_import
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
@@ -33,9 +36,17 @@ class InstallerRevisionListView(generics.ListAPIView):
         ]
 
 
-class InstallerRevisionDetailView(generics.RetrieveAPIView):
+class InstallerRevisionDetailView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     def get_object(self):
         revision_id = self.request.parser_context['kwargs']['pk']
