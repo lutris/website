@@ -1,9 +1,10 @@
 from __future__ import absolute_import
+
 from rest_framework import generics
+from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
-from games import serializers
-from games import models
+from games import models, serializers
 
 
 class InstallerListView(generics.ListAPIView):
@@ -15,3 +16,27 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
+
+
+class InstallerRevisionListView(generics.ListAPIView):
+    permission_classes = [IsAdminOrReadOnly]
+    serializer_class = serializers.InstallerRevisionSerializer
+
+    def get_queryset(self):
+        print "InstallerRevisionListView"
+        installer_id = self.request.parser_context['kwargs']['pk']
+        versions = []
+        for version in Version.objects.filter(content_type__model='installer',
+                                              object_id=installer_id):
+            versions.append(models.InstallerRevision(version.id))
+        return versions
+
+
+class InstallerRevisionDetailView(generics.RetrieveAPIView):
+    permission_classes = [IsAdminOrReadOnly]
+    serializer_class = serializers.InstallerRevisionSerializer
+
+    def get_object(self):
+        revision_id = self.request.parser_context['kwargs']['pk']
+        version = models.InstallerRevision(revision_id)
+        return version

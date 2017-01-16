@@ -14,6 +14,7 @@ from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from bitfield import BitField
+from reversion.models import Version
 import reversion
 
 from common.util import get_auto_increment_slug
@@ -511,3 +512,22 @@ class GameLink(models.Model):
         """Additional configuration for model"""
         verbose_name = "External link"
         ordering = ['website']
+
+
+class InstallerRevision(object):
+    def __init__(self, pk):
+        self.id = int(pk)
+        self.version = Version.objects.get(pk=pk)
+        self.comment = self.version.revision.comment
+        self.user = self.version.revision.user
+        self.created_at = self.version.revision.date_created
+        self.data = self.get_installer_data()
+        self.installer = self.version.object_id
+
+    def get_installer_data(self):
+        installer_data = json.loads(self.version.serialized_data)[0]['fields']
+        raw_content = installer_data['content']
+        content = yaml.safe_load(installer_data['content'])
+        installer_data['raw_content'] = raw_content
+        installer_data['content'] = content
+        return installer_data

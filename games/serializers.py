@@ -1,3 +1,4 @@
+from reversion.models import Version
 from rest_framework import serializers
 from platforms.models import Platform
 from . import models
@@ -66,3 +67,11 @@ class GameInstallersSerializer(GameSerializer):
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
             'gogid', 'humblestoreid', 'installers'
         )
+
+
+class InstallerRevisionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    data = serializers.JSONField()
+    comment = serializers.CharField()
+    created_at = serializers.DateTimeField()
+    installer = serializers.IntegerField()
