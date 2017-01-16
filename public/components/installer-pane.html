@@ -1,0 +1,34 @@
+<link rel="import" href="/static/polymer/polymer.html">
+
+<dom-module id="installer-pane">
+  <template>
+    <div class="pane">
+      <p>{{title}}</p>
+      <pre>{{content}}</pre>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'installer-pane',
+      properties: {
+        installerId: {
+          type: Number,
+          reflectToAttribute: true,
+          observer: '_installerIdChanged'
+        },
+        revisionId: {
+          type: Number,
+          reflectToAttribute: true,
+          observer: '_revisionIdChanged'
+        },
+        version: String,
+        author: String,
+        content: Text,
+      },
+      ready: function() {
+        this.title = "Example title";
+        this.content = "foo";
+      }
+    })
+  </script>
+</dom-module>

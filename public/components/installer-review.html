@@ -1,0 +1,25 @@
+<link rel="import" href="/static/polymer/polymer.html">
+<link rel="import" href="/static/components/installer-pane.html">
+
+<dom-module id="installer-review">
+  <template>
+    <div class="row">
+      <installer-pane class="col-sm-4" id="pane-1"></installer-pane>
+      <installer-pane class="col-sm-4" id="pane-2"></installer-pane>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'installer-review',
+      properties: {
+        activePane: {
+          type: Number,
+          default: 'pane-1'
+        }
+      },
+      ready: function() {
+        console.log("Hello polymer");
+      }
+    })
+  </script>
+</dom-module>
