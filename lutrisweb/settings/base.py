@@ -213,6 +213,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 250,
 }
 
+# Shell Plus
+SHELL_PLUS_DONT_LOAD = ['tosec']
+
 # Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins', 'console']
