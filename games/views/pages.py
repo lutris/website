@@ -1,35 +1,35 @@
 """Views for lutris main app"""
 # pylint: disable=E1101, W0613
 from __future__ import absolute_import
+
 import json
 import logging
 from difflib import HtmlDiff
-from django.conf import settings
-from django.http import HttpResponse, Http404
-from django.utils import timezone
-from django.views.generic import ListView  # , DetailView
-from django.views.decorators.http import require_POST
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.core.mail import mail_managers
-from django.contrib import messages
-from django.contrib.syndication.views import Feed
-from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
 
-from sorl.thumbnail import get_thumbnail
 import reversion
-from reversion.models import Version, Revision
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.syndication.views import Feed
+from django.core.mail import mail_managers
+from django.db.models import Q
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils import timezone
+from django.views.decorators.http import require_POST
+from django.views.generic import ListView
+from reversion.models import Revision, Version
+from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required
-from platforms.models import Platform
-from games.models import Game, Installer, GameSubmission, InstallerIssue
 from games import models
-from games.forms import (
-    InstallerForm, ScreenshotForm, GameForm, ForkInstallerForm, DiffInstallerForm
-)
+from games.forms import (DiffInstallerForm, ForkInstallerForm, GameForm,
+                         InstallerForm, ScreenshotForm)
+from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
+from platforms.models import Platform
 
 LOGGER = logging.getLogger(__name__)
 
@@ -584,25 +584,19 @@ def installer_submissions(request):
 
 
 @staff_member_required
-def installer_review(request, id):
-    revision = get_object_or_404(Revision, id=id)
-    version = revision.version_set.first()
-    installer = version.object
-    version_data = json.loads(version.serialized_data)[0]['fields']
-    if request.method == 'POST':
-        if 'delete' in request.POST:
-            revision.delete()
-        if 'accept' in request.POST:
-            version.revert()
-            revision.delete()
-            installer = Installer.objects.get(pk=installer.id)
-            installer.published = True
-            installer.save()
-        return redirect(reverse('installer_submissions'))
-
+def installer_review(request, slug):
+    game = get_object_or_404(Game, slug=slug)
+    installers_data = []
+    installers = game.installers.all()
+    for installer in installers:
+        installers_data.append({
+            'installer': installer,
+            'versions': Version.objects.filter(
+                content_type__model="installer",
+                object_id=installer.id
+            )
+        })
     return render(request, 'installers/review.html', {
-        'revision': revision,
-        'version': version,
-        'installer': installer,
-        'version_data': version_data,
+        'game': game,
+        'installers_data': installers_data
     })

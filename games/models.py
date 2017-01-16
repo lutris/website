@@ -537,3 +537,10 @@ class InstallerRevision(object):
 
     def delete(self):
         self.version.delete()
+
+    def accept(self):
+        self.version.revert()
+        installer = Installer.objects.get(pk=self.installer)
+        installer.published = True
+        installer.save()
+        self.delete()

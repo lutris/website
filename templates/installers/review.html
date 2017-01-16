@@ -2,65 +2,159 @@
 
 
 {% block content %}
-<div class="row">
-  <div class="col-sm-12">
-    <h1>{{revision.comment}}</h1>
+<style>
+  .installer-revision-list {
+    list-style-type:none;
+    padding: 0;
+  }
+  .installer-revision-list .btn {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  .pane-active {
+    border-radius: 6px;
+    background-color: #444;
+  }
+</style>
+<div class="content">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1><a href="{{game.get_absolute_url}}">{{game.name}}</a> installers</h1>
+    </div>
+
+    <div class="col-sm-3">
+      <ul class="installer-revision-list">
+        {% for installer_data in installers_data %}
+          <li>
+            <a href="javascript:void(0)"
+              class="btn btn-primary"
+              data-installer-id="{{installer_data.installer.id}}"
+              onclick="onInstallerClick(this)">
+              {{installer_data.installer}}
+            </a>
+          </li>
+          {% for version in installer_data.versions %}
+            <li>
+              <a href="javascript:void(0)"
+                class="btn"
+                data-version-id="{{version.id}}"
+                onclick="onRevisionClick(this)"
+                title="{{version.revision.comment}}">
+                {{version}}
+              </a>
+            </li>
+          {% endfor %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-sm-4 pane pane-active" id="pane-1" onclick="switchPane(this)">
+      <h2 class="title"></h2>
+      <p>
+        <strong>Author:</strong><span class="author"></span><br/>
+        <strong>Date:</strong><span class="date"></span><br/>
+        <strong>Version:</strong><span class="version"></span><br/>
+        <strong>Runner:</strong><span class="runner"></span><br/>
+        <strong>Draft:</strong><input type="checkbox" class="draft" disabled>
+        <strong>Published:</strong><input type="checkbox" class="published" disabled>
+      </p>
+      <pre class="output"></pre>
+      <section>
+        <h5>Description</h5>
+        <p class="description"></p>
+      </section>
+      <section>
+        <h5>Notes</h5>
+        <p class="notes"></p>
+      </section>
+    </div>
+
+    <div class="col-sm-5 pane" id="pane-2" onclick="switchPane(this)">
+      <h2 class="title"></h2>
+      <p>
+        <strong>Author:</strong><span class="author"></span><br/>
+        <strong>Date:</strong><span class="date"></span><br/>
+        <strong>Version:</strong><span class="version"></span><br/>
+        <strong>Runner:</strong><span class="runner"></span><br/>
+        <strong>Draft:</strong><input type="checkbox" class="draft" disabled>
+        <strong>Published:</strong><input type="checkbox" class="published" disabled>
+      </p>
+      <pre class="output"></pre>
+      <section>
+        <h5>Description</h5>
+        <p class="description"></p>
+      </section>
+      <section>
+        <h5>Notes</h5>
+        <p class="notes"></p>
+      </section>
+    </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-6">
-    <p>{{installer.notes}}</p>
-  </div>
-  <div class="col-sm-6">
-    <p>{{version_data.notes}}</p>
-  </div>
-</div>
+<script type="text/javascript" charset="utf-8">
+  window.activePane = "pane-1";
 
-<div class="row">
-  <div class="col-sm-6">
-    <p>{{installer.description}}</p>
-  </div>
-  <div class="col-sm-6">
-    <p>{{version_data.description}}</p>
-  </div>
-</div>
+  function switchPane(element) {
+    const paneId = element.getAttribute('id');
+    const panes = document.getElementsByClassName('pane');
+    Array.prototype.forEach.call(panes, function(elem) {
+      elem.classList.remove('pane-active')
+    });
+    element.classList.add('pane-active');
+    window.activePane = paneId;
+  }
 
-<div class="row">
-  <div class="col-sm-6">
-    <p>
-      <strong>Version:</strong>
-      <span>{{installer.version}}</span>
-    </p>
-    <pre>{{installer.content}}</pre>
-  </div>
-  <div class="col-sm-6">
-    <p>
-      <strong>Version:</strong>
-      <span>{{version_data.version}}</span>
-    </p>
-    <pre>{{version_data.content}}</pre>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-12">
-    <form action="{% url 'installer_review' id=revision.id %}" method="post">
-      {% csrf_token %}
-      <input type="submit" name="delete" id="delete" value="Delete" class="btn btn-danger" />
-      <input type="submit" name="accept" id="accept" value="Accept" class="btn btn-primary" />
-    </form>
-  </div>
-</div>
+  function getRequest(method, url) {
+    request = new XMLHttpRequest();
+    request.open(method, url);
+    request.setRequestHeader("Content-type","application/json");
+    request.setRequestHeader("Authorization","Token {{user.auth_token.key}}");
+    return request;
+  }
 
-<div class="row">
-  <div class="col-sm-12">
-    <p>Game: <a href="{{installer.game.get_absolute_url}}">{{installer.game}}</a></p>
-    <p> {% if installer.content == version_data.content %}The installer has not been modified{% endif %} </p>
-    {% for installer in installer.game.installers.all %}
-    <h2>{{installer.slug}}</h2>
-    {% endfor %}
-  </div>
+  function getPaneElements() {
+    const pane = document.getElementById(window.activePane);
+    return {
+      'title': pane.getElementsByClassName('title')[0],
+      'version': pane.getElementsByClassName('version')[0],
+      'content': pane.getElementsByClassName('output')[0],
+      'notes': pane.getElementsByClassName('notes')[0],
+      'description': pane.getElementsByClassName('description')[0],
+      'date': pane.getElementsByClassName('date')[0],
+      'author': pane.getElementsByClassName('author')[0],
+      'version': pane.getElementsByClassName('version')[0],
+      'runner': pane.getElementsByClassName('runner')[0],
+      'draft': pane.getElementsByClassName('draft')[0],
+      'published': pane.getElementsByClassName('published')[0],
+    }
+  }
 
-</div>
+  function onInstallerClick(element) {
+    const installerId = event.target.getAttribute('data-installer-id');
+  }
 
+  function onRevisionClick(element) {
+    const versionId = element.getAttribute('data-version-id');
+    const request = getRequest('GET', '/api/installers/0/revisions/' + versionId)
+    const pane = getPaneElements();
+    request.send();
+    request.onreadystatechange = function(event) {
+      if(event.target.readyState == 4) {
+        response = JSON.parse(event.target.response);
+        pane.title.innerHTML = response.comment;
+        pane.version.innerHTML = response.data.version;
+        pane.content.innerHTML = response['data']['raw_content'];
+        pane.date.innerHTML = response.data.created_at;
+        pane.description.innerHTML = response.data.description;
+        pane.notes.innerHTML = response.data.notes;
+        pane.runner.innerHTML = response.data.runner;
+        pane.author.innerHTML = response.data.user;
+        pane.draft.checked = response.data.draft;
+        pane.published.checked = response.data.published;
+      }
+    };
+  }
+</script>
 {% endblock content %}

@@ -1,10 +1,9 @@
 from __future__ import absolute_import
-from rest_framework import permissions
-from rest_framework.response import Response
-from rest_framework import generics, filters
 
-from games import serializers
-from games import models
+from rest_framework import filters, generics, permissions
+from rest_framework.response import Response
+
+from games import models, serializers
 
 
 class GameListView(generics.GenericAPIView):

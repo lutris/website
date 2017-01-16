@@ -77,7 +77,7 @@ urlpatterns = [
     url(r'installer/submissions$',
         views.installer_submissions,
         name='installer_submissions'),
-    url(r'installer/submissions/(?P<id>\d+)$',
+    url(r'installer/review/(?P<slug>[\w\-]+)$',
         views.installer_review,
         name='installer_review'
         ),
