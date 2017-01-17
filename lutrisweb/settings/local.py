@@ -1,5 +1,5 @@
 import os
-from base import *  # noqa
+from lutrisweb.settings.base import *  # noqa
 
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
