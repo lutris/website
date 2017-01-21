@@ -151,11 +151,6 @@
     ga('create', 'UA-42114412-1', 'lutris.net');
     ga('send', 'pageview');
   </script>
-  {% if debug %}
-  <script>
-    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
-  </script>
-  {% endif %}
   {% block scripts %}{% endblock %}
 </body>
 </html>
