@@ -21,6 +21,14 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Installer.objects.all()
 
 
+class GameInstallerList(generics.ListAPIView):
+    serializer_class = serializers.InstallerSerializer
+
+    def get_queryset(self):
+        game_slug = self.request.parser_context['kwargs']['slug']
+        return models.Installer.objects.filter(game__slug=game_slug)
+
+
 class InstallerRevisionListView(generics.ListAPIView):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
