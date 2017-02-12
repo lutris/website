@@ -29,6 +29,7 @@ UNSUPPORTED_PLATFORMS = (
 )
 
 PLATFORM_MAP = {
+    '3DO': '3do',
     'Arcade': 'arcade',
     'Amiga': 'amiga',
     'Atari 2600': 'atari-2600',
