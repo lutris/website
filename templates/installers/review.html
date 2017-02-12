@@ -57,11 +57,11 @@
   }
 </style>
 <div class="content">
-  <installer-review></installer-review>
   <div class="row">
     <div class="col-sm-12">
       <h1><a href="{{game.get_absolute_url}}">{{game.name}}</a> installers</h1>
     </div>
+    <installer-review game='{{game.slug}}'></installer-review>
 
     <div class="col-sm-3">
       <ul class="installer-revision-list">
@@ -91,14 +91,6 @@
     </div>
     <div class="col-sm-4 pane pane-active" id="pane-1" onclick="switchPane(this)">
       <h2 class="title"></h2>
-      <p>
-        <strong>Author:</strong><span class="author"></span><br/>
-        <strong>Date:</strong><span class="date"></span><br/>
-        <strong>Version:</strong><span class="version"></span><br/>
-        <strong>Runner:</strong><span class="runner"></span><br/>
-        <strong>Draft:</strong><input type="checkbox" class="draft" disabled>
-        <strong>Published:</strong><input type="checkbox" class="published" disabled>
-      </p>
       <pre class="output"></pre>
       <section>
         <h5>Description</h5>

@@ -5,12 +5,22 @@
   <template>
     <iron-ajax
       auto
+      id="installer-api-request"
       handle-as="json"
       verbose="true"
       method="GET">
     </iron-ajax>
     <div class="pane">
+      <p>
+        <strong>Author:</strong><span class="author">[[author]]</span><br/>
+        <strong>Date:</strong><span class="date">[[date]]</span><br/>
+        <strong>Version:</strong><span class="version"></span><br/>
+        <strong>Runner:</strong><span class="runner"></span><br/>
+        <strong>Draft:</strong><input type="checkbox" class="draft" disabled>
+        <strong>Published:</strong><input type="checkbox" class="published" disabled>
+      </p>
       <p>{{title}}</p>
+
       <pre>{{content}}</pre>
     </div>
   </template>
@@ -35,7 +45,14 @@
       ready: function() {
         this.title = "Example title";
         this.content = "foo";
-      }
+      },
+      _revisionIdChanged: function(newValue, oldValue) {
+        const installerAPIRequest = this.$['installer-api-request'];
+        console.log(installerAPIRequest);
+      },
+
+
+
     })
   </script>
 </dom-module>
