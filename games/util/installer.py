@@ -4,6 +4,13 @@ from games.models import DEFAULT_INSTALLER
 SUCCESS = (True, "")
 
 
+def get_installer_script(installer):
+    script = yaml.safe_load(installer.content)
+    if not script:
+        return {}
+    return script
+
+
 def validate_installer(installer):
     errors = []
     is_valid = True
@@ -23,7 +30,7 @@ def validate_installer(installer):
 
 
 def script_is_not_the_default_one(installer):
-    script = yaml.safe_load(installer.content)
+    script = get_installer_script(installer)
     if script == DEFAULT_INSTALLER:
         return (
             False,
@@ -33,7 +40,7 @@ def script_is_not_the_default_one(installer):
 
 
 def doesnt_contain_useless_fields(installer):
-    script = yaml.safe_load(installer.content)
+    script = get_installer_script(installer)
     for field in (
         'version', 'gogid', 'humbleid', 'game_slug', 'description',
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
@@ -44,7 +51,7 @@ def doesnt_contain_useless_fields(installer):
 
 
 def files_is_an_array(installer):
-    script = yaml.safe_load(installer.content)
+    script = get_installer_script(installer)
     if 'files' in script:
         if not isinstance(script['files'], list):
             return (False, "'files' section should be an array.")
@@ -56,7 +63,7 @@ def scummvm_has_gameid(installer):
         runner = installer.runner.name
     except Runner.DoesNotExist:
         runner = ""
-    script = yaml.safe_load(installer.content)
+    script = get_installer_script(installer)
     if runner != 'scummvm':
         return SUCCESS
     if 'game' not in script:
