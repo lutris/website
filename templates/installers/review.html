@@ -58,10 +58,12 @@
 </style>
 <div class="content">
   <div class="row">
+    <installer-review game='{{game.slug}}' api-key='{{user.auth_token.key}}'></installer-review>
+  </div>
+  <div class="row">
     <div class="col-sm-12">
       <h1><a href="{{game.get_absolute_url}}">{{game.name}}</a> installers</h1>
     </div>
-    <installer-review game='{{game.slug}}'></installer-review>
 
     <div class="col-sm-3">
       <ul class="installer-revision-list">

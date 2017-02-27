@@ -577,7 +577,7 @@ def installer_diff(request):
 
 @staff_member_required
 def installer_submissions(request):
-    submissions = Revision.objects.filter(comment__startswith="[submission]")
+    submissions = Version.objects.filter(revision__comment__startswith="[submission]")
     return render(request, 'installers/submissions.html', {
         'submissions': submissions
     })

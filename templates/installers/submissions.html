@@ -13,9 +13,17 @@
   <strong>{{ submission }}</strong>
 </p>
 <p>
-<span>{{submission.user}}</span>
-<span>{{submission.date_created}}</span>
-<span><a href="{% url 'installer_review' id=submission.id %}" class="btn">Review</a> </span>
+<span>{{submission.revision.user}}</span>
+<span>{{submission.revision.date_created}}</span>
+{% if submission.object.game %}
+<span>
+  <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+</span>
+{% else %}
+<span>
+  <strong>NO OBJECT</strong>
+</span>
+{% endif %}
 </p>
 </li>
 {% endfor %}
