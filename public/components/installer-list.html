@@ -3,7 +3,10 @@
 
 <dom-module id="installer-list">
   <template>
-      <style>
+      <style is="custom-style">
+        :host {
+          padding: 0;
+        }
         .installer-revision-list {
           list-style-type:none;
           padding: 0;
@@ -11,6 +14,7 @@
         .btn {
           width: 100%;
           margin: 4px 0;
+          overflow: hidden;
         }
         .selected {
           background-color: #BBB;

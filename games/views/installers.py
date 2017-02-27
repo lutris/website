@@ -7,6 +7,7 @@ from rest_framework import status
 from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAdminUser
 from games import models, serializers
 
 
@@ -21,8 +22,8 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Installer.objects.all()
 
 
-class GameRevisionListView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminOrReadOnly]
+class GameRevisionListView(generics.RetrieveAPIView):
+    permission_classes = [IsAdminUser]
     serializer_class = serializers.GameRevisionSerializer
     queryset = models.Game.objects.all()
     lookup_field = 'slug'

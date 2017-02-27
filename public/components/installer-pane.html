@@ -2,12 +2,6 @@
 
 <dom-module id="installer-pane">
   <template>
-    <style>
-      .pane {
-        margin: 0;
-        padding: 0;
-      }
-    </style>
     <div class="pane">
       <p>
         <strong>Author:</strong><span class="author">[[installer.user]]</span><br/>
@@ -17,7 +11,14 @@
         <strong>Draft:</strong><input type="checkbox" class="draft" disabled checked="[[installer.draft]]"><br/>
         <strong>Published:</strong><input type="checkbox" class="published" disabled checked="[[installer.published]]">
       </p>
-      <p>{{title}}</p>
+      <p>
+        <strong>Notes:</strong>
+        <span>[[installer.notes]]</span>
+      </p>
+      <p>
+        <strong>Description:</strong>
+        <span>[[installer.description]]</span>
+      </p>
 
       <template is="dom-if" if="[[sourceVisible]]">
         <pre>[[installer.content]]</pre>
