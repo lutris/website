@@ -428,6 +428,16 @@ class Installer(models.Model):
     def game_slug(self):
         return self.game.slug
 
+    @property
+    def revisions(self):
+        return [
+            InstallerRevision(version)
+            for version
+            in Version.objects.filter(
+                content_type__model='installer', object_id=self.id
+            )
+        ]
+
     def save(self, *args, **kwargs):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save(*args, **kwargs)
@@ -515,9 +525,9 @@ class GameLink(models.Model):
 
 
 class InstallerRevision(object):
-    def __init__(self, pk):
-        self.id = int(pk)
-        self.version = Version.objects.get(pk=pk)
+    def __init__(self, version):
+        self.version = version
+        self.id = version.pk
         self.comment = self.version.revision.comment
         self.user = self.version.revision.user
         self.created_at = self.version.revision.date_created

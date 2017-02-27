@@ -21,6 +21,13 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Installer.objects.all()
 
 
+class GameRevisionListView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminOrReadOnly]
+    serializer_class = serializers.GameRevisionSerializer
+    queryset = models.Game.objects.all()
+    lookup_field = 'slug'
+
+
 class GameInstallerList(generics.ListAPIView):
     serializer_class = serializers.InstallerSerializer
 
@@ -34,14 +41,8 @@ class InstallerRevisionListView(generics.ListAPIView):
     serializer_class = serializers.InstallerRevisionSerializer
 
     def get_queryset(self):
-        installer_id = self.request.parser_context['kwargs']['pk']
-        return [
-            models.InstallerRevision(version.id)
-            for version
-            in Version.objects.filter(
-                content_type__model='installer', object_id=installer_id
-            )
-        ]
+        installer = models.Installer.object.get(pk=self.request.parser_context['kwargs']['pk'])
+        return installer.revisions
 
 
 class InstallerRevisionDetailView(generics.RetrieveDestroyAPIView):
@@ -57,5 +58,5 @@ class InstallerRevisionDetailView(generics.RetrieveDestroyAPIView):
         return Response(serializer.data)
 
     def get_object(self):
-        revision_id = self.request.parser_context['kwargs']['pk']
-        return models.InstallerRevision(revision_id)
+        version = Version.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        return models.InstallerRevision(version)

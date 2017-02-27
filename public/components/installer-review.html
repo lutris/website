@@ -1,5 +1,6 @@
 <link rel="import" href="/static/polymer/polymer.html">
 <link rel="import" href="/static/components/installer-pane.html">
+<link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-review">
   <template>
@@ -12,13 +13,15 @@
     Polymer({
       is: 'installer-review',
       properties: {
+        slug: String,
+        apiKey: String,
         activePane: {
           type: Number,
           default: 'pane-1'
         }
       },
       ready: function() {
-        console.log("Hello polymer");
+        console.log(this.apiKey);
       }
     })
   </script>

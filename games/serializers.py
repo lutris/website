@@ -75,3 +75,25 @@ class InstallerRevisionSerializer(serializers.Serializer):
     comment = serializers.CharField()
     created_at = serializers.DateTimeField()
     installer = serializers.IntegerField()
+
+
+class InstallerWithRevisionsSerializer(InstallerSerializer):
+    revisions = InstallerRevisionSerializer(many=True)
+
+    class Meta(object):
+        model = models.Installer
+        fields = ('game', 'user', 'runner', 'slug', 'version', 'description',
+                  'notes', 'created_at', 'updated_at', 'published', 'rating',
+                  'script', 'revisions')
+
+
+class GameRevisionSerializer(GameSerializer):
+    installers = InstallerWithRevisionsSerializer(many=True)
+
+    class Meta(object):
+        model = models.Game
+        fields = (
+            'name', 'slug', 'year', 'platforms', 'genres',
+            'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
+            'gogid', 'humblestoreid', 'installers'
+        )
