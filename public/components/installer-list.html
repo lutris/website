@@ -12,6 +12,14 @@
           width: 100%;
           margin: 4px 0;
         }
+        .selected {
+          background-color: #BBB;
+          color: #444;
+        }
+
+        .previous-selected {
+          background-color: #777;
+        }
       </style>
       <ul class="installer-revision-list">
         <template is="dom-repeat" id="installer-list" items={{installers}} as="installer">
@@ -37,8 +45,6 @@
           </template>
         </template>
       </ul>
-
-
   </template>
   <script>
     Polymer({
@@ -46,16 +52,26 @@
       properties: {
         installers: Object
       },
-      ready: function() {
-        console.log(this.installers);
+      _clearSelected: function () {
+        [].forEach.call(document.getElementsByClassName('previous-selected'), function(element) {
+          element.classList.remove('previous-selected');
+        });
+        [].forEach.call(document.getElementsByClassName('selected'), function(element) {
+          element.classList.remove('selected');
+          element.classList.add('previous-selected');
+        });
       },
       onInstallerClick: function(event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
+        this._clearSelected()
+        event.target.classList.add('selected');
         this.fire('load-installer', {'installerSlug': installerSlug});
       },
       onRevisionClick: function(event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
         const revisionId = event.target.attributes['data-revision-id'].value;
+        this._clearSelected()
+        event.target.classList.add('selected');
         this.fire('load-revision', {'installerSlug': installerSlug, 'revisionId': revisionId})
       }
     })

@@ -1,26 +1,42 @@
 <link rel="import" href="/static/polymer/polymer.html">
 <link rel="import" href="/static/components/installer-pane.html">
 <link rel="import" href="/static/components/installer-list.html">
+<link rel="import" href="/static/components/installer-diff.html">
 <link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-review">
   <template>
     <div class="row">
-      <h1><a href="[[game.slug]]">[[game.name]]</a> installers</h1>
+      <div class="col-sm-12">
+        <h1><a href="[[game.slug]]">[[game.name]]</a> installers</h1>
+      </div>
+      <div class="col-sm-3">
+        <button on-tap="onSwitchDiff" class="btn">Diff</button>
+      </div>
+      <div class="col-sm-5">
+        <button on-tap="deleteInstaller1" class="btn">Delete</button>
+      </div>
+    </div>
+    <div class="row">
       <installer-list class="col-sm-3" id="installer-list" installers="[[game.installers]]"></installer-list>
       <installer-pane
         class="col-sm-5"
         id="pane-1"
-        source-visible="{{sourceVisible}}"
+        source-visible="[[sourceVisible]]"
         installer="[[activeInstaller1]]">
       </installer-pane>
       <installer-pane
         class="col-sm-4"
         id="pane-2"
-        source-visible="{{sourceVisible}}"
+        source-visible="[[sourceVisible]]"
         installer="[[activeInstaller2]]">
       </installer-pane>
-      <button on-tap="onSwitchDiff" class="btn">Diff</button>
+      <installer-diff
+        class="col-sm-9"
+        hidden="[[sourceVisible]]"
+        installer1="[[activeInstaller1]]"
+        installer2="[[activeInstaller2]]">
+      </installer-diff>
     </div>
 
     <iron-ajax
@@ -38,10 +54,7 @@
       properties: {
         slug: String,
         apiKey: String,
-        sourceVisible: {
-          type: Boolean,
-          default: true
-        },
+        sourceVisible: Boolean,
         game: {
           type: Object,
           default: {}
@@ -62,14 +75,12 @@
         'load-revision': 'onLoadRevision'
       },
       attached: function() {
-        this.sourceVisible = true;
+        this.sourceVisible = false;
       },
       handleResponse: function(response) {
         this.game = response.detail.__data__.response;
-        console.log(this.installers);
       },
       onLoadInstaller: function (event) {
-        console.log(event);
         const installerSlug = event.detail.installerSlug;
 
         let selectedInstaller = null;
@@ -79,7 +90,6 @@
           }
         });
         if(selectedInstaller) {
-          console.log(selectedInstaller)
           this.activeInstaller2 = this.activeInstaller1;
           this.activeInstaller1 = selectedInstaller;
         }

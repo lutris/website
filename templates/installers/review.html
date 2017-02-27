@@ -30,61 +30,16 @@
           script.src = '/static/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
           document.head.appendChild(script);
-          console.log("added webcomponentsjs");
         } else {
           onload();
         }
-        console.log("webComponentsSupported", webComponentsSupported);
       })();
   </script>
   <link rel="import" href="/static/components/installer-review.html">
 {% endblock extra_head %}
 
 {% block content %}
-<style>
-  .pane-active {
-    border-radius: 6px;
-    background-color: #444;
-  }
-</style>
-
 <div class="content">
-  <div class="row">
-    <div class="col-sm-12">
-      <installer-review slug='{{game.slug}}' api-key='{{user.auth_token.key}}'></installer-review>
-    </div>
-  </div>
+  <installer-review slug='{{game.slug}}' api-key='{{user.auth_token.key}}'></installer-review>
 </div>
-
-<script type="text/javascript" charset="utf-8">
-  window.activePane = "pane-1";
-
-  function switchPane(element) {
-    const paneId = element.getAttribute('id');
-    const panes = document.getElementsByClassName('pane');
-    Array.prototype.forEach.call(panes, function(elem) {
-      elem.classList.remove('pane-active')
-    });
-    element.classList.add('pane-active');
-    window.activePane = paneId;
-  }
-
-  function getPaneElements() {
-    const pane = document.getElementById(window.activePane);
-    return {
-      'title': pane.getElementsByClassName('title')[0],
-      'version': pane.getElementsByClassName('version')[0],
-      'content': pane.getElementsByClassName('output')[0],
-      'notes': pane.getElementsByClassName('notes')[0],
-      'description': pane.getElementsByClassName('description')[0],
-      'date': pane.getElementsByClassName('date')[0],
-      'author': pane.getElementsByClassName('author')[0],
-      'version': pane.getElementsByClassName('version')[0],
-      'runner': pane.getElementsByClassName('runner')[0],
-      'draft': pane.getElementsByClassName('draft')[0],
-      'published': pane.getElementsByClassName('published')[0],
-    }
-  }
-
-</script>
 {% endblock content %}

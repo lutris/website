@@ -1,0 +1,60 @@
+<link rel="import" href="/static/polymer/polymer.html">
+<script type="text/javascript" src="/static/jsdifflib/diffview.js"></script>
+<script type="text/javascript" src="/static/jsdifflib/difflib.js"></script>
+
+<dom-module id="installer-diff">
+  <style>
+    #diffoutput {
+      background-color: #eee;
+      font-size: 0.8em;
+      color: #444;
+      width: 100%;
+    }
+  </style>
+  <template>
+    <link rel="stylesheet" href="/static/jsdifflib/diffview.css" type="text/css">
+    <div id="diffoutput">
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'installer-diff',
+      properties: {
+        installer1: {
+          type: Object,
+          observer: 'onInstallerChanged'
+        },
+        installer2: {
+          type: Object,
+          observer: 'onInstallerChanged'
+        }
+      },
+      observers: [
+        'onInstallerChanged(installer1.content)',
+      ],
+      onInstallerChanged: function(event) {
+        if(!this.installer1 || !this.installer2) {
+          return;
+        }
+        var byId = function (id) { return document.getElementById(id); },
+          base = difflib.stringAsLines(this.installer1.content),
+          newtxt = difflib.stringAsLines(this.installer2.content),
+          sm = new difflib.SequenceMatcher(base, newtxt),
+          opcodes = sm.get_opcodes(),
+          diffoutputdiv = byId("diffoutput");
+
+        diffoutputdiv.innerHTML = "";
+
+        diffoutputdiv.appendChild(diffview.buildView({
+          baseTextLines: base,
+          newTextLines: newtxt,
+          opcodes: opcodes,
+          baseTextName: "Base Text",
+          newTextName: "New Text",
+          contextSize: null,
+          viewType: 0
+        }));
+      }
+    })
+  </script>
+</dom-module>
