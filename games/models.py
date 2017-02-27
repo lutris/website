@@ -19,6 +19,7 @@ import reversion
 
 from common.util import get_auto_increment_slug
 from platforms.models import Platform
+from runners.models import Runner
 from games import managers
 from games.util import steam
 from emails import messages
@@ -532,6 +533,10 @@ class InstallerRevision(object):
         self.user = self.version.revision.user
         self.created_at = self.version.revision.date_created
         self.data = self.get_installer_data()
+        if self.user:
+            self.data['user'] = self.user.username
+            self.data['runner'] = Runner.objects.get(pk=self.data['runner']).name
+        self.data['created_at'] = self.created_at
         self.installer = self.version.object_id
 
     def __unicode__(self):
@@ -539,10 +544,7 @@ class InstallerRevision(object):
 
     def get_installer_data(self):
         installer_data = json.loads(self.version.serialized_data)[0]['fields']
-        raw_content = installer_data['content']
-        content = yaml.safe_load(installer_data['content'])
-        installer_data['raw_content'] = raw_content
-        installer_data['content'] = content
+        installer_data['script'] = yaml.safe_load(installer_data['content'])
         return installer_data
 
     def delete(self):

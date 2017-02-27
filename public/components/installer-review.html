@@ -1,13 +1,36 @@
 <link rel="import" href="/static/polymer/polymer.html">
 <link rel="import" href="/static/components/installer-pane.html">
+<link rel="import" href="/static/components/installer-list.html">
 <link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-review">
   <template>
     <div class="row">
-      <installer-pane class="col-sm-4" id="pane-1"></installer-pane>
-      <installer-pane class="col-sm-4" id="pane-2"></installer-pane>
+      <h1><a href="[[game.slug]]">[[game.name]]</a> installers</h1>
+      <installer-list class="col-sm-3" id="installer-list" installers="[[game.installers]]"></installer-list>
+      <installer-pane
+        class="col-sm-5"
+        id="pane-1"
+        source-visible="{{sourceVisible}}"
+        installer="[[activeInstaller1]]">
+      </installer-pane>
+      <installer-pane
+        class="col-sm-4"
+        id="pane-2"
+        source-visible="{{sourceVisible}}"
+        installer="[[activeInstaller2]]">
+      </installer-pane>
+      <button on-tap="onSwitchDiff" class="btn">Diff</button>
     </div>
+
+    <iron-ajax
+      auto
+      verbose
+      url="/api/installers/game/[[slug]]/revisions"
+      headers='{"Authorization": "Token [[apiKey]]"}'
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
   </template>
   <script>
     Polymer({
@@ -15,13 +38,73 @@
       properties: {
         slug: String,
         apiKey: String,
+        sourceVisible: {
+          type: Boolean,
+          default: true
+        },
+        game: {
+          type: Object,
+          default: {}
+        },
+        activeInstaller1: {
+          type: Object
+        },
+        activeInstaller2: {
+          type: Object
+        },
         activePane: {
-          type: Number,
+          type: String,
           default: 'pane-1'
         }
       },
-      ready: function() {
-        console.log(this.apiKey);
+      listeners: {
+        'load-installer': 'onLoadInstaller',
+        'load-revision': 'onLoadRevision'
+      },
+      attached: function() {
+        this.sourceVisible = true;
+      },
+      handleResponse: function(response) {
+        this.game = response.detail.__data__.response;
+        console.log(this.installers);
+      },
+      onLoadInstaller: function (event) {
+        console.log(event);
+        const installerSlug = event.detail.installerSlug;
+
+        let selectedInstaller = null;
+        this.game.installers.forEach(function(installer) {
+          if(installer.slug == installerSlug) {
+            selectedInstaller = installer;
+          }
+        });
+        if(selectedInstaller) {
+          console.log(selectedInstaller)
+          this.activeInstaller2 = this.activeInstaller1;
+          this.activeInstaller1 = selectedInstaller;
+        }
+      },
+      onLoadRevision: function (event) {
+        const installerSlug = event.detail.installerSlug;
+        const revisionId = event.detail.revisionId;
+        let selectedRevision = null;
+        this.game.installers.forEach(function (installer) {
+          if(installer.slug == installerSlug) {
+            installer.revisions.forEach(function(revision) {
+              if(revision.id == revisionId) {
+                selectedRevision = revision;
+              }
+            });
+          }
+        });
+        if(selectedRevision) {
+          this.activeInstaller2 = this.activeInstaller1;
+          this.activeInstaller1 = selectedRevision.data;
+        }
+      },
+
+      onSwitchDiff: function (event) {
+        this.sourceVisible = !this.sourceVisible;
       }
     })
   </script>

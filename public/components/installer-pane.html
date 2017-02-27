@@ -1,58 +1,36 @@
 <link rel="import" href="/static/polymer/polymer.html">
-<link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-pane">
   <template>
-    <iron-ajax
-      auto
-      id="installer-api-request"
-      handle-as="json"
-      verbose="true"
-      method="GET">
-    </iron-ajax>
+    <style>
+      .pane {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
     <div class="pane">
       <p>
-        <strong>Author:</strong><span class="author">[[author]]</span><br/>
-        <strong>Date:</strong><span class="date">[[date]]</span><br/>
-        <strong>Version:</strong><span class="version"></span><br/>
-        <strong>Runner:</strong><span class="runner"></span><br/>
-        <strong>Draft:</strong><input type="checkbox" class="draft" disabled>
-        <strong>Published:</strong><input type="checkbox" class="published" disabled>
+        <strong>Author:</strong><span class="author">[[installer.user]]</span><br/>
+        <strong>Date:</strong><span class="date">[[installer.created_at]]</span><br/>
+        <strong>Version:</strong><span class="version">[[installer.version]]</span><br/>
+        <strong>Runner:</strong><span class="runner">[[installer.runner]]</span><br/>
+        <strong>Draft:</strong><input type="checkbox" class="draft" disabled checked="[[installer.draft]]"><br/>
+        <strong>Published:</strong><input type="checkbox" class="published" disabled checked="[[installer.published]]">
       </p>
       <p>{{title}}</p>
 
-      <pre>{{content}}</pre>
+      <template is="dom-if" if="[[sourceVisible]]">
+        <pre>[[installer.content]]</pre>
+      </template>
     </div>
   </template>
   <script>
     Polymer({
       is: 'installer-pane',
       properties: {
-        installerId: {
-          type: Number,
-          reflectToAttribute: true,
-          observer: '_installerIdChanged'
-        },
-        revisionId: {
-          type: Number,
-          reflectToAttribute: true,
-          observer: '_revisionIdChanged'
-        },
-        version: String,
-        author: String,
-        content: Text,
-      },
-      ready: function() {
-        this.title = "Example title";
-        this.content = "foo";
-      },
-      _revisionIdChanged: function(newValue, oldValue) {
-        const installerAPIRequest = this.$['installer-api-request'];
-        console.log(installerAPIRequest);
-      },
-
-
-
+        installer: Object,
+        sourceVisible: Boolean,
+      }
     })
   </script>
 </dom-module>

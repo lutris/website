@@ -45,11 +45,8 @@ class InstallerSerializer(serializers.ModelSerializer):
         lookup_field='slug'
     )
     user = serializers.StringRelatedField()
-    runner = serializers.HyperlinkedRelatedField(
-        view_name='runner_detail',
-        read_only=True,
-        lookup_field='slug'
-    )
+
+    runner = serializers.StringRelatedField()
 
     class Meta(object):
         model = models.Installer
@@ -84,7 +81,7 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
         model = models.Installer
         fields = ('game', 'user', 'runner', 'slug', 'version', 'description',
                   'notes', 'created_at', 'updated_at', 'published', 'rating',
-                  'script', 'revisions')
+                  'script', 'content', 'revisions')
 
 
 class GameRevisionSerializer(GameSerializer):

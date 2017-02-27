@@ -11,7 +11,7 @@ local_settings.py
 nosetests.xml
 coverage.xml
 .coverage
-components
+/components
 public/js
 public/css
 public/fonts
