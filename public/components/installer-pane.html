@@ -4,12 +4,13 @@
   <template>
     <div class="pane">
       <p>
-        <strong>Author:</strong><span class="author">[[installer.user]]</span><br/>
-        <strong>Date:</strong><span class="date">[[installer.created_at]]</span><br/>
-        <strong>Version:</strong><span class="version">[[installer.version]]</span><br/>
-        <strong>Runner:</strong><span class="runner">[[installer.runner]]</span><br/>
-        <strong>Draft:</strong><input type="checkbox" class="draft" disabled checked="[[installer.draft]]"><br/>
-        <strong>Published:</strong><input type="checkbox" class="published" disabled checked="[[installer.published]]">
+        <strong>ID:</strong><span>[[installer.id]]</span><br/>
+        <strong>Author:</strong><span>[[installer.user]]</span><br/>
+        <strong>Date:</strong><span>[[installer.created_at]]</span><br/>
+        <strong>Version:</strong><span>[[installer.version]]</span><br/>
+        <strong>Runner:</strong><span>[[installer.runner]]</span><br/>
+        <strong>Draft:</strong><input type="checkbox" disabled checked="[[installer.draft]]"><br/>
+        <strong>Published:</strong><input type="checkbox" disabled checked="[[installer.published]]">
       </p>
       <p>
         <strong>Notes:</strong>

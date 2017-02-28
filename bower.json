@@ -20,6 +20,7 @@
     "jcrop-fileinput": "git://github.com/strycore/jcrop-fileinput.git#0.1.10",
     "polymer": "Polymer#^1.7.1",
     "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
-    "jsdifflib": "*"
+    "jsdifflib": "*",
+    "paper-button": "PolymerElements/paper-button#^1.0.14"
   }
 }

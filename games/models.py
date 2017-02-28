@@ -545,6 +545,7 @@ class InstallerRevision(object):
     def get_installer_data(self):
         installer_data = json.loads(self.version.serialized_data)[0]['fields']
         installer_data['script'] = yaml.safe_load(installer_data['content'])
+        installer_data['id'] = self.id
         return installer_data
 
     def delete(self):

@@ -42,11 +42,11 @@ class InstallerRevisionListView(generics.ListAPIView):
     serializer_class = serializers.InstallerRevisionSerializer
 
     def get_queryset(self):
-        installer = models.Installer.object.get(pk=self.request.parser_context['kwargs']['pk'])
+        installer = models.Installer.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         return installer.revisions
 
 
-class InstallerRevisionDetailView(generics.RetrieveDestroyAPIView):
+class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
@@ -57,6 +57,16 @@ class InstallerRevisionDetailView(generics.RetrieveDestroyAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if request.data.get('action') == 'accept':
+            instance.accept()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get_object(self):
         version = Version.objects.get(pk=self.request.parser_context['kwargs']['pk'])

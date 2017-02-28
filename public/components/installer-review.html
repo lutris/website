@@ -3,6 +3,7 @@
 <link rel="import" href="/static/components/installer-list.html">
 <link rel="import" href="/static/components/installer-diff.html">
 <link rel="import" href="/static/iron-ajax/iron-ajax.html">
+<link rel="import" href="/static/paper-button/paper-button.html">
 
 <dom-module id="installer-review">
   <template>
@@ -10,11 +11,13 @@
       <div class="col-sm-12">
         <h1><a href="[[game.slug]]">[[game.name]]</a> installers</h1>
       </div>
-      <div class="col-sm-2">
-        <button on-tap="onSwitchDiff" class="btn">Diff</button>
+      <div class="col-sm-7">
+        <paper-button on-tap="onSwitchDiff" class="btn">Diff</paper-button>
       </div>
       <div class="col-sm-5">
-        <button on-tap="onDeleteInstaller" class="btn">Delete</button>
+        <paper-button on-tap="onDeleteInstaller" class="btn">Delete</paper-button>
+
+        <paper-button on-tap="onValidateInstaller" class="btn" hidden="[[isNotRevision]]">Accept</paper-button>
       </div>
     </div>
     <div class="row">
@@ -47,9 +50,9 @@
       handle-as="json"
       on-response="handleResponse">
     </iron-ajax>
+
     <iron-ajax
       id="action-request"
-      headers='{"Authorization": "Token [[apiKey]]"}'
       handle-as="json"
       on-response="handleAction">
     </iron-ajax>
@@ -63,12 +66,14 @@
         sourceVisible: Boolean,
         game: {
           type: Object,
-          default: {}
+          default: {},
+          notify: true
         },
         selectedObject: {
           type: Object,
           default: {}
         },
+        selectedInstaller: Object,
         activeInstaller1: Object,
         activeInstaller2: Object,
         activePane: {
@@ -78,6 +83,11 @@
         objectName: {
           type: String,
           computed: 'getObjectName(selectedObject)'
+        },
+        isNotRevision: {
+          type: Boolean,
+          value: true,
+          computed: 'getIsNotRevision(selectedObject)'
         }
       },
 
@@ -91,7 +101,6 @@
       },
 
       getObjectName: function(selectedObject) {
-        console.log("!!")
         if (!selectedObject) {
           return;
         }
@@ -99,13 +108,26 @@
           return selectedObject.comment;
         } else if ('slug' in selectedObject) {
           return selectedObject.slug;
+        }
+      },
+
+      getIsNotRevision: function(selectedObject) {
+        if (!selectedObject) {
+          return true;
+        }
+        if ('comment' in selectedObject) {
+          return false;
         } else {
-          return "???";
+          return true;
         }
       },
 
       handleResponse: function(response) {
         this.game = response.detail.__data__.response;
+      },
+
+      handleAction: function(response) {
+        console.log(response);
       },
 
       onLoadInstaller: function (event) {
@@ -128,8 +150,10 @@
         const installerSlug = event.detail.installerSlug;
         const revisionId = event.detail.revisionId;
         let selectedRevision = null;
+        let selectedInstaller = null;
         this.game.installers.forEach(function (installer) {
           if(installer.slug == installerSlug) {
+            selectedInstaller = installer;
             installer.revisions.forEach(function(revision) {
               if(revision.id == revisionId) {
                 selectedRevision = revision;
@@ -139,6 +163,7 @@
         });
         if(selectedRevision) {
           this.selectedObject = selectedRevision;
+          this.selectedInstaller = selectedInstaller;
           this.activeInstaller1 = this.activeInstaller2;
           this.activeInstaller2 = selectedRevision.data;
         }
@@ -148,19 +173,59 @@
         this.sourceVisible = !this.sourceVisible;
       },
 
-      onDeleteInstaller: function (event) {
-        const name = this.getObjectName();
+      requestAction: function (method, payload) {
+        const name = this.objectName;
         if (name) {
           // confirm(`Are you sure you want to delete ${name}?`)
           const actionRequest = this.$['action-request'];
           if ('comment' in this.selectedObject) {
             action_url = `/api/installers/revisions/${this.selectedObject.id}`;
           } else {
-            action_url = `/api/installers/${this.selectedObject.slug}`;
+            action_url = `/api/installers/${this.selectedObject.id}`;
           }
-          console.log(action_url);
 
+          actionRequest.url = action_url;
+          actionRequest.method = method;
+          if (payload) {
+            actionRequest.body = payload;
+          }
+          actionRequest.contentType = 'application/json';
+          actionRequest.headers.Authorization = 'Token ' + this.apiKey;
+          actionRequest.headers.Accept = 'application/json';
+
+          actionRequest.generateRequest();
         }
+      },
+
+      removeSelected: function () {
+        if (this.isNotRevision) {
+          this.game.installers.forEach(function(installer, index, array) {
+            if(installer.slug == this.selectedObject.slug) {
+              this.splice('game.installers', index, 1);
+            }
+          }.bind(this));
+        } else {
+          this.game.installers.forEach(function (installer, installerIndex) {
+            if(installer.slug == this.selectedInstaller.slug) {
+              installer.revisions.forEach(function(revision, index, array) {
+                if(revision.id == this.selectedObject.id) {
+                  this.splice('game.installers.'+installerIndex+'.revisions', index, 1);
+                  this.notifyPath(this.game.installers[installerIndex]);
+                }
+              }.bind(this));
+            }
+          }.bind(this));
+        }
+      },
+
+      onDeleteInstaller: function (event) {
+        this.requestAction('DELETE');
+        this.removeSelected();
+      },
+
+      onValidateInstaller: function (event) {
+        this.requestAction('PUT', {'action': 'accept'});
+        this.removeSelected();
       }
     })
   </script>
