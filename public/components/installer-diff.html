@@ -27,11 +27,19 @@
         installer2: {
           type: Object,
           observer: 'onInstallerChanged'
+        },
+        name: {
+          type: String,
+          observer: 'onNameChanged'
+        },
+        oldName: {
+          type: String,
+          value: "Previous version"
         }
       },
-      observers: [
-        'onInstallerChanged(installer1.content)',
-      ],
+      onNameChanged: function(newValue, oldValue) {
+        this.oldName = oldValue;
+      },
       onInstallerChanged: function(event) {
         if(!this.installer1 || !this.installer2) {
           return;
@@ -49,8 +57,8 @@
           baseTextLines: base,
           newTextLines: newtxt,
           opcodes: opcodes,
-          baseTextName: "Base Text",
-          newTextName: "New Text",
+          baseTextName: this.oldName,
+          newTextName: this.name,
           contextSize: null,
           viewType: 0
         }));

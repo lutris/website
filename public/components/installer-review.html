@@ -14,7 +14,7 @@
         <button on-tap="onSwitchDiff" class="btn">Diff</button>
       </div>
       <div class="col-sm-5">
-        <button on-tap="deleteInstaller1" class="btn">Delete</button>
+        <button on-tap="onDeleteInstaller" class="btn">Delete</button>
       </div>
     </div>
     <div class="row">
@@ -34,6 +34,7 @@
       <installer-diff
         class="col-sm-10"
         hidden="[[sourceVisible]]"
+        name="{{objectName}}"
         installer1="[[activeInstaller1]]"
         installer2="[[activeInstaller2]]">
       </installer-diff>
@@ -41,11 +42,16 @@
 
     <iron-ajax
       auto
-      verbose
       url="/api/installers/game/[[slug]]/revisions"
       headers='{"Authorization": "Token [[apiKey]]"}'
       handle-as="json"
       on-response="handleResponse">
+    </iron-ajax>
+    <iron-ajax
+      id="action-request"
+      headers='{"Authorization": "Token [[apiKey]]"}'
+      handle-as="json"
+      on-response="handleAction">
     </iron-ajax>
   </template>
   <script>
@@ -59,27 +65,49 @@
           type: Object,
           default: {}
         },
-        activeInstaller1: {
-          type: Object
+        selectedObject: {
+          type: Object,
+          default: {}
         },
-        activeInstaller2: {
-          type: Object
-        },
+        activeInstaller1: Object,
+        activeInstaller2: Object,
         activePane: {
           type: String,
           default: 'pane-1'
+        },
+        objectName: {
+          type: String,
+          computed: 'getObjectName(selectedObject)'
         }
       },
+
       listeners: {
         'load-installer': 'onLoadInstaller',
         'load-revision': 'onLoadRevision'
       },
-      attached: function() {
+
+      ready: function() {
         this.sourceVisible = false;
       },
+
+      getObjectName: function(selectedObject) {
+        console.log("!!")
+        if (!selectedObject) {
+          return;
+        }
+        if ('comment' in selectedObject) {
+          return selectedObject.comment;
+        } else if ('slug' in selectedObject) {
+          return selectedObject.slug;
+        } else {
+          return "???";
+        }
+      },
+
       handleResponse: function(response) {
         this.game = response.detail.__data__.response;
       },
+
       onLoadInstaller: function (event) {
         const installerSlug = event.detail.installerSlug;
 
@@ -90,10 +118,12 @@
           }
         });
         if(selectedInstaller) {
-          this.activeInstaller2 = this.activeInstaller1;
-          this.activeInstaller1 = selectedInstaller;
+          this.selectedObject = selectedInstaller;
+          this.activeInstaller1 = this.activeInstaller2;
+          this.activeInstaller2 = selectedInstaller;
         }
       },
+
       onLoadRevision: function (event) {
         const installerSlug = event.detail.installerSlug;
         const revisionId = event.detail.revisionId;
@@ -108,13 +138,29 @@
           }
         });
         if(selectedRevision) {
-          this.activeInstaller2 = this.activeInstaller1;
-          this.activeInstaller1 = selectedRevision.data;
+          this.selectedObject = selectedRevision;
+          this.activeInstaller1 = this.activeInstaller2;
+          this.activeInstaller2 = selectedRevision.data;
         }
       },
 
       onSwitchDiff: function (event) {
         this.sourceVisible = !this.sourceVisible;
+      },
+
+      onDeleteInstaller: function (event) {
+        const name = this.getObjectName();
+        if (name) {
+          // confirm(`Are you sure you want to delete ${name}?`)
+          const actionRequest = this.$['action-request'];
+          if ('comment' in this.selectedObject) {
+            action_url = `/api/installers/revisions/${this.selectedObject.id}`;
+          } else {
+            action_url = `/api/installers/${this.selectedObject.slug}`;
+          }
+          console.log(action_url);
+
+        }
       }
     })
   </script>
