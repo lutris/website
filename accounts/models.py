@@ -30,9 +30,9 @@ class User(AbstractUser):
         default_url = settings.STATIC_URL + "images/default-avatar.png"
         size = 64
         return (
-            "https://www.gravatar.com/avatar/"
-            + hashlib.md5(self.email.lower()).hexdigest() + "?"
-            + urllib.urlencode({'d': default_url, 's': str(size)})
+            "https://www.gravatar.com/avatar/" +
+            hashlib.md5(self.email.lower()).hexdigest() + "?" +
+            urllib.urlencode({'d': default_url, 's': str(size)})
         )
 
     def set_steamid(self):

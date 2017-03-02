@@ -21,14 +21,20 @@
       <strong>Email:</strong>
       <span>{{user.email}}</span>
       {% if not user.email_confirmed %}
-      <a href="{% url "user_send_confirmation" %}">Send validation link</a>
-      <br/>
-      <span class='warning-message'>Your email address has not been validated.
-        Some email providers such as Hotmail do not accept messages from
-        Lutris, if this is the case, please change your email address to
-        validate it.
-      </span>
-
+        {% if user.email %}
+          <a href="{% url "user_send_confirmation" %}">Send validation link</a>
+          <br/>
+          <span class='warning-message'>Your email address has not been validated.
+            Some email providers such as Hotmail do not accept messages from
+            Lutris, if this is the case, please change your email address to
+            validate it.
+          </span>
+        {% else %}
+          <span class='warning-message'>
+            You don't have an email set, your account will be limited and you
+            won't be able to use the forums.
+          </span>
+        {% endif %}
       {% endif %}
       <br/>
       {% if user.website %}
