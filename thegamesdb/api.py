@@ -140,8 +140,10 @@ def get_similar(game_data):
 
 
 def get_pics(game_data, tag_name):
-    fanarts = game_data.find_all(tag_name)
     results = []
+    if not game_data:
+        return results
+    fanarts = game_data.find_all(tag_name)
     for fanart in fanarts:
         original = fanart.find('original')
         original_meta = original.attrs
