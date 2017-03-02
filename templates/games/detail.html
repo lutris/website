@@ -158,6 +158,9 @@
           {% if unpublished_installers %}
             <a href="#" onclick="toggleUnpublishedInstallers(event)" class="discreet-text">Show unpublished installers</a>
           {% endif %}
+          {% if user.is_staff %}
+            <a href="{% url 'installer_review' slug=game.slug %} " class="discreet-text">Review installers</a>
+          {% endif %}
           <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
         </div>
       </div>
