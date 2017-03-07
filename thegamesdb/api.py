@@ -46,6 +46,7 @@ PLATFORM_MAP = {
     'Sony Playstation': 'sony-playstation',
     'Sony Playstation 2': 'sony-playstation-2',
     'Sony PSP': 'sony-psp',
+    'Sony Playstation Portable': 'sony-psp',
     'Nintendo Entertainment System (NES)': 'nes',
     'Super Nintendo (SNES)': 'super-nintendo',
     'Neo Geo': 'neo-geo',
