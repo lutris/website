@@ -7,7 +7,6 @@ from games import models, serializers
 
 
 class GameListView(generics.GenericAPIView):
-    serializer_class = serializers.GameSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', 'name')
 
@@ -23,6 +22,12 @@ class GameListView(generics.GenericAPIView):
         else:
             queryset = models.Game.objects.all()
         return queryset
+
+    def get_serializer_class(self):
+        if self.request.GET.get('installers') == '1':
+            return serializers.GameInstallersSerializer
+        else:
+            return serializers.GameSerializer
 
     def get(self, request):
         queryset = self.filter_queryset(self.get_queryset())
