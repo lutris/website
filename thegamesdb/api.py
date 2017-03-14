@@ -61,6 +61,7 @@ PLATFORM_MAP = {
     'NeoGeo': 'neo-geo',
     'TurboGrafx 16': 'turbografx-16',
     'Vectrex': 'vectrex',
+    'Sinclair ZX Spectrum': 'zx-spectrum',
 }
 
 
