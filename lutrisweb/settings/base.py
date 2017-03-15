@@ -13,7 +13,8 @@ def media_directory(path):
         os.makedirs(abs_path)
     return abs_path
 
-CLIENT_VERSION = "0.4.5"
+
+CLIENT_VERSION = "0.4.6"
 
 DEBUG = False
 THUMBNAIL_DEBUG = False
