@@ -2,30 +2,48 @@
 
 {% block extra_head %}
 {{ form.media.css }}
+<script>
+  function getRequest(method, url) {
+    request = new XMLHttpRequest();
+    request.open(method, url);
+    request.setRequestHeader("Content-type","application/json");
+    request.setRequestHeader("Authorization","Token {{user.auth_token.key}}");
+    return request;
+  }
+
+  function deleteRevision(target) {
+    const button = target;
+    const revisionId = target.getAttribute('data-id');
+    request = getRequest('DELETE', `/api/installers/revisions/${revisionId}`);
+    request.onreadystatechange = function() {
+      console.log('Revision deleted');
+    };
+    request.send();
+  }
+</script>
 {% endblock extra_head %}
 
 {% block content %}
 <ul class="game-list">
-
-{% for submission in submissions %}
-<li>
-<p>
-  <strong>{{ submission }}</strong>
-</p>
-<p>
-<span>{{submission.revision.user}}</span>
-<span>{{submission.revision.date_created}}</span>
-{% if submission.object.game %}
-<span>
-  <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
-</span>
-{% else %}
-<span>
-  <strong>NO OBJECT</strong>
-</span>
-{% endif %}
-</p>
-</li>
-{% endfor %}
+  {% for submission in submissions %}
+    <li>
+      <p>
+        <strong>{{ submission }}</strong>
+      </p>
+      <p>
+      <span>{{submission.revision.user}}</span>
+      <span>{{submission.revision.date_created}}</span>
+      {% if submission.object.game %}
+        <span>
+          <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+        </span>
+      {% else %}
+        <span>
+          <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
+        </span>
+      {% endif %}
+      </p>
+    </li>
+  {% endfor %}
 </ul>
 {% endblock %}
