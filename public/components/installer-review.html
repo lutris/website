@@ -17,7 +17,8 @@
       <div class="col-sm-5">
         <paper-button on-tap="onDeleteInstaller" class="btn">Delete</paper-button>
 
-        <paper-button on-tap="onValidateInstaller" class="btn" hidden="[[isNotRevision]]">Accept</paper-button>
+        <paper-button on-tap="onAcceptSubmission" class="btn" hidden="[[isNotRevision]]">Accept</paper-button>
+        <paper-button on-tap="onPublishInstaller" class="btn" hidden="[[!isUnpublishedInstaller]]">Publish</paper-button>
       </div>
     </div>
     <div class="row">
@@ -90,6 +91,11 @@
           type: Boolean,
           value: true,
           computed: 'getIsNotRevision(selectedObject)'
+        },
+        isUnpublishedInstaller: {
+          type: Boolean,
+          value: false,
+          computed: 'getIsUnpublishedInstaller(selectedObject)'
         }
       },
 
@@ -122,6 +128,13 @@
         } else {
           return true;
         }
+      },
+
+      getIsUnpublishedInstaller(selectedObject) {
+        if (!selectedObject) {
+          return false;
+        }
+        return selectedObject.published === false;
       },
 
       handleResponse: function(response) {
@@ -178,7 +191,6 @@
       requestAction: function (method, payload) {
         const name = this.objectName;
         if (name) {
-          // confirm(`Are you sure you want to delete ${name}?`)
           const actionRequest = this.$['action-request'];
           if ('comment' in this.selectedObject) {
             action_url = `/api/installers/revisions/${this.selectedObject.id}`;
@@ -225,9 +237,14 @@
         this.removeSelected();
       },
 
-      onValidateInstaller: function (event) {
+      onAcceptSubmission: function (event) {
         this.requestAction('PUT', {'action': 'accept'});
         this.removeSelected();
+      },
+
+      onPublishInstaller: function (event) {
+        this.requestAction('PATCH', '{"published": true, "draft": false}');
+        this.selectedObject.published = true;
       }
     })
   </script>

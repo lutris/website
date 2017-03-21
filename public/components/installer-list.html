@@ -7,15 +7,18 @@
         :host {
           padding: 0;
         }
+
         .installer-revision-list {
           list-style-type:none;
           padding: 0;
         }
+
         .btn {
           width: 100%;
           margin: 4px 0;
           overflow: hidden;
         }
+
         .selected {
           background-color: #BBB;
           color: #444;
@@ -24,12 +27,20 @@
         .previous-selected {
           background-color: #777;
         }
+
+        .btn-published {
+          border-left: 5px solid green;
+        }
+
+        .btn-unpublished {
+          border-left: 5px solid red;
+        }
       </style>
       <ul class="installer-revision-list">
         <template is="dom-repeat" id="installer-list" items={{installers}} as="installer">
           <li>
             <a
-              class="btn btn-primary"
+              class$="{{getInstallerButtonClasses(installer)}}"
               data-installer-slug$="[[installer.slug]]"
               on-tap="onInstallerClick">
               [[installer.slug]]
@@ -64,6 +75,16 @@
           element.classList.add('previous-selected');
         });
       },
+
+      getInstallerButtonClasses: function(installer) {
+        baseClasses = "btn btn-primary";
+        if (installer.published) {
+          return baseClasses + " btn-published";
+        } else {
+          return baseClasses + " btn-unpublished";
+        }
+      },
+
       onInstallerClick: function(event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
         this._clearSelected()
