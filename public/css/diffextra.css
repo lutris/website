@@ -1,0 +1,9 @@
+.diff {
+  width: 730px;
+  background-color: #DDD;
+  font-size: 0.8em;
+  color: #444;
+}
+.diff td {
+  width: 324px;
+}

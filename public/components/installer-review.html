@@ -22,25 +22,27 @@
     </div>
     <div class="row">
       <installer-list class="col-sm-2" id="installer-list" installers="[[game.installers]]"></installer-list>
-      <installer-pane
-        class="col-sm-5"
-        id="pane-1"
-        source-visible="[[sourceVisible]]"
-        installer="[[activeInstaller1]]">
-      </installer-pane>
-      <installer-pane
-        class="col-sm-5"
-        id="pane-2"
-        source-visible="[[sourceVisible]]"
-        installer="[[activeInstaller2]]">
-      </installer-pane>
-      <installer-diff
-        class="col-sm-10"
-        hidden="[[sourceVisible]]"
-        name="{{objectName}}"
-        installer1="[[activeInstaller1]]"
-        installer2="[[activeInstaller2]]">
-      </installer-diff>
+      <div class="col-sm-10 row">
+        <installer-pane
+          class="col-sm-6"
+          id="pane-1"
+          source-visible="[[sourceVisible]]"
+          installer="[[activeInstaller1]]">
+        </installer-pane>
+        <installer-pane
+          class="col-sm-6"
+          id="pane-2"
+          source-visible="[[sourceVisible]]"
+          installer="[[activeInstaller2]]">
+        </installer-pane>
+        <installer-diff
+          class="col-sm-12"
+          hidden="[[sourceVisible]]"
+          name="{{objectName}}"
+          installer1="[[activeInstaller1]]"
+          installer2="[[activeInstaller2]]">
+        </installer-diff>
+      </div>
     </div>
 
     <iron-ajax
