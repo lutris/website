@@ -555,5 +555,6 @@ class InstallerRevision(object):
         self.version.revert()
         installer = Installer.objects.get(pk=self.installer)
         installer.published = True
+        installer.draft = False
         installer.save()
         self.delete()

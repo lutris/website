@@ -50,7 +50,7 @@ class InstallerSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = models.Installer
-        fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description',
+        fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
                   'notes', 'created_at', 'updated_at', 'published', 'rating', 'script')
 
 
