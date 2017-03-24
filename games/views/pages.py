@@ -20,7 +20,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from reversion.models import Revision, Version
+from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required
@@ -153,8 +153,8 @@ class GameListByCompany(GameList):
     """View for games filtered by publisher"""
     def get_queryset(self):
         queryset = super(GameListByCompany, self).get_queryset()
-        return queryset.filter(Q(publisher__slug=self.args[0])
-                               | Q(developer__slug=self.args[0]))
+        return queryset.filter(Q(publisher__slug=self.args[0]) |
+                               Q(developer__slug=self.args[0]))
 
     def get_context_data(self, **kwargs):
         context = super(GameListByCompany, self).get_context_data(**kwargs)
@@ -239,7 +239,7 @@ def new_installer(request, slug):
         installer.user = request.user
         installer.save()
         return redirect("installer_complete", slug=game.slug)
-    return render(request, 'games/installer-form.html',
+    return render(request, 'installers/form.html',
                   {'form': form, 'game': game, 'new': True})
 
 
@@ -253,7 +253,6 @@ def edit_installer(request, slug):
             revision_id = int(request.GET['revision'])
         except ValueError:
             revision_id = None
-        print revision_id
     else:
         revision_id = None
     versions = Version.objects.get_for_object(installer)
@@ -264,8 +263,8 @@ def edit_installer(request, slug):
                 initial_data = version.field_dict
                 break
         else:
-            if(version.revision.user == request.user
-               and version.revision.date_created > installer.updated_at):
+            if(version.revision.user == request.user and
+               version.revision.date_created > installer.updated_at):
                 initial_data = version.field_dict
                 break
 
@@ -290,7 +289,7 @@ def edit_installer(request, slug):
             ))
             reversion.add_to_revision(installer)
         return redirect("installer_complete", slug=installer.game.slug)
-    return render(request, 'games/installer-form.html', {
+    return render(request, 'installers/form.html', {
         'form': form,
         'game': installer.game,
         'new': False,
@@ -313,7 +312,7 @@ def delete_installer(request, slug):
             u"The installer {} has been deleted.".format(installer_name)
         )
         return redirect(game.get_absolute_url())
-    return render(request, 'games/installer-delete.html', {
+    return render(request, 'installers/delete.html', {
         'installer': installer
     })
 
@@ -338,7 +337,7 @@ def validate(game, request, form):
 
 def installer_complete(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
-    return render(request, 'games/installer-complete.html', {'game': game})
+    return render(request, 'installers/complete.html', {'game': game})
 
 
 def get_installers(request, slug):
@@ -354,7 +353,7 @@ def view_installer(request, id):
         installer = Installer.objects.get(pk=id)
     except Installer.DoesNotExist:
         raise Http404
-    return render(request, 'games/installer-view.html', {'installer': installer})
+    return render(request, 'installers/view.html', {'installer': installer})
 
 
 @user_confirmed_required
@@ -376,7 +375,7 @@ def fork_installer(request, id):
         'form': form,
         'installer': installer,
     }
-    return render(request, 'games/installer-fork.html', context)
+    return render(request, 'installers/fork.html', context)
 
 
 class InstallerFeed(Feed):
@@ -542,7 +541,7 @@ def submit_issue(request):
 @staff_member_required
 def installer_mass_publish(request):
     installers = Installer.objects.filter(published=False)[:50]
-    return render(request, 'games/installer-mass-publish.html', {
+    return render(request, 'installers/mass-publish.html', {
         'installers': installers
     })
 
@@ -567,7 +566,7 @@ def installer_diff(request):
         diff = HtmlDiff(tabsize=2, wrapcolumn=64)
         diff_table = diff.make_table(i1_lines, i2_lines)
 
-    return render(request, 'games/installer-diff.html', {
+    return render(request, 'installers/diff.html', {
         'form': form,
         'diff_table': diff_table,
         'installer_1': installer_1,
