@@ -140,7 +140,7 @@
           {% endfor %}
         </ul>
         {% endif %}
-        {% if auto_installers %}
+        {% elif auto_installers%}
         <ul>
           {% for installer in auto_installers %}
             {% include "games/_installer.html" %}
