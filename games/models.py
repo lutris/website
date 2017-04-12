@@ -542,6 +542,7 @@ class InstallerRevision(object):
         self.rating = installer_data['rating']
 
         self.script = installer_data['script']
+        self.content = installer_data['content']
 
         self.user = self.user
         self.runner = Runner.objects.get(pk=installer_data['runner'])

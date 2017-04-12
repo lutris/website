@@ -100,6 +100,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
 
     script = serializers.JSONField()
+    content = serializers.CharField()
     comment = serializers.CharField()
     installer_id = serializers.IntegerField()
 
