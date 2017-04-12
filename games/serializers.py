@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from platforms.models import Platform
-from . import models
+from games import models
 
 
 class PlatformSerializer(serializers.ModelSerializer):
@@ -52,11 +52,11 @@ class InstallerSerializer(serializers.ModelSerializer):
 
     user = serializers.StringRelatedField()
 
-    runner = serializers.StringRelatedField()
+    runner = serializers.SlugRelatedField(slug_field="slug", read_only=True)
 
     class Meta(object):
         model = models.Installer
-        fields = ('id', 'name', 'game', 'game_slug', 'year', 'user', 'runner', 'slug',
+        fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'rating', 'steamid', 'gogid', 'humblestoreid',
                   'script')
@@ -68,18 +68,40 @@ class GameInstallersSerializer(GameSerializer):
     class Meta(object):
         model = models.Game
         fields = (
-            'name', 'slug', 'year', 'platforms', 'genres',
-            'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogid', 'humblestoreid', 'installers'
+            'id', 'name', 'slug', 'year', 'platforms', 'genres',
+            'banner_url', 'icon_url', 'is_public', 'updated',
+            'steamid', 'gogid', 'humblestoreid', 'installers'
         )
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    data = serializers.JSONField()
-    comment = serializers.CharField()
+    game = serializers.HyperlinkedRelatedField(
+        view_name='api_game_detail',
+        read_only=True,
+        lookup_field='slug'
+    )
+    game_slug = serializers.ReadOnlyField(source='game.slug')
+    name = serializers.ReadOnlyField(source='game.name')
+    year = serializers.ReadOnlyField(source='game.year')
+    user = serializers.StringRelatedField()
+    runner = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+    slug = serializers.CharField()
+    version = serializers.CharField()
+    description = serializers.CharField()
+    notes = serializers.CharField()
     created_at = serializers.DateTimeField()
-    installer = serializers.IntegerField()
+    draft = serializers.BooleanField()
+    published = serializers.BooleanField()
+    rating = serializers.CharField()
+
+    steamid = serializers.ReadOnlyField(source='game.steamid')
+    gogid = serializers.ReadOnlyField(source='game.gogid')
+    humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
+
+    script = serializers.JSONField()
+    comment = serializers.CharField()
+    installer_id = serializers.IntegerField()
 
 
 class InstallerWithRevisionsSerializer(InstallerSerializer):

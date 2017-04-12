@@ -527,32 +527,45 @@ class GameLink(models.Model):
 
 class InstallerRevision(object):
     def __init__(self, version):
-        self.version = version
+        self._version = version
         self.id = version.pk
-        self.comment = self.version.revision.comment
-        self.user = self.version.revision.user
-        self.created_at = self.version.revision.date_created
-        self.data = self.get_installer_data()
-        if self.user:
-            self.data['user'] = self.user.username
-            self.data['runner'] = Runner.objects.get(pk=self.data['runner']).name
-        self.data['created_at'] = self.created_at
-        self.installer = self.version.object_id
+        installer_data = self.get_installer_data()
+        self.game = Game.objects.get(pk=installer_data['game'])
+
+        self.name = self.game.name
+
+        self.comment = self._version.revision.comment
+        self.user = self._version.revision.user
+        self.created_at = self._version.revision.date_created
+        self.draft = installer_data['draft']
+        self.published = installer_data['published']
+        self.rating = installer_data['rating']
+
+        self.script = installer_data['script']
+
+        self.user = self.user
+        self.runner = Runner.objects.get(pk=installer_data['runner'])
+        self.slug = installer_data['slug']
+        self.version = installer_data['version']
+        self.description = installer_data['description']
+        self.notes = installer_data['notes']
+
+        self.installer_id = self._version.object_id
 
     def __unicode__(self):
         return self.comment
 
     def get_installer_data(self):
-        installer_data = json.loads(self.version.serialized_data)[0]['fields']
+        installer_data = json.loads(self._version.serialized_data)[0]['fields']
         installer_data['script'] = yaml.safe_load(installer_data['content'])
         installer_data['id'] = self.id
         return installer_data
 
     def delete(self):
-        self.version.delete()
+        self._version.delete()
 
     def accept(self):
-        self.version.revert()
+        self._version.revert()
         installer = Installer.objects.get(pk=self.installer)
         installer.published = True
         installer.draft = False

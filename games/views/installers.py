@@ -12,17 +12,20 @@ from games import models, serializers
 
 
 class InstallerListView(generics.ListAPIView):
+    """Lists all the installers"""
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Returns the details for a given installer"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
 
 
 class GameRevisionListView(generics.RetrieveAPIView):
+    """Returns the list of revisions """
     permission_classes = [IsAdminUser]
     serializer_class = serializers.GameRevisionSerializer
     queryset = models.Game.objects.all()
