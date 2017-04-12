@@ -266,6 +266,7 @@ def edit_installer(request, slug):
             if(version.revision.user == request.user and
                version.revision.date_created > installer.updated_at):
                 initial_data = version.field_dict
+                revision_id = version.id
                 break
 
     if initial_data:
@@ -294,7 +295,8 @@ def edit_installer(request, slug):
         'game': installer.game,
         'new': False,
         'installer': installer,
-        'versions': versions
+        'versions': versions,
+        'revision_id': revision_id
     })
 
 
