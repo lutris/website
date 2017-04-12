@@ -1,4 +1,3 @@
-from reversion.models import Version
 from rest_framework import serializers
 from platforms.models import Platform
 from . import models
@@ -44,14 +43,23 @@ class InstallerSerializer(serializers.ModelSerializer):
         read_only=True,
         lookup_field='slug'
     )
+    game_slug = serializers.ReadOnlyField(source='game.slug')
+    name = serializers.ReadOnlyField(source='game.name')
+    year = serializers.ReadOnlyField(source='game.year')
+    steamid = serializers.ReadOnlyField(source='game.steamid')
+    gogid = serializers.ReadOnlyField(source='game.gogid')
+    humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
+
     user = serializers.StringRelatedField()
 
     runner = serializers.StringRelatedField()
 
     class Meta(object):
         model = models.Installer
-        fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
-                  'notes', 'created_at', 'updated_at', 'published', 'rating', 'script')
+        fields = ('id', 'name', 'game', 'game_slug', 'year', 'user', 'runner', 'slug',
+                  'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
+                  'published', 'rating', 'steamid', 'gogid', 'humblestoreid',
+                  'script')
 
 
 class GameInstallersSerializer(GameSerializer):
