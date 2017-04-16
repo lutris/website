@@ -115,22 +115,6 @@ def update_celery():
          + '/etc/supervisor/conf.d/', shell=False)
 
 
-def rsync():
-    """ rsync code to remote host """
-    require('root', provided_by=('staging', 'production'))
-    if env.environment == 'production':
-        if not console.confirm('Are you sure you want to deploy production?',
-                               default=False):
-            utils.abort('Production deployment aborted.')
-    extra_opts = '--omit-dir-times'
-    rsync_project(
-        env.root,
-        exclude=RSYNC_EXCLUDE,
-        delete=True,
-        extra_opts=extra_opts,
-    )
-
-
 def copy_local_settings():
     require('code_root', provided_by=('staging', 'production'))
     put('config/local_settings_%(environment)s.py' % env, env.code_root)
@@ -228,7 +212,7 @@ def sql_restore():
             db_dump = f
             break
     if not db_dump:
-        print "No SQL dump found"
+        print("No SQL dump found")
         return
     local('gunzip {}'.format(db_dump))
     db_dump = db_dump[:-3]
