@@ -567,7 +567,7 @@ class InstallerRevision(object):
 
     def accept(self):
         self._version.revert()
-        installer = Installer.objects.get(pk=self.installer)
+        installer = Installer.objects.get(pk=self.installer_id)
         installer.published = True
         installer.draft = False
         installer.save()
