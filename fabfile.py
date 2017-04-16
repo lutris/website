@@ -3,28 +3,11 @@ import os
 import datetime
 
 from fabric.api import run, env, local, sudo, put, require, cd
-from fabric.contrib.project import rsync_project
-from fabric.contrib import console
 from fabric.operations import get
-from fabric import utils
 from fabric.context_managers import prefix
 
 
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
-RSYNC_EXCLUDE = (
-    '.git',
-    '.gitignore',
-    '*.pyc',
-    '*.example',
-    '*.db',
-    'media',
-    'static',
-    'local_settings.py',
-    'fabfile.py',
-    'bootstrap.py',
-    'tags',
-    'lutris_client',
-)
 
 env.project = 'lutrisweb'
 env.home = '/srv'
