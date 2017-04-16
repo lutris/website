@@ -453,7 +453,6 @@ def game_list(request):
 #                   {'games': games})
 
 @user_confirmed_required
-@login_required
 def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
@@ -502,7 +501,7 @@ def screenshot_add(request, slug):
     return render(request, 'games/screenshot/add.html', {'form': form})
 
 
-@user_confirmed_required
+@login_required
 def publish_screenshot(request, id):
     screenshot = get_object_or_404(models.Screenshot, id=id)
     if not request.user.is_staff:
