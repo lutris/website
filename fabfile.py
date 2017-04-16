@@ -142,6 +142,7 @@ def pull():
 
 def npm():
     with cd(env.code_root):
+        run("npm install -U bower")
         run("npm install")
 
 
