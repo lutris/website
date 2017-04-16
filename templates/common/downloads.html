@@ -10,8 +10,9 @@
         Lutris should be compatible with most up-to-date Linux distributions,
         it relies on the Python language and Gnome 3 libraries (but will run
         fine under any desktop environmment). The following distributions are
-        currently supported: Ubuntu 16.04 and 16.10, Debian 8 (Jessie), Fedora 23,
-        openSUSE 13, Arch Linux and Gentoo.
+        currently supported: Ubuntu 16.04, 16.10 and 17.04, Debian 8 (Jessie),
+        Fedora 24 and 25, openSUSE 13.2, Leap 42 and Tumbleweed, Arch Linux
+        and Gentoo.
       </p>
     </article>
     <ul class='download-list'>
@@ -35,7 +36,7 @@
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/Debian_8.0/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
           <strong>For Ubuntu</strong><br/>
-          <code>ver=$(lsb_release -sr); if [ $ver != "16.10" -a $ver != "15.10" -a $ver != "16.04" ]; then ver=16.04; fi</code>
+          <code>ver=$(lsb_release -sr); if [ $ver != "16.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=16.04; fi</code>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
@@ -68,9 +69,6 @@
         <p>
         You can get Lutris from the AUR repositories:
         <a href="https://aur.archlinux.org/packages/lutris/">https://aur.archlinux.org/packages/lutris/</a>.<br/>
-        or get the version from git:
-        <a href="https://aur.archlinux.org/packages/lutris-git/">https://aur.archlinux.org/packages/lutris-git/</a>.
-        (may be unstable, use with caution)
         </p>
       </li>
       <li>
@@ -80,8 +78,8 @@
           </li>
         </ul>
         <p>
-        Lutris is available in the official Gentoo repositories:
-        <a href="https://packages.gentoo.org/package/games-util/lutris">https://packages.gentoo.org/package/games-util/lutris</a>.
+        Lutris is available in Zugaina's overlay (may not be up to date):
+        <a href="https://gpo.zugaina.org/games-util/lutris">https://gpo.zugaina.org/games-util/lutris</a>.
         </p>
       </li>
       <li>
@@ -91,7 +89,7 @@
           </li>
         </ul>
         <p>
-        Lutris is available from the SlackBuilds repositories:
+        Lutris is available from the SlackBuilds repositories (may not be up to date):
         <a href="https://slackbuilds.org/apps/lutris/">https://slackbuilds.org/apps/lutris/</a>.
         </p>
       </li>
