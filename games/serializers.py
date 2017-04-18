@@ -59,7 +59,7 @@ class InstallerSerializer(serializers.ModelSerializer):
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'rating', 'steamid', 'gogid', 'humblestoreid',
-                  'script')
+                  'script', 'content')
 
 
 class GameInstallersSerializer(GameSerializer):

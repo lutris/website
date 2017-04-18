@@ -18,13 +18,21 @@ class InstallerListView(generics.ListAPIView):
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Returns the details for a given installer"""
+    """Returns the details for a given installer accessed by its id"""
     permission_classes = [IsAdminOrReadOnly]
+    serializer_class = serializers.InstallerSerializer
+    lookup_field = 'slug'
+
+
+class GameInstallerListView(generics.ListAPIView):
+    """Return the list of installers available for a game if a game slug is provided,
+    or a particular installer if an installer slug is passed.
+    """
     serializer_class = serializers.InstallerSerializer
 
     def get_queryset(self):
         slug = self.request.parser_context['kwargs']['slug']
-        return models.Installer.objects.fuzzy_get(slug)
+        return models.Installer.objects.fuzzy_filter(slug)
 
 
 class GameRevisionListView(generics.RetrieveAPIView):
