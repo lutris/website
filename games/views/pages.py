@@ -452,8 +452,7 @@ def game_list(request):
 #     return render(request, 'games/game_list.html',
 #                   {'games': games})
 
-
-@login_required
+@user_confirmed_required
 def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
@@ -490,7 +489,7 @@ def publish_game(request, id):
     return redirect(reverse('game_detail', kwargs={'slug': game.slug}))
 
 
-@login_required
+@user_confirmed_required
 def screenshot_add(request, slug):
     game = get_object_or_404(Game, slug=slug)
     form = ScreenshotForm(request.POST or None, request.FILES or None,
