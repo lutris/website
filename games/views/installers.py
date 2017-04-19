@@ -22,6 +22,7 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerSerializer
     lookup_field = 'slug'
+    queryset = models.Installer.objects.all()
 
 
 class GameInstallerListView(generics.ListAPIView):
