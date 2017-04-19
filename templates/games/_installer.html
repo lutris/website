@@ -47,7 +47,10 @@
   <div class="centered-vertical">
     <span class='filter-link'>{{ installer.runner }}</span>
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
-    <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
+    <span class="discreet-text">
+      by {{ installer.user.username|default:"Lutris" }},
+      last updated on {{ installer.updated_at }}
+    </span>
   </div>
   {% if installer.rating %}{% rating %}{% endif %}
   {% if installer.draft %}
@@ -62,6 +65,5 @@
   <div class="discreet-text">
     {{ installer.notes|linebreaks }}
   </div>
-  <p class="discreet-text">Last updated on {{ installer.updated_at }}</p>
   {% endif %}
 </li>
