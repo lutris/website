@@ -21,7 +21,6 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Returns the details for a given installer accessed by its id"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerSerializer
-    lookup_field = 'slug'
     queryset = models.Installer.objects.all()
 
 
