@@ -399,27 +399,12 @@ class InstallerFeed(Feed):
         return item.get_absolute_url()
 
 
-def get_game_by_slug(slug):
-    """Return game matching an installer slug or game slug"""
-    game = None
-    try:
-        installers = Installer.objects.fuzzy_get(slug)
-        installer = installers[0]
-        if isinstance(installer, dict):
-            game = models.Game.objects.get(slug=installer['game_slug'])
-        else:
-            game = installer.game
-    except Installer.DoesNotExist:
-        try:
-            game = models.Game.objects.get(slug=slug)
-        except models.Game.DoesNotExist:
-            pass
-    return game
-
-
 def get_banner(request, slug):
     """Serve game title in an appropriate format for the client."""
-    game = get_game_by_slug(slug)
+    try:
+        game = Game.objects.get(slug=slug)
+    except Game.DoesNotExist:
+        game = None
     if not game or not game.title_logo:
         raise Http404
     try:
@@ -431,7 +416,10 @@ def get_banner(request, slug):
 
 
 def get_icon(request, slug):
-    game = get_game_by_slug(slug)
+    try:
+        game = Game.objects.get(slug=slug)
+    except Game.DoesNotExist:
+        game = None
     if not game or not game.icon:
         raise Http404
     thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
