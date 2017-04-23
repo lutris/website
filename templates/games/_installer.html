@@ -49,7 +49,9 @@
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
     <span class="discreet-text">
       by {{ installer.user.username|default:"Lutris" }},
+      {% if installer.updated_at %}
       last updated on {{ installer.updated_at }}
+      {% endif %}
     </span>
   </div>
   {% if installer.rating %}{% rating %}{% endif %}
