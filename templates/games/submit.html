@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
 {% load crispy_forms_tags %}
 {% block title %}Submit a game - Lutris{% endblock %}
 {% block extra_head %}
@@ -15,6 +16,12 @@
         Wikipedia or <a href="https://www.mobygames.com/search/quick">Mobygames</a>
         are generally reliable sources. If you know more accurate ones, let us
         know! Thanks for your efforts!<br /><br />
+      </p>
+      <p>
+        <img src="{% static "images/nosteam.png" %}" alt="Don't submit Steam games" style="float: left; margin-right: 12px;"/>
+        <strong>Do not submit Steam games.</strong> We probably already have the game in our database
+        (check for unpublished games in the advanced search options). If the game really isn't available,
+        sync your Steam library from your Lutris account, this will add missing games to our database.
       </p>
       {% crispy form %}
     </div>
