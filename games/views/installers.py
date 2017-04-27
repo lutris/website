@@ -72,6 +72,9 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
+    def patch(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     def put(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
