@@ -131,7 +131,7 @@
       },
 
       getIsUnpublishedInstaller(selectedObject) {
-        if (!selectedObject) {
+        if (!selectedObject || 'comment' in selectedObject) {
           return false;
         }
         return selectedObject.published === false;
