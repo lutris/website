@@ -370,6 +370,7 @@ def fork_installer(request, id):
         installer.game = form.cleaned_data['game']
         installer.version = 'Change Me'
         installer.published = False
+        installer.rating = ''
         installer.user = request.user
         installer.save()
         return redirect(reverse('edit_installer', kwargs={'slug': installer.slug}))
