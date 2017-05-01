@@ -5,9 +5,6 @@ from games.views import installers as views
 
 
 urlpatterns = [
-    url(r'game/(?P<slug>[\w\-]+)$',
-        views.GameInstallerList.as_view(),
-        name='api_game_installer_list'),
     url(r'game/(?P<slug>[\w\-]+)/revisions$',
         views.GameRevisionListView.as_view(),
         name='api_game_revisions_list'),
