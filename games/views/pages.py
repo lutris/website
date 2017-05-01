@@ -343,6 +343,8 @@ def installer_complete(request, slug):
 
 
 def get_installers(request, slug):
+    """Deprecated function, use REST API"""
+    LOGGER.error("Call to get_installers for %s", slug)
     try:
         installers_json = Installer.objects.get_json(slug)
     except Installer.DoesNotExist:

@@ -34,8 +34,9 @@
           </li>
         {% endif %}
         <li>
-          {% url 'get_installers' slug=installer.slug as download_url %}
-          <a href="{{ download_url }}"><i class='icon-download'></i> Download install script</a>
+          <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
+            <i class='icon-download'></i> Download install script
+          </a>
         </li>
         {% if user.is_authenticated %}
         <li>
