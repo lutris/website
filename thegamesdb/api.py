@@ -35,6 +35,7 @@ PLATFORM_MAP = {
     'Atari 2600': 'atari-2600',
     'Atari 5200': 'atari-5200',
     'Atari ST': 'atari-st',
+    'Colecovision': 'colecovision',
     'PC': 'windows',
     'Sega Genesis': 'sega-genesis',
     'Sega Mega Drive': 'sega-genesis',
