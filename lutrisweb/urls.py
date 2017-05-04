@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^api/runtime', include('runners.runtime_urls')),
     url(r'^api/games', include('games.urls.games')),
     url(r'^api/installers', include('games.urls.installers')),
+    url(r'^api/achievements', include('games.urls.achievements')),
     url(r'^games/', include('games.urls.pages')),
     url(r'^bundles', include('bundles.urls')),
     url(r'^email/', include('emails.urls')),
