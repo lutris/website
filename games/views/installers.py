@@ -18,10 +18,21 @@ class InstallerListView(generics.ListAPIView):
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Returns the details for a given installer"""
+    """Returns the details for a given installer accessed by its id"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
+
+
+class GameInstallerListView(generics.ListAPIView):
+    """Return the list of installers available for a game if a game slug is provided,
+    or a particular installer if an installer slug is passed.
+    """
+    serializer_class = serializers.InstallerSerializer
+
+    def get_queryset(self):
+        slug = self.request.parser_context['kwargs']['slug']
+        return models.Installer.objects.fuzzy_filter(slug)
 
 
 class GameRevisionListView(generics.RetrieveAPIView):
@@ -30,14 +41,6 @@ class GameRevisionListView(generics.RetrieveAPIView):
     serializer_class = serializers.GameRevisionSerializer
     queryset = models.Game.objects.all()
     lookup_field = 'slug'
-
-
-class GameInstallerList(generics.ListAPIView):
-    serializer_class = serializers.InstallerSerializer
-
-    def get_queryset(self):
-        game_slug = self.request.parser_context['kwargs']['slug']
-        return models.Installer.objects.filter(game__slug=game_slug)
 
 
 class InstallerRevisionListView(generics.ListAPIView):
@@ -60,6 +63,9 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
         try:

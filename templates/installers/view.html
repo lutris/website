@@ -7,7 +7,7 @@
   <div class="col-lg-10 col-lg-offset-1">
     <p>
       This script is for reference only and can't be directly used to install the game
-      in the Lutris client. To install the game, <a href="{% url 'get_installers' slug=installer.slug %}">download</a> the full script.
+      in the Lutris client. To install the game, <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">download</a> the full script.
     </p>
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">

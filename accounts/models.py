@@ -31,7 +31,7 @@ class User(AbstractUser):
         size = 64
         return (
             "https://www.gravatar.com/avatar/" +
-            hashlib.md5(self.email.lower()).hexdigest() + "?" +
+            hashlib.md5(self.email.encode('utf-8').lower()).hexdigest() + "?" +
             urllib.urlencode({'d': default_url, 's': str(size)})
         )
 

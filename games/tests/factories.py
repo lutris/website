@@ -1,17 +1,18 @@
 import factory
-from django.utils.text import slugify
 from django.db.models.signals import post_save
-from platforms.models import Platform
-from runners.models import Runner
-from games import models
+from django.utils.text import slugify
+
 from accounts.models import User
 from accounts.signals import create_library
+from games import models
+from platforms.models import Platform
+from runners.models import Runner
 
 
 class PlatformFactory(factory.DjangoModelFactory):
     class Meta:
         model = Platform
-    name = 'Amiga'
+    name = factory.Iterator(['Amiga', 'Super Nintendo', 'Sega Genesis', 'Sony Playstation'])
 
 
 class GenreFactory(factory.DjangoModelFactory):

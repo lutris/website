@@ -1,7 +1,9 @@
+import json
+
 from django.test import TestCase
 from django.urls import reverse
+
 from . import factories
-import json
 
 
 class TestGameApi(TestCase):
@@ -68,4 +70,20 @@ class TestGameLibraryApi(TestCase):
         library_url = reverse('api_game_library',
                               kwargs={'username': user.username})
         response = self.client.get(library_url)
+        self.assertEqual(response.status_code, 200)
+
+
+class TestInstallerApi(TestCase):
+    def setUp(self):
+        self.slug = 'strider'
+        self.game = factories.GameFactory(name=self.slug)
+        factories.RunnerFactory(name="Linux", slug='linux')
+        platform = factories.PlatformFactory()
+        platform.default_installer = {"game": {"rom": "foo"}, "runner": "linux"}
+        platform.save()
+        self.game.platforms.add(platform)
+
+    def test_can_get_installer_list_for_a_game(self):
+        self.assertTrue(self.game.platforms.count())
+        response = self.client.get(reverse('api_game_installer_list', kwargs={'slug': self.slug}))
         self.assertEqual(response.status_code, 200)

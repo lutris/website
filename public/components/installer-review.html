@@ -131,7 +131,7 @@
       },
 
       getIsUnpublishedInstaller(selectedObject) {
-        if (!selectedObject) {
+        if (!selectedObject || 'comment' in selectedObject) {
           return false;
         }
         return selectedObject.published === false;
@@ -195,7 +195,7 @@
           if ('comment' in this.selectedObject) {
             action_url = `/api/installers/revisions/${this.selectedObject.id}`;
           } else {
-            action_url = `/api/installers/${this.selectedObject.id}`;
+            action_url = `/api/installers/id/${this.selectedObject.id}`;
           }
 
           actionRequest.url = action_url;

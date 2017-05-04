@@ -25,6 +25,11 @@ class InstallerAdmin(VersionAdmin):
     readonly_fields = ('game_link', 'created_at', 'updated_at')
     search_fields = ('slug', 'user__username', 'content')
 
+    raw_id_fields = ('game', 'user')
+    autocomplete_lookup_fields = {
+        'fk': ['game', 'user'],
+    }
+
     def game_link(self, obj):
         return u"<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.game.id, )),

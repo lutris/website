@@ -3,6 +3,7 @@
 import json
 import datetime
 import yaml
+from itertools import chain
 
 from django.db import models
 from django.db.models import Q, Count
@@ -172,8 +173,10 @@ class Game(models.Model):
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
     def has_installer(self):
-        return self.installers.count() > 0 \
-            or bool(self.get_default_installers())
+        return self.installers.exists() or self.has_auto_installers()
+
+    def has_auto_installers(self):
+        return self.platforms.filter(default_installer__isnull=False).exists()
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
@@ -279,35 +282,66 @@ class InstallerManager(models.Manager):
     def unpublished(self):
         return self.get_queryset().filter(published=False)
 
-    def fuzzy_get(self, slug):
-        """Return either the installer that matches exactly 'slug' or the
-        installers with game matching slug.
-        Installers are always returned in a list.
-        """
+    def _fuzzy_search(self, slug, return_models=False):
         try:
+            # Try returning installers by installer slug
             installer = self.get_queryset().get(slug=slug)
             return [installer]
         except ObjectDoesNotExist:
-            installers = self.get_queryset().filter(game__slug=slug,
-                                                    published=True)
-            if not installers:
-                # Try auto installers
-                platforms = Platform.objects.exclude(
-                    default_installer__isnull=True
-                )
-                for platform in platforms:
-                    suffix = "-" + platform.slug
-                    if slug.endswith(suffix):
-                        game_slug = slug[:-len(suffix)]
-                        games = Game.objects.filter(slug__startswith=game_slug)
-                        for game in games:
+
+            # Try getting installers by game name
+            try:
+                game = Game.objects.get(slug=slug)
+            except ObjectDoesNotExist:
+                game = None
+
+            if game:
+                installers = self.get_queryset().filter(game=game, published=True)
+
+                auto_installers = []
+                for platform in game.platforms.exclude(default_installer__isnull=True):
+                    auto_installers.append(AutoInstaller(game, platform))
+
+                if installers or auto_installers:
+                    return list(chain(installers, auto_installers))
+
+            # Try auto installers
+            for platform in Platform.objects.exclude(default_installer__isnull=True):
+                suffix = "-" + platform.slug
+                if slug.endswith(suffix):
+                    game_slug = slug[:-len(suffix)]
+                    try:
+                        game = Game.objects.get(slug=game_slug)
+                    except Game.DoesNotExist:
+                        pass
+                    else:
+                        if return_models:
+                            auto_installer = AutoInstaller(game, platform)
+                            if auto_installer.slug == slug:
+                                return [auto_installer]
+                        else:
                             auto_installers = game.get_default_installers()
                             for auto_installer in auto_installers:
                                 if auto_installer['slug'] == slug:
                                     return [auto_installer]
-                raise
+
+            # A bit hackish, return_models is used for filter and not with get
+            if return_models:
+                return self.none()
             else:
-                return installers
+                raise
+
+    def fuzzy_get(self, slug):
+        """Return either the installer that matches exactly 'slug' or the
+        installers with game matching slug.
+        Installers are always returned in a list.
+        TODO: Deprecate in favor of fuzzy_filter
+        """
+        return self._fuzzy_search(slug)
+
+    def fuzzy_filter(self, slug):
+        """Like fuzzy_get but always returns a list of model instances"""
+        return self._fuzzy_search(slug, return_models=True)
 
     def get_json(self, slug):
         try:
@@ -330,45 +364,18 @@ class InstallerManager(models.Manager):
         return json.dumps(installer_data, indent=2)
 
 
-@reversion.register()
-class Installer(models.Model):
-    """Game installer model"""
+class BaseInstaller(models.Model):
+    """Base class for Installer-like classes."""
+    class Meta:
+        abstract = True
 
-    RATINGS = {
-        'platinum': 'Platinum: installs and runs flawlessly',
-        'gold': 'Gold: works flawlessly with some minor tweaking',
-        'silver': ('Silver: works excellently for "normal" use but some '
-                   'features may be broken'),
-        'bronze': 'Bronze: works: but has some issues: even for normal use',
-        'garbage': 'Garbage: game is not playable'
-    }
+    @property
+    def raw_script(self):
+        return self.as_dict(with_metadata=False)
 
-    game = models.ForeignKey(Game, related_name='installers')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    runner = models.ForeignKey('runners.Runner')
-
-    slug = models.SlugField(unique=True)
-    version = models.CharField(max_length=32)
-    description = models.CharField(max_length=512, blank=True, null=True)
-    notes = models.TextField(blank=True)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    published = models.BooleanField(default=False)
-    draft = models.BooleanField(default=False)
-    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
-    objects = InstallerManager()
-
-    def __unicode__(self):
-        return self.slug
-
-    def set_default_installer(self):
-        if self.game and self.game.steam_support():
-            installer_data = {'game': {'appid': self.game.steamid}}
-            self.version = 'Steam'
-        else:
-            installer_data = DEFAULT_INSTALLER
-        self.content = yaml.safe_dump(installer_data, default_flow_style=False)
+    @property
+    def game_slug(self):
+        return self.game.slug
 
     def as_dict(self, with_metadata=True):
         yaml_content = yaml.safe_load(self.content) or {}
@@ -416,18 +423,51 @@ class Installer(models.Model):
         """Return the JSON installer without the metadata"""
         return json.dumps(self.as_dict(with_metadata=False), indent=2)
 
-    @property
-    def raw_script(self):
-        return self.as_dict(with_metadata=False)
-
     def build_slug(self, version):
         slug = "%s-%s" % (slugify(self.game.name)[:29],
                           slugify(version)[:20])
         return get_auto_increment_slug(self.__class__, self, slug)
 
-    @property
-    def game_slug(self):
-        return self.game.slug
+
+@reversion.register()
+class Installer(BaseInstaller):
+    """Game installer model"""
+
+    RATINGS = {
+        'platinum': 'Platinum: installs and runs flawlessly',
+        'gold': 'Gold: works flawlessly with some minor tweaking',
+        'silver': ('Silver: works excellently for "normal" use but some '
+                   'features may be broken'),
+        'bronze': 'Bronze: works: but has some issues: even for normal use',
+        'garbage': 'Garbage: game is not playable'
+    }
+
+    game = models.ForeignKey(Game, related_name='installers')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    runner = models.ForeignKey('runners.Runner')
+
+    slug = models.SlugField(unique=True)
+    version = models.CharField(max_length=32)
+    description = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.TextField(blank=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=False)
+    draft = models.BooleanField(default=False)
+    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+    objects = InstallerManager()
+
+    def __unicode__(self):
+        return self.slug
+
+    def set_default_installer(self):
+        if self.game and self.game.steam_support():
+            installer_data = {'game': {'appid': self.game.steamid}}
+            self.version = 'Steam'
+        else:
+            installer_data = DEFAULT_INSTALLER
+        self.content = yaml.safe_dump(installer_data, default_flow_style=False)
 
     @property
     def revisions(self):
@@ -525,7 +565,7 @@ class GameLink(models.Model):
         ordering = ['website']
 
 
-class InstallerRevision(object):
+class InstallerRevision(BaseInstaller):
     def __init__(self, version):
         self._version = version
         self.id = version.pk
@@ -567,8 +607,36 @@ class InstallerRevision(object):
 
     def accept(self):
         self._version.revert()
-        installer = Installer.objects.get(pk=self.installer)
+        installer = Installer.objects.get(pk=self.installer_id)
         installer.published = True
         installer.draft = False
         installer.save()
         self.delete()
+
+
+class AutoInstaller(BaseInstaller):
+    published = True
+    draft = False
+    auto = True
+    description = ""
+    notes = ""
+    user = None
+    rating = None
+    created_at = None
+    updated_at = None
+
+    def __init__(self, game, platform):
+        self.game = game
+        if platform not in game.platforms.all():
+            raise ObjectDoesNotExist
+        self.script = platform.default_installer
+        self.content = json.dumps(self.script)
+        self.name = game.name
+        self.version = platform.name
+        self.slug = "-".join((game.slug[:30], platform.slug[:20]))
+        self.platform = platform.slug
+        self.runner = Runner.objects.get(slug=self.script.pop('runner'))
+
+    @property
+    def raw_script(self):
+        return self.script

@@ -46,6 +46,8 @@ urlpatterns = [
     url(r'install/(?P<id>[\d]+)/fork$',
         views.fork_installer,
         name='fork_installer'),
+
+    # Deprecated! Remove after 0.5.0 release!
     url(r'install/(?P<slug>[\w\-]+)/$',
         views.get_installers,
         name='get_installers'),

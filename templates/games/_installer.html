@@ -34,8 +34,9 @@
           </li>
         {% endif %}
         <li>
-          {% url 'get_installers' slug=installer.slug as download_url %}
-          <a href="{{ download_url }}"><i class='icon-download'></i> Download install script</a>
+          <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
+            <i class='icon-download'></i> Download install script
+          </a>
         </li>
         {% if user.is_authenticated %}
         <li>
@@ -47,7 +48,12 @@
   <div class="centered-vertical">
     <span class='filter-link'>{{ installer.runner }}</span>
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
-    <span class="discreet-text">by {{ installer.user.username|default:"Lutris" }}</span>
+    <span class="discreet-text">
+      by {{ installer.user.username|default:"Lutris" }},
+      {% if installer.updated_at %}
+      last updated on {{ installer.updated_at }}
+      {% endif %}
+    </span>
   </div>
   {% if installer.rating %}{% rating %}{% endif %}
   {% if installer.draft %}
@@ -62,6 +68,5 @@
   <div class="discreet-text">
     {{ installer.notes|linebreaks }}
   </div>
-  <p class="discreet-text">Last updated on {{ installer.updated_at }}</p>
   {% endif %}
 </li>
