@@ -32,6 +32,7 @@ PLATFORM_MAP = {
     '3DO': '3do',
     'Arcade': 'arcade',
     'Amiga': 'amiga',
+    'Apple II': 'apple-e',
     'Atari 2600': 'atari-2600',
     'Atari 5200': 'atari-5200',
     'Atari ST': 'atari-st',
