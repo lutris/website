@@ -2,8 +2,8 @@ import datetime
 import hashlib
 import hmac
 import logging
-import urllib
 import uuid
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -36,7 +36,7 @@ class User(AbstractUser):
         return (
             "https://www.gravatar.com/avatar/" +
             hashlib.md5(self.email.encode('utf-8').lower()).hexdigest() + "?" +
-            urllib.urlencode({'d': default_url, 's': str(size)})
+            urlencode({'d': default_url, 's': str(size)})
         )
 
     def set_steamid(self):
