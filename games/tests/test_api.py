@@ -19,7 +19,7 @@ class TestGameApi(TestCase):
         game_list_url = reverse('api_game_list')
         response = self.client.get(game_list_url)
         self.assertEqual(response.status_code, 200)
-        games = json.loads(response.content)
+        games = json.loads(response.content.decode())
         self.assertEqual(len(games['results']), self.num_games)
 
     def test_can_get_subset_of_games(self):
@@ -28,7 +28,7 @@ class TestGameApi(TestCase):
         response = self.client.get(game_list_url, data=game_slugs,
                                    extra={"Content-Type": "application/json"})
         self.assertEqual(response.status_code, 200)
-        games = json.loads(response.content)
+        games = json.loads(response.content.decode())
         self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_post_subset_of_games(self):
@@ -40,7 +40,7 @@ class TestGameApi(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
-        games = json.loads(response.content)
+        games = json.loads(response.content.decode())
         self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_query_game_details(self):
