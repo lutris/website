@@ -1,7 +1,7 @@
 PyYAML==3.12
 Django==1.11.7
 Pillow==4.3.0
-ipython==5.5.0
+ipython==6.0.0
 Sphinx==1.6.5
 cssselect==1.0.1
 djangorestframework==3.7.1
@@ -25,9 +25,12 @@ jsonfield==2.0.2
 psycopg2==2.7.3
 factory_boy==2.9.2
 sorl-thumbnail==12.4.a1
--e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
+python-openid==2.2.5
+django-openid-auth==0.14
+# -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
-beautifulsoup4==4.5.1
-lxml==3.6.1
+beautifulsoup4==4.6.0
+lxml==3.7.3
 premailer==3.0.1
 Fabric==1.14.0
+six==1.10.0
