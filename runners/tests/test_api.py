@@ -32,7 +32,7 @@ class TestApi(TestCase):
 
     def test_can_get_runner_details(self):
         response = self.client.get(self.runner_url)
-        response = json.loads(response.content)
+        response = json.loads(response.content.decode())
         self.assertEqual(response["name"], "Wine")
 
     def test_anomymous_user_cant_upload_runners(self):
@@ -54,6 +54,6 @@ class TestApi(TestCase):
                 format='multipart',
             )
         self.assertEqual(response.status_code, 201)
-        response_data = json.loads(response.content)
+        response_data = json.loads(response.content.decode())
         self.assertIn('lutris-runner.dummy',
                       response_data['versions'][0]['url'])

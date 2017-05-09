@@ -4,7 +4,7 @@ from ..util.pagination import get_page_range
 
 class TestPageRange(TestCase):
     def test_single_page_should_return_single_entry(self):
-        self.assertEqual(get_page_range(1, 1), [1])
+        self.assertEqual(get_page_range(1, 1), range(1, 2))
 
     def test_num_page_less_than_max_returns_all(self):
         self.assertEqual(get_page_range(7, 1), range(1, 8))

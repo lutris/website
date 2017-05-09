@@ -14,7 +14,7 @@ class TestTosecParser(TestCase):
 
     def test_dat_file_is_loaded(self):
         self.assertGreater(len(self.dat_content), 25)
-        self.assertEqual(self.dat_content[6], ')\r\n')
+        self.assertEqual(self.dat_content[6], ')\n')
 
     def test_can_parse_headers(self):
         parser = TosecParser(self.dat_content)
