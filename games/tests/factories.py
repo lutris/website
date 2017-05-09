@@ -81,7 +81,7 @@ class RunnerFactory(factory.DjangoModelFactory):
     def set_slug(self, create, extracted, **kwargs):
         if not create:
             return
-        self.slug = slugify(unicode(self.name))
+        self.slug = slugify(self.name)
 
 
 class InstallerFactory(factory.DjangoModelFactory):

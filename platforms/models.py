@@ -35,7 +35,7 @@ class Platform(models.Model):
         return "%s" % self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(unicode(self.name))
+        self.slug = slugify(self.name)
         return super(Platform, self).save(*args, **kwargs)
 
     @staticmethod

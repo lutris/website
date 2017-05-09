@@ -385,7 +385,7 @@ class BaseInstaller(models.Model):
             yaml_content = yaml_content[0]
 
         # If yaml content evaluates to a string return an empty dict
-        if isinstance(yaml_content, basestring):
+        if isinstance(yaml_content, str):
             return {}
 
         # Do not add metadata if the clean argument has been passed
