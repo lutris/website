@@ -55,5 +55,5 @@ class TestApiAuth(TestCase):
         }
         response = self.client.post(reverse('accounts_get_token'), payload)
         self.assertEqual(response.status_code, 200)
-        response_data = json.loads(response.content)
+        response_data = json.loads(response.content.decode())
         self.assertIn('token', response_data)
