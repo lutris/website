@@ -1,5 +1,5 @@
 -r base.pip
 django-jenkins==0.110.0
-pylint==1.6.4
+pylint==1.7.1
 pep8==1.7.0
-coverage==4.2
+coverage==4.4

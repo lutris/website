@@ -1,3 +1,4 @@
+from six import string_types
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -50,7 +51,7 @@ def send_email(template, context, subject, recipients, sender=None):
         'MEDIA_URL': settings.MEDIA_URL,
     })
     sender = sender or settings.DEFAULT_FROM_EMAIL
-    if isinstance(recipients, basestring):
+    if isinstance(recipients, string_types):
         recipients = [recipients]
     subject = u"{} {}".format(settings.EMAIL_SUBJECT_PREFIX, subject)
     text_part = render_to_string('emails/{}.txt'.format(template), context)

@@ -23,6 +23,9 @@ class User(AbstractUser):
     key = models.CharField(max_length=256, blank=True, default='')
     email_confirmed = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return self.username
+
     @property
     def avatar_url(self):
         if self.avatar:
