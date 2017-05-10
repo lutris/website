@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics
 from rest_framework.response import Response
@@ -78,5 +79,8 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get_object(self):
-        version = Version.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        try:
+            version = Version.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        except Version.DoesNotExist:
+            raise Http404
         return models.InstallerRevision(version)
