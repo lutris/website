@@ -17,6 +17,7 @@ def media_directory(path):
 CLIENT_VERSION = "0.4.10"
 
 DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = False
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
