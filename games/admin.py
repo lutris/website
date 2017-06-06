@@ -17,9 +17,9 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class InstallerAdmin(VersionAdmin):
-    list_display = ('__unicode__', 'runner', 'game_link', 'user',
+    list_display = ('__unicode__', 'runner', 'version', 'game_link', 'user',
                     'created_at', 'updated_at', 'published', 'draft')
-    list_filter = ('published', 'runner')
+    list_filter = ('published', 'runner', 'version')
     list_editable = ('published', )
     ordering = ('-created_at', )
     readonly_fields = ('game_link', 'created_at', 'updated_at')
