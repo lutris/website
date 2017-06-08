@@ -42,7 +42,7 @@ def script_is_not_the_default_one(installer):
 def doesnt_contain_useless_fields(installer):
     script = get_installer_script(installer)
     for field in (
-        'version', 'gogid', 'humbleid', 'game_slug', 'description',
+        'version', 'gogslug', 'humbleid', 'game_slug', 'description',
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
     ):
         if field in script:

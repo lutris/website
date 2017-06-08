@@ -82,7 +82,7 @@
             {% endif %}
           </p>
           <p>
-            {% if game.steamid or game.gogid or game.humblestoreid %}
+            {% if game.steamid or game.gogslug or game.humblestoreid %}
             <span>Get it from:</span><br/>
             {% endif %}
             {% if game.steamid %}
@@ -97,8 +97,8 @@
               <span>Humble Store</span>
             </a>
             {% endif %}
-            {% if game.gogid %}
-            <a href="https://www.gog.com/game/{{ game.gogid }}" title="GOG.com" class='external-link'>
+            {% if game.gogslug %}
+            <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG.com" class='external-link'>
               <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
               <span>GOG</span>
             </a>

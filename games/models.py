@@ -137,7 +137,7 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
-    gogid = models.CharField(max_length=200, blank=True)
+    gogslug = models.CharField(max_length=200, blank=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
 
@@ -397,7 +397,7 @@ class BaseInstaller(models.Model):
             yaml_content['name'] = self.game.name
             yaml_content['year'] = self.game.year
             yaml_content['steamid'] = self.game.steamid
-            yaml_content['gogid'] = self.game.gogid
+            yaml_content['gogslug'] = self.game.gogslug
             yaml_content['humblestoreid'] = self.game.humblestoreid
             try:
                 yaml_content['runner'] = self.runner.slug

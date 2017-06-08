@@ -68,7 +68,7 @@ class GameLinkAdmin(admin.TabularInline):
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
-    list_display = ('__unicode__', 'is_public', 'year', 'steamid', 'gogid',
+    list_display = ('__unicode__', 'is_public', 'year', 'steamid', 'gogslug',
                     'humblestoreid', 'created', 'updated', )
     list_filter = ('is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
