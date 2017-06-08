@@ -199,7 +199,7 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYBEAT_SCHEDULE = {
     'send-daily-mod-mail': {
         'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=12, minute=0),
+        'schedule': crontab(hour=18, minute=0),
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'
