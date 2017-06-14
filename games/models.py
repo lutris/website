@@ -138,6 +138,7 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     steamid = models.PositiveIntegerField(null=True, blank=True)
     gogslug = models.CharField(max_length=200, blank=True)
+    gogid = models.PositiveIntegerField(null=True, unique=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
 
