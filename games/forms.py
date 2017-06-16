@@ -165,7 +165,7 @@ class InstallerForm(forms.ModelForm):
             'runner': Select2Widget,
             'description': forms.Textarea(
                 attrs={'class': 'installer-textarea'}
-                ),
+            ),
             'notes': forms.Textarea(attrs={'class': 'installer-textarea'}),
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
@@ -180,7 +180,7 @@ class InstallerForm(forms.ModelForm):
                 "500...), or the vendor version (e.g. GOG, Steam...) or "
                 "the actual software version of the game... Whatever makes "
                 "the most sense."
-                ),
+            ),
             'description': "Additional details.",
             'notes': ("Describe any known issues or manual tasks required "
                       "to run the game properly."),
@@ -213,6 +213,8 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError('This field is mandatory')
         if version.lower() == 'change me':
             raise forms.ValidationError('When we say "change me", we mean it.')
+        if version.lower().endswith('version'):
+            raise forms.ValidationError("Don't put 'version' at the end of the 'version' field")
         return version
 
     def clean(self):
