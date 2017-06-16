@@ -44,6 +44,10 @@ class BaseGameForm(AutoSlugForm):
         model = models.Game
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(BaseGameForm, self).__init__(*args, **kwargs)
+        self.fields['gogid'].required = False
+
 
 class GameForm(forms.ModelForm):
     class Meta(object):
