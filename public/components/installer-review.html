@@ -108,6 +108,15 @@
         this.sourceVisible = false;
       },
 
+      getInstallerIndex: function(installerId) {
+        for (i=0; i < this.game.installers.length; i++) {
+          let installer = this.game.installers[i];
+          if (installer.id === installerId) {
+            return i;
+          }
+        }
+      },
+
       getObjectName: function(selectedObject) {
         if (!selectedObject) {
           return;
@@ -238,6 +247,12 @@
       },
 
       onAcceptSubmission: function (event) {
+        const installerIndex = this.getInstallerIndex(this.selectedObject.installer_id);
+        const installer = this.game.installers[installerIndex];
+        installer.published = true;
+        this.game.installers[installerIndex] = installer;
+        this.notifyPath(this.game.installers[installerIndex]);
+
         this.requestAction('PUT', {'action': 'accept'});
         this.removeSelected();
       },

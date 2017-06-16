@@ -64,7 +64,10 @@
     Polymer({
       is: 'installer-list',
       properties: {
-        installers: Object
+        installers: {
+          type: Object,
+          notify: true
+        }
       },
       _clearSelected: function () {
         [].forEach.call(document.getElementsByClassName('previous-selected'), function(element) {
@@ -91,6 +94,7 @@
         event.target.classList.add('selected');
         this.fire('load-installer', {'installerSlug': installerSlug});
       },
+
       onRevisionClick: function(event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
         const revisionId = event.target.attributes['data-revision-id'].value;
