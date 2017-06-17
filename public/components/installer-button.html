@@ -45,8 +45,7 @@
       static get properties() {
         return {
           installer: {
-            type: Object,
-            observer: 'installerChanged'
+            type: Object
           },
           revision: Object,
           previouslySelected: {
@@ -62,20 +61,6 @@
             computed: '_getButtonClass(installer.published)'
           }
         }
-      }
-
-      static get observers() {
-        return [
-          '_publishedChanged(installer.published)'
-        ]
-      }
-
-      installerChanged(newValue, oldValue) {
-        console.log("INSTALLER CHANGED!", newValue);
-      }
-
-      _publishedChanged(published) {
-        console.log("CHANGED: ", published);
       }
 
       _selectedChanged(newValue, oldValue) {
