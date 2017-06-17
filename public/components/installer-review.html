@@ -261,8 +261,10 @@
       }
 
       onPublishInstaller(event) {
+        const installerIndex = this.getInstallerIndex(this.selectedObject.id);
+        this.set(`game.installers.${installerIndex}.published`, true);
+
         this.requestAction('PATCH', {"published": true, "draft": false});
-        this.selectedObject.published = true;
       }
     }
     customElements.define(InstallerReview.is, InstallerReview);
