@@ -6,6 +6,7 @@
 <link rel="import" href="/static/paper-button/paper-button.html">
 
 <dom-module id="installer-review">
+  <link rel="import" type="css" href="/static/css/lutris.min.css">
   <template>
     <div class="row">
       <div class="col-sm-12">
@@ -61,63 +62,68 @@
     </iron-ajax>
   </template>
   <script>
-    Polymer({
-      is: 'installer-review',
-      properties: {
-        slug: String,
-        apiKey: String,
-        sourceVisible: Boolean,
-        game: {
-          type: Object,
-          default: {},
-          notify: true
-        },
-        selectedObject: {
-          type: Object,
-          default: {}
-        },
-        selectedInstaller: Object,
-        activeInstaller1: Object,
-        activeInstaller2: Object,
-        activePane: {
-          type: String,
-          default: 'pane-1'
-        },
-        objectName: {
-          type: String,
-          computed: 'getObjectName(selectedObject)'
-        },
-        isNotRevision: {
-          type: Boolean,
-          value: true,
-          computed: 'getIsNotRevision(selectedObject)'
-        },
-        isUnpublishedInstaller: {
-          type: Boolean,
-          value: false,
-          computed: 'getIsUnpublishedInstaller(selectedObject)'
+    class InstallerReview extends Polymer.Element {
+      static get is() { return 'installer-review' }
+
+      static get properties() {
+        return  {
+          slug: String,
+          apiKey: String,
+          sourceVisible: Boolean,
+          game: {
+            type: Object,
+            default: {},
+            notify: true
+          },
+          selectedObject: {
+            type: Object,
+            default: {}
+          },
+          selectedInstaller: Object,
+          activeInstaller1: Object,
+          activeInstaller2: Object,
+          activePane: {
+            type: String,
+            default: 'pane-1'
+          },
+          objectName: {
+            type: String,
+            computed: 'getObjectName(selectedObject)'
+          },
+          isNotRevision: {
+            type: Boolean,
+            value: true,
+            computed: 'getIsNotRevision(selectedObject)'
+          },
+          isUnpublishedInstaller: {
+            type: Boolean,
+            value: false,
+            computed: 'getIsUnpublishedInstaller(selectedObject)'
+          }
         }
-      },
+      }
 
-      listeners: {
-        'load-installer': 'onLoadInstaller',
-        'load-revision': 'onLoadRevision'
-      },
+      connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('load-installer', this.onLoadInstaller.bind(this));
+        window.addEventListener('load-revision', this.onLoadRevision.bind(this));
+      }
 
-      ready: function() {
+      ready() {
+        super.ready();
         this.sourceVisible = false;
-      },
+      }
 
-      getInstallerIndex: function(installerId) {
-        for (i=0; i < this.game.installers.length; i++) {
+      getInstallerIndex(installerId) {
+        for (let i=0; i < this.game.installers.length; i++) {
           let installer = this.game.installers[i];
           if (installer.id === installerId) {
             return i;
           }
         }
-      },
+      }
 
-      getObjectName: function(selectedObject) {
+      getObjectName(selectedObject) {
         if (!selectedObject) {
           return;
         }
@@ -126,9 +132,9 @@
         } else if ('slug' in selectedObject) {
           return selectedObject.slug;
         }
-      },
+      }
 
-      getIsNotRevision: function(selectedObject) {
+      getIsNotRevision(selectedObject) {
         if (!selectedObject) {
           return true;
         }
@@ -137,24 +143,24 @@
         } else {
           return true;
         }
-      },
+      }
 
       getIsUnpublishedInstaller(selectedObject) {
         if (!selectedObject || 'comment' in selectedObject) {
           return false;
         }
         return selectedObject.published === false;
-      },
+      }
 
-      handleResponse: function(response) {
-        this.game = response.detail.__data__.response;
-      },
+      handleResponse(response) {
+        this.game = response.detail.__data.response;
+      }
 
-      handleAction: function(response) {
+      handleAction(response) {
         console.log(response);
-      },
+      }
 
-      onLoadInstaller: function (event) {
+      onLoadInstaller(event) {
         const installerSlug = event.detail.installerSlug;
 
         let selectedInstaller = null;
@@ -168,17 +174,17 @@
           this.activeInstaller1 = this.activeInstaller2;
           this.activeInstaller2 = selectedInstaller;
         }
-      },
+      }
 
-      onLoadRevision: function (event) {
+      onLoadRevision(event) {
         const installerSlug = event.detail.installerSlug;
         const revisionId = event.detail.revisionId;
         let selectedRevision = null;
         let selectedInstaller = null;
-        this.game.installers.forEach(function (installer) {
+        this.game.installers.forEach(installer => {
           if(installer.slug == installerSlug) {
             selectedInstaller = installer;
-            installer.revisions.forEach(function(revision) {
+            installer.revisions.forEach(revision => {
               if(revision.id == revisionId) {
                 selectedRevision = revision;
               }
@@ -191,14 +197,15 @@
           this.activeInstaller1 = this.activeInstaller2;
           this.activeInstaller2 = selectedRevision;
         }
-      },
+      }
 
-      onSwitchDiff: function (event) {
+      onSwitchDiff(event) {
         this.sourceVisible = !this.sourceVisible;
-      },
+      }
 
-      requestAction: function (method, payload) {
+      requestAction(method, payload) {
         const name = this.objectName;
+        let action_url;
         if (name) {
           const actionRequest = this.$['action-request'];
           if ('comment' in this.selectedObject) {
@@ -218,35 +225,35 @@
 
           actionRequest.generateRequest();
         }
-      },
+      }
 
-      removeSelected: function () {
+      removeSelected() {
         if (this.isNotRevision) {
-          this.game.installers.forEach(function(installer, index, array) {
+          this.game.installers.forEach((installer, index, array) => {
             if(installer.slug == this.selectedObject.slug) {
               this.splice('game.installers', index, 1);
             }
-          }.bind(this));
+          });
         } else {
-          this.game.installers.forEach(function (installer, installerIndex) {
+          this.game.installers.forEach((installer, installerIndex) => {
             if(installer.slug == this.selectedInstaller.slug) {
-              installer.revisions.forEach(function(revision, index, array) {
+              installer.revisions.forEach((revision, index, array) => {
                 if(revision.id == this.selectedObject.id) {
                   this.splice('game.installers.'+installerIndex+'.revisions', index, 1);
                   this.notifyPath(this.game.installers[installerIndex]);
                 }
-              }.bind(this));
+              });
             }
-          }.bind(this));
+          });
         }
-      },
+      }
 
-      onDeleteInstaller: function (event) {
+      onDeleteInstaller(event) {
         this.requestAction('DELETE');
         this.removeSelected();
-      },
+      }
 
-      onAcceptSubmission: function (event) {
+      onAcceptSubmission(event) {
         const installerIndex = this.getInstallerIndex(this.selectedObject.installer_id);
         const installer = this.game.installers[installerIndex];
         installer.published = true;
@@ -255,12 +262,13 @@
 
         this.requestAction('PUT', {'action': 'accept'});
         this.removeSelected();
-      },
+      }
 
-      onPublishInstaller: function (event) {
+      onPublishInstaller(event) {
         this.requestAction('PATCH', '{"published": true, "draft": false}');
         this.selectedObject.published = true;
       }
-    })
+    }
+    customElements.define(InstallerReview.is, InstallerReview);
   </script>
 </dom-module>

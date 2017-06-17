@@ -1,48 +1,55 @@
 <link rel="import" href="/static/polymer/polymer.html">
+<link rel="import" href="/static/polymer/polymer-element.html">
+<link rel="import" href="/static/shadycss/apply-shim.html">
 <script type="text/javascript" src="/static/jsdifflib/diffview.js"></script>
 <script type="text/javascript" src="/static/jsdifflib/difflib.js"></script>
 
 <dom-module id="installer-diff">
+  <link rel="import" type="css" href="/static/css/lutris.min.css">
+  <link rel="import" type="css" href="/static/jsdifflib/diffview.css">
+  <link rel="import" type="css" href="/static/css/diffextra.css">
   <template>
-    <link rel="stylesheet" href="/static/jsdifflib/diffview.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/diffextra.css" type="text/css">
-    <div id="diffoutput">
-    </div>
+    <div id="diffoutput"></div>
   </template>
   <script>
-    Polymer({
-      is: 'installer-diff',
-      properties: {
-        installer1: {
-          type: Object,
-          observer: 'onInstallerChanged'
-        },
-        installer2: {
-          type: Object,
-          observer: 'onInstallerChanged'
-        },
-        name: {
-          type: String,
-          observer: 'onNameChanged'
-        },
-        oldName: {
-          type: String,
-          value: "Previous version"
+    class InstallerDiff extends Polymer.Element {
+
+      static get is() { return 'installer-diff' }
+
+      static get properties() {
+        return {
+          installer1: {
+            type: Object,
+            observer: 'onInstallerChanged'
+          },
+          installer2: {
+            type: Object,
+            observer: 'onInstallerChanged'
+          },
+          name: {
+            type: String,
+            observer: 'onNameChanged'
+          },
+          oldName: {
+            type: String,
+            value: "Previous version"
+          }
         }
-      },
-      onNameChanged: function(newValue, oldValue) {
+      }
+
+      onNameChanged(newValue, oldValue) {
         this.oldName = oldValue;
-      },
-      onInstallerChanged: function(event) {
+      }
+
+      onInstallerChanged(event) {
         if(!this.installer1 || !this.installer2) {
           return;
         }
-        var byId = function (id) { return document.getElementById(id); },
-          base = difflib.stringAsLines(this.installer1.content),
+        const diffoutputdiv = this.$["diffoutput"];
+        let base = difflib.stringAsLines(this.installer1.content),
           newtxt = difflib.stringAsLines(this.installer2.content),
           sm = new difflib.SequenceMatcher(base, newtxt),
-          opcodes = sm.get_opcodes(),
-          diffoutputdiv = byId("diffoutput");
+          opcodes = sm.get_opcodes();
 
         diffoutputdiv.innerHTML = "";
 
@@ -56,6 +63,7 @@
           viewType: 0
         }));
       }
-    })
+    }
+    customElements.define(InstallerDiff.is, InstallerDiff);
   </script>
 </dom-module>

@@ -1,9 +1,15 @@
 <link rel="import" href="/static/polymer/polymer.html">
+<link rel="import" href="/static/polymer/polymer-element.html">
+<link rel="import" href="/static/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="/static/iron-ajax/iron-ajax.html">
 
 <dom-module id="installer-list">
+
+  <link rel="import" type="css" href="/static/css/lutris.min.css">
+
   <template>
-      <style is="custom-style">
+    <custom-style>
+      <style is='custom-style'>
         :host {
           padding: 0;
         }
@@ -13,95 +19,110 @@
           padding: 0;
         }
 
-        .btn {
+        .installer-revision-list .btn {
           width: 100%;
           margin: 4px 0;
           overflow: hidden;
+          background-color: #222;
         }
 
-        .selected {
+        .installer-revision-list .selected {
           background-color: #BBB;
           color: #444;
         }
 
-        .previous-selected {
+        .installer-revision-list .previous-selected {
           background-color: #777;
         }
 
-        .btn-published {
+        .installer-revision-list .btn-published {
           border-left: 5px solid green;
         }
 
-        .btn-unpublished {
+        .installer-revision-list .btn-unpublished {
           border-left: 5px solid red;
         }
       </style>
-      <ul class="installer-revision-list">
-        <template is="dom-repeat" id="installer-list" items={{installers}} as="installer">
-          <li>
-            <a
-              class$="{{getInstallerButtonClasses(installer)}}"
+    </custom-style>
+    <ul class="installer-revision-list">
+      <template is="dom-repeat" id="installer-list" items={{installers}} as="installer">
+        <li>
+          <a class$="{{getInstallerButtonClasses(installer)}}"
               data-installer-slug$="[[installer.slug]]"
               on-tap="onInstallerClick">
               [[installer.slug]]
+          </a>
+        </li>
+        <template is="dom-repeat" id="revision-list" items={{installer.revisions}} as="revision">
+          <li>
+            <a
+              class="btn"
+              data-installer-slug$="[[installer.slug]]"
+              data-revision-id$="[[revision.id]]"
+              on-tap="onRevisionClick">
+              [[installer.slug]]
             </a>
           </li>
-          <template is="dom-repeat" id="revision-list" items={{installer.revisions}} as="revision">
-            <li>
-              <a
-                class="btn"
-                data-installer-slug$="[[installer.slug]]"
-                data-revision-id$="[[revision.id]]"
-                on-tap="onRevisionClick">
-                [[installer.slug]]
-              </a>
-            </li>
-          </template>
         </template>
-      </ul>
+      </template>
+    </ul>
   </template>
+
   <script>
-    Polymer({
-      is: 'installer-list',
-      properties: {
-        installers: {
-          type: Object,
-          notify: true
+    class InstallerList extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'installer-list'}
+
+      static get properties() {
+        return {
+          installers: {
+            type: Object,
+            notify: true
+          }
         }
-      },
-      _clearSelected: function () {
-        [].forEach.call(document.getElementsByClassName('previous-selected'), function(element) {
+      }
+
+      _clearSelected() {
+        [].forEach.call(this.shadowRoot.querySelectorAll('.previous-selected'), element => {
           element.classList.remove('previous-selected');
         });
-        [].forEach.call(document.getElementsByClassName('selected'), function(element) {
+        [].forEach.call(this.shadowRoot.querySelectorAll('.selected'), element => {
           element.classList.remove('selected');
           element.classList.add('previous-selected');
         });
-      },
+      }
 
-      getInstallerButtonClasses: function(installer) {
-        baseClasses = "btn btn-primary";
+      getInstallerButtonClasses(installer) {
+        let baseClasses = "btn btn-primary";
         if (installer.published) {
           return baseClasses + " btn-published";
         } else {
           return baseClasses + " btn-unpublished";
         }
-      },
+      }
 
-      onInstallerClick: function(event) {
+      onInstallerClick (event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
         this._clearSelected()
         event.target.classList.add('selected');
-        this.fire('load-installer', {'installerSlug': installerSlug});
-      },
+        this.dispatchEvent(new CustomEvent('load-installer', {
+          bubbles: true,
+          composed: true,
+          detail: {'installerSlug': installerSlug}
+        }));
+      }
 
-      onRevisionClick: function(event) {
+      onRevisionClick(event) {
         const installerSlug = event.target.attributes['data-installer-slug'].value;
         const revisionId = event.target.attributes['data-revision-id'].value;
         this._clearSelected()
         event.target.classList.add('selected');
-        this.fire('load-revision', {'installerSlug': installerSlug, 'revisionId': revisionId})
+        this.dispatchEvent(new CustomEvent('load-revision', {
+          bubbles: true,
+          composed: true,
+          detail: {revisionId: revisionId, installerSlug: installerSlug}
+        }));
       }
-    })
+    }
+    customElements.define(InstallerList.is, InstallerList);
   </script>
 </dom-module>

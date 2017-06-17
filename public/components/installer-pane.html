@@ -1,6 +1,8 @@
 <link rel="import" href="/static/polymer/polymer.html">
+<link rel="import" href="/static/polymer/polymer-element.html">
 
 <dom-module id="installer-pane">
+  <link rel="import" type="css" href="/static/css/lutris.min.css">
   <template>
     <div class="pane">
       <p>
@@ -28,12 +30,18 @@
     </div>
   </template>
   <script>
-    Polymer({
-      is: 'installer-pane',
-      properties: {
-        installer: Object,
-        sourceVisible: Boolean,
+    class InstallerPane extends Polymer.Element {
+
+      static get is() { return 'installer-pane' }
+
+      static get properties() {
+        return {
+          installer: Object,
+          sourceVisible: Boolean,
+        }
       }
-    })
+    }
+
+    customElements.define(InstallerPane.is, InstallerPane);
   </script>
 </dom-module>
