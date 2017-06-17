@@ -255,17 +255,13 @@
 
       onAcceptSubmission(event) {
         const installerIndex = this.getInstallerIndex(this.selectedObject.installer_id);
-        const installer = this.game.installers[installerIndex];
-        installer.published = true;
-        this.game.installers[installerIndex] = installer;
-        this.notifyPath(this.game.installers[installerIndex]);
-
+        this.set(`game.installers.${installerIndex}.published`, true);
         this.requestAction('PUT', {'action': 'accept'});
         this.removeSelected();
       }
 
       onPublishInstaller(event) {
-        this.requestAction('PATCH', '{"published": true, "draft": false}');
+        this.requestAction('PATCH', {"published": true, "draft": false});
         this.selectedObject.published = true;
       }
     }
