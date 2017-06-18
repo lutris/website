@@ -533,10 +533,12 @@ def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
     installers = Installer.objects.filter(published=False)[:20]
+    unpublished_games = Game.objects.filter(installers__isnull=False, is_public=False).distinct()
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
         'drafts': drafts,
-        'installers': installers
+        'installers': installers,
+        'unpublished_games': unpublished_games
     })
 
 

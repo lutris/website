@@ -97,12 +97,26 @@
       {{installer.user}}
       {{installer.created_at}}
     </span>
-    <span class='small'>
+    <span>
       <a href="{% url 'installer_review' slug=installer.game.slug %}" class="btn">Review</a>
     </span>
   </p>
 </li>
 {% endfor %}
+</ul>
+
+<h2>Unpublished games with installers</h2>
+<ul class='game-list'>
+  {% for game in unpublished_games %}
+  <li>
+    <p>
+      <strong>{{game}}</strong>
+      <span>
+        <a href="{% url 'game_detail' slug=game.slug %}" class="btn">Review</a>
+      </span>
+    </p>
+  </li>
+  {% endfor %}
 </ul>
 
 {% endblock %}
