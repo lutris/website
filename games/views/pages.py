@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 import json
 import logging
-from difflib import HtmlDiff
 
 import reversion
 from django.conf import settings
@@ -25,7 +24,7 @@ from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required
 from games import models
-from games.forms import (DiffInstallerForm, ForkInstallerForm, GameForm,
+from games.forms import (ForkInstallerForm, GameForm,
                          InstallerForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
@@ -534,34 +533,6 @@ def installer_mass_publish(request):
     installers = Installer.objects.filter(published=False)[:50]
     return render(request, 'installers/mass-publish.html', {
         'installers': installers
-    })
-
-
-@staff_member_required
-def installer_diff(request):
-
-    form = DiffInstallerForm()
-    diff_table = None
-
-    installer_1_id = request.GET.get('installer_1')
-    installer_2_id = request.GET.get('installer_2')
-
-    installer_1 = None
-    installer_2 = None
-
-    if installer_1_id and installer_2_id:
-        installer_1 = get_object_or_404(Installer, id=installer_1_id)
-        installer_2 = get_object_or_404(Installer, id=installer_2_id)
-        i1_lines = installer_1.content.split('\n')
-        i2_lines = installer_2.content.split('\n')
-        diff = HtmlDiff(tabsize=2, wrapcolumn=64)
-        diff_table = diff.make_table(i1_lines, i2_lines)
-
-    return render(request, 'installers/diff.html', {
-        'form': form,
-        'diff_table': diff_table,
-        'installer_1': installer_1,
-        'installer_2': installer_2
     })
 
 

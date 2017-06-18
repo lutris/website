@@ -248,20 +248,3 @@ class ForkInstallerForm(forms.ModelForm):
                 search_fields=['name__icontains']
             )
         }
-
-
-class DiffInstallerForm(forms.Form):
-
-    installer_1 = forms.ChoiceField(
-        widget=ModelSelect2Widget(
-            model=models.Installer,
-            search_fields=['slug__contains']
-        )
-    )
-
-    installer_2 = forms.ChoiceField(
-        widget=ModelSelect2Widget(
-            model=models.Installer,
-            search_fields=['slug__contains']
-        )
-    )
