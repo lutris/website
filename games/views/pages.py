@@ -529,18 +529,12 @@ def submit_issue(request):
 
 
 @staff_member_required
-def installer_mass_publish(request):
-    installers = Installer.objects.filter(published=False)[:50]
-    return render(request, 'installers/mass-publish.html', {
-        'installers': installers
-    })
-
-
-@staff_member_required
 def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
+    installers = Installer.objects.filter(published=False)[:50]
     return render(request, 'installers/submissions.html', {
-        'submissions': submissions
+        'submissions': submissions,
+        'installers': installers
     })
 
 
