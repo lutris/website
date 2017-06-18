@@ -531,9 +531,11 @@ def submit_issue(request):
 @staff_member_required
 def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
-    installers = Installer.objects.filter(published=False)[:50]
+    drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
+    installers = Installer.objects.filter(published=False)[:20]
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
+        'drafts': drafts,
         'installers': installers
     })
 

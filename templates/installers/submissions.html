@@ -97,6 +97,32 @@
 </ul>
 
 
+<h2>User drafts</h2>
+
+<ul class="game-list">
+  {% for submission in drafts %}
+    <li>
+      <p>
+        <strong>{{ submission }}</strong>
+      </p>
+      <p>
+      <span>{{submission.revision.user}}</span>
+      <span>{{submission.revision.date_created}}</span>
+      {% if submission.object.game %}
+        <span>
+          <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+        </span>
+      {% else %}
+        <span>
+          <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
+        </span>
+      {% endif %}
+      </p>
+    </li>
+  {% endfor %}
+</ul>
+
+
 <h2>Unpublished installers</h2>
 
 {% for installer in installers %}
