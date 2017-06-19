@@ -18,6 +18,7 @@ def validate_installer(installer):
         script_is_not_the_default_one,
         doesnt_contain_useless_fields,
         files_is_an_array,
+        installer_steps_have_one_key,
         scummvm_has_gameid,
     ]
     for rule in rules:
@@ -55,6 +56,17 @@ def files_is_an_array(installer):
     if 'files' in script:
         if not isinstance(script['files'], list):
             return (False, "'files' section should be an array.")
+    return SUCCESS
+
+
+def installer_steps_have_one_key(installer):
+    script = get_installer_script(installer)
+    if 'installer' in script:
+        if not isinstance(script['installer'], list):
+            return (False, "'installer' section should be an array.")
+        for step in script['installer']:
+            if isinstance(step, dict) and len(step.keys()) > 1:
+                return (False, "Installer step %s shouldn't have more than one key (check your indentation)" % step)
     return SUCCESS
 
 
