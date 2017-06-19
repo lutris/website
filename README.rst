@@ -24,7 +24,7 @@ also tell the project to fallback to SQLite::
 
     export USE_SQLITE=1
 
-Once your virtualenv is created, you can install the system and pyhton
+Once your virtualenv is created, you can install the system and python
 dependencies::
 
     sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
