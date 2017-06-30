@@ -18,4 +18,3 @@ make db
 make client
 make docs
 pip install Faker
-rm lutrisweb/settings/base.pyc
