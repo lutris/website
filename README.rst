@@ -20,7 +20,7 @@ Reconnecting after creating
 
 ::
 
-    docker start lutisdev
+    docker start lutrisdev
     docker exex -it lutrisdev /bin/bash
 
 
