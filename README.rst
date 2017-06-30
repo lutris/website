@@ -1,6 +1,32 @@
 Getting the site up and running for development
 ===============================================
 
+With docker
+===========
+
+Install docker for your system.
+
+::
+
+    docker build -t lutrisweb Docker/
+
+Start a new container using the image
+
+::
+
+    docker run --name lutrisdev -it -p 8000:8000 lutrisweb /bin/bash
+
+Reconnecting after creating
+
+::
+
+    docker start lutisdev
+    docker exex -it lutrisdev /bin/bash
+
+
+Natively
+========
+
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
 their website: https://virtualenvwrapper.readthedocs.org/en/latest/

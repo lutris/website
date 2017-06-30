@@ -10,4 +10,4 @@ RUN apt-get install -y git curl python python-pip imagemagick memcached libmemca
 RUN /bin/bash /install.sh
 RUN rm lutrisweb/settings/base.pyc
 
-CMD ["python", "manage.py runserver"]
+CMD ["/bin/bash"]
