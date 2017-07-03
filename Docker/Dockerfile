@@ -8,6 +8,9 @@ RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN apt-get install -y git curl python python-pip imagemagick memcached libmemcached-dev mercurial bzr
 RUN /bin/bash /install.sh
-RUN rm lutrisweb/settings/base.pyc
+
+ENV SECRET_KEY "somethissecret"
+ENV DJANGO_SETTINGS_MODULE "lutrisweb.settings.local"
+ENV USE_SQLITE 1
 
 CMD ["/bin/bash"]
