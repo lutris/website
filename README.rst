@@ -21,7 +21,7 @@ Reconnecting after creating
 ::
 
     docker start lutrisdev
-    docker exex -it lutrisdev /bin/bash
+    docker exec -it lutrisdev /bin/bash
 
 
 Natively
