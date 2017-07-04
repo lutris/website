@@ -16,7 +16,7 @@ Start a new container using the image
 
 ::
 
-    docker run --name lutrisdev -it -P lutrisweb
+    docker run --name lutrisdev -it -p 8000:8000 lutrisweb
 
 Attach to shell
 
