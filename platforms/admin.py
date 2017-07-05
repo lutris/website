@@ -8,7 +8,7 @@ class PlatformAdmin(admin.ModelAdmin):
     form = forms.PlatformForm
     ordering = ('name', )
     search_fields = ('name', )
-    list_display = ('__unicode__', 'has_auto_installer')
+    list_display = ('__unicode__', 'slug', 'has_auto_installer')
 
 
 admin.site.register(models.Platform, PlatformAdmin)

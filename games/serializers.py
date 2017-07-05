@@ -24,7 +24,7 @@ class GameSerializer(serializers.ModelSerializer):
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogid', 'humblestoreid',
+            'gogslug', 'humblestoreid',
         )
 
 
@@ -47,7 +47,7 @@ class InstallerSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
     steamid = serializers.ReadOnlyField(source='game.steamid')
-    gogid = serializers.ReadOnlyField(source='game.gogid')
+    gogslug = serializers.ReadOnlyField(source='game.gogslug')
     humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
 
     user = serializers.StringRelatedField()
@@ -58,7 +58,7 @@ class InstallerSerializer(serializers.ModelSerializer):
         model = models.Installer
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
-                  'published', 'rating', 'steamid', 'gogid', 'humblestoreid',
+                  'published', 'rating', 'steamid', 'gogslug', 'humblestoreid',
                   'script', 'content')
 
 
@@ -70,7 +70,7 @@ class GameInstallersSerializer(GameSerializer):
         fields = (
             'id', 'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated',
-            'steamid', 'gogid', 'humblestoreid', 'installers'
+            'steamid', 'gogslug', 'humblestoreid', 'installers'
         )
 
 
@@ -96,7 +96,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     rating = serializers.CharField()
 
     steamid = serializers.ReadOnlyField(source='game.steamid')
-    gogid = serializers.ReadOnlyField(source='game.gogid')
+    gogslug = serializers.ReadOnlyField(source='game.gogslug')
     humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
 
     script = serializers.JSONField()
@@ -123,5 +123,5 @@ class GameRevisionSerializer(GameSerializer):
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogid', 'humblestoreid', 'installers'
+            'gogslug', 'humblestoreid', 'installers'
         )

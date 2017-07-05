@@ -1,0 +1,94 @@
+<link rel="import" href="/static/polymer/polymer-element.html">
+<dom-module id="installer-button">
+
+  <link rel="import" type="css" href="/static/css/lutris.min.css">
+
+  <template>
+    <custom-style>
+      <style is="custom-style">
+        a.btn {
+          width: 100%;
+          margin: 4px 0;
+          overflow: hidden;
+          background-color: #222;
+          border-width: 0px;
+        }
+        a.selected {
+          background-color: #BBB;
+          color: #444;
+        }
+
+        a.previous-selected {
+          background-color: #777;
+        }
+
+        a.btn-published {
+          border-left: 5px solid green;
+        }
+
+        a.btn-unpublished {
+          border-left: 5px solid red;
+        }
+      </style>
+    </custom-style>
+    <a
+      id="button-link"
+      class$="[[buttonClass]]"
+      data-installer-slug$="[[installer.slug]]">
+        [[installer.slug]]
+    </a>
+  </template>
+  <script>
+    class InstallerButton extends Polymer.Element {
+      static get is() { return 'installer-button' }
+
+      static get properties() {
+        return {
+          installer: {
+            type: Object
+          },
+          revision: Object,
+          previouslySelected: {
+            type: Boolean
+          },
+          selected: {
+            type: Boolean,
+            observer: '_selectedChanged',
+            default: false
+          },
+          buttonClass: {
+            type: String,
+            computed: '_getButtonClass(installer.published)'
+          }
+        }
+      }
+
+      _selectedChanged(newValue, oldValue) {
+        this.$['button-link'].classList.remove('previous-selected');
+        if (newValue) {
+          this.$['button-link'].classList.add('selected');
+        } else {
+          this.$['button-link'].classList.remove('selected');
+          if (oldValue) {
+            this.$['button-link'].classList.add('previous-selected');
+          }
+        }
+      }
+
+      _getButtonClass(published) {
+        let publishedClass = "";
+
+        if (!this.revision) {
+          if (published) {
+            publishedClass = "btn-published";
+          } else {
+            publishedClass = "btn-unpublished";
+          }
+        }
+        return `btn btn-primary ${publishedClass}`
+      }
+    }
+
+    customElements.define(InstallerButton.is, InstallerButton);
+  </script>
+</dom-module>

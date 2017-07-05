@@ -24,6 +24,14 @@
 {% endblock extra_head %}
 
 {% block content %}
+<style>
+  .glyphicon {
+    cursor: crosshair;
+  }
+</style>
+
+<h2>User submissions</h2>
+
 <ul class="game-list">
   {% for submission in submissions %}
     <li>
@@ -31,19 +39,84 @@
         <strong>{{ submission }}</strong>
       </p>
       <p>
-      <span>{{submission.revision.user}}</span>
-      <span>{{submission.revision.date_created}}</span>
-      {% if submission.object.game %}
-        <span>
-          <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+        <span class="small">
+          {{submission.revision.user}}
+          {{submission.revision.date_created}}
         </span>
-      {% else %}
-        <span>
-          <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
-        </span>
-      {% endif %}
+        {% if submission.object.game %}
+          <span>
+            <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+          </span>
+        {% else %}
+          <span>
+            <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
+          </span>
+        {% endif %}
       </p>
     </li>
   {% endfor %}
 </ul>
+
+
+<h2>User drafts</h2>
+
+<ul class="game-list">
+  {% for submission in drafts %}
+    <li>
+      <p>
+        <strong>{{ submission }}</strong>
+      </p>
+      <p>
+        <span class="small">
+          {{submission.revision.user}}
+          {{submission.revision.date_created}}
+        </span>
+        {% if submission.object.game %}
+          <span>
+            <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
+          </span>
+        {% else %}
+          <span>
+            <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
+          </span>
+        {% endif %}
+      </p>
+    </li>
+  {% endfor %}
+</ul>
+
+<h2>Unpublished installers</h2>
+<ul class="game-list">
+{% for installer in installers %}
+<li>
+  <p>
+    <strong>{{installer.game}}</strong>
+  </p>
+  <p>
+    <span class="small">
+      {{installer.user}}
+      {{installer.created_at}}
+    </span>
+    <span>
+      <a href="{% url 'installer_review' slug=installer.game.slug %}" class="btn">Review</a>
+    </span>
+  </p>
+</li>
+{% endfor %}
+</ul>
+
+<h2>Unpublished games with installers</h2>
+<ul class='game-list'>
+  {% for game in unpublished_games %}
+  <li>
+    <p>
+      <strong>{{game}}</strong>
+      <span>
+        <a href="{% url 'game_detail' slug=game.slug %}" class="btn">Review</a>
+      </span>
+    </p>
+  </li>
+  {% endfor %}
+</ul>
+
 {% endblock %}

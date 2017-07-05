@@ -14,9 +14,10 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.4.9"
+CLIENT_VERSION = "0.4.12"
 
 DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = False
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -198,7 +199,7 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYBEAT_SCHEDULE = {
     'send-daily-mod-mail': {
         'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=12, minute=0),
+        'schedule': crontab(hour=18, minute=0),
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'

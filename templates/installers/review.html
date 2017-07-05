@@ -1,11 +1,23 @@
 {% extends "base.html" %}
 
 {% block extra_head %}
-  {% include "includes/polymer.html" %}
+  <script src="/static/webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="/static/components/installer-review.html">
 {% endblock extra_head %}
 
 {% block content %}
+
+<div class="page-header">
+  <div class='title'>
+    {% if game.icon %}
+      <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
+    {% endif %}
+    <span><a href="{% url 'game_detail' slug=game.slug %}">{{ game.name }}</a></span>
+    <div class="buttons">
+      <a class="btn" href="{% url 'installer_submissions' %}">Back</a>
+    </div>
+  </div>
+</div>
 <div class="content">
   <installer-review slug='{{game.slug}}' api-key='{{user.auth_token.key}}'></installer-review>
 </div>

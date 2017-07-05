@@ -1,0 +1,10 @@
+{
+  "sources": [
+    "public/components/*",
+    "bower.json"
+  ],
+  "lint": {
+    "rules": ["polymer-2"],
+    "ignoreWarnings": []
+  }
+}

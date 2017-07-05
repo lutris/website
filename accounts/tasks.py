@@ -1,6 +1,7 @@
 import logging
 
 from celery import task
+from django.db import IntegrityError
 from django.utils.text import slugify
 
 import games.models
@@ -42,7 +43,11 @@ def sync_steam_library(user_id):
             except games.models.Game.DoesNotExist:
                 steam_game = create_game(game)
                 LOGGER.info("Creating game %s", steam_game.slug)
-        library.games.add(steam_game)
+        try:
+            library.games.add(steam_game)
+        except IntegrityError:
+            # Game somehow already added.
+            pass
 
 
 @task
