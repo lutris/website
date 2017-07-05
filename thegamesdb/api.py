@@ -28,46 +28,6 @@ UNSUPPORTED_PLATFORMS = (
     'Mac OS',
 )
 
-PLATFORM_MAP = {
-    '3DO': '3do',
-    'Arcade': 'arcade',
-    'Amiga': 'amiga',
-    'Apple II': 'apple-e',
-    'Atari 2600': 'atari-2600',
-    'Atari 5200': 'atari-5200',
-    'Atari ST': 'atari-st',
-    'Colecovision': 'colecovision',
-    'PC': 'windows',
-    'Sega Genesis': 'sega-genesis',
-    'Sega Mega Drive': 'sega-genesis',
-    'Sega 32X': 'sega-32x',
-    'Sega Master System': 'sega-master-system',
-    'Sega Saturn': 'sega-saturn',
-    'Sega Game Gear': 'sega-game-gear',
-    'Sega Dreamcast': 'sega-dreamcast',
-    'Atari Jaguar': 'atari-jaguar',
-    'Sony Playstation': 'sony-playstation',
-    'Sony Playstation 2': 'sony-playstation-2',
-    'Sony PSP': 'sony-psp',
-    'Sony Playstation Portable': 'sony-psp',
-    'Nintendo Entertainment System (NES)': 'nes',
-    'Super Nintendo (SNES)': 'super-nintendo',
-    'Neo Geo': 'neo-geo',
-    'Neo Geo CD': 'neo-geo-cd',
-    'Nintendo Game Boy': 'game-boy',
-    'Nintendo Game Boy Color': 'nintendo-game-boy-color',
-    'Nintendo Game Boy Advance': 'nintendo-game-boy-advance',
-    'Nintendo 64': 'nintendo-64',
-    'Nintendo GameCube': 'gamecube',
-    'Nintendo DS': 'nintendo-ds',
-    'Nintendo Wii': 'nintendo-wii',
-    'Nintendo Wii U': 'nintendo-wii-u',
-    'NeoGeo': 'neo-geo',
-    'TurboGrafx 16': 'turbografx-16',
-    'Vectrex': 'vectrex',
-    'Sinclair ZX Spectrum': 'zx-spectrum',
-}
-
 
 def download_image(media_type, url):
     """Download an image from TheGamesDB (is necessary) and return its local path"""
@@ -178,6 +138,15 @@ def get_tags_with_attrs(soup, tag_name, value_name='value'):
 
 
 def get_games_list(query, remove_unsupported=True):
+    """Search TGDB for games
+
+    Args:
+        query (str): search query to send to TGDB
+        remove_unsupported (bool): Remove games from platforms unsupported by Lutris
+
+    Returns:
+        list: list of games
+    """
     soup = api_request('GetGamesList.php?name=' + query)
     game_list = []
     games = soup.find_all('Game')
@@ -197,7 +166,7 @@ def get_games_list(query, remove_unsupported=True):
 def get_game(game_id):
     soup = api_request('GetGame.php?id={}'.format(game_id))
     game_data = soup.find('Game')
-    game_info = {
+    return {
         'id': get_value(game_data, 'id'),
         'base_img_url': get_value(soup, 'baseImgUrl'),
         'game_title': get_value(game_data, 'GameTitle'),
@@ -215,16 +184,21 @@ def get_game(game_id):
         'screenshots': get_pics(game_data, 'screenshot'),
         'clearlogo': get_tags_with_attrs(game_data, 'clearlogo'),
     }
-    return game_info
 
 
 def get_lutris_platform(platform_name):
+    """Return the Lutris platform identified by TGDB name
+
+    Args:
+        platform_name (str): Name of platform on TGDB
+
+    Returns:
+        Platform: Lutris Platform instance
+    """
     try:
-        slug = PLATFORM_MAP[platform_name]
-    except KeyError:
-        LOGGER.error('No map for %s', platform_name)
-        return
-    return Platform.objects.get(slug=slug)
+        return Platform.objects.get(tgdb_name=platform_name)
+    except Platform.DoesNotExist:
+        LOGGER.error('No TGDB name for %s', platform_name)
 
 
 def to_lutris(game):
