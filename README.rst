@@ -6,17 +6,19 @@ With docker
 
 Install docker for your system.
 
+Build the image
+
 ::
 
-    docker build -t lutrisweb Docker/
+    docker build -t lutrisweb .
 
 Start a new container using the image
 
 ::
 
-    docker run --name lutrisdev -it -p 8000:8000 lutrisweb /bin/bash
+    docker run --name lutrisdev -it -p 8000:8000 lutrisweb
 
-Reconnecting after creating
+Attach to shell
 
 ::
 

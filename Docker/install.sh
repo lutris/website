@@ -5,6 +5,7 @@ chmod 755 $HOME/.nvm/nvm.sh
 source $HOME/.nvm/nvm.sh
 nvm install node
 npm install -g bower grunt-cli
+sed -i -e "s/sudo//g" Makefile
 make setup
 make sysdeps
 make db
