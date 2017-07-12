@@ -10,20 +10,20 @@ Build the image
 
 ::
 
-    docker build -t lutrisweb .
+    docker build -t lutris/website .
 
 Start a new container using the image
 
 ::
 
-    docker run --name lutrisdev -it -p 8000:8000 lutrisweb
+    docker run --name lutrisweb -it -p 8000:8000 lutris/website
 
 Attach to shell
 
 ::
 
-    docker start lutrisdev
-    docker exec -it lutrisdev /bin/bash
+    docker start lutrisweb
+    docker exec -it lutrisweb /bin/bash
 
 
 Natively
