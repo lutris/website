@@ -3,7 +3,7 @@ setup:
 	bower install --allow-root
 	grunt
 run:
-	./manage.py runserver
+	./manage.py runserver 0.0.0.0:8000
 
 db:
 	./manage.py migrate
