@@ -249,6 +249,8 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
+        if not self.slug:
+            raise ValueError("Can't generate a slug for name %s" % self.name)
         self.download_steam_capsule()
         self.check_for_submission()
         return super(Game, self).save(*args, **kwargs)
