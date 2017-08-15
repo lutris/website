@@ -4,6 +4,7 @@ import datetime
 import json
 from itertools import chain
 
+import six
 import reversion
 import yaml
 from bitfield import BitField
@@ -55,11 +56,11 @@ class Company(models.Model):
     def __unicode__(self):
         return u"%s" % self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         self.slug = slugify(self.name)
         if not self.slug:
             raise ValueError("Tried to save Company without a slug: %s", self)
-        return super(Company, self).save(*args, **kwargs)
+        return super(Company, self).save(force_insert=force_insert, using=using)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -80,10 +81,10 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save(*args, **kwargs)
+        return super(Genre, self).save(force_insert=force_insert, using=using)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -99,8 +100,8 @@ class GameManager(models.Manager):
             self.get_queryset()
             .filter(is_public=True)
             .filter(
-                Q(installers__published=True)
-                | Q(platforms__default_installer__startswith='{')
+                Q(installers__published=True) |
+                Q(platforms__default_installer__startswith='{')
             )
             .order_by('name')
             .annotate(installer_count=Count('installers'))
@@ -207,8 +208,7 @@ class Game(models.Model):
             return 'linux'
         elif 'windows' in platforms:
             return 'windows'
-        else:
-            return True
+        return True
 
     def get_default_installers(self):
         installers = []
@@ -246,14 +246,14 @@ class Game(models.Model):
         else:
             submission.accept()
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
         if not self.slug:
             raise ValueError("Can't generate a slug for name %s" % self.name)
         self.download_steam_capsule()
         self.check_for_submission()
-        return super(Game, self).save(*args, **kwargs)
+        return super(Game, self).save(force_insert=force_insert, using=using)
 
 
 class GameMetadata(models.Model):
@@ -388,7 +388,7 @@ class BaseInstaller(models.Model):
             yaml_content = yaml_content[0]
 
         # If yaml content evaluates to a string return an empty dict
-        if isinstance(yaml_content, basestring):
+        if isinstance(yaml_content, six.string_types):
             return {}
 
         # Do not add metadata if the clean argument has been passed
@@ -482,9 +482,9 @@ class Installer(BaseInstaller):
             )
         ]
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         self.slug = self.build_slug(self.version)
-        return super(Installer, self).save(*args, **kwargs)
+        return super(Installer, self).save()
 
 
 class InstallerIssue(models.Model):
@@ -570,6 +570,7 @@ class GameLink(models.Model):
 
 class InstallerRevision(BaseInstaller):
     def __init__(self, version):
+        super(InstallerRevision, self).__init__()
         self._version = version
         self.id = version.pk
         installer_data = self.get_installer_data()
@@ -605,7 +606,7 @@ class InstallerRevision(BaseInstaller):
         installer_data['id'] = self.id
         return installer_data
 
-    def delete(self):
+    def delete(self, using=None, keep_parents=False):
         self._version.delete()
 
     def accept(self):
@@ -629,6 +630,7 @@ class AutoInstaller(BaseInstaller):
     updated_at = None
 
     def __init__(self, game, platform):
+        super(AutoInstaller, self).__init__()
         self.game = game
         if platform not in game.platforms.all():
             raise ObjectDoesNotExist

@@ -1,6 +1,8 @@
 import json
+
 from django.test import TestCase
 from django.urls import reverse
+
 from accounts.models import User
 from common.util import create_admin, create_user
 

@@ -1,6 +1,8 @@
-from accounts import models
+# pylint: disable=R0201
 from django.contrib import admin
 from django.core import urlresolvers
+
+from accounts import models
 
 
 class UserAdmin(admin.ModelAdmin):

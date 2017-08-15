@@ -1,14 +1,15 @@
-import uuid
-import hmac
 import datetime
+import hashlib
+import hmac
 import logging
 import urllib
-import hashlib
-from django.db import models
-from django.utils import timezone
+import uuid
+
 from django.conf import settings
-from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 from django_openid_auth.models import UserOpenID
 
 from emails import messages
@@ -60,9 +61,11 @@ class AuthToken(models.Model):
     token = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         self.token = str(uuid.uuid4())
-        return super(AuthToken, self).save(*args, **kwargs)
+        return super(AuthToken, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                           update_fields=update_fields)
 
 
 class EmailConfirmationToken(models.Model):

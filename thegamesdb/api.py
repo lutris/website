@@ -133,8 +133,7 @@ def get_tags_with_attrs(soup, tag_name, value_name='value'):
         results.append(attrs)
     if len(results) == 1:
         return results[0]
-    else:
-        return results
+    return results
 
 
 def get_games_list(query, remove_unsupported=True):

@@ -1,28 +1,25 @@
 import json
 import logging
-from django.http import (
-    HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest
-)
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
-from django.urls import reverse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.conf import settings
-
-from django_openid_auth.views import parse_openid_response, login_complete
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseRedirect)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
+from django_openid_auth.views import login_complete, parse_openid_response
 
-from .models import AuthToken, User, EmailConfirmationToken
-from . import forms
-from . import tasks
-from . import sso
 import games.models
 import games.util.steam
+
+from . import forms, sso, tasks
+from .models import AuthToken, EmailConfirmationToken, User
 
 LOGGER = logging.getLogger(__name__)
 

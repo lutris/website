@@ -1,8 +1,9 @@
 # pylint: disable=W0232, R0903
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from accounts.models import User
 from rest_framework.authtoken.models import Token
+
+from accounts.models import User
 from common.forms import get_bootstrap_helper
 
 
@@ -94,7 +95,7 @@ class ProfileForm(forms.ModelForm):
         self.helper = get_bootstrap_helper(list(self.Meta.fields),
                                            'save', "Save")
 
-    def save(self, *args, **kwargs):
+    def save(self, commit=True):
         if 'email' in self.changed_data:
             self.instance.email_confirmed = False
-        return super(ProfileForm, self).save(*args, **kwargs)
+        return super(ProfileForm, self).save(commit=commit)

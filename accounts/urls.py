@@ -2,8 +2,7 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
-from . import forms
-from . import views
+from . import forms, views
 
 urlpatterns = [
     url(r'^login/$', auth_views.login,
