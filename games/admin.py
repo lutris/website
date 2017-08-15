@@ -2,12 +2,11 @@
 # pylint: disable=R0201
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
-from django.urls import reverse
 from django.contrib import admin
+from django.urls import reverse
 from reversion.admin import VersionAdmin
 
-from . import models
-from . import forms
+from . import forms, models
 
 
 class CompanyAdmin(admin.ModelAdmin):

@@ -1,29 +1,29 @@
 """Models for main lutris app"""
+import datetime
 # pylint: disable=E1002, E0202
 import json
-import datetime
-import yaml
 from itertools import chain
 
-from django.db import models
-from django.db.models import Q, Count
+import reversion
+import yaml
+from bitfield import BitField
 from django.conf import settings
-from django.utils.text import slugify
-from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-from bitfield import BitField
+from django.db import models
+from django.db.models import Count, Q
+from django.urls import reverse
+from django.utils.text import slugify
 from reversion.models import Version
-import reversion
 
 from common.util import get_auto_increment_slug
-from platforms.models import Platform
-from runners.models import Runner
+from emails import messages
 from games import managers
 from games.util import steam
-from emails import messages
+from platforms.models import Platform
+from runners.models import Runner
 
 DEFAULT_INSTALLER = {
     'files': [

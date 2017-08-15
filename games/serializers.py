@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from platforms.models import Platform
+
 from games import models
+from platforms.models import Platform
 
 
 class PlatformSerializer(serializers.ModelSerializer):
