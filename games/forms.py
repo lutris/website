@@ -185,7 +185,8 @@ class InstallerForm(forms.ModelForm):
                 "the actual software version of the game... Whatever makes "
                 "the most sense."
             ),
-            'description': "Additional details.",
+            'description': ("Additional details about the installer. "
+                            "Do NOT put a description for the game, it will be deleted"),
             'notes': ("Describe any known issues or manual tasks required "
                       "to run the game properly."),
         }
