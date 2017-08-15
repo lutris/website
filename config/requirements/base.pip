@@ -1,29 +1,29 @@
 PyYAML==3.12
 Django==1.10.2
-Pillow==3.4.1
-ipython==5.1.0
-Sphinx==1.4.8
-djangorestframework==3.4.7
+Pillow==4.2.1
+ipython==5.4.1
+Sphinx==1.6.3
+djangorestframework==3.6.3
 django-appconf==1.0.2
-django-compressor==2.1
+django-compressor==2.1.1
 django-crispy-forms==1.6.0
-django_select2==5.8.9
-django-grappelli==2.8.2
+django_select2==5.11.1
+django-grappelli==2.10.1
 django-tastypie==0.13.3
 django-markupfield==1.4.1
 django-extensions==1.7.4
 django_inlinecss==0.1.2
-django-reversion
-# django-bitfield==1.8.0
--e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
+django-reversion==2.0.9
+django-bitfield==1.9.3
+# -e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
 python-openid
-requests==2.11.1
-Celery==3.1.24
+requests==2.18.3
+Celery==4.1.0
 mimeparse==0.1.3
 mock==2.0.0
-jsonfield==1.0.3
-psycopg2==2.6.2
-factory_boy==2.7.0
+jsonfield==2.0.2
+psycopg2==2.7.3
+factory_boy==2.9.2
 sorl-thumbnail==12.4.a1
 -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 -e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
