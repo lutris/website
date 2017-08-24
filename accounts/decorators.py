@@ -34,7 +34,7 @@ def can_edit_installer(slug=None, is_game=False):
             return True
     if not game:
         return True
-    return bool(game.flags.protected)
+    return not bool(game.flags.protected)
 
 
 def check_installer_restrictions(view_func):
