@@ -320,9 +320,12 @@ class InstallerManager(models.Manager):
                         pass
                     else:
                         if return_models:
-                            auto_installer = AutoInstaller(game, platform)
-                            if auto_installer.slug == slug:
-                                return [auto_installer]
+                            try:
+                                auto_installer = AutoInstaller(game, platform)
+                                if auto_installer.slug == slug:
+                                    return [auto_installer]
+                            except ObjectDoesNotExist:
+                                pass
                         else:
                             auto_installers = game.get_default_installers()
                             for auto_installer in auto_installers:
