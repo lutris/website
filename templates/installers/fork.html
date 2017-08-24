@@ -26,7 +26,7 @@ Fork installer {{ installer }}
   </p>
 
   <div>
-    <form action="{% url "fork_installer" id=installer.id %}" method="post" accept-charset="utf-8">
+    <form action="{% url "fork_installer" slug=installer.slug %}" method="post" accept-charset="utf-8">
       {% csrf_token %}
       {{ form.as_p }}
       <p class="form-actions right">

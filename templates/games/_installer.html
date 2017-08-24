@@ -17,7 +17,7 @@
                 Edit installer </a>
             </li>
             <li>
-              {% url 'fork_installer' id=installer.id as fork_url %}
+              {% url 'fork_installer' slug=installer.slug as fork_url %}
               <a href="{{ fork_url }}">
                 <i class='glyphicon  glyphicon-leaf'></i>
                 Fork installer

@@ -360,9 +360,9 @@ def view_installer(request, id):
 
 
 @user_confirmed_required
-def fork_installer(request, id):
+def fork_installer(request, slug):
     try:
-        installer = Installer.objects.get(pk=id)
+        installer = Installer.objects.get(slug=slug)
     except Installer.DoesNotExist:
         raise Http404
     form = ForkInstallerForm(request.POST or None, instance=installer)
