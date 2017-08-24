@@ -22,7 +22,7 @@ from django.views.generic import ListView
 from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import user_confirmed_required
+from accounts.decorators import user_confirmed_required, check_installer_restrictions
 from games import models
 from games.forms import (ForkInstallerForm, GameForm,
                          InstallerForm, ScreenshotForm)
@@ -227,6 +227,7 @@ def game_detail(request, slug):
 
 
 @user_confirmed_required
+@check_installer_restrictions
 def new_installer(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
     installer = Installer(game=game)
@@ -243,6 +244,7 @@ def new_installer(request, slug):
 
 
 @user_confirmed_required
+@check_installer_restrictions
 def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if 'delete' in request.POST:
@@ -307,6 +309,7 @@ def delete_installer(request, slug):
     if request.method == 'POST' and 'delete' in request.POST:
         game = installer.game
         installer_name = installer.slug
+        # TODO Delete revisions
         installer.delete()
         messages.warning(
             request,
@@ -318,11 +321,9 @@ def delete_installer(request, slug):
     })
 
 
-@login_required
+@staff_member_required
 def publish_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
-    if not request.user.is_staff:
-        raise Http404
     installer.published = True
     installer.save()
     return redirect('game_detail', slug=installer.game.slug)
@@ -433,13 +434,6 @@ def game_list(request):
     games = models.Game.objects.all()
     return render(request, 'games/game_list.html', {'games': games})
 
-
-# def games_by_runner(request, runner_slug):
-#     """View for games filtered by runner"""
-#     runner = get_object_or_404(Runner, slug=runner_slug)
-#     games = models.Game.objects.filter(runner__slug=runner.slug)
-#     return render(request, 'games/game_list.html',
-#                   {'games': games})
 
 @user_confirmed_required
 def submit_game(request):

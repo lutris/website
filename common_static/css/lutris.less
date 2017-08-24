@@ -841,14 +841,6 @@ input {
   }
 }
 
-.screenshots-bar {
-  background-color: #151515;
-  border-bottom: 1px solid #444;
-  height: 26px;
-  padding-right: 4px;
-  padding-top: 4px;
-}
-
 .carousel-control {
   opacity: 0;
   &:focus {
@@ -1154,22 +1146,35 @@ input {
     border-left: 2px solid #700;
     background-color: #333;
   }
-  .installer-actions {
-    background-color: #151515;
-    text-align: right;
-    padding: 4px;
-    a {
-      padding: 4px 8px;
-      border-radius: 2px;
-    }
-    a:hover {
-      background-color: #2e2e2e;
-    }
-  }
   .hide-unpublished {
     display: none;
   }
 }
+
+.screenshots-bar {
+  border-bottom: 1px solid #444;
+}
+
+.actions-bar {
+  background-color: #151515;
+  background-color: #151515;
+  text-align: right;
+  padding: 4px;
+  a, span {
+    font-size: .8em;
+    padding: 4px;
+  }
+  a {
+    border-radius: 2px;
+    color: #888;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  a:hover {
+    background-color: #2e2e2e;
+  }
+}
+
 
 .filter-list {
   .ul-reset;
@@ -1276,10 +1281,17 @@ input {
   padding: 2em;
 }
 
+@warning: #FD3750;
+
+.warning {
+  font-weight: bold;
+  color: @warning;
+}
+
 .obnoxious-warning {
   font-size: 1.2em;
   text-transform: uppercase;
-  color: #FD3750;
+  color: @warning;
 }
 
 .external-link {

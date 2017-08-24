@@ -118,6 +118,7 @@ class Game(models.Model):
         ('freetoplay', 'Free-to-play'),
         ('pwyw', 'Pay what you want'),
         ('demo', 'Has a demo'),
+        ('protected', 'Installer modification is restricted'),
     )
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=False)
@@ -253,7 +254,7 @@ class Game(models.Model):
             raise ValueError("Can't generate a slug for name %s" % self.name)
         self.download_steam_capsule()
         self.check_for_submission()
-        return super(Game, self).save(force_insert=force_insert, using=using)
+        return super(Game, self).save()
 
 
 class GameMetadata(models.Model):
