@@ -22,6 +22,10 @@
 @modal-content-bg: @darkerBackground;
 @modal-header-border-color: #666;
 
+@warning-color: #FD3750;
+
+@padding: 7px;
+@banner-width: 198px;
 
 /* == Defaults */
 html, body {
@@ -1038,21 +1042,23 @@ input {
   display: inline-block;
   margin: 8px auto;
   text-align: center;
+  width: @banner-width;
   a {
+    width: @banner-width;
     font-weight: 500;
     font-size: .8em;
     display: inline-block;
     text-decoration: none;
-    padding: 7px;
+    padding: @padding;
     background-color: #222;
-    width: 184px + 14px;
+    text-overflow:  hidden;
     &:hover, &:focus {
       background-color: #444;
       outline: 0;
     }
   }
   .game-title {
-    .discreet-text
+    &:extend(.discreet-text);
   }
 }
 
@@ -1281,17 +1287,15 @@ input {
   padding: 2em;
 }
 
-@warning: #FD3750;
-
 .warning {
   font-weight: bold;
-  color: @warning;
+  color: @warning-color;
 }
 
 .obnoxious-warning {
   font-size: 1.2em;
   text-transform: uppercase;
-  color: @warning;
+  color: @warning-color;
 }
 
 .external-link {
