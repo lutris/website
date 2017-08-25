@@ -205,7 +205,6 @@ def sql_restore():
 
 
 def deploy():
-    fix_perms(user='django')
     pull()
     bower()
     grunt()
@@ -213,7 +212,6 @@ def deploy():
     collect_static()
     migrate()
     docs()
-    fix_perms()
     nginx_reload()
     update_celery()
     supervisor_restart()
