@@ -99,3 +99,15 @@ class ProfileForm(forms.ModelForm):
         if 'email' in self.changed_data:
             self.instance.email_confirmed = False
         return super(ProfileForm, self).save(commit=commit)
+
+
+class ProfileDeleteForm(forms.Form):
+    confirm_delete = forms.BooleanField(
+        label="Yes, I confirm I want to delete my account"
+    )
+
+    def clean_confirm_delete(self):
+        confirm_delete = self.cleaned_data["confirm_delete"]
+        if not confirm_delete:
+            raise forms.ValidationError("You must confirm to delete your account")
+        return confirm_delete

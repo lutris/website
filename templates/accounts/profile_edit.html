@@ -11,6 +11,9 @@
   {% crispy form %}
 </div>
 <div class="form-view">
-  <a href="{% url 'password_change' %}" class="btn btn-sm">Modify your password</a>
+  <a href="{% url 'password_change' %}" class="btn btn-sm">Modify my password</a>
+</div>
+<div class='form-view'>
+  <a href="{% url 'profile_delete' username=user.username %}" class="btn btn-danger">Delete my account</a>
 </div>
 {% endblock %}

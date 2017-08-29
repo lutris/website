@@ -54,6 +54,21 @@ class User(AbstractUser):
         # Hmac that beast.
         return hmac.new(new_uuid.bytes, digestmod=hashlib.sha1).hexdigest()
 
+    def deactivate(self):
+        self.gamelibrary.delete()
+        self.groups.clear()
+        self.authtoken_set.all().delete()
+        self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
+        self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
+        self.is_active = False
+        self.is_staff = False
+        self.email_confirmed = False
+        self.email = ''
+        self.avatar = ''
+        self.steamid = ''
+        self.key = ''
+        self.save()
+
 
 class AuthToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

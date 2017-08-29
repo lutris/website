@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="form-view col-sm-6">
+    <h1>Delete my account</h1>
+    <p class='warning'>
+      This action is irreversible, you will lose the list of games in your
+      Lutris library and the ability to log in.
+    </p>
+    <form class="simple-form" action="" method="post">
+      {% csrf_token %}
+      <div class='important-checkbox'>
+        {{ form.as_p }}
+      </div>
+      <p>
+        <input class="btn btn-sm btn-danger" type="submit" value="DELETE MY ACCOUNT">
+      </p>
+    </form>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
+{% endblock %}

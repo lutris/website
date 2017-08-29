@@ -1,9 +1,8 @@
 import json
 import logging
-
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
@@ -140,6 +139,20 @@ def profile_edit(request, username):
         )
         return redirect(reverse('user_account', args=(username, )))
     return render(request, 'accounts/profile_edit.html', {'form': form})
+
+
+@login_required
+def profile_delete(request, username):
+    user = get_object_or_404(User, username=username)
+    if user != request.user:
+        raise Http404
+    form = forms.ProfileDeleteForm(request.POST or None)
+    if form.is_valid():
+        logout(request)
+        user.deactivate()
+        messages.success(request, 'Your account is now deleted')
+        return redirect(reverse('homepage'))
+    return render(request, 'accounts/profile_delete.html', {'form': form})
 
 
 @csrf_exempt
