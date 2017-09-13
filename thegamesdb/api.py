@@ -122,6 +122,8 @@ def get_pics(game_data, tag_name):
 
 
 def get_tags_with_attrs(soup, tag_name, value_name='value'):
+    if not soup:
+        return []
     tags = soup.find_all(tag_name)
     results = []
     for tag in tags:
