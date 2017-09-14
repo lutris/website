@@ -286,6 +286,13 @@ class InstallerManager(models.Manager):
     def unpublished(self):
         return self.get_queryset().filter(published=False)
 
+    def abandoned(self):
+        """Return the installer with 'Change Me' version that haven't received any modifications"""
+        return [
+            installer for installer in self.get_queryset().filter(version='Change Me')
+            if not Version.objects.filter(object_id=installer.id, content_type__model='installer').count()
+        ]
+
     def _fuzzy_search(self, slug, return_models=False):
         try:
             # Try returning installers by installer slug

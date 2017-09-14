@@ -200,6 +200,10 @@ CELERYBEAT_SCHEDULE = {
     'send-daily-mod-mail': {
         'task': 'accounts.tasks.daily_mod_mail',
         'schedule': crontab(hour=18, minute=0),
+    },
+    'delete-unchanged-forks': {
+        'task': 'games.tasks.delete_unchanged_forks',
+        'schedule': crontab(hour=17, minute=59)
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'
