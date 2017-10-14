@@ -1,6 +1,7 @@
 """Models for main lutris app"""
 import datetime
 # pylint: disable=E1002, E0202
+import re
 import json
 import random
 from itertools import chain
@@ -109,8 +110,21 @@ class GameManager(models.Manager):
             .annotate(default_installer_count=Count('platforms'))
         )
 
-    def get_random(self):
-        pks = self.get_queryset().values_list('pk', flat=True)
+    def get_random(self, option=""):
+        if not re.match('^[\w\d-]+$', option) or len(option) > 128:
+            raise ValueError(option)
+            return
+        pk_query = self.get_queryset()
+        if option == 'incomplete':
+            pk_query = pk_query.filter(year=None)
+        elif option == 'published':
+            pk_query = self.with_installer()
+        elif len(option) > 1:
+            pk_query = pk_query.filter(
+                Q(platforms__slug=option) |
+                Q(installers__runner__slug=option)
+            )
+        pks = pk_query.values_list('pk', flat=True)
         random_pk = random.choice(pks)
         return self.get_queryset().get(pk=random_pk)
 
