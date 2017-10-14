@@ -112,7 +112,6 @@ class GameManager(models.Manager):
 
     def get_random(self, option=""):
         if not re.match('^[\w\d-]+$', option) or len(option) > 128:
-            raise ValueError(option)
             return
         pk_query = self.get_queryset()
         if option == 'incomplete':
