@@ -2,6 +2,7 @@
 import datetime
 # pylint: disable=E1002, E0202
 import json
+import random
 from itertools import chain
 
 import six
@@ -107,6 +108,11 @@ class GameManager(models.Manager):
             .annotate(installer_count=Count('installers'))
             .annotate(default_installer_count=Count('platforms'))
         )
+
+    def get_random(self):
+        pks = self.get_queryset().values_list('pk', flat=True)
+        random_pk = random.choice(pks)
+        return self.get_queryset().get(pk=random_pk)
 
 
 class Game(models.Model):

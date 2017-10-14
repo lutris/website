@@ -19,6 +19,8 @@ class GameListView(generics.GenericAPIView):
             game_slugs = []
         if game_slugs:
             queryset = models.Game.objects.filter(slug__in=game_slugs)
+        elif 'random' in self.request.GET:
+            queryset = [models.Game.objects.get_random()]
         else:
             queryset = models.Game.objects.all()
         return queryset
