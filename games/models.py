@@ -632,7 +632,10 @@ class InstallerRevision(BaseInstaller):
 
     def get_installer_data(self):
         installer_data = json.loads(self._version.serialized_data)[0]['fields']
-        installer_data['script'] = yaml.safe_load(installer_data['content'])
+        try:
+            installer_data['script'] = yaml.safe_load(installer_data['content'])
+        except yaml.ScannerError:
+            installer_data['script'] = ['This installer is fucked up.']
         installer_data['id'] = self.id
         return installer_data
 
