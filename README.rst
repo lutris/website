@@ -66,12 +66,7 @@ page ::
 
     https://github.com/creationix/nvm
 
-Then install bower and grunt::
-
-    npm install -g bower
-    npm install -g grunt-cli
-
-Once you have grunt and bower installed, you can run the following commands::
+Once you a recent version of npm installed, you can run the following commands::
 
     make setup  # Will install the project's npm and bower dependencies
                 # and build the static files
