@@ -22,7 +22,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "bower install --allow-root && grunt"
+    "setup": "bower install --allow-root && grunt",
+    "watch": "grunt watch"
   },
   "repository": {
     "type": "git",

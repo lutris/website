@@ -1,6 +1,10 @@
 setup:
 	npm install
 	npm run setup
+
+watch:
+	npm run watch
+
 run:
 	./manage.py runserver 0.0.0.0:8000
 
