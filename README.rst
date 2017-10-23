@@ -70,7 +70,7 @@ Once you installed a recent version of npm, you can run the following commands::
 
     make setup  # Will install the project's npm and bower dependencies
                 # and build the static files
-    grunt watch  # Watch for JS/CSS changes and compile them
+    make watch  # Watch for JS/CSS changes and compile them
 
 You'll need to setup the database, if you want to use a PostgreSQL database,
 follow the instructions found in the next paragraph before running this
