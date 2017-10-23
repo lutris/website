@@ -55,7 +55,7 @@ also tell the project to fallback to SQLite::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
+    sudo apt-get install imagemagick memcached libmemcached-dev libxml2-dev libxslt1-dev mercurial bzr python-dev
     make deps
 
 In order to build the frontend code (javascript and css files), you'll
