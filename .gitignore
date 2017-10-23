@@ -16,6 +16,7 @@ public/js
 public/css
 public/fonts
 node_modules
+npm-debug.log
 reports
 ENV
 celerybeat-schedule
