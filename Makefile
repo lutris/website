@@ -1,7 +1,6 @@
 setup:
 	npm install
-	bower install --allow-root
-	grunt
+	npm run setup
 run:
 	./manage.py runserver 0.0.0.0:8000
 
