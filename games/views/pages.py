@@ -463,6 +463,20 @@ def submit_game(request):
     return render(request, 'games/submit.html', {'form': form})
 
 
+@user_confirmed_required
+def edit_game(request, slug):
+    """Lets the user suggest changes to a game for a moderator to verify"""
+
+    # Load related game object and populate form with it or with rejected values (if form invalid)
+    game = get_object_or_404(Game, slug=slug)
+    form = GameForm(request.POST or None, request.FILES or None, instance=game)
+
+    if request.method == 'POST' and form.is_valid():
+        print('is valid')
+
+    return render(request, 'games/submit.html', {'form': form, 'game': game})
+
+
 def publish_game(request, id):
     if not request.user.has_perm('games.can_publish_game'):
         raise Http404
