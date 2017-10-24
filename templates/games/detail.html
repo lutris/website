@@ -10,14 +10,15 @@
         <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
       {% endif %}
       <span>{{ game.name }}</span>
-      {% if user.is_staff %}
         <div class="buttons">
-          {% if not game.is_public %}
-            <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+          <a class="btn" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
+          {% if user.is_staff %}
+            {% if not game.is_public %}
+              <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+            {% endif %}
+            <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
           {% endif %}
-          <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
         </div>
-      {% endif %}
     </div>
   </div>
 
