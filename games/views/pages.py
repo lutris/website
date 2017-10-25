@@ -2,7 +2,6 @@
 # pylint: disable=E1101, W0613
 from __future__ import absolute_import
 
-from copy import deepcopy
 import json
 import logging
 
