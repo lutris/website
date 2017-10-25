@@ -31,9 +31,23 @@ def list_change_submissions_view(request, game_id=None):
     # Filter changes if a game_id is given
     if game_id:
         game = get_object_or_404(models.Game, id=game_id)
-        change_suggestions = models.Game.objects.filter(change_for=game_id)
+        change_suggestions_unfiltered = models.Game.objects.filter(change_for=game_id)
     else:
-        change_suggestions = models.Game.objects.filter(change_for__isnull=False)
+        change_suggestions_unfiltered = models.Game.objects.filter(change_for__isnull=False)
+
+    # Generate diffs
+    obsolete_changes = 0
+    change_suggestions = []
+    for change_suggestion in change_suggestions_unfiltered:
+        diff = change_suggestion.get_changes()
+
+        # If the diff is empty, this change is obselete and can be deleted
+        if not diff:
+            change_suggestion.delete()
+            obsolete_changes += 1
+        else:
+            change_suggestion.diff = diff
+            change_suggestions.append(change_suggestion)
 
     # Determine title
     title = 'Change submissions'
@@ -42,6 +56,7 @@ def list_change_submissions_view(request, game_id=None):
 
     context = dict(
         title=title,
+        obsolete_changes=obsolete_changes,
         change_suggestions=change_suggestions,
         for_game=game_id
     )

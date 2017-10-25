@@ -9,6 +9,9 @@
 {% block content %}
 
 <div class="grp-content-container">
+  {% if obsolete_changes > 0 %}
+    <p><strong>INFO:</strong> {{obsolete_changes}} obsolete changes were deleted.</p>
+  {% endif %}
   {% for c in change_suggestions %}
     <div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
         margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
@@ -23,7 +26,7 @@
           <th>Old</th>
           <th>New</th>
         </tr>
-        {% for entry, old_value, new_value in c.get_changes %}
+        {% for entry, old_value, new_value in c.diff %}
           <tr><th>{{entry}}</th><td>{{old_value}}</td><td>{{new_value}}</td></tr>
         {% endfor %}
       </table>
@@ -37,7 +40,7 @@
     </div>
   {% endfor %}
   {% if not change_suggestions %}
-    No change suggestions left.
+    <p>No change suggestions left.</p>
   {% endif %}
 </div>
 
