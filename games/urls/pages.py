@@ -33,6 +33,9 @@ urlpatterns = [
     url(r'^game-submitted',
         TemplateView.as_view(template_name='games/submitted.html'),
         name="game-submitted"),
+    url(r'^game-changes-submitted',
+        TemplateView.as_view(template_name='games/submitted-changes.html'),
+        name='game-submitted-changes'),
 
     url('^game-issue',
         views.submit_issue,

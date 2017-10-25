@@ -4,9 +4,40 @@ from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
 from django.urls import reverse
+from django.utils.html import format_html
 from reversion.admin import VersionAdmin
 
 from . import forms, models
+
+
+class GameFilter(admin.SimpleListFilter):
+    """Simple filter to remove clutter from the admin panel"""
+
+    title = 'Show'
+    parameter_name = 'change_for'
+
+    def lookups(self, request, model_admin):
+        return (
+            (None, 'Only games (default)'),
+            ('only-changes', 'Only suggested changes'),
+            ('all', 'All'),
+        )
+
+    def choices(self, cl):
+        for lookup, title in self.lookup_choices:
+            yield {
+                'selected': self.value() == lookup,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset.filter(change_for__isnull=True)
+        elif self.value() == 'only-changes':
+            return queryset.filter(change_for__isnull=False)
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -68,8 +99,8 @@ class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
     list_display = ('__unicode__', 'is_public', 'year', 'steamid', 'gogslug',
-                    'humblestoreid', 'created', 'updated', )
-    list_filter = ('is_public', 'publisher', 'developer', 'genres')
+                    'humblestoreid', 'created', 'updated', 'custom_actions')
+    list_filter = (GameFilter, 'is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
     search_fields = ('name', 'steamid')
     raw_id_fields = ('publisher', 'developer', 'genres', 'platforms')
@@ -84,6 +115,36 @@ class GameAdmin(admin.ModelAdmin):
         GameMetadataInline,
         GameLinkAdmin
     ]
+    actions = ['reject_user_suggested_changes']
+
+    def custom_actions(self, game):
+        """Column to display additional actions"""
+
+        actions = []
+
+        if game.change_for is not None:
+            actions += [self.review_changes_url(game)]
+
+        output = ', '.join(actions) if actions else '-'
+        return format_html(output)
+
+    def review_changes_url(self, game):
+        """Add a link to review the changes of a change submission"""
+
+        url = reverse('admin-change-submission', kwargs={'submission_id': game.id})
+        return '<a href="{url}">{text}</a>'.format(url=url, text='Review')
+
+    def reject_user_suggested_changes(self, request, queryset):
+        """Admin-action to bulk-reject the changes a user suggested"""
+
+        for change_set in queryset:
+            game = change_set.change_for
+
+            if game is not None:
+                change_set.delete()
+
+    custom_actions.short_description = 'Actions'
+    reject_user_suggested_changes.short_description = 'Reject user-suggested changes'
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
