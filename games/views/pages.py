@@ -2,6 +2,7 @@
 # pylint: disable=E1101, W0613
 from __future__ import absolute_import
 
+from copy import deepcopy
 import json
 import logging
 
@@ -13,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.core.mail import mail_managers
 from django.db.models import Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -24,7 +25,7 @@ from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required, check_installer_restrictions
 from games import models
-from games.forms import (ForkInstallerForm, GameForm,
+from games.forms import (ForkInstallerForm, GameForm, GameEditForm,
                          InstallerForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
@@ -467,14 +468,37 @@ def submit_game(request):
 def edit_game(request, slug):
     """Lets the user suggest changes to a game for a moderator to verify"""
 
-    # Load related game object and populate form with it or with rejected values (if form invalid)
-    game = get_object_or_404(Game, slug=slug)
-    form = GameForm(request.POST or None, request.FILES or None, instance=game)
+    # Load game object and get a copy to work on
+    game_suggested = get_object_or_404(Game, slug=slug)
+    game_current = game_suggested.create_copy()
 
+    # Sanity check: Disallow change-suggestions for changes
+    if game_suggested.change_for:
+        return HttpResponseBadRequest('You can only apply changes to a game')
+
+    # Initialise form with rejected values or with the working copy
+    form = GameEditForm(request.POST or None, request.FILES or None, instance=game_suggested)
+
+    # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
-        print('is valid')
+        game_suggested.id = None
+        game_suggested.pk = None
+        game_suggested.slug = None
+        game_suggested.is_public = False
+        game_suggested.change_for = game_current
+        game_suggested = form.save()
 
-    return render(request, 'games/submit.html', {'form': form, 'game': game})
+        redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
+
+        # Enforce https
+        if not settings.DEBUG:
+            redirect_url = redirect_url.replace('http:', 'https:')
+
+        LOGGER.info('Change-suggestions for game submitted, redirecting to %s', redirect_url)
+        return redirect(redirect_url)
+
+    # Render template
+    return render(request, 'games/submit.html', {'form': form, 'game': game_suggested})
 
 
 def publish_game(request, id):
