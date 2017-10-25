@@ -159,6 +159,15 @@ class GameEditForm(forms.ModelForm):
         self.helper.include_media = False
         self.helper.add_input(Submit('submit', "Submit"))
 
+    def clean(self):
+        cleaned_data = super(GameEditForm, self).clean()
+
+        # Raise error if nothing actually changed
+        if not self.has_changed():
+            raise forms.ValidationError('You have not changed anything')
+
+        return cleaned_data
+
 
 class FeaturedForm(forms.ModelForm):
     class Meta:

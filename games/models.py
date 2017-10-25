@@ -211,14 +211,17 @@ class Game(models.Model):
 
     def get_changes(self):
         """Returns a dictionary of the changes"""
+        
         changes = []
-
         considered_entries = ['name', 'year', 'platforms', 'genres', 'website', 'description']
 
+        # From the considered fields, only those who differ will
+        # be returned
         for entry in considered_entries:
             old_value = getattr(self.change_for, entry)
             new_value = getattr(self, entry)
 
+            # M2M relations to string
             if entry in ['platforms', 'genres']:
                 old_value = ', '.join('[{0}]'.format(str(x)) for x in list(old_value.all()))
                 new_value = ', '.join('[{0}]'.format(str(x)) for x in list(new_value.all()))
