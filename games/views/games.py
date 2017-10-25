@@ -18,11 +18,11 @@ class GameListView(generics.GenericAPIView):
         else:
             game_slugs = []
         if game_slugs:
-            queryset = models.Game.objects.filter(slug__in=game_slugs)
+            queryset = models.Game.objects.filter(change_for__isnull=True).filter(slug__in=game_slugs)
         elif 'random' in self.request.GET:
             queryset = [models.Game.objects.get_random(self.request.GET['random'])]
         else:
-            queryset = models.Game.objects.all()
+            queryset = models.Game.objects.filter(change_for__isnull=True)
         return queryset
 
     def get_serializer_class(self):
@@ -65,10 +65,10 @@ class GameLibraryView(generics.RetrieveAPIView):
 class GameDetailView(generics.RetrieveAPIView):
     serializer_class = serializers.GameSerializer
     lookup_field = 'slug'
-    queryset = models.Game.objects.all()
+    queryset = models.Game.objects.filter(change_for__isnull=True)
 
 
 class GameInstallersView(generics.RetrieveAPIView):
     serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
-    queryset = models.Game.objects.all()
+    queryset = models.Game.objects.filter(change_for__isnull=True)

@@ -41,7 +41,7 @@ class GameRevisionListView(generics.RetrieveAPIView):
     """Returns the list of revisions """
     permission_classes = [IsAdminUser]
     serializer_class = serializers.GameRevisionSerializer
-    queryset = models.Game.objects.all()
+    queryset = models.Game.objects.filter(change_for__isnull=True)
     lookup_field = 'slug'
 
 
