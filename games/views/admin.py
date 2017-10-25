@@ -2,7 +2,7 @@
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
@@ -24,14 +24,19 @@ def redirect_to(request, target):
 def list_change_submissions_view(request, game_id=None):
     """View to list all change submissions"""
 
+    # Check permissions
+    if not request.user.has_perm('games.change_game'):
+        return HttpResponseForbidden("You don't have the permission to review changes")
+
+    # Filter changes if a game_id is given
     if game_id:
         game = get_object_or_404(models.Game, id=game_id)
         change_suggestions = models.Game.objects.filter(change_for=game_id)
     else:
         change_suggestions = models.Game.objects.filter(change_for__isnull=False)
 
+    # Determine title
     title = 'Change submissions'
-
     if game_id:
         title = "{title} for '{name}'".format(title=title, name=game.name)
 
@@ -47,6 +52,10 @@ def list_change_submissions_view(request, game_id=None):
 @staff_member_required
 def review_change_submission_view(request, submission_id):
     """View to review a specific change submission"""
+
+    # Check permissions
+    if not request.user.has_perm('games.change_game'):
+        return HttpResponseForbidden("You don't have the permission to review changes")
 
     # Fetch game change DB entry
     game_changes = get_object_or_404(models.Game, id=submission_id)
@@ -71,6 +80,10 @@ def review_change_submission_view(request, submission_id):
 def change_submission_accept(request, submission_id):
     """Accept submission and redirect to overview"""
 
+    # Check permissions
+    if not request.user.has_perm('games.change_game'):
+        return HttpResponseForbidden("You don't have the permission to review changes")
+
     # Fetch game change DB entry
     game_changes = get_object_or_404(models.Game, id=submission_id)
 
@@ -78,13 +91,14 @@ def change_submission_accept(request, submission_id):
     if game_changes.change_for is None:
         return HttpResponseBadRequest('ID must be one of a change submission')
 
+    # Apply the changes and delete change entry
     game = game_changes.change_for
     game.apply_changes(game_changes)
     game.save()
     game_changes.delete()
 
+    # Redirect
     redirect_target = request.GET.get('redirect', 'admin-change-submissions')
-
     return redirect_to(request, redirect_target)
 
 
@@ -92,6 +106,10 @@ def change_submission_accept(request, submission_id):
 def change_submission_reject(request, submission_id):
     """Reject submission and redirect to overview"""
 
+    # Check permissions
+    if not request.user.has_perm('games.change_game'):
+        return HttpResponseForbidden("You don't have the permission to review changes")
+
     # Fetch game change DB entry
     game_changes = get_object_or_404(models.Game, id=submission_id)
 
@@ -99,8 +117,9 @@ def change_submission_reject(request, submission_id):
     if game_changes.change_for is None:
         return HttpResponseBadRequest('ID must be one of a change submission')
 
+    # Delete change entry
     game_changes.delete()
 
+    # Redirect
     redirect_target = request.GET.get('redirect', 'admin-change-submissions')
-
     return redirect_to(request, redirect_target)

@@ -208,7 +208,7 @@ def game_detail(request, slug):
         screenshots = game.screenshot_set.published(user=user,
                                                     is_staff=user.is_staff)
 
-        if user.is_staff:
+        if user.is_staff and user.has_perm('games.change_game'):
             pending_change_subm_count = len(Game.objects.filter(change_for=game))
     else:
         in_library = False
@@ -225,6 +225,8 @@ def game_detail(request, slug):
                    'in_library': in_library,
                    'library_count': library_count,
                    'pending_change_subm_count': pending_change_subm_count,
+                   'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
+                   'can_edit': user.is_staff and user.has_perm('games.change_game'),
                    'installers': installers,
                    'auto_installers': auto_installers,
                    'unpublished_installers': unpublished_installers,
