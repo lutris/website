@@ -1,3 +1,4 @@
+.vscode/
 *.pyc
 tags
 lutris.db
