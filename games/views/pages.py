@@ -41,7 +41,7 @@ class GameList(ListView):
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = models.Game.objects.all()
+            queryset = models.Game.objects.filter(change_for__isnull=True)
         else:
             queryset = models.Game.objects.with_installer()
 
@@ -431,7 +431,7 @@ def get_icon(request, slug):
 
 def game_list(request):
     """View for all games"""
-    games = models.Game.objects.all()
+    games = models.Game.objects.filter(change_for__isnull=True)
     return render(request, 'games/game_list.html', {'games': games})
 
 
@@ -564,7 +564,11 @@ def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
     installers = Installer.objects.filter(published=False)[:20]
-    unpublished_games = Game.objects.filter(installers__isnull=False, is_public=False).distinct()
+    unpublished_games = (
+        Game.objects.filter(change_for__isnull=True)
+        .filter(installers__isnull=False, is_public=False)
+        .distinct()
+    )
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
         'drafts': drafts,
