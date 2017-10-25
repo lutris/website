@@ -11,7 +11,7 @@ from games import models
 
 def redirect_to(request, target):
     """Helper to redirect to the given target"""
-    redirect_url = request.build_absolute_uri(reverse(target))
+    redirect_url = target if target[0] == '/' else request.build_absolute_uri(reverse(target))
 
     # Enforce https
     if not settings.DEBUG:
@@ -21,12 +21,24 @@ def redirect_to(request, target):
 
 
 @staff_member_required
-def list_change_submissions_view(request):
+def list_change_submissions_view(request, game_id=None):
     """View to list all change submissions"""
 
+    if game_id:
+        game = get_object_or_404(models.Game, id=game_id)
+        change_suggestions = models.Game.objects.filter(change_for=game_id)
+    else:
+        change_suggestions = models.Game.objects.filter(change_for__isnull=False)
+
+    title = 'Change submissions'
+
+    if game_id:
+        title = "{title} for '{name}'".format(title=title, name=game.name)
+
     context = dict(
-        title='Change submissions',
-        change_suggestions=models.Game.objects.filter(change_for__isnull=False)
+        title=title,
+        change_suggestions=change_suggestions,
+        for_game=game_id
     )
 
     return render(request, 'admin/review-change-submissions.html', context)
@@ -71,7 +83,9 @@ def change_submission_accept(request, submission_id):
     game.save()
     game_changes.delete()
 
-    return redirect_to(request, 'admin-change-submissions')
+    redirect_target = request.GET.get('redirect', 'admin-change-submissions')
+
+    return redirect_to(request, redirect_target)
 
 
 @staff_member_required
@@ -87,5 +101,6 @@ def change_submission_reject(request, submission_id):
 
     game_changes.delete()
 
-    return redirect_to(request, 'admin-change-submissions')
+    redirect_target = request.GET.get('redirect', 'admin-change-submissions')
 
+    return redirect_to(request, redirect_target)

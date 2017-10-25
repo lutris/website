@@ -8,17 +8,37 @@
 {% endblock %}
 {% block content %}
 
-<div class="g-d-c">
-  <dic class="g-d-12">
-    <div class="grp-module">
-      <h2>Changes</h2>
-      {% for c in change_suggestions %}
-        <div class="grp-row">
-          <a href="{% url 'admin-change-submission' c.id %}"><strong>{{ c.change_for.name }}</strong></a>
-        </div>
-      {% endfor %}
+<div class="grp-content-container">
+  {% for c in change_suggestions %}
+    <div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
+        margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
+      {% if not for_game %}
+        <h4 style="margin-bottom: 5px;">
+          For game: <a href="{% url 'game_detail' c.change_for.slug %}">{{c.change_for.name}}</a>
+        </h4>
+      {% endif %}
+      <table style="background-color: #fefefe;">
+        <tr>
+          <td></td>
+          <th>Old</th>
+          <th>New</th>
+        </tr>
+        {% for entry, old_value, new_value in c.get_changes %}
+          <tr><th>{{entry}}</th><td>{{old_value}}</td><td>{{new_value}}</td></tr>
+        {% endfor %}
+      </table>
+    
+      <div style="margin-top: 1em;">
+        <a href="{% url 'admin-change-submission-accept' c.id %}?redirect={{ request.get_full_path }}"
+            class="grp-button grp-default">Accept</a>
+        <a href="{% url 'admin-change-submission-reject' c.id %}?redirect={{ request.get_full_path }}"
+            class="grp-button grp-delete-link">Reject</a>
+      </div>
     </div>
-  </dic>
+  {% endfor %}
+  {% if not change_suggestions %}
+    No change suggestions left.
+  {% endif %}
 </div>
 
 {% endblock %}
