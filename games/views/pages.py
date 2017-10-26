@@ -487,11 +487,7 @@ def edit_game(request, slug):
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
-        game_suggested.id = None
-        game_suggested.pk = None
-        game_suggested.slug = None
-        game_suggested.is_public = False
-        game_suggested.change_for = game_current
+        game_suggested.prepare_change_submission(game_current)
         game_suggested = form.save()
 
         redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))

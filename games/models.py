@@ -209,9 +209,18 @@ class Game(models.Model):
         """Creates a shallow copy of this model"""
         return copy(self)
 
+    def prepare_change_submission(self, change_for):
+        """Prepares a change submission. Needs to be called before save()"""
+
+        self.id = None
+        self.pk = None
+        self.slug = None
+        self.is_public = False
+        self.change_for = change_for
+
     def get_changes(self):
         """Returns a dictionary of the changes"""
-        
+
         changes = []
         considered_entries = ['name', 'year', 'platforms', 'genres', 'website', 'description']
 
