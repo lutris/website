@@ -136,7 +136,11 @@ class GameForm(forms.ModelForm):
 
 
 class GameEditForm(forms.ModelForm):
+    """Form to suggest changes for games"""
+
     class Meta(object):
+        """Form configuration"""
+
         model = models.Game
         fields = ('name', 'year', 'website', 'platforms', 'genres', 'description')
         widgets = {
@@ -147,8 +151,8 @@ class GameEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(GameEditForm, self).__init__(*args, **kwargs)
 
-        self.fields['name'].label = "Title"
-        self.fields['year'].label = "Release year"
+        self.fields['name'].label = 'Title'
+        self.fields['year'].label = 'Release year'
 
         fields_order = [
             'name', 'year', 'website', 'platforms', 'genres', 'description'
@@ -157,9 +161,11 @@ class GameEditForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.include_media = False
-        self.helper.add_input(Submit('submit', "Submit"))
+        self.helper.add_input(Submit('submit', 'Submit'))
 
     def clean(self):
+        """Overwrite clean to fail validation if unchanged form was submitted"""
+
         cleaned_data = super(GameEditForm, self).clean()
 
         # Raise error if nothing actually changed
