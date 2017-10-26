@@ -69,3 +69,90 @@ class TestGameForm(TestCase):
         })
         self.assertFalse(form.is_valid())
         self.assertIn('name', form.errors)
+
+
+class TestGameEditForm(TestCase):
+    """Test suite for the form to suggest game changes"""
+
+    def setUp(self):
+        name = 'Horribly Misspelled Game Title'
+        platform = factories.PlatformFactory()
+        genre = factories.GenreFactory()
+        year = 2012
+        website = 'https://example.com'
+
+        self.game = factories.GameFactory(name=name)
+        self.game.platforms.set([platform.id])
+        self.game.genres.set([genre.id])
+        self.game.website = website
+        self.game.year = year
+        self.game.description = ''
+        self.game.save()
+
+        self.inputs = {
+            'name': name,
+            'platforms': [platform.id],
+            'genres': [genre.id],
+            'website': website,
+            'year': year,
+            'description': ''
+        }
+
+    def test_user_cannot_submit_unchanged_form(self):
+        """Ensures that a user cannot submit an unchanged form"""
+
+        # Create form
+        form = forms.GameEditForm(self.inputs, instance=self.game)
+
+        # Form should not be valid since no changes were made
+        self.assertFalse(form.is_valid())
+        self.assertIn('You have not changed anything', str(form.errors))
+
+    def test_user_can_submit_valid_changed_form(self):
+        """Ensures that a user can submit valid changes"""
+
+        # Prepare the change to be suggested
+        self.inputs['name'] = 'Corrected Game Title'
+
+        # Needed for the foreign key of the change row
+        change_for = self.game.create_copy()
+
+        # Create form
+        form = forms.GameEditForm(self.inputs, instance=self.game)
+
+        # Assert that form is valid since the change is valid
+        self.assertTrue(form.is_valid())
+
+        # Persist changes
+        self.game.prepare_change_submission(change_for)
+        changed_game = form.save()
+
+        # Assert that the changes are in the model
+        self.assertEqual(changed_game.name, 'Corrected Game Title')
+
+        # Get the diff
+        diff = changed_game.get_changes()
+
+        # Count should be 1 since only one change was made
+        self.assertEqual(len(diff), 1)
+
+        # Untie
+        (diff_name, diff_old, diff_new) = diff[0]
+
+        # Verify diff
+        self.assertEqual(diff_name, 'name')
+        self.assertEqual(diff_old, 'Horribly Misspelled Game Title')
+        self.assertEqual(diff_new, 'Corrected Game Title')
+
+    def test_user_cannot_submit_invalid_changed_form(self):
+        """Ensures that a user cannot submit invalid changes"""
+
+        # Prepare the change to be suggested (which is invalid here)
+        self.inputs['name'] = ''
+
+        # Create form
+        form = forms.GameEditForm(self.inputs, instance=self.game)
+
+        # Assert that form is invalid since the name must not be empty
+        self.assertFalse(form.is_valid())
+        self.assertIn('This field is required', str(form.errors['name']))
