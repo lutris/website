@@ -102,7 +102,7 @@ class TestGameEditForm(TestCase):
         """Ensures that a user cannot submit an unchanged form"""
 
         # Create form
-        form = forms.GameEditForm(self.inputs, instance=self.game)
+        form = forms.GameEditForm(self.inputs, initial=self.game.get_change_model())
 
         # Form should not be valid since no changes were made
         self.assertFalse(form.is_valid())
@@ -153,7 +153,7 @@ class TestGameEditForm(TestCase):
         self.inputs['name'] = ''
 
         # Create form
-        form = forms.GameEditForm(self.inputs, instance=self.game)
+        form = forms.GameEditForm(self.inputs, initial=self.game.get_change_model())
 
         # Assert that form is invalid since the name must not be empty
         self.assertFalse(form.is_valid())
