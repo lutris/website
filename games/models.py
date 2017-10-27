@@ -224,8 +224,7 @@ class Game(models.Model):
         changes = []
         considered_entries = ['name', 'year', 'platforms', 'genres', 'website', 'description']
 
-        # From the considered fields, only those who differ will
-        # be returned
+        # From the considered fields, only those who differ will be returned
         for entry in considered_entries:
             old_value = getattr(self.change_for, entry)
             new_value = getattr(self, entry)
@@ -322,6 +321,7 @@ class Game(models.Model):
             submission.accept()
 
     def save(self, force_insert=True, using=None):
+        # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
             if not self.slug:
                 self.slug = slugify(self.name)[:50]
