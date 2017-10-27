@@ -1,6 +1,5 @@
 """Models for main lutris app"""
 
-from copy import copy
 import datetime
 # pylint: disable=E1002, E0202
 import re
@@ -205,18 +204,19 @@ class Game(models.Model):
         """Return labels of active flags, suitable for display"""
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
-    def create_copy(self):
-        """Creates a shallow copy of this model"""
-        return copy(self)
+    def get_change_model(self):
+        """Returns a dictionary which can be used as initial value in forms"""
 
-    def prepare_change_submission(self, change_for):
-        """Prepares a change submission. Needs to be called before save()"""
+        copy = {
+            'name': self.name,
+            'year': self.year,
+            'website': self.website,
+            'description': self.description,
+            'platforms': [x.id for x in list(self.platforms.all())],
+            'genres': [x.id for x in list(self.genres.all())]
+        }
 
-        self.id = None
-        self.pk = None
-        self.slug = None
-        self.is_public = False
-        self.change_for = change_for
+        return copy
 
     def get_changes(self):
         """Returns a dictionary of the changes"""
