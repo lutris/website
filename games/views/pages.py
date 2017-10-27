@@ -474,21 +474,27 @@ def submit_game(request):
 def edit_game(request, slug):
     """Lets the user suggest changes to a game for a moderator to verify"""
 
-    # Load game object and get a copy to work on
-    game_suggested = get_object_or_404(Game, slug=slug)
-    game_current = game_suggested.create_copy()
+    # Load game object and get changeable fields and their defaults
+    game = get_object_or_404(Game, slug=slug)
+    change_model = game.get_change_model()
+
+    # Workaround: Assigning change_model to initial in the form
+    # direcetly will display the error immediately that changes must be made
+    initial = change_model if request.method == 'POST' else None
 
     # Sanity check: Disallow change-suggestions for changes
-    if game_suggested.change_for:
+    if game.change_for:
         return HttpResponseBadRequest('You can only apply changes to a game')
 
     # Initialise form with rejected values or with the working copy
-    form = GameEditForm(request.POST or None, request.FILES or None, instance=game_suggested)
+    form = GameEditForm(request.POST or change_model, request.FILES or None, initial=initial)
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
-        game_suggested.prepare_change_submission(game_current)
-        game_suggested = form.save()
+        change_suggestion = form.save(commit=False)
+        change_suggestion.change_for = game
+        change_suggestion.save()
+        form.save_m2m()
 
         redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
 
@@ -500,7 +506,7 @@ def edit_game(request, slug):
         return redirect(redirect_url)
 
     # Render template
-    return render(request, 'games/submit.html', {'form': form, 'game': game_suggested})
+    return render(request, 'games/submit.html', {'form': form, 'game': game})
 
 
 def publish_game(request, id):
