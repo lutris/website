@@ -124,6 +124,8 @@ class GameManager(models.Manager):
                 Q(installers__runner__slug=option)
             )
         pks = pk_query.values_list('pk', flat=True)
+        if not pks:
+            return
         random_pk = random.choice(pks)
         return self.get_queryset().get(pk=random_pk)
 
