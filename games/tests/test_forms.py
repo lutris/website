@@ -115,23 +115,25 @@ class TestGameEditForm(TestCase):
         self.inputs['name'] = 'Corrected Game Title'
 
         # Needed for the foreign key of the change row
-        change_for = self.game.create_copy()
+        change_for = self.game.get_change_model()
 
         # Create form
-        form = forms.GameEditForm(self.inputs, instance=self.game)
+        form = forms.GameEditForm(self.inputs, initial=change_for)
 
         # Assert that form is valid since the change is valid
         self.assertTrue(form.is_valid())
 
         # Persist changes
-        self.game.prepare_change_submission(change_for)
-        changed_game = form.save()
+        change_suggestion = form.save(commit=False)
+        change_suggestion.change_for = self.game
+        change_suggestion.save()
+        form.save_m2m()
 
         # Assert that the changes are in the model
-        self.assertEqual(changed_game.name, 'Corrected Game Title')
+        self.assertEqual(change_suggestion.name, 'Corrected Game Title')
 
-        # Get the diff
-        diff = changed_game.get_changes()
+        # Finally, verify the diff (did only the name change?)
+        diff = change_suggestion.get_changes()
 
         # Count should be 1 since only one change was made
         self.assertEqual(len(diff), 1)
