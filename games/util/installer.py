@@ -106,7 +106,7 @@ def winesteam_scripts_use_correct_prefix(installer):
             False,
             "Missing section game"
         )
-    if '$USER' in script['game'].get('prefix'):
+    if '$USER' in script['game'].get('prefix', ''):
         return (
             False,
             "Do not create the prefix in the home folder, use $GAMEDIR/prefix"
