@@ -124,6 +124,11 @@ class GameAdmin(admin.ModelAdmin):
 
         if game.change_for is not None:
             actions += [self.review_changes_url(game)]
+        else:
+            change_suggestions_count = models.Game.objects.filter(change_for=game).count()
+
+            if change_suggestions_count > 0:
+                actions += [self.list_change_submissions(game, change_suggestions_count)]
 
         output = ', '.join(actions) if actions else '-'
         return format_html(output)
@@ -132,19 +137,16 @@ class GameAdmin(admin.ModelAdmin):
         """Add a link to review the changes of a change submission"""
 
         url = reverse('admin-change-submission', kwargs={'submission_id': game.id})
-        return '<a href="{url}">{text}</a>'.format(url=url, text='Review')
+        return '<a href="{url}">{text}</a>'.format(url=url, text='Review changes')
 
-    def reject_user_suggested_changes(self, request, queryset):
-        """Admin-action to bulk-reject the changes a user suggested"""
+    def list_change_submissions(self, game, count):
+        """Add a link to review all change suggestions for a given game"""
 
-        for change_set in queryset:
-            game = change_set.change_for
-
-            if game is not None:
-                change_set.delete()
+        url = reverse('admin-change-submissions', kwargs={'game_id': game.id})
+        text = '{count} change submissions'.format(count=count)
+        return '<a href="{url}">{text}</a>'.format(url=url, text=text)
 
     custom_actions.short_description = 'Actions'
-    reject_user_suggested_changes.short_description = 'Reject user-suggested changes'
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
