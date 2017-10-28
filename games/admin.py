@@ -153,7 +153,7 @@ class GameAdmin(admin.ModelAdmin):
         """Add a link to review all change suggestions for a given game"""
 
         url = reverse('admin-change-submissions', kwargs={'game_id': game.id})
-        text = '{count} change submissions'.format(count=count)
+        text = '{count} change submission{pl}'.format(count=count, pl='s' if count > 1 else '')
         return '<a href="{url}">{text}</a>'.format(url=url, text=text)
 
     custom_actions.short_description = 'Actions'
