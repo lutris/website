@@ -96,7 +96,7 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(change_for__isnull=True).filter(is_public=True)
+        return self.get_queryset().filter(change_for__isnull=True, is_public=True)
 
     def with_installer(self):
         return (
@@ -117,7 +117,7 @@ class GameManager(models.Manager):
             return
         pk_query = self.get_queryset()
         if option == 'incomplete':
-            pk_query = pk_query.filter(change_for__isnull=True).filter(year=None)
+            pk_query = pk_query.filter(change_for__isnull=True, year=None)
         elif option == 'published':
             pk_query = self.with_installer()
         elif len(option) > 1:
