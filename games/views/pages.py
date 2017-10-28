@@ -479,7 +479,7 @@ def edit_game(request, slug):
     change_model = game.get_change_model()
 
     # Workaround: Assigning change_model to initial in the form
-    # direcetly will display the error immediately that changes must be made
+    # directly will display the error immediately that changes must be made
     initial = change_model if request.method == 'POST' else None
 
     # Sanity check: Disallow change-suggestions for changes
