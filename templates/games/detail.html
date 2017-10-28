@@ -15,7 +15,8 @@
           {% if user.is_staff %}
             {% if can_edit and pending_change_subm_count > 0 %}
               <a class="btn" href="{% url 'admin-change-submissions' game.id %}">
-                {{ pending_change_subm_count }} pending change suggestions
+                {{ pending_change_subm_count }} pending change
+                suggestion{% if pending_change_subm_count > 1 %}s{% endif %}
               </a>
             {% endif %}
             {% if can_publish and not game.is_public %}
