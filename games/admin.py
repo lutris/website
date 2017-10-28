@@ -19,6 +19,7 @@ class GameFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return (
             (None, 'Only games (default)'),
+            ('only-games-with-changes', 'Only games with suggested changes'),
             ('only-changes', 'Only suggested changes'),
             ('all', 'All'),
         )
@@ -36,6 +37,9 @@ class GameFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset.filter(change_for__isnull=True)
+        elif self.value() == 'only-games-with-changes':
+            subqueryset = queryset.values('change_for__id').filter(change_for__isnull=False).distinct()
+            return queryset.filter(change_for__isnull=True, id__in=subqueryset)
         elif self.value() == 'only-changes':
             return queryset.filter(change_for__isnull=False)
 
