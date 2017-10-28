@@ -129,3 +129,4 @@ def dont_disable_monitor(installer):
             "Do not disable the process monitor in installers, if you have "
             "issues with the process monitor, submit an issue on Github"
         )
+    return SUCCESS
