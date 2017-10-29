@@ -198,19 +198,6 @@ def game_detail(request, slug):
     banner_size = "940x352"
     user = request.user
 
-    # URLs can be submitted without leading http[s]://, resulting
-    # in relative URLs in the view
-    if '://' not in game.website:
-        game.website = 'http://' + game.website
-
-    # Strip URLs for prettyprinting
-    game.website_text = (
-        game.website
-        .split('https:', 1)[-1]
-        .split('http:', 1)[-1]
-        .strip('/')
-    )
-
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
 

@@ -180,6 +180,25 @@ class Game(models.Model):
         return ("name__icontains",)
 
     @property
+    def website_url(self):
+        """Returns self.website ensured to be a URI"""
+
+        # Fall back to http if no protocol specified (cannot asume that https will work)
+        has_protocol = '://' in self.website
+        return 'http://' + self.website if not has_protocol else self.website
+
+    @property
+    def website_url_hr(self):
+        """Returns a human readible website URL (stripped protocols)"""
+
+        return (
+            self.website
+            .split('https:', 1)[-1]
+            .split('http:', 1)[-1]
+            .strip('/')
+        )
+
+    @property
     def banner_url(self):
         if self.title_logo:
             return reverse('get_banner', kwargs={'slug': self.slug})
