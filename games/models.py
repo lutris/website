@@ -189,7 +189,7 @@ class Game(models.Model):
 
     @property
     def website_url_hr(self):
-        """Returns a human readible website URL (stripped protocols)"""
+        """Returns a human readable website URL (stripped protocols)"""
 
         return (
             self.website
