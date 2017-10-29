@@ -9,6 +9,21 @@ class TestGame(TestCase):
         self.assertEqual(game.slug, "quake-3-arena")
         self.assertFalse(game.is_public)
 
+    def test_website_url_no_website_specified(self):
+        """
+        Ensures that None is returned for website_url
+        and website_url_hr if no website was specified
+        """
+
+        # Create a game with no website specified
+        game = factories.GameFactory(name='Game Title', website='')
+
+        # website_url should return None
+        self.assertIsNone(game.website_url)
+
+        # website_url_hr should return None
+        self.assertIsNone(game.website_url_hr)
+
     def test_website_url_no_protocol_specified(self):
         """Ensures that URLs are uniform if no protocol was specified"""
 
