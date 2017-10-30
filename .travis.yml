@@ -1,4 +1,8 @@
 language: python
+env:
+  - DJANGO=1.10.2
+  - DJANGO_SETTINGS_MODULE='lutrisweb.settings.local'
+  - SECRET_KEY="ThisIsMySecretThereAreOtherLikeThisButThisOneIsMine"
 python:
   - 2.7
 install:
