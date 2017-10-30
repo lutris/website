@@ -58,6 +58,7 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
+
         self.fields['search'] = forms.CharField(
             widget=HeavySelect2Widget(
                 data_view='tgd.search_json'
@@ -93,9 +94,9 @@ class GameForm(forms.ModelForm):
             "If you can't make a good banner, don't worry. Somebody will "
             "eventually make a better one. Probably."
         )
+
         fields_order = [
-            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description',
-            'title_logo',
+            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description', 'title_logo'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
@@ -118,6 +119,7 @@ class GameForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         slug = slugify(name)[:50]
+
         try:
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
@@ -131,6 +133,46 @@ class GameForm(forms.ModelForm):
                        "submitted</a>, you're welcome to nag us so we "
                        "publish it faster.") % slug
             raise forms.ValidationError(mark_safe(msg))
+
+
+class GameEditForm(forms.ModelForm):
+    """Form to suggest changes for games"""
+
+    class Meta(object):
+        """Form configuration"""
+
+        model = models.Game
+        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description')
+        widgets = {
+            'platforms': Select2MultipleWidget,
+            'genres': Select2MultipleWidget
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(GameEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label = 'Title'
+        self.fields['year'].label = 'Release year'
+
+        fields_order = [
+            'name', 'year', 'website', 'platforms', 'genres', 'description'
+        ]
+        self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
+
+        self.helper = FormHelper()
+        self.helper.include_media = False
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    def clean(self):
+        """Overwrite clean to fail validation if unchanged form was submitted"""
+
+        cleaned_data = super(GameEditForm, self).clean()
+
+        # Raise error if nothing actually changed
+        if not self.has_changed():
+            raise forms.ValidationError('You have not changed anything')
+
+        return cleaned_data
 
 
 class FeaturedForm(forms.ModelForm):

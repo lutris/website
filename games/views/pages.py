@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.core.mail import mail_managers
 from django.db.models import Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -24,7 +24,7 @@ from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required, check_installer_restrictions
 from games import models
-from games.forms import (ForkInstallerForm, GameForm,
+from games.forms import (ForkInstallerForm, GameForm, GameEditForm,
                          InstallerForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
@@ -41,7 +41,7 @@ class GameList(ListView):
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = models.Game.objects.all()
+            queryset = models.Game.objects.filter(change_for__isnull=True)
         else:
             queryset = models.Game.objects.with_installer()
 
@@ -201,11 +201,15 @@ def game_detail(request, slug):
 
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
+    pending_change_subm_count = 0
 
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user,
                                                     is_staff=user.is_staff)
+
+        if user.is_staff and user.has_perm('games.change_game'):
+            pending_change_subm_count = len(Game.objects.filter(change_for=game))
     else:
         in_library = False
         screenshots = game.screenshot_set.published()
@@ -220,6 +224,9 @@ def game_detail(request, slug):
                    'banner_size': banner_size,
                    'in_library': in_library,
                    'library_count': library_count,
+                   'pending_change_subm_count': pending_change_subm_count,
+                   'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
+                   'can_edit': user.is_staff and user.has_perm('games.change_game'),
                    'installers': installers,
                    'auto_installers': auto_installers,
                    'unpublished_installers': unpublished_installers,
@@ -431,7 +438,7 @@ def get_icon(request, slug):
 
 def game_list(request):
     """View for all games"""
-    games = models.Game.objects.all()
+    games = models.Game.objects.filter(change_for__isnull=True)
     return render(request, 'games/game_list.html', {'games': games})
 
 
@@ -461,6 +468,45 @@ def submit_game(request):
         LOGGER.info('Game submitted, redirecting to %s', redirect_url)
         return redirect(redirect_url)
     return render(request, 'games/submit.html', {'form': form})
+
+
+@user_confirmed_required
+def edit_game(request, slug):
+    """Lets the user suggest changes to a game for a moderator to verify"""
+
+    # Load game object and get changeable fields and their defaults
+    game = get_object_or_404(Game, slug=slug)
+    change_model = game.get_change_model()
+
+    # Workaround: Assigning change_model to initial in the form
+    # directly will display the error immediately that changes must be made
+    initial = change_model if request.method == 'POST' else None
+
+    # Sanity check: Disallow change-suggestions for changes
+    if game.change_for:
+        return HttpResponseBadRequest('You can only apply changes to a game')
+
+    # Initialise form with rejected values or with the working copy
+    form = GameEditForm(request.POST or change_model, request.FILES or None, initial=initial)
+
+    # If form was submitted and is valid, persist suggestion for moderation
+    if request.method == 'POST' and form.is_valid():
+        change_suggestion = form.save(commit=False)
+        change_suggestion.change_for = game
+        change_suggestion.save()
+        form.save_m2m()
+
+        redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
+
+        # Enforce https
+        if not settings.DEBUG:
+            redirect_url = redirect_url.replace('http:', 'https:')
+
+        LOGGER.info('Change-suggestions for game submitted, redirecting to %s', redirect_url)
+        return redirect(redirect_url)
+
+    # Render template
+    return render(request, 'games/submit.html', {'form': form, 'game': game})
 
 
 def publish_game(request, id):
@@ -527,7 +573,11 @@ def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
     installers = Installer.objects.filter(published=False)[:20]
-    unpublished_games = Game.objects.filter(installers__isnull=False, is_public=False).distinct()
+    unpublished_games = (
+        Game.objects.filter(change_for__isnull=True)
+        .filter(installers__isnull=False, is_public=False)
+        .distinct()
+    )
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
         'drafts': drafts,
