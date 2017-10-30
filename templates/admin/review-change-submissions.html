@@ -10,34 +10,10 @@
 
 <div class="grp-content-container">
   {% if obsolete_changes > 0 %}
-    <p><strong>INFO:</strong> {{obsolete_changes}} obsolete changes were deleted.</p>
+    <p><strong>INFO:</strong> {{ obsolete_changes }} obsolete changes were deleted.</p>
   {% endif %}
-  {% for c in change_suggestions %}
-    <div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
-        margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
-      {% if not for_game %}
-        <h4 style="margin-bottom: 5px;">
-          For game: <a href="{% url 'game_detail' c.change_for.slug %}">{{c.change_for.name}}</a>
-        </h4>
-      {% endif %}
-      <table style="background-color: #fefefe;">
-        <tr>
-          <td></td>
-          <th>Old</th>
-          <th>New</th>
-        </tr>
-        {% for entry, old_value, new_value in c.diff %}
-          <tr><th>{{entry}}</th><td>{{old_value}}</td><td>{{new_value}}</td></tr>
-        {% endfor %}
-      </table>
-    
-      <div style="margin-top: 1em;">
-        <a href="{% url 'admin-change-submission-accept' c.id %}?redirect={{ request.get_full_path }}"
-            class="grp-button grp-default">Accept</a>
-        <a href="{% url 'admin-change-submission-reject' c.id %}?redirect={{ request.get_full_path }}"
-            class="grp-button grp-delete-link">Reject</a>
-      </div>
-    </div>
+  {% for change in change_suggestions %}
+    {% include "admin/change-submission.html" with game="change" %}
   {% endfor %}
   {% if not change_suggestions %}
     <p>No change suggestions left.</p>

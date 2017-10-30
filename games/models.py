@@ -620,6 +620,7 @@ class GameSubmission(models.Model):
     game = models.ForeignKey(Game)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
+    reason = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "User submitted game"

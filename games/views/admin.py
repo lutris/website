@@ -35,19 +35,26 @@ def list_change_submissions_view(request, game_id=None):
     else:
         change_suggestions_unfiltered = models.Game.objects.filter(change_for__isnull=False)
 
-    # Generate diffs
+    # Populate additional information into the model
     obsolete_changes = 0
     change_suggestions = []
     for change_suggestion in change_suggestions_unfiltered:
+        # Generate diff
         diff = change_suggestion.get_changes()
 
         # If the diff is empty, this change is obselete and can be deleted
         if not diff:
             change_suggestion.delete()
             obsolete_changes += 1
+            continue
         else:
             change_suggestion.diff = diff
             change_suggestions.append(change_suggestion)
+
+        # Populate meta information
+        meta = models.GameSubmission.objects.get(game=change_suggestion)
+        change_suggestion.author = meta.user
+        change_suggestion.reason = meta.reason
 
     # Determine title
     title = 'Change submissions'
@@ -73,19 +80,23 @@ def review_change_submission_view(request, submission_id):
         return HttpResponseForbidden("You don't have the permission to review changes")
 
     # Fetch game change DB entry
-    game_changes = get_object_or_404(models.Game, id=submission_id)
+    change_suggestion = get_object_or_404(models.Game, id=submission_id)
 
     # Sanity check: Must be a change submission
-    if game_changes.change_for is None:
+    if change_suggestion.change_for is None:
         return HttpResponseBadRequest('ID must be one of a change submission')
 
-    # Get list of all deltas
-    changes = game_changes.get_changes()
+    # Populate diff
+    change_suggestion.diff = change_suggestion.get_changes()
+
+    # Populate meta information
+    meta = models.GameSubmission.objects.get(game=change_suggestion)
+    change_suggestion.author = meta.user
+    change_suggestion.reason = meta.reason
 
     context = dict(
         title='Review change submission',
-        submission_id=game_changes.id,
-        changes=changes
+        change=change_suggestion
     )
 
     return render(request, 'admin/review-change-submission.html', context)

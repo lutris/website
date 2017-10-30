@@ -491,10 +491,19 @@ def edit_game(request, slug):
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
+        # Save the game
         change_suggestion = form.save(commit=False)
         change_suggestion.change_for = game
         change_suggestion.save()
         form.save_m2m()
+
+        # Save metadata (author + reason)
+        change_suggestion_meta = GameSubmission(
+            user=request.user,
+            game=change_suggestion,
+            reason=request.POST['reason']
+        )
+        change_suggestion_meta.save()
 
         redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
 

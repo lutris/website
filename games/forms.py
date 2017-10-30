@@ -138,11 +138,19 @@ class GameForm(forms.ModelForm):
 class GameEditForm(forms.ModelForm):
     """Form to suggest changes for games"""
 
+    reason = forms.CharField(
+        required=False,
+        help_text=(
+            'Please describe briefly, why this change is necessary.'
+            'Please also add sources if applicable.'
+        )
+    )
+
     class Meta(object):
         """Form configuration"""
 
         model = models.Game
-        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description')
+        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description', 'reason')
         widgets = {
             'platforms': Select2MultipleWidget,
             'genres': Select2MultipleWidget
@@ -155,7 +163,7 @@ class GameEditForm(forms.ModelForm):
         self.fields['year'].label = 'Release year'
 
         fields_order = [
-            'name', 'year', 'website', 'platforms', 'genres', 'description'
+            'name', 'year', 'website', 'platforms', 'genres', 'description', 'reason'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 

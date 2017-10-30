@@ -180,7 +180,7 @@ class FeaturedAdmin(admin.ModelAdmin):
 
 
 class GameSubmissionAdmin(admin.ModelAdmin):
-    list_display = ("game_link", "user_link", "created_at", "accepted_at")
+    list_display = ("game_link", "user_link", "created_at", "accepted_at", 'reason')
 
     def game_link(self, obj):
         return u"<a href='{0}'>{1}<a/>".format(

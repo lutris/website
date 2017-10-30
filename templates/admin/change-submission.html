@@ -1,0 +1,28 @@
+<div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
+    margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
+  {% if not for_game %}
+  <h4 style="margin-bottom: 5px;">
+    For game: <a href="{% url 'game_detail' change.change_for.slug %}">{{ change.change_for.name }}</a>
+  </h4>
+  {% endif %}
+  <table style="background-color: #fefefe;">
+    <tr>
+      <td></td>
+      <th>Old</th>
+      <th>New</th>
+    </tr>
+    {% for entry, old_value, new_value in change.diff %}
+      <tr><th>{{ entry }}</th><td>{{ old_value }}</td><td>{{ new_value }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <p><strong>Author</strong>: {{ change.author }}</p>
+  <p><strong>Reason</strong>: {{ change.reason }}</p>
+
+  <div style="margin-top: 1em;">
+    <a href="{% url 'admin-change-submission-accept' change.id %}?redirect={{ request.get_full_path }}"
+      class="grp-button grp-default">Accept</a>
+    <a href="{% url 'admin-change-submission-reject' change.id %}?redirect={{ request.get_full_path }}"
+      class="grp-button grp-delete-link">Reject</a>
+  </div>
+</div>
