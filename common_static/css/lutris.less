@@ -50,6 +50,7 @@ article {
       font-size: 1.2em;
   }
 }
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   word-spacing: .1em;
@@ -62,9 +63,21 @@ h1 {
   font-weight: 300;
   box-shadow: 0px 4px 1px -2px rgba(0,0,0,.3);
   padding: 3px;
+  padding-left: 15px;
+
+  font-size: 1.6em;
+  margin-top: 10px;
+
+  @media (min-width: @screen-sm-min) {
+    font-size: 2em;
+    margin-top: 20px;
+  }
 }
 
-h2 { font-size: 1.4em; }
+h2 {
+  font-size: 1.4em;
+}
+
 h3 {
   color: #BBB;
   font-size: 1.2em;
@@ -72,6 +85,7 @@ h3 {
   padding: 7px 14px;
   font-weight: 300;
 }
+
 h4 {
   font-size: 1.1em;
   color: #CDCDCD;
@@ -168,6 +182,8 @@ input {
 
 .container {
   .container-fixed();
+  padding-left: 0;
+  padding-right: 0;
 
   @media (min-width: @screen-sm-min) {
     width: @container-sm;
@@ -327,7 +343,6 @@ input {
 .navbar {
   box-shadow: 0 0 10px #000;
   font-weight: 300;
-  min-height: 84px;
   margin: auto;
   font-family: @sansSerif;
   .brand {
@@ -347,8 +362,13 @@ input {
     }
   }
   .logo {
-    width: 64px;
-    height: 64px;
+    width: 34px;
+    height: 34px;
+
+    @media (min-width: @screen-md-min) {
+      width: 64px;
+      height: 64px;
+    }
   }
   .nav > li > a {
     color: #aaa;
@@ -996,9 +1016,13 @@ input {
   li {
     border-bottom: 2px solid #252525;
     color: #999;
-    padding: 8px;
+    padding: 0;
     margin-bottom: 5px;
     background-color: @darkerBackground;
+
+    @media (min-width: @screen-sm-min) {
+      padding: 8px;
+    }
   }
   a {
     color :#DDD;
@@ -1015,8 +1039,16 @@ input {
   }
   .game-cover {
     float: left;
-    margin-right: 15px;
+    margin-right: 0;
+    width: 100%;
+    height: auto;
     overflow: hidden;
+
+    @media (min-width: @screen-sm-min) {
+      margin-right: 15px;
+      width: 184px;
+      height: 69px;
+    }
   }
   .game-title {
     font-size: 1.1em;
@@ -1083,10 +1115,14 @@ input {
 }
 
 .pane {
-  padding: 0px 14px;
+  padding: 0px;
   p {
     margin-top: 15px;
     color: #ACACAC;
+  }
+
+  @media (min-width: @screen-sm-min) {
+    padding: 0px 14px;
   }
 }
 
