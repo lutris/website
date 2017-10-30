@@ -9,6 +9,69 @@ class TestGame(TestCase):
         self.assertEqual(game.slug, "quake-3-arena")
         self.assertFalse(game.is_public)
 
+    def test_website_url_no_website_specified(self):
+        """
+        Ensures that None is returned for website_url
+        and website_url_hr if no website was specified
+        """
+
+        # Create a game with no website specified
+        game = factories.GameFactory(name='Game Title', website='')
+
+        # website_url should return None
+        self.assertIsNone(game.website_url)
+
+        # website_url_hr should return None
+        self.assertIsNone(game.website_url_hr)
+
+    def test_website_url_no_protocol_specified(self):
+        """Ensures that URLs are uniform if no protocol was specified"""
+
+        # Create a game with a protocol-less website (no http:// or https://)
+        game = factories.GameFactory(name='Game Title', website='example.com')
+
+        # If no protocol was specified, it should fall back to http://
+        self.assertEqual(game.website_url, 'http://example.com')
+
+        # HR URL should be unchanged
+        self.assertEqual(game.website_url_hr, 'example.com')
+
+    def test_website_url_http_specified(self):
+        """Ensures that URLs are uniform if http was specified"""
+
+        # Create a game with an http:// website specified
+        game = factories.GameFactory(name='Game Title', website='http://example.com')
+
+        # If a protocl was specified, it should be returned unchanged
+        self.assertEqual(game.website_url, 'http://example.com')
+
+        # HR URL should strip the http:// part
+        self.assertEqual(game.website_url_hr, 'example.com')
+
+    def test_website_url_https_specified(self):
+        """Ensures that URLs are uniform if https was specified"""
+
+        # Create a game with an https:// website specified
+        game = factories.GameFactory(name='Game Title', website='https://example.com')
+
+        # If a protocl was specified, it should be returned unchanged
+        self.assertEqual(game.website_url, 'https://example.com')
+
+        # HR URL should strip the https:// part
+        self.assertEqual(game.website_url_hr, 'example.com')
+
+    def test_website_url_strip_trailing_slash(self):
+        """Ensures that trailing slashes are stripped for HR website_url"""
+
+        # Create a game with a URL with trailing slash
+        game = factories.GameFactory(name='Game Title', website='http://example.com/')
+
+        # If a trailing slash was given, it should not be stripped for website_url
+        self.assertEqual(game.website_url, 'http://example.com/')
+
+        # HR URL should strip the http:// part and the trailing slash
+        self.assertEqual(game.website_url_hr, 'example.com')
+
     def test_game_list_filters_game_with_no_installers(self):
         doom = factories.GameFactory(name="Doom")
         game_list = models.Game.objects.with_installer()

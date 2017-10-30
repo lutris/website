@@ -197,7 +197,6 @@ def game_detail(request, slug):
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
     user = request.user
-    game.website_text = game.website[6:].strip('/')
 
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
