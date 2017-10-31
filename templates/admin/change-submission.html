@@ -25,14 +25,18 @@
               <th>field</th>
               <td>{{ entry }}</td>
             </tr>
-            <tr style="color: red; background-color: #fbe9eb;">
-              <th>old</th>
-              <td>{{ old_value }}</td>
-            </tr>
-            <tr style="color: green; background-color: #ecfdf0;">
-              <th>new</th>
-              <td>{{ new_value }}</td>
-            </tr>
+            {% if old_value %}
+              <tr style="color: #770000; background-color: #fbe9eb; font-family: monospace;">
+                <th>-</th>
+                <td>{{ old_value }}</td>
+              </tr>
+            {% endif %}
+            {% if new_value %}
+              <tr style="color: #007700; background-color: #ecfdf0; font-family: monospace;">
+                <th>+</th>
+                <td>{{ new_value }}</td>
+              </tr>
+            {% endif %}
           {% endfor %}
         </table>
       </td>
