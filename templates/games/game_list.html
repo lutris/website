@@ -10,26 +10,26 @@
     <div class="pane">
     <ul class='breadcrumb'>
       <li>
-        <a href='/games'>All</a>
+        <a href="/games">All</a>
       </li>
       {% if genre %}
         <li>
-          <a href='{% url "games_by_genre" genre.slug %}'>{{ genre }}</a>
+          <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
         </li>
       {% endif %}
       {% if platform %}
       <li>
-        <a href='/games/platform/{{ platform.slug }}'>{{ platform }}</a>
+        <a href="/games/platform/{{ platform.slug }}">{{ platform }}</a>
       </li>
       {% endif %}
       {% if year %}
       <li>
-        <a href='{% url "games_by_year" year %}'>{{ year }}</a>
+        <a href="{% url 'games_by_year' year %}">{{ year }}</a>
       </li>
       {% endif %}
       {% if company %}
       <li>
-        <a href='{% url "games_by_company" company.slug %}'>{{ company.name }}</a>
+        <a href="{% url 'games_by_company' company.slug %}">{{ company.name }}</a>
       </li>
       {% endif %}
       {% if search_terms %}
@@ -38,7 +38,7 @@
       {% endif %}
     </ul>
 
-    <ul class='game-list'>
+    <ul class="game-list">
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
