@@ -635,14 +635,23 @@ input {
   list-style: none;
   background-color: #222;
   overflow: hidden;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   li {
-    float: left;
+    /* float: left; */
     position: relative;
     text-shadow: 0 1px 0 #ffffff;
+    display: inline;
+
     a {
       text-shadow: none;
       padding: 8px 0px 8px 50px;
       color: #AEAEAE;
+
       &:before, &:after {
         content: " ";
         display: block;
