@@ -232,6 +232,8 @@ input {
 }
 
 .pagination-block-wrapper {
+  margin-top: 20px;
+
   .pagination-block {
     display: table;
     margin: 0 auto;
@@ -240,7 +242,8 @@ input {
       list-style: none;
       padding: 0;
       margin: 0;
-      background-color: #444;
+      background-color: #222;
+      border-radius: 4px;
 
       li {
         position: relative;
@@ -250,14 +253,15 @@ input {
       li a,
       li span {
         display: inline-block;
-        color: #DDD;
+        color: #AEAEAE;
         margin: 0;
         padding: 10px 15px;
       }
 
-      li a:hover {
+      li a:hover,
+      li a:focus {
         text-decoration: none;
-        background-color: #666;
+        color: #fff;
       }
     }
   }
