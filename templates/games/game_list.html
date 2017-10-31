@@ -42,6 +42,9 @@
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
+      {% if not games %}
+        <em>No games found that match these criteria.</em>
+      {% endif %}
     </ul>
 
     {% if page_obj.page_count > 1 %}
