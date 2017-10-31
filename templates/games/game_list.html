@@ -44,26 +44,29 @@
       {% endfor %}
     </ul>
 
-    <div class="pagination-block">
-      <div class="pagination-pager">
-        {% if page_obj.has_previous %}
-          <a href="{% append_to_get page=page_obj.previous_page_number %}">&laquo;</a>
-        {% endif %}
-        {% for page in page_range %}
-          {% if not page %}
-          …
-          {% elif page.number == page_obj.number %}
-            {{ page.number }}
+    <div class="pagination-block-wrapper">
+      <div class="pagination-block">
+        <ul class="pagination-block clearfix">
+          {% if page_obj.number == 1 %}
+          <li><a href="{% append_to_get page=page_obj.next_page_number %}">
+            Next<span style="width: 20px;"></span>&rsaquo;
+          </a></li>
           {% else %}
-            <a href="{% append_to_get page=page.number %}">{{ page.number }}</a>
+            {% if page_obj.number >= 3 %}
+              <li><a href="{% append_to_get page=1 %}">&laquo;</a></li>
+            {% endif %}
+
+            {% if page_obj.number >= 2 %}
+              <li><a href="{% append_to_get page=page_obj.previous_page_number %}">&lsaquo;</a></li>
+            {% endif %}
+
+            <li><span>Page {{ page_obj.number }}</span></li>
+
+            {% if page_obj.has_next %}
+              <li><a href="{% append_to_get page=page_obj.next_page_number %}">&rsaquo;</a></li>
+            {% endif %}
           {% endif %}
-        {% endfor %}
-        {% if page_obj.has_next %}
-            <a href="{% append_to_get page=page_obj.next_page_number %}">&raquo;</a>
-        {% endif %}
-      </div>
-      <div class='pagination-info'>
-        {{ page_obj.start_index }}-{{ page_obj.end_index}} of {{ page_obj.paginator.count }}
+        </ul>
       </div>
     </div>
   </div>

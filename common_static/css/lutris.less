@@ -231,16 +231,35 @@ input {
   }
 }
 
-.pagination-block {
-  font-size: .85em;
-  a {
-    color: #AAA;
-  }
-  .pagination-pager {
-    float: right;
-  }
-  .pagination-info {
-    float: left;
+.pagination-block-wrapper {
+  .pagination-block {
+    display: table;
+    margin: 0 auto;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background-color: #444;
+  
+      li {
+        position: relative;
+        float: left;
+      }
+  
+      li a,
+      li span {
+        display: inline-block;
+        color: #DDD;
+        margin: 0;
+        padding: 10px 15px;
+      }
+
+      li a:hover {
+        text-decoration: none;
+        background-color: #666;
+      }
+    }
   }
 }
 
@@ -1098,7 +1117,7 @@ input {
 
 .game-cover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  margin-bottom: 5px;
+  margin-bottom: 0;
   display: block;
   width: 184px;
   height: 69px;
@@ -1109,6 +1128,10 @@ input {
   color: #AAA;
   font-size: 1.5em;
   position: relative;
+
+  @media (min-width: @screen-sm-min) {
+    margin-bottom: 5px;
+  }
 }
 
 .game-banner {
