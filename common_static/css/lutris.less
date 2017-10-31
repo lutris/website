@@ -642,10 +642,14 @@ input {
   white-space: nowrap;
 
   li {
-    /* float: left; */
     position: relative;
     text-shadow: 0 1px 0 #ffffff;
     display: inline;
+    padding-left: 0;
+
+    &:before {
+      content: "" !important;
+    }
 
     a {
       text-shadow: none;
