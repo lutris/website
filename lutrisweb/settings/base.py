@@ -189,6 +189,11 @@ SELECT2_JS = '/static/js/select2.min.js'
 SELECT2_CSS = '/static/css/select2.min.css'
 
 # Email
+
+try:
+    SEND_EMAILS = bool(int(os.environ.get('SEND_EMAILS', '1')))
+except ValueError:
+    SEND_EMAILS = True
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
