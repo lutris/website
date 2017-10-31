@@ -1,28 +1,51 @@
 <div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
     margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
-  {% if not for_game %}
-  <h4 style="margin-bottom: 5px;">
-    For game: <a href="{% url 'game_detail' change.change_for.slug %}">{{ change.change_for.name }}</a>
-  </h4>
-  {% endif %}
-  <table style="background-color: #fefefe;">
+
+  <table style="background-color: #fefefe; width: 100%;">
+    {% if not for_game %}
+      <tr>
+        <th>Changes for</th>
+        <td><a href="{% url 'game_detail' change.change_for.slug %}">{{ change.change_for.name }}</a></td>
+      </tr>
+    {% endif %}
     <tr>
-      <td></td>
-      <th>Old</th>
-      <th>New</th>
+      <th>From</th>
+      <td>{{ change.author }}</td>
     </tr>
-    {% for entry, old_value, new_value in change.diff %}
-      <tr><th>{{ entry }}</th><td>{{ old_value }}</td><td>{{ new_value }}</td></tr>
-    {% endfor %}
+    <tr>
+      <th>Reason</th>
+      <td>{% if change.reason %} {{ change.reason }} {% else %} <em>No reason given</em> {% endif %}</td>
+    </tr>
+    <tr>
+      <th>Diff</th>
+      <td style="padding: 0;">
+        <table style="width: 100%; border: 0;">
+          {% for entry, old_value, new_value in change.diff %}
+            <tr>
+              <th>field</th>
+              <td>{{ entry }}</td>
+            </tr>
+            <tr style="color: red;">
+              <th>old</th>
+              <td>{{ old_value }}</td>
+            </tr>
+            <tr style="color: green;">
+              <th>new</th>
+              <td>{{ new_value }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <th>Actions</th>
+      <td>
+        <a href="{% url 'admin-change-submission-accept' change.id %}?redirect={{ request.get_full_path }}"
+          class="grp-button grp-default">Accept</a>
+        <a href="{% url 'admin-change-submission-reject' change.id %}?redirect={{ request.get_full_path }}"
+          class="grp-button grp-delete-link">Reject</a>
+      </td>
+    </tr>
   </table>
 
-  <p><strong>Author</strong>: {{ change.author }}</p>
-  <p><strong>Reason</strong>: {{ change.reason }}</p>
-
-  <div style="margin-top: 1em;">
-    <a href="{% url 'admin-change-submission-accept' change.id %}?redirect={{ request.get_full_path }}"
-      class="grp-button grp-default">Accept</a>
-    <a href="{% url 'admin-change-submission-reject' change.id %}?redirect={{ request.get_full_path }}"
-      class="grp-button grp-delete-link">Reject</a>
-  </div>
 </div>
