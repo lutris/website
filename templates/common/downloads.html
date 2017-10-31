@@ -10,7 +10,7 @@
         Lutris should be compatible with most up-to-date Linux distributions,
         it relies on the Python language and Gnome 3 libraries (but will run
         fine under any desktop environmment). The following distributions are
-        currently supported: Ubuntu 16.04, 16.10 and 17.04, Debian 8 and 9,
+        currently supported: Ubuntu 16.04, 17.04 and 17.10 Debian 8 and 9,
         Fedora 24 and 25, openSUSE 13.2, Leap 42 and Tumbleweed, Arch Linux
         and Gentoo.
       </p>
@@ -36,7 +36,7 @@
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/Debian_9.0/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
           <strong>For Ubuntu</strong><br/>
-          <code>ver=$(lsb_release -sr); if [ $ver != "16.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=16.04; fi</code>
+          <code>ver=$(lsb_release -sr); if [ $ver != "17.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=16.04; fi</code>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
