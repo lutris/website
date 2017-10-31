@@ -8,35 +8,36 @@
 <div class="row">
   <div class="col-sm-8 col-lg-9">
     <div class="pane">
-    <ul class='breadcrumb'>
-      <li>
-        <a href="/games">All</a>
-      </li>
-      {% if genre %}
+      <ul class='breadcrumb'>
         <li>
-          <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
+          <a href="/games">All</a>
         </li>
-      {% endif %}
-      {% if platform %}
-      <li>
-        <a href="/games/platform/{{ platform.slug }}">{{ platform }}</a>
-      </li>
-      {% endif %}
-      {% if year %}
-      <li>
-        <a href="{% url 'games_by_year' year %}">{{ year }}</a>
-      </li>
-      {% endif %}
-      {% if company %}
-      <li>
-        <a href="{% url 'games_by_company' company.slug %}">{{ company.name }}</a>
-      </li>
-      {% endif %}
-      {% if search_terms %}
-      <li><a href="{{ request.path }}">Search "{{ search_terms }}"</a></li>
-
-      {% endif %}
-    </ul>
+        {% if genre %}
+          <li>
+            <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
+          </li>
+        {% endif %}
+        {% if platform %}
+          <li>
+            <a href="/games/platform/{{ platform.slug }}">{{ platform }}</a>
+          </li>
+        {% endif %}
+        {% if year %}
+          <li>
+            <a href="{% url 'games_by_year' year %}">{{ year }}</a>
+          </li>
+        {% endif %}
+        {% if company %}
+          <li>
+            <a href="{% url 'games_by_company' company.slug %}">{{ company.name }}</a>
+          </li>
+        {% endif %}
+        {% if search_terms %}
+          <li>
+            <a href="{{ request.path }}">Search "{{ search_terms }}"</a>
+          </li>
+        {% endif %}
+      </ul>
 
     <ul class="game-list">
       {% for game in games %}
