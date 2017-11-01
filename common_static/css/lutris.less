@@ -630,6 +630,42 @@ input {
   }
 }
 
+.subnav {
+  .clearfix;
+
+  & > ul.breadcrumb,
+  & > button {
+    height: 39px;
+  }
+
+  & > ul.breadcrumb {
+    float: left;
+    width: calc(100% - 43px); /* Full width minux button width minux 5px margin */
+
+    @media (min-width: @screen-sm-min) {
+      width: 100%;
+    }
+  }
+
+  & > button {
+    width: 38px;
+    border: none;
+    color: #AEAEAE;
+    background: none;
+    background-color: #222;
+    float: right;
+    border-radius: 4px;
+
+    @media (min-width: @screen-sm-min) {
+      display: none;
+    }
+  }
+
+  & > button:hover {
+    color: white;
+  }
+}
+
 .breadcrumb {
   margin: 0 0 20px;
   list-style: none;
@@ -692,6 +728,14 @@ input {
   & > .active {
     color: #999999;
   }
+}
+
+#filter-mobile {
+  background-color: #444;
+  color: #DDD;
+  padding: 10px;
+  margin: 0;
+  margin-bottom: 20px;
 }
 
 .footnote {
@@ -1302,15 +1346,19 @@ input {
 
 
 .filter-list {
+  display: inline-block;
   .ul-reset;
   list-style-position: inside;
   margin: 0;
+
   li {
-    margin: 5px 0px;
+    display: inline-block;
+    margin: 0px;
+    margin-top: 5px;
   }
+
   a {
     display: block;
-    padding-left: 15px;
   }
 }
 
@@ -1319,10 +1367,15 @@ input {
   font-size: .75em;
   text-transform: uppercase;
   vertical-align: text-top;
-  padding: 3px 6px;
+  padding: 6px 12px;
   color: #EDEDED;
   border-radius: 2px;
   white-space: nowrap;
+
+  @media (min-width: @screen-sm-min) {
+    padding: 3px 6px;
+  }
+
   &:hover {
     background-color: #666;
     color: inherit;
