@@ -36,7 +36,7 @@ LOGGER = logging.getLogger(__name__)
 class GameList(ListView):
     model = models.Game
     context_object_name = "games"
-    paginate_by = 25
+    paginate_by = 5
 
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
