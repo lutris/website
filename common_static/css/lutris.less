@@ -389,13 +389,21 @@ input {
     }
   }
 
-  #search-games > .search-games-content {
-    padding-top: 5px;
-    padding-bottom: 5px;
+  #search-games {
+    display: block;
 
-    input[type="text"] {
-      background: none;
-      border: none;
+    @media (min-width: @screen-sm-min) {
+      display: none;
+    }
+
+    .search-games-content {
+      padding-top: 5px;
+      padding-bottom: 5px;
+  
+      input[type="text"] {
+        background: none;
+        border: none;
+      }
     }
   }
 
@@ -778,6 +786,10 @@ input {
       background-color: #444;
       color: #DDD;
       padding: 10px;
+
+      .input-group{
+        width: 100%
+      }
     }
   }
 }
@@ -1266,14 +1278,11 @@ input {
 }
 
 .pane {
-  padding: 0px;
+  padding: 0;
+
   p {
     margin-top: 15px;
     color: #ACACAC;
-  }
-
-  @media (min-width: @screen-sm-min) {
-    padding: 0px 14px;
   }
 }
 
