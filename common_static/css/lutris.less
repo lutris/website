@@ -389,6 +389,16 @@ input {
     }
   }
 
+  #search-games > .search-games-content {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    input[type="text"] {
+      background: none;
+      border: none;
+    }
+  }
+
   .logo {
     width: 34px;
     height: 34px;
@@ -755,14 +765,20 @@ input {
   }
 }
 
-.filter-mobile-content {
-  margin: 0;
-  margin-bottom: 20px;
+#filter-controls {
+  @media (min-width: @screen-sm-min) {
+    display: block !important; /* Controls should always be visible on large screens */
+  }
 
-  .pane {
-    background-color: #444;
-    color: #DDD;
-    padding: 10px;
+  .filter-controls-content {
+    margin: 0;
+    margin-bottom: 20px;
+  
+    .pane {
+      background-color: #444;
+      color: #DDD;
+      padding: 10px;
+    }
   }
 }
 
