@@ -368,22 +368,27 @@ input {
   font-weight: 300;
   margin: auto;
   font-family: @sansSerif;
+
   .brand {
     color: #ccc;
     padding: 10px;
     font-size: 2.2em;
+
     img {
       display: inline-block;
     }
+
     p {
       vertical-align: middle;
       display: inline-block;
       margin-bottom: 0px;
     }
+
     span {
       font-size: .5em;
     }
   }
+
   .logo {
     width: 34px;
     height: 34px;
@@ -393,6 +398,20 @@ input {
       height: 64px;
     }
   }
+
+  .navbar-header > button {
+    background: none;
+    border: none;
+    margin-right: 5px;
+    margin-bottom: 0;
+    color: #aaa;
+  }
+
+  .navbar-header > button:active,
+  .navbar-header > button:focus {
+    color: #fff;
+  }
+
   .nav > li > a {
     color: #aaa;
 
@@ -417,6 +436,7 @@ input {
     text-transform: uppercase;
     font-size: .8em;
     font-weight: 400;
+
     &:hover {
       color: #ccc;
       background-color: #555;
