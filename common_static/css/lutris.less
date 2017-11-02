@@ -375,6 +375,8 @@ input {
     color: #ccc;
     padding: 10px;
     font-size: 2.2em;
+    position: relative;
+    z-index: 100;
 
     img {
       display: inline-block;
@@ -399,7 +401,7 @@ input {
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 60px;
+        left: 0;
         right: 48px;
         margin: 0;
         padding: 0;
@@ -414,8 +416,6 @@ input {
       }
 
       @media (min-width: @screen-md-min) {
-        left: 300px;
-
         .search-games-content {
           padding-top: 47px;
         }
