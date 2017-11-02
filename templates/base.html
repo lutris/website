@@ -41,7 +41,7 @@
             <span class="sr-only">Toggle navigation</span>
             <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
           </button>
-          
+
           <!-- SEARCH GAME BUTTON -->
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
               data-target="#search-games" aria-expanded="false" aria-controls="navbar">
@@ -63,7 +63,7 @@
           <div class="search-games-content">
             <form action="{% url 'game_list' %}" method="get" class="form-inline">
               <div class="input-group">
-                <input type="text" name="q" class="search-query form-control" 
+                <input type="text" name="q" class="search-query form-control"
                     placeholder="Search…" />
                 <span class="input-group-btn">
                   <button class="btn btn-default" type="submit">Search</button>
@@ -82,12 +82,19 @@
             <li><a href="https://forums.lutris.net">Forums</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'library_show' user.username %}">My Library</a></li>
-              <li><a href="{% url 'user_account' user.username %}">My account</a></li>
+              <li><a href="{% url 'user_account' user.username %}">My Account</a></li>
               <li><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
               <li><a href="{% url 'login' %}">Login</a></li>
               <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
+            <li class="hidden-xs">
+              <a href="#" class="collapsed" data-toggle="collapse"
+                  data-target="#search-games" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Search games</span>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </a>
+            </li>
           </ul>
         </div>
 

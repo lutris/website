@@ -392,19 +392,60 @@ input {
   }
 
   #search-games {
-    /* display: block;*/
+    &.collapsing,
+    &.collapse.in {
+      @media (min-width: @screen-sm-min) {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 60px;
+        right: 48px;
+        margin: 0;
+        padding: 0;
+        background-color: #222;
+        z-index: 10;
+        text-align: right;
 
-    @media (min-width: @screen-sm-min) {
-      display: none !important;
-    } 
+        .search-games-content {
+          padding-right: 15px;
+          padding-top: 9px;
+        }
+      }
+
+      @media (min-width: @screen-md-min) {
+        left: 300px;
+
+        .search-games-content {
+          padding-top: 47px;
+        }
+      }
+
+      @media (min-width: @screen-lg-min) {
+        right: 58px;
+      }
+    }
+
+    &.collapse {
+      @media (min-width: @screen-sm-min) {
+        display: none !important;
+      }
+    }
 
     .search-games-content {
       padding-top: 5px;
       padding-bottom: 5px;
-  
+
+      @media (min-width: @screen-sm-min) {
+        padding: 5px;
+      }
+
       input[type="text"] {
+        color: #aaa;
         background: none;
         border: none;
+        box-shadow: none;
+        outline: 0;
       }
     }
   }
@@ -783,7 +824,7 @@ input {
   .filter-controls-content {
     margin: 0;
     margin-bottom: 20px;
-  
+
     .pane {
       background-color: #444;
       color: #DDD;
