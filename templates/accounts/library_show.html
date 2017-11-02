@@ -5,13 +5,13 @@
 
 
 {% block content %}
+<h1>Library <small>{{ games.count }} Games</small></h1>
 <div class="row">
   <div class="col-md-12">
     <div class="game-list-header">
       <h2>Your games</h2>
-      <span class="centered">{{ games.count }} games in library</span>
       <form class="game-filter">
-        <input type="text" placeholder="filter games" id="game-filter"/>
+        <input type="text" placeholder="Filter your games…" id="game-filter"/>
       </form>
     </div>
     <ul class="game-list user-library">
