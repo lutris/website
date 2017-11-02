@@ -156,7 +156,7 @@
             <ul class="pagination-block clearfix">
               {% if page_obj.number == 1 %}
               <li><a href="{% append_to_get page=page_obj.next_page_number %}">
-                Next<span style="width: 20px;"></span>&rsaquo;
+                  <span style="margin: 0; padding: 0; padding-right: 30px;">Next</span>&rsaquo;
               </a></li>
               {% else %}
                 {% if page_obj.number >= 3 %}
