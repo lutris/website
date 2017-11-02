@@ -135,6 +135,11 @@
             data-target="#filter-controls" aria-expanded="false" aria-controls="filter-controls">
           <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
         </button>
+
+        <button type="button" class="btn btn-default" data-toggle="collapse" onclick="blur();"
+            data-target="#filter-controls" aria-expanded="false" aria-controls="filter-controls">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
       </div>
 
       <!-- GAME LIST -->
@@ -143,12 +148,16 @@
           {% include "includes/game_preview.html" %}
         {% endfor %}
         {% if not games %}
-          <em>
-            No games found that match these criteria.
-            {% if not unpublished_filter %}
-              However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished games</a> do.
-            {% endif %}
-          </em>
+          <p><em>No games found that match these criteria.</em></p>
+          {% if not unpublished_filter and unpublished_match_count > 0 %}
+            <p>
+              <em>However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished games</a> do.</em>
+            </p>
+          {% else %}
+            <p>
+              <em>Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.</em>
+            </p>
+          {% endif %}
         {% endif %}
       </ul>
 
