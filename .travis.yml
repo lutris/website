@@ -8,4 +8,5 @@ install:
 before_script:
   - touch templates/docs/installers.html
 script:
+  - make lint-python
   - make test

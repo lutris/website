@@ -20,6 +20,11 @@ cleanthumbs:
 	./manage.py thumbnail cleanup
 	rm -rf ./media/cache/
 
+lint-python:
+	pylint --rcfile=config/pylintrc accounts bundles common emails games lutrisweb platforms runners thegamesdb tosec
+
+lint: lint-python
+
 test:
 	SEND_EMAILS=0 ./manage.py test --failfast $(test)
 
