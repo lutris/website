@@ -1188,6 +1188,8 @@ input {
 
 .game-filter {
   float: right;
+  margin-bottom: 20px;
+
   input {
     background-color: #444;
     color: #CCC;
@@ -1483,16 +1485,23 @@ input {
     position: relative;
     top: 0px;
     float: right;
+    
     .help {
       position: absolute;
       white-space:nowrap;
-      top: -5px;
-      right: 7px;
+      top: 0;
+      right: 0;
       font-size: .9em;
       background-color: #4c4c4c;
       padding: 3px 7px;
       border-radius: 2px;
       color: #333;
+
+      @media (min-width: @screen-sm-min) {
+        top: -5px;
+        right: -5px;
+      }
+
       &:hover {
         background-color: #777;
         color: #DEDEDE;
