@@ -59,11 +59,16 @@ article {
     right: 7px; /* 15px padding like h1 on the left - 8px padding of a to span */
     bottom: 2px;
 
+    @media (min-width: @screen-sm-min) {
+      display: none;
+    }
+
     a {
       background: none;
       border: none;
       margin: 0;
       padding: 4px 8px;
+      color: #aaa;
     }
   }
 }
