@@ -4,7 +4,23 @@
 {% block title %}Games - Lutris{% endblock %}
 
 {% block content %}
-<h1>Games</h1>
+
+<!-- HEADER -->
+<div class="header-wrap">
+  <h1>Games</h1>
+
+  <div class="header-control">
+    <a href="{% url 'game-submit' %}" class="btn btn-default" onclick="blur();">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </a>
+
+    <a href="#" class="btn btn-default" data-toggle="collapse" onclick="blur();"
+        data-target="#filter-controls" aria-expanded="false" aria-controls="filter-controls">
+      <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+    </a>
+  </div>
+</div>
+
 <div class="row">
 
   <!-- FILTER CONTROLS -->
@@ -99,48 +115,36 @@
   <!-- CONTENT -->
   <div class="col-sm-8 col-lg-9 col-sm-pull-4 col-lg-pull-3">
     <div class="pane">
-      <div class="subnav">
-        <ul class="breadcrumb">
+      <ul class="breadcrumb">
+        <li>
+          <a href="/games">All</a>
+        </li>
+        {% if genre %}
           <li>
-            <a href="/games">All</a>
+            <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
           </li>
-          {% if genre %}
-            <li>
-              <a href="{% url 'games_by_genre' genre.slug %}">{{ genre }}</a>
-            </li>
-          {% endif %}
-          {% if platform %}
-            <li>
-              <a href="/games/platform/{{ platform.slug }}">{{ platform }}</a>
-            </li>
-          {% endif %}
-          {% if year %}
-            <li>
-              <a href="{% url 'games_by_year' year %}">{{ year }}</a>
-            </li>
-          {% endif %}
-          {% if company %}
-            <li>
-              <a href="{% url 'games_by_company' company.slug %}">{{ company.name }}</a>
-            </li>
-          {% endif %}
-          {% if search_terms %}
-            <li>
-              <a href="{{ request.path }}">Search "{{ search_terms }}"</a>
-            </li>
-          {% endif %}
-        </ul>
-
-        <button type="button" class="btn btn-default" data-toggle="collapse" onclick="blur();"
-            data-target="#filter-controls" aria-expanded="false" aria-controls="filter-controls">
-          <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-        </button>
-
-        <button type="button" class="btn btn-default" data-toggle="collapse" onclick="blur();"
-            data-target="#filter-controls" aria-expanded="false" aria-controls="filter-controls">
-          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>
-      </div>
+        {% endif %}
+        {% if platform %}
+          <li>
+            <a href="/games/platform/{{ platform.slug }}">{{ platform }}</a>
+          </li>
+        {% endif %}
+        {% if year %}
+          <li>
+            <a href="{% url 'games_by_year' year %}">{{ year }}</a>
+          </li>
+        {% endif %}
+        {% if company %}
+          <li>
+            <a href="{% url 'games_by_company' company.slug %}">{{ company.name }}</a>
+          </li>
+        {% endif %}
+        {% if search_terms %}
+          <li>
+            <a href="{{ request.path }}">Search "{{ search_terms }}"</a>
+          </li>
+        {% endif %}
+      </ul>
 
       <!-- GAME LIST -->
       <ul class="game-list">

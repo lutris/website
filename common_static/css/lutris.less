@@ -51,6 +51,23 @@ article {
   }
 }
 
+.header-wrap {
+  position: relative;
+
+  .header-control {
+    position: absolute;
+    right: 7px; /* 15px padding like h1 on the left - 8px padding of a to span */
+    bottom: 2px;
+
+    a {
+      background: none;
+      border: none;
+      margin: 0;
+      padding: 4px 8px;
+    }
+  }
+}
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   word-spacing: .1em;
@@ -713,48 +730,10 @@ input {
   }
 }
 
-.subnav {
-  .clearfix;
-
-  & > ul.breadcrumb,
-  & > button {
-    height: 39px;
-  }
-
-  & > ul.breadcrumb {
-    float: left;
-    width: calc(100% - 43px); /* Full width minus button width minus 5px margin */
-
-    @media (min-width: @screen-sm-min) {
-      width: 100%;
-    }
-  }
-
-  & > button {
-    width: 38px;
-    border: none;
-    color: #AEAEAE;
-    background: none;
-    background-color: #222;
-    float: right;
-    border-radius: 4px;
-
-    @media (min-width: @screen-sm-min) {
-      display: none;
-    }
-  }
-
-  & > button:focus,
-  & > button:active,
-  & > button:hover {
-    color: white;
-    background-color: #222;
-  }
-}
-
 .breadcrumb {
-  margin: 0 0 20px;
+  margin: 0 0 20px 0;
   padding: 8px 10px;
+  width: 100%;
   list-style: none;
   background-color: #222;
   overflow: hidden;
