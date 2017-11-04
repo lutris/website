@@ -520,7 +520,7 @@ class Installer(BaseInstaller):
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
     reason = models.CharField(max_length=512, blank=True, null=True)
-    
+
     # Collection manager
     objects = InstallerManager()
 
@@ -657,6 +657,7 @@ class InstallerRevision(BaseInstaller):
         self.version = installer_data['version']
         self.description = installer_data['description']
         self.notes = installer_data['notes']
+        self.reason = installer_data['reason']
 
         self.installer_id = self._version.object_id
 
