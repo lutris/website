@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^game-submitted',
         TemplateView.as_view(template_name='games/submitted.html'),
         name="game-submitted"),
+    url(r'^game-changes-submitted',
+        TemplateView.as_view(template_name='games/submitted-changes.html'),
+        name='game-submitted-changes'),
 
     url('^game-issue',
         views.submit_issue,
@@ -49,6 +52,9 @@ urlpatterns = [
         views.get_installers,
         name='get_installers'),
 
+    url(r'(?P<slug>[\w\-]+)/suggest-changes/$',
+        views.edit_game,
+        name='game-edit'),
     url(r'(?P<slug>[\w\-]+)/installer/new$',
         views.new_installer,
         name="new_installer"),

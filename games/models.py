@@ -1,4 +1,5 @@
 """Models for main lutris app"""
+
 import datetime
 # pylint: disable=E1002, E0202
 import re
@@ -95,11 +96,12 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(is_public=True)
+        return self.get_queryset().filter(change_for__isnull=True, is_public=True)
 
     def with_installer(self):
         return (
             self.get_queryset()
+            .filter(change_for__isnull=True)
             .filter(is_public=True)
             .filter(
                 Q(installers__published=True) |
@@ -115,7 +117,7 @@ class GameManager(models.Manager):
             return
         pk_query = self.get_queryset()
         if option == 'incomplete':
-            pk_query = pk_query.filter(year=None)
+            pk_query = pk_query.filter(change_for__isnull=True, year=None)
         elif option == 'published':
             pk_query = self.with_installer()
         elif len(option) > 1:
@@ -142,7 +144,7 @@ class Game(models.Model):
         ('protected', 'Installer modification is restricted'),
     )
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=False)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform)
     genres = models.ManyToManyField(Genre)
@@ -165,6 +167,11 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
 
+    # Indicates whether this data row is a changeset for another data row.
+    # If so, this attribute is not NULL and the value is the ID of the
+    # corresponding data row
+    change_for = models.ForeignKey('self', null=True, blank=True)
+
     objects = GameManager()
 
     # pylint: disable=W0232, R0903
@@ -175,7 +182,10 @@ class Game(models.Model):
         )
 
     def __unicode__(self):
-        return self.name
+        if self.change_for is None:
+            return self.name
+        else:
+            return '[Changes for] ' + self.change_for.name
 
     @staticmethod
     def autocomplete_search_fields():
@@ -220,6 +230,51 @@ class Game(models.Model):
     def flag_labels(self):
         """Return labels of active flags, suitable for display"""
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
+
+    def get_change_model(self):
+        """Returns a dictionary which can be used as initial value in forms"""
+
+        copy = {
+            'name': self.name,
+            'year': self.year,
+            'website': self.website,
+            'description': self.description,
+            'platforms': [x.id for x in list(self.platforms.all())],
+            'genres': [x.id for x in list(self.genres.all())]
+        }
+
+        return copy
+
+    def get_changes(self):
+        """Returns a dictionary of the changes"""
+
+        changes = []
+        considered_entries = ['name', 'year', 'platforms', 'genres', 'website', 'description']
+
+        # From the considered fields, only those who differ will be returned
+        for entry in considered_entries:
+            old_value = getattr(self.change_for, entry)
+            new_value = getattr(self, entry)
+
+            # M2M relations to string
+            if entry in ['platforms', 'genres']:
+                old_value = ', '.join('[{0}]'.format(str(x)) for x in list(old_value.all()))
+                new_value = ', '.join('[{0}]'.format(str(x)) for x in list(new_value.all()))
+
+            if old_value != new_value:
+                changes.append((entry, old_value, new_value))
+
+        return changes
+
+    def apply_changes(self, change_set):
+        """Applies user-suggested changes to this model"""
+
+        self.name = change_set.name
+        self.year = change_set.year
+        self.platforms.set(change_set.platforms.all())
+        self.genres.set(change_set.genres.all())
+        self.website = change_set.website
+        self.description = change_set.description
 
     def has_installer(self):
         return self.installers.exists() or self.has_auto_installers()
@@ -275,7 +330,6 @@ class Game(models.Model):
         return installers
 
     def check_for_submission(self):
-
         # Skip freshly created and unpublished objects
         if not self.pk or not self.is_public:
             return
@@ -294,12 +348,14 @@ class Game(models.Model):
             submission.accept()
 
     def save(self, force_insert=True, using=None):
-        if not self.slug:
-            self.slug = slugify(self.name)[:50]
-        if not self.slug:
-            raise ValueError("Can't generate a slug for name %s" % self.name)
-        self.download_steam_capsule()
-        self.check_for_submission()
+        # Only create slug etc. if this is a game submission, no change submission
+        if not self.change_for:
+            if not self.slug:
+                self.slug = slugify(self.name)[:50]
+            if not self.slug:
+                raise ValueError("Can't generate a slug for name %s" % self.name)
+            self.download_steam_capsule()
+            self.check_for_submission()
         return super(Game, self).save()
 
 
@@ -597,6 +653,7 @@ class GameSubmission(models.Model):
     game = models.ForeignKey(Game)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
+    reason = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "User submitted game"

@@ -12,12 +12,14 @@ from runners.models import Runner
 class PlatformFactory(factory.DjangoModelFactory):
     class Meta:
         model = Platform
+        django_get_or_create = ('name',)
     name = factory.Iterator(['Amiga', 'Super Nintendo', 'Sega Genesis', 'Sony Playstation'])
 
 
 class GenreFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.Genre
+        django_get_or_create = ('name',)
     name = 'Arcade'
 
 
@@ -27,7 +29,42 @@ class GameFactory(factory.DjangoModelFactory):
     name = factory.Iterator(['Quake', 'Unreal', 'Serious Sam',
                              'Duke 3D', 'Deus Ex'])
     year = 1999
+    website = 'example.com'
+    description = 'Description'
+    platforms = factory.RelatedFactory(PlatformFactory, name='Amiga')
+    genres = factory.RelatedFactory(GenreFactory, name='Arcade')
     is_public = True
+
+
+class GameChangeFactory(factory.DjangoModelFactory):
+    """Creates a change row model which is equal to the game given by change_for"""
+
+    class Meta:
+        model = models.Game
+
+    name = factory.LazyAttribute(lambda obj: obj.change_for.name)
+    year = factory.LazyAttribute(lambda obj: obj.change_for.year)
+    website = factory.LazyAttribute(lambda obj: obj.change_for.website)
+    description = factory.LazyAttribute(lambda obj: obj.change_for.description)
+    is_public = False
+
+    @factory.post_generation
+    def platforms(self, create, extracted):
+        if not create:
+            return
+
+        if extracted:
+            for platform in self.change_for.platforms.all():
+                self.platforms.add(platform)
+
+    @factory.post_generation
+    def genres(self, create, extracted):
+        if not create:
+            return
+
+        if extracted:
+            for genre in self.change_for.genres.all():
+                self.genres.add(genre)
 
 
 class UserFactory(factory.DjangoModelFactory):
