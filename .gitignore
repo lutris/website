@@ -1,3 +1,6 @@
+.vscode/
+src/django-jcrop/
+src/django-openid-auth/
 *.pyc
 tags
 lutris.db

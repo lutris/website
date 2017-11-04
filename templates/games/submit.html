@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load crispy_forms_tags %}
-{% block title %}Submit a game - Lutris{% endblock %}
+{% block title %}
+{% if not game %} Submit a game {% else %} Suggest changes {% endif %}- Lutris
+{% endblock %}
 {% block extra_head %}
 {{ form.media.css }}
 {% endblock %}
@@ -10,19 +12,27 @@
 <div class="row">
   <div class="col-lg-10 col-lg-offset-1">
     <div class="form-view">
-      <h1>Submit a game</h1>
+      <h1>
+        {% if not game %}
+          Submit a game
+        {% else %}
+          Suggest changes to '{{ game.name }}'
+        {% endif %}
+      </h1>
       <p>
         Please be as accurate as possible with the information you provide.
         Wikipedia or <a href="https://www.mobygames.com/search/quick">Mobygames</a>
         are generally reliable sources. If you know more accurate ones, let us
         know! Thanks for your efforts!<br /><br />
       </p>
+      {% if not game %}
       <p>
         <img src="{% static "images/nosteam.png" %}" alt="Don't submit Steam games" style="float: left; margin-right: 12px;"/>
         <strong>Do not submit Steam games.</strong> We probably already have the game in our database
         (check for unpublished games in the advanced search options). If the game really isn't available,
         sync your Steam library from your Lutris account, this will add missing games to our database.
       </p>
+      {% endif %}
       {% crispy form %}
     </div>
   </div>

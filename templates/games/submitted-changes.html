@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Changes submitted - Lutris{% endblock %}
+
+{% block content %}
+<div class="form-view">
+  <p>
+    Changes submitted, thank you!
+  </p>
+  <p>
+    We will review it as soon as possible.
+  </p>
+  <a href="{% url "game_list" %}">Back to the games list</a>
+</div>
+{% endblock %}

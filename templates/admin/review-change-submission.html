@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<ul>
+    <li><a href="../../../">Home</a></li>
+    <li><a href="../../">Games</a></li>
+    <li>{{ title }}</li>
+</ul>
+{% endblock %}
+{% block content %}
+
+<div class="grp-content-container">
+  {% include "admin/change-submission.html" with game="change" %}
+</div>
+
+{% endblock %}
