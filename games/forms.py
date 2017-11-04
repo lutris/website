@@ -235,6 +235,26 @@ class InstallerForm(forms.ModelForm):
             return self.cleaned_data
 
 
+class InstallerEditForm(InstallerForm):
+    """Form to edit an installer"""
+
+    class Meta(InstallerForm.Meta):
+        """Form configuration"""
+
+        fields = ['runner', 'version', 'description', 'notes', 'reason',
+                  'content', 'draft']
+
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'installer-textarea'}),
+        required=False,
+        help_text='Please describe briefly, why this change is necessary or useful. '
+                  'This will help us moderate the changes.'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(InstallerEditForm, self).__init__(*args, **kwargs)
+
+
 class ForkInstallerForm(forms.ModelForm):
 
     class Meta:

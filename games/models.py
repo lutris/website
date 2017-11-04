@@ -516,6 +516,12 @@ class Installer(BaseInstaller):
     published = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+
+    # Relevant for edit submissions only: Reason why the proposed change
+    # is necessecary or useful
+    reason = models.CharField(max_length=512, blank=True, null=True)
+
+    # Collection manager
     objects = InstallerManager()
 
     def __unicode__(self):
@@ -651,6 +657,7 @@ class InstallerRevision(BaseInstaller):
         self.version = installer_data['version']
         self.description = installer_data['description']
         self.notes = installer_data['notes']
+        self.reason = installer_data['reason']
 
         self.installer_id = self._version.object_id
 
