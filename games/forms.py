@@ -253,7 +253,6 @@ class InstallerEditForm(InstallerForm):
 
     def __init__(self, *args, **kwargs):
         super(InstallerEditForm, self).__init__(*args, **kwargs)
-        self.fields['notes'].label = 'Technical notes'
 
 
 class ForkInstallerForm(forms.ModelForm):
