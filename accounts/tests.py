@@ -15,14 +15,14 @@ class TestRegistration(TestCase):
 
         response = self.client.post(registration_url, {
             'username': "testuser",
-            'email': 'admin@lutris.net',
+            'email': 'testuser@lutris.net',
             'password1': "testpassword",
             'password2': "testpassword"
         }, follow=True)
         self.assertEqual(response.status_code, 200)
         created_user = User.objects.get(username="testuser")
         self.assertTrue(created_user)
-        self.assertEqual(created_user.email, "admin@lutris.net")
+        self.assertEqual(created_user.email, "testuser@lutris.net")
         self.assertTrue(created_user.gamelibrary)
 
 
