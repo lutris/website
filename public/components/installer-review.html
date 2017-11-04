@@ -23,6 +23,11 @@
     <div class="row">
       <installer-list class="col-sm-2" id="installer-list" installers="[[game.installers]]"></installer-list>
       <div class="col-sm-10 row">
+        <div class="col-sm-12">
+          <div style="margin-top: 1em;">
+            <p hidden="[[ !hasChangeReason ]]"><strong>Reason: </strong>{{ selectedObject.reason }}</p>
+          </div>
+        </div>
         <installer-pane
           class="col-sm-6"
           id="pane-1"
@@ -102,6 +107,11 @@
             type: Boolean,
             value: true,
             computed: 'getHasNoRevision(selectedInstaller)'
+          },
+          hasChangeReason: {
+            type: Boolean,
+            value: false,
+            computed: 'getHasChangeReason(selectedObject)'
           }
         }
       }
@@ -157,6 +167,10 @@
 
       getHasNoRevision(selectedInstaller) {
         return !selectedInstaller.revisions.length;
+      }
+
+      getHasChangeReason(selectedObject) {
+        return (selectedObject && selectedObject.reason && selectedObject.reason != '')
       }
 
       handleResponse(response) {
