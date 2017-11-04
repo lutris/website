@@ -161,12 +161,10 @@ class InstallerForm(forms.ModelForm):
     class Meta:
         """Form configuration"""
         model = models.Installer
-        fields = ('runner', 'version', 'description', 'notes', 'content', 'draft')
+        fields = ['runner', 'version', 'description', 'notes', 'content', 'draft']
         widgets = {
             'runner': Select2Widget,
-            'description': forms.Textarea(
-                attrs={'class': 'installer-textarea'}
-            ),
+            'description': forms.Textarea(attrs={'class': 'installer-textarea'}),
             'notes': forms.Textarea(attrs={'class': 'installer-textarea'}),
             'content': forms.Textarea(
                 attrs={'class': 'code-editor', 'spellcheck': 'false'}
@@ -175,37 +173,37 @@ class InstallerForm(forms.ModelForm):
         }
         help_texts = {
             'version': (
-                "Short version name describing the release of the game "
-                "targeted by the installer. It can be the release name (e.g. "
-                "GOTY, Gold...) or format (CD...) or platform (Amiga "
-                "500...), or the vendor version (e.g. GOG, Steam...) or "
-                "the actual software version of the game... Whatever makes "
-                "the most sense."
+                'Short version name describing the release of the game '
+                'targeted by the installer. It can be the release name (e.g. '
+                'GOTY, Gold...) or format (CD...) or platform (Amiga '
+                '500...), or the vendor version (e.g. GOG, Steam...) or '
+                'the actual software version of the game... Whatever makes '
+                'the most sense.'
             ),
-            'description': ("Additional details about the installer. "
-                            "Do NOT put a description for the game, it will be deleted"),
-            'notes': ("Describe any known issues or manual tasks required "
-                      "to run the game properly."),
+            'description': ('Additional details about the installer. '
+                            'Do NOT put a description for the game, it will be deleted'),
+            'notes': ('Describe any known issues or manual tasks required '
+                      'to run the game properly.'),
         }
 
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
-        self.fields['notes'].label = "Technical notes"
+        self.fields['notes'].label = 'Technical notes'
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
-        yaml_data = self.cleaned_data["content"]
+        yaml_data = self.cleaned_data['content']
         try:
             yaml_data = yaml.safe_load(yaml_data)
         except yaml.scanner.ScannerError:
-            raise forms.ValidationError("Invalid YAML data (scanner error)")
+            raise forms.ValidationError('Invalid YAML data (scanner error)')
         except yaml.parser.ParserError:
-            raise forms.ValidationError("Invalid YAML data (parse error)")
+            raise forms.ValidationError('Invalid YAML data (parse error)')
         except yaml.composer.ComposerError as ex:
             raise forms.ValidationError(
-                "Script error: %s."
-                "Make sure to quote any string with special characters such as '*' or ':'"
-                % ex.problem
+                'Script error: {problem}. '
+                'Make sure to quote any string with special characters '
+                "such as '*' or ':'".format(problem=ex.problem)
             )
         return yaml.safe_dump(yaml_data, default_flow_style=False)
 
@@ -228,11 +226,32 @@ class InstallerForm(forms.ModelForm):
                 self.errors['content'] = []
             for error in errors:
                 self.errors['content'].append(error)
-            raise forms.ValidationError("Invalid installer script")
+            raise forms.ValidationError('Invalid installer script')
         else:
             # Draft status depends on the submit button clicked
             self.cleaned_data['draft'] = 'save' in self.data
             return self.cleaned_data
+
+
+class InstallerEditForm(InstallerForm):
+    """Form to edit an installer"""
+
+    class Meta(InstallerForm.Meta):
+        """Form configuration"""
+
+        fields = ['runner', 'version', 'description', 'notes', 'reason',
+                  'content', 'draft']
+
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'installer-textarea'}),
+        required=False,
+        help_text='Please describe briefly, why this change is necessary or useful. '
+                  'This will help us moderate the changes.'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(InstallerEditForm, self).__init__(*args, **kwargs)
+        self.fields['notes'].label = 'Technical notes'
 
 
 class ForkInstallerForm(forms.ModelForm):

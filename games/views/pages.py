@@ -25,7 +25,7 @@ from sorl.thumbnail import get_thumbnail
 from accounts.decorators import user_confirmed_required, check_installer_restrictions
 from games import models
 from games.forms import (ForkInstallerForm, GameForm,
-                         InstallerForm, ScreenshotForm)
+                         InstallerForm, InstallerEditForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from platforms.models import Platform
@@ -277,7 +277,7 @@ def edit_installer(request, slug):
         if 'runner_id' in initial_data:
             initial_data['runner'] = initial_data['runner_id']
 
-    form = InstallerForm(request.POST or None, instance=installer, initial=initial_data)
+    form = InstallerEditForm(request.POST or None, instance=installer, initial=initial_data)
     if request.method == 'POST' and form.is_valid():
         with reversion.create_revision():
             installer = form.save(commit=False)
