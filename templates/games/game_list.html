@@ -181,7 +181,7 @@
                 <!-- "Next >" -->
                 <li>
                   <a href="{% append_to_get page=page_obj.next_page_number %}">
-                    <span style="margin: 0; padding: 0; padding-right: 30px;">Next</span>
+                    <span style="margin: 0; padding: 0; padding-right: 24px;">Next</span>
                     <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
                   </a>
                 </li>
@@ -190,7 +190,7 @@
                 {% if page_obj.number >= 3 %}
                   <li>
                     <a href="{% append_to_get page=1 %}">
-                      <span class="glyphicon glyphicon-menu-left" style="margin-right: -13px;" aria-hidden="true"></span>
+                      <span class="glyphicon glyphicon-menu-left" style="margin-right: -10px;" aria-hidden="true"></span>
                       <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                     </a>
                   </li>
@@ -221,7 +221,7 @@
                 <li>
                   <a href="{% append_to_get page=page_obj.page_count %}">
                     <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-menu-right" style="margin-left: -13px;" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-menu-right" style="margin-left: -10px;" aria-hidden="true"></span>
                   </a>
                 </li>
               {% endif %}
