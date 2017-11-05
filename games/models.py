@@ -197,7 +197,7 @@ class Game(models.Model):
 
         if not self.website:
             return None
-        
+
         # Fall back to http if no protocol specified (cannot assume that https will work)
         has_protocol = '://' in self.website
         return 'http://' + self.website if not has_protocol else self.website
@@ -208,7 +208,7 @@ class Game(models.Model):
 
         if not self.website:
             return None
-        
+
         return (
             self.website
             .split('https:', 1)[-1]
@@ -494,7 +494,11 @@ class BaseInstaller(models.Model):
         return self.game.slug
 
     def as_dict(self, with_metadata=True):
-        yaml_content = yaml.safe_load(self.content) or {}
+        try:
+            yaml_content = yaml.safe_load(self.content) or {}
+        except yaml.parser.ParserError:
+            LOGGER.exception("Invalid YAML %s" % self.content)
+            yaml_content = {}
 
         # Allow pasting raw install scripts (which are served as lists)
         if isinstance(yaml_content, list):
