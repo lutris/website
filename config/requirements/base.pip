@@ -1,21 +1,21 @@
 PyYAML==3.12
 Django==1.11.7
-Pillow==4.2.1
-ipython==5.4.1
-Sphinx==1.6.3
-djangorestframework==3.6.3
+Pillow==4.3.0
+ipython==5.5.0
+Sphinx==1.6.5
+cssselect==1.0.1
+djangorestframework==3.7.1
 django-appconf==1.0.2
-django-compressor==2.1.1
-django-crispy-forms==1.6.0
+django-compressor==2.2
+django-crispy-forms==1.7.0
 django_select2==5.11.1
 django-grappelli==2.10.1
 django-tastypie==0.13.3
-django-markupfield==1.4.1
-django-extensions==1.7.4
+django-markupfield==1.4.3
+django-extensions==1.9.7
 django_inlinecss==0.1.2
-django-reversion==2.0.9
+django-reversion==2.0.10
 django-bitfield==1.9.3
-# -e git+https://github.com/lutris/django-bitfield#egg=django-bitfield
 python-openid
 requests==2.18.3
 Celery==4.1.0
@@ -30,4 +30,4 @@ sorl-thumbnail==12.4.a1
 beautifulsoup4==4.5.1
 lxml==3.6.1
 premailer==3.0.1
-Fabric==1.12.0
+Fabric==1.14.0
