@@ -1,13 +1,21 @@
 {% load thumbnail %}
 
 <li class="clearfix {% if game.has_installer %} with-installer{% endif%}">
-	<a href="{{ game.get_absolute_url }}">
-	{% thumbnail game.title_logo "184x69" crop="center" as img %}
-		<img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
-	{% empty %}
-		<span class="game-cover">no image</span>
-	{% endthumbnail %}
-	</a>
+  {% if not game.change_for %}
+    <a href="{{ game.get_absolute_url }}">
+      {% thumbnail game.title_logo "184x69" crop="center" as img %}
+        <img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
+      {% empty %}
+        <span class="game-cover">no image</span>
+      {% endthumbnail %}
+    </a>
+  {% else %}
+    {% thumbnail game.change_for.title_logo "184x69" crop="center" as img %}
+      <img src="{{ img.url }}" alt="{{ game.change_for.name }}" class="game-cover"/>
+    {% empty %}
+      <span class="game-cover">no image</span>
+    {% endthumbnail %}
+  {% endif %}
 
   {% if is_library %}
     <a href="{% url "remove_from_library" slug=game.slug %}" class="right-button">
@@ -15,7 +23,11 @@
     </a>
   {% endif %}
   <div class="hidden-xs">
-    <a href="{{ game.get_absolute_url }}" class="game-title">{{ game.name }}</a>
+    {% if not game.change_for %}
+      <a href="{{ game.get_absolute_url }}" class="game-title">{{ game.name }}</a>
+    {% else %}
+      <a class="game-title">[Change suggestions for] {{ game.change_for.name }}</a>
+    {% endif %}
     {% for platform in game.platforms.all %}
       <a href="{% url "games_by_plaform" slug=platform.slug %}" class="filter-link">{{ platform }}</a>
     {% endfor %}
