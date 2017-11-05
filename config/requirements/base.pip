@@ -1,5 +1,5 @@
 PyYAML==3.12
-Django==1.10.2
+Django==1.11.7
 Pillow==4.2.1
 ipython==5.4.1
 Sphinx==1.6.3
