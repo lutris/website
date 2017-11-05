@@ -1,6 +1,6 @@
 {% load thumbnail %}
 
-<li class="clearfix {% if game.has_installer %} with-installer{% endif%}">
+<li class="clearfix {% if game.has_installer %} with-installer{% endif %}">
   {% if not game.change_for %}
     <a href="{{ game.get_absolute_url }}">
       {% thumbnail game.title_logo "184x69" crop="center" as img %}
