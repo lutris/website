@@ -167,6 +167,14 @@
 
       {% if page_obj.page_count > 1 %}
         <div class="pagination-block-wrapper">
+          <div class="meta-information hidden-xs" style="color: #aaa; font-size: 12px; position: absolute; left: 15px;">
+            {% if page_obj.start_index == page_obj.end_index %}
+              {{ page_obj.start_index }} of {{ page_obj.paginator.count }}
+            {% else %}
+              {{ page_obj.start_index }}–{{ page_obj.end_index}} of {{ page_obj.paginator.count }}
+            {% endif %}
+          </div>
+
           <div class="pagination-block">
             <ul class="pagination-block clearfix">
               {% if page_obj.number == 1 %}
@@ -187,6 +195,9 @@
                 {% if page_obj.has_next %}
                   <li><a href="{% append_to_get page=page_obj.next_page_number %}">&rsaquo;</a></li>
                 {% endif %}
+              {% endif %}
+              {% if page_obj.diff_to_last_page > 1 %}
+                <li><a href="{% append_to_get page=page_obj.page_count %}">&raquo;</a></li>
               {% endif %}
             </ul>
           </div>

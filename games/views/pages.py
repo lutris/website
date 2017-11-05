@@ -94,6 +94,7 @@ class GameList(ListView):
         paginator = page.paginator
         page_indexes = get_page_range(paginator.num_pages, page.number)
         page.page_count = page_indexes[-1]
+        page.diff_to_last_page = page.page_count - page.number
         pages = []
         for i in page_indexes:
             if i:
