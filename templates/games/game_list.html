@@ -167,7 +167,7 @@
 
       {% if page_obj.page_count > 1 %}
         <div class="pagination-block-wrapper">
-          <div class="meta-information hidden-xs" style="color: #aaa; font-size: 12px; position: absolute; left: 15px;">
+          <div class="meta-information hidden-xs">
             {% if page_obj.start_index == page_obj.end_index %}
               {{ page_obj.start_index }} of {{ page_obj.paginator.count }}
             {% else %}
