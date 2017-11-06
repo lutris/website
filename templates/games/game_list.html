@@ -115,6 +115,8 @@
   <!-- CONTENT -->
   <div class="col-sm-8 col-lg-9 col-sm-pull-4 col-lg-pull-3">
     <div class="pane">
+
+      <!-- BREADCRUMBS -->
       <ul class="breadcrumb">
         <li>
           <a href="/games">All</a>
@@ -146,24 +148,35 @@
         {% endif %}
       </ul>
 
-      <!-- GAME LIST -->
-      <ul class="game-list">
-        {% for game in games %}
-          {% include "includes/game_preview.html" %}
-        {% endfor %}
-        {% if not games %}
-          <p><em>No games found that match these criteria.</em></p>
+      <!-- CONTENT: GAME LIST | MESSAGE -->
+      {% if games %}
+        <ul class="game-list">
+          {% for game in games %}
+            {% include 'includes/game_preview.html' %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="filter-failure-message">
+          <p class="filter-failure-icon">
+            <span class="glyphicon glyphicon-alert"></span>
+          </p>
+          <p>No games found that match these criteria.</p>
           {% if not unpublished_filter and unpublished_match_count > 0 %}
             <p>
-              <em>However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished games</a> do.</em>
+              However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished
+              {% if unpublished_match_count == 1 %}
+                game</a> does.
+              {% else %}
+                games</a> do.
+              {% endif %}
             </p>
           {% else %}
             <p>
-              <em>Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.</em>
+              Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.
             </p>
           {% endif %}
-        {% endif %}
-      </ul>
+        </div>
+      {% endif %}
 
       {% if page_obj.page_count > 1 %}
         <div class="pagination-block-wrapper">
