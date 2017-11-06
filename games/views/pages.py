@@ -42,10 +42,13 @@ class GameList(ListView):
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = models.Game.objects.filter(change_for__isnull=True)
+            base_queryset = models.Game.objects.filter(change_for__isnull=True)
         else:
-            queryset = models.Game.objects.with_installer()
+            base_queryset = models.Game.objects.with_installer()
 
+        return self.get_filtered_queryset(base_queryset)
+
+    def get_filtered_queryset(self, queryset):
         statement = ''
 
         # Filter open source
@@ -121,12 +124,15 @@ class GameList(ListView):
                 break
         context['platforms'] = Platform.objects.with_games()
         context['genres'] = models.Genre.objects.with_games()
+        context['unpublished_match_count'] = self.get_filtered_queryset(
+            models.Game.objects.filter(is_public=False)
+        ).count()
         return context
 
 
 class GameListByYear(GameList):
-    def get_queryset(self):
-        queryset = super(GameListByYear, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByYear, self).get_filtered_queryset(queryset)
         return queryset.filter(year=self.args[0])
 
     def get_context_data(self, **kwargs):
@@ -137,8 +143,8 @@ class GameListByYear(GameList):
 
 class GameListByGenre(GameList):
     """View for games filtered by genre"""
-    def get_queryset(self):
-        queryset = super(GameListByGenre, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByGenre, self).get_filtered_queryset(queryset)
         return queryset.filter(genres__slug=self.args[0])
 
     def get_context_data(self, **kwargs):
@@ -152,8 +158,8 @@ class GameListByGenre(GameList):
 
 class GameListByCompany(GameList):
     """View for games filtered by publisher"""
-    def get_queryset(self):
-        queryset = super(GameListByCompany, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByCompany, self).get_filtered_queryset(queryset)
         return queryset.filter(Q(publisher__slug=self.args[0]) |
                                Q(developer__slug=self.args[0]))
 
@@ -168,8 +174,8 @@ class GameListByCompany(GameList):
 
 class GameListByPlatform(GameList):
     """View for games filtered by platform"""
-    def get_queryset(self):
-        queryset = super(GameListByPlatform, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByPlatform, self).get_filtered_queryset(queryset)
         return queryset.filter(platforms__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
