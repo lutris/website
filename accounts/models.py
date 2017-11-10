@@ -106,7 +106,7 @@ class EmailConfirmationToken(models.Model):
         try:
             user = User.objects.get(email=self.email)
         except User.DoesNotExist:
-            LOGGER.error("%s tried to confirm but does not exist", self.email)
+            LOGGER.warning("%s tried to confirm but does not exist", self.email)
             return
         except User.MultipleObjectsReturned:
             user = User.objects.filter(email=self.email).order_by('-id')[0]
