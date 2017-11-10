@@ -80,6 +80,12 @@ def initial_setup():
         run('git clone %s' % LUTRIS_REMOTE)
 
 
+def pip_list():
+    require('environment', provided_by=('staging', 'production'))
+    with cd(env.code_root):
+        with activate():
+            run('pip list')
+
 def requirements():
     require('environment', provided_by=('staging', 'production'))
     with cd(env.code_root):
