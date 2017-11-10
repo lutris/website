@@ -6,6 +6,7 @@ import re
 import json
 import random
 from itertools import chain
+from collections import defaultdict
 
 import six
 import reversion
@@ -732,7 +733,11 @@ class InstallerRevision(BaseInstaller):
         except yaml.scanner.ScannerError:
             installer_data['script'] = ['This installer is fucked up.']
         installer_data['id'] = self.id
-        return installer_data
+        # Return a defaultdict to prevent key errors for new fields that
+        # weren't present in previous revisions
+        default_installer_data = defaultdict(str)
+        default_installer_data.update(installer_data)
+        return default_installer_data
 
     def delete(self, using=None, keep_parents=False):
         self._version.delete()
