@@ -1257,6 +1257,25 @@ input {
   }
 }
 
+/**
+ * Box which shows a error message if applied filters returned
+ * an empty response in a list view
+ */
+.filter-failure-message {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+
+  & > .filter-failure-icon {
+    color: #444;
+    font-size: 60px;
+  }
+
+  & > p {
+    margin-top: 0 !important;
+  }
+}
+
 .latest-games {
     display: inline-flex;
     flex-wrap: wrap;
