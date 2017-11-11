@@ -256,6 +256,13 @@ input {
 .pagination-block-wrapper {
   margin-top: 20px;
 
+  .meta-information {
+    position: absolute;
+    color: #aaa;
+    font-size: 12px;
+    left: 15px;
+  }
+
   .pagination-block {
     display: table;
     margin: 0 auto;
@@ -266,6 +273,7 @@ input {
       margin: 0;
       background-color: #222;
       border-radius: 4px;
+      font-size: 14px;
 
       li {
         position: relative;
@@ -277,7 +285,12 @@ input {
         display: inline-block;
         color: #AEAEAE;
         margin: 0;
-        padding: 10px 15px;
+        padding: 10px 12px;
+      }
+
+      li span.glyphicon {
+        padding: 0;
+        font-size: 11px;
       }
 
       li a:hover span,
