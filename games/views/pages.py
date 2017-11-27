@@ -439,8 +439,12 @@ def get_icon(request, slug):
         game = None
     if not game or not game.icon:
         raise Http404
-    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
-                              format="PNG")
+    try:
+        thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
+                                  format="PNG")
+    except AttributeError:
+        game.icon.delete()
+        raise Http404
     return redirect(thumbnail.url)
 
 
