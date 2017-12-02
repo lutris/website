@@ -24,7 +24,33 @@
       </p>
     </article>
     <article>
+      <h2>Runners</h2>
+      <h3>What is a "Runner"?</h3>
+      <p>
+        A "runner" is the term we use to refer to programs that can run games,
+        it can be Linux itself, Wine, DOSBox, MAME, gzdoom, …
+        Runners are recognized as such in Lutris itself, not all programs that
+        run games are considered runners. For example Darkplaces, the open
+        source engine for Quake is not a runner but gzdoom is. Usually,
+        programs become runners if they can run a variety of games, not just
+        one or two.
+      </p>
+      <h3>I want to use your runners but I don't care for Lutris itself</h3>
+      <p>
+        Aww, that's too bad… :( But don't worry! All our runner builds are
+        freely downloadable from <a
+          href="https://lutris.net/files/runners/">here</a>.
+      </p>
+    </article>
+    <article>
       <h2>Wine games</h2>
+      <h3>How do I change the Wine version used in a game</h3>
+      <p>
+        If you already have a version of Wine installed, you should see a Wine
+        entry on the sidebar, you can right click on it then select "Manage
+        versions". From there you can install or remove any Wine build we
+        provide. The wine versions are downloaded to <code>~/.local/share/lutris/runners/wine/</code>
+      </p>
       <h3>The resolution is messed up, how can I fix that?</h3>
       <p>
         Resolution switching for Wine games heavily depends on your hardware
@@ -41,8 +67,6 @@
           Github wiki</a>
       </p>
     </article>
-
-
   </div>
 </div>
 {% endblock content %}
