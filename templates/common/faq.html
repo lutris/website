@@ -8,13 +8,13 @@
   <div class="col-md-12">
     <article>
       <h2>General</h2>
-      <h3>Does Lutris sell games</h3>
+      <h3 id='faq-sell-games'>Does Lutris sell games?</h3>
       <p>
         No, we don't sell commercial games on the platform, Lutris allows you
         to install and play games purchased on a variety on different game stores such as
         Steam, Humble Bundle, GOG, Battle.net, etc…
       </p>
-      <h3>I'm a game developer, can I publish my game on Lutris</h3>
+      <h3 id='faq-game-dev'>I'm a game developer, can I publish my game on Lutris?</h3>
       <p>
         You can create a page for your game and submit an installer for it but
         right now there aren't any special features for game developers. We do
@@ -22,10 +22,25 @@
         follow its development here: <a
           href='https://github.com/lutris/website/issues/83'>on Github</a>
       </p>
+      <h3 id='faq-runtime'>What is the Lutris runtime?</h3>
+      <p>
+        The Lutris runtime is a collection of libraries we automatically
+        provide to ensure compatibility with all games and runners over all
+        Linux distributions. The runtime itself is composed of parts of the <a
+          href="https://github.com/ValveSoftware/steam-runtime">Steam
+          runtime</a>, some Ubuntu 16.04 libraries and a few extra libraries
+        from various places.<br/>
+        Of course, ensuring binary compatibility over all existing Linux
+        distributions is not an easy task and sometimes issues will arise. If
+        such a thing happen, try disabling the runtime in the system options of
+        your game. For more details on the runtime, see the <a
+          href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">wiki</a>.
+      </p>
     </article>
+
     <article>
       <h2>Runners</h2>
-      <h3>What is a "Runner"?</h3>
+      <h3 id='faq-runner'>What is a "Runner"?</h3>
       <p>
         A "runner" is the term we use to refer to programs that can run games,
         it can be Linux itself, Wine, DOSBox, MAME, gzdoom, …
@@ -36,22 +51,23 @@
         one or two.
       </p>
       <h3>I want to use your runners but I don't care for Lutris itself</h3>
-      <p>
+      <p id='faq-download-runners'>
         Aww, that's too bad… :( But don't worry! All our runner builds are
         freely downloadable from <a
           href="https://lutris.net/files/runners/">here</a>.
       </p>
     </article>
+
     <article>
       <h2>Wine games</h2>
-      <h3>How do I change the Wine version used in a game</h3>
+      <h3 id='faq-wine-versions'>How do I change the Wine version used in a game?</h3>
       <p>
         If you already have a version of Wine installed, you should see a Wine
         entry on the sidebar, you can right click on it then select "Manage
         versions". From there you can install or remove any Wine build we
         provide. The wine versions are downloaded to <code>~/.local/share/lutris/runners/wine/</code>
       </p>
-      <h3>The resolution is messed up, how can I fix that?</h3>
+      <h3 id='faq-wine-resolution'>The resolution is messed up, how can I fix that?</h3>
       <p>
         Resolution switching for Wine games heavily depends on your hardware
         and your desktop environment and also the game itself.<br/>
@@ -60,7 +76,7 @@
         native resolution. Once the game is using your native resolution, you
         should be able to turn off the virtual desktop.
       </p>
-      <h3>I'm just here for Overwatch, don't care about anything else</h3>
+      <h3 id='faq-overwatch'>I'm just here for Overwatch, don't care about anything else</h3>
       <p>
         Please refer to the following article <a
           href="https://github.com/lutris/lutris/wiki/Game:-Overwatch">on the
