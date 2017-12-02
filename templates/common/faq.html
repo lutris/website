@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Lutris F.A.Q.{% endblock title %}
+
+{% block content %}
+<h1>Frequently asked questions</h1>
+
+<div class='row'>
+  <div class="col-md-12">
+    <h2>General</h2>
+    <article>
+      <h3>Does Lutris sell games</h3>
+      <p>
+        No, we don't sell commercial games on the platform, Lutris allows you
+        to install and play games purchased on a variety on different game stores such as
+        Steam, Humble Bundle, GOG, Battle.net, etc…
+      </p>
+      <h3>I'm a game developer, can I publish my game on Lutris</h3>
+      <p>
+        You can create a page for your game and submit an installer for it but
+        right now there aren't any special features for game developers. We do
+        have some plan to add a game developer role to the website, you can
+        follow its development here: <a
+          href='https://github.com/lutris/website/issues/83'>on Github</a>
+      </p>
+    </article>
+    <h3>Wine games</h3>
+    <article>
+      <h3>The resolution is messed up, how can I fix that?</h3>
+      <p>
+        Resolution switching for Wine games heavily depends on your hardware
+        and your desktop environment and also the game itself.<br/>
+        If you are experiencing issues, try using a virtual desktop in the Wine
+        runner options then start the game and set it to use your monitor's
+        native resolution. Once the game is using your native resolution, you
+        should be able to turn off the virtual desktop.
+      </p>
+    </article>
+
+
+  </div>
+</div>
+{% endblock content %}
