@@ -59,7 +59,7 @@ def list_change_submissions_view(request, game_id=None):
     # Determine title
     title = 'Change submissions'
     if game_id:
-        title = "{title} for '{name}'".format(title=title, name=game.name)
+        title = u"{title} for '{name}'".format(title=title, name=game.name)
 
     context = dict(
         title=title,
