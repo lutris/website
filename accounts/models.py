@@ -58,6 +58,7 @@ class User(AbstractUser):
         self.gamelibrary.delete()
         self.groups.clear()
         self.authtoken_set.all().delete()
+        self.useropenid_set.all().delete()
         self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
         self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
         self.is_active = False
