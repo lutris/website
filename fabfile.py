@@ -223,14 +223,6 @@ def deploy():
     supervisor_restart()
 
 
-def fastdeploy():
-    pull()
-    bower()
-    grunt()
-    collect_static()
-    supervisor_restart()
-
-
 def pythonfix():
     """Apply a fix fro Python code only (no migration, no frontend change)"""
     pull()
