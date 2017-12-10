@@ -1,6 +1,5 @@
 # pylint: disable=R0903
-from django.db.models import Manager
-from django.db.models import Q, Count
+from django.db.models import Count, Manager, Q
 
 
 class ScreenshotManager(Manager):

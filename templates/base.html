@@ -10,8 +10,9 @@
   <meta name="description" content="Lutris is a gaming platform for Linux. It supports as many games as possible for a wide variety of platforms (native games, Windows, Playstation, Gamecube, SNES, Arcade games, Amiga, etc ...). "/>
   <meta name="keywords" content="Lutris, Linux, GNU / Linux, gaming, video games, native, humble bundle, loki, windows games, nintendo, sega, playstation, dos, amiga, atari, neo geo, pc engine, joypad, joystick, python, open source, free software, gpl, steam, desura" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
-  <link rel="publisher" href="https://plus.google.com/+LutrisNet">
-  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+  <link rel="publisher" href="https://plus.google.com/+LutrisNet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700,800,900"
+      rel="stylesheet" type="text/css" />
   <link type="text/css" href="{{ STATIC_URL }}css/libs.min.css" rel="stylesheet" />
   <link type="text/css" href="{{ STATIC_URL }}css/lutris.min.css" rel="stylesheet" />
   {% block stylesheets %}{% endblock %}
@@ -20,47 +21,84 @@
 <body>
   {% if messages %}
   <ul class="alerts">
-      {% for message in messages %}
+    {% for message in messages %}
       <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
         {{ message }}
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       </li>
-      {% endfor %}
+    {% endfor %}
   </ul>
   {% endif %}
   <div class="container">
     <nav class="navbar navbar-default navbar-inverse">
       <div class="container-fluid">
+
+        <!-- NAV ICONS + BRAND -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <!-- MENU BUTTON -->
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
           </button>
-          <a class="navbar-brand brand" href='/'>
-            <img class='logo' src='{{ STATIC_URL }}images/logo-big.png' alt='Lutris'/>
-            <p>
+
+          <!-- SEARCH GAME BUTTON -->
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#search-games" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Search games</span>
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          </button>
+
+          <!-- BRAND -->
+          <a class="navbar-brand brand" href="/">
+            <img class="logo" src="{{ STATIC_URL }}images/logo-big.png" alt="Lutris" />
+            <p class="hidden-sm hidden-xs">
               Lutris<br/><span>Open Gaming Platform</span>
             </p>
           </a>
         </div>
+
+        <!-- SEARCH GAME COLLAPSE -->
+        <div id="search-games" class="navbar-collapse collapse">
+          <div class="search-games-content">
+            <form action="{% url 'game_list' %}" method="get" class="form-inline">
+              <div class="input-group">
+                <input type="text" name="q" class="search-query form-control" id="global-search"
+                    placeholder="Search…" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">Search</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- MENU COLLAPSE -->
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right" id='main-nav'>
-            <li><a href='{% url "about" %}'>About</a></li>
-            <li><a href='{% url "downloads" %}'>Download</a></li>
-            <li><a href="{% url "game_list" %}">Games</a></li>
+          <ul class="nav navbar-nav navbar-right" id="main-nav">
+            <li><a href="{% url 'downloads' %}">Download</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'faq' %}">FAQ</a></li>
+            <li><a href="{% url 'game_list' %}">Games</a></li>
             <li><a href="https://forums.lutris.net">Forums</a></li>
             {% if user.is_authenticated %}
-              <li><a href="{% url "library_show" user.username %}">My Library</a></li>
-              <li><a href="{% url "user_account" user.username %}">My account</a></li>
-              <li><a href="{% url "logout" %}">Logout</a></li>
+              <li><a href="{% url 'library_show' user.username %}">My Library</a></li>
+              <li><a href="{% url 'user_account' user.username %}">My Account</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
-              <li><a href="{% url "login" %}">Login</a></li>
-              <li><a href="{% url "register" %}">Register</a></li>
+              <li><a href="{% url 'login' %}">Login</a></li>
+              <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
+            <li class="hidden-xs">
+              <a href="#" class="collapsed" data-toggle="collapse" data-target="#search-games"
+                  aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Search games</span>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </a>
+            </li>
           </ul>
         </div>
+
       </div>
     </nav>
 
@@ -102,6 +140,11 @@
                 </a>
               </li>
               <li>
+                <a href="https://discord.gg/GC8vA6C">
+                  <img src="{{ STATIC_URL }}images/icons/discord-32.png" title="Discord channel">
+                </a>
+              </li>
+              <li>
                 <a href="irc://irc.freenode.org:6667/lutris">
                   <img src="{{ STATIC_URL }}images/icons/chat-32.png" title="IRC (#lutris on Freenode)">
                 </a>
@@ -113,7 +156,8 @@
             <h5>Support us!</h5>
             <p>
               <a href="https://patreon.com/lutris">
-                <img src="{% static 'images/patreon_white.png' %}" alt="Support Lutris on Patreon" />
+                <img src="{% static 'images/patreon_white.png' %}" alt="Support Lutris on Patreon"
+                    style="width: 100%; max-width: 240px;" />
               </a>
             </p>
           </div>
@@ -137,6 +181,16 @@
   </div>
   <script src="{% static 'js/libs.js' %}"></script>
   <script src="{% static 'js/app.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      $('#search-games').on('show.bs.collapse', function() {
+        // Wait a little while: calling focus on hidden objects will blur immediately
+        setTimeout(function() {
+          document.getElementById('global-search').focus();
+        }, 50);
+      });
+    });
+  </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

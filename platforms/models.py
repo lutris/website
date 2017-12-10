@@ -24,6 +24,7 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)
+    tgdb_name = models.CharField(max_length=255, blank=True)
 
     objects = PlatformManager()
 
@@ -36,7 +37,7 @@ class Platform(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(unicode(self.name))
+            self.slug = slugify(self.name)
         return super(Platform, self).save(*args, **kwargs)
 
     @staticmethod

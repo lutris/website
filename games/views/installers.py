@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics
+from rest_framework import mixins
 from rest_framework.response import Response
 from rest_framework import status
 from reversion.models import Version
@@ -40,17 +41,20 @@ class GameRevisionListView(generics.RetrieveAPIView):
     """Returns the list of revisions """
     permission_classes = [IsAdminUser]
     serializer_class = serializers.GameRevisionSerializer
-    queryset = models.Game.objects.all()
+    queryset = models.Game.objects.filter(change_for__isnull=True)
     lookup_field = 'slug'
 
 
-class InstallerRevisionListView(generics.ListAPIView):
+class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
     def get_queryset(self):
         installer = models.Installer.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         return installer.revisions
+
+    def delete(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):

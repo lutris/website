@@ -10,21 +10,30 @@
         <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
       {% endif %}
       <span>{{ game.name }}</span>
-      {% if user.is_staff %}
         <div class="buttons">
-          {% if not game.is_public %}
-            <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+          <a class="btn" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
+          {% if user.is_staff %}
+            {% if can_edit and pending_change_subm_count > 0 %}
+              <a class="btn" href="{% url 'admin-change-submissions' game.id %}">
+                {{ pending_change_subm_count }} pending change
+                suggestion{% if pending_change_subm_count > 1 %}s{% endif %}
+              </a>
+            {% endif %}
+            {% if can_publish and not game.is_public %}
+              <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+            {% endif %}
+            {% if can_edit %}
+              <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+            {% endif %}
           {% endif %}
-          <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
         </div>
-      {% endif %}
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-3 col-md-push-9">
       <div class="game-info">
-        {% thumbnail game.title_logo "184" as img %}
+        {% thumbnail game.title_logo "300" as img %}
           <img src="{{ img.url }}" class="banner" />
         {% endthumbnail %}
         <ul>
@@ -65,7 +74,7 @@
           {% if game.website %}
           <li class="ellipse-text">
               <span class="info-label">Website: </span>
-              <a href='{{ game.website }}'>{{ game.website_text }}</a>
+              <a href='{{ game.website_url }}'>{{ game.website_url_hr }}</a>
           </li>
           {% endif %}
         </ul>
@@ -129,8 +138,8 @@
 
     <div class="col-md-9 col-md-pull-3">
       {% include "includes/screenshots_slider.html" %}
-      <div class="screenshots-bar">
-        <a href='{% url 'screenshot_add' game.slug %}' class='discreet-text right'>Submit screenshot</a>
+      <div class="screenshots-bar actions-bar">
+        <a href='{% url 'screenshot_add' game.slug %}'>Submit screenshot</a>
       </div>
       <div class="installer-list">
         {% if installers %}
@@ -154,14 +163,20 @@
           {% endfor %}
         </ul>
         {% endif %}
-        <div class="installer-actions">
+        <div class="installer-actions actions-bar">
           {% if unpublished_installers %}
-            <a href="#" onclick="toggleUnpublishedInstallers(event)" class="discreet-text">Show unpublished installers</a>
+            <a href="#" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</a>
           {% endif %}
           {% if user.is_staff %}
-            <a href="{% url 'installer_review' slug=game.slug %} " class="discreet-text">Review installers</a>
+            <a href="{% url 'installer_review' slug=game.slug %} ">Review installers</a>
           {% endif %}
-          <a href="{% url "new_installer" slug=game.slug %}" class="discreet-text">Write a new installer</a>
+          {% if game.flags.protected %}
+          <span class='warning'>Installer creation is restricted
+            <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
+          </span>
+          {% else %}
+            <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
+          {% endif %}
         </div>
       </div>
       <article>

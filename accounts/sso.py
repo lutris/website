@@ -23,8 +23,8 @@ A SSO request handler might look something like
         return redirect('http://discuss.example.com' + url)
 """
 import base64
-import hmac
 import hashlib
+import hmac
 import logging
 
 try:  # py3

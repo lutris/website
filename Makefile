@@ -1,9 +1,12 @@
 setup:
 	npm install
-	bower install --allow-root
-	grunt
+	npm run setup
+
+watch:
+	npm run watch
+
 run:
-	./manage.py runserver
+	./manage.py runserver 0.0.0.0:8000
 
 db:
 	./manage.py migrate
@@ -18,7 +21,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	./manage.py test $(test)
+	SEND_EMAILS=0 ./manage.py test --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)

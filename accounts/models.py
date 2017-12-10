@@ -1,15 +1,15 @@
-import uuid
-import hmac
 import datetime
-import logging
 import hashlib
+import hmac
+import logging
+import uuid
 from urllib.parse import urlencode
 
-from django.db import models
-from django.utils import timezone
 from django.conf import settings
-from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 from django_openid_auth.models import UserOpenID
 
 from emails import messages
@@ -57,6 +57,22 @@ class User(AbstractUser):
         # Hmac that beast.
         return hmac.new(new_uuid.bytes, digestmod=hashlib.sha1).hexdigest()
 
+    def deactivate(self):
+        self.gamelibrary.delete()
+        self.groups.clear()
+        self.authtoken_set.all().delete()
+        self.useropenid_set.all().delete()
+        self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
+        self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
+        self.is_active = False
+        self.is_staff = False
+        self.email_confirmed = False
+        self.email = ''
+        self.avatar = ''
+        self.steamid = ''
+        self.key = ''
+        self.save()
+
 
 class AuthToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -64,9 +80,11 @@ class AuthToken(models.Model):
     token = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         self.token = str(uuid.uuid4())
-        return super(AuthToken, self).save(*args, **kwargs)
+        return super(AuthToken, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                           update_fields=update_fields)
 
 
 class EmailConfirmationToken(models.Model):
@@ -92,7 +110,7 @@ class EmailConfirmationToken(models.Model):
         try:
             user = User.objects.get(email=self.email)
         except User.DoesNotExist:
-            LOGGER.error("%s tried to confirm but does not exist", self.email)
+            LOGGER.warning("%s tried to confirm but does not exist", self.email)
             return
         except User.MultipleObjectsReturned:
             user = User.objects.filter(email=self.email).order_by('-id')[0]

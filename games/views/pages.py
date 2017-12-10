@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.core.mail import mail_managers
 from django.db.models import Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -22,10 +22,11 @@ from django.views.generic import ListView
 from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import user_confirmed_required
+from accounts.decorators import (check_installer_restrictions,
+                                 user_confirmed_required)
 from games import models
-from games.forms import (ForkInstallerForm, GameForm,
-                         InstallerForm, ScreenshotForm)
+from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
+                         InstallerEditForm, InstallerForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from platforms.models import Platform
@@ -41,10 +42,13 @@ class GameList(ListView):
     def get_queryset(self):
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            queryset = models.Game.objects.all()
+            base_queryset = models.Game.objects.filter(change_for__isnull=True)
         else:
-            queryset = models.Game.objects.with_installer()
+            base_queryset = models.Game.objects.with_installer()
 
+        return self.get_filtered_queryset(base_queryset)
+
+    def get_filtered_queryset(self, queryset):
         statement = ''
 
         # Filter open source
@@ -92,6 +96,8 @@ class GameList(ListView):
         page = context['page_obj']
         paginator = page.paginator
         page_indexes = get_page_range(paginator.num_pages, page.number)
+        page.page_count = page_indexes[-1]
+        page.diff_to_last_page = page.page_count - page.number
         pages = []
         for i in page_indexes:
             if i:
@@ -119,12 +125,15 @@ class GameList(ListView):
                 break
         context['platforms'] = Platform.objects.with_games()
         context['genres'] = models.Genre.objects.with_games()
+        context['unpublished_match_count'] = self.get_filtered_queryset(
+            models.Game.objects.filter(is_public=False)
+        ).count()
         return context
 
 
 class GameListByYear(GameList):
-    def get_queryset(self):
-        queryset = super(GameListByYear, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByYear, self).get_filtered_queryset(queryset)
         return queryset.filter(year=self.args[0])
 
     def get_context_data(self, **kwargs):
@@ -135,8 +144,8 @@ class GameListByYear(GameList):
 
 class GameListByGenre(GameList):
     """View for games filtered by genre"""
-    def get_queryset(self):
-        queryset = super(GameListByGenre, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByGenre, self).get_filtered_queryset(queryset)
         return queryset.filter(genres__slug=self.args[0])
 
     def get_context_data(self, **kwargs):
@@ -150,8 +159,8 @@ class GameListByGenre(GameList):
 
 class GameListByCompany(GameList):
     """View for games filtered by publisher"""
-    def get_queryset(self):
-        queryset = super(GameListByCompany, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByCompany, self).get_filtered_queryset(queryset)
         return queryset.filter(Q(publisher__slug=self.args[0]) |
                                Q(developer__slug=self.args[0]))
 
@@ -166,8 +175,8 @@ class GameListByCompany(GameList):
 
 class GameListByPlatform(GameList):
     """View for games filtered by platform"""
-    def get_queryset(self):
-        queryset = super(GameListByPlatform, self).get_queryset()
+    def get_filtered_queryset(self, queryset):
+        queryset = super(GameListByPlatform, self).get_filtered_queryset(queryset)
         return queryset.filter(platforms__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
@@ -197,15 +206,18 @@ def game_detail(request, slug):
     banner_options = {'crop': 'top', 'blur': '14x6'}
     banner_size = "940x352"
     user = request.user
-    game.website_text = game.website[6:].strip('/')
 
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
+    pending_change_subm_count = 0
 
     if user.is_authenticated():
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user,
                                                     is_staff=user.is_staff)
+
+        if user.is_staff and user.has_perm('games.change_game'):
+            pending_change_subm_count = len(Game.objects.filter(change_for=game))
     else:
         in_library = False
         screenshots = game.screenshot_set.published()
@@ -220,6 +232,9 @@ def game_detail(request, slug):
                    'banner_size': banner_size,
                    'in_library': in_library,
                    'library_count': library_count,
+                   'pending_change_subm_count': pending_change_subm_count,
+                   'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
+                   'can_edit': user.is_staff and user.has_perm('games.change_game'),
                    'installers': installers,
                    'auto_installers': auto_installers,
                    'unpublished_installers': unpublished_installers,
@@ -227,6 +242,7 @@ def game_detail(request, slug):
 
 
 @user_confirmed_required
+@check_installer_restrictions
 def new_installer(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
     installer = Installer(game=game)
@@ -243,6 +259,7 @@ def new_installer(request, slug):
 
 
 @user_confirmed_required
+@check_installer_restrictions
 def edit_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
     if 'delete' in request.POST:
@@ -276,7 +293,7 @@ def edit_installer(request, slug):
         if 'runner_id' in initial_data:
             initial_data['runner'] = initial_data['runner_id']
 
-    form = InstallerForm(request.POST or None, instance=installer, initial=initial_data)
+    form = InstallerEditForm(request.POST or None, instance=installer, initial=initial_data)
     if request.method == 'POST' and form.is_valid():
         with reversion.create_revision():
             installer = form.save(commit=False)
@@ -307,6 +324,7 @@ def delete_installer(request, slug):
     if request.method == 'POST' and 'delete' in request.POST:
         game = installer.game
         installer_name = installer.slug
+        # TODO Delete revisions
         installer.delete()
         messages.warning(
             request,
@@ -318,11 +336,9 @@ def delete_installer(request, slug):
     })
 
 
-@login_required
+@staff_member_required
 def publish_installer(request, slug):
     installer = get_object_or_404(Installer, slug=slug)
-    if not request.user.is_staff:
-        raise Http404
     installer.published = True
     installer.save()
     return redirect('game_detail', slug=installer.game.slug)
@@ -359,9 +375,9 @@ def view_installer(request, id):
 
 
 @user_confirmed_required
-def fork_installer(request, id):
+def fork_installer(request, slug):
     try:
-        installer = Installer.objects.get(pk=id)
+        installer = Installer.objects.get(slug=slug)
     except Installer.DoesNotExist:
         raise Http404
     form = ForkInstallerForm(request.POST or None, instance=installer)
@@ -423,23 +439,20 @@ def get_icon(request, slug):
         game = None
     if not game or not game.icon:
         raise Http404
-    thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
-                              format="PNG")
+    try:
+        thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center",
+                                  format="PNG")
+    except AttributeError:
+        game.icon.delete()
+        raise Http404
     return redirect(thumbnail.url)
 
 
 def game_list(request):
     """View for all games"""
-    games = models.Game.objects.all()
+    games = models.Game.objects.filter(change_for__isnull=True)
     return render(request, 'games/game_list.html', {'games': games})
 
-
-# def games_by_runner(request, runner_slug):
-#     """View for games filtered by runner"""
-#     runner = get_object_or_404(Runner, slug=runner_slug)
-#     games = models.Game.objects.filter(runner__slug=runner.slug)
-#     return render(request, 'games/game_list.html',
-#                   {'games': games})
 
 @user_confirmed_required
 def submit_game(request):
@@ -467,6 +480,54 @@ def submit_game(request):
         LOGGER.info('Game submitted, redirecting to %s', redirect_url)
         return redirect(redirect_url)
     return render(request, 'games/submit.html', {'form': form})
+
+
+@user_confirmed_required
+def edit_game(request, slug):
+    """Lets the user suggest changes to a game for a moderator to verify"""
+
+    # Load game object and get changeable fields and their defaults
+    game = get_object_or_404(Game, slug=slug)
+    change_model = game.get_change_model()
+
+    # Workaround: Assigning change_model to initial in the form
+    # directly will display the error immediately that changes must be made
+    initial = change_model if request.method == 'POST' else None
+
+    # Sanity check: Disallow change-suggestions for changes
+    if game.change_for:
+        return HttpResponseBadRequest('You can only apply changes to a game')
+
+    # Initialise form with rejected values or with the working copy
+    form = GameEditForm(request.POST or change_model, request.FILES or None, initial=initial)
+
+    # If form was submitted and is valid, persist suggestion for moderation
+    if request.method == 'POST' and form.is_valid():
+        # Save the game
+        change_suggestion = form.save(commit=False)
+        change_suggestion.change_for = game
+        change_suggestion.save()
+        form.save_m2m()
+
+        # Save metadata (author + reason)
+        change_suggestion_meta = GameSubmission(
+            user=request.user,
+            game=change_suggestion,
+            reason=request.POST['reason']
+        )
+        change_suggestion_meta.save()
+
+        redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
+
+        # Enforce https
+        if not settings.DEBUG:
+            redirect_url = redirect_url.replace('http:', 'https:')
+
+        LOGGER.info('Change-suggestions for game submitted, redirecting to %s', redirect_url)
+        return redirect(redirect_url)
+
+    # Render template
+    return render(request, 'games/submit.html', {'form': form, 'game': game})
 
 
 def publish_game(request, id):
@@ -533,7 +594,11 @@ def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
     installers = Installer.objects.filter(published=False)[:20]
-    unpublished_games = Game.objects.filter(installers__isnull=False, is_public=False).distinct()
+    unpublished_games = (
+        Game.objects.filter(change_for__isnull=True)
+        .filter(installers__isnull=False, is_public=False)
+        .distinct()
+    )
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
         'drafts': drafts,

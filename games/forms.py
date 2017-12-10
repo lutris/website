@@ -1,20 +1,17 @@
 """Forms for the main app"""
 # pylint: disable=W0232, R0903
 import os
-import yaml
 from collections import OrderedDict
 
-from django import forms
-from django.conf import settings
-from django.utils.text import slugify
-from django.utils.safestring import mark_safe
-
+import yaml
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-
-from django_select2.forms import (
-    Select2MultipleWidget, HeavySelect2Widget, Select2Widget, ModelSelect2Widget
-)
+from django import forms
+from django.conf import settings
+from django.utils.safestring import mark_safe
+from django.utils.text import slugify
+from django_select2.forms import (HeavySelect2Widget, ModelSelect2Widget,
+                                  Select2MultipleWidget, Select2Widget)
 
 from common.util import get_auto_increment_slug
 from games import models
@@ -61,6 +58,7 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
+
         self.fields['search'] = forms.CharField(
             widget=HeavySelect2Widget(
                 data_view='tgd.search_json'
@@ -96,9 +94,9 @@ class GameForm(forms.ModelForm):
             "If you can't make a good banner, don't worry. Somebody will "
             "eventually make a better one. Probably."
         )
+
         fields_order = [
-            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description',
-            'title_logo',
+            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description', 'title_logo'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
@@ -121,6 +119,7 @@ class GameForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         slug = slugify(name)[:50]
+
         try:
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
@@ -134,6 +133,54 @@ class GameForm(forms.ModelForm):
                        "submitted</a>, you're welcome to nag us so we "
                        "publish it faster.") % slug
             raise forms.ValidationError(mark_safe(msg))
+
+
+class GameEditForm(forms.ModelForm):
+    """Form to suggest changes for games"""
+
+    reason = forms.CharField(
+        required=False,
+        help_text=(
+            'Please describe briefly, why this change is necessary.'
+            'Please also add sources if applicable.'
+        )
+    )
+
+    class Meta(object):
+        """Form configuration"""
+
+        model = models.Game
+        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description', 'reason')
+        widgets = {
+            'platforms': Select2MultipleWidget,
+            'genres': Select2MultipleWidget
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(GameEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label = 'Title'
+        self.fields['year'].label = 'Release year'
+
+        fields_order = [
+            'name', 'year', 'website', 'platforms', 'genres', 'description', 'reason'
+        ]
+        self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
+
+        self.helper = FormHelper()
+        self.helper.include_media = False
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    def clean(self):
+        """Overwrite clean to fail validation if unchanged form was submitted"""
+
+        cleaned_data = super(GameEditForm, self).clean()
+
+        # Raise error if nothing actually changed
+        if not self.has_changed():
+            raise forms.ValidationError('You have not changed anything')
+
+        return cleaned_data
 
 
 class FeaturedForm(forms.ModelForm):
@@ -185,7 +232,8 @@ class InstallerForm(forms.ModelForm):
                 "the actual software version of the game... Whatever makes "
                 "the most sense."
             ),
-            'description': "Additional details.",
+            'description': ("Additional details about the installer. "
+                            "Do NOT put a description for the game, it will be deleted"),
             'notes': ("Describe any known issues or manual tasks required "
                       "to run the game properly."),
         }
@@ -235,6 +283,26 @@ class InstallerForm(forms.ModelForm):
             # Draft status depends on the submit button clicked
             self.cleaned_data['draft'] = 'save' in self.data
             return self.cleaned_data
+
+
+class InstallerEditForm(InstallerForm):
+    """Form to edit an installer"""
+
+    class Meta(InstallerForm.Meta):
+        """Form configuration"""
+
+        fields = ['runner', 'version', 'description', 'notes', 'reason',
+                  'content', 'draft']
+
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'installer-textarea'}),
+        required=False,
+        help_text='Please describe briefly, why this change is necessary or useful. '
+                  'This will help us moderate the changes.'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(InstallerEditForm, self).__init__(*args, **kwargs)
 
 
 class ForkInstallerForm(forms.ModelForm):

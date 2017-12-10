@@ -1,12 +1,13 @@
 # pylint: disable=W0613
 import logging
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 from tastypie.models import create_api_key
 
-from . import models
 from emails import messages
+
+from . import models
 
 LOGGER = logging.getLogger(__name__)
 

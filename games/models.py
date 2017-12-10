@@ -1,29 +1,34 @@
 """Models for main lutris app"""
-# pylint: disable=E1002, E0202
-import json
-import datetime
-import yaml
-from itertools import chain
 
-from django.db import models
-from django.db.models import Q, Count
+import datetime
+# pylint: disable=E1002, E0202
+import re
+import json
+import random
+from itertools import chain
+from collections import defaultdict
+
+import six
+import reversion
+import yaml
+from bitfield import BitField
 from django.conf import settings
-from django.utils.text import slugify
-from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-from bitfield import BitField
+from django.db import models
+from django.db.models import Count, Q
+from django.urls import reverse
+from django.utils.text import slugify
 from reversion.models import Version
-import reversion
 
 from common.util import get_auto_increment_slug
-from platforms.models import Platform
-from runners.models import Runner
+from emails import messages
 from games import managers
 from games.util import steam
-from emails import messages
+from platforms.models import Platform
+from runners.models import Runner
 
 DEFAULT_INSTALLER = {
     'files': [
@@ -55,11 +60,11 @@ class Company(models.Model):
     def __unicode__(self):
         return u"%s" % self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         self.slug = slugify(self.name)
         if not self.slug:
             raise ValueError("Tried to save Company without a slug: %s", self)
-        return super(Company, self).save(*args, **kwargs)
+        return super(Company, self).save(force_insert=force_insert, using=using)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -77,13 +82,16 @@ class Genre(models.Model):
     class Meta:
         ordering = ['name']
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save(*args, **kwargs)
+        return super(Genre, self).save(force_insert=force_insert, using=using)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -92,20 +100,40 @@ class Genre(models.Model):
 
 class GameManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(is_public=True)
+        return self.get_queryset().filter(change_for__isnull=True, is_public=True)
 
     def with_installer(self):
         return (
             self.get_queryset()
+            .filter(change_for__isnull=True)
             .filter(is_public=True)
             .filter(
-                Q(installers__published=True)
-                | Q(platforms__default_installer__startswith='{')
+                Q(installers__published=True) |
+                Q(platforms__default_installer__startswith='{')
             )
             .order_by('name')
             .annotate(installer_count=Count('installers'))
             .annotate(default_installer_count=Count('platforms'))
         )
+
+    def get_random(self, option=""):
+        if not re.match('^[\w\d-]+$', option) or len(option) > 128:
+            return
+        pk_query = self.get_queryset()
+        if option == 'incomplete':
+            pk_query = pk_query.filter(change_for__isnull=True, year=None)
+        elif option == 'published':
+            pk_query = self.with_installer()
+        elif len(option) > 1:
+            pk_query = pk_query.filter(
+                Q(platforms__slug=option) |
+                Q(installers__runner__slug=option)
+            )
+        pks = pk_query.values_list('pk', flat=True)
+        if not pks:
+            return
+        random_pk = random.choice(pks)
+        return self.get_queryset().get(pk=random_pk)
 
 
 class Game(models.Model):
@@ -117,9 +145,10 @@ class Game(models.Model):
         ('freetoplay', 'Free-to-play'),
         ('pwyw', 'Pay what you want'),
         ('demo', 'Has a demo'),
+        ('protected', 'Installer modification is restricted'),
     )
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=False)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform)
     genres = models.ManyToManyField(Genre)
@@ -142,6 +171,11 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
 
+    # Indicates whether this data row is a changeset for another data row.
+    # If so, this attribute is not NULL and the value is the ID of the
+    # corresponding data row
+    change_for = models.ForeignKey('self', null=True, blank=True)
+
     objects = GameManager()
 
     # pylint: disable=W0232, R0903
@@ -152,11 +186,39 @@ class Game(models.Model):
         )
 
     def __unicode__(self):
-        return self.name
+        if self.change_for is None:
+            return self.name
+        else:
+            return '[Changes for] ' + self.change_for.name
 
     @staticmethod
     def autocomplete_search_fields():
         return ("name__icontains",)
+
+    @property
+    def website_url(self):
+        """Returns self.website guaranteed to be a valid URI"""
+
+        if not self.website:
+            return None
+
+        # Fall back to http if no protocol specified (cannot assume that https will work)
+        has_protocol = '://' in self.website
+        return 'http://' + self.website if not has_protocol else self.website
+
+    @property
+    def website_url_hr(self):
+        """Returns a human readable website URL (stripped protocols and trailing slashes)"""
+
+        if not self.website:
+            return None
+
+        return (
+            self.website
+            .split('https:', 1)[-1]
+            .split('http:', 1)[-1]
+            .strip('/')
+        )
 
     @property
     def banner_url(self):
@@ -172,6 +234,51 @@ class Game(models.Model):
     def flag_labels(self):
         """Return labels of active flags, suitable for display"""
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
+
+    def get_change_model(self):
+        """Returns a dictionary which can be used as initial value in forms"""
+
+        copy = {
+            'name': self.name,
+            'year': self.year,
+            'website': self.website,
+            'description': self.description,
+            'platforms': [x.id for x in list(self.platforms.all())],
+            'genres': [x.id for x in list(self.genres.all())]
+        }
+
+        return copy
+
+    def get_changes(self):
+        """Returns a dictionary of the changes"""
+
+        changes = []
+        considered_entries = ['name', 'year', 'platforms', 'genres', 'website', 'description']
+
+        # From the considered fields, only those who differ will be returned
+        for entry in considered_entries:
+            old_value = getattr(self.change_for, entry)
+            new_value = getattr(self, entry)
+
+            # M2M relations to string
+            if entry in ['platforms', 'genres']:
+                old_value = ', '.join('[{0}]'.format(str(x)) for x in list(old_value.all()))
+                new_value = ', '.join('[{0}]'.format(str(x)) for x in list(new_value.all()))
+
+            if old_value != new_value:
+                changes.append((entry, old_value, new_value))
+
+        return changes
+
+    def apply_changes(self, change_set):
+        """Applies user-suggested changes to this model"""
+
+        self.name = change_set.name
+        self.year = change_set.year
+        self.platforms.set(change_set.platforms.all())
+        self.genres.set(change_set.genres.all())
+        self.website = change_set.website
+        self.description = change_set.description
 
     def has_installer(self):
         return self.installers.exists() or self.has_auto_installers()
@@ -207,8 +314,7 @@ class Game(models.Model):
             return 'linux'
         elif 'windows' in platforms:
             return 'windows'
-        else:
-            return True
+        return True
 
     def get_default_installers(self):
         installers = []
@@ -228,7 +334,6 @@ class Game(models.Model):
         return installers
 
     def check_for_submission(self):
-
         # Skip freshly created and unpublished objects
         if not self.pk or not self.is_public:
             return
@@ -246,12 +351,16 @@ class Game(models.Model):
         else:
             submission.accept()
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)[:50]
-        self.download_steam_capsule()
-        self.check_for_submission()
-        return super(Game, self).save(*args, **kwargs)
+    def save(self, force_insert=True, using=None):
+        # Only create slug etc. if this is a game submission, no change submission
+        if not self.change_for:
+            if not self.slug:
+                self.slug = slugify(self.name)[:50]
+            if not self.slug:
+                raise ValueError("Can't generate a slug for name %s" % self.name)
+            self.download_steam_capsule()
+            self.check_for_submission()
+        return super(Game, self).save()
 
 
 class GameMetadata(models.Model):
@@ -282,6 +391,13 @@ class InstallerManager(models.Manager):
 
     def unpublished(self):
         return self.get_queryset().filter(published=False)
+
+    def abandoned(self):
+        """Return the installer with 'Change Me' version that haven't received any modifications"""
+        return [
+            installer for installer in self.get_queryset().filter(version='Change Me')
+            if not Version.objects.filter(object_id=installer.id, content_type__model='installer').count()
+        ]
 
     def _fuzzy_search(self, slug, return_models=False):
         try:
@@ -317,9 +433,12 @@ class InstallerManager(models.Manager):
                         pass
                     else:
                         if return_models:
-                            auto_installer = AutoInstaller(game, platform)
-                            if auto_installer.slug == slug:
-                                return [auto_installer]
+                            try:
+                                auto_installer = AutoInstaller(game, platform)
+                                if auto_installer.slug == slug:
+                                    return [auto_installer]
+                            except ObjectDoesNotExist:
+                                pass
                         else:
                             auto_installers = game.get_default_installers()
                             for auto_installer in auto_installers:
@@ -379,14 +498,18 @@ class BaseInstaller(models.Model):
         return self.game.slug
 
     def as_dict(self, with_metadata=True):
-        yaml_content = yaml.safe_load(self.content) or {}
+        try:
+            yaml_content = yaml.safe_load(self.content) or {}
+        except yaml.parser.ParserError:
+            LOGGER.exception("Invalid YAML %s" % self.content)
+            yaml_content = {}
 
         # Allow pasting raw install scripts (which are served as lists)
         if isinstance(yaml_content, list):
             yaml_content = yaml_content[0]
 
         # If yaml content evaluates to a string return an empty dict
-        if isinstance(yaml_content, str):
+        if isinstance(yaml_content, six.string_types):
             return {}
 
         # Do not add metadata if the clean argument has been passed
@@ -457,6 +580,12 @@ class Installer(BaseInstaller):
     published = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+
+    # Relevant for edit submissions only: Reason why the proposed change
+    # is necessecary or useful
+    reason = models.CharField(max_length=512, blank=True, null=True)
+
+    # Collection manager
     objects = InstallerManager()
 
     def __unicode__(self):
@@ -480,9 +609,9 @@ class Installer(BaseInstaller):
             )
         ]
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=True, using=None):
         self.slug = self.build_slug(self.version)
-        return super(Installer, self).save(*args, **kwargs)
+        return super(Installer, self).save()
 
 
 class InstallerIssue(models.Model):
@@ -532,6 +661,7 @@ class GameSubmission(models.Model):
     game = models.ForeignKey(Game)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
+    reason = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "User submitted game"
@@ -568,6 +698,7 @@ class GameLink(models.Model):
 
 class InstallerRevision(BaseInstaller):
     def __init__(self, version):
+        super(InstallerRevision, self).__init__()
         self._version = version
         self.id = version.pk
         installer_data = self.get_installer_data()
@@ -591,6 +722,7 @@ class InstallerRevision(BaseInstaller):
         self.version = installer_data['version']
         self.description = installer_data['description']
         self.notes = installer_data['notes']
+        self.reason = installer_data['reason']
 
         self.installer_id = self._version.object_id
 
@@ -599,11 +731,18 @@ class InstallerRevision(BaseInstaller):
 
     def get_installer_data(self):
         installer_data = json.loads(self._version.serialized_data)[0]['fields']
-        installer_data['script'] = yaml.safe_load(installer_data['content'])
+        try:
+            installer_data['script'] = yaml.safe_load(installer_data['content'])
+        except yaml.scanner.ScannerError:
+            installer_data['script'] = ['This installer is fucked up.']
         installer_data['id'] = self.id
-        return installer_data
+        # Return a defaultdict to prevent key errors for new fields that
+        # weren't present in previous revisions
+        default_installer_data = defaultdict(str)
+        default_installer_data.update(installer_data)
+        return default_installer_data
 
-    def delete(self):
+    def delete(self, using=None, keep_parents=False):
         self._version.delete()
 
     def accept(self):
@@ -627,6 +766,7 @@ class AutoInstaller(BaseInstaller):
     updated_at = None
 
     def __init__(self, game, platform):
+        super(AutoInstaller, self).__init__()
         self.game = game
         if platform not in game.platforms.all():
             raise ObjectDoesNotExist

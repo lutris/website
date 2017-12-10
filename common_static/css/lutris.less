@@ -22,6 +22,10 @@
 @modal-content-bg: @darkerBackground;
 @modal-header-border-color: #666;
 
+@warning-color: #FD3750;
+
+@padding: 7px;
+@banner-width: 198px;
 
 /* == Defaults */
 html, body {
@@ -46,6 +50,29 @@ article {
       font-size: 1.2em;
   }
 }
+
+.header-wrap {
+  position: relative;
+
+  .header-control {
+    position: absolute;
+    right: 7px; /* 15px padding like h1 on the left - 8px padding of a to span */
+    bottom: 2px;
+
+    @media (min-width: @screen-sm-min) {
+      display: none;
+    }
+
+    a {
+      background: none;
+      border: none;
+      margin: 0;
+      padding: 4px 8px;
+      color: #aaa;
+    }
+  }
+}
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   word-spacing: .1em;
@@ -58,9 +85,21 @@ h1 {
   font-weight: 300;
   box-shadow: 0px 4px 1px -2px rgba(0,0,0,.3);
   padding: 3px;
+  padding-left: 15px;
+
+  font-size: 1.6em;
+  margin-top: 10px;
+
+  @media (min-width: @screen-sm-min) {
+    font-size: 2em;
+    margin-top: 20px;
+  }
 }
 
-h2 { font-size: 1.4em; }
+h2 {
+  font-size: 1.4em;
+}
+
 h3 {
   color: #BBB;
   font-size: 1.2em;
@@ -68,6 +107,7 @@ h3 {
   padding: 7px 14px;
   font-weight: 300;
 }
+
 h4 {
   font-size: 1.1em;
   color: #CDCDCD;
@@ -164,6 +204,8 @@ input {
 
 .container {
   .container-fixed();
+  padding-left: 0;
+  padding-right: 0;
 
   @media (min-width: @screen-sm-min) {
     width: @container-sm;
@@ -211,16 +253,54 @@ input {
   }
 }
 
-.pagination-block {
-  font-size: .85em;
-  a {
-    color: #AAA;
+.pagination-block-wrapper {
+  margin-top: 20px;
+
+  .meta-information {
+    position: absolute;
+    color: #aaa;
+    font-size: 12px;
+    left: 15px;
   }
-  .pagination-pager {
-    float: right;
-  }
-  .pagination-info {
-    float: left;
+
+  .pagination-block {
+    display: table;
+    margin: 0 auto;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background-color: #222;
+      border-radius: 4px;
+      font-size: 14px;
+
+      li {
+        position: relative;
+        float: left;
+      }
+
+      li a,
+      li span {
+        display: inline-block;
+        color: #AEAEAE;
+        margin: 0;
+        padding: 10px 12px;
+      }
+
+      li span.glyphicon {
+        padding: 0;
+        font-size: 11px;
+      }
+
+      li a:hover span,
+      li a:focus span,
+      li a:hover,
+      li a:focus {
+        text-decoration: none;
+        color: #fff;
+      }
+    }
   }
 }
 
@@ -323,29 +403,113 @@ input {
 .navbar {
   box-shadow: 0 0 10px #000;
   font-weight: 300;
-  min-height: 84px;
   margin: auto;
   font-family: @sansSerif;
+
   .brand {
     color: #ccc;
     padding: 10px;
     font-size: 2.2em;
+    position: relative;
+    z-index: 100;
+
     img {
       display: inline-block;
     }
+
     p {
       vertical-align: middle;
       display: inline-block;
       margin-bottom: 0px;
     }
+
     span {
       font-size: .5em;
     }
   }
-  .logo {
-    width: 64px;
-    height: 64px;
+
+  #search-games {
+    &.collapsing,
+    &.collapse.in {
+      @media (min-width: @screen-sm-min) {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 48px;
+        margin: 0;
+        padding: 0;
+        background-color: #222;
+        z-index: 10;
+        text-align: right;
+
+        .search-games-content {
+          padding-right: 15px;
+          padding-top: 9px;
+        }
+      }
+
+      @media (min-width: @screen-md-min) {
+        .search-games-content {
+          padding-top: 47px;
+        }
+      }
+
+      @media (min-width: @screen-lg-min) {
+        right: 58px;
+      }
+    }
+
+    &.collapse {
+      @media (min-width: @screen-sm-min) {
+        display: none !important;
+      }
+    }
+
+    .search-games-content {
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      @media (min-width: @screen-sm-min) {
+        padding: 5px;
+      }
+
+      input[type="text"] {
+        color: #aaa;
+        background: none;
+        border: none;
+        box-shadow: none;
+        outline: 0;
+      }
+    }
   }
+
+  .logo {
+    width: 34px;
+    height: 34px;
+
+    @media (min-width: @screen-md-min) {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .navbar-header > button {
+    background: none;
+    border: none;
+    margin-right: 5px;
+    margin-bottom: 0;
+    color: #aaa;
+  }
+
+  .navbar-header > button:hover,
+  .navbar-header > button:active,
+  .navbar-header > button:focus {
+    color: #fff;
+    background: none;
+  }
+
   .nav > li > a {
     color: #aaa;
 
@@ -370,6 +534,7 @@ input {
     text-transform: uppercase;
     font-size: .8em;
     font-weight: 400;
+
     &:hover {
       color: #ccc;
       background-color: #555;
@@ -535,45 +700,81 @@ input {
 
 .download-list {
   padding: 0;
+
   li {
     list-style-type: none;
   }
+
   &>li {
-    padding: 15px 20px;
+    padding: 14px 15px;
     border-bottom: 1px solid #555;
+
+    @media (min-width: @screen-sm-min) {
+      padding: 15px 20px;
+    }
+
     &:last-child {
       border-bottom: none;
     }
+
     ul {
       width: 200px;
-      border-right: 1px solid #444;
-      display: table-cell;
+      padding-left: 0;
+      border-right: none;
+      display: block;
+
+      @media (min-width: @screen-sm-min) {
+        padding-left: 35px;
+        display: table-cell;
+        border-right: 1px solid #444;
+      }
     }
+
     p {
-      display: table-cell;
-      padding: 7px 34px;
+      display: block;
+      padding: 7px 0 7px 34px;
       font-size: .9em;
       color: #AEAEAE;
+
+      @media (min-width: @screen-sm-min) {
+        padding: 7px 34px;
+        display: table-cell;
+      }
     }
   }
+
   img {
     margin: 7px;
   }
 }
 
 .breadcrumb {
-  margin: 0 0 20px;
+  margin: 0 0 20px 0;
+  padding: 8px 10px;
+  width: 100%;
   list-style: none;
   background-color: #222;
   overflow: hidden;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   li {
-    float: left;
     position: relative;
     text-shadow: 0 1px 0 #ffffff;
+    display: inline;
+    padding-left: 0;
+
+    &:before {
+      content: "" !important;
+    }
+
     a {
       text-shadow: none;
-      padding: 8px 0px 8px 50px;
+      padding: 8px 0px 8px 35px;
       color: #AEAEAE;
+
       &:before, &:after {
         content: " ";
         display: block;
@@ -609,6 +810,27 @@ input {
   }
   & > .active {
     color: #999999;
+  }
+}
+
+#filter-controls {
+  @media (min-width: @screen-sm-min) {
+    display: block !important; /* Controls should always be visible on large screens */
+  }
+
+  .filter-controls-content {
+    margin: 0;
+    margin-bottom: 20px;
+
+    .pane {
+      background-color: #444;
+      color: #DDD;
+      padding: 10px;
+
+      .input-group{
+        width: 100%;
+      }
+    }
   }
 }
 
@@ -683,6 +905,25 @@ input {
   input[type="checkbox"]:checked + label {
     color: #EEE;
   }
+}
+
+
+.important-checkbox {
+    display: block;
+    label {
+        line-height: 24px;
+        font-size: 1.2em;
+        display: inline-block;
+        padding-top: 4px;
+
+    }
+    input[type="checkbox"] {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        border: 2px solid blue;
+        float: right;
+    }
 }
 
 .overlay {
@@ -841,14 +1082,6 @@ input {
   }
 }
 
-.screenshots-bar {
-  background-color: #151515;
-  border-bottom: 1px solid #444;
-  height: 26px;
-  padding-right: 4px;
-  padding-top: 4px;
-}
-
 .carousel-control {
   opacity: 0;
   &:focus {
@@ -906,6 +1139,7 @@ input {
     margin: 0 auto;
     display: block;
     margin-bottom: 14px;
+    width: 100%;
   }
 
   ul {
@@ -967,6 +1201,8 @@ input {
 
 .game-filter {
   float: right;
+  margin-bottom: 20px;
+
   input {
     background-color: #444;
     color: #CCC;
@@ -981,9 +1217,13 @@ input {
   li {
     border-bottom: 2px solid #252525;
     color: #999;
-    padding: 8px;
+    padding: 0;
     margin-bottom: 5px;
     background-color: @darkerBackground;
+
+    @media (min-width: @screen-sm-min) {
+      padding: 8px;
+    }
   }
   a {
     color :#DDD;
@@ -1000,7 +1240,16 @@ input {
   }
   .game-cover {
     float: left;
-    margin-right: 15px;
+    margin-right: 0;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    @media (min-width: @screen-sm-min) {
+      margin-right: 15px;
+      width: 184px;
+      height: 69px;
+    }
   }
   .game-title {
     font-size: 1.1em;
@@ -1021,6 +1270,25 @@ input {
   }
 }
 
+/**
+ * Box which shows a error message if applied filters returned
+ * an empty response in a list view
+ */
+.filter-failure-message {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+
+  & > .filter-failure-icon {
+    color: #444;
+    font-size: 60px;
+  }
+
+  & > p {
+    margin-top: 0 !important;
+  }
+}
+
 .latest-games {
     display: inline-flex;
     flex-wrap: wrap;
@@ -1028,7 +1296,7 @@ input {
 
 .game-cover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  margin-bottom: 5px;
+  margin-bottom: 0;
   display: block;
   width: 184px;
   height: 69px;
@@ -1039,6 +1307,10 @@ input {
   color: #AAA;
   font-size: 1.5em;
   position: relative;
+
+  @media (min-width: @screen-sm-min) {
+    margin-bottom: 5px;
+  }
 }
 
 .game-banner {
@@ -1046,26 +1318,29 @@ input {
   display: inline-block;
   margin: 8px auto;
   text-align: center;
+  width: @banner-width;
   a {
+    width: @banner-width;
     font-weight: 500;
     font-size: .8em;
     display: inline-block;
     text-decoration: none;
-    padding: 7px;
+    padding: @padding;
     background-color: #222;
-    width: 184px + 14px;
+    text-overflow:  hidden;
     &:hover, &:focus {
       background-color: #444;
       outline: 0;
     }
   }
   .game-title {
-    .discreet-text
+    &:extend(.discreet-text);
   }
 }
 
 .pane {
-  padding: 0px 14px;
+  padding: 0;
+
   p {
     margin-top: 15px;
     color: #ACACAC;
@@ -1154,33 +1429,50 @@ input {
     border-left: 2px solid #700;
     background-color: #333;
   }
-  .installer-actions {
-    background-color: #151515;
-    text-align: right;
-    padding: 4px;
-    a {
-      padding: 4px 8px;
-      border-radius: 2px;
-    }
-    a:hover {
-      background-color: #2e2e2e;
-    }
-  }
   .hide-unpublished {
     display: none;
   }
 }
 
+.screenshots-bar {
+  border-bottom: 1px solid #444;
+}
+
+.actions-bar {
+  background-color: #151515;
+  background-color: #151515;
+  text-align: right;
+  padding: 4px;
+  a, span {
+    font-size: .8em;
+    padding: 4px;
+  }
+  a {
+    border-radius: 2px;
+    color: #888;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  a:hover {
+    background-color: #2e2e2e;
+  }
+}
+
+
 .filter-list {
+  display: inline-block;
   .ul-reset;
   list-style-position: inside;
   margin: 0;
+
   li {
-    margin: 5px 0px;
+    display: inline-block;
+    margin: 0px;
+    margin-top: 5px;
   }
+
   a {
     display: block;
-    padding-left: 15px;
   }
 }
 
@@ -1189,10 +1481,15 @@ input {
   font-size: .75em;
   text-transform: uppercase;
   vertical-align: text-top;
-  padding: 3px 6px;
+  padding: 6px 12px;
   color: #EDEDED;
   border-radius: 2px;
   white-space: nowrap;
+
+  @media (min-width: @screen-sm-min) {
+    padding: 3px 6px;
+  }
+
   &:hover {
     background-color: #666;
     color: inherit;
@@ -1220,16 +1517,23 @@ input {
     position: relative;
     top: 0px;
     float: right;
+    
     .help {
       position: absolute;
       white-space:nowrap;
-      top: -5px;
-      right: 7px;
+      top: 0;
+      right: 0;
       font-size: .9em;
       background-color: #4c4c4c;
       padding: 3px 7px;
       border-radius: 2px;
       color: #333;
+
+      @media (min-width: @screen-sm-min) {
+        top: -5px;
+        right: -5px;
+      }
+
       &:hover {
         background-color: #777;
         color: #DEDEDE;
@@ -1276,10 +1580,15 @@ input {
   padding: 2em;
 }
 
+.warning {
+  font-weight: bold;
+  color: @warning-color;
+}
+
 .obnoxious-warning {
   font-size: 1.2em;
   text-transform: uppercase;
-  color: #FD3750;
+  color: @warning-color;
 }
 
 .external-link {
