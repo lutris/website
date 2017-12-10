@@ -16,7 +16,6 @@ django-extensions==1.9.7
 django_inlinecss==0.1.2
 django-reversion==2.0.10
 django-bitfield==1.9.3
-python-openid
 requests==2.18.3
 Celery==4.1.0
 mimeparse==0.1.3
