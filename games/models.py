@@ -5,6 +5,7 @@ import datetime
 import re
 import json
 import random
+import logging
 from itertools import chain
 from collections import defaultdict
 
@@ -30,6 +31,7 @@ from games.util import steam
 from platforms.models import Platform
 from runners.models import Runner
 
+LOGGER = logging.getLogger(__name__)
 DEFAULT_INSTALLER = {
     'files': [
         {'file_id': "http://location"},
