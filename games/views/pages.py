@@ -281,7 +281,7 @@ def edit_installer(request, slug):
     revision_id = request.GET.get('revision')
     try:
         revision_id = int(revision_id)
-    except ValueError:
+    except (ValueError, TypeError):
         revision_id = None
 
     draft_data = None
