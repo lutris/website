@@ -608,6 +608,16 @@ class Installer(BaseInstaller):
             )
         ]
 
+    @property
+    def latest_revision(self):
+        try:
+            return Version.objects.filter(
+                content_type__model='installer',
+                object_id=self.id
+            ).latest('revision__date_created')
+        except Version.DoesNotExist:
+            pass
+
     def save(self, force_insert=True, using=None):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save()

@@ -1,4 +1,5 @@
 {% load rating %}
+{% load humanize %}
 <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
     <div class="btn-group right">
       <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
@@ -71,10 +72,9 @@
     <span class='filter-link'>{{ installer.runner }}</span>
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
     <span class="discreet-text">
-      by {{ installer.user.username|default:"Lutris" }},
-      {% if installer.updated_at %}
-      last updated on {{ installer.updated_at }}
-      {% endif %}
+      by {{ installer.user.username|default:"Lutris" }}{% if installer.updated_at %},
+      last published {{ installer.updated_at | naturaltime }}{% endif %}{% if installer.latest_revision %},
+      last edit made {{ installer.latest_revision.revision.date_created | naturaltime }}{% endif %}
     </span>
   </div>
   {% if installer.rating %}{% rating %}{% endif %}

@@ -261,40 +261,56 @@ def new_installer(request, slug):
 @user_confirmed_required
 @check_installer_restrictions
 def edit_installer(request, slug):
+    """Display an edit form for install scripts
+
+    Args:
+        request: Django request object
+        slug (str): installer slug
+
+    Returns:
+        Django response
+    """
+
     installer = get_object_or_404(Installer, slug=slug)
+
+    # Handle installer deletion in a separate view
     if 'delete' in request.POST:
         return redirect(reverse('delete_installer', kwargs={'slug': installer.slug}))
-    if 'revision' in request.GET:
-        try:
-            revision_id = int(request.GET['revision'])
-        except ValueError:
-            revision_id = None
-    else:
+
+    # Extract optional revision ID from parameters
+    revision_id = request.GET.get('revision')
+    try:
+        revision_id = int(revision_id)
+    except ValueError:
         revision_id = None
+
+    draft_data = None
     versions = Version.objects.get_for_object(installer)
-    initial_data = None
     for version in versions:
         if revision_id:
+            # Display the revision given in the GET parameters
             if version.id == revision_id:
-                initial_data = version.field_dict
+                draft_data = version.field_dict
                 break
         else:
+            # Display the latest revision created by the current logged in user
             if(version.revision.user == request.user and
                version.revision.date_created > installer.updated_at):
-                initial_data = version.field_dict
+                draft_data = version.field_dict
                 revision_id = version.id
                 break
 
-    if initial_data:
+    if draft_data:
         messages.info(request,
                       "You are viewing a draft of the installer which does not "
                       "reflect the currently available installer. Changes will be "
                       "published once it goes through moderation.")
-        if 'runner_id' in initial_data:
-            initial_data['runner'] = initial_data['runner_id']
+        if 'runner_id' in draft_data:
+            draft_data['runner'] = draft_data['runner_id']
 
-    form = InstallerEditForm(request.POST or None, instance=installer, initial=initial_data)
+    form = InstallerEditForm(request.POST or None, instance=installer, initial=draft_data)
     if request.method == 'POST' and form.is_valid():
+        # Force the creation of a revision instead of creating a new installer
         with reversion.create_revision():
             installer = form.save(commit=False)
             reversion.set_user(request.user)
