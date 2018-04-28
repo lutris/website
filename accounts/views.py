@@ -157,13 +157,16 @@ def profile_delete(request, username):
 
 @csrf_exempt
 def associate_steam(request):
+    LOGGER.info("Associating Steam user with Lutris account")
     if not request.user.is_authenticated():
+        LOGGER.info("User is authenticated, completing login")
         return login_complete(request)
     else:
         openid_response = parse_openid_response(request)
         account_url = reverse('user_account', args=(request.user.username, ))
         if openid_response.status == 'failure':
             messages.warning(request, "Failed to associate Steam account")
+            LOGGER.error("Failed to associate Steam account for %s", request.user.username)
             return redirect(account_url)
         openid_backend = OpenIDBackend()
         try:
@@ -222,6 +225,7 @@ def library_remove(request, slug):
 @login_required
 def library_steam_sync(request):
     user = request.user
+    LOGGER.info("Syncing contents of Steam library for user %s", user.username)
     tasks.sync_steam_library.delay(user.id)
     messages.success(
         request,
