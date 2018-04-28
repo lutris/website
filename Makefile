@@ -61,7 +61,7 @@ shell:
 	./manage.py shell_plus --traceback
 
 worker:
-	celery worker -A lutrisweb -B --loglevel=debug --autoreload --hostname=lutris.net -E
+	celery worker -A lutrisweb -B --loglevel=debug --hostname=lutris.net -E
 
 sqlflush:
 	./manage.py sqlflush | psql -U lutris_staging -h localhost lutris_staging
