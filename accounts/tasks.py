@@ -19,7 +19,7 @@ def sync_steam_library(user_id):
     library = games.models.GameLibrary.objects.get(user=user)
     steam_games = games.util.steam.steam_sync(steamid)
     if not steam_games:
-        LOGGER.info("Steam user %s has no steam games")
+        LOGGER.info("Steam user %s has no steam games", user.username)
         return
     for game in steam_games:
         LOGGER.info("Adding %s to %s's library", game['name'], user.username)
