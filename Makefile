@@ -85,5 +85,5 @@ start: deps setup run
 sync:
 	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
 	gunzip lutris.tar.gz
-	sudo -u postgres pg_restore --exit-on-error --dbname=lutris lutris.tar
+	sudo -u postgres pg_restore --clean --exit-on-error --dbname=lutris lutris.tar
 	rm lutris.tar
