@@ -429,8 +429,12 @@ class InstallerManager(models.Manager):
                     try:
                         game = Game.objects.get(slug=game_slug)
                     except Game.DoesNotExist:
-                        pass
-                    else:
+                        try:
+                            game = Game.objects.get(slug__startswith=game_slug)
+                        except Game.DoesNotExist:
+                            LOGGER.warning("Couldn't find game with slug %s", game_slug)
+
+                    if game:
                         if return_models:
                             try:
                                 auto_installer = AutoInstaller(game, platform)
