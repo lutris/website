@@ -427,14 +427,11 @@ class InstallerManager(models.Manager):
                 if slug.endswith(suffix):
                     game_slug = slug[:-len(suffix)]
                     try:
-                        game = Game.objects.get(slug=game_slug)
+                        games = [Game.objects.get(slug=game_slug)]
                     except Game.DoesNotExist:
-                        try:
-                            game = Game.objects.get(slug__startswith=game_slug)
-                        except Game.DoesNotExist:
-                            LOGGER.warning("Couldn't find game with slug %s", game_slug)
+                        games = Game.objects.filter(slug__startswith=game_slug)
 
-                    if game:
+                    for game in games:
                         if return_models:
                             try:
                                 auto_installer = AutoInstaller(game, platform)
