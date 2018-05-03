@@ -49,43 +49,28 @@ class GameList(ListView):
         return self.get_filtered_queryset(base_queryset)
 
     def get_filtered_queryset(self, queryset):
-        statement = ''
-
         # Filter open source
         filters = []
-        fully_libre_filter = self.request.GET.get('fully-libre-filter')
-        if fully_libre_filter:
+        if self.request.GET.get('fully-libre-filter'):
             filters.append('fully_libre')
-        open_engine_filter = self.request.GET.get('open-engine-filter')
-        if open_engine_filter:
+        if self.request.GET.get('open-engine-filter'):
             filters.append('open_engine')
-
-        if filters:
-            for flag in filters:
-                statement += "Q(flags=Game.flags.%s) | " % flag
-            statement = statement.strip('| ')
+        open_source_filters = " | ".join(["Q(flags=Game.flags.%s)" % flag for flag in filters])
 
         # Filter free
         filters = []
-        free_filter = self.request.GET.get('free-filter')
-        if free_filter:
+        if self.request.GET.get('free-filter'):
             filters.append('free')
-        freetoplay_filter = self.request.GET.get('freetoplay-filter')
-        if freetoplay_filter:
+        if self.request.GET.get('freetoplay-filter'):
             filters.append('freetoplay')
-        pwyw_filter = self.request.GET.get('pwyw-filter')
-        if pwyw_filter:
+        if self.request.GET.get('pwyw-filter'):
             filters.append('pwyw')
 
-        if filters:
-            if statement:
-                statement = statement + ', '
-            for flag in filters:
-                statement += "Q(flags=Game.flags.%s) | " % flag
-            statement = statement.strip('| ')
+        free_filters = " | ".join(["Q(flags=Game.flags.%s)" % flag for flag in filters])
+        query_filters = ', '.join([filters for filters in (open_source_filters, free_filters) if filters])
 
-        if statement:
-            queryset = eval("queryset.filter(%s)" % statement)
+        if query_filters:
+            queryset = eval("queryset.filter(%s)" % query_filters)
 
         search_terms = self.request.GET.get('q')
         if search_terms:
