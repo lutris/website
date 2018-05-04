@@ -29,7 +29,7 @@
         style="margin-top: 2px; margin-bottom: 22px; height: 35px;">Submit a new game</a>
     <div class="filter-controls-content">
       <div class="pane">
-            
+
         <!-- GENERAL FILTER, SEARCH -->
         <h4>Filter</h4>
         <form action="." method="get" class="form-inline">
@@ -82,16 +82,23 @@
               </li>
             </ul>
             <ul>
+              <li>
               <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
                   {% if unpublished_filter %}checked{% endif %} />
               <label for="unpublished-filter"><span></span>Show unpublished games</label>
+              </li>
+              <li>
+              <input type="checkbox" id="sort-by-popularity" name="sort-by-popularity"
+                  {% if sort_by_popularity %}checked{% endif %} />
+              <label for="sort-by-popularity"><span></span>Sort by popularity</label>
+              </li>
             </ul>
             <span class="input-group-btn">
               <button class="btn btn-default" type="submit">Apply filter</button>
             </span>
           </div>
         </form>
-      
+
         <!-- PLATFORM FILTER -->
         <h4>Platforms</h4>
         <ul class="filter-list">
@@ -99,7 +106,7 @@
             <li><a class="filter-link" href="{% url 'games_by_plaform' slug=platform.slug %}">{{ platform.name }}</a></li>
           {% endfor %}
         </ul>
-      
+
         <!-- GENRE FILTER -->
         <h4>Genres</h4>
         <ul class="filter-list">
@@ -107,7 +114,7 @@
             <li><a class="filter-link" href="{% url 'games_by_genre' genre.slug %}">{{ genre.name }}</a></li>
           {% endfor %}
         </ul>
-      
+
       </div>
     </div>
   </div>
@@ -219,7 +226,7 @@
                 {% endif %}
 
                 <li><span>Page {{ page_obj.number }}</span></li>
-      
+
                 <!-- ">" -->
                 {% if page_obj.has_next %}
                   <li>

@@ -19,7 +19,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models import Count, Q
+from django.db.models import Q, Count
 from django.urls import reverse
 from django.utils.text import slugify
 from reversion.models import Version
@@ -98,6 +98,10 @@ class Genre(models.Model):
 
 
 class GameManager(models.Manager):
+
+    class Meta:
+        ordering = ['name']
+
     def published(self):
         return self.get_queryset().filter(change_for__isnull=True, is_public=True)
 
@@ -111,8 +115,7 @@ class GameManager(models.Manager):
                 Q(platforms__default_installer__startswith='{')
             )
             .order_by('name')
-            .annotate(installer_count=Count('installers'))
-            .annotate(default_installer_count=Count('platforms'))
+            .annotate(installer_count=Count('installers', distinct=True))
         )
 
     def get_random(self, option=""):

@@ -12,7 +12,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.core.mail import mail_managers
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -40,13 +40,15 @@ class GameList(ListView):
     paginate_by = 25
 
     def get_queryset(self):
+        queryset = models.Game.objects
         unpublished_filter = self.request.GET.get('unpublished-filter')
         if unpublished_filter:
-            base_queryset = models.Game.objects.filter(change_for__isnull=True)
+            queryset = queryset.filter(change_for__isnull=True)
         else:
-            base_queryset = models.Game.objects.with_installer()
-
-        return self.get_filtered_queryset(base_queryset)
+            queryset = queryset.with_installer()
+        if self.request.GET.get('sort-by-popularity'):
+            queryset = queryset.annotate(library_count=Count('gamelibrary', distinct=True)).order_by('-library_count')
+        return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
         # Filter open source
@@ -67,7 +69,9 @@ class GameList(ListView):
             filters.append('pwyw')
 
         free_filters = " | ".join(["Q(flags=Game.flags.%s)" % flag for flag in filters])
-        query_filters = ', '.join([filters for filters in (open_source_filters, free_filters) if filters])
+        query_filters = ', '.join([
+            filters for filters in (open_source_filters, free_filters) if filters
+        ])
 
         if query_filters:
             queryset = eval("queryset.filter(%s)" % query_filters)
@@ -104,6 +108,7 @@ class GameList(ListView):
         context['freetoplay_filter'] = get_args.get('freetoplay-filter')
         context['pwyw_filter'] = get_args.get('pwyw-filter')
         context['unpublished_filter'] = get_args.get('unpublished-filter')
+        context['sort_by_popularity'] = get_args.get('sort-by-popularity')
         for key in context:
             if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True
