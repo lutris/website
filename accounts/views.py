@@ -1,28 +1,24 @@
 import json
 import logging
-from django.http import (
-    HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest
-)
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
-from django.urls import reverse
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.conf import settings
-
-from django_openid_auth.views import parse_openid_response, login_complete
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseRedirect)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
+from django_openid_auth.views import login_complete, parse_openid_response
 
-from .models import AuthToken, User, EmailConfirmationToken
-from . import forms
-from . import tasks
-from . import sso
 import games.models
 import games.util.steam
+
+from . import forms, sso, tasks
+from .models import AuthToken, EmailConfirmationToken, User
 
 LOGGER = logging.getLogger(__name__)
 
@@ -145,15 +141,32 @@ def profile_edit(request, username):
     return render(request, 'accounts/profile_edit.html', {'form': form})
 
 
+@login_required
+def profile_delete(request, username):
+    user = get_object_or_404(User, username=username)
+    if user != request.user:
+        raise Http404
+    form = forms.ProfileDeleteForm(request.POST or None)
+    if form.is_valid():
+        logout(request)
+        user.deactivate()
+        messages.success(request, 'Your account is now deleted')
+        return redirect(reverse('homepage'))
+    return render(request, 'accounts/profile_delete.html', {'form': form})
+
+
 @csrf_exempt
 def associate_steam(request):
+    LOGGER.info("Associating Steam user with Lutris account")
     if not request.user.is_authenticated():
+        LOGGER.info("User is authenticated, completing login")
         return login_complete(request)
     else:
         openid_response = parse_openid_response(request)
         account_url = reverse('user_account', args=(request.user.username, ))
         if openid_response.status == 'failure':
             messages.warning(request, "Failed to associate Steam account")
+            LOGGER.error("Failed to associate Steam account for %s", request.user.username)
             return redirect(account_url)
         openid_backend = OpenIDBackend()
         try:
@@ -212,6 +225,7 @@ def library_remove(request, slug):
 @login_required
 def library_steam_sync(request):
     user = request.user
+    LOGGER.info("Syncing contents of Steam library for user %s", user.username)
     tasks.sync_steam_library.delay(user.id)
     messages.success(
         request,

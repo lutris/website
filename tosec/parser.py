@@ -150,6 +150,16 @@ class TosecNamingConvention(object):
         self.date = groupdict['date']
         self.publisher = groupdict['publisher']
 
+        self.system = ""
+        self.video = ""
+        self.country = ""
+        self.language = ""
+        self.copyright = ""
+        self.development = ""
+        self.media = ""
+        self.media_additional = ""
+        self.media_label = ""
+
         if self.matches:
             remainder = self.filename[self.matches.end():]
             flag_match = re.search(r'\(.*\)', remainder)

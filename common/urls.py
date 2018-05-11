@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'upload/',
         views.upload_file,
         name='upload_file'),
+    url(r'faq',
+        TemplateView.as_view(template_name='common/faq.html'),
+        name='faq'),
     url(r'^error-testing/', views.error_testing),
 ]

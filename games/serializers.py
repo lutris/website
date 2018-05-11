@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from platforms.models import Platform
+
 from games import models
+from platforms.models import Platform
 
 
 class PlatformSerializer(serializers.ModelSerializer):
@@ -101,6 +102,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
 
     script = serializers.JSONField()
     content = serializers.CharField()
+    reason = serializers.CharField()
     comment = serializers.CharField()
     installer_id = serializers.IntegerField()
 

@@ -1,9 +1,10 @@
 # pylint: disable=C0103
 import logging
 from importlib import import_module
+
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.conf import settings
 from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -14,6 +15,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/games/', include('games.urls.admin')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^openid/', include('django_openid_auth.urls')),

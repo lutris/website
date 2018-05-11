@@ -17,11 +17,17 @@
 
         <paper-button on-tap="onAcceptSubmission" class="btn" hidden="[[isNotRevision]]">Accept</paper-button>
         <paper-button on-tap="onPublishInstaller" class="btn" hidden="[[!isUnpublishedInstaller]]">Publish</paper-button>
+        <paper-button on-tap="onClearRevisions" class="btn" hidden="[[hasNoRevision]]">Clear revisions</paper-button>
       </div>
     </div>
     <div class="row">
       <installer-list class="col-sm-2" id="installer-list" installers="[[game.installers]]"></installer-list>
       <div class="col-sm-10 row">
+        <div class="col-sm-12">
+          <div style="margin-top: 1em;">
+            <p hidden="[[ !hasChangeReason ]]"><strong>Reason: </strong>{{ selectedObject.reason }}</p>
+          </div>
+        </div>
         <installer-pane
           class="col-sm-6"
           id="pane-1"
@@ -96,6 +102,16 @@
             type: Boolean,
             value: false,
             computed: 'getIsUnpublishedInstaller(selectedObject)'
+          },
+          hasNoRevision: {
+            type: Boolean,
+            value: true,
+            computed: 'getHasNoRevision(selectedInstaller)'
+          },
+          hasChangeReason: {
+            type: Boolean,
+            value: false,
+            computed: 'getHasChangeReason(selectedObject)'
           }
         }
       }
@@ -149,6 +165,14 @@
         return selectedObject.published === false;
       }
 
+      getHasNoRevision(selectedInstaller) {
+        return !selectedInstaller.revisions.length;
+      }
+
+      getHasChangeReason(selectedObject) {
+        return (selectedObject && selectedObject.reason && selectedObject.reason != '')
+      }
+
       handleResponse(response) {
         this.game = response.detail.__data.response;
       }
@@ -196,6 +220,10 @@
         }
       }
 
+      onClearRevisions(event) {
+        console.log(this.selectedInstaller.id);
+      }
+
       onSwitchDiff(event) {
         this.sourceVisible = !this.sourceVisible;
       }
@@ -203,25 +231,29 @@
       requestAction(method, payload) {
         const name = this.objectName;
         let action_url;
-        if (name) {
-          const actionRequest = this.$['action-request'];
-          if ('comment' in this.selectedObject) {
-            action_url = `/api/installers/revisions/${this.selectedObject.id}`;
-          } else {
-            action_url = `/api/installers/id/${this.selectedObject.id}`;
-          }
-
-          actionRequest.url = action_url;
-          actionRequest.method = method;
-          if (payload) {
-            actionRequest.body = payload;
-          }
-          actionRequest.contentType = 'application/json';
-          actionRequest.headers.Authorization = 'Token ' + this.apiKey;
-          actionRequest.headers.Accept = 'application/json';
-
-          actionRequest.generateRequest();
+        if (!name) {
+          return;
         }
+        const actionRequest = this.$['action-request'];
+        if (payload === 'clear-revsions') {
+          action_url = `/api/installers/${this.selectedInstaller.id}/revisions`;
+        }
+        else if ('comment' in this.selectedObject) {
+          action_url = `/api/installers/revisions/${this.selectedObject.id}`;
+        } else {
+          action_url = `/api/installers/id/${this.selectedObject.id}`;
+        }
+
+        actionRequest.url = action_url;
+        actionRequest.method = method;
+        if (payload) {
+          actionRequest.body = payload;
+        }
+        actionRequest.contentType = 'application/json';
+        actionRequest.headers.Authorization = 'Token ' + this.apiKey;
+        actionRequest.headers.Accept = 'application/json';
+
+        actionRequest.generateRequest();
       }
 
       removeSelected() {

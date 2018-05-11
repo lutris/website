@@ -27,9 +27,6 @@ class Runner(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        return super(Runner, self).save(*args, **kwargs)
-
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )

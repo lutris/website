@@ -24,6 +24,7 @@ class Platform(models.Model):
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)
+    tgdb_name = models.CharField(max_length=255, blank=True)
 
     objects = PlatformManager()
 

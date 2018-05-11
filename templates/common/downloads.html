@@ -9,9 +9,9 @@
       <p>
         Lutris should be compatible with most up-to-date Linux distributions,
         it relies on the Python language and Gnome 3 libraries (but will run
-        fine under any desktop environmment). The following distributions are
-        currently supported: Ubuntu 16.04, 16.10 and 17.04, Debian 8 and 9,
-        Fedora 24 and 25, openSUSE 13.2, Leap 42 and Tumbleweed, Arch Linux
+        fine under any desktop environment). The following distributions are
+        currently supported: Ubuntu 16.04, 17.04, 17.10 and 18.04, Debian 8 and 9,
+        Fedora 24, 25, 26 and 27, openSUSE 13.2, Leap 42 and Tumbleweed, Arch Linux
         and Gentoo.
       </p>
     </article>
@@ -24,10 +24,13 @@
           <li>
             <img src='{{ STATIC_URL }}images/icons/debian.png' alt='Debian'>Debian
           </li>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/linux_mint.png' alt='Linux Mint'>Linux Mint
+          </li>
         </ul>
         <p>
           Packages compatible with Debian and Ubuntu are available on the
-          <a href="https://build.opensuse.org/package/binaries/home:strycore/lutris?repository=Debian_8.0">openSUSE build service</a>
+          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>.
           <br/>
           You can add a repository to receive automatic updates:<br/>
           <br/>
@@ -35,8 +38,8 @@
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/Debian_9.0/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/Debian_9.0/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
-          <strong>For Ubuntu</strong><br/>
-          <code>ver=$(lsb_release -sr); if [ $ver != "16.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=16.04; fi</code>
+          <strong>For Ubuntu & derivatives like Pop!_OS, Elementary OS, Linux Mint…</strong><br/>
+          <code>ver=$(lsb_release -sr); if [ $ver != "18.04" -a $ver != "17.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=18.04; fi</code>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
@@ -57,7 +60,7 @@
         <p>
           Packages and repositories for current versions of Fedora and openSUSE
           are available from the
-          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>
+          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>.
         </p>
       </li>
       <li>
@@ -78,8 +81,8 @@
           </li>
         </ul>
         <p>
-        Lutris is available in Zugaina's overlay (may not be up to date):
-        <a href="https://gpo.zugaina.org/games-util/lutris">https://gpo.zugaina.org/games-util/lutris</a>.
+        Lutris is available in portage tree:
+        <a href="https://packages.gentoo.org/packages/games-util/lutris">https://packages.gentoo.org/packages/games-util/lutris</a>.
         </p>
       </li>
       <li>

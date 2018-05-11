@@ -2,8 +2,7 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
-from . import forms
-from . import views
+from . import forms, views
 
 urlpatterns = [
     url(r'^login/$', auth_views.login,
@@ -45,11 +44,12 @@ urlpatterns = [
         name="remove_from_library"),
     url(r'^library/steam-sync/', views.library_steam_sync,
         name="library_steam_sync"),
-    url(r'profile/$', views.profile, name="profile"),
-    url(r'(.*)/edit/$', views.profile_edit, name='profile_edit'),
-    url(r'(.*)/$', views.user_account, name="user_account"),
+    url(r'profile$', views.profile, name="profile"),
     url(r'send-confirmation$', views.user_send_confirmation, name='user_send_confirmation'),
-    url(r'require-confirmation', views.user_require_confirmation, name='user_require_confirmation'),
+    url(r'require-confirmation$', views.user_require_confirmation, name='user_require_confirmation'),
     url(r'confirm$', views.user_email_confirm, name='user_email_confirm'),
     url(r'discourse-sso$', views.discourse_sso, name='discourse_sso'),
+    url(r'(?P<username>.*)/edit$', views.profile_edit, name='profile_edit'),
+    url(r'(?P<username>.*)/delete$', views.profile_delete, name='profile_delete'),
+    url(r'(?P<username>.*)$', views.user_account, name="user_account"),
 ]

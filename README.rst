@@ -6,22 +6,24 @@ With docker
 
 Install docker for your system.
 
+Build the image
+
 ::
 
-    docker build -t lutrisweb Docker/
+    docker build -t lutris/website .
 
 Start a new container using the image
 
 ::
 
-    docker run --name lutrisdev -it -p 8000:8000 lutrisweb /bin/bash
+    docker run --name lutrisweb -it -p 8000:8000 lutris/website
 
-Reconnecting after creating
+Attach to shell
 
 ::
 
-    docker start lutrisdev
-    docker exec -it lutrisdev /bin/bash
+    docker start lutrisweb
+    docker exec -it lutrisweb /bin/bash
 
 
 Natively
@@ -53,27 +55,22 @@ also tell the project to fallback to SQLite::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install imagemagick memcached libmemcached-dev mercurial bzr python-dev
+    sudo apt-get install imagemagick memcached libmemcached-dev libxml2-dev libxslt1-dev mercurial bzr python-dev
     make deps
 
 In order to build the frontend code (javascript and css files), you'll
-need nodejs, npm, grunt and bower installed on your system. If you are
+need nodejs and npm installed on your system. If you are
 running Ubuntu, it is advised to use nvm to get the most recent
 version of node, you can install it following the instructions on the github
 page ::
 
     https://github.com/creationix/nvm
 
-Then install bower and grunt::
-
-    npm install -g bower
-    npm install -g grunt-cli
-
-Once you have grunt and bower installed, you can run the following commands::
+Once you installed a recent version of npm, you can run the following commands::
 
     make setup  # Will install the project's npm and bower dependencies
                 # and build the static files
-    grunt watch  # Watch for JS/CSS changes and compile them
+    make watch  # Watch for JS/CSS changes and compile them
 
 You'll need to setup the database, if you want to use a PostgreSQL database,
 follow the instructions found in the next paragraph before running this

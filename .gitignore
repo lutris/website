@@ -1,3 +1,6 @@
+.vscode/
+src/django-jcrop/
+src/django-openid-auth/
 *.pyc
 tags
 lutris.db
@@ -16,6 +19,7 @@ public/js
 public/css
 public/fonts
 node_modules
+npm-debug.log
 reports
 ENV
 celerybeat-schedule

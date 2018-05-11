@@ -1,0 +1,11 @@
+language: python
+env:
+  - DJANGO=1.10.2 DJANGO_SETTINGS_MODULE='lutrisweb.settings.local' SECRET_KEY="ThisIsMySecretThereAreOtherLikeThisButThisOneIsMine" USE_SQLITE=1
+python:
+  - 2.7
+install:
+  - pip install -r config/requirements/devel.pip
+before_script:
+  - touch templates/docs/installers.html
+script:
+  - make test

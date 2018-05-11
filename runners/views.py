@@ -25,8 +25,7 @@ class RunnerDetailView(generics.RetrieveUpdateAPIView):
     lookup_field = 'slug'
     queryset = Runner.objects.all()
 
-    # pylint: disable=W0221
-    def get(self, request, slug):
+    def get(self, request, slug):  # pylint: disable=W0221
         try:
             runner = Runner.objects.get(slug=slug)
         except Runner.DoesNotExist:
@@ -42,8 +41,7 @@ class RunnerUploadView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminOrReadOnly, )
 
-    # pylint: disable=W0221
-    def post(self, request, slug):
+    def post(self, request, slug):  # pylint: disable=W0221
         try:
             runner = Runner.objects.get(slug=slug)
         except Runner.DoesNotExist:
@@ -79,12 +77,12 @@ class RuntimeView(generics.ListCreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminOrReadOnly, )
 
-    def get(self, request):
+    def get(self, request):  # pylint: disable=W0221
         queryset = self.get_queryset()
         serializer = RuntimeSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request):  # pylint: disable=W0221
         uploaded_file = request.data['file']
         runtime_dir = os.path.join(settings.FILES_ROOT, 'runtime/')
         if not os.path.isdir(runtime_dir):

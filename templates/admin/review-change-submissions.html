@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<ul>
+    <li><a href="../../">Home</a></li>
+    <li><a href="../">Games</a></li>
+    <li>{{ title }}</li>
+</ul>
+{% endblock %}
+{% block content %}
+
+<div class="grp-content-container">
+  {% if obsolete_changes > 0 %}
+    <p><strong>INFO:</strong> {{ obsolete_changes }} obsolete changes were deleted.</p>
+  {% endif %}
+  {% for change in change_suggestions %}
+    {% include "admin/change-submission.html" with game="change" %}
+  {% endfor %}
+  {% if not change_suggestions %}
+    <p>No change suggestions left.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -20,6 +20,8 @@ def validate_installer(installer):
         files_is_an_array,
         installer_steps_have_one_key,
         scummvm_has_gameid,
+        winesteam_scripts_use_correct_prefix,
+        dont_disable_monitor,
     ]
     for rule in rules:
         success, message = rule(installer)
@@ -72,7 +74,7 @@ def installer_steps_have_one_key(installer):
 
 def scummvm_has_gameid(installer):
     try:
-        runner = installer.runner.name
+        runner = installer.runner.slug
     except Runner.DoesNotExist:
         runner = ""
     script = get_installer_script(installer)
@@ -87,5 +89,44 @@ def scummvm_has_gameid(installer):
         return (
             False,
             "ScummVM game should have a game identifier in the 'game' section"
+        )
+    return SUCCESS
+
+
+def winesteam_scripts_use_correct_prefix(installer):
+    try:
+        runner = installer.runner.slug
+    except Runner.DoesNotExist:
+        runner = ""
+    if runner != 'winesteam':
+        return SUCCESS
+    script = get_installer_script(installer)
+    if 'game' not in script:
+        return (
+            False,
+            "Missing section game"
+        )
+    if '$USER' in script['game'].get('prefix', ''):
+        return (
+            False,
+            "Do not create the prefix in the home folder, use $GAMEDIR/prefix"
+        )
+    if script['game'].get('prefix', '').strip() == '$GAMEDIR':
+        return (
+            False,
+            "Do not create the prefix directly in the game folder, use $GAMEDIR/prefix"
+        )
+    return SUCCESS
+
+
+def dont_disable_monitor(installer):
+    script = get_installer_script(installer)
+    if 'system' not in script:
+        return SUCCESS
+    if 'disable_monitor' in script['system']:
+        return (
+            False,
+            "Do not disable the process monitor in installers, if you have "
+            "issues with the process monitor, submit an issue on Github"
         )
     return SUCCESS

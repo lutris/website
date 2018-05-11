@@ -1,9 +1,12 @@
 setup:
 	npm install
-	bower install --allow-root
-	grunt
+	npm run setup
+
+watch:
+	npm run watch
+
 run:
-	./manage.py runserver
+	./manage.py runserver 0.0.0.0:8000
 
 db:
 	./manage.py migrate
@@ -18,7 +21,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	./manage.py test $(test)
+	SEND_EMAILS=0 ./manage.py test --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)
@@ -58,7 +61,7 @@ shell:
 	./manage.py shell_plus --traceback
 
 worker:
-	celery worker -A lutrisweb -B --loglevel=debug --autoreload --hostname=lutris.net -E
+	celery worker -A lutrisweb -B --loglevel=debug --hostname=lutris.net -E
 
 sqlflush:
 	./manage.py sqlflush | psql -U lutris_staging -h localhost lutris_staging
@@ -82,5 +85,5 @@ start: deps setup run
 sync:
 	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
 	gunzip lutris.tar.gz
-	pg_restore --clean --dbname=lutris lutris.tar
+	sudo -u postgres pg_restore --clean --exit-on-error --dbname=lutris lutris.tar
 	rm lutris.tar

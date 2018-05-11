@@ -80,6 +80,12 @@ def initial_setup():
         run('git clone %s' % LUTRIS_REMOTE)
 
 
+def pip_list():
+    require('environment', provided_by=('staging', 'production'))
+    with cd(env.code_root):
+        with activate():
+            run('pip list')
+
 def requirements():
     require('environment', provided_by=('staging', 'production'))
     with cd(env.code_root):
@@ -205,7 +211,6 @@ def sql_restore():
 
 
 def deploy():
-    fix_perms(user='django')
     pull()
     bower()
     grunt()
@@ -213,15 +218,12 @@ def deploy():
     collect_static()
     migrate()
     docs()
-    fix_perms()
     nginx_reload()
     update_celery()
     supervisor_restart()
 
 
-def fastdeploy():
+def pythonfix():
+    """Apply a fix fro Python code only (no migration, no frontend change)"""
     pull()
-    bower()
-    grunt()
-    collect_static()
     supervisor_restart()

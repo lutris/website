@@ -15,21 +15,21 @@ class TestScriptValidator(TestCase):
     def test_files_must_not_be_dict(self):
         self.installer.content = json.dumps({'files': {}})
         is_valid, errors = validate_installer(self.installer)
-        self.assertFalse(is_valid)
+        self.assertFalse(is_valid, errors)
 
     def test_files_should_be_list(self):
         self.installer.content = json.dumps({'files': []})
         is_valid, errors = validate_installer(self.installer)
-        self.assertTrue(is_valid)
+        self.assertTrue(is_valid, errors)
 
     def test_scummvm_script_requires_game_id(self):
         script = json.dumps({'game': {}})
         installer = Installer(
-            runner=Runner(name="scummvm"),
+            runner=Runner(name="ScummVM", slug='scummvm'),
             content=script
         )
         is_valid, errors = validate_installer(installer)
-        self.assertFalse(is_valid)
+        self.assertFalse(is_valid, errors)
         self.assertIn("ScummVM game should have a "
                       "game identifier in the 'game' section",
                       errors)

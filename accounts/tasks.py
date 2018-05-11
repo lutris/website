@@ -5,9 +5,9 @@ from django.db import IntegrityError
 from django.utils.text import slugify
 
 import games.models
-from games.util.steam import create_game
 from accounts.models import User
 from emails.messages import send_daily_mod_mail
+from games.util.steam import create_game
 
 LOGGER = logging.getLogger()
 
@@ -19,7 +19,7 @@ def sync_steam_library(user_id):
     library = games.models.GameLibrary.objects.get(user=user)
     steam_games = games.util.steam.steam_sync(steamid)
     if not steam_games:
-        LOGGER.info("Steam user %s has no steam games")
+        LOGGER.info("Steam user %s has no steam games", user.username)
         return
     for game in steam_games:
         LOGGER.info("Adding %s to %s's library", game['name'], user.username)

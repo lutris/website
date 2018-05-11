@@ -14,7 +14,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.4.12"
+CLIENT_VERSION = "0.4.15"
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -189,6 +189,11 @@ SELECT2_JS = '/static/js/select2.min.js'
 SELECT2_CSS = '/static/css/select2.min.css'
 
 # Email
+
+try:
+    SEND_EMAILS = bool(int(os.environ.get('SEND_EMAILS', '1')))
+except ValueError:
+    SEND_EMAILS = True
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
@@ -200,6 +205,10 @@ CELERYBEAT_SCHEDULE = {
     'send-daily-mod-mail': {
         'task': 'accounts.tasks.daily_mod_mail',
         'schedule': crontab(hour=18, minute=0),
+    },
+    'delete-unchanged-forks': {
+        'task': 'games.tasks.delete_unchanged_forks',
+        'schedule': crontab(hour=17, minute=59)
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'

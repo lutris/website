@@ -6,6 +6,7 @@
 
 
 {% block content %}
+<h1>Account</h1>
 <div class="row">
   <div class="col-md-12">
   <div class="profile-header">
@@ -54,9 +55,9 @@
     </section>
 
     <section>
-      <h4>Game submissions</h4>
+      <h4>Submitted contributions</h4>
       {% if submissions %}
-      <p>The following games you submitted are awaiting approval from a
+      <p>The following contributions you submitted are awaiting approval from a
       moderator.</p>
       <ul class="game-list">
         {% for submission in submissions %}
@@ -67,7 +68,7 @@
       </ul>
       {% else %}
       <p>
-        You have no submitted games awaiting approval.
+        You have no submitted contributions awaiting approval.
       </p>
       {% endif %}
     </section>
