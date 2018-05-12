@@ -59,7 +59,7 @@ class Company(models.Model):
     def get_absolute_url(self):
         return reverse("games_by_company", args=(self.slug, ))
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s" % self.name
 
     def save(self, force_insert=True, using=None):
@@ -84,7 +84,7 @@ class Genre(models.Model):
     class Meta:
         ordering = ['name']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def save(self, force_insert=True, using=None):
@@ -187,7 +187,7 @@ class Game(models.Model):
             ('can_publish_game', "Can publish game"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         if self.change_for is None:
             return self.name
         else:
@@ -382,7 +382,7 @@ class Screenshot(models.Model):
 
     objects = managers.ScreenshotManager()
 
-    def __unicode__(self):
+    def __str__(self):
         desc = self.description if self.description else self.game.name
         return u"%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
@@ -591,7 +591,7 @@ class Installer(BaseInstaller):
     # Collection manager
     objects = InstallerManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.slug
 
     def set_default_installer(self):
@@ -634,7 +634,7 @@ class InstallerIssue(models.Model):
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return "Issue for {}".format(self.installer.slug)
 
     def get_absolute_url(self):
@@ -649,7 +649,7 @@ class GameLibrary(models.Model):
     class Meta:
         verbose_name_plural = "game libraries"
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s's library" % self.user.username
 
 
@@ -665,7 +665,7 @@ class Featured(models.Model):
     class Meta:
         verbose_name = "Featured content"
 
-    def __unicode__(self):
+    def __str__(self):
         return "[%s] %s" % (self.content_type, str(self.content_object), )
 
 
@@ -679,7 +679,7 @@ class GameSubmission(models.Model):
     class Meta:
         verbose_name = "User submitted game"
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} submitted {1} on {2}".format(self.user, self.game,
                                                   self.created_at)
 
@@ -739,7 +739,7 @@ class InstallerRevision(BaseInstaller):
 
         self.installer_id = self._version.object_id
 
-    def __unicode__(self):
+    def __str__(self):
         return self.comment
 
     def get_installer_data(self):

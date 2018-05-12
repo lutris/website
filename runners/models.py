@@ -24,7 +24,7 @@ class Runner(models.Model):
     class Meta(object):
         ordering = ['name']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @staticmethod
@@ -53,7 +53,7 @@ class RunnerVersion(models.Model):
     class Meta(object):
         ordering = ('version', 'architecture')
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} v{} ({})".format(self.runner.name,
                                      self.version,
                                      self.architecture)
@@ -78,5 +78,5 @@ class Runtime(models.Model):
     class Meta(object):
         ordering = ('-created_at', )
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} runtime (uploaded on {})".format(self.name, self.created_at)

@@ -10,7 +10,7 @@ class Category(models.Model):
     author = models.CharField(max_length=128)
     section = models.CharField(max_length=12, default='TOSEC')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta(object):
@@ -23,7 +23,7 @@ class Game(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta(object):
@@ -38,5 +38,5 @@ class Rom(models.Model):
     md5 = models.CharField(max_length=32)
     sha1 = models.CharField(max_length=64)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name

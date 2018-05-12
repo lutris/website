@@ -236,7 +236,7 @@ class TestPlatform(TestCase):
         platform.name = 'Linux'
         platform.save()
         self.assertEqual(platform.slug, 'linux')
-        self.assertEqual(platform.__unicode__(), 'Linux')
+        self.assertEqual(platform.__str__(), 'Linux')
 
 
 class TestCompany(TestCase):
@@ -245,7 +245,7 @@ class TestCompany(TestCase):
         company.name = 'id Software'
         company.save()
         self.assertEqual(company.slug, 'id-software')
-        self.assertEqual(company.__unicode__(), 'id Software')
+        self.assertEqual(company.__str__(), 'id Software')
 
 
 class TestGenre(TestCase):
@@ -254,4 +254,4 @@ class TestGenre(TestCase):
         genre.name = 'Platformer'
         genre.save()
         self.assertEqual(genre.slug, 'platformer')
-        self.assertEqual(genre.__unicode__(), 'Platformer')
+        self.assertEqual(genre.__str__(), 'Platformer')

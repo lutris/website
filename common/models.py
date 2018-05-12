@@ -22,7 +22,7 @@ class News(models.Model):
         verbose_name_plural = "news"
         db_table = 'news'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     # pylint: disable=E0202
@@ -40,7 +40,7 @@ class Upload(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.uploaded_file.name
 
     def validate(self):

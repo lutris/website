@@ -24,7 +24,7 @@ class User(AbstractUser):
     key = models.CharField(max_length=256, blank=True, default='')
     email_confirmed = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username
 
     @property
