@@ -121,17 +121,24 @@ def requirements(c, environment='production'):
 
 
 @task
-def update_celery(c):
+def setup_scripts(c):
     config = get_config(c)
-    tempfile = "/tmp/lutrisweb-celery.conf"
-    c.local('cp config/lutrisweb-celery.conf ' + tempfile)
-    c.local('sed -i s#%%ROOT%%#%(root)s#g ' % config + tempfile)
-    c.local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % config + tempfile)
-    print('%(root)s' % config)
-    c.put(tempfile, remote='%(root)s' % config)
+    c.put('config/celery_start.sh', remote='%(root)s/bin/celery_start.sh' % config)
+    c.put('config/gunicorn_start.sh', remote='%(root)s/bin/gunicorn_start.sh' % config)
+
+
+@task
+def setup_supervisor(c):
+    config = get_config(c)
+    config_filename = "lutris-supervisor.conf"
+    temppath = "/tmp/" + config_filename
+    c.local('cp config/%s ' % config_filename + temppath)
+    c.local('sed -i s#%%ROOT%%#%(root)s#g ' % config + temppath)
+    c.local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % config + temppath)
+    c.put(temppath, remote=temppath)
     c.sudo(
-        'mv %(root)s/lutrisweb-celery.conf '
-        '/etc/supervisor/conf.d/%(domain)s-celery.conf' % config
+        'mv %s /etc/supervisor/conf.d/%s.conf' %
+        (temppath, config['domain'])
     )
 
 
