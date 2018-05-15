@@ -39,7 +39,7 @@ DATABASES = {
     }
 }
 
-TIME_ZONE = 'Europe/Paris'
+TIME_ZONE = 'Etc/UTC'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
