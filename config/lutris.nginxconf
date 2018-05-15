@@ -1,5 +1,5 @@
 upstream lutris_server {
-    server unix:/srv/lutris/run/gunicorn.sock fail_timeout=0;
+    server unix:%ROOT%/run/gunicorn.sock fail_timeout=0;
 }
 
 server {
@@ -14,15 +14,20 @@ server {
 
     client_max_body_size 4G;
 
-    access_log /srv/lutris/logs/nginx-access.log;
-    error_log /srv/lutris/logs/nginx-error.log;
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-XSS-Protection 1;
+    add_header Content-Security-Policy "frame-ancestors 'self'";
+    add_header X-Content-Type-Options "nosniff" always;
+
+    access_log %ROOT%/logs/nginx-access.log;
+    error_log %ROOT%/logs/nginx-error.log;
 
     location /static/ {
-        alias /srv/lutris/lutris.net/static/;
+        alias %ROOT%/lutris.net/static/;
     }
 
     location /media/ {
-        alias /srv/lutris/lutris.net/media/;
+        alias %ROOT%/lutris.net/media/;
     }
 
     location /files {
@@ -47,6 +52,6 @@ server {
 
     error_page 500 502 503 504 /500.html;
     location = /500.html {
-        root /srv/lutris/lutris.net/templates/;
+        root %ROOT%/lutris.net/templates/;
     }
 }
