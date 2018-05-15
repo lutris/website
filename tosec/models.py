@@ -19,7 +19,7 @@ class Category(models.Model):
 
 
 class Game(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
@@ -31,7 +31,7 @@ class Game(models.Model):
 
 
 class Rom(models.Model):
-    game = models.ForeignKey(Game, related_name='roms', on_delete=models.SET_NULL)
+    game = models.ForeignKey(Game, related_name='roms', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     size = models.IntegerField()
     crc = models.CharField(max_length=16)

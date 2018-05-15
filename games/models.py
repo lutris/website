@@ -376,7 +376,7 @@ class Screenshot(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
 
@@ -570,8 +570,8 @@ class Installer(BaseInstaller):
     }
 
     game = models.ForeignKey(Game, related_name='installers', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
-    runner = models.ForeignKey('runners.Runner', on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    runner = models.ForeignKey('runners.Runner', on_delete=models.CASCADE)
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
@@ -630,7 +630,7 @@ class Installer(BaseInstaller):
 class InstallerIssue(models.Model):
     """Model to store problems about installers or update requests"""
     installer = models.ForeignKey(Installer, on_delete=models.CASCADE)
-    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 

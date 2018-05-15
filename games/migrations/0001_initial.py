@@ -133,8 +133,8 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('published', models.BooleanField(default=False)),
                 ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
-                ('runner', models.ForeignKey(to='runners.Runner', on_delete=models.SET_NULL)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
+                ('runner', models.ForeignKey(to='runners.Runner', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -146,7 +146,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('description', models.TextField()),
                 ('installer', models.ForeignKey(to='games.Installer', on_delete=models.CASCADE)),
-                ('submitted_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
+                ('submitted_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=256, null=True, blank=True)),
                 ('published', models.BooleanField(default=False)),
                 ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
-                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
+                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
