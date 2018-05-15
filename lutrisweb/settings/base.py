@@ -133,7 +133,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'sorl.thumbnail',
-    'tastypie',
     'rest_framework',
     'rest_framework.authtoken',
     'django_jcrop',

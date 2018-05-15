@@ -3,7 +3,6 @@ import logging
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from tastypie.models import create_api_key
 
 from emails import messages
 
@@ -27,5 +26,3 @@ def send_registration_email(sender, instance, created, **kwargs):
         token.create_token()
         token.save()
         messages.send_account_creation(instance, token.get_token_url())
-
-post_save.connect(create_api_key, sender=models.User)

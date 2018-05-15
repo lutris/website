@@ -13,7 +13,6 @@ djangorestframework==3.7.7
 django-compressor==2.2
 django_select2==5.11.1
 django-grappelli==2.10.1
-django-tastypie==0.13.3
 django-markupfield==1.4.3
 django_inlinecss==0.1.2
 django-reversion==2.0.10
