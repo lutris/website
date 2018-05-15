@@ -128,7 +128,7 @@ def setup_scripts(c):
 
 
 @task
-def setup_supervisor(c):
+def supervisor_setup(c):
     config = get_config(c)
     config_filename = "lutris-supervisor.conf"
     temppath = "/tmp/" + config_filename
@@ -265,9 +265,9 @@ def deploy(c):
     collect_static(c)
     migrate(c)
     docs(c)
-    nginx_reload(c)
-    update_celery(c)
+    supervisor_setup(c)
     supervisor_restart(c)
+    nginx_reload(c)
 
 
 @task
