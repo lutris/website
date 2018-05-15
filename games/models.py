@@ -155,10 +155,10 @@ class Game(models.Model):
     platforms = models.ManyToManyField(Platform)
     genres = models.ManyToManyField(Genre)
     publisher = models.ForeignKey(
-        Company, related_name='published_game', null=True, blank=True
+        Company, related_name='published_game', null=True, blank=True, on_delete=models.SET_NULL
     )
     developer = models.ForeignKey(
-        Company, related_name='developed_game', null=True, blank=True
+        Company, related_name='developed_game', null=True, blank=True, on_delete=models.SET_NULL
     )
     website = models.CharField(max_length=200, blank=True)
     icon = models.ImageField(upload_to='games/icons', blank=True)
@@ -176,7 +176,7 @@ class Game(models.Model):
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
     # corresponding data row
-    change_for = models.ForeignKey('self', null=True, blank=True)
+    change_for = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     objects = GameManager()
 
@@ -366,17 +366,17 @@ class Game(models.Model):
 
 
 class GameMetadata(models.Model):
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
     key = models.CharField(max_length=16)
     value = models.CharField(max_length=255)
 
 
 class Screenshot(models.Model):
     """Screenshots for games"""
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
 
@@ -569,9 +569,9 @@ class Installer(BaseInstaller):
         'garbage': 'Garbage: game is not playable'
     }
 
-    game = models.ForeignKey(Game, related_name='installers')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    runner = models.ForeignKey('runners.Runner')
+    game = models.ForeignKey(Game, related_name='installers', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    runner = models.ForeignKey('runners.Runner', on_delete=models.SET_NULL)
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
@@ -629,8 +629,8 @@ class Installer(BaseInstaller):
 
 class InstallerIssue(models.Model):
     """Model to store problems about installers or update requests"""
-    installer = models.ForeignKey(Installer)
-    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    installer = models.ForeignKey(Installer, on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
@@ -642,7 +642,7 @@ class InstallerIssue(models.Model):
 
 
 class GameLibrary(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     games = models.ManyToManyField(Game)
 
     # pylint: disable=W0232, R0903
@@ -654,7 +654,7 @@ class GameLibrary(models.Model):
 
 
 class Featured(models.Model):
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     image = models.ImageField(upload_to='featured', max_length=100)
@@ -670,8 +670,8 @@ class Featured(models.Model):
 
 
 class GameSubmission(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    game = models.ForeignKey(Game)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
@@ -698,7 +698,7 @@ class GameLink(models.Model):
         ('lemonamiga', 'Lemon Amiga'),
         ('github', 'Github'),
     )
-    game = models.ForeignKey(Game, related_name='links')
+    game = models.ForeignKey(Game, related_name='links', on_delete=models.CASCADE)
     website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -58,7 +58,7 @@ class RunnerVersion(models.Model):
                                      self.version,
                                      self.architecture)
 
-    runner = models.ForeignKey(Runner, related_name='runner_versions')
+    runner = models.ForeignKey(Runner, related_name='runner_versions', on_delete=models.CASCADE)
     version = models.CharField(max_length=32)
     architecture = models.CharField(max_length=8,
                                     choices=ARCH_CHOICES,

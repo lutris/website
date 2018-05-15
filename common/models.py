@@ -14,7 +14,7 @@ class News(models.Model):
     content = MarkupField(markup_type='restructuredtext')
     publish_date = models.DateTimeField(default=datetime.datetime.now)
     image = models.ImageField(upload_to='news', null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
 
     # pylint: disable=W0232, R0903
     class Meta(object):
@@ -38,7 +38,7 @@ class Upload(models.Model):
     uploaded_file = models.FileField(upload_to='uploads')
     destination = models.CharField(max_length=256)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.uploaded_file.name

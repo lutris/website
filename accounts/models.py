@@ -51,7 +51,6 @@ class User(AbstractUser):
         self.steamid = user_openid.claimed_id.split('/')[-1]
 
     def generate_key(self):
-        """API key generation from TastyPie"""
         # Get a random UUID.
         new_uuid = uuid.uuid4()
         # Hmac that beast.
@@ -75,7 +74,7 @@ class User(AbstractUser):
 
 
 class AuthToken(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ip_address = models.GenericIPAddressField()
     token = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
