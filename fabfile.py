@@ -7,15 +7,11 @@ from invoke import task
 
 
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
-
-env.project = 'lutrisweb'
-env.home = '/srv'
-env.name = 'lutris'
-env.settings_module = 'lutrisweb.settings.production'
+DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
 
 
 def _setup_path():
-    env.root = os.path.join(env.home, env.name)
+    env.root = os.path.join('/srv/lutris')
     env.code_root = os.path.join(env.root, env.domain)
 
 
@@ -31,7 +27,6 @@ def staging():
 
 def production():
     """ use production environment on remote host"""
-    env.sql_backup_dir = '/srv/backup/sql/'
     env.user = 'django'
     env.environment = 'production'
     env.domain = 'lutris.net'
@@ -45,7 +40,7 @@ def activate(c):
         'export DJANGO_SETTINGS_MODULE=%s && '
         '. %s/bin/envvars && '
         '. %s/bin/activate'
-        % (env.settings_module, env.root, env.root)
+        % (DJANGO_SETTINGS_MODULE, env.root, env.root)
     )
 
 
@@ -101,7 +96,7 @@ def requirements(c):
 
 
 def update_celery(c):
-    tempfile = "/tmp/%(project)s-celery.conf" % env
+    tempfile = "/tmp/lutrisweb-celery.conf"
     c.local('cp config/lutrisweb-celery.conf ' + tempfile)
     c.local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
     c.local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
@@ -191,7 +186,8 @@ def docs(c):
 
 
 def sql_dump(c):
-    with c.cd(env.sql_backup_dir):
+    sql_backup_dir = '/srv/backup/sql/'
+    with c.cd(sql_backup_dir):
         backup_file = "lutris-{}.tar".format(
             datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
         )
