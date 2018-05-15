@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255)),
-                ('category', models.ForeignKey(to='tosec.Category')),
+                ('category', models.ForeignKey(to='tosec.Category', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('category', 'name'),
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('crc', models.CharField(max_length=16)),
                 ('md5', models.CharField(max_length=32)),
                 ('sha1', models.CharField(max_length=64)),
-                ('game', models.ForeignKey(related_name='roms', to='tosec.Game')),
+                ('game', models.ForeignKey(related_name='roms', to='tosec.Game', on_delete=models.CASCADE)),
             ],
             options={
             },

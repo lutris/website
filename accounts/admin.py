@@ -1,6 +1,6 @@
 # pylint: disable=R0201
 from django.contrib import admin
-from django.core import urlresolvers
+from django.urls import reverse
 
 from accounts import models
 
@@ -15,11 +15,12 @@ class UserAdmin(admin.ModelAdmin):
         return obj.gamelibrary.games.count()
 
     def installers_link(self, obj):
-        installers_url = urlresolvers.reverse('admin:games_installer_changelist')
+        installers_url = reverse('admin:games_installer_changelist')
         return "<a href='%s?user__id__exact=%s'>Installers</a>" % (
             installers_url, obj.id
         )
     installers_link.allow_tags = True
     installers_link.short_description = 'Installers'
+
 
 admin.site.register(models.User, UserAdmin)

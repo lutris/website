@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('ip_address', models.IPAddressField()),
                 ('token', models.CharField(max_length=64)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },

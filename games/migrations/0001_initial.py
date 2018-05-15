@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(upload_to=b'featured')),
                 ('description', models.CharField(max_length=255, null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
+                ('content_type', models.ForeignKey(to='contenttypes.ContentType', on_delete=models.SET_NULL)),
             ],
             options={
                 'verbose_name': 'Featured content',
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('steamid', models.PositiveIntegerField(null=True, blank=True)),
                 ('flags', bitfield.models.BitField(((b'fully_libre', b'Fully libre'), (b'open_engine', b'Open engine only'), (b'free', b'Free'), (b'freetoplay', b'Free-to-play'), (b'pwyw', b'Pay what you want')), default=None)),
-                ('developer', models.ForeignKey(related_name='developed_game', blank=True, to='games.Company', null=True)),
+                ('developer', models.ForeignKey(related_name='developed_game', blank=True, to='games.Company', null=True, on_delete=models.SET_NULL)),
             ],
             options={
                 'ordering': ['name'],
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('games', models.ManyToManyField(to='games.Game')),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'game libraries',
@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('key', models.CharField(max_length=16)),
                 ('value', models.CharField(max_length=255)),
-                ('game', models.ForeignKey(to='games.Game')),
+                ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -100,8 +100,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('accepted_at', models.DateTimeField(null=True)),
-                ('game', models.ForeignKey(to='games.Game')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'User submitted game',
@@ -132,9 +132,9 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('published', models.BooleanField(default=False)),
-                ('game', models.ForeignKey(to='games.Game')),
-                ('runner', models.ForeignKey(to='runners.Runner')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
+                ('runner', models.ForeignKey(to='runners.Runner', on_delete=models.SET_NULL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
             ],
             options={
             },
@@ -145,8 +145,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('description', models.TextField()),
-                ('installer', models.ForeignKey(to='games.Installer')),
-                ('submitted_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('installer', models.ForeignKey(to='games.Installer', on_delete=models.CASCADE)),
+                ('submitted_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
             ],
             options={
             },
@@ -160,8 +160,8 @@ class Migration(migrations.Migration):
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
                 ('description', models.CharField(max_length=256, null=True, blank=True)),
                 ('published', models.BooleanField(default=False)),
-                ('game', models.ForeignKey(to='games.Game')),
-                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('game', models.ForeignKey(to='games.Game', on_delete=models.CASCADE)),
+                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)),
             ],
             options={
             },
@@ -182,7 +182,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='publisher',
-            field=models.ForeignKey(related_name='published_game', blank=True, to='games.Company', null=True),
+            field=models.ForeignKey(related_name='published_game', blank=True, to='games.Company', null=True, on_delete=models.SET_NULL),
             preserve_default=True,
         ),
     ]

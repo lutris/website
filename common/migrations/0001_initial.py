@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('publish_date', models.DateTimeField(default=datetime.datetime.now)),
                 ('image', models.ImageField(null=True, upload_to=b'news', blank=True)),
                 ('_content_rendered', models.TextField(editable=False)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['-publish_date'],
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('uploaded_file', models.FileField(upload_to=b'uploads')),
                 ('destination', models.CharField(max_length=256)),
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('uploaded_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },

@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('version', models.CharField(max_length=32)),
                 ('architecture', models.CharField(default=b'x86_64', max_length=8, choices=[(b'i386', b'32 bit'), (b'x86_64', b'64 bit'), (b'arm', b'ARM')])),
                 ('url', models.URLField(blank=True)),
-                ('runner', models.ForeignKey(related_name='versions', to='runners.Runner')),
+                ('runner', models.ForeignKey(related_name='versions', to='runners.Runner', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('version', 'architecture'),
