@@ -3,7 +3,7 @@ import logging
 from importlib import import_module
 
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from django.contrib import admin
 from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
@@ -13,35 +13,35 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/games/', include('games.urls.admin')),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^select2/', include('django_select2.urls')),
-    url(r'^openid/', include('django_openid_auth.urls')),
-    url(r'^user/', include('accounts.urls')),
-    url(r'^api/accounts/token', obtain_auth_token, name='accounts_get_token'),
-    url(r'^api/accounts/auth',
-        include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api/tosec', include('tosec.urls')),
-    url(r'^api/runners', include('runners.runner_urls')),
-    url(r'^api/runtime', include('runners.runtime_urls')),
-    url(r'^api/games', include('games.urls.games')),
-    url(r'^api/installers', include('games.urls.installers')),
-    url(r'^games/', include('games.urls.pages')),
-    url(r'^bundles', include('bundles.urls')),
-    url(r'^email/', include('emails.urls')),
-    url(r'^steam-login/', login_begin, kwargs={
-        'login_complete_view': 'associate_steam'}, name='steam_login'),
-    url(r'thegamesdb/', include('thegamesdb.urls')),
-    url(r'^', include('common.urls')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^grappelli/', include('grappelli.urls')),
+    re_path(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    re_path(r'^admin/games/', include('games.urls.admin')),
+    re_path(r'^select2/', include('django_select2.urls')),
+    re_path(r'^openid/', include('django_openid_auth.urls')),
+    re_path(r'^user/', include('accounts.urls')),
+    re_path(r'^api/accounts/token', obtain_auth_token, name='accounts_get_token'),
+    re_path(r'^api/accounts/auth',
+            include('rest_framework.urls', namespace='rest_framework')),
+    re_path(r'^api/tosec', include('tosec.urls')),
+    re_path(r'^api/runners', include('runners.runner_urls')),
+    re_path(r'^api/runtime', include('runners.runtime_urls')),
+    re_path(r'^api/games', include('games.urls.games')),
+    re_path(r'^api/installers', include('games.urls.installers')),
+    re_path(r'^games/', include('games.urls.pages')),
+    re_path(r'^bundles', include('bundles.urls')),
+    re_path(r'^email/', include('emails.urls')),
+    re_path(r'^steam-login/', login_begin, kwargs={
+            'login_complete_view': 'associate_steam'}, name='steam_login'),
+    re_path(r'thegamesdb/', include('thegamesdb.urls')),
+    re_path(r'^', include('common.urls')),
 ]
 
 if settings.DEBUG:
     from django.views.static import serve
     urlpatterns += [
-        url(r'^media/(?P<path>.*)$', serve,
-            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+        re_path(r'^media/(?P<path>.*)$', serve,
+                {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     ]
 
 
