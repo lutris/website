@@ -20,7 +20,7 @@
       <!-- Screenshot-->
       <div class="screenshot"><a href="{{ MEDIA_URL }}{{ screenshot.image }}" class="screenshot">
         {% thumbnail screenshot.image '690x388' as img %}
-          <img src="{{ MEDIA_URL }}{{ img }}" title="{{ screenshot.description }}"/>
+          <img src="{{ img.url }}" title="{{ screenshot.description }}"/>
         {% endthumbnail %}
       </a>
       </div>

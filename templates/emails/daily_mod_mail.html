@@ -57,7 +57,7 @@
   {% for screenshot in screenshots %}
   <a href="{{ screenshot.game.get_absolute_url }}">
      {% thumbnail screenshot.image '184x130' as img %}
-        <img src="{{ MEDIA_URL }}{{ img }}" title="{{ screenshot.description }}"/>
+        <img src="{{ img.url }}" title="{{ screenshot.description }}"/>
       {% endthumbnail %}
     </a>
   {% endfor %}

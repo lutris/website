@@ -8,7 +8,7 @@
     <p> Posted by {{ news.user }} {{ news.publish_date }} </p>
     {% if news.image %}
        {% thumbnail news.image '400x400' format='PNG' upscale=False as image %}
-        <a href="{{ MEDIA_URL }}{{ news.image }}">
+        <a href="{{ news.image.url }}">
           <img src="{{ image.url }}" />
         </a>
        {% endthumbnail %}
