@@ -1,5 +1,5 @@
 import os
-from base import *  # noqa
+from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
 MEDIA_URL = '//lutris.net/media/'
