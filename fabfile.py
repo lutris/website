@@ -7,6 +7,7 @@ from invoke import task
 
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
+NVM_DIR = '/home/django/.nvm'
 
 
 def get_config(context):
@@ -54,6 +55,10 @@ def activate(c):
     )
 
 
+def nvm(c):
+    return c.prefix('. %s/nvm.sh && nvm use default' % NVM_DIR)
+
+
 @task
 def touch_wsgi(c):
     """Touch wsgi file to trigger reload."""
@@ -87,9 +92,9 @@ def test(c):
 def initial_setup(c):
     """Setup virtualenv"""
     config = get_config(c)
+    c.sudo("apt install -y python3-venv")
     c.sudo("mkdir -p %s" % config['root'])
     c.sudo("chown %s:%s %s" % (c.user, c.user, config['root']))
-    c.sudo("apt install -y python3-venv")
     with c.cd(config['root']):
         c.run('python3 -m venv .')
         c.run('git clone %s %s' % (LUTRIS_REMOTE, config['domain']))
@@ -144,29 +149,32 @@ def pull(c):
     with c.cd(config['code_root']):
         c.run("git checkout %s" % config['git_branch'])
         c.run("git pull")
-        c.run("git log")
 
 
 @task
 def npm(c):
     config = get_config(c)
     with c.cd(config['code_root']):
-        c.run("npm install -U bower")
-        c.run("npm install")
+        with nvm(c):
+            c.run("npm install -U bower")
+            c.run("npm install")
 
 
+@task
 def bower(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         c.run("bower install")
 
 
+@task
 def grunt(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         c.run("grunt")
 
 
+@task
 def collect_static(c):
     config = get_config(c)
     with c.cd(config['code_root']):
@@ -174,6 +182,7 @@ def collect_static(c):
             c.run('./manage.py collectstatic --noinput')
 
 
+@task
 def fix_perms(c, user='www-data', group=None):
     if not group:
         group = user
@@ -193,11 +202,6 @@ def clean(c):
 
 
 @task
-def configtest(c):
-    c.sudo("service nginx configtest")
-
-
-@task
 def authorize(c, ip):
     config = get_config(c)
     with c.cd(config['code_root']):
@@ -205,6 +209,7 @@ def authorize(c, ip):
             c.run('./manage.py authorize %s' % ip)
 
 
+@task
 def docs(c):
     config = get_config(c)
     with c.cd(config['code_root']):
@@ -213,6 +218,7 @@ def docs(c):
             c.run("make docs")
 
 
+@task
 def sql_dump(c):
     sql_backup_dir = '/srv/backup/sql/'
     with c.cd(sql_backup_dir):
@@ -225,6 +231,7 @@ def sql_dump(c):
         c.get(backup_file, backup_file)
 
 
+@task
 def sql_restore(c):
     """Restore a SQL DB dump to the local database"""
     db_dump = None
@@ -245,9 +252,9 @@ def sql_restore(c):
 def deploy(c):
     """Run a full deploy"""
     pull(c)
+    requirements(c)
     bower(c)
     grunt(c)
-    requirements(c)
     collect_static(c)
     migrate(c)
     docs(c)
