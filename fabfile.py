@@ -2,8 +2,6 @@ import re
 import os
 import datetime
 
-from fabric import Connection, Config
-from paramiko import SSHConfig
 from invoke import task
 
 
@@ -11,28 +9,27 @@ LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
 
 
-def get_connection():
-    config = Config(ssh_config=SSHConfig(), overrides={'user': 'django'})
-    return Connection(host='lutris', config=config)
-
-
 def get_config(context=None):
-    if context:
-        print(context.host)
     env = 'staging'
+    if context and context.host == 'lutris.net':
+        env = 'production'
+
     if env == 'production':
         domain = 'lutris.net'
         root = os.path.join('/srv/lutris')
+        git_branch = 'master'
     elif env == 'staging':
         domain = 'dev.lutris.net'
         root = os.path.join('/srv/lutris_staging')
+        git_branch = 'py3'
     else:
         raise ValueError("Unsupported environment %s" % env)
 
     return {
         'root': root,
         'code_root': os.path.join(root, domain),
-        'domain': domain
+        'domain': domain,
+        'git_branch': git_branch
     }
 
 
@@ -149,6 +146,7 @@ def migrate(c):
 def pull(c):
     config = get_config()
     with c.cd(config['code_root']):
+        c.run("git checkout %s" % config['git_branch'])
         c.run("git pull")
 
 
