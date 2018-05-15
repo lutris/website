@@ -158,7 +158,7 @@ def profile_delete(request, username):
 @csrf_exempt
 def associate_steam(request):
     LOGGER.info("Associating Steam user with Lutris account")
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         LOGGER.info("User is authenticated, completing login")
         return login_complete(request)
     else:
