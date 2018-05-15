@@ -2,14 +2,14 @@ import datetime
 import hashlib
 import hmac
 import logging
-import urllib
 import uuid
+from urllib.parse import urlencode
 
+from django.db import models
+from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.urls import reverse
-from django.utils import timezone
 from django_openid_auth.models import UserOpenID
 
 from emails import messages
@@ -24,6 +24,9 @@ class User(AbstractUser):
     key = models.CharField(max_length=256, blank=True, default='')
     email_confirmed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.username
+
     @property
     def avatar_url(self):
         if self.avatar:
@@ -33,7 +36,7 @@ class User(AbstractUser):
         return (
             "https://www.gravatar.com/avatar/" +
             hashlib.md5(self.email.encode('utf-8').lower()).hexdigest() + "?" +
-            urllib.urlencode({'d': default_url, 's': str(size)})
+            urlencode({'d': default_url, 's': str(size)})
         )
 
     def set_steamid(self):
@@ -80,8 +83,8 @@ class AuthToken(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         self.token = str(uuid.uuid4())
-        return super(AuthToken, self).save(force_insert=force_insert, force_update=force_update, using=using,
-                                           update_fields=update_fields)
+        return super(AuthToken, self).save(force_insert=force_insert, force_update=force_update,
+                                           using=using, update_fields=update_fields)
 
 
 class EmailConfirmationToken(models.Model):

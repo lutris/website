@@ -14,7 +14,7 @@ def get_auto_increment_slug(model, instance, text, slug=None):
     :param slug: Optional initial slug
     :return: Unique slug for the model
     """
-    text = unicode(text)
+    text = str(text)
     if not slug:
         original_slug = slugify(text)[:SLUG_MAX_LENGTH]
         slug = original_slug

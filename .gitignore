@@ -14,6 +14,7 @@ local_settings.py
 nosetests.xml
 coverage.xml
 .coverage
+fabric.yaml
 /components
 public/js
 public/css

@@ -6,7 +6,7 @@ from accounts import models
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'email', 'email_confirmed', 'is_staff',
+    list_display = ('__str__', 'email', 'email_confirmed', 'is_staff',
                     'steamid', 'website', 'game_count', 'installers_link')
     list_filter = ('is_staff', 'groups')
     search_fields = ('username', 'email')

@@ -57,7 +57,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class InstallerAdmin(VersionAdmin):
-    list_display = ('__unicode__', 'runner', 'version', 'game_link', 'user',
+    list_display = ('__str__', 'runner', 'version', 'game_link', 'user',
                     'created_at', 'updated_at', 'published', 'draft')
     list_filter = ('published', 'runner', 'version')
     list_editable = ('published', )
@@ -80,7 +80,7 @@ class InstallerAdmin(VersionAdmin):
 
 
 class InstallerIssueAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'submitted_by', 'submitted_on', 'installer')
+    list_display = ('__str__', 'submitted_by', 'submitted_on', 'installer')
     readonly_fields = ('submitted_on', 'game_link',)
 
     def game_link(self, obj):
@@ -108,7 +108,7 @@ class GameLinkAdmin(admin.TabularInline):
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
-    list_display = ('__unicode__', 'is_public', 'year', 'steamid', 'gogslug',
+    list_display = ('__str__', 'is_public', 'year', 'steamid', 'gogslug',
                     'humblestoreid', 'created', 'updated', 'custom_actions')
     list_filter = (GameFilter, 'is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
@@ -161,7 +161,7 @@ class GameAdmin(admin.ModelAdmin):
 
 class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("-uploaded_at", )
-    list_display = ("__unicode__", "game_link", "uploaded_at", "published")
+    list_display = ("__str__", "game_link", "uploaded_at", "published")
     list_editable = ("published", )
     readonly_fields = ('game_link',)
     search_fields = ['game__name']
@@ -176,7 +176,7 @@ class ScreenshotAdmin(admin.ModelAdmin):
 
 
 class FeaturedAdmin(admin.ModelAdmin):
-    list_display = ("__unicode__", "created_at")
+    list_display = ("__str__", "created_at")
 
 
 class GameSubmissionAdmin(admin.ModelAdmin):

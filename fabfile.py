@@ -2,57 +2,68 @@ import re
 import os
 import datetime
 
-from fabric import Connection
 from invoke import task
 
 
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
-
-env.project = 'lutrisweb'
-env.home = '/srv'
-env.name = 'lutris'
-env.settings_module = 'lutrisweb.settings.production'
+DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
+NVM_DIR = '/home/django/.nvm'
 
 
-def _setup_path():
-    env.root = os.path.join(env.home, env.name)
-    env.code_root = os.path.join(env.root, env.domain)
+def get_config(context):
+    try:
+        host = context.host
+    except AttributeError:
+        host = 'localhost'
 
+    if host == 'lutris.net':
+        env = 'production'
+    elif host == 'dev.lutris.net':
+        env = 'staging'
+    else:
+        env = 'local'
 
-def staging():
-    """ use staging environment on remote host"""
-    env.user = 'django'
-    env.environment = 'staging'
-    env.domain = 'dev.lutris.net'
-    env.port = '22101'
-    env.hosts = [env.domain + ':' + env.port]
-    _setup_path()
+    code_root = None
+    if env == 'production':
+        root = os.path.join('/srv/lutris')
+        git_branch = 'master'
+    elif env == 'staging':
+        root = os.path.join('/srv/lutris_staging')
+        git_branch = 'py3'
+    else:
+        root = os.path.dirname(os.path.abspath(__file__))
+        code_root = root
+        git_branch = ''
 
-
-def production():
-    """ use production environment on remote host"""
-    env.sql_backup_dir = '/srv/backup/sql/'
-    env.user = 'django'
-    env.environment = 'production'
-    env.domain = 'lutris.net'
-    env.port = '22101'
-    env.hosts = [env.domain]
-    _setup_path()
+    return {
+        'root': root,
+        'code_root': code_root or os.path.join(root, host),
+        'domain': host,
+        'git_branch': git_branch,
+        'env': env
+    }
 
 
 def activate(c):
+    config = get_config(c)
+    root = config['root']
     return c.prefix(
         'export DJANGO_SETTINGS_MODULE=%s && '
         '. %s/bin/envvars && '
         '. %s/bin/activate'
-        % (env.settings_module, env.root, env.root)
+        % (DJANGO_SETTINGS_MODULE, root, root)
     )
+
+
+def nvm(c):
+    return c.prefix('. %s/nvm.sh && nvm use default' % NVM_DIR)
 
 
 @task
 def touch_wsgi(c):
     """Touch wsgi file to trigger reload."""
-    conf_dir = os.path.join(env.code_root, 'config')
+    config = get_config(c)
+    conf_dir = os.path.join(config['code_root'], 'config')
     with c.cd(conf_dir):
         c.run('touch lutrisweb.wsgi')
 
@@ -60,147 +71,174 @@ def touch_wsgi(c):
 @task
 def nginx_reload(c):
     """ reload Nginx on remote host """
-    c.sudo('service nginx reload', shell=False)
+    c.sudo('service nginx reload')
 
 
 @task
 def supervisor_restart(c):
     """ Reload Supervisor service """
-    c.sudo('service supervisor restart', shell=False)
+    c.sudo('service supervisor restart')
 
 
 @task
 def test(c):
-    c.run("python manage.py test games")
-    c.run("python manage.py test accounts")
+    config = get_config(c)
+    with c.cd(config['code_root']):
+        with activate(c):
+            c.run("python manage.py test accounts")
 
 
 @task
 def initial_setup(c):
     """Setup virtualenv"""
-    c.run("mkdir -p %s" % env.root)
-    with c.cd(env.root):
-        c.run('virtualenv .')
-        c.run('git clone %s' % LUTRIS_REMOTE)
+    config = get_config(c)
+    c.sudo("apt install -y python3-venv")
+    c.sudo("mkdir -p %s" % config['root'])
+    c.sudo("chown %s:%s %s" % (c.user, c.user, config['root']))
+    with c.cd(config['root']):
+        c.run('python3 -m venv .')
+        c.run('git clone %s %s' % (LUTRIS_REMOTE, config['domain']))
 
 
 @task
 def pip_list(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         with activate(c):
             c.run('pip list')
 
 
 @task
-def requirements(c):
-    with c.cd(env.code_root):
+def requirements(c, environment='production'):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         with activate(c):
+            c.run('pip install -U pip')
+            c.run('pip install -U wheel')
             c.run(
-                'pip install -r config/requirements/%s.pip --exists-action=s' % env.environment
+                'pip install -r config/requirements/%s.pip --exists-action=s' % environment
             )
 
 
-def update_celery(c):
-    tempfile = "/tmp/%(project)s-celery.conf" % env
-    c.local('cp config/lutrisweb-celery.conf ' + tempfile)
-    c.local('sed -i s#%%ROOT%%#%(root)s#g ' % env + tempfile)
-    c.local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % env + tempfile)
-    c.put(tempfile, '%(root)s' % env)
+@task
+def setup_scripts(c):
+    config = get_config(c)
+    c.put('config/celery_start.sh', remote='%(root)s/bin/celery_start.sh' % config)
+    c.put('config/gunicorn_start.sh', remote='%(root)s/bin/gunicorn_start.sh' % config)
+
+
+@task
+def supervisor_setup(c):
+    config = get_config(c)
+    config_filename = "lutris-supervisor.conf"
+    temppath = "/tmp/" + config_filename
+    c.local('cp config/%s ' % config_filename + temppath)
+    c.local('sed -i s#%%ROOT%%#%(root)s#g ' % config + temppath)
+    c.local('sed -i s/%%DOMAIN%%/%(domain)s/g ' % config + temppath)
+    c.put(temppath, remote=temppath)
     c.sudo(
-        'cp %(root)s/lutrisweb-celery.conf /etc/supervisor/conf.d/' % env,
-        shell=False
+        'mv %s /etc/supervisor/conf.d/%s.conf' %
+        (temppath, config['domain'])
     )
 
 
 @task
-def copy_local_settings(c):
-    c.put('config/local_settings_%(environment)s.py' % env, env.code_root)
-    with c.cd(env.code_root):
-        c.run('mv local_settings_%(environment)s.py local_settings_template.py' % env)
-
-
 def migrate(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         with activate(c):
             c.run("./manage.py migrate")
 
 
-def clone(c):
-    with c.cd(env.root):
-        c.run("git clone /srv/git/lutrisweb")
-
-
+@task
 def pull(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
+        c.run("git checkout %s" % config['git_branch'])
         c.run("git pull")
 
 
+@task
 def npm(c):
-    with c.cd(env.code_root):
-        c.run("npm install -U bower")
-        c.run("npm install")
+    config = get_config(c)
+    with c.cd(config['code_root']):
+        with nvm(c):
+            c.run("npm install -U bower")
+            c.run("npm install")
 
 
+@task
 def bower(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         c.run("bower install")
 
 
+@task
 def grunt(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         c.run("grunt")
 
 
+@task
 def collect_static(c):
-    c.require('code_root', provided_by=('stating', 'production'))
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         with activate(c):
             c.run('./manage.py collectstatic --noinput')
 
 
+@task
 def fix_perms(c, user='www-data', group=None):
     if not group:
-        group = env.user
-    with c.cd(env.code_root):
+        group = user
+    config = get_config(c)
+    with c.cd(config['code_root']):
         c.sudo('chown -R %s:%s static' % (user, group))
         c.sudo('chmod -R ug+w static')
         c.sudo('chown -R %s:%s media' % (user, group))
         c.sudo('chmod -R ug+w media')
 
 
+@task
 def clean(c):
-    with c.cd(env.code_root):
-        c.run('find . -name "*.pyc" -delete')
+    config = get_config(c)
+    with c.cd(config['code_root']):
+        c.run('py3clean .')
 
 
-def configtest(c):
-    c.sudo("service nginx configtest")
-
-
+@task
 def authorize(c, ip):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         with activate(c):
             c.run('./manage.py authorize %s' % ip)
 
 
+@task
 def docs(c):
-    with c.cd(env.code_root):
+    config = get_config(c)
+    with c.cd(config['code_root']):
         c.run("make client")
         with activate(c):
             c.run("make docs")
 
 
+@task
 def sql_dump(c):
-    with c.cd(env.sql_backup_dir):
+    sql_backup_dir = '/srv/backup/sql/'
+    with c.cd(sql_backup_dir):
         backup_file = "lutris-{}.tar".format(
             datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
         )
         c.run('pg_dump --format=tar lutris > {}'.format(backup_file))
         c.run('gzip {}'.format(backup_file))
         backup_file += '.gz'
-        get(backup_file, backup_file)
+        c.get(backup_file, backup_file)
 
 
+@task
 def sql_restore(c):
     """Restore a SQL DB dump to the local database"""
     db_dump = None
@@ -221,15 +259,15 @@ def sql_restore(c):
 def deploy(c):
     """Run a full deploy"""
     pull(c)
+    requirements(c)
     bower(c)
     grunt(c)
-    requirements(c)
     collect_static(c)
     migrate(c)
     docs(c)
-    nginx_reload(c)
-    update_celery(c)
+    supervisor_setup(c)
     supervisor_restart(c)
+    nginx_reload(c)
 
 
 @task

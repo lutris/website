@@ -32,12 +32,12 @@ class Platform(models.Model):
     class Meta:
         ordering = ('name', )
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(unicode(self.name))
+            self.slug = slugify(str(self.name))
         return super(Platform, self).save(*args, **kwargs)
 
     @staticmethod

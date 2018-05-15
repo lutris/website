@@ -1,6 +1,6 @@
+from __future__ import unicode_literals
 import json
 from django.core.management.base import BaseCommand
-# from games import models
 from accounts.models import User
 
 
@@ -39,8 +39,8 @@ class Command(BaseCommand):
             if 'winesteam' in runners:
                 game_works = True
                 for installer in game.installers.all():
-                    if(installer.runner.slug == 'winesteam'
-                       and installer.rating == 'garbage'):
+                    if(installer.runner.slug == 'winesteam' and
+                       installer.rating == 'garbage'):
                         game_works = False
                 if game_works:
                     library_stats['wine'] += 1
@@ -48,6 +48,6 @@ class Command(BaseCommand):
                     library_stats['windows_only'] += 1
                 continue
             library_stats['unknown'] += 1
-            self.stdout.write(unicode(game))
+            self.stdout.write(str(game))
 
         self.stdout.write(json.dumps(library_stats, indent=2))
