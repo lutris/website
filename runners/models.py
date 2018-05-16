@@ -37,7 +37,7 @@ class Runner(models.Model):
             version = runner_version.version
             version_match = re.search(r'(\d[\d\.]+\d)', version)
             if not version_match:
-                return ([], '', '')
+                return []
             version_number = version_match.groups()[0]
             prefix = version[0:version_match.span()[0]]
             suffix = version[version_match.span()[1]:]
