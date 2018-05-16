@@ -58,7 +58,7 @@ def validate(payload, signature, secret):
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
-    hmac_ = hmac.new(secret, payload, digestmod=hashlib.sha256)
+    hmac_ = hmac.new(bytes(secret), payload, digestmod=hashlib.sha256)
     this_signature = hmac_.hexdigest()
 
     if this_signature != signature:
