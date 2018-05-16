@@ -597,21 +597,23 @@ def submit_issue(request):
     return HttpResponse(json.dumps(response))
 
 
+def get_revisions(filter):
+    """Utility function to return Version objects while deleting orphans."""
+    revisions = Version.objects.filter(revision__comment__startswith=filter)
+    orphans = [revision for revision in revisions if not revision.object]
+    if orphans:
+        for revision in revisions:
+            LOGGER.info("Deleting orphan revision %s", revision)
+            revision.delete()
+        revisions = Version.objects.filter(revision__comment__startswith=filter)
+    return revisions
+
+
 @staff_member_required
 def installer_submissions(request):
-    submissions = Version.objects.filter(revision__comment__startswith="[submission]")
-    for submission in submissions:
-        if not submission.object:
-            LOGGER.info("Deleting orphan submission %s", submission)
-            submission.delete()
-
-    drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
-    for draft in drafts:
-        if not draft.object:
-            LOGGER.info("Deleting orphan draft %s", draft)
-            draft.delete()
-
-    installers = Installer.objects.filter(published=False)[:20]
+    submissions = get_revisions("[submission]")
+    drafts = get_revisions("[draft]")
+    installers = Installer.objects.filter(published=False)
     unpublished_games = (
         Game.objects.filter(change_for__isnull=True)
         .filter(installers__isnull=False, is_public=False)
@@ -619,8 +621,8 @@ def installer_submissions(request):
     )
     return render(request, 'installers/submissions.html', {
         'submissions': submissions,
-        'drafts': drafts,
-        'installers': installers,
+        'drafts': drafts[:20],
+        'installers': installers[:20],
         'unpublished_games': unpublished_games
     })
 
