@@ -25,7 +25,6 @@ from django.utils.text import slugify
 
 from common.util import get_auto_increment_slug
 from emails import messages
-from games import managers
 from games.util import steam
 from platforms.models import Platform
 from runners.models import Runner
@@ -74,12 +73,24 @@ class Company(models.Model):
         return ('name__icontains', 'slug__icontains')
 
 
+class GenreManager(models.Manager):
+    def with_games(self):
+        genre_list = (
+            Game.objects.with_installer()
+            .values_list('genres')
+            .annotate(g_count=Count('genres'))
+            .filter(g_count__gt=0)
+        )
+        genre_ids = [genre[0] for genre in genre_list]
+        return self.get_queryset().filter(id__in=genre_ids)
+
+
 class Genre(models.Model):
     """Gaming genre"""
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
 
-    objects = managers.GenreManager()
+    objects = GenreManager()
 
     # pylint: disable=W0232, R0903
     class Meta:
@@ -372,6 +383,17 @@ class GameMetadata(models.Model):
     value = models.CharField(max_length=255)
 
 
+class ScreenshotManager(models.Manager):
+    def published(self, user=None, is_staff=False):
+        query = self.get_queryset()
+        query = query.order_by('uploaded_at')
+        if is_staff:
+            return query
+        elif user:
+            return query.filter(Q(published=True) | Q(uploaded_by=user))
+        return query.filter(published=True)
+
+
 class Screenshot(models.Model):
     """Screenshots for games"""
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -381,7 +403,7 @@ class Screenshot(models.Model):
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
 
-    objects = managers.ScreenshotManager()
+    objects = ScreenshotManager()
 
     def __str__(self):
         desc = self.description if self.description else self.game.name
