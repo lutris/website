@@ -5,6 +5,7 @@ from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from reversion.admin import VersionAdmin
 
 from . import forms, models
@@ -71,11 +72,10 @@ class InstallerAdmin(VersionAdmin):
     }
 
     def game_link(self, obj):
-        return u"<a href='{0}'>{1}<a/>".format(
+        return mark_safe("<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.game.id, )),
             obj.game
-        )
-    game_link.allow_tags = True
+        ))
     game_link.short_description = "Game (link)"
 
 
@@ -84,11 +84,10 @@ class InstallerIssueAdmin(admin.ModelAdmin):
     readonly_fields = ('submitted_on', 'game_link',)
 
     def game_link(self, obj):
-        return u"<a href='{0}'>{1}<a/>".format(
+        return mark_safe("<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.installer.game.id, )),
             obj.installer.game
-        )
-    game_link.allow_tags = True
+        ))
     game_link.short_description = "Game (link)"
 
 
@@ -167,11 +166,10 @@ class ScreenshotAdmin(admin.ModelAdmin):
     search_fields = ['game__name']
 
     def game_link(self, obj):
-        return u"<a href='{0}'>{1}<a/>".format(
+        return mark_safe("<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.game.id, )),
             obj.game
-        )
-    game_link.allow_tags = True
+        ))
     game_link.short_description = "Game (link)"
 
 
@@ -183,19 +181,17 @@ class GameSubmissionAdmin(admin.ModelAdmin):
     list_display = ("game_link", "user_link", "created_at", "accepted_at", 'reason')
 
     def game_link(self, obj):
-        return u"<a href='{0}'>{1}<a/>".format(
+        return mark_safe("<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.game.id, )),
             obj.game
-        )
-    game_link.allow_tags = True
+        ))
     game_link.short_description = "Game"
 
     def user_link(self, obj):
-        return u"<a href='{0}'>{1}</a>".format(
+        return mark_safe("<a href='{0}'>{1}</a>".format(
             reverse("admin:accounts_user_change", args=(obj.user.id, )),
             obj.user
-        )
-    user_link.allow_tags = True
+        ))
     user_link.short_description = "User"
 
 

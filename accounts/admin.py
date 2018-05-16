@@ -1,6 +1,7 @@
 # pylint: disable=R0201
 from django.contrib import admin
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from accounts import models
 
@@ -16,10 +17,9 @@ class UserAdmin(admin.ModelAdmin):
 
     def installers_link(self, obj):
         installers_url = reverse('admin:games_installer_changelist')
-        return "<a href='%s?user__id__exact=%s'>Installers</a>" % (
+        return mark_safe("<a href='%s?user__id__exact=%s'>Installers</a>" % (
             installers_url, obj.id
-        )
-    installers_link.allow_tags = True
+        ))
     installers_link.short_description = 'Installers'
 
 
