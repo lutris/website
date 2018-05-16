@@ -29,9 +29,11 @@ class News(models.Model):
     def get_absolute_url(self):
         return reverse('news_details', kwargs={'slug': self.slug}) + "#article"
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=False,
+             update_fields=False):
         self.slug = slugify(self.title)
-        return super(News, self).save(*args, **kwargs)
+        return super(News, self).save(force_insert=force_insert, force_update=force_insert, using=using,
+                                      update_fields=update_fields)
 
 
 class Upload(models.Model):

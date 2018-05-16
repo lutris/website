@@ -35,10 +35,12 @@ class Platform(models.Model):
     def __str__(self):
         return "%s" % self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         if not self.slug:
             self.slug = slugify(str(self.name))
-        return super(Platform, self).save(*args, **kwargs)
+        return super(Platform, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                          update_fields=update_fields)
 
     @staticmethod
     def autocomplete_search_fields():

@@ -5,11 +5,11 @@ import logging
 import uuid
 from urllib.parse import urlencode
 
-from django.db import models
-from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django_openid_auth.models import UserOpenID
 
 from emails import messages

@@ -1,9 +1,11 @@
+from functools import wraps
+
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
-from django.utils.decorators import available_attrs
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from functools import wraps
+from django.utils.decorators import available_attrs
+
 from games.models import Game, Installer
 
 

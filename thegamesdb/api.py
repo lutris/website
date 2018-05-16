@@ -85,7 +85,7 @@ def api_request(url):
 
 def get_value(soup, field):
     if not soup:
-        LOGGER.warn("No soup provided")
+        LOGGER.error("No soup provided")
         return
     tag = soup.find(field)
     if tag:

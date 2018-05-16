@@ -1,5 +1,6 @@
-from django.urls import reverse
 from django.db import models
+from django.urls import reverse
+
 from games.models import Game
 
 

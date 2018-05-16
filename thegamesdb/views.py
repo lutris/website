@@ -33,12 +33,12 @@ def search_json(request):
     })
 
 
-def detail(request, game_id):
+def detail(_request, game_id):
     game = get_game(game_id)
     return JsonResponse(game)
 
 
-def detail_to_lutris(request, game_id):
+def detail_to_lutris(_request, game_id):
     game = get_game(game_id)
     game = to_lutris(game)
     return JsonResponse(game)

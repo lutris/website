@@ -10,8 +10,7 @@ class ScreenshotManager(Manager):
             return query
         elif user:
             return query.filter(Q(published=True) | Q(uploaded_by=user))
-        else:
-            return query.filter(published=True)
+        return query.filter(published=True)
 
 
 class GenreManager(Manager):

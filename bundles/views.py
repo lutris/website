@@ -1,5 +1,6 @@
+from django.views.generic import DetailView, ListView
+
 from . import models
-from django.views.generic import ListView, DetailView
 
 
 class BundleList(ListView):

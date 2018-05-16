@@ -73,7 +73,3 @@ def upload_file(request):
         upload.save()
         return HttpResponseRedirect('/')
     return render(request, 'common/upload.html', {'form': form})
-
-
-def error_testing(request):
-    raise ValueError("Making things crash")

@@ -25,11 +25,11 @@ class GameFilter(admin.SimpleListFilter):
             ('all', 'All'),
         )
 
-    def choices(self, cl):
+    def choices(self, changelist):
         for lookup, title in self.lookup_choices:
             yield {
                 'selected': self.value() == lookup,
-                'query_string': cl.get_query_string({
+                'query_string': changelist.get_query_string({
                     self.parameter_name: lookup,
                 }, []),
                 'display': title,
