@@ -75,6 +75,7 @@ class GameInstallersSerializer(GameSerializer):
         )
 
 
+# pylint: disable=W0223 No need for create and update methods now
 class InstallerRevisionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     game = serializers.HyperlinkedRelatedField(

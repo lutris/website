@@ -8,9 +8,9 @@ from jsonfield import JSONField
 
 class PlatformManager(models.Manager):
     def with_games(self):
-        Game = apps.get_model(app_label='games', model_name='Game')
+        game_model = apps.get_model(app_label='games', model_name='Game')
         platform_list = (
-            Game.objects.with_installer()
+            game_model.objects.with_installer()
             .values_list('platforms')
             .annotate(p_count=Count('platforms'))
             .filter(p_count__gt=0)
