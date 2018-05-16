@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from accounts.models import User
+from accounts import sso
 from common.util import create_admin, create_user
 
 
@@ -59,3 +60,20 @@ class TestApiAuth(TestCase):
         self.assertEqual(response.status_code, 200)
         response_data = json.loads(response.content.decode())
         self.assertIn('token', response_data)
+
+
+class TestSSO(TestCase):
+    def setUp(self):
+        pass
+
+    def test_redirect_url(self):
+        url = sso.redirect_url(
+            'nonce',
+            'secret',
+            'user@domain.com',
+            'external_id',
+            'username'
+        )
+        self.assertIn('/session/sso_login', url)
+        self.assertIn('sso=', url)
+        self.assertIn('sig=', url)

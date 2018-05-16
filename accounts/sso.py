@@ -44,17 +44,14 @@ def validate(payload, signature, secret):
 
         return value: The nonce used by discourse to validate the redirect URL
     """
-    if None in [payload, signature]:
-        raise RuntimeError('No SSO payload or signature.')
-
-    if not secret:
-        raise RuntimeError('Invalid secret.')
+    if not all([payload, signature, secret]):
+        raise RuntimeError('SSO payload, signature and secret are required')
 
     payload = bytes(unquote(payload), 'utf-8')
     if not payload:
         raise RuntimeError('Invalid payload.')
 
-    decoded = str(base64.decodestring(payload))
+    decoded = base64.decodestring(payload).decode('utf-8')
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
@@ -73,7 +70,7 @@ def validate(payload, signature, secret):
 
 def redirect_url(nonce, secret, email, external_id, username, **kwargs):
     """
-        nonce: returned by sso_validate()
+        nonce: returned by validate()
         secret: the secret key you entered into Discourse sso secret
         user_email: email address of the user who logged in
         user_id: the internal id of the logged in user
@@ -89,8 +86,8 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
         'username': username
     })
 
-    return_payload = base64.encodestring(urlencode(kwargs))
-    hmac_ = hmac.new(secret, return_payload, digestmod=hashlib.sha256)
+    return_payload = base64.encodestring(bytes(urlencode(kwargs), 'utf-8'))
+    hmac_ = hmac.new(bytes(secret, 'utf-8'), return_payload, digestmod=hashlib.sha256)
     query_string = urlencode({'sso': return_payload, 'sig': hmac_.hexdigest()})
 
     return '/session/sso_login?%s' % query_string
