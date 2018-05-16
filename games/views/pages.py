@@ -600,7 +600,17 @@ def submit_issue(request):
 @staff_member_required
 def installer_submissions(request):
     submissions = Version.objects.filter(revision__comment__startswith="[submission]")
+    for submission in submissions:
+        if not submission.object:
+            LOGGER.info("Deleting orphan submission %s", submission)
+            submission.delete()
+
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")[:20]
+    for draft in drafts:
+        if not draft.object:
+            LOGGER.info("Deleting orphan draft %s", draft)
+            draft.delete()
+
     installers = Installer.objects.filter(published=False)[:20]
     unpublished_games = (
         Game.objects.filter(change_for__isnull=True)
