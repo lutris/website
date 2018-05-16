@@ -63,9 +63,6 @@ class TestApiAuth(TestCase):
 
 
 class TestSSO(TestCase):
-    def setUp(self):
-        pass
-
     def test_redirect_url(self):
         url = sso.redirect_url(
             'nonce',

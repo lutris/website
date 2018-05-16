@@ -50,7 +50,8 @@ class User(AbstractUser):
             user_openid = UserOpenID.objects.filter(user=self)[0]
         self.steamid = user_openid.claimed_id.split('/')[-1]
 
-    def generate_key(self):
+    @staticmethod
+    def generate_key():
         # Get a random UUID.
         new_uuid = uuid.uuid4()
         # Hmac that beast.

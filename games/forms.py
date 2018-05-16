@@ -200,9 +200,9 @@ class ScreenshotForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', "Submit"))
 
-    def save(self, *args, **kwargs):
+    def save(self, commit=True):
         self.instance.game = self.game
-        return super(ScreenshotForm, self).save(*args, **kwargs)
+        return super(ScreenshotForm, self).save(commit=commit)
 
 
 class InstallerForm(forms.ModelForm):

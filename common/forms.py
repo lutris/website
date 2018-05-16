@@ -1,7 +1,8 @@
-from django import forms
-from common import models
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Div
+from crispy_forms.layout import Div, Layout, Submit
+from django import forms
+
+from common import models
 
 
 def get_bootstrap_helper(fields, submit_id, submit_label):

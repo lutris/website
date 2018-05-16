@@ -244,8 +244,8 @@ def discourse_sso(request):
     signature = request.GET.get('sig')
     try:
         nonce = sso.validate(payload, signature, settings.DISCOURSE_SSO_SECRET)
-    except RuntimeError as e:
-        return HttpResponseBadRequest(e.args[0])
+    except RuntimeError as ex:
+        return HttpResponseBadRequest(ex.args[0])
 
     url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
                            request.user.id, request.user.username)

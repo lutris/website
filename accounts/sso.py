@@ -51,7 +51,7 @@ def validate(payload, signature, secret):
     if not payload:
         raise RuntimeError('Invalid payload.')
 
-    decoded = base64.decodestring(payload).decode('utf-8')
+    decoded = base64.decodebytes(payload).decode('utf-8')
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
@@ -62,9 +62,7 @@ def validate(payload, signature, secret):
         raise RuntimeError('Payload does not match signature.')
 
     query_string = parse_qs(decoded)
-    LOGGER.info(query_string)
     nonce = query_string['nonce'][0]
-    LOGGER.info(nonce)
     return nonce
 
 
@@ -86,7 +84,7 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
         'username': username
     })
 
-    return_payload = base64.encodestring(bytes(urlencode(kwargs), 'utf-8'))
+    return_payload = base64.encodebytes(bytes(urlencode(kwargs), 'utf-8'))
     hmac_ = hmac.new(bytes(secret, 'utf-8'), return_payload, digestmod=hashlib.sha256)
     query_string = urlencode({'sso': return_payload, 'sig': hmac_.hexdigest()})
 
