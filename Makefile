@@ -1,3 +1,4 @@
+.PHONY: tags
 setup:
 	npm install
 	npm run setup
@@ -87,3 +88,6 @@ sync:
 	gunzip lutris.tar.gz
 	sudo -u postgres pg_restore --clean --exit-on-error --dbname=lutris lutris.tar
 	rm lutris.tar
+
+tags:
+	ctags -R .
