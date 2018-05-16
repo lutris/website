@@ -22,12 +22,21 @@ server {
     access_log %ROOT%/logs/nginx-access.log;
     error_log %ROOT%/logs/nginx-error.log;
 
+    
+    location /favicon.ico {
+        alias %ROOT%/%DOMAIN%/public/favicon.ico;
+    }
+
+    location /robots.txt {
+        alias %ROOT%/%DOMAIN%/public/favicon.ico;
+    }
+
     location /static/ {
-        alias %ROOT%/lutris.net/static/;
+        alias %ROOT%/%DOMAIN%/static/;
     }
 
     location /media/ {
-        alias %ROOT%/lutris.net/media/;
+        alias %ROOT%/%DOMAIN%/media/;
     }
 
     location /files {
@@ -52,6 +61,6 @@ server {
 
     error_page 500 502 503 504 /500.html;
     location = /500.html {
-        root %ROOT%/lutris.net/templates/;
+        root %ROOT%/%DOMAIN%/templates/;
     }
 }
