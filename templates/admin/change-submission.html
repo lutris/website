@@ -1,37 +1,54 @@
-<div style="margin: 5px; padding: 10px; background-color: #eee; max-width: 600px; 
-    margin-bottom: 15px; box-shadow: 1px 2px 5px 0px rgba(148,148,148,1);">
+<style type="text/css" media="screen">
+  .submission {
+    max-width: 960px;
+  }
+  .submission-table {
+    background-color: #fefefe;
+    width: 100%;
+  }
+  .submission-table th, td {
+    padding: 5px;
+  }
+  .submission-table th {
+    text-align: right;
+    width: 120px;
+    font-weight: bold;
+  }
+</style>
 
-  <table style="background-color: #fefefe; width: 100%;">
+
+<div class="submission">
+  <table class="submission-table">
     <tr>
-      <th style="text-align: right;">Changes for</th>
+      <th>Changes for</th>
       <td><a href="{% url 'game_detail' change.change_for.slug %}">{{ change.change_for.name }}</a></td>
     </tr>
     <tr>
-      <th style="width: 75px; text-align: right;">From</th>
+      <th>From</th>
       <td><a href="{% url 'admin:accounts_user_change' change.author.id %}">{{ change.author }}</a></td>
     </tr>
     <tr>
-      <th style="text-align: right;">Reason</th>
+      <th>Reason</th>
       <td>{% if change.reason %} {{ change.reason }} {% else %} <em>No reason given</em> {% endif %}</td>
     </tr>
     <tr>
-      <th style="text-align: right;">Diff</th>
+      <th>Changes</th>
       <td style="padding: 0;">
         <table style="width: 100%; border: 0;">
           {% for entry, old_value, new_value in change.diff %}
             <tr>
-              <th style="width: 50px; text-align: right;">field</th>
+              <th style="width: 50px;">field</th>
               <td>{{ entry }}</td>
             </tr>
             {% if old_value %}
               <tr style="color: #770000; background-color: #fbe9eb; font-family: monospace;">
-                <th style="text-align: right;">--</th>
+                <th>--</th>
                 <td>{{ old_value }}</td>
               </tr>
             {% endif %}
             {% if new_value %}
               <tr style="color: #007700; background-color: #ecfdf0; font-family: monospace;">
-                <th style="text-align: right;">++</th>
+                <th>++</th>
                 <td>{{ new_value }}</td>
               </tr>
             {% endif %}
@@ -40,7 +57,7 @@
       </td>
     </tr>
     <tr>
-      <th style="text-align: right;">Actions</th>
+      <th>Actions</th>
       <td>
         <a href="{% url 'admin-change-submission-accept' change.id %}?redirect={{ request.get_full_path }}"
           class="grp-button grp-default">Accept</a>
@@ -52,5 +69,4 @@
       </td>
     </tr>
   </table>
-
 </div>
