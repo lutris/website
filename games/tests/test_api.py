@@ -1,9 +1,12 @@
 import json
+import logging
 
 from django.test import TestCase
 from django.urls import reverse
 
 from . import factories
+
+LOGGER = logging.getLogger(__name__)
 
 
 class TestGameApi(TestCase):

@@ -61,11 +61,13 @@ class Company(models.Model):
     def __str__(self):
         return u"%s" % self.name
 
-    def save(self, force_insert=True, using=None):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         self.slug = slugify(self.name)
         if not self.slug:
-            raise ValueError("Tried to save Company without a slug: %s", self)
-        return super(Company, self).save(force_insert=force_insert, using=using)
+            raise ValueError("Tried to save Company without a slug: %s" % self)
+        return super(Company, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                         update_fields=update_fields)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -86,10 +88,12 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, force_insert=True, using=None):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save(force_insert=force_insert, using=using)
+        return super(Genre, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                       update_fields=update_fields)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -118,7 +122,7 @@ class GameManager(models.Manager):
         )
 
     def get_random(self, option=""):
-        if not re.match('^[\w\d-]+$', option) or len(option) > 128:
+        if not re.match(r'^[\w\d-]+$', option) or len(option) > 128:
             return
         pk_query = self.get_queryset()
         if option == 'incomplete':
@@ -189,8 +193,7 @@ class Game(models.Model):
     def __str__(self):
         if self.change_for is None:
             return self.name
-        else:
-            return '[Changes for] ' + self.change_for.name
+        return '[Changes for] ' + self.change_for.name
 
     @staticmethod
     def autocomplete_search_fields():
@@ -238,8 +241,7 @@ class Game(models.Model):
 
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
-
-        copy = {
+        return {
             'name': self.name,
             'year': self.year,
             'website': self.website,
@@ -247,8 +249,6 @@ class Game(models.Model):
             'platforms': [x.id for x in list(self.platforms.all())],
             'genres': [x.id for x in list(self.genres.all())]
         }
-
-        return copy
 
     def get_changes(self):
         """Returns a dictionary of the changes"""
@@ -352,7 +352,8 @@ class Game(models.Model):
         else:
             submission.accept()
 
-    def save(self, force_insert=True, using=None):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
             if not self.slug:
@@ -361,7 +362,8 @@ class Game(models.Model):
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.download_steam_capsule()
             self.check_for_submission()
-        return super(Game, self).save()
+        return super(Game, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                      update_fields=update_fields)
 
 
 class GameMetadata(models.Model):
@@ -396,8 +398,12 @@ class InstallerManager(models.Manager):
     def abandoned(self):
         """Return the installer with 'Change Me' version that haven't received any modifications"""
         return [
-            installer for installer in self.get_queryset().filter(version='Change Me')
-            if not Version.objects.filter(object_id=installer.id, content_type__model='installer').count()
+            installer
+            for installer in self.get_queryset().filter(version='Change Me')
+            if not Version.objects.filter(
+                object_id=installer.id,
+                content_type__model='installer'
+            ).count()
         ]
 
     def _fuzzy_search(self, slug, return_models=False):
@@ -434,24 +440,30 @@ class InstallerManager(models.Manager):
                         games = Game.objects.filter(slug__startswith=game_slug)
 
                     for game in games:
-                        if return_models:
-                            try:
-                                auto_installer = AutoInstaller(game, platform)
-                                if auto_installer.slug == slug:
-                                    return [auto_installer]
-                            except ObjectDoesNotExist:
-                                pass
-                        else:
-                            auto_installers = game.get_default_installers()
-                            for auto_installer in auto_installers:
-                                if auto_installer['slug'] == slug:
-                                    return [auto_installer]
+                        auto_installer = self.get_auto_installer(slug, game, platform, return_models=return_models)
+                        if auto_installer:
+                            return auto_installer
 
             # A bit hackish, return_models is used for filter and not with get
             if return_models:
                 return self.none()
             else:
                 raise
+
+    @staticmethod
+    def get_auto_installer(slug, game, platform, return_models=False):
+        if return_models:
+            try:
+                auto_installer = AutoInstaller(game, platform)
+                if auto_installer.slug == slug:
+                    return [auto_installer]
+            except ObjectDoesNotExist:
+                pass
+        else:
+            auto_installers = game.get_default_installers()
+            for auto_installer in auto_installers:
+                if auto_installer['slug'] == slug:
+                    return [auto_installer]
 
     def fuzzy_get(self, slug):
         """Return either the installer that matches exactly 'slug' or the
@@ -503,7 +515,7 @@ class BaseInstaller(models.Model):
         try:
             yaml_content = yaml.safe_load(self.content) or {}
         except yaml.parser.ParserError:
-            LOGGER.exception("Invalid YAML %s" % self.content)
+            LOGGER.exception("Invalid YAML %s", self.content)
             yaml_content = {}
 
         # Allow pasting raw install scripts (which are served as lists)
@@ -621,9 +633,11 @@ class Installer(BaseInstaller):
         except Version.DoesNotExist:
             pass
 
-    def save(self, force_insert=True, using=None):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         self.slug = self.build_slug(self.version)
-        return super(Installer, self).save()
+        return super(Installer, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                           update_fields=update_fields)
 
 
 class InstallerIssue(models.Model):
