@@ -1,17 +1,17 @@
 """Models for main lutris app"""
-
-import datetime
 # pylint: disable=E1002, E0202
-import re
+import datetime
 import json
-import random
 import logging
-from itertools import chain
+import random
+import re
 from collections import defaultdict
+from itertools import chain
 
 import six
-import reversion
 import yaml
+import reversion
+from reversion.models import Version
 from bitfield import BitField
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -19,10 +19,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.text import slugify
-from reversion.models import Version
 
 from common.util import get_auto_increment_slug
 from emails import messages
