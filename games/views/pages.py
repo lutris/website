@@ -77,6 +77,8 @@ class GameList(ListView):
             queryset = eval("queryset.filter(%s)" % query_filters)
 
         search_terms = self.request.GET.get('q')
+        if '\x00' in str(search_terms):
+            search_terms = None
         if search_terms:
             queryset = queryset.filter(name__icontains=search_terms)
         return queryset
