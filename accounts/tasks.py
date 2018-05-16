@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 import games.models
 from accounts.models import User
-from emails.messages import send_daily_mod_mail
+from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
 
 LOGGER = logging.getLogger()

@@ -1,4 +1,6 @@
+from django.conf import settings
 from games import models
+from emails.messages import send_email
 
 DEFAULT_COUNT = 12
 
@@ -28,3 +30,14 @@ def get_mod_mail_content():
         'submissions': get_unreviewed_game_submissions(),
         'issues': get_installer_issues()
     }
+
+
+def send_daily_mod_mail():
+    from accounts.models import User
+    context = get_mod_mail_content()
+    if settings.DEBUG:
+        moderators = [u[1] for u in settings.MANAGERS]
+    else:
+        moderators = [u.email for u in User.objects.filter(is_staff=True)]
+    subject = 'Your daily moderator mail'
+    return send_email('daily_mod_mail', context, subject, moderators)
