@@ -54,7 +54,7 @@ def validate(payload, signature, secret):
     if not payload:
         raise RuntimeError('Invalid payload.')
 
-    decoded = base64.decodestring(payload)
+    decoded = str(base64.decodestring(payload))
     if 'nonce' not in decoded:
         raise RuntimeError('Invalid payload.')
 
