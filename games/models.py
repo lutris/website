@@ -248,7 +248,7 @@ class Game(models.Model):
     @property
     def flag_labels(self):
         """Return labels of active flags, suitable for display"""
-        # pylint: disable=E1133 self.flags *is* iterable
+        # pylint: disable=E1133; self.flags *is* iterable
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
     def get_change_model(self):
