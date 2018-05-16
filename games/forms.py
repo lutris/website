@@ -301,9 +301,6 @@ class InstallerEditForm(InstallerForm):
                   'This will help us moderate the changes.'
     )
 
-    def __init__(self, *args, **kwargs):
-        super(InstallerEditForm, self).__init__(*args, **kwargs)
-
 
 class ForkInstallerForm(forms.ModelForm):
 

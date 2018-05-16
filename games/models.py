@@ -66,8 +66,8 @@ class Company(models.Model):
         self.slug = slugify(self.name)
         if not self.slug:
             raise ValueError("Tried to save Company without a slug: %s" % self)
-        return super(Company, self).save(force_insert=force_insert, force_update=force_update, using=using,
-                                         update_fields=update_fields)
+        return super(Company, self).save(force_insert=force_insert, force_update=force_update,
+                                         using=using, update_fields=update_fields)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -92,8 +92,8 @@ class Genre(models.Model):
              update_fields=None):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Genre, self).save(force_insert=force_insert, force_update=force_update, using=using,
-                                       update_fields=update_fields)
+        return super(Genre, self).save(force_insert=force_insert, force_update=force_update,
+                                       using=using, update_fields=update_fields)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -362,8 +362,8 @@ class Game(models.Model):
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.download_steam_capsule()
             self.check_for_submission()
-        return super(Game, self).save(force_insert=force_insert, force_update=force_update, using=using,
-                                      update_fields=update_fields)
+        return super(Game, self).save(force_insert=force_insert, force_update=force_update,
+                                      using=using, update_fields=update_fields)
 
 
 class GameMetadata(models.Model):
@@ -440,7 +440,10 @@ class InstallerManager(models.Manager):
                         games = Game.objects.filter(slug__startswith=game_slug)
 
                     for game in games:
-                        auto_installer = self.get_auto_installer(slug, game, platform, return_models=return_models)
+                        auto_installer = self.get_auto_installer(slug,
+                                                                 game,
+                                                                 platform,
+                                                                 return_models=return_models)
                         if auto_installer:
                             return auto_installer
 
@@ -636,8 +639,8 @@ class Installer(BaseInstaller):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         self.slug = self.build_slug(self.version)
-        return super(Installer, self).save(force_insert=force_insert, force_update=force_update, using=using,
-                                           update_fields=update_fields)
+        return super(Installer, self).save(force_insert=force_insert, force_update=force_update,
+                                           using=using, update_fields=update_fields)
 
 
 class InstallerIssue(models.Model):
@@ -726,7 +729,7 @@ class InstallerRevision(BaseInstaller):
     def __init__(self, version):
         super(InstallerRevision, self).__init__()
         self._version = version
-        self.id = version.pk
+        self.id = version.pk  # pylint: disable=C0103
         installer_data = self.get_installer_data()
         self.game = Game.objects.get(pk=installer_data['game'])
 

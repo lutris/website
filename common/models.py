@@ -32,8 +32,8 @@ class News(models.Model):
     def save(self, force_insert=False, force_update=False, using=False,
              update_fields=False):
         self.slug = slugify(self.title)
-        return super(News, self).save(force_insert=force_insert, force_update=force_insert, using=using,
-                                      update_fields=update_fields)
+        return super(News, self).save(force_insert=force_insert, force_update=force_insert,
+                                      using=using, update_fields=update_fields)
 
 
 class Upload(models.Model):
