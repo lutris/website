@@ -50,7 +50,7 @@ def validate(payload, signature, secret):
     if not secret:
         raise RuntimeError('Invalid secret.')
 
-    payload = bytes(unquote(payload))
+    payload = bytes(unquote(payload), 'utf-8')
     if not payload:
         raise RuntimeError('Invalid payload.')
 
