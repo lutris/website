@@ -15,15 +15,6 @@ def send_game_accepted(user, game):
     return send_email('game_accepted', context, subject, user.email)
 
 
-def send_confirmation_link(user, confirmation_link):
-    context = {
-        'username': user.username,
-        'confirmation_link': confirmation_link
-    }
-    subject = 'Confirm your email address'
-    return send_email('email_confirmation', context, subject, user.email)
-
-
 def send_account_creation(user, confirmation_link):
     context = {
         'username': user.username,

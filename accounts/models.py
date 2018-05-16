@@ -100,7 +100,12 @@ class EmailConfirmationToken(models.Model):
     def send(self, request):
         user = request.user
         confirmation_link = request.build_absolute_uri(self.get_token_url())
-        messages.send_confirmation_link(user, confirmation_link)
+        context = {
+            'username': user.username,
+            'confirmation_link': confirmation_link
+        }
+        subject = 'Confirm your email address'
+        messages.send_email('email_confirmation', context, subject, user.email)
 
     def is_valid(self):
         return self.created_at > timezone.now() - datetime.timedelta(days=3)
