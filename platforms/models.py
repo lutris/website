@@ -1,4 +1,5 @@
 # pylint: disable=R0903
+from django.apps import apps
 from django.db import models
 from django.db.models import Count
 from django.utils.text import slugify
@@ -7,7 +8,7 @@ from jsonfield import JSONField
 
 class PlatformManager(models.Manager):
     def with_games(self):
-        from games.models import Game
+        Game = apps.get_model(app_label='games', model_name='Game')
         platform_list = (
             Game.objects.with_installer()
             .values_list('platforms')

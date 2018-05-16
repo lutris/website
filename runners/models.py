@@ -2,8 +2,6 @@
 import re
 from django.db import models
 
-from platforms.models import Platform
-
 ARCH_CHOICES = (
     ('i386', '32 bit'),
     ('x86_64', '64 bit'),
@@ -18,7 +16,7 @@ class Runner(models.Model):
     slug = models.SlugField(unique=True)
     website = models.CharField(max_length=127, blank=True)
     icon = models.ImageField(upload_to='runners/icons', blank=True)
-    platforms = models.ManyToManyField(Platform, related_name='runners')
+    platforms = models.ManyToManyField('platforms.Platform', related_name='runners')
 
     # pylint: disable=W0232, R0903
     class Meta(object):
