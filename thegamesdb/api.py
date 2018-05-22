@@ -40,7 +40,7 @@ def download_image(media_type, url):
     dest_path = os.path.join(media_type_map[media_type], os.path.basename(url))
     if not os.path.exists(dest_path):
         response = requests.get(url)
-        with open(dest_path, 'w') as dest_file:
+        with open(dest_path, 'wb') as dest_file:
             dest_file.write(response.content)
     return dest_path
 
