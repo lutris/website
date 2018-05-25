@@ -1,4 +1,5 @@
 from django.test import TestCase
+from common.util import slugify
 
 
 class PagesTest(TestCase):
@@ -16,3 +17,10 @@ class TestNewsFeed(TestCase):
     def test_feed_availability(self):
         response = self.client.get("/news/feed/")
         self.assertEqual(response.status_code, 200)
+
+
+class TestUtils(TestCase):
+    def test_slugify(self):
+        self.assertEqual(slugify(None), "")
+        self.assertEqual(slugify("Foo bar"), "foo-bar")
+        self.assertEqual(slugify("わがままアリスと百日戦争"), "wagamamaarisuto")

@@ -6,8 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 from django.conf import settings
-from django.utils.text import slugify
 
+from common.util import slugify
 from games.models import Company
 from platforms.models import Platform
 

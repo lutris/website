@@ -1,7 +1,8 @@
 import logging
 import requests
-from django.utils.text import slugify
 from django.conf import settings
+
+from common.util import slugify
 
 LOGGER = logging.getLogger(__name__)
 STEAM_API_URL = "http://api.steampowered.com/"

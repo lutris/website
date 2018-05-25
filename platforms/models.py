@@ -2,8 +2,8 @@
 from django.apps import apps
 from django.db import models
 from django.db.models import Count
-from django.utils.text import slugify
 from jsonfield import JSONField
+from common.util import slugify
 
 
 class PlatformManager(models.Manager):

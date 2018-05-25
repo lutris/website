@@ -1,6 +1,17 @@
+import romkan
 from django.contrib.auth import get_user_model
-from django.utils.text import slugify
+from django.utils.text import slugify as django_slugify
 SLUG_MAX_LENGTH = 50
+
+
+def slugify(text):
+    """Version of slugify that supports Japanese characters"""
+    if not text:
+        return ""
+    slug = django_slugify(text)
+    if not slug:
+        slug = django_slugify(romkan.to_roma(text))
+    return slug
 
 
 def get_auto_increment_slug(model, instance, text, slug=None):

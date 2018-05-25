@@ -21,9 +21,8 @@ from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models import Count, Q
 from django.urls import reverse
-from django.utils.text import slugify
 
-from common.util import get_auto_increment_slug
+from common.util import get_auto_increment_slug, slugify
 from emails import messages
 from games.util import steam
 from platforms.models import Platform

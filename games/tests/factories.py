@@ -1,9 +1,9 @@
 import factory
 from django.db.models.signals import post_save
-from django.utils.text import slugify
 
 from accounts.models import User
 from accounts.signals import create_library
+from common.util import slugify
 from games import models
 from platforms.models import Platform
 from runners.models import Runner

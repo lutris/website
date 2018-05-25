@@ -2,12 +2,12 @@ import logging
 
 from celery import task
 from django.db import IntegrityError
-from django.utils.text import slugify
 
 import games.models
 from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
 from accounts.models import User
+from common.util import slugify
 
 LOGGER = logging.getLogger()
 

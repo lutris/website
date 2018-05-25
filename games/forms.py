@@ -9,11 +9,10 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
-from django.utils.text import slugify
 from django_select2.forms import (HeavySelect2Widget, ModelSelect2Widget,
                                   Select2MultipleWidget, Select2Widget)
 
-from common.util import get_auto_increment_slug
+from common.util import get_auto_increment_slug, slugify
 from games import models
 from games.util.installer import validate_installer
 
