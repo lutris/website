@@ -1,4 +1,4 @@
-# pylint: disable=C0103, C0301
+# pylint: disable=C0103, C0301, missing-docstring
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
@@ -44,9 +44,12 @@ urlpatterns = [
         name="remove_from_library"),
     url(r'^library/steam-sync/', views.library_steam_sync,
         name="library_steam_sync"),
-    url(r'profile$', views.profile, name="profile"),
-    url(r'send-confirmation$', views.user_send_confirmation, name='user_send_confirmation'),
-    url(r'require-confirmation$', views.user_require_confirmation, name='user_require_confirmation'),
+    url(r'profile$', views.profile,
+        name="profile"),
+    url(r'send-confirmation$', views.user_send_confirmation,
+        name='user_send_confirmation'),
+    url(r'require-confirmation$', views.user_require_confirmation,
+        name='user_require_confirmation'),
     url(r'confirm$', views.user_email_confirm, name='user_email_confirm'),
     url(r'discourse-sso$', views.discourse_sso, name='discourse_sso'),
     url(r'(?P<username>.*)/edit$', views.profile_edit, name='profile_edit'),

@@ -42,19 +42,6 @@ def get_client_ip(request):
 
 
 @csrf_exempt
-def client_auth(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(username=username, password=password)
-    if user and user.is_active:
-        response_data = {'token': user.api_key.key}
-    else:
-        response_data = {'error': "Bad credentials"}
-    return HttpResponse(json.dumps(response_data),
-                        content_type="application/json")
-
-
-@csrf_exempt
 def client_verify(request):
     token = request.POST.get('token')
     try:
