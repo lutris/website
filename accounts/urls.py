@@ -33,7 +33,6 @@ urlpatterns = [
         name='password_reset_complete'),
 
     url(r'^register/$', views.register, name="register"),
-    url(r'^auth/$', views.client_auth, name="client_auth"),
     url(r'^verify/$', views.client_verify),
     url(r'^associate-steam/', views.associate_steam, name="associate_steam"),
     url(r'^(?P<username>.*)/library/$', views.library_show,
