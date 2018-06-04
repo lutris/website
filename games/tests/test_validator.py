@@ -1,3 +1,5 @@
+"""Tests for the installer validator"""
+# pylint: disable=invalid-name, missing-docstring
 import json
 from django.test import TestCase
 from runners.models import Runner
@@ -21,6 +23,30 @@ class TestScriptValidator(TestCase):
         self.installer.content = json.dumps({'files': []})
         is_valid, errors = validate_installer(self.installer)
         self.assertTrue(is_valid, errors)
+
+    def test_files_should_be_unique(self):
+        self.installer.content = json.dumps({'files': [
+            {'file1': 'http://foo'},
+            {'file1': 'http://bar'},
+        ]})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertFalse(is_valid, 'Files should be unique')
+
+    def test_files_should_have_correct_attributes(self):
+        """Files should have url and filename params"""
+        self.installer.content = json.dumps({'files': [
+            {'file1': {'foo': 'bar'}},
+            {'file2': 'http://bar'}
+        ]})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertFalse(is_valid)
+
+        self.installer.content = json.dumps({'files': [
+            {'file1': {'url': 'http://foo', 'filename': 'foo'}},
+            {'file2': 'http://bar'}
+        ]})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertTrue(is_valid)
 
     def test_scummvm_script_requires_game_id(self):
         script = json.dumps({'game': {}})

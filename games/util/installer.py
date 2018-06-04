@@ -22,6 +22,8 @@ def validate_installer(installer):
         scummvm_has_gameid,
         winesteam_scripts_use_correct_prefix,
         dont_disable_monitor,
+        no_duplicate_file_ids,
+        files_have_correct_attributes,
     ]
     for rule in rules:
         success, message = rule(installer)
@@ -129,4 +131,34 @@ def dont_disable_monitor(installer):
             "Do not disable the process monitor in installers, if you have "
             "issues with the process monitor, submit an issue on Github"
         )
+    return SUCCESS
+
+
+def no_duplicate_file_ids(installer):
+    """Check that all file identifiers are unique"""
+    script = get_installer_script(installer)
+    file_ids = []
+    for file_info in script.get('files', []):
+        file_id = next(iter(file_info.keys()))
+        if file_id in file_ids:
+            return (
+                False,
+                "There is already a file named '%s', make "
+                "sure all files have unique identifiers" % file_id
+            )
+        file_ids.append(file_id)
+    return SUCCESS
+
+
+def files_have_correct_attributes(installer):
+    """Make sure all files are strings or have url/filename attributes"""
+    script = get_installer_script(installer)
+    for file_info in script.get('files', []):
+        file_meta = file_info[next(iter(file_info.keys()))]
+        if isinstance(file_meta, dict):
+            if 'url' not in file_meta or 'filename' not in file_meta:
+                return (
+                    False,
+                    'Files should have a url and filename parameters.'
+                )
     return SUCCESS
