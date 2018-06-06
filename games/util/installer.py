@@ -24,6 +24,7 @@ def validate_installer(installer):
         dont_disable_monitor,
         no_duplicate_file_ids,
         files_have_correct_attributes,
+        tasks_have_names,
     ]
     for rule in rules:
         success, message = rule(installer)
@@ -160,5 +161,19 @@ def files_have_correct_attributes(installer):
                 return (
                     False,
                     'Files should have a url and filename parameters.'
+                )
+    return SUCCESS
+
+
+def tasks_have_names(installer):
+    """Make sure all tasks have names"""
+    script = get_installer_script(installer)
+    for step in script.get('installer', []):
+        step_name, arguments = next(iter(step.items()))
+        if step_name == 'task':
+            if 'name' not in arguments:
+                return (
+                    False,
+                    'All tasks should have a name.'
                 )
     return SUCCESS

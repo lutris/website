@@ -48,6 +48,22 @@ class TestScriptValidator(TestCase):
         is_valid, _errors = validate_installer(self.installer)
         self.assertTrue(is_valid)
 
+    def test_task_have_names(self):
+        self.installer.content = json.dumps({'installer': [
+            {'task': {'name': 'create_prefix'}},
+            {'task': {'name': 'winetricks', 'app': 'directx9'}}
+        ]})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertTrue(is_valid)
+
+        self.installer.content = json.dumps({'installer': [
+            {'task': {'name': 'create_prefix'}},
+            {'task': {'app': 'directx9'}}
+        ]})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertFalse(is_valid)
+        self.assertIn('name', _errors[0])
+
     def test_scummvm_script_requires_game_id(self):
         script = json.dumps({'game': {}})
         installer = Installer(
