@@ -31,3 +31,4 @@ premailer==3.2.0
 fabric==2.0.1
 Sphinx==1.7.4
 romkan==0.2.1
+xpinyin==0.5.5

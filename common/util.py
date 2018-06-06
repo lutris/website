@@ -1,4 +1,6 @@
+"""Various utility functions used across the website"""
 import romkan
+from xpinyin import Pinyin
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
 SLUG_MAX_LENGTH = 50
@@ -10,7 +12,12 @@ def slugify(text):
         return ""
     slug = django_slugify(text)
     if not slug:
+        # Title may be in Japanese
         slug = django_slugify(romkan.to_roma(text))
+    if not slug:
+        # Title may be in Chinese
+        pinyin = Pinyin()
+        slug = django_slugify(pinyin.get_pinyin(text))
     return slug
 
 
