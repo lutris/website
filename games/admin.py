@@ -55,6 +55,7 @@ class CompanyAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ("name", )}
     ordering = ('name', )
     search_fields = ('name', )
+    list_display = ('__str__', 'id', 'website')
 
 
 class InstallerAdmin(VersionAdmin):
