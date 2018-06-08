@@ -139,7 +139,8 @@ def no_duplicate_file_ids(installer):
     """Check that all file identifiers are unique"""
     script = get_installer_script(installer)
     file_ids = []
-    for file_info in script.get('files', []):
+    files = script.get('files') or  []
+    for file_info in files:
         file_id = next(iter(file_info.keys()))
         if file_id in file_ids:
             return (
