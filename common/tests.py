@@ -27,5 +27,5 @@ class TestUtils(TestCase):
         self.assertEqual(slugify("わがままアリスと百日戦争"), "wagamamaarisuto")
         self.assertEqual(
             slugify("关于我被小学女生绑架这件事"),
-            "guan-yu-wo-bei-xiao-xue-nv-sheng-bang-jia-zhe-jian-shi"
+            "guan-yu-wo-bei-xiao-xue-nv-sheng-bang-jia-zhe-jian"
         )
