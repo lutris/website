@@ -75,3 +75,12 @@ class TestScriptValidator(TestCase):
         self.assertIn("ScummVM game should have a "
                       "game identifier in the 'game' section",
                       errors)
+
+    def test_game_should_be_a_dict(self):
+        self.installer.content = json.dumps({'game': ['foo', 'bar']})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertFalse(is_valid)
+
+        self.installer.content = json.dumps({'game': {'foo': 'bar', 'bar': 'foo'}})
+        is_valid, _errors = validate_installer(self.installer)
+        self.assertTrue(is_valid)

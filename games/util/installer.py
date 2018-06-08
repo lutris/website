@@ -21,6 +21,7 @@ def validate_installer(installer):
         script_is_not_the_default_one,
         doesnt_contain_useless_fields,
         files_is_an_array,
+        game_is_a_dict,
         installer_steps_have_one_key,
         scummvm_has_gameid,
         winesteam_scripts_use_correct_prefix,
@@ -69,6 +70,15 @@ def files_is_an_array(installer):
     if 'files' in script:
         if not isinstance(script['files'], list):
             return (False, "'files' section should be an array.")
+    return SUCCESS
+
+
+def game_is_a_dict(installer):
+    """Make sure the game section is a dictionary"""
+    script = get_installer_script(installer)
+    if 'game' in script:
+        if not isinstance(script['game'], dict):
+            return (False, "'game' section should be a mapping.")
     return SUCCESS
 
 
