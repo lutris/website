@@ -18,7 +18,7 @@ def slugify(text):
         # Title may be in Chinese
         pinyin = Pinyin()
         slug = django_slugify(pinyin.get_pinyin(text))
-    return slug
+    return slug[:50]
 
 
 def get_auto_increment_slug(model, instance, text, slug=None):
