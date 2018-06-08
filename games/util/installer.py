@@ -1,6 +1,9 @@
+import logging
 import yaml
 from runners.models import Runner
 from games.models import DEFAULT_INSTALLER
+
+LOGGER = logging.getLogger(__name__)
 SUCCESS = (True, "")
 
 
@@ -27,7 +30,12 @@ def validate_installer(installer):
         tasks_have_names,
     ]
     for rule in rules:
-        success, message = rule(installer)
+        try:
+            success, message = rule(installer)
+        except Exception as ex:
+            success = False
+            message = "Unknown error!"
+            LOGGER.exception(ex)
         if not success:
             errors.append(message)
             is_valid = False
