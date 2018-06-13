@@ -72,7 +72,7 @@
     <span class='filter-link'>{{ installer.runner }}</span>
     <span class='installer-name'>{{ installer.version|capfirst }} version</span>
     <span class="discreet-text">
-      by {{ installer.user.username|default:"Lutris" }}{% if installer.updated_at %},
+      {% if installer.updated_at %},
       last published {{ installer.updated_at | naturaltime }}{% endif %}{% if installer.latest_revision %},
       last edit made {{ installer.latest_revision.revision.date_created | naturaltime }}{% endif %}
     </span>
