@@ -85,7 +85,11 @@ class GameList(ListView):
         if '\x00' in str(search_terms):
             search_terms = None
         if search_terms:
-            queryset = queryset.filter(name__icontains=search_terms)
+            if self.request.GET.get('search-installers'):
+                # Search in installer instead of the game name
+                queryset = queryset.filter(installers__content__icontains=search_terms)
+            else:
+                queryset = queryset.filter(name__icontains=search_terms)
         return queryset
 
     def get_pages(self, context):
@@ -116,6 +120,7 @@ class GameList(ListView):
         context['pwyw_filter'] = get_args.get('pwyw-filter')
         context['unpublished_filter'] = get_args.get('unpublished-filter')
         context['sort_by_popularity'] = get_args.get('sort-by-popularity')
+        context['search_installers'] = get_args.get('search-installers')
         for key in context:
             if key.endswith('_filter') and context[key]:
                 context['show_advanced'] = True

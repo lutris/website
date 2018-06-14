@@ -82,15 +82,23 @@
               </li>
             </ul>
             <ul>
+
               <li>
-              <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
-                  {% if unpublished_filter %}checked{% endif %} />
-              <label for="unpublished-filter"><span></span>Show unpublished games</label>
+                <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
+                    {% if unpublished_filter %}checked{% endif %} />
+                <label for="unpublished-filter"><span></span>Show unpublished games</label>
               </li>
+
               <li>
-              <input type="checkbox" id="sort-by-popularity" name="sort-by-popularity"
-                  {% if sort_by_popularity %}checked{% endif %} />
-              <label for="sort-by-popularity"><span></span>Sort by popularity</label>
+                <input type="checkbox" id="sort-by-popularity" name="sort-by-popularity"
+                    {% if sort_by_popularity %}checked{% endif %} />
+                <label for="sort-by-popularity"><span></span>Sort by popularity</label>
+              </li>
+
+              <li>
+                <input type="checkbox" id="search-installers" name="search-installers"
+                    {% if search_installers %}checked{% endif %} />
+                <label for="search-installers"><span></span>Search in installers</label>
               </li>
             </ul>
             <span class="input-group-btn">
