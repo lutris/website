@@ -1,3 +1,4 @@
+"""API views module"""
 from __future__ import absolute_import
 
 from rest_framework import filters, generics, permissions
@@ -7,6 +8,7 @@ from games import models, serializers
 
 
 class GameListView(generics.GenericAPIView):
+    """CBV for games list"""
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', 'name')
 
@@ -26,12 +28,16 @@ class GameListView(generics.GenericAPIView):
         return queryset
 
     def get_serializer_class(self):
+        """Return the appropriate serializer
+
+        Adding ?installer=1 to the url adds the installers to the games
+        """
         if self.request.GET.get('installers') == '1':
             return serializers.GameInstallersSerializer
-        else:
-            return serializers.GameSerializer
+        return serializers.GameSerializer
 
     def get(self, request):
+        """GET request"""
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -42,6 +48,7 @@ class GameListView(generics.GenericAPIView):
         return Response(serializer.data)
 
     def post(self, request):
+        """POST request"""
         # Using POST instead of GET is a violation of API rules but it's the
         # only way to send a huge payload to the server. GET querystrings only
         # support a limited number of characters (depending on the web server or
