@@ -1,24 +1,25 @@
 """Views for lutris main app"""
-# pylint: disable=E1101, W0613
+# pylint: disable=too-many-ancestors
 from __future__ import absolute_import
 
 import json
 import logging
 
-import reversion
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.core.mail import mail_managers
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+
+import reversion
 from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
@@ -35,6 +36,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class GameList(ListView):
+    """Game list view"""
     model = models.Game
     context_object_name = "games"
     paginate_by = 25
@@ -46,8 +48,11 @@ class GameList(ListView):
             queryset = queryset.filter(change_for__isnull=True)
         else:
             queryset = queryset.with_installer()
+
         if self.request.GET.get('sort-by-popularity'):
-            queryset = queryset.annotate(library_count=Count('gamelibrary', distinct=True)).order_by('-library_count')
+            queryset = queryset.annotate(
+                library_count=Count('gamelibrary', distinct=True)
+            ).order_by('-library_count')
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
