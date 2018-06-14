@@ -65,6 +65,17 @@
         issues other Windows users are running into, in the Steam forums for
         example.
       </p>
+      <h3 id='faq-url-handler'>Clicking "Install" on the website's games doesn't do anything</h3>
+      <p>
+        Some distributions (such as Kubuntu) do not configure URL handlers
+        correctly, this is not an issue with Lutris, the same thing will happen
+        with, for example, the Steam client.
+        To fix the issue, you can set `network.protocol-handler.expose-all` to
+        False in Firefox's about:config. With that flag disabled, you will now
+        see a pop-up when clicking "Install", prompting you to choose a program
+        to open the URL with. It is recommended you use `/usr/bin/xdg-open` to
+        handle lutris: (or steam:) urls.
+      </p>
     </article>
 
     <article>
