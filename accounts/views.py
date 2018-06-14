@@ -63,11 +63,17 @@ def user_account(request, username):
     """Profile view"""
     user = get_object_or_404(User, username=username)
     if request.user.username == username:
-        submissions = games.models.GameSubmission.objects.filter(
+        pending_submissions = games.models.GameSubmission.objects.filter(
             user=user, accepted_at__isnull=True
         )
-        return render(request, 'accounts/profile.html',
-                      {'user': user, 'submissions': submissions})
+        accepted_submissions = games.models.GameSubmission.objects.filter(
+            user=user, accepted_at__isnull=False
+        )
+        return render(request, 'accounts/profile.html', {
+            'user': user,
+            'pending_submissions': pending_submissions,
+            'accepted_submissions': accepted_submissions
+        })
     else:
         # Once public profiles are implemented, we'll return a view here,
         # currently, only throw a 404.
