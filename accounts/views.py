@@ -1,9 +1,10 @@
+"""Module for user account views"""
 import json
 import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
@@ -17,6 +18,7 @@ from django_openid_auth.views import login_complete, parse_openid_response
 
 import games.models
 import games.util.steam
+from common.util import get_client_ip
 
 from . import forms, sso, tasks
 from .models import AuthToken, EmailConfirmationToken, User
@@ -25,6 +27,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def register(request):
+    """Register a new user account"""
     form = forms.RegistrationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -32,17 +35,9 @@ def register(request):
     return render(request, 'accounts/registration_form.html', {'form': form})
 
 
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip_address = x_forwarded_for.split(',')[0]
-    else:
-        ip_address = request.META.get('REMOTE_ADDR')
-    return ip_address
-
-
 @csrf_exempt
 def client_verify(request):
+    """Verify that a token is valid for the current IP"""
     token = request.POST.get('token')
     try:
         auth_token = AuthToken.objects.get(token=token,
@@ -56,28 +51,38 @@ def client_verify(request):
 
 @login_required
 def profile(request):
-    user = request.user
-    return HttpResponseRedirect(reverse('user_account',
-                                        args=(user.username, )))
+    """Redirect to user account
+    Takes the username from the request, allows to have a unique URL for all profiles.
+    """
+    return HttpResponseRedirect(
+        reverse('user_account', args=(request.user.username, ))
+    )
 
 
 def user_account(request, username):
+    """Profile view"""
     user = get_object_or_404(User, username=username)
     if request.user.username == username:
-        submissions = games.models.GameSubmission.objects.filter(
+        pending_submissions = games.models.GameSubmission.objects.filter(
             user=user, accepted_at__isnull=True
         )
-        return render(request, 'accounts/profile.html',
-                      {'user': user, 'submissions': submissions})
+        accepted_submissions = games.models.GameSubmission.objects.filter(
+            user=user, accepted_at__isnull=False
+        )
+        return render(request, 'accounts/profile.html', {
+            'user': user,
+            'pending_submissions': pending_submissions,
+            'accepted_submissions': accepted_submissions
+        })
     else:
-        # TODO We're returning a 404 error until we have a good public profile
-        # page (with worthwhile content)
+        # Once public profiles are implemented, we'll return a view here,
+        # currently, only throw a 404.
         raise Http404
-        # return render(request, 'accounts/public_profile.html', {'user': user})
 
 
 @login_required
 def user_send_confirmation(request):
+    """Send an email with a confirmation link"""
     user = request.user
     if not user.email_confirmed:
         token = EmailConfirmationToken(email=user.email)
@@ -88,6 +93,9 @@ def user_send_confirmation(request):
 
 
 def user_require_confirmation(request):
+    """Display an error message that the resource is reserved for confirmed
+    accounts only.
+    """
     if request.user.is_authenticated:
         messages.error(
             request,
@@ -103,6 +111,10 @@ def user_require_confirmation(request):
 
 
 def user_email_confirm(request):
+    """Confirm an user's account
+
+    This is the view pointed by the link in the confirmation email
+    """
     token = request.GET.get('token')
     confirmation_token = get_object_or_404(EmailConfirmationToken, token=token)
     if confirmation_token.is_valid():
@@ -114,6 +126,7 @@ def user_email_confirm(request):
 
 @login_required
 def profile_edit(request, username):
+    """Change profile imformation"""
     user = get_object_or_404(User, username=username)
     if user != request.user:
         raise Http404
@@ -131,6 +144,7 @@ def profile_edit(request, username):
 
 @login_required
 def profile_delete(request, username):
+    """Deactivate a user account"""
     user = get_object_or_404(User, username=username)
     if user != request.user:
         raise Http404
@@ -145,6 +159,7 @@ def profile_delete(request, username):
 
 @csrf_exempt
 def associate_steam(request):
+    """Associate a Steam account with a Lutris account"""
     LOGGER.info("Associating Steam user with Lutris account")
     if not request.user.is_authenticated:
         LOGGER.info("User is authenticated, completing login")
@@ -174,9 +189,11 @@ def associate_steam(request):
 
 
 def library_show(request, username):
+    """Display the user's library"""
     user = get_object_or_404(User, username=username)
     if request.user != user:
-        # TODO: Implement a profile setting to set the library public
+        # Libraries are currently private. This will change once public
+        # profiles are implemented
         raise Http404
     library = games.models.GameLibrary.objects.get(user=user)
     library_games = library.games.all()
@@ -187,6 +204,7 @@ def library_show(request, username):
 
 @login_required
 def library_add(request, slug):
+    """Add a game to the user's library"""
     user = request.user
     library = games.models.GameLibrary.objects.get(user=user)
     game = get_object_or_404(games.models.Game, slug=slug)
@@ -199,6 +217,7 @@ def library_add(request, slug):
 
 @login_required
 def library_remove(request, slug):
+    """Remove a game from a user's library"""
     user = request.user
     library = games.models.GameLibrary.objects.get(user=user)
     game = get_object_or_404(games.models.Game, slug=slug)
@@ -212,6 +231,7 @@ def library_remove(request, slug):
 
 @login_required
 def library_steam_sync(request):
+    """Launch a Steam library sync in the background"""
     user = request.user
     LOGGER.info("Syncing contents of Steam library for user %s", user.username)
     tasks.sync_steam_library.delay(user.id)
@@ -225,6 +245,7 @@ def library_steam_sync(request):
 
 @login_required
 def discourse_sso(request):
+    """View used to sign in a user to the Discord forums"""
     user = request.user
     if not user.email_confirmed:
         return HttpResponseBadRequest('You must confirm your email to use the forums')

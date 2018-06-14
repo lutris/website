@@ -6,7 +6,6 @@
 
 
 {% block content %}
-<h1>Account</h1>
 <div class="row">
   <div class="col-md-12">
   <div class="profile-header">
@@ -60,7 +59,7 @@
       <p>The following contributions you submitted are awaiting approval from a
       moderator.</p>
       <ul class="game-list">
-        {% for submission in submissions %}
+        {% for submission in pending_submissions %}
         {% with submission.game as game %}
           {% include "includes/game_preview.html" %}
         {% endwith %}
@@ -72,6 +71,20 @@
       </p>
       {% endif %}
     </section>
+
+    {% if accepted_submissions %}
+    <section>
+      <h4>Contributions</h4>
+      <p>These are the games you have previously submitted to Lutris</p>
+      <ul class="game-list">
+        {% for submission in accepted_submissions %}
+        {% with submission.game as game %}
+          {% include "includes/game_preview.html" %}
+        {% endwith %}
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
   </div>
   </div>
 </div>

@@ -71,3 +71,13 @@ def create_user(username='user', password='password'):
     user.set_password(password)
     user.save()
     return user
+
+
+def get_client_ip(request):
+    """Return the user's IP address from a Django request"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip_address = x_forwarded_for.split(',')[0]
+    else:
+        ip_address = request.META.get('REMOTE_ADDR')
+    return ip_address
