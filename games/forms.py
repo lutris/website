@@ -246,10 +246,16 @@ class InstallerForm(forms.ModelForm):
         yaml_data = self.cleaned_data["content"]
         try:
             yaml_data = yaml.safe_load(yaml_data)
-        except yaml.error.MarkedYAMLError as ex:
-            raise forms.ValidationError("Invalid YAML, problem at line %s, %s" % (
-                ex.problem_mark.line, ex.problem
-            ))
+        except yaml.scanner.ScannerError:
+            raise forms.ValidationError("Invalid YAML data (scanner error)")
+        except yaml.parser.ParserError:
+            raise forms.ValidationError("Invalid YAML data (parse error)")
+        except yaml.composer.ComposerError as ex:
+            raise forms.ValidationError(
+                "Script error: %s."
+                "Make sure to quote any string with special characters such as '*' or ':'"
+                % ex.problem
+            )
         return yaml.safe_dump(yaml_data, default_flow_style=False)
 
     def clean_version(self):

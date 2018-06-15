@@ -15,18 +15,6 @@ module.exports = function(grunt) {
             flatten: true,
             src: ['components/jcrop/css/Jcrop.gif'],
             dest: 'public/css/'
-          },
-          {
-            expand: true,
-            flatten: true,
-            src: ['components/ace-builds/src-noconflict/*'],
-            dest: 'public/ace'
-          },
-          {
-            expand: true,
-            flatten: true,
-            src: ['components/ace-builds/src-noconflict/snippets/*'],
-            dest: 'public/ace/snippets'
           }
         ]
       }

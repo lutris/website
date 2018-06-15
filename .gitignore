@@ -18,7 +18,6 @@ fabric.yaml
 /components
 public/js
 public/css
-public/ace
 public/fonts
 node_modules
 npm-debug.log
