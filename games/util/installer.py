@@ -144,7 +144,7 @@ def dont_disable_monitor(installer):
     script = get_installer_script(installer)
     if 'system' not in script:
         return SUCCESS
-    if 'disable_monitor' in script['system']:
+    if 'disable_monitor' in script.get('system') or {}:
         return (
             False,
             "Do not disable the process monitor in installers, if you have "
@@ -157,7 +157,7 @@ def no_duplicate_file_ids(installer):
     """Check that all file identifiers are unique"""
     script = get_installer_script(installer)
     file_ids = []
-    files = script.get('files') or  []
+    files = script.get('files') or []
     for file_info in files:
         file_id = next(iter(file_info.keys()))
         if file_id in file_ids:
@@ -173,7 +173,7 @@ def no_duplicate_file_ids(installer):
 def files_have_correct_attributes(installer):
     """Make sure all files are strings or have url/filename attributes"""
     script = get_installer_script(installer)
-    for file_info in script.get('files', []):
+    for file_info in script.get('files') or []:
         file_meta = file_info[next(iter(file_info.keys()))]
         if isinstance(file_meta, dict):
             if 'url' not in file_meta or 'filename' not in file_meta:
@@ -187,7 +187,7 @@ def files_have_correct_attributes(installer):
 def tasks_have_names(installer):
     """Make sure all tasks have names"""
     script = get_installer_script(installer)
-    for step in script.get('installer', []):
+    for step in script.get('installer') or []:
         step_name, arguments = next(iter(step.items()))
         if step_name == 'task':
             if 'name' not in arguments:
