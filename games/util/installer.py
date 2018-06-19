@@ -159,6 +159,8 @@ def no_duplicate_file_ids(installer):
     file_ids = []
     files = script.get('files') or []
     for file_info in files:
+        if not isinstance(file_info, dict):
+            continue
         file_id = next(iter(file_info.keys()))
         if file_id in file_ids:
             return (
@@ -188,6 +190,8 @@ def tasks_have_names(installer):
     """Make sure all tasks have names"""
     script = get_installer_script(installer)
     for step in script.get('installer') or []:
+        if not isinstance(step, dict):
+            continue
         step_name, arguments = next(iter(step.items()))
         if step_name == 'task':
             if 'name' not in arguments:
