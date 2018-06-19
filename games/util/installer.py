@@ -11,6 +11,8 @@ def get_installer_script(installer):
     script = yaml.safe_load(installer.content)
     if not script:
         return {}
+    if not isinstance(script, dict):
+        raise TypeError("Malformed script")
     return script
 
 
@@ -176,6 +178,8 @@ def files_have_correct_attributes(installer):
     """Make sure all files are strings or have url/filename attributes"""
     script = get_installer_script(installer)
     for file_info in script.get('files') or []:
+        if not isinstance(file_info, dict):
+            continue
         file_meta = file_info[next(iter(file_info.keys()))]
         if isinstance(file_meta, dict):
             if 'url' not in file_meta or 'filename' not in file_meta:
