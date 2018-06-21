@@ -172,6 +172,7 @@ def bower(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         c.run("bower install")
+        c.run("bower update")
 
 
 @task

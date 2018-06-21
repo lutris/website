@@ -34,6 +34,7 @@
     <form action="" method="post">
       {% csrf_token %}
       {{ form.as_p }}
+      <div id='editor'></div>
       <input type="submit" class="btn" name="save" value="Save draft">
       <input type="submit" class="btn btn-primary" name="submit" value="Submit to moderation"/>
       {% if installer.draft %}
@@ -56,8 +57,24 @@
 
 
 {% block scripts %}
+  <script src="/static/ace/ace.js" type="text/javascript" charset="utf-8"></script>
   <script>
     $(function(){
+      // ACE editor config
+      const textarea = $('textarea[name="content"]').hide();
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/twilight");
+      editor.session.setMode("ace/mode/yaml");
+      editor.session.setTabSize(4);
+      editor.session.setUseSoftTabs(true);
+      editor.setOption("fontSize", "16px");
+
+      editor.getSession().setValue(textarea.val());
+      editor.getSession().on('change', function(){
+        textarea.val(editor.getSession().getValue());
+      });
+
+      // Select2 config
       $.fn.select2.defaults.set("width", null);
       $.fn.select2.defaults.set("theme", 'bootstrap');
 

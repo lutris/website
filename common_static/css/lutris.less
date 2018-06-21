@@ -683,6 +683,17 @@ input {
   height: 500px;
 }
 
+.ace_editor {
+    height: 500px;
+    width: 100%;
+}
+
+// Workaround for a cursor rendering bug in ACE editor:
+// https://github.com/ajaxorg/ace/issues/2548
+.ace_editor, .ace_text-input, .ace_editor div{
+    font-family : monospace !important;
+}
+
 .errorlist {
   padding: 0;
   li {
@@ -1517,7 +1528,7 @@ input {
     position: relative;
     top: 0px;
     float: right;
-    
+
     .help {
       position: absolute;
       white-space:nowrap;
