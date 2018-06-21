@@ -23,6 +23,7 @@ from common.util import get_client_ip
 from . import forms, sso, tasks
 from .models import AuthToken, EmailConfirmationToken, User
 
+REQUEST_LOGGER = logging.getLogger('django.request')
 LOGGER = logging.getLogger(__name__)
 
 
@@ -169,7 +170,11 @@ def associate_steam(request):
         account_url = reverse('user_account', args=(request.user.username, ))
         if openid_response.status == 'failure':
             messages.warning(request, "Failed to associate Steam account")
-            LOGGER.error("Failed to associate Steam account for %s", request.user.username)
+            REQUEST_LOGGER.error("Failed to associate Steam account for %s", request.user.username,
+                                 extra={
+                                     'status_code': 400,
+                                     'request': request
+                                 })
             return redirect(account_url)
         openid_backend = OpenIDBackend()
         try:
