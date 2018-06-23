@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
+{% block extra_head %}
+<meta property="pageId" content="{{ game.slug }}" />
+{% thumbnail game.title_logo "300" as img %}
+<link rel='image_src' href="{{img.url}}">
+<meta property='og:image' content="{{img.url}}" />
+{% endthumbnail %}
+<meta property='og:title' content="{{ game.name }}" />
+<meta property='og:site_name' content='Lutris' />
+<meta name="title" content="{{ game.name }} - Lutris" />
+<meta name="description" content="{{ game.name }} - Lutris" />
+<meta property="og:description" content="{{ game.name }} - Lutris" />
+{% endblock extra_head %}
+
+
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
