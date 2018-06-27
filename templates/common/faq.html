@@ -11,17 +11,23 @@
       <h3 id='faq-sell-games'>Does Lutris sell games?</h3>
       <p>
         No, we don't sell commercial games on the platform, Lutris allows you
-        to install and play games purchased on a variety on different game stores such as
-        Steam, Humble Bundle, GOG, Battle.net, etc…
+        to install and play games purchased on a variety of different game stores such as
+        Steam, Humble Bundle, GOG, Battle.net, etc.
       </p>
-      <h3 id='faq-community'>How do I get in touch with the Lutris community?</h3>
+      <h3>
+        <a id="faq-community" class="anchor" href="#faq-community">
+          <svg height="30" width="500">
+            <text x="0" y="25" fill="#BBB">How do I get in touch with the Lutris community?</text>
+          </svg>
+        </a>
+      </h3>
       <p>
         If you want to ask questions about Lutris or just hang out with other Lutris users, you can join our
         <a href="https://discord.gg/dfUpvYn">Discord channel</a> or our IRC channel
         <a href="irc://irc.freenode.org:6667/lutris">#lutris on freenode.org</a>.
         You can also use the <a href="https://forums.lutris.net/">forums</a> to ask questions.
         Please do not privately contact Lutris developers for tech support, do
-        not report issues by email or by private message. Bug report have to
+        not report issues by email or by private message. Bug reports have to
         stay visible to the community.
       </p>
 
@@ -29,7 +35,7 @@
       <p>
         You can create a page for your game and submit an installer for it but
         right now there aren't any special features for game developers. We do
-        have some plan to add a game developer role to the website, you can
+        have some plans to add a game developer role to the website, you can
         follow its development here: <a
           href='https://github.com/lutris/website/issues/83'>on Github</a>
       </p>
@@ -43,7 +49,7 @@
         from various places.<br/>
         Of course, ensuring binary compatibility over all existing Linux
         distributions is not an easy task and sometimes issues will arise. If
-        such a thing happen, try disabling the runtime in the system options of
+        such a thing happens, try disabling the runtime in the system options of
         your game. For more details on the runtime, see the <a
           href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">wiki</a>.
       </p>
@@ -53,15 +59,15 @@
         If you see errors related to Linux libraries, try running the game with
         the <a href='#faq-runtime'>runtime</a> disabled. If disabling the
         runtime fixes the issue, please, notify the developers, we don't want
-        to ship a broken runtime and your input can help fixing it.<br/>
+        to ship a broken runtime and your input can help in fixing it.<br/>
         If your game still doesn't launch try collecting as much info about
-        your setup (name of the game, your graphics drivers, Linux distributin,
+        your setup (name of the game, your graphics drivers, Linux distribution,
         hardware setup, desktop environment, …) and explain your issue to the
         <a href="#faq-community">community</a>.
         If you want to troubleshoot the issue yourself, there are some good
         resources you can look into. Start by looking up the game in <a
           href="https://pcgamingwiki.com">PCGamingWiki</a> as you might run
-        into a know problem and they might have a workaround. If you are trying
+        into a known problem and they might have a workaround. If you are trying
         to run a Windows game, also check out <a
           href="https://appdb.winehq.org/">WineHQ's AppDB</a> or look for
         issues other Windows users are running into, in the Steam forums for
@@ -72,10 +78,10 @@
         Some distributions (such as Kubuntu) do not configure URL handlers
         correctly, this is not an issue with Lutris, the same thing will happen
         with, for example, the Steam client.
-        To fix the issue, you can set `network.protocol-handler.expose-all` to
+        To fix the issue, you can set <code>network.protocol-handler.expose-all</code> to
         False in Firefox's about:config. With that flag disabled, you will now
         see a pop-up when clicking "Install", prompting you to choose a program
-        to open the URL with. It is recommended you use `/usr/bin/xdg-open` to
+        to open the URL with. It is recommended you use <code>/usr/bin/xdg-open</code> to
         handle lutris: (or steam:) urls.
       </p>
     </article>
