@@ -8,7 +8,7 @@
   "main": "Gruntfile.js",
   "devDependencies": {
     "bower": "^1.8.4",
-    "grunt": "~1.0.1",
+    "grunt": "^1.0.3",
     "grunt-browser-sync": "^2.2.0",
     "grunt-cli": "1.2.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -18,7 +18,7 @@
     "grunt-contrib-uglify": "~3.3.0",
     "grunt-contrib-watch": "^1.1.0",
     "hoek": "5.0.3",
-    "request": "^2.86.0"
+    "request": "^2.87.0"
   },
   "scripts": {
     "setup": "bower install --allow-root && grunt",
