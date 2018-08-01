@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load humanize %}
 
 {% block extra_head %}
 <meta property="pageId" content="{{ game.slug }}" />
@@ -202,6 +203,22 @@
       <article>
         {{ game.description|linebreaks }}
       </article>
+      {% if issues %}
+        <h3>Issues</h3>
+        {% regroup issues by installer as installer_issues %}
+        {% for installer in installer_issues %}
+          <h4>{{ installer.grouper }}</h4>
+          <ul class='issue-list'>
+              {% for issue in installer.list %}
+                <li>
+                  <strong>{{ issue.submitted_by }}</strong>
+                  <span>{{issue.submitted_on|naturaltime}}</span>
+                  <p>{{ issue.description }}</p>
+                </li>
+              {% endfor %}
+          </ul>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
   <div class="modal fade" id='installer-issue-modal'>

@@ -80,9 +80,30 @@ class InstallerAdmin(VersionAdmin):
     game_link.short_description = "Game (link)"
 
 
+class IssueReplyInline(admin.StackedInline):
+    """Admin config for issue replies"""
+    model = models.InstallerIssueReply
+    extra = 1
+    readonly_fields = (
+        'submitted_by',
+        'submitted_on',
+        'issue'
+    )
+
+
 class InstallerIssueAdmin(admin.ModelAdmin):
+    """Admin config for issues"""
     list_display = ('__str__', 'submitted_by', 'submitted_on', 'installer')
-    readonly_fields = ('submitted_on', 'game_link',)
+    readonly_fields = (
+        'submitted_by',
+        'submitted_on',
+        'installer',
+        'game_link'
+    )
+
+    inlines = [
+        IssueReplyInline
+    ]
 
     def game_link(self, obj):
         return mark_safe("<a href='{0}'>{1}<a/>".format(
