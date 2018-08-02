@@ -697,7 +697,7 @@ class InstallerIssue(BaseIssue):
 
 class InstallerIssueReply(BaseIssue):
     """Reply to an issue"""
-    issue = models.ForeignKey(InstallerIssue, on_delete=models.CASCADE)
+    issue = models.ForeignKey(InstallerIssue, related_name='replies', on_delete=models.CASCADE)
 
 
 class GameLibrary(models.Model):

@@ -5,6 +5,8 @@ from __future__ import absolute_import
 import json
 import logging
 
+import reversion
+from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -18,16 +20,14 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-
-import reversion
-from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import (check_installer_restrictions,
                                  user_confirmed_required)
 from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
-                         InstallerEditForm, InstallerForm, ScreenshotForm)
+                         InstallerEditForm, InstallerForm,
+                         InstallerIssueReplyForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from platforms.models import Platform
@@ -215,6 +215,12 @@ def game_detail(request, slug):
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
     issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
+    issue_reply_form = InstallerIssueReplyForm(request.POST or None)
+    if request.method == 'POST' and issue_reply_form.is_valid():
+        reply = issue_reply_form.save(commit=False)
+        reply.submitted_by = request.user
+        reply.save()
+        return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
     if user.is_authenticated:
@@ -245,7 +251,8 @@ def game_detail(request, slug):
                    'auto_installers': auto_installers,
                    'unpublished_installers': unpublished_installers,
                    'screenshots': screenshots,
-                   'issues': issues})
+                   'issues': issues,
+                   'issue_reply_form': issue_reply_form})
 
 
 @user_confirmed_required

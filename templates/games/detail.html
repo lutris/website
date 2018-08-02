@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 {% load humanize %}
 
 {% block extra_head %}
@@ -212,8 +213,25 @@
               {% for issue in installer.list %}
                 <li>
                   <strong>{{ issue.submitted_by }}</strong>
-                  <span>{{issue.submitted_on|naturaltime}}</span>
-                  <p>{{ issue.description }}</p>
+                  <span>{{ issue.submitted_on|naturaltime }}</span>
+                  <p><pre>{{ issue.description }}</pre></p>
+                  <ul>
+                  {% for reply in issue.replies.all %}
+                    <li>
+                      <strong>{{ reply.submitted_by }}</strong>
+                      <span>{{ reply.submitted_on|naturaltime }}</span>
+                      <p><pre>{{ reply.description }}</pre></p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+                  <form action="." method="post">
+                    {% csrf_token %}
+                    {{ issue_reply_form.description }}
+                    <input type="hidden" name="issue" value="{{issue.id}}">
+                    <p>
+                      <input type="submit" value="Reply">
+                    </p>
+                  </form>
                 </li>
               {% endfor %}
           </ul>
