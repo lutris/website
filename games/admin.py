@@ -95,17 +95,16 @@ class IssueReplyInline(admin.StackedInline):
 
         class DefaultUserFormSet(formset):
             """Sets every instance of the formset to a given user"""
-            saved_forms = []
 
             def save_new_objects(self, commit=True):
                 """Force commit to false to prevent IntegrityErrors then set
                 the user. You must set this attribute yourself.
                 """
+                self.saved_forms = []
                 objects = super().save_new_objects(commit=False)
                 for obj in objects:
                     obj.submitted_by = self.user
-                    if commit:
-                        obj.save()
+                    obj.save()
                 return objects
 
         DefaultUserFormSet.user = request.user
