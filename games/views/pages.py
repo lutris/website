@@ -85,6 +85,7 @@ class GameList(ListView):
         if '\x00' in str(search_terms):
             search_terms = None
         if search_terms:
+            search_terms = search_terms.strip()
             if self.request.GET.get('search-installers'):
                 # Search in installer instead of the game name
                 queryset = queryset.filter(installers__content__icontains=search_terms)
