@@ -250,7 +250,7 @@ def library_steam_sync(request):
 
 @login_required
 def discourse_sso(request):
-    """View used to sign in a user to the Discord forums"""
+    """View used to sign in a user to the Discourse forums"""
     user = request.user
     if not user.email_confirmed:
         return HttpResponseBadRequest('You must confirm your email to use the forums')

@@ -113,6 +113,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
+                "common.context_processors.discord_url",
             ],
             'debug': False
         }
@@ -170,6 +171,8 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 
 DISCOURSE_SSO_SECRET = os.environ.get('DISCOURSE_SSO_SECRET')
 DISCOURSE_URL = 'https://forums.lutris.net'
+
+DISCORD_URL = "https://discord.gg/C3uJjRD"
 
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
