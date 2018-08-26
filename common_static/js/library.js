@@ -29,8 +29,12 @@
 
 function applyLibraryFilter(event) {
     var ordering = $("<input>").attr("type", "hidden").attr("name", "ordering").val($('#order_by').val());
-    var paginate_by = $("<input>").attr("type", "hidden").attr("name", "paginate_by").val($('#paginate_by').val());
-    $('#library_filter_form').append($(ordering)).append($(paginate_by)).submit();
+    $('#library_filter_form').append($(ordering));
+    if ($('#paginate_by').length > 0) {
+        var paginate_by = $("<input>").attr("type", "hidden").attr("name", "paginate_by").val($('#paginate_by').val());
+        $('#library_filter_form').append($(paginate_by));
+    }
+    $('#library_filter_form').submit();
 }
 
 function clearLibraryFilter(event) {
@@ -39,7 +43,10 @@ function clearLibraryFilter(event) {
     $('#id_genre').val([]).change();
     var order_by = $('#order_by').val();
     var paginate_by = $('#paginate_by').val();
-    window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_by
+    if (paginate_by !== undefined)
+        window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_by
+    else
+        window.location.href = '?ordering=' + order_by
 }
 
 function changeLibraryPaginateCount(event) {
@@ -53,7 +60,10 @@ function changeLibraryOrderBy(event) {
     var order_by = $('#order_by').val();
     var paginate_by = $('#paginate_by').val();
     var filter = $('#order_by').data('filter');
-    window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_by + filter;
+    if (paginate_by !== undefined)
+        window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_by + filter;
+    else
+        window.location.href = '?ordering=' + order_by + filter;
 }
 
 function changeLibraryPage(event) {

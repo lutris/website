@@ -21,6 +21,7 @@ from django.views.generic import ListView
 import games.models
 import games.util.steam
 from common.util import get_client_ip
+from games import models
 from games.forms import LibraryFilterForm
 
 from . import forms, sso, tasks
@@ -213,14 +214,20 @@ class LibraryList(ListView):
         user = get_object_or_404(User, username=self.kwargs['username'])
         queryset = games.models.GameLibrary.objects.get(user=user).games.all()
         search = self.request.GET.get('search', None)
-        platform = self.request.GET.getlist('platform', None)
-        genre = self.request.GET.getlist('genre', None)
+        platforms = self.request.GET.getlist('platform', None)
+        genres = self.request.GET.getlist('genre', None)
+        flags = self.request.GET.getlist('flags', None)
         if search:
             queryset = queryset.filter(Q(name__icontains=search) | Q(description__icontains=search))
-        if platform:
-            queryset = queryset.filter(Q(platforms__in=platform))
-        if genre:
-            queryset = queryset.filter(Q(genres__in=genre))
+        if platforms:
+            queryset = queryset.filter(Q(platforms__in=platforms))
+        if genres:
+            queryset = queryset.filter(Q(genres__in=genres))
+        if flags:
+            flag_Q = Q()
+            for flag in flags:
+                flag_Q |= Q(flags=getattr(models.Game.flags, flag))
+            queryset = queryset.filter(flag_Q)
         return queryset.order_by(self.get_ordering())
 
     def get_context_data(self, **kwargs):
@@ -236,6 +243,7 @@ class LibraryList(ListView):
         search = self.request.GET.get('search', None)
         platforms = self.request.GET.getlist('platform', None)
         genres = self.request.GET.getlist('genre', None)
+        flags = self.request.GET.getlist('flags', None)
         filter_string = ''
         if search:
             filter_string = '&search=%s' % search
@@ -245,11 +253,15 @@ class LibraryList(ListView):
         if genres:
             for genre in genres:
                 filter_string += '&genre=%s' % genre
+        if flags:
+            for flag in flags:
+                filter_string += '&flags=%s' % flag
         context['filter_string'] = filter_string
         context['filter_form'] = LibraryFilterForm(initial={
             'search': self.request.GET.get('search', ''),
             'platform': self.request.GET.getlist('platform', []),
-            'genre': self.request.GET.getlist('genre', [])
+            'genre': self.request.GET.getlist('genre', []),
+            'flags': self.request.GET.getlist('flags', [])
         })
         context['order_by'] = self.get_ordering()
         context['paginate_by'] = self.get_paginate_by(None)
