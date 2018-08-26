@@ -306,3 +306,19 @@ class ForkInstallerForm(forms.ModelForm):
                 search_fields=['name__icontains']
             )
         }
+
+
+class LibraryFilterForm(forms.Form):
+    search = forms.CharField(max_length=50,
+                             widget=forms.TextInput(attrs={'style': 'width: 100%;'}),
+                             required=False)
+    platform = forms.ModelMultipleChoiceField(
+        queryset=models.Platform.objects.all(),
+        widget=Select2MultipleWidget,
+        required=False
+    )
+    genre = forms.ModelMultipleChoiceField(
+        queryset=models.Genre.objects.all(),
+        widget=Select2MultipleWidget,
+        required=False
+    )
