@@ -163,7 +163,6 @@ def npm(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         with nvm(c):
-            c.run("npm install -U bower")
             c.run("npm install")
 
 
