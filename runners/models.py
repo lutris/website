@@ -1,4 +1,4 @@
-# pylint: disable=W0232,R0903
+# pylint: disable=missing-docstring,too-few-public-methods,no-member
 import re
 from django.db import models
 
@@ -66,7 +66,8 @@ class RunnerVersion(models.Model):
 
 
 class Runtime(models.Model):
-    name = models.CharField(max_length=8)
+    """Model class for runtime components"""
+    name = models.CharField(max_length=32)
     created_at = models.DateTimeField(auto_now=True)
     architecture = models.CharField(max_length=8,
                                     choices=ARCH_CHOICES,
