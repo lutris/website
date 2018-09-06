@@ -260,7 +260,7 @@ def deploy(c):
     """Run a full deploy"""
     pull(c)
     requirements(c)
-    bower(c)
+    # bower(c)  # Bower install is disabled, some packages are broken
     grunt(c)
     collect_static(c)
     migrate(c)
