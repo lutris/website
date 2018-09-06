@@ -49,7 +49,7 @@ class GameList(ListView):
         else:
             queryset = queryset.with_installer()
 
-        if self.request.GET.get('sort-by-popularity'):
+        if self.request.GET.get('sort-by-popularity') or not self.request.GET:
             queryset = queryset.annotate(
                 library_count=Count('gamelibrary', distinct=True)
             ).order_by('-library_count')
