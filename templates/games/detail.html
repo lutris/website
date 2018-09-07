@@ -208,18 +208,22 @@
         <h3>Issues</h3>
         {% regroup issues by installer as installer_issues %}
         {% for installer in installer_issues %}
-          <h4>{{ installer.grouper }}</h4>
+        <h4>Installer: {{installer.grouper.version}} version for {{ installer.grouper.runner}}</h4>
           <ul class='issue-list'>
               {% for issue in installer.list %}
                 <li>
-                  <strong>{{ issue.submitted_by }}</strong>
-                  <span>{{ issue.submitted_on|naturaltime }}</span>
+                  <h5>
+                    <strong>{{ issue.submitted_by }}</strong>
+                    <span title="{{issue.submitted_on}}">{{ issue.submitted_on|naturaltime }}</span>
+                  </h5>
                   <p><pre>{{ issue.description }}</pre></p>
                   <ul>
                   {% for reply in issue.replies.all %}
                     <li>
+                      <h5>
                       <strong>{{ reply.submitted_by }}</strong>
-                      <span>{{ reply.submitted_on|naturaltime }}</span>
+                      <span title="{{reply.submitted_on}}">{{ reply.submitted_on|naturaltime }}</span>
+                      </h5>
                       <p><pre>{{ reply.description }}</pre></p>
                     </li>
                   {% endfor %}
