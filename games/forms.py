@@ -306,3 +306,13 @@ class ForkInstallerForm(forms.ModelForm):
                 search_fields=['name__icontains']
             )
         }
+
+
+class InstallerIssueReplyForm(forms.ModelForm):
+    class Meta:
+        model = models.InstallerIssueReply
+        fields = ('description', 'issue')
+        widgets = {
+            'description': forms.Textarea,
+            'issue': forms.HiddenInput
+        }

@@ -143,6 +143,8 @@ form {
   textarea, input {
     border-radius: 0;
     border: 1px solid #999;
+    background-color: #DEDEDE;
+    color: #222;
   }
   textarea {
     padding: 5px 10px;
@@ -1555,6 +1557,50 @@ input {
 
 .modal-title {
   border-bottom: 0;
+}
+
+.issue-list {
+  list-style-type: none;
+  padding: 0;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  h5 {
+    padding-top: 1em;
+    color: #DDA654;
+  }
+  pre {
+      font-family: @sansSerif;
+      font-size: 0.9em;
+      background-color: @darkBackground;
+      color: #EDEDED;
+      white-space: pre-wrap;
+      border-radius: 0;
+      border: none;
+      padding: 1.2em;
+  }
+  textarea {
+    width: 100%;
+    height: 4.5em;
+    background-color: @darkerBackground;
+    border-color: @darkBackground;
+    color: #ADADAD;
+    margin-top: 0.5em;
+  }
+  input[type=submit] {
+    background-color: transparent;
+    border: none;
+    color: @brandColor;
+    text-decoration: underline;
+    font-size: 1em;
+    font-weight: 500;
+  }
+  form {
+    padding-bottom: 1em;
+    border-bottom: 3px solid @darkBackground;
+  }
 }
 
 .issue-content {
