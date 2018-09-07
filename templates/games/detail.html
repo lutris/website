@@ -229,7 +229,10 @@
                     {{ issue_reply_form.description }}
                     <input type="hidden" name="issue" value="{{issue.id}}">
                     <p>
-                      <input type="submit" value="Reply">
+                      <input type="submit" name="reply" value="Reply">
+                      {% if request.user.is_staff or request.user == issue.submitted_by %}
+                        <input type="submit" name="solve" value="Mark as solved">
+                      {% endif %}
                     </p>
                   </form>
                 </li>

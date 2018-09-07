@@ -222,6 +222,15 @@ def game_detail(request, slug):
         reply = issue_reply_form.save(commit=False)
         reply.submitted_by = request.user
         reply.save()
+        if 'solve' in request.POST:
+            try:
+                issue = InstallerIssue.objects.get(pk=request.POST.get('issue'))
+            except InstallerIssue.DoesNotExist:
+                LOGGER.warning("Issue %s doesnt exist", request.POST.get('issue'))
+                issue = None
+            if issue and (issue.submitted_by == request.user or request.user.is_staff):
+                issue.solved = True
+                issue.save()
         return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
