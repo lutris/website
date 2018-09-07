@@ -215,6 +215,8 @@ def game_detail(request, slug):
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
     issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
+    if not request.GET.get('show-closed-issues'):
+        issues = issues.filter(solved=False)
     issue_reply_form = InstallerIssueReplyForm(request.POST or None)
     if request.method == 'POST' and issue_reply_form.is_valid():
         reply = issue_reply_form.save(commit=False)
