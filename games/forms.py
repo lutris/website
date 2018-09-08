@@ -1,5 +1,5 @@
 """Forms for the main app"""
-# pylint: disable=W0232, R0903
+# pylint: disable=missing-docstring,too-few-public-methods
 import os
 from collections import OrderedDict
 
@@ -149,10 +149,19 @@ class GameEditForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.Game
-        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description', 'reason')
+        fields = ('name', 'year', 'developer', 'publisher',
+                  'website', 'platforms', 'genres', 'description', 'reason')
         widgets = {
             'platforms': Select2MultipleWidget,
-            'genres': Select2MultipleWidget
+            'genres': Select2MultipleWidget,
+            'developer': ModelSelect2Widget(
+                model=models.Company,
+                search_fields=['name__icontains']
+            ),
+            'publisher': ModelSelect2Widget(
+                model=models.Company,
+                search_fields=['name__icontains']
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -162,7 +171,8 @@ class GameEditForm(forms.ModelForm):
         self.fields['year'].label = 'Release year'
 
         fields_order = [
-            'name', 'year', 'website', 'platforms', 'genres', 'description', 'reason'
+            'name', 'year', 'developer', 'publisher',
+            'website', 'platforms', 'genres', 'description', 'reason'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
