@@ -311,6 +311,10 @@ def edit_installer(request, slug):
 
     draft_data = None
     versions = Version.objects.get_for_object(installer)
+
+    # Reset reason when the installer is edited.
+    installer.reason = ""
+
     for version in versions:
         if revision_id:
             # Display the revision given in the GET parameters
@@ -330,6 +334,7 @@ def edit_installer(request, slug):
                       "You are viewing a draft of the installer which does not "
                       "reflect the currently available installer. Changes will be "
                       "published once it goes through moderation.")
+        draft_data['reason'] = ""
         if 'runner_id' in draft_data:
             draft_data['runner'] = draft_data['runner_id']
 
