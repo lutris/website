@@ -260,6 +260,12 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError('When we say "change me", we mean it.')
         if version.lower().endswith('version'):
             raise forms.ValidationError("Don't put 'version' at the end of the 'version' field")
+        version_exists = models.Installer.objects.filter(
+            game=self.instance.game,
+            version=version
+        ).exclude(id=self.instance.id).count()
+        if version_exists:
+            raise forms.ValidationError("An installer with the same version name already exists")
         return version
 
     def clean(self):
