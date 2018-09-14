@@ -228,6 +228,7 @@
                     </li>
                   {% endfor %}
                   </ul>
+                  {% if user.is_authenticated %}
                   <form action="." method="post">
                     {% csrf_token %}
                     {{ issue_reply_form.description }}
@@ -239,6 +240,7 @@
                       {% endif %}
                     </p>
                   </form>
+                  {% endif %}
                 </li>
               {% endfor %}
           </ul>
