@@ -213,7 +213,7 @@
               {% for issue in installer.list %}
                 <li>
                   <h5>
-                    <strong>{{ issue.submitted_by }}</strong>
+                    <strong>{% if issue.solved %}[SOLVED] {% endif %}{{ issue.submitted_by }}</strong>
                     <span title="{{issue.submitted_on}}">{{ issue.submitted_on|naturaltime }}</span>
                   </h5>
                   <p><pre>{{ issue.description }}</pre></p>
