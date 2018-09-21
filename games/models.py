@@ -184,6 +184,7 @@ class Game(models.Model):
     gogslug = models.CharField(max_length=200, blank=True)
     gogid = models.PositiveIntegerField(null=True, unique=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
+    wineappdbid = models.PositiveIntegerField(null=True, unique=True)
     flags = BitField(flags=GAME_FLAGS)
 
     # Indicates whether this data row is a changeset for another data row.
@@ -566,6 +567,7 @@ class BaseInstaller(models.Model):
             yaml_content['steamid'] = self.game.steamid
             yaml_content['gogslug'] = self.game.gogslug
             yaml_content['humblestoreid'] = self.game.humblestoreid
+            yaml_content['wineappdbid'] = self.game.wineappdbid
             try:
                 yaml_content['runner'] = self.runner.slug
             except ObjectDoesNotExist:

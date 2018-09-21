@@ -50,6 +50,7 @@ class InstallerSerializer(serializers.ModelSerializer):
     steamid = serializers.ReadOnlyField(source='game.steamid')
     gogslug = serializers.ReadOnlyField(source='game.gogslug')
     humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
+    wineappdbid = serializers.ReadOnlyField(source='game.wineappdbid')
 
     user = serializers.StringRelatedField()
 
@@ -60,7 +61,7 @@ class InstallerSerializer(serializers.ModelSerializer):
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'rating', 'steamid', 'gogslug', 'humblestoreid',
-                  'script', 'content')
+                  'wineappdbid', 'script', 'content')
 
 
 class GameInstallersSerializer(GameSerializer):
@@ -71,7 +72,7 @@ class GameInstallersSerializer(GameSerializer):
         fields = (
             'id', 'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated',
-            'steamid', 'gogslug', 'humblestoreid', 'installers'
+            'steamid', 'gogslug', 'humblestoreid', 'wineappdbid', 'installers'
         )
 
 
@@ -100,6 +101,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     steamid = serializers.ReadOnlyField(source='game.steamid')
     gogslug = serializers.ReadOnlyField(source='game.gogslug')
     humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
+    wineappdbid = serializers.ReadOnlyField(source='game.wineappdbid')
 
     script = serializers.JSONField()
     content = serializers.CharField()
@@ -126,5 +128,5 @@ class GameRevisionSerializer(GameSerializer):
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogslug', 'humblestoreid', 'installers'
+            'gogslug', 'humblestoreid', 'wineappdbid', 'installers'
         )

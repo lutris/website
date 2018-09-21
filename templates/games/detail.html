@@ -144,6 +144,12 @@
                 <span>SteamDB</span>
               </a>
               {% endif %}
+              {% if game.wineappdbid %}
+              <a href="https://appdb.winehq.org/objectManager.php?sClass=application&iId={{ game.wineappdbid }}" title="Wine AppDB" class='external-link'>
+                <img src="{{ STATIC_URL }}images/icons/winehq.png" alt="Wine AppDB" />
+                <span>Wine AppDB</span>
+              </a>
+              {% endif %}
             </p>
           {% endif %}
 
