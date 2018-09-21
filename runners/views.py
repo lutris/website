@@ -66,10 +66,10 @@ class RunnerUploadView(generics.CreateAPIView):
         except Runner.DoesNotExist:
             return Response(status=404)
         serializer = RunnerSerializer(runner)
-        if 'file' in self.request.data:
-            url = self.upload(request)
+        if 'url' in self.request.POST:
+            url = request.data['url']
         else:
-            url = self.data['url']
+            url = self.upload(request)
         runner_version = RunnerVersion.objects.create(
             runner=runner,
             version=request.data['version'],
