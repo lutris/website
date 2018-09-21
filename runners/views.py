@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 import os
 
 from django.utils import timezone

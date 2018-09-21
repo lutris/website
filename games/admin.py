@@ -1,5 +1,5 @@
 """Admin configuration for Lutris games"""
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,missing-docstring,no-self-use
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
@@ -96,11 +96,11 @@ class IssueReplyInline(admin.StackedInline):
         class DefaultUserFormSet(formset):
             """Sets every instance of the formset to a given user"""
 
-            def save_new_objects(self, commit=True):
+            def save_new_objects(self, commit=True):  # pylint: disable=unused-argument
                 """Force commit to false to prevent IntegrityErrors then set
                 the user. You must set this attribute yourself.
                 """
-                self.saved_forms = []
+                self.saved_forms = []  # pylint: disable=attribute-defined-outside-init
                 objects = super().save_new_objects(commit=False)
                 for obj in objects:
                     obj.submitted_by = self.user
