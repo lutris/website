@@ -756,9 +756,6 @@ class GameLink(models.Model):
         ('winehq', 'WineHQ AppDB'),
         ('lemonamiga', 'Lemon Amiga'),
         ('github', 'Github'),
-		('origin', 'Origin'),
-		('ubisoft', 'Ubisoft'),
-		('battlenet', 'Battle.net'),
     )
     game = models.ForeignKey(Game, related_name='links', on_delete=models.CASCADE)
     website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
