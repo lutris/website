@@ -1,8 +1,10 @@
+# pylint: disable=missing-docstring
 from django.shortcuts import render
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.views.generic import DetailView, TemplateView
+from django.urls import reverse
 
 from common.forms import UploadForm
 from common.models import News
@@ -71,5 +73,5 @@ def upload_file(request):
         upload = form.save(commit=False)
         upload.uploaded_by = request.user
         upload.save()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('upload_file'))
     return render(request, 'common/upload.html', {'form': form})
