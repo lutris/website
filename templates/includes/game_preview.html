@@ -1,20 +1,7 @@
 {% load thumbnail %}
 
 <li style="padding-left: 1em;" class="{% if game.has_installer %} with-installer{% endif %}">
-  <div class="row">
-    <div class="col">
-      {% if not game.change_for %}
-        <a href="{{ game.get_absolute_url }}" class="game-title">{{ game.name }}</a>
-      {% else %}
-        <a class="game-title">[Change suggestions for] {{ game.change_for.name }}</a>
-      {% endif %}
-      {% if is_library %}
-        <a title="Remove from Library" href="{% url "remove_from_library" slug=game.slug %}" class="right-button">
-          <i class="fas fa-trash-alt"></i>
-        </a>
-      {% endif %}
-    </div>
-  </div>
+
   <div class="row" style="display: flex;">
     <div style="width: 184px; margin-right: 1em;">
       {% if not game.change_for %}
@@ -33,7 +20,23 @@
         {% endthumbnail %}
       {% endif %}
     </div>
-    <div class="hidden-xs">
+    <div class="hidden-xs" style="width: 100%;">
+      <div class="row">
+        <!--<div class="col">-->
+          {% if not game.change_for %}
+            <a href="{{ game.get_absolute_url }}" title="{{ game.name }}"
+               class="game-title ellipse-text" style="max-width: 640px;">{{ game.name }}</a>
+          {% else %}
+            <a class="game-title ellipse-text" title="{{ game.change_for.name }}"
+            style="max-width: 640px;">[Change suggestions for] {{ game.change_for.name }}</a>
+          {% endif %}
+          {% if is_library %}
+            <a title="Remove from Library" href="{% url "remove_from_library" slug=game.slug %}" class="right-button">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          {% endif %}
+        <!--</div>-->
+      </div>
       <div class="row">
         Platforms:
         {% for platform in game.platforms.all %}
