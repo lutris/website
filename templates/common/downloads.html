@@ -10,7 +10,7 @@
         Lutris should be compatible with most up-to-date Linux distributions,
         it relies on the Python language and Gnome 3 libraries (but will run
         fine under any desktop environment). The following distributions are
-        currently supported: Ubuntu 16.04, 17.04, 17.10 and 18.04, Debian 8 and 9,
+        currently supported: Ubuntu 16.04 and 18.04, Debian 8 and 9,
         Fedora 24, 25, 26, 27 and 28, openSUSE Leap 15.0 and Tumbleweed,
         Mageia, Arch Linux and Gentoo.
       </p>
@@ -48,7 +48,7 @@
           You can add a repository to receive automatic updates:<br/>
           <br/>
           <strong>For Ubuntu & derivatives like Pop!_OS, Elementary OS, Linux Mint…</strong><br/>
-          <code>ver=$(lsb_release -sr); if [ $ver != "18.04" -a $ver != "17.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=18.04; fi</code>
+          <code>ver=$(lsb_release -sr); if [ $ver != "18.04" -a $ver != "16.04" ]; then ver=18.04; fi</code>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
@@ -107,7 +107,7 @@
       <li>
         <ul>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/mageia.svg' height="32px" alt='Mageia'>
+            <img src='{{ STATIC_URL }}images/icons/mageia.png' height="32px" alt='Mageia'>Mageia
           </li>
         </ul>
         <p>
