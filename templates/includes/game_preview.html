@@ -31,7 +31,7 @@
             style="max-width: 640px;">[Change suggestions for] {{ game.change_for.name }}</a>
           {% endif %}
           {% if is_library %}
-            <a title="Remove from Library" href="{% url "remove_from_library" slug=game.slug %}" class="right-button">
+            <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="right-button">
               <i class="fas fa-trash-alt"></i>
             </a>
           {% endif %}
@@ -40,7 +40,7 @@
       <div class="row">
         Platforms:
         {% for platform in game.platforms.all %}
-        <a href="{% url "games_by_plaform" slug=platform.slug %}" class="filter-link">{{ platform }}</a>
+        <a href="{% url 'games_by_plaform' slug=platform.slug %}" class="filter-link">{{ platform }}</a>
         {% endfor %}
       </div>
       <div class="info">
