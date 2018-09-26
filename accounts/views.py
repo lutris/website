@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
@@ -15,10 +16,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
+from django.views.generic import ListView
 
 import games.models
 import games.util.steam
 from common.util import get_client_ip
+from games import models
+from games.forms import LibraryFilterForm
 
 from . import forms, sso, tasks
 from .models import AuthToken, EmailConfirmationToken, User
@@ -193,18 +197,75 @@ def associate_steam(request):
         return redirect(reverse("library_steam_sync"))
 
 
-def library_show(request, username):
-    """Display the user's library"""
-    user = get_object_or_404(User, username=username)
-    if request.user != user:
-        # Libraries are currently private. This will change once public
-        # profiles are implemented
-        raise Http404
-    library = games.models.GameLibrary.objects.get(user=user)
-    library_games = library.games.all()
-    return render(request, 'accounts/library_show.html',
-                  {'user': user, 'games': library_games,
-                   'is_library': True})
+class LibraryList(ListView):
+    template_name = 'accounts/library_show.html'
+    context_object_name = 'games'
+    paginate_by = 25
+    paginate_orphans = 10
+    ordering = 'name'
+
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('paginate_by', self.paginate_by)
+
+    def get_ordering(self):
+        return self.request.GET.get('ordering', self.ordering)
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs['username'])
+        queryset = games.models.GameLibrary.objects.get(user=user).games.all()
+        search = self.request.GET.get('search', None)
+        platforms = self.request.GET.getlist('platform', None)
+        genres = self.request.GET.getlist('genre', None)
+        flags = self.request.GET.getlist('flags', None)
+        if search:
+            queryset = queryset.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if platforms:
+            queryset = queryset.filter(Q(platforms__in=platforms))
+        if genres:
+            queryset = queryset.filter(Q(genres__in=genres))
+        if flags:
+            flag_Q = Q()
+            for flag in flags:
+                flag_Q |= Q(flags=getattr(models.Game.flags, flag))
+            queryset = queryset.filter(flag_Q)
+        return queryset.order_by(self.get_ordering())
+
+    def get_context_data(self, **kwargs):
+        """Display the user's library"""
+        context = super().get_context_data(**kwargs)
+        user = get_object_or_404(User, username=self.kwargs['username'])
+        if self.request.user != user:
+            # Libraries are currently private. This will change once public
+            # profiles are implemented
+            raise Http404
+        context['user'] = user
+        context['is_library'] = True
+        search = self.request.GET.get('search', None)
+        platforms = self.request.GET.getlist('platform', None)
+        genres = self.request.GET.getlist('genre', None)
+        flags = self.request.GET.getlist('flags', None)
+        filter_string = ''
+        if search:
+            filter_string = '&search=%s' % search
+        if platforms:
+            for platform in platforms:
+                filter_string += '&platform=%s' % platform
+        if genres:
+            for genre in genres:
+                filter_string += '&genre=%s' % genre
+        if flags:
+            for flag in flags:
+                filter_string += '&flags=%s' % flag
+        context['filter_string'] = filter_string
+        context['filter_form'] = LibraryFilterForm(initial={
+            'search': self.request.GET.get('search', ''),
+            'platform': self.request.GET.getlist('platform', []),
+            'genre': self.request.GET.getlist('genre', []),
+            'flags': self.request.GET.getlist('flags', [])
+        })
+        context['order_by'] = self.get_ordering()
+        context['paginate_by'] = self.get_paginate_by(None)
+        return context
 
 
 @login_required

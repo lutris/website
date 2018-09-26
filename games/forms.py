@@ -11,6 +11,7 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django_select2.forms import (HeavySelect2Widget, ModelSelect2Widget,
                                   Select2MultipleWidget, Select2Widget)
+from bitfield.forms import BitFieldCheckboxSelectMultiple
 
 from common.util import get_auto_increment_slug, slugify
 from games import models
@@ -324,6 +325,27 @@ class ForkInstallerForm(forms.ModelForm):
         }
 
 
+class LibraryFilterForm(forms.Form):
+    search = forms.CharField(max_length=50,
+                             widget=forms.TextInput(attrs={'style': 'width: 100%;'}),
+                             required=False)
+    platform = forms.ModelMultipleChoiceField(
+        queryset=models.Platform.objects.all(),
+        widget=Select2MultipleWidget,
+        required=False
+    )
+    genre = forms.ModelMultipleChoiceField(
+        queryset=models.Genre.objects.all(),
+        widget=Select2MultipleWidget,
+        required=False
+    )
+    flags = forms.MultipleChoiceField(
+        choices=models.Game.GAME_FLAGS,
+        widget=BitFieldCheckboxSelectMultiple,
+        required=False
+    )
+    
+    
 class InstallerIssueReplyForm(forms.ModelForm):
     class Meta:
         model = models.InstallerIssueReply
