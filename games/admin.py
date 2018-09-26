@@ -1,5 +1,5 @@
 """Admin configuration for Lutris games"""
-# pylint: disable=R0201
+# pylint: disable=too-few-public-methods,missing-docstring,no-self-use
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
@@ -80,9 +80,50 @@ class InstallerAdmin(VersionAdmin):
     game_link.short_description = "Game (link)"
 
 
+class IssueReplyInline(admin.StackedInline):
+    """Admin config for issue replies"""
+    model = models.InstallerIssueReply
+    extra = 1
+    readonly_fields = (
+        'submitted_by',
+        'submitted_on',
+        'issue'
+    )
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+
+        class DefaultUserFormSet(formset):
+            """Sets every instance of the formset to a given user"""
+
+            def save_new_objects(self, commit=True):  # pylint: disable=unused-argument
+                """Force commit to false to prevent IntegrityErrors then set
+                the user. You must set this attribute yourself.
+                """
+                self.saved_forms = []  # pylint: disable=attribute-defined-outside-init
+                objects = super().save_new_objects(commit=False)
+                for obj in objects:
+                    obj.submitted_by = self.user
+                    obj.save()
+                return objects
+
+        DefaultUserFormSet.user = request.user
+        return DefaultUserFormSet
+
+
 class InstallerIssueAdmin(admin.ModelAdmin):
+    """Admin config for issues"""
     list_display = ('__str__', 'submitted_by', 'submitted_on', 'installer')
-    readonly_fields = ('submitted_on', 'game_link',)
+    readonly_fields = (
+        'submitted_by',
+        'submitted_on',
+        'installer',
+        'game_link'
+    )
+
+    inlines = [
+        IssueReplyInline
+    ]
 
     def game_link(self, obj):
         return mark_safe("<a href='{0}'>{1}<a/>".format(

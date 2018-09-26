@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block extra_head %}
 <meta property="pageId" content="{{ game.slug }}" />
@@ -202,6 +204,51 @@
       <article>
         {{ game.description|linebreaks }}
       </article>
+      {% if issues %}
+        <h3>Issues</h3>
+        {% regroup issues by installer as installer_issues %}
+        {% for installer in installer_issues %}
+        <h4>Installer: {{installer.grouper.version}} version for {{ installer.grouper.runner}}</h4>
+          <ul class='issue-list'>
+              {% for issue in installer.list %}
+                <li>
+                  <h5>
+                    <strong>{% if issue.solved %}[SOLVED] {% endif %}{{ issue.submitted_by }}</strong>
+                    <span title="{{issue.submitted_on}}">{{ issue.submitted_on|naturaltime }}</span>
+                  </h5>
+                  <p><pre>{{ issue.description }}</pre></p>
+                  <ul>
+                  {% for reply in issue.replies.all %}
+                    <li>
+                      <h5>
+                      <strong>{{ reply.submitted_by }}</strong>
+                      <span title="{{reply.submitted_on}}">{{ reply.submitted_on|naturaltime }}</span>
+                      </h5>
+                      <p><pre>{{ reply.description }}</pre></p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+                  {% if user.is_authenticated %}
+                  <form action="." method="post">
+                    {% csrf_token %}
+                    {{ issue_reply_form.description }}
+                    <input type="hidden" name="issue" value="{{issue.id}}">
+                    <p>
+                      <input type="submit" name="reply" value="Reply">
+                      {% if request.user.is_staff or request.user == issue.submitted_by %}
+                        <input type="submit" name="solve" value="Mark as solved">
+                      {% endif %}
+                    </p>
+                  </form>
+                  {% endif %}
+                </li>
+              {% endfor %}
+          </ul>
+        {% endfor %}
+        <p>
+          <a href="{{request.path}}?show-closed-issues=true">Show closed issues</a>
+        </p>
+      {% endif %}
     </div>
   </div>
   <div class="modal fade" id='installer-issue-modal'>

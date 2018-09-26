@@ -8,7 +8,7 @@ from invoke import task
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
 NVM_DIR = '/home/django/.nvm'
-
+PRODUCTION_IP = '62.210.136.153'
 
 def get_config(context):
     try:
@@ -16,13 +16,16 @@ def get_config(context):
     except AttributeError:
         host = 'localhost'
 
-    if host == 'lutris.net':
+    if host == PRODUCTION_IP:
+        host = 'lutris.net'
+
+    if host in 'lutris.net':
         env = 'production'
     elif host == 'dev.lutris.net':
         env = 'staging'
     else:
         env = 'local'
-
+    print("Using env %s" % env)
     code_root = None
     if env == 'production':
         root = os.path.join('/srv/lutris')
@@ -163,7 +166,6 @@ def npm(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         with nvm(c):
-            c.run("npm install -U bower")
             c.run("npm install")
 
 
@@ -261,7 +263,7 @@ def deploy(c):
     """Run a full deploy"""
     pull(c)
     requirements(c)
-    bower(c)
+    # bower(c)  # Bower install is disabled, some packages are broken
     grunt(c)
     collect_static(c)
     migrate(c)

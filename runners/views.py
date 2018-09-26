@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 import os
 
 from django.utils import timezone
@@ -41,12 +42,13 @@ class RunnerUploadView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminOrReadOnly, )
 
-    def post(self, request, slug):  # pylint: disable=W0221
-        try:
-            runner = Runner.objects.get(slug=slug)
-        except Runner.DoesNotExist:
-            return Response(status=404)
-        serializer = RunnerSerializer(runner)
+    @staticmethod
+    def upload(request):
+        """Handles the file upload
+
+        Return:
+            The runner's public URL
+        """
         uploaded_file = request.data['file']
         runner_dir = os.path.join(settings.FILES_ROOT, 'runners/')
         if not os.path.isdir(runner_dir):
@@ -57,11 +59,23 @@ class RunnerUploadView(generics.CreateAPIView):
             for chunk in uploaded_file.chunks():
                 runner_file.write(chunk)
 
+        return settings.FILES_URL + 'runners/' + uploaded_file.name
+
+    def post(self, request, slug):
+        try:
+            runner = Runner.objects.get(slug=slug)
+        except Runner.DoesNotExist:
+            return Response(status=404)
+        serializer = RunnerSerializer(runner)
+        if 'url' in request.data:
+            url = request.data['url']
+        else:
+            url = self.upload(request)
         runner_version = RunnerVersion.objects.create(
             runner=runner,
             version=request.data['version'],
             architecture=request.data['architecture'],
-            url=settings.FILES_URL + 'runners/' + uploaded_file.name
+            url=url
         )
         runner_version.save()
 

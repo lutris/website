@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=E1002, E0202
+# pylint: disable=no-member,too-few-public-methods
 import datetime
 import json
 import logging
@@ -669,25 +669,42 @@ class Installer(BaseInstaller):
                                            using=using, update_fields=update_fields)
 
 
-class InstallerIssue(models.Model):
-    """Model to store problems about installers or update requests"""
-    installer = models.ForeignKey(Installer, on_delete=models.CASCADE)
+class BaseIssue(models.Model):
+    """Abstract class for issue-like models"""
     submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
-        return "Issue for {}".format(self.installer.slug)
+        return "[{user} {date}] {summary}".format(
+            date=self.submitted_on.date(),
+            user=self.submitted_by,
+            summary=self.description[:24]
+        )
+
+
+class InstallerIssue(BaseIssue):
+    """Model to store problems about installers or update requests"""
+    installer = models.ForeignKey(Installer, on_delete=models.CASCADE)
+    solved = models.BooleanField(default=False)
 
     def get_absolute_url(self):
+        """Return url for admin form"""
         return reverse('admin:games_installerissue_change', args=(self.id, ))
+
+
+class InstallerIssueReply(BaseIssue):
+    """Reply to an issue"""
+    issue = models.ForeignKey(InstallerIssue, related_name='replies', on_delete=models.CASCADE)
 
 
 class GameLibrary(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     games = models.ManyToManyField(Game)
 
-    # pylint: disable=W0232, R0903
     class Meta:
         verbose_name_plural = "game libraries"
 

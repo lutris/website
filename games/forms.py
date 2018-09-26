@@ -1,5 +1,5 @@
 """Forms for the main app"""
-# pylint: disable=W0232, R0903
+# pylint: disable=missing-docstring,too-few-public-methods
 import os
 from collections import OrderedDict
 
@@ -150,10 +150,19 @@ class GameEditForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.Game
-        fields = ('name', 'year', 'website', 'platforms', 'genres', 'description', 'reason')
+        fields = ('name', 'year', 'developer', 'publisher',
+                  'website', 'platforms', 'genres', 'description', 'reason')
         widgets = {
             'platforms': Select2MultipleWidget,
-            'genres': Select2MultipleWidget
+            'genres': Select2MultipleWidget,
+            'developer': ModelSelect2Widget(
+                model=models.Company,
+                search_fields=['name__icontains']
+            ),
+            'publisher': ModelSelect2Widget(
+                model=models.Company,
+                search_fields=['name__icontains']
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -163,7 +172,8 @@ class GameEditForm(forms.ModelForm):
         self.fields['year'].label = 'Release year'
 
         fields_order = [
-            'name', 'year', 'website', 'platforms', 'genres', 'description', 'reason'
+            'name', 'year', 'developer', 'publisher',
+            'website', 'platforms', 'genres', 'description', 'reason'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
@@ -261,6 +271,12 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError('When we say "change me", we mean it.')
         if version.lower().endswith('version'):
             raise forms.ValidationError("Don't put 'version' at the end of the 'version' field")
+        version_exists = models.Installer.objects.filter(
+            game=self.instance.game,
+            version=version
+        ).exclude(id=self.instance.id).count()
+        if version_exists:
+            raise forms.ValidationError("An installer with the same version name already exists")
         return version
 
     def clean(self):
@@ -328,3 +344,13 @@ class LibraryFilterForm(forms.Form):
         widget=BitFieldCheckboxSelectMultiple,
         required=False
     )
+    
+    
+class InstallerIssueReplyForm(forms.ModelForm):
+    class Meta:
+        model = models.InstallerIssueReply
+        fields = ('description', 'issue')
+        widgets = {
+            'description': forms.Textarea,
+            'issue': forms.HiddenInput
+        }

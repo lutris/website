@@ -11,9 +11,19 @@
         it relies on the Python language and Gnome 3 libraries (but will run
         fine under any desktop environment). The following distributions are
         currently supported: Ubuntu 16.04, 17.04, 17.10 and 18.04, Debian 8 and 9,
-        Fedora 24, 25, 26, 27 and 28, openSUSE 13.2, Leap 42 and Tumbleweed, Arch Linux
-        and Gentoo.
+        Fedora 24, 25, 26, 27 and 28, openSUSE Leap 15.0 and Tumbleweed,
+        Mageia, Arch Linux and Gentoo.
       </p>
+    </article>
+    <article>
+      <strong class='obnoxious-warning'>Install Wine Staging on your system if you plan running Windows games.</strong>
+      You can find instructions to download and install Wine Staging on
+      <a href="https://wiki.winehq.org/Download">WineHQ</a>.</br>
+      Lutris provides a wide variety of Wine builds but having a recent version
+      installed system-wide helps getting all dependencies installed (not all
+      can be provided by the
+      <a href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">Lutris
+        runtime</a>)
     </article>
     <ul class='download-list'>
       <li>
@@ -22,14 +32,39 @@
             <img src='{{ STATIC_URL }}images/icons/ubuntu.png' alt='Ubuntu'>Ubuntu
           </li>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/debian.png' alt='Debian'>Debian
+            <img src='{{ STATIC_URL }}images/icons/pop_os.png' alt='Pop!_OS'>Pop!_OS
+          </li>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/elementary_os.png' alt='Elementary OS'>Elementary OS
           </li>
           <li>
             <img src='{{ STATIC_URL }}images/icons/linux_mint.png' alt='Linux Mint'>Linux Mint
           </li>
         </ul>
         <p>
-          Packages compatible with Debian and Ubuntu are available on the
+          Packages compatible with Ubuntu and Ubuntu derivatives are available on the
+          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>.
+          <br/>
+          You can add a repository to receive automatic updates:<br/>
+          <br/>
+          <strong>For Ubuntu & derivatives like Pop!_OS, Elementary OS, Linux Mint…</strong><br/>
+          <code>ver=$(lsb_release -sr); if [ $ver != "18.04" -a $ver != "17.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=18.04; fi</code>
+          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
+          <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
+          <br/>
+          <strong>After setting up the repository</strong><br/>
+          <code>sudo apt-get update</code><br/>
+          <code>sudo apt-get install lutris</code>
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/debian.png' alt='Debian'>Debian
+          </li>
+        </ul>
+        <p>
+          Packages compatible with Debian are available on the
           <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>.
           <br/>
           You can add a repository to receive automatic updates:<br/>
@@ -37,11 +72,6 @@
           <strong>For Debian</strong><br/>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/Debian_9.0/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q http://download.opensuse.org/repositories/home:/strycore/Debian_9.0/Release.key -O- | sudo apt-key add -</code><br/>
-          <br/>
-          <strong>For Ubuntu & derivatives like Pop!_OS, Elementary OS, Linux Mint…</strong><br/>
-          <code>ver=$(lsb_release -sr); if [ $ver != "18.04" -a $ver != "17.10" -a $ver != "17.04" -a $ver != "16.04" ]; then ver=18.04; fi</code>
-          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
-          <code>wget -q http://download.opensuse.org/repositories/home:/strycore/xUbuntu_$ver/Release.key -O- | sudo apt-key add -</code><br/>
           <br/>
           <strong>After setting up the repository</strong><br/>
           <code>sudo apt-get update</code><br/>
@@ -70,8 +100,19 @@
           </li>
         </ul>
         <p>
-        You can get Lutris from the AUR repositories:
-        <a href="https://aur.archlinux.org/packages/lutris/">https://aur.archlinux.org/packages/lutris/</a>.<br/>
+        You can get Lutris from the Arch Community Repository:
+        <a href="https://www.archlinux.org/packages/community/any/lutris/">https://www.archlinux.org/packages/community/any/lutris/</a>.<br/>
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/mageia.svg' height="32px" alt='Mageia'>
+          </li>
+        </ul>
+        <p>
+        Lutris is available in Mageia App Db:
+        <a href="http://madb.mageia.org/package/show/name/lutris">http://madb.mageia.org/package/show/name/lutris</a>.<br/>
         </p>
       </li>
       <li>

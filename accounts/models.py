@@ -31,7 +31,7 @@ class User(AbstractUser):
     def avatar_url(self):
         if self.avatar:
             return self.avatar.url
-        default_url = settings.STATIC_URL + "images/default-avatar.png"
+        default_url = "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
         size = 64
         return (
             "https://www.gravatar.com/avatar/" +

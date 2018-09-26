@@ -9,3 +9,9 @@ before_script:
   - touch templates/docs/installers.html
 script:
   - make test
+
+# Build Notifications
+# https://docs.travis-ci.com/user/notifications/
+notifications:
+  # Turn off email notifications entirely.
+  email: false

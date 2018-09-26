@@ -5,6 +5,8 @@ from __future__ import absolute_import
 import json
 import logging
 
+import reversion
+from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -18,16 +20,14 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-
-import reversion
-from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import (check_installer_restrictions,
                                  user_confirmed_required)
 from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
-                         InstallerEditForm, InstallerForm, ScreenshotForm)
+                         InstallerEditForm, InstallerForm,
+                         InstallerIssueReplyForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from platforms.models import Platform
@@ -49,7 +49,9 @@ class GameList(ListView):
         else:
             queryset = queryset.with_installer()
 
-        if self.request.GET.get('sort-by-popularity'):
+        search_params = [key for key in self.request.GET.keys() if key != 'page']
+
+        if self.request.GET.get('sort-by-popularity') or not search_params:
             queryset = queryset.annotate(
                 library_count=Count('gamelibrary', distinct=True)
             ).order_by('-library_count')
@@ -212,6 +214,24 @@ def game_detail(request, slug):
 
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
+    issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
+    if not request.GET.get('show-closed-issues'):
+        issues = issues.filter(solved=False)
+    issue_reply_form = InstallerIssueReplyForm(request.POST or None)
+    if request.method == 'POST' and issue_reply_form.is_valid():
+        reply = issue_reply_form.save(commit=False)
+        reply.submitted_by = request.user
+        reply.save()
+        if 'solve' in request.POST:
+            try:
+                issue = InstallerIssue.objects.get(pk=request.POST.get('issue'))
+            except InstallerIssue.DoesNotExist:
+                LOGGER.warning("Issue %s doesnt exist", request.POST.get('issue'))
+                issue = None
+            if issue and (issue.submitted_by == request.user or request.user.is_staff):
+                issue.solved = True
+                issue.save()
+        return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
     if user.is_authenticated:
@@ -241,7 +261,9 @@ def game_detail(request, slug):
                    'installers': installers,
                    'auto_installers': auto_installers,
                    'unpublished_installers': unpublished_installers,
-                   'screenshots': screenshots})
+                   'screenshots': screenshots,
+                   'issues': issues,
+                   'issue_reply_form': issue_reply_form})
 
 
 @user_confirmed_required
@@ -289,6 +311,10 @@ def edit_installer(request, slug):
 
     draft_data = None
     versions = Version.objects.get_for_object(installer)
+
+    # Reset reason when the installer is edited.
+    installer.reason = ""
+
     for version in versions:
         if revision_id:
             # Display the revision given in the GET parameters
@@ -308,6 +334,7 @@ def edit_installer(request, slug):
                       "You are viewing a draft of the installer which does not "
                       "reflect the currently available installer. Changes will be "
                       "published once it goes through moderation.")
+        draft_data['reason'] = ""
         if 'runner_id' in draft_data:
             draft_data['runner'] = draft_data['runner_id']
 

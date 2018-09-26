@@ -21,19 +21,6 @@ class TestInstallerForm(TestCase):
         installer = form.save()
         self.assertEqual(installer.slug, 'doom-demo')
 
-    def test_auto_increment_installer_slug(self):
-        factories.InstallerFactory(version='zdoom', slug='doom-zdoom',
-                                   game=self.game)
-        form_data = {
-            'version': 'zdoom',
-            'content': "exe: doom.x86",
-            'runner': str(self.runner.id)
-        }
-        form = forms.InstallerForm(form_data, instance=self.installer)
-        self.assertTrue(form.is_valid())
-        installer = form.save()
-        self.assertEqual(installer.slug, 'doom-zdoom-1')
-
     def test_form_requires_runner(self):
         form_data = {
             'version': 'zdoom',
