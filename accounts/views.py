@@ -17,6 +17,7 @@ from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
 from django.views.generic import ListView
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
 import games.models
 import games.util.steam
@@ -218,7 +219,9 @@ class LibraryList(ListView):
         genres = self.request.GET.getlist('genre', None)
         flags = self.request.GET.getlist('flags', None)
         if search:
-            queryset = queryset.filter(Q(name__icontains=search) | Q(description__icontains=search))
+            vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+            query = SearchQuery(search)
+            queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if platforms:
             queryset = queryset.filter(Q(platforms__in=platforms))
         if genres:
@@ -228,7 +231,7 @@ class LibraryList(ListView):
             for flag in flags:
                 flag_Q |= Q(flags=getattr(models.Game.flags, flag))
             queryset = queryset.filter(flag_Q)
-        return queryset.order_by(self.get_ordering())
+        return queryset.order_by('-rank', self.get_ordering())
 
     def get_context_data(self, **kwargs):
         """Display the user's library"""

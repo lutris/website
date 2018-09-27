@@ -25,7 +25,14 @@
       }
     });
   });
+  $('#id_search').keypress(onSearchKeyPressed);
 }).call(this);
+
+function onSearchKeyPressed(event) {
+    if (event.which == 13) {
+        applyLibraryFilter(event);
+    }
+}
 
 function applyLibraryFilter(event) {
     var ordering = $("<input>").attr("type", "hidden").attr("name", "ordering").val($('#order_by').val());
