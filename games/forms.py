@@ -59,14 +59,6 @@ class GameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
 
-        self.fields['search'] = forms.CharField(
-            widget=HeavySelect2Widget(
-                data_view='tgd.search_json'
-            ),
-            required=False,
-            label="Search on TheGamesDB.net"
-        )
-
         self.fields['name'].label = "Title"
         self.fields['year'].label = "Release year"
         self.fields['website'].help_text = (
@@ -96,7 +88,7 @@ class GameForm(forms.ModelForm):
         )
 
         fields_order = [
-            'search', 'name', 'year', 'website', 'platforms', 'genres', 'description', 'title_logo'
+            'name', 'year', 'website', 'platforms', 'genres', 'description', 'title_logo'
         ]
         self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
