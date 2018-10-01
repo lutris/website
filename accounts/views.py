@@ -227,11 +227,13 @@ class LibraryList(ListView):
         if genres:
             queryset = queryset.filter(Q(genres__in=genres))
         if flags:
-            flag_Q = Q()
+            flag_q = Q()
             for flag in flags:
-                flag_Q |= Q(flags=getattr(models.Game.flags, flag))
-            queryset = queryset.filter(flag_Q)
-        return queryset.order_by('-rank', self.get_ordering())
+                flag_q |= Q(flags=getattr(models.Game.flags, flag))
+            queryset = queryset.filter(flag_q)
+        if search:
+            return queryset.order_by('-rank', self.get_ordering())
+        return queryset.order_by(self.get_ordering())
 
     def get_context_data(self, **kwargs):
         """Display the user's library"""
