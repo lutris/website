@@ -53,7 +53,6 @@
   </div>
   <div class="col-sm-3">
     <div class="panel panel-default no-border">
-      <div class="panel-heading" style="font-weight: bold;font-size: 1.5em;color: white;background-color: #444;">Filter</div>
       <div class="panel-body" style="background-color:#444;">
         <form action="{% url 'library_show' username=user.username %}" method="get" id="library_filter_form">
           {{ filter_form.as_p }}
