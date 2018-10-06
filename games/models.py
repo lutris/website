@@ -631,6 +631,9 @@ class Installer(BaseInstaller):
     # Collection manager
     objects = InstallerManager()
 
+    class Meta:
+        ordering = ('version', )
+
     def __str__(self):
         return self.slug
 
