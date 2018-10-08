@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring
 from django.test import TestCase
-from common.util import slugify
+from common.util import slugify, clean_html
 
 
 class PagesTest(TestCase):
@@ -28,4 +28,15 @@ class TestUtils(TestCase):
         self.assertEqual(
             slugify("关于我被小学女生绑架这件事"),
             "guan-yu-wo-bei-xiao-xue-nv-sheng-bang-jia-zhe-jian"
+        )
+
+    def test_clean_html(self):
+        dirty_markup = "This is <b> a string </b> with <span>tags</span>"
+        self.assertEqual(clean_html(dirty_markup), "This is <b> a string </b> with tags")
+
+    def test_clean_html_keeps_links(self):
+        dirty_markup = """<div v-if="foo" class="blue">Visit <a href="https://lutris.net">Lutris.net</a> </div><br/><p>it's full of <blink>fun</blink>!</p>"""
+        self.assertEqual(
+            clean_html(dirty_markup),
+            "Visit <a href=\"https://lutris.net\">Lutris.net</a> it's full of fun!"
         )

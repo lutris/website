@@ -1,5 +1,6 @@
 """Various utility functions used across the website"""
 import romkan
+from lxml.html.clean import Cleaner
 from xpinyin import Pinyin
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
@@ -81,3 +82,21 @@ def get_client_ip(request):
     else:
         ip_address = request.META.get('REMOTE_ADDR')
     return ip_address
+
+
+def clean_html(dirty_markup):
+    """Removes all tags while preserving some.
+    Keeps the tags that are valid in Gtk markup
+    This allows to render proper html for installer descriptions.
+    """
+    cleaner = Cleaner(
+        style=True,
+        scripts=True,
+        remove_unknown_tags=False,
+        safe_attrs=set(['href']),
+        allow_tags=('b', 'i', 'a')
+    )
+    clean_markup = cleaner.clean_html(dirty_markup)
+    # The lxml cleaner adds a div around the resulting
+    # markup, which we don't want.
+    return clean_markup[5:-6]
