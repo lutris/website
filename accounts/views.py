@@ -13,14 +13,12 @@ from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
-from django.views.generic import ListView
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
-import games.models
-import games.util.steam
 from common.util import get_client_ip
 from games import models
 from games.forms import LibraryFilterForm
@@ -69,10 +67,10 @@ def user_account(request, username):
     """Profile view"""
     user = get_object_or_404(User, username=username)
     if request.user.username == username:
-        pending_submissions = games.models.GameSubmission.objects.filter(
+        pending_submissions = models.GameSubmission.objects.filter(
             user=user, accepted_at__isnull=True
         )
-        accepted_submissions = games.models.GameSubmission.objects.filter(
+        accepted_submissions = models.GameSubmission.objects.filter(
             user=user, accepted_at__isnull=False
         )
         return render(request, 'accounts/profile.html', {
@@ -198,7 +196,7 @@ def associate_steam(request):
         return redirect(reverse("library_steam_sync"))
 
 
-class LibraryList(ListView):
+class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     template_name = 'accounts/library_show.html'
     context_object_name = 'games'
     paginate_by = 25
@@ -213,7 +211,7 @@ class LibraryList(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs['username'])
-        queryset = games.models.GameLibrary.objects.get(user=user).games.all()
+        queryset = models.GameLibrary.objects.get(user=user).games.all()
         search = self.request.GET.get('search', None)
         platforms = self.request.GET.getlist('platform', None)
         genres = self.request.GET.getlist('genre', None)
@@ -235,7 +233,7 @@ class LibraryList(ListView):
             return queryset.order_by('-rank', self.get_ordering())
         return queryset.order_by(self.get_ordering())
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
         context = super().get_context_data(**kwargs)
         user = get_object_or_404(User, username=self.kwargs['username'])
@@ -277,8 +275,8 @@ class LibraryList(ListView):
 def library_add(request, slug):
     """Add a game to the user's library"""
     user = request.user
-    library = games.models.GameLibrary.objects.get(user=user)
-    game = get_object_or_404(games.models.Game, slug=slug)
+    library = models.GameLibrary.objects.get(user=user)
+    game = get_object_or_404(models.Game, slug=slug)
     try:
         library.games.add(game)
     except IntegrityError:
@@ -290,8 +288,8 @@ def library_add(request, slug):
 def library_remove(request, slug):
     """Remove a game from a user's library"""
     user = request.user
-    library = games.models.GameLibrary.objects.get(user=user)
-    game = get_object_or_404(games.models.Game, slug=slug)
+    library = models.GameLibrary.objects.get(user=user)
+    game = get_object_or_404(models.Game, slug=slug)
     library.games.remove(game)
     redirect_url = request.META.get('HTTP_REFERER')
     if not redirect_url:
