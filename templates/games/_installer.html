@@ -1,4 +1,5 @@
 {% load rating %}
+{% load lutris %}
 {% load humanize %}
 <li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
     <div class="btn-group right">
@@ -83,11 +84,11 @@
   </p>
   {% endif %}
   {% if installer.description %}
-  <p class="discreet-text"><strong>{{ installer.description }}</strong></p>
+  <p class="discreet-text"><strong>{{ installer.description|clean_html|safe }}</strong></p>
   {% endif %}
   {% if installer.notes %}
   <div class="discreet-text">
-    {{ installer.notes|linebreaks }}
+    {{ installer.notes|clean_html|safe|linebreaks }}
   </div>
   {% endif %}
 </li>
