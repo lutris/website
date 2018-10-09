@@ -5,7 +5,7 @@ from django.conf import settings
 from common.util import slugify
 
 LOGGER = logging.getLogger(__name__)
-STEAM_API_URL = "http://api.steampowered.com/"
+STEAM_API_URL = "https://api.steampowered.com/"
 
 
 def get_capsule(steamid):
