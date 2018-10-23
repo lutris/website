@@ -1,6 +1,8 @@
+"""Adds missing architectures to wine scripts"""
 import logging
-import yaml
 from django.core.management.base import BaseCommand
+
+from common.util import load_yaml, dump_yaml
 from games.models import Installer
 
 LOGGER = logging.getLogger(__name__)
@@ -11,7 +13,7 @@ class Command(BaseCommand):
 
     def add_arch_to_non_wine_installers(self, installer):
         script_updated = False
-        script = yaml.safe_load(installer.content)
+        script = load_yaml(installer.content)
         for step in [step for step in script['installer'] if 'task' in step]:
             task = step['task']
             if task['name'] == 'wine.wineexec' and 'arch' not in task:
@@ -19,12 +21,12 @@ class Command(BaseCommand):
                 script_updated = True
 
         if script_updated:
-            installer.content = yaml.safe_dump(script, default_flow_style=False)
+            installer.content = dump_yaml(script)
         return script_updated
 
     def add_arch_to_wine_installers(self, installer):
         script_updated = False
-        script = yaml.safe_load(installer.content)
+        script = load_yaml(installer.content)
         try:
             game_config = script.get('game', {})
         except AttributeError:
@@ -64,7 +66,7 @@ class Command(BaseCommand):
 
         if script_updated:
             script['game'] = game_config
-            installer.content = yaml.safe_dump(script, default_flow_style=False)
+            installer.content = dump_yaml(script)
         return True
 
     def handle(self, *args, **options):

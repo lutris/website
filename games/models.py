@@ -22,7 +22,7 @@ from django.db import models
 from django.db.models import Count, Q
 from django.urls import reverse
 
-from common.util import get_auto_increment_slug, slugify
+from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from emails import messages
 from games.util import steam
 from platforms.models import Platform
@@ -542,7 +542,7 @@ class BaseInstaller(models.Model):
 
     def as_dict(self, with_metadata=True):
         try:
-            yaml_content = yaml.safe_load(self.content) or {}
+            yaml_content = load_yaml(self.content) or {}
         except yaml.parser.ParserError:
             LOGGER.exception("Invalid YAML %s", self.content)
             yaml_content = {}
@@ -577,14 +577,14 @@ class BaseInstaller(models.Model):
         return yaml_content
 
     def as_yaml(self):
-        return yaml.safe_dump(self.as_dict(), default_flow_style=False)
+        return dump_yaml(self.as_dict())
 
     def as_json(self):
         return json.dumps(self.as_dict(), indent=2)
 
     def as_cleaned_yaml(self):
         """Return the YAML installer without the metadata"""
-        return yaml.safe_dump(self.as_dict(with_metadata=False), default_flow_style=False)
+        return dump_yaml(self.as_dict(with_metadata=False))
 
     def as_cleaned_json(self):
         """Return the JSON installer without the metadata"""
@@ -643,7 +643,7 @@ class Installer(BaseInstaller):
             self.version = 'Steam'
         else:
             installer_data = DEFAULT_INSTALLER
-        self.content = yaml.safe_dump(installer_data, default_flow_style=False)
+        self.content = dump_yaml(installer_data)
 
     @property
     def revisions(self):
@@ -810,7 +810,7 @@ class InstallerRevision(BaseInstaller):
     def get_installer_data(self):
         installer_data = json.loads(self._version.serialized_data)[0]['fields']
         try:
-            installer_data['script'] = yaml.safe_load(installer_data['content'])
+            installer_data['script'] = load_yaml(installer_data['content'])
         except (yaml.scanner.ScannerError, yaml.parser.ParserError) as ex:
             LOGGER.exception(ex)
             installer_data['script'] = ['This installer is f\'d up.']

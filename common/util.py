@@ -1,4 +1,5 @@
 """Various utility functions used across the website"""
+import yaml
 import romkan
 from lxml.html.clean import Cleaner
 from xpinyin import Pinyin
@@ -100,3 +101,21 @@ def clean_html(dirty_markup):
     # The lxml cleaner adds a div around the resulting
     # markup, which we don't want.
     return clean_markup[5:-6]
+
+
+def load_yaml(content):
+    """Loads a YAML string and return a native structure.
+
+    Uses BaseLoader to convert everything as a string, it is just as safe if
+    not safer than SafeLoader since there is no type conversion.
+    """
+    return yaml.load(content, Loader=yaml.BaseLoader)
+
+
+def dump_yaml(native_data):
+    """Takes a native structure and outputs it in YAML.
+
+    default_flow_style is disabled to ensure that every level gets expanded as
+    YAML mappings and not JSON.
+    """
+    return yaml.safe_dump(native_data, default_flow_style=False)

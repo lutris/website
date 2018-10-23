@@ -9,11 +9,11 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
-from django_select2.forms import (HeavySelect2Widget, ModelSelect2Widget,
+from django_select2.forms import (ModelSelect2Widget,
                                   Select2MultipleWidget, Select2Widget)
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 
-from common.util import get_auto_increment_slug, slugify
+from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from games import models
 from games.util.installer import validate_installer
 
@@ -248,12 +248,12 @@ class InstallerForm(forms.ModelForm):
         """Verify that the content field is valid yaml"""
         yaml_data = self.cleaned_data["content"]
         try:
-            yaml_data = yaml.safe_load(yaml_data)
+            yaml_data = load_yaml(yaml_data)
         except yaml.error.MarkedYAMLError as ex:
             raise forms.ValidationError("Invalid YAML, problem at line %s, %s" % (
                 ex.problem_mark.line, ex.problem
             ))
-        return yaml.safe_dump(yaml_data, default_flow_style=False)
+        return dump_yaml(yaml_data)
 
     def clean_version(self):
         version = self.cleaned_data['version']
@@ -336,8 +336,8 @@ class LibraryFilterForm(forms.Form):
         widget=BitFieldCheckboxSelectMultiple,
         required=False
     )
-    
-    
+
+
 class InstallerIssueReplyForm(forms.ModelForm):
     class Meta:
         model = models.InstallerIssueReply

@@ -1,5 +1,5 @@
 import logging
-import yaml
+from common.util import load_yaml
 from runners.models import Runner
 from games.models import DEFAULT_INSTALLER
 
@@ -8,7 +8,7 @@ SUCCESS = (True, "")
 
 
 def get_installer_script(installer):
-    script = yaml.safe_load(installer.content)
+    script = load_yaml(installer.content)
     if not script:
         return {}
     if not isinstance(script, dict):

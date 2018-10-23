@@ -1,5 +1,5 @@
-import yaml
 from django.core.management.base import BaseCommand
+from common.util import load_yaml
 from games import models
 
 
@@ -10,7 +10,7 @@ class Command(BaseCommand):
         command_stats = {}
         for installer in installers:
             slug = installer.slug
-            installer_content = yaml.safe_load(installer.content)
+            installer_content = load_yaml(installer.content)
             commands = installer_content.get('installer', [])
             for command in commands:
                 command_key = command.keys()[0]
