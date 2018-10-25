@@ -106,10 +106,12 @@ def clean_html(dirty_markup):
 def load_yaml(content):
     """Loads a YAML string and return a native structure.
 
-    Uses BaseLoader to convert everything as a string, it is just as safe if
-    not safer than SafeLoader since there is no type conversion.
+    ~~ Uses BaseLoader to convert everything as a string, it is just as safe if ~~
+    ~~ not safer than SafeLoader since there is no type conversion. ~~
+
+    SafeLoader is used for now, the client doesn't parse boolean values correctly.
     """
-    return yaml.load(content, Loader=yaml.BaseLoader)
+    return yaml.load(content, Loader=yaml.SafeLoader)
 
 
 def dump_yaml(native_data):
