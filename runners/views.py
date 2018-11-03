@@ -97,19 +97,9 @@ class RuntimeView(generics.ListCreateAPIView):
         return Response(serializer.data)
 
     def post(self, request):  # pylint: disable=W0221
-        uploaded_file = request.data['file']
-        runtime_dir = os.path.join(settings.FILES_ROOT, 'runtime/')
-        if not os.path.isdir(runtime_dir):
-            os.makedirs(runtime_dir)
-        dest_file_path = os.path.join(runtime_dir, uploaded_file.name)
-
-        with open(dest_file_path, 'wb') as runtime_file:
-            for chunk in uploaded_file.chunks():
-                runtime_file.write(chunk)
-
         runtime, created = Runtime.objects.get_or_create(
             name=request.data['name'],
-            url=settings.FILES_URL + 'runtime/' + uploaded_file.name
+            url=request.data['url']
         )
         runtime.created_at = timezone.now()
         runtime.save()
