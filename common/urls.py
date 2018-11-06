@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'faq',
         TemplateView.as_view(template_name='common/faq.html'),
         name='faq'),
+    url(r'donate',
+        TemplateView.as_view(template_name='common/donate.html'),
+        name='donate')
 ]
