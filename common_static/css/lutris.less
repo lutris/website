@@ -1386,22 +1386,17 @@ input {
 
 .main-button {
   @backgroundColor: @brandColor;
+  .four-colors-gradient(#FF9900, #FFC433, #DD7700, #CC4400);
+  padding: 7px 14px;
+  margin-right: 14px;
   color: #111;
-  padding: 7px;
   background-color: @backgroundColor;
   text-align: center;
   font-size: .95em;
   font-weight: 500;
-  .four-colors-gradient(#FF9900, #FFC433, #DD7700, #CC4400);
   border-radius: 5px;
-  display: block;
+  display: inline-flex;
   box-shadow: 0 2px 3px rgba(0,0,0,0.5);
-  span {
-    display: block;
-    font-size: .95em;
-    color: #444;
-    text-transform: capitalize;
-  }
   &:hover {
     .four-colors-gradient(#FF9900, #FFDF3D, #F29000, #CC4400);
     color: #222;
