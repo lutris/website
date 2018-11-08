@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import logging
 
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,6 +12,8 @@ from reversion.models import Version
 from common.permissions import IsAdminOrReadOnly
 from rest_framework.permissions import IsAdminUser
 from games import models, serializers
+
+LOGGER = logging.getLogger(__name__)
 
 
 class InstallerListView(generics.ListAPIView):
@@ -25,6 +28,11 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
 
+    def patch(self, request, *args, **kwargs):
+        if request.data.get('published'):
+            LOGGER.info("Installer is published by %s", self.request.user)
+            request.data['published_by'] = self.request.user.id
+        return super().patch(request, *args, **kwargs)
 
 class GameInstallerListView(generics.ListAPIView):
     """Return the list of installers available for a game if a game slug is provided,
@@ -78,7 +86,7 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         if request.data.get('action') == 'accept':
-            instance.accept()
+            instance.accept(self.request.user)
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_404_NOT_FOUND)
 

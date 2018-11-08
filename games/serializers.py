@@ -59,7 +59,7 @@ class InstallerSerializer(serializers.ModelSerializer):
         model = models.Installer
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
-                  'published', 'rating', 'steamid', 'gogslug', 'humblestoreid',
+                  'published', 'published_by', 'rating', 'steamid', 'gogslug', 'humblestoreid',
                   'script', 'content')
 
 

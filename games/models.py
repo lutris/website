@@ -621,6 +621,11 @@ class Installer(BaseInstaller):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
+    published_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                     on_delete=models.SET_NULL,
+                                     related_name='moderator',
+                                     blank=True,
+                                     null=True)
     draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
 
@@ -824,10 +829,12 @@ class InstallerRevision(BaseInstaller):
     def delete(self, using=None, keep_parents=False):
         self._version.delete()
 
-    def accept(self):
+    def accept(self, moderator):
         self._version.revert()
         installer = Installer.objects.get(pk=self.installer_id)
         installer.published = True
+        LOGGER.info("Installer published by %s", moderator)
+        installer.published_by = moderator
         installer.draft = False
         installer.save()
         self.delete()

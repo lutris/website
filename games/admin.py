@@ -64,7 +64,7 @@ class InstallerAdmin(VersionAdmin):
     list_filter = ('published', 'runner', 'version')
     list_editable = ('published', )
     ordering = ('-created_at', )
-    readonly_fields = ('game_link', 'created_at', 'updated_at')
+    readonly_fields = ('game_link', 'created_at', 'updated_at', 'published_by')
     search_fields = ('slug', 'user__username', 'content')
 
     raw_id_fields = ('game', 'user')
