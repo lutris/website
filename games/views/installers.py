@@ -1,16 +1,17 @@
+"""Installer related API views"""
+# pylint: disable=too-many-ancestors
 from __future__ import absolute_import
+
 import logging
 
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics
-from rest_framework import mixins
+from django.http import Http404
+from rest_framework import generics, mixins, status
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from rest_framework import status
 from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
-from rest_framework.permissions import IsAdminUser
 from games import models, serializers
 
 LOGGER = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
             LOGGER.info("Installer is published by %s", self.request.user)
             request.data['published_by'] = self.request.user.id
         return super().patch(request, *args, **kwargs)
+
 
 class GameInstallerListView(generics.ListAPIView):
     """Return the list of installers available for a game if a game slug is provided,
@@ -62,7 +64,10 @@ class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
         installer = models.Installer.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         return installer.revisions
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, _request, *_args, **_kwargs):  # pylint: disable=no-self-use
+        """Prevent deletion
+        XXX Why is this needed?
+        """
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
