@@ -1,7 +1,9 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <span>Issues</span>
+  <div>
+    <h1>Issues</h1>
+    <ul v-for="issue in issues">
+      <li>{{ issue }}</li>
+    </ul>
   </div>
 </template>
 
@@ -10,7 +12,8 @@ export default {
   name: 'InstallerIssues',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      issues: ['ahh', 'ohh nooo', 'bli  blu'],
+      msg: 'Here are installer issues',
     };
   },
 };

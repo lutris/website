@@ -204,6 +204,7 @@
       <article>
         {{ game.description|linebreaks }}
       </article>
+      <installer-issues></installer-issues>
       {% if issues %}
         <h3>Issues</h3>
         {% regroup issues by installer as installer_issues %}
@@ -282,6 +283,10 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script src="https://unpkg.com/vue"></script>
+<script src="{{STATIC_URL}}installer-issues.js"></script>
+
 <script>
   function submitInstallerIssue(event) {
     event.preventDefault();
