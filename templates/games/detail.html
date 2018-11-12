@@ -204,7 +204,9 @@
       <article>
         {{ game.description|linebreaks }}
       </article>
-      <installer-issues slug="{{game.slug}}"></installer-issues>
+      <div id="installer-issues">
+        <installer-issues slug="{{game.slug}}"></installer-issues>
+      </div>
       {% if issues %}
         <h3>Issues</h3>
         {% regroup issues by installer as installer_issues %}
@@ -285,7 +287,7 @@
 {% block scripts %}
 
 <script src="https://unpkg.com/vue"></script>
-<script src="{{STATIC_URL}}installer-issues.js"></script>
+<script src="{{STATIC_URL}}installer-issues.umd.min.js"></script>
 
 <script>
   function submitInstallerIssue(event) {

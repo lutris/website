@@ -201,5 +201,6 @@ class InstallerIssueListSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'slug',
+            'version',
             'issues',
         )
