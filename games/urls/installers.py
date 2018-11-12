@@ -21,6 +21,10 @@ urlpatterns = [
         views.InstallerRevisionDetailView.as_view(),
         name="api_installer_revision_detail"),
 
+    url(r'(?P<slug>[\w\-]+)/issues$',
+        views.InstallerIssueView.as_view(),
+        name='api_installer_issue'),
+
     url(r'id/(?P<pk>[\d]+)$',
         views.InstallerDetailView.as_view(),
         name='api_installer_detail'),
@@ -30,5 +34,4 @@ urlpatterns = [
     url(r'^$',
         views.InstallerListView.as_view(),
         name='api_installer_list'),
-
 ]

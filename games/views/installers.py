@@ -103,3 +103,14 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         except Version.DoesNotExist:
             raise Http404
         return models.InstallerRevision(version)
+
+
+class InstallerIssueView(generics.ListAPIView):
+    """Returns all issues and their replies for a game"""
+    serializer_class = serializers.InstallerIssueListSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        slug = self.request.parser_context['kwargs']['slug']
+        game = models.Game.objects.get(slug=slug)
+        return game.installers.all()

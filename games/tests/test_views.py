@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 import json
 from django.test import TestCase
 from django.urls import reverse
@@ -43,3 +44,19 @@ class TestGameViews(TestCase):
     def test_can_get_game_list(self):
         response = self.client.get(reverse('game_list'))
         self.assertEqual(response.status_code, 200)
+
+
+class TestInstallerIssues(TestCase):
+    def setUp(self):
+        self.user = factories.UserFactory()
+        self.game = factories.GameFactory()
+        self.installer = factories.InstallerFactory(game=self.game)
+
+    def test_get_issues(self):
+        response = self.client.get(
+            reverse('api_installer_issue', kwargs={'slug': self.game.slug})
+        )
+        self.assertEqual(response.status_code, 200)
+        content = response.json()
+        self.assertEqual(content['count'], 1)
+        self.assertEqual(content['results'][0]['slug'], 'quake-test')

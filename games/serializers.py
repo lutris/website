@@ -157,7 +157,7 @@ class InstallerIssueReplySerializer(serializers.ModelSerializer):
         fields = ('submitted_by', 'submitted_on', 'description')
 
 
-class InstallerIssue(serializers.ModelSerializer):
+class InstallerIssueSerializer(serializers.ModelSerializer):
     """Serializer for installer issues"""
     replies = InstallerIssueReplySerializer(many=True)
 
@@ -165,10 +165,23 @@ class InstallerIssue(serializers.ModelSerializer):
         """Model and field definitions"""
         model = models.InstallerIssue
         fields = (
-            'installer',
             'submitted_by',
             'submitted_on',
             'description',
             'solved',
             'replies'
+        )
+
+
+class InstallerIssueListSerializer(serializers.ModelSerializer):
+    """Serializer for grouping all issues from a installer together"""
+    issues = InstallerIssueSerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.Installer
+        fields = (
+            'id',
+            'slug',
+            'issues',
         )

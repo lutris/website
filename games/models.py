@@ -697,7 +697,7 @@ class BaseIssue(models.Model):
 
 class InstallerIssue(BaseIssue):
     """Model to store problems about installers or update requests"""
-    installer = models.ForeignKey(Installer, on_delete=models.CASCADE)
+    installer = models.ForeignKey(Installer, related_name='issues', on_delete=models.CASCADE)
     solved = models.BooleanField(default=False)
 
     def get_absolute_url(self):
