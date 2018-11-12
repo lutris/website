@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'game/(?P<slug>[\w\-]+)/revisions$',
         views.GameRevisionListView.as_view(),
         name='api_game_revisions_list'),
+
     url(r'game/(?P<slug>[\w\-]+)/revisions/(?P<pk>[\d]+)',
         views.InstallerRevisionDetailView.as_view(),
         name="api_game_installer_detail"),
@@ -22,7 +23,7 @@ urlpatterns = [
     url(r'id/(?P<pk>[\d]+)$',
         views.InstallerDetailView.as_view(),
         name='api_installer_detail'),
-    url(r'/(?P<slug>[\w\-]+)$',
+    url(r'(?P<slug>[\w\-]+)$',
         views.GameInstallerListView.as_view(),
         name='api_game_installer_list'),
     url(r'^$',
