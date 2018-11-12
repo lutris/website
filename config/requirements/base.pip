@@ -13,8 +13,10 @@ django_select2==6.0.2
 django-grappelli==2.11.1
 django-markupfield==1.4.3
 django_inlinecss==0.1.2
+django-rest-swagger==2.2.0
 django-reversion==2.0.13
 django-bitfield==1.9.3
+django-webpack-loader==0.6.0
 python-openid
 requests==2.18.4
 mimeparse==0.1.3

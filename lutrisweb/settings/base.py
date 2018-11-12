@@ -46,16 +46,12 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Remove when updated to Django 1.11
-SILENCED_SYSTEM_CHECKS = [
-    'urls.W002',
-]
-
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "public"),
+    os.path.join(BASE_DIR, "frontend/vue/dist"),
     os.path.join(BASE_DIR, "components"),
 )
 STATICFILES_FINDERS = (
@@ -135,6 +131,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'django_jcrop',
     'crispy_forms',
     'django_select2',

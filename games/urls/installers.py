@@ -1,4 +1,5 @@
-# pylint: disable=C0103
+"""URL conf for the installer API"""
+# pylint: disable=invalid-name
 from __future__ import absolute_import
 from django.conf.urls import url
 from games.views import installers as views
