@@ -4,13 +4,21 @@ import InstallerIssues from './components/InstallerIssues';
 
 Vue.config.productionTip = false;
 
-function formatDate(date) {
+function formatTimeAgo(date) {
   if (!date) {
     return '';
   }
   return timeago().format(new Date(date));
 }
 
+function formatDate(date) {
+  if (!date) {
+    return '';
+  }
+  return new Date(date).toLocalString();
+}
+
+Vue.filter('formatTimeAgo', formatTimeAgo);
 Vue.filter('formatDate', formatDate);
 /* eslint-disable no-new */
 new Vue({
