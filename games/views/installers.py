@@ -17,7 +17,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class InstallerListView(generics.ListAPIView):
-    """Lists all the installers"""
+    """Return a list of all installers"""
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
 
@@ -54,6 +54,7 @@ class GameRevisionListView(generics.RetrieveAPIView):
 
 
 class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
+    """Return a list of revisions for a given installer"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
@@ -66,6 +67,7 @@ class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
 
 
 class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve a detailed view of an installer revision"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
