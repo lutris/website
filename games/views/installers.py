@@ -5,9 +5,10 @@ from __future__ import absolute_import
 import logging
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from django.http import Http404
 from rest_framework import generics, mixins, status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from reversion.models import Version
 
@@ -105,7 +106,7 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return models.InstallerRevision(version)
 
 
-class InstallerIssueView(generics.ListAPIView):
+class InstallerIssueView(generics.ListAPIView, generics.CreateAPIView):
     """Returns all issues and their replies for a game"""
     serializer_class = serializers.InstallerIssueListSerializer
     lookup_field = 'slug'
@@ -114,3 +115,28 @@ class InstallerIssueView(generics.ListAPIView):
         slug = self.request.parser_context['kwargs']['slug']
         game = models.Game.objects.get(slug=slug)
         return game.installers.all()
+
+
+class InstallerIssueCreateView(generics.CreateAPIView):
+    """Create a new issue"""
+    serializer_class = serializers.InstallerIssueSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        game_slug = self.request.parser_context['kwargs']['game_slug']
+        installer_slug = self.request.parser_context['kwargs']['installer_slug']
+        return models.Installer.objects.filter(game__slug=game_slug).get(slug=installer_slug)
+
+    def create(self, request, *args, **kwargs):
+        issue_payload = dict(request.data)
+
+        # Complete the information with the current user
+        issue_payload['submitted_by'] = request.user.id
+        issue_payload['submitted_on'] = timezone.now()
+        issue_payload['installer'] = self.get_queryset().id
+
+        serializer = self.get_serializer(data=issue_payload)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

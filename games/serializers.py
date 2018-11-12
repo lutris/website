@@ -159,12 +159,14 @@ class InstallerIssueReplySerializer(serializers.ModelSerializer):
 
 class InstallerIssueSerializer(serializers.ModelSerializer):
     """Serializer for installer issues"""
-    replies = InstallerIssueReplySerializer(many=True)
+    replies = InstallerIssueReplySerializer(many=True, required=False)
 
     class Meta:
         """Model and field definitions"""
         model = models.InstallerIssue
         fields = (
+            'id',
+            'installer',
             'submitted_by',
             'submitted_on',
             'description',

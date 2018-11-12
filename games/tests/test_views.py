@@ -59,4 +59,35 @@ class TestInstallerIssues(TestCase):
         self.assertEqual(response.status_code, 200)
         content = response.json()
         self.assertEqual(content['count'], 1)
-        self.assertEqual(content['results'][0]['slug'], 'quake-test')
+        self.assertEqual(content['results'][0]['slug'], self.installer.slug)
+
+    def test_cant_post_an_issue_if_not_logged_in(self):
+        response = self.client.post(
+            reverse('api_installer_issue_create', kwargs={
+                'game_slug': self.game.slug,
+                'installer_slug': self.installer.slug
+            }),
+            {
+                'slug': self.installer.slug,
+                'description': 'Game does not launch'
+            }
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_can_post_an_issue(self):
+        self.client.login(username=self.user.username, password="password")
+        response = self.client.post(
+            reverse('api_installer_issue_create', kwargs={
+                'game_slug': self.game.slug,
+                'installer_slug': self.installer.slug
+            }),
+            json.dumps({
+                'slug': self.installer.slug,
+                'description': 'Game does not launch'
+            }),
+            content_type='application/json'
+        )
+        content = response.json()
+        self.assertEqual(content['submitted_by'], 1)
+        self.assertEqual(content['description'], 'Game does not launch')
+        self.assertEqual(response.status_code, 201)
