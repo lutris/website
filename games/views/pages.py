@@ -195,8 +195,8 @@ class GameListByPlatform(GameList):
         return context
 
 
-def game_for_installer(request, slug):
-    """ Redirects to the game details page from a valid installer slug """
+def game_for_installer(_request, slug):
+    """Redirects to the game details page from a valid installer slug"""
     try:
         installers = models.Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
@@ -207,11 +207,8 @@ def game_for_installer(request, slug):
 
 
 def game_detail(request, slug):
+    """View rendering the details for a game"""
     game = get_object_or_404(models.Game, slug=slug)
-    banner_options = {'crop': 'top', 'blur': '14x6'}
-    banner_size = "940x352"
-    user = request.user
-
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
     issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
@@ -234,6 +231,7 @@ def game_detail(request, slug):
         return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
+    user = request.user
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user,
@@ -245,25 +243,25 @@ def game_detail(request, slug):
         in_library = False
         screenshots = game.screenshot_set.published()
 
-    library_count = (models.GameLibrary.objects
-                     .filter(games__in=[game.id]).count())
-
-    auto_installers = game.get_default_installers()
-    return render(request, 'games/detail.html',
-                  {'game': game,
-                   'banner_options': banner_options,
-                   'banner_size': banner_size,
-                   'in_library': in_library,
-                   'library_count': library_count,
-                   'pending_change_subm_count': pending_change_subm_count,
-                   'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
-                   'can_edit': user.is_staff and user.has_perm('games.change_game'),
-                   'installers': installers,
-                   'auto_installers': auto_installers,
-                   'unpublished_installers': unpublished_installers,
-                   'screenshots': screenshots,
-                   'issues': issues,
-                   'issue_reply_form': issue_reply_form})
+    return render(
+        request, 'games/detail.html',
+        {
+            'game': game,
+            'banner_options': {'crop': 'top', 'blur': '14x6'},
+            'banner_size': "940x352",
+            'in_library': in_library,
+            'library_count': models.GameLibrary.objects.filter(games__in=[game.id]).count(),
+            'pending_change_subm_count': pending_change_subm_count,
+            'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
+            'can_edit': user.is_staff and user.has_perm('games.change_game'),
+            'installers': installers,
+            'auto_installers': game.get_default_installers(),
+            'unpublished_installers': unpublished_installers,
+            'screenshots': screenshots,
+            'issues': issues,
+            'issue_reply_form': issue_reply_form
+        }
+    )
 
 
 @user_confirmed_required
