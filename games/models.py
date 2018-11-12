@@ -684,6 +684,7 @@ class BaseIssue(models.Model):
     description = models.TextField()
 
     class Meta:
+        """This is an abstract model"""
         abstract = True
 
     def __str__(self):
