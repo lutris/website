@@ -135,12 +135,40 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
 
 
 class GameRevisionSerializer(GameSerializer):
+    """WAT"""
     installers = InstallerWithRevisionsSerializer(many=True)
 
     class Meta(object):
+        """Model and field definitions"""
         model = models.Game
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
             'gogslug', 'humblestoreid', 'installers'
+        )
+
+
+class InstallerIssueReplySerializer(serializers.ModelSerializer):
+    """Serializer for Installer issues"""
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerIssueReply
+        fields = ('submitted_by', 'submitted_on', 'description')
+
+
+class InstallerIssue(serializers.ModelSerializer):
+    """Serializer for installer issues"""
+    replies = InstallerIssueReplySerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerIssue
+        fields = (
+            'installer',
+            'submitted_by',
+            'submitted_on',
+            'description',
+            'solved',
+            'replies'
         )

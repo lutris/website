@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Issues</h1>
+    <h3>Issues</h3>
     <ul v-for="issue in issues">
       <li>{{ issue }}</li>
     </ul>
@@ -20,8 +20,7 @@ export default {
 </script>
 
 <style scoped>
-h1,
-h2 {
+h3 {
   font-weight: normal;
 }
 ul {
