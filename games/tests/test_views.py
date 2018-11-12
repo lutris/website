@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
+from games.models import InstallerIssue
 from . import factories
 
 
@@ -88,6 +89,27 @@ class TestInstallerIssues(TestCase):
             content_type='application/json'
         )
         content = response.json()
-        self.assertEqual(content['submitted_by'], 1)
+        self.assertEqual(content['submitted_by'], self.user.id)
         self.assertEqual(content['description'], 'Game does not launch')
+        self.assertEqual(response.status_code, 201)
+
+    def test_can_post_a_reply(self):
+        self.client.login(username=self.user.username, password="password")
+        issue = InstallerIssue.objects.create(
+            submitted_by=self.user,
+            installer=self.installer,
+            description="I can't launch the game hurr durr"
+        )
+        response = self.client.post(
+            reverse('api_installer_issue_reply', kwargs={
+                'pk': issue.id
+            }),
+            json.dumps({
+                'description': 'try blowing in the cartridge'
+            }),
+            content_type='application/json'
+        )
+        content = response.json()
+        self.assertEqual(content['submitted_by'], self.user.id)
+        self.assertIn('cartridge', content['description'])
         self.assertEqual(response.status_code, 201)

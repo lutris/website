@@ -27,6 +27,9 @@ urlpatterns = [
     url(r'(?P<game_slug>[\w\-]+)/issues/(?P<installer_slug>[\w\-]+)$',
         views.InstallerIssueCreateView.as_view(),
         name='api_installer_issue_create'),
+    url(r'issues/(?P<pk>[\w\-]+)$',
+        views.InstallerIssueReplyView.as_view(),
+        name='api_installer_issue_reply'),
 
     # WTF is this shit? Remove after migrating to Vue!
     url(r'id/(?P<pk>[\d]+)$',

@@ -123,11 +123,13 @@ class InstallerIssueCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """Return the Installer instance based off URL parameters"""
         game_slug = self.request.parser_context['kwargs']['game_slug']
         installer_slug = self.request.parser_context['kwargs']['installer_slug']
         return models.Installer.objects.filter(game__slug=game_slug).get(slug=installer_slug)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs): # pylint: disable=unused-argument
+        """Create a new issue"""
         issue_payload = dict(request.data)
 
         # Complete the information with the current user
@@ -136,6 +138,33 @@ class InstallerIssueCreateView(generics.CreateAPIView):
         issue_payload['installer'] = self.get_queryset().id
 
         serializer = self.get_serializer(data=issue_payload)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class InstallerIssueReplyView(generics.CreateAPIView):
+    """Post a reply to an issue"""
+    serializer_class = serializers.InstallerIssueReplySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Return the installer issue from its ID"""
+        issue_id = self.request.parser_context['kwargs']['pk']
+        return models.InstallerIssue.objects.get(issue_id)
+
+    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        """Create the reply"""
+        issue_id = self.request.parser_context['kwargs']['pk']
+        reply_payload = dict(request.data)
+
+        # Complete the information with the current user
+        reply_payload['submitted_by'] = request.user.id
+        reply_payload['submitted_on'] = timezone.now()
+        reply_payload['issue'] = issue_id
+
+        serializer = self.get_serializer(data=reply_payload)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

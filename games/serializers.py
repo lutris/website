@@ -158,6 +158,7 @@ class InstallerIssueReplySerializer(serializers.ModelSerializer):
         model = models.InstallerIssueReply
         fields = (
             'id',
+            'issue',
             'username',
             'submitted_by',
             'submitted_on',
