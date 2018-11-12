@@ -113,3 +113,24 @@ class TestInstallerIssues(TestCase):
         self.assertEqual(content['submitted_by'], self.user.id)
         self.assertIn('cartridge', content['description'])
         self.assertEqual(response.status_code, 201)
+
+    def test_can_mark_an_issue_as_solved(self):
+        self.client.login(username=self.user.username, password="password")
+        issue = InstallerIssue.objects.create(
+            submitted_by=self.user,
+            installer=self.installer,
+            description="I can't launch the game hurr durr"
+        )
+        response = self.client.patch(
+            reverse('api_installer_issue_reply', kwargs={
+                'pk': issue.id
+            }),
+            json.dumps({
+                'solved': True
+            }),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        content = response.json()
+        self.assertEqual(content['solved'], True)

@@ -9,13 +9,14 @@
     </em>
     <p>{{ issue.description }}</p>
     <span v-if="issue.replies.length">
-      <a href="#" v-bind:issue-id="issue.id" @click="onShowReplies">
+      <a href="#" @click.prevent="onShowReplies">
         show {{ issue.replies.length }}
         {{ issue.replies.length > 1 ? 'replies' : 'reply' }}
       </a>
     </span>
+    <span> <a href="#" @click.prevent="onReplyClick">reply</a> </span>
     <span>
-      <a href="#" v-bind:issue-id="issue.id" @click="onReplyClick">reply</a>
+      <a href="#" @click.prevent="onMarkAsSolved">mark as solved</a>
     </span>
 
     <transition name="slide-fade">
@@ -85,13 +86,11 @@ export default {
       event.preventDefault();
       return false;
     },
-    onReplyClick(event) {
+    onReplyClick() {
       this.showReplyForm = !this.showReplyForm;
-      event.preventDefault();
       return false;
     },
-    onSubmitClick(event) {
-      event.preventDefault();
+    onSubmitClick() {
       const config = {
         headers: {
           'X-CSRFToken': Cookies.get('csrftoken'),
@@ -105,6 +104,19 @@ export default {
         this.replyContent = '';
         this.showReplies = true;
         this.showReplyForm = false;
+      });
+    },
+    onMarkAsSolved() {
+      const config = {
+        headers: {
+          'X-CSRFToken': Cookies.get('csrftoken'),
+          'Content-Type': 'application/json',
+        },
+      };
+      const payload = { solved: true };
+      const url = `/api/installers/issues/${this.issue.id}`;
+      axios.patch(url, payload, config).then(response => {
+        this.issue.solved = true;
       });
     },
   },

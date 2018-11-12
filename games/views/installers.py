@@ -144,27 +144,27 @@ class InstallerIssueCreateView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class InstallerIssueReplyView(generics.CreateAPIView):
-    """Post a reply to an issue"""
-    serializer_class = serializers.InstallerIssueReplySerializer
+class InstallerIssueReplyView(generics.CreateAPIView, generics.RetrieveUpdateDestroyAPIView):
+    """Edit or post a reply to an issue"""
+    serializer_class = serializers.InstallerIssueSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_object(self):
         """Return the installer issue from its ID"""
         issue_id = self.request.parser_context['kwargs']['pk']
-        return models.InstallerIssue.objects.get(issue_id)
+        return models.InstallerIssue.objects.get(pk=issue_id)
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Create the reply"""
         issue_id = self.request.parser_context['kwargs']['pk']
-        reply_payload = dict(request.data)
 
+        reply_payload = dict(request.data)
         # Complete the information with the current user
         reply_payload['submitted_by'] = request.user.id
         reply_payload['submitted_on'] = timezone.now()
         reply_payload['issue'] = issue_id
 
-        serializer = self.get_serializer(data=reply_payload)
+        serializer = serializers.InstallerIssueReplySerializer(data=reply_payload)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
