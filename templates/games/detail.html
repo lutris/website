@@ -204,7 +204,7 @@
       <article>
         {{ game.description|linebreaks }}
       </article>
-      <installer-issues></installer-issues>
+      <installer-issues slug="{{game.slug}}"></installer-issues>
       {% if issues %}
         <h3>Issues</h3>
         {% regroup issues by installer as installer_issues %}

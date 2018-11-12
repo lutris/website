@@ -8,7 +8,8 @@ from platforms.models import Platform
 
 class PlatformSerializer(serializers.ModelSerializer):
     """Serializer for Platforms"""
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = Platform
         fields = ('name',)
 
@@ -16,7 +17,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 class GenreSerializer(serializers.ModelSerializer):
     """Serializer for Genres"""
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Genre
         fields = ('name',)
@@ -27,7 +28,7 @@ class GameSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True)
     platforms = PlatformSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
@@ -41,7 +42,7 @@ class GameLibrarySerializer(serializers.ModelSerializer):
     """Serializer for Games"""
     games = GameSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.GameLibrary
         fields = ('user', 'games')
@@ -66,7 +67,7 @@ class InstallerSerializer(serializers.ModelSerializer):
 
     runner = serializers.SlugRelatedField(slug_field="slug", read_only=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Installer
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
@@ -79,7 +80,7 @@ class GameInstallersSerializer(GameSerializer):
     """Serializer for Installers belonging to a specific game"""
     installers = InstallerSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
@@ -126,7 +127,7 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
     """Serializer for Installers with their associated revisions"""
     revisions = InstallerRevisionSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Installer
         fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
@@ -138,7 +139,7 @@ class GameRevisionSerializer(GameSerializer):
     """WAT"""
     installers = InstallerWithRevisionsSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
@@ -150,16 +151,27 @@ class GameRevisionSerializer(GameSerializer):
 
 class InstallerIssueReplySerializer(serializers.ModelSerializer):
     """Serializer for Installer issues"""
+    username = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
         model = models.InstallerIssueReply
-        fields = ('submitted_by', 'submitted_on', 'description')
+        fields = (
+            'id',
+            'username',
+            'submitted_by',
+            'submitted_on',
+            'description'
+        )
+
+    def get_username(self, obj):
+        return obj.submitted_by.username
 
 
 class InstallerIssueSerializer(serializers.ModelSerializer):
     """Serializer for installer issues"""
     replies = InstallerIssueReplySerializer(many=True, required=False)
+    username = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
@@ -167,12 +179,16 @@ class InstallerIssueSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'installer',
+            'username',
             'submitted_by',
             'submitted_on',
             'description',
             'solved',
             'replies'
         )
+
+    def get_username(self, obj):
+        return obj.submitted_by.username
 
 
 class InstallerIssueListSerializer(serializers.ModelSerializer):
