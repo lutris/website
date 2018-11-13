@@ -63,6 +63,7 @@ export default {
     return {
       showReplies: false,
       showReplyForm: false,
+      showConfirmation: false,
       replyContent: '',
     };
   },
@@ -83,12 +84,9 @@ export default {
         this.showReplies = true;
         link.innerHTML = label.replace('show', 'hide');
       }
-      event.preventDefault();
-      return false;
     },
     onReplyClick() {
       this.showReplyForm = !this.showReplyForm;
-      return false;
     },
     onSubmitClick() {
       const config = {
@@ -107,6 +105,9 @@ export default {
       });
     },
     onMarkAsSolved() {
+      this.showConfirmation = true;
+    },
+    onSolvedConfirmed() {
       const config = {
         headers: {
           'X-CSRFToken': Cookies.get('csrftoken'),
@@ -116,6 +117,10 @@ export default {
       const payload = { solved: true };
       const url = `/api/installers/issues/${this.issue.id}`;
       axios.patch(url, payload, config).then(response => {
+        if (!response.data.solved) {
+          // The installer wasn't solved on the backend, the action failed
+          return;
+        }
         this.issue.solved = true;
       });
     },
