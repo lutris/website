@@ -45,6 +45,7 @@
         </div>
       </template>
     </transition>
+    <md-dialog :md-active.sync="showConfirmation"> blopblop </md-dialog>
   </div>
 </template>
 
