@@ -1,12 +1,15 @@
 import timeago from 'timeago.js';
 import axios from 'axios';
 import Vue from 'vue';
-import { MdDialog } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
+import { MdDialogConfirm, MdButton } from 'vue-material/dist/components';
+import { MdDialogContent } from 'vue-material/dist/components/MdDialog';
 import InstallerIssues from './components/InstallerIssues';
 
 Vue.config.productionTip = false;
-Vue.use(MdDialog);
+Vue.use(MdDialogConfirm);
+Vue.use(MdDialogContent);
+Vue.use(MdButton);
 
 function formatTimeAgo(date) {
   if (!date) {

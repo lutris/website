@@ -45,7 +45,15 @@
         </div>
       </template>
     </transition>
-    <md-dialog :md-active.sync="showConfirmation"> blopblop </md-dialog>
+    <md-dialog-confirm
+      :md-active.sync="showConfirmation"
+      md-title="Close this issue?"
+      md-content="If this issue is solved, you can mark as closed. Make sure to indicate any solution you've used to help other users."
+      md-confirm-text="Yes"
+      md-cancel-text="No"
+      @md-cancel="showConfirmation = false;"
+      @md-confirm="onSolvedConfirmed"
+    />
   </div>
 </template>
 
@@ -123,6 +131,7 @@ export default {
           return;
         }
         this.issue.solved = true;
+        this.showConfirmation = true;
       });
     },
   },
