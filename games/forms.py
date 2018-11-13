@@ -336,13 +336,3 @@ class LibraryFilterForm(forms.Form):
         widget=BitFieldCheckboxSelectMultiple,
         required=False
     )
-
-
-class InstallerIssueReplyForm(forms.ModelForm):
-    class Meta:
-        model = models.InstallerIssueReply
-        fields = ('description', 'issue')
-        widgets = {
-            'description': forms.Textarea,
-            'issue': forms.HiddenInput
-        }

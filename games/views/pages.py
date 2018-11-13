@@ -27,7 +27,7 @@ from accounts.decorators import (check_installer_restrictions,
 from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
                          InstallerEditForm, InstallerForm,
-                         InstallerIssueReplyForm, ScreenshotForm)
+                         ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from platforms.models import Platform
@@ -211,24 +211,6 @@ def game_detail(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
-    issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
-    if not request.GET.get('show-closed-issues'):
-        issues = issues.filter(solved=False)
-    issue_reply_form = InstallerIssueReplyForm(request.POST or None)
-    if request.method == 'POST' and issue_reply_form.is_valid():
-        reply = issue_reply_form.save(commit=False)
-        reply.submitted_by = request.user
-        reply.save()
-        if 'solve' in request.POST:
-            try:
-                issue = InstallerIssue.objects.get(pk=request.POST.get('issue'))
-            except InstallerIssue.DoesNotExist:
-                LOGGER.warning("Issue %s doesnt exist", request.POST.get('issue'))
-                issue = None
-            if issue and (issue.submitted_by == request.user or request.user.is_staff):
-                issue.solved = True
-                issue.save()
-        return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
     user = request.user
@@ -258,8 +240,6 @@ def game_detail(request, slug):
             'auto_installers': game.get_default_installers(),
             'unpublished_installers': unpublished_installers,
             'screenshots': screenshots,
-            'issues': issues,
-            'issue_reply_form': issue_reply_form
         }
     )
 
