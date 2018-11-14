@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         """Model and field definitions"""
         model = User
         fields = (
+            'id',
             'username',
             'email',
             'website',

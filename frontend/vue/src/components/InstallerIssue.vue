@@ -15,8 +15,11 @@
       </a>
     </span>
     <span> <a href="#" @click.prevent="onReplyClick">reply</a> </span>
-    <span>
+    <span v-if="canSolveIssue">
       <a href="#" @click.prevent="onMarkAsSolved">mark as solved</a>
+    </span>
+    <span v-if="canDeleteIssue">
+      <a href="#" @click.prevent="onDelete">delete</a>
     </span>
 
     <transition name="slide-fade">
@@ -46,13 +49,23 @@
       </template>
     </transition>
     <md-dialog-confirm
-      :md-active.sync="showConfirmation"
+      :md-active.sync="showSolvedConfirmation"
       md-title="Close this issue?"
       md-content="If this issue is solved, you can mark as closed. Make sure to indicate any solution you've used to help other users."
       md-confirm-text="Yes"
       md-cancel-text="No"
-      @md-cancel="showConfirmation = false;"
+      @md-cancel="showSolvedConfirmation = false;"
       @md-confirm="onSolvedConfirmed"
+      style="background-color: #444444;"
+    />
+    <md-dialog-confirm
+      :md-active.sync="showDeleteConfirmation"
+      md-title="Delete this issue?"
+      md-content="This will complety erase the issue."
+      md-confirm-text="Yes"
+      md-cancel-text="No"
+      @md-cancel="showDeleteConfirmation = false;"
+      @md-confirm="onDeleteConfirmed"
       style="background-color: #444444;"
     />
   </div>
@@ -66,6 +79,7 @@ export default {
   name: 'InstallerIssue',
   props: {
     game_slug: String,
+    user: Object,
     installer_slug: String,
     issue: Object,
   },
@@ -73,9 +87,24 @@ export default {
     return {
       showReplies: false,
       showReplyForm: false,
-      showConfirmation: false,
+      showSolvedConfirmation: false,
+      showDeleteConfirmation: false,
       replyContent: '',
     };
+  },
+  computed: {
+    canSolveIssue() {
+      if (this.issue.solved || !this.user) {
+        return false;
+      }
+      return this.user.is_staff || this.user.id === this.issue.submitted_by;
+    },
+    canDeleteIssue() {
+      if (!this.user) {
+        return false;
+      }
+      return this.user.is_staff || this.user.id === this.issue.submitted_by;
+    },
   },
   methods: {
     getDate(date) {
@@ -115,24 +144,38 @@ export default {
       });
     },
     onMarkAsSolved() {
-      this.showConfirmation = true;
+      this.showSolvedConfirmation = true;
     },
-    onSolvedConfirmed() {
-      const config = {
+    getAxiosConfig() {
+      return {
         headers: {
           'X-CSRFToken': Cookies.get('csrftoken'),
           'Content-Type': 'application/json',
         },
       };
-      const payload = { solved: true };
+    },
+    onSolvedConfirmed() {
       const url = `/api/installers/issues/${this.issue.id}`;
-      axios.patch(url, payload, config).then(response => {
-        if (!response.data.solved) {
-          // The installer wasn't solved on the backend, the action failed
-          return;
+      axios
+        .patch(url, { solved: true }, this.getAxiosConfig())
+        .then(response => {
+          if (!response.data.solved) {
+            // The installer wasn't solved on the backend, the action failed
+            return;
+          }
+          this.issue.solved = true;
+          this.showSolvedConfirmation = false;
+        });
+    },
+    onDelete() {
+      this.showDeleteConfirmation = true;
+    },
+    onDeleteConfirmed() {
+      const url = `api/installers/issues/${this.issue.id}`;
+      axios.delete(url, this.getAxiosConfig()).then(response => {
+        if (response.status === 204) {
+          this.$emit('delete-issue');
         }
-        this.issue.solved = true;
-        this.showConfirmation = true;
       });
     },
   },

@@ -2,7 +2,7 @@
   <section v-if="hasIssues">
     <div>
       <h3>
-        Issues for {{ slug }}
+        Issues
         <span class="title-action">
           <input
             type="checkbox"
@@ -14,12 +14,14 @@
         </span>
       </h3>
       <div v-for="installer in installer_issues" v-bind:key="installer.slug">
-        <div v-for="issue in installer.issues" v-bind:key="issue.id">
+        <div v-for="(issue, index) in installer.issues" v-bind:key="issue.id">
           <template v-if="!issue.solved || !hideResolvedIssues">
             <installer-issue
               :issue="issue"
+              :user="user"
               :installer_slug="installer.slug"
               :game_slug="slug"
+              v-on:delete-issue="deleteIssue(installer.slug, index);"
             ></installer-issue>
           </template>
         </div>
@@ -40,6 +42,7 @@ export default {
   data() {
     return {
       installer_issues: [],
+      user: null,
       hideResolvedIssues: false,
     };
   },
@@ -61,10 +64,26 @@ export default {
       }
       this.installer_issues = response.data.results;
     });
+
+    axios.get('/api/users/me').then(response => {
+      if (response.data) {
+        this.user = response.data;
+      } else {
+        this.user = null;
+      }
+    });
   },
   methods: {
     onToggleResolvedIssues() {
       this.hideResolvedIssues = !this.hideResolvedIssues;
+    },
+    deleteIssue(installerSlug, index) {
+      for (let i = 0; i < this.installer_issues.length; i += 1) {
+        const installer = this.installer_issues[i];
+        if (installer.slug === installerSlug) {
+          installer.issues.splice(index, 1);
+        }
+      }
     },
   },
   components: {
