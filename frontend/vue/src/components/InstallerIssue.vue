@@ -53,6 +53,7 @@
       md-cancel-text="No"
       @md-cancel="showConfirmation = false;"
       @md-confirm="onSolvedConfirmed"
+      style="background-color: #444444;"
     />
   </div>
 </template>
