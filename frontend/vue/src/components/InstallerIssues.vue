@@ -43,7 +43,7 @@ export default {
     return {
       installer_issues: [],
       user: null,
-      hideResolvedIssues: false,
+      hideResolvedIssues: true,
     };
   },
   computed: {

@@ -7,7 +7,7 @@
     <em :title="getDate(issue.submitted_on)">
       {{ issue.submitted_on | formatTimeAgo }}
     </em>
-    <p>{{ issue.description }}</p>
+    <p v-html="getMarkup(issue.description)"></p>
     <span v-if="issue.replies.length">
       <a href="#" @click.prevent="onShowReplies">
         show {{ issue.replies.length }}
@@ -42,7 +42,7 @@
               <em :title="getDate(reply.submitted_on)">
                 {{ reply.submitted_on | formatTimeAgo }}
               </em>
-              <p>{{ reply.description }}</p>
+              <p v-html="getMarkup(reply.description)"></p>
             </div>
           </div>
         </div>
@@ -74,6 +74,7 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import anchorme from 'anchorme';
 
 export default {
   name: 'InstallerIssue',
@@ -112,6 +113,9 @@ export default {
         return '';
       }
       return new Date(date).toLocaleString();
+    },
+    getMarkup(text) {
+      return anchorme(text);
     },
     onShowReplies(event) {
       const link = event.target;
