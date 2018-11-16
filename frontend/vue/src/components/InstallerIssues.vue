@@ -22,6 +22,7 @@
               :installer_slug="installer.slug"
               :game_slug="slug"
               v-on:delete-issue="deleteIssue(installer.slug, index);"
+              v-on:delete-reply="deleteReply"
             ></installer-issue>
           </template>
         </div>
@@ -82,6 +83,21 @@ export default {
         const installer = this.installer_issues[i];
         if (installer.slug === installerSlug) {
           installer.issues.splice(index, 1);
+        }
+      }
+    },
+    deleteReply(replyId) {
+      for (let i = 0; i < this.installer_issues.length; i += 1) {
+        const installer = this.installer_issues[i];
+        for (let j = 0; j < installer.issues.length; j += 1) {
+          const issue = installer.issues[j];
+          for (let k = 0; k < issue.replies.length; k += 1) {
+            const reply = issue.replies[k];
+            if (reply.id === replyId) {
+              issue.replies.splice(k, 1);
+              return;
+            }
+          }
         }
       }
     },

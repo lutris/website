@@ -22,12 +22,15 @@ urlpatterns = [
 
     # Issues
     url(r'(?P<slug>[\w\-]+)/issues$',
-        views.InstallerIssueView.as_view(),
+        views.InstallerIssueList.as_view(),
         name='api_installer_issue'),
     url(r'(?P<game_slug>[\w\-]+)/issues/(?P<installer_slug>[\w\-]+)$',
         views.InstallerIssueCreateView.as_view(),
         name='api_installer_issue_create'),
-    url(r'issues/(?P<pk>[\w\-]+)$',
+    url(r'issues/(?P<pk>[\d]+)$',
+        views.InstallerIssueView.as_view(),
+        name='api_installer_issue'),
+    url(r'issue-replies/(?P<pk>[\d]+)$',
         views.InstallerIssueReplyView.as_view(),
         name='api_installer_issue_reply'),
 

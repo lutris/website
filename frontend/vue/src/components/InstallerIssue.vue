@@ -42,6 +42,9 @@
               <em :title="getDate(reply.submitted_on)">
                 {{ reply.submitted_on | formatTimeAgo }}
               </em>
+              <span v-if="canDeleteReply(reply)">
+                <a href="#" @click.prevent="onDeleteReply(reply);">delete</a>
+              </span>
               <p v-html="getMarkup(reply.description)"></p>
             </div>
           </div>
@@ -68,6 +71,16 @@
       @md-confirm="onDeleteConfirmed"
       style="background-color: #444444;"
     />
+    <md-dialog-confirm
+      :md-active.sync="showDeleteReplyConfirmation"
+      md-title="Delete this reply?"
+      md-content="This will complety erase this reply."
+      md-confirm-text="Yes"
+      md-cancel-text="No"
+      @md-cancel="showDeleteReplyConfirmation = false;"
+      @md-confirm="onDeleteReplyConfirmed"
+      style="background-color: #444444;"
+    />
   </div>
 </template>
 
@@ -90,7 +103,9 @@ export default {
       showReplyForm: false,
       showSolvedConfirmation: false,
       showDeleteConfirmation: false,
+      showDeleteReplyConfirmation: false,
       replyContent: '',
+      deletedReplyId: null,
     };
   },
   computed: {
@@ -108,6 +123,12 @@ export default {
     },
   },
   methods: {
+    canDeleteReply(reply) {
+      if (!this.user) {
+        return false;
+      }
+      return this.user.is_staff || this.user.id === reply.submitted_by;
+    },
     getDate(date) {
       if (!date) {
         return '';
@@ -179,6 +200,18 @@ export default {
       axios.delete(url, this.getAxiosConfig()).then(response => {
         if (response.status === 204) {
           this.$emit('delete-issue');
+        }
+      });
+    },
+    onDeleteReply(reply) {
+      this.deletedReplyId = reply.id;
+      this.showDeleteReplyConfirmation = true;
+    },
+    onDeleteReplyConfirmed() {
+      const url = `api/installers/issue-replies/${this.deletedReplyId}`;
+      axios.delete(url, this.getAxiosConfig()).then(response => {
+        if (response.status === 204) {
+          this.$emit('delete-reply', this.deletedReplyId);
         }
       });
     },

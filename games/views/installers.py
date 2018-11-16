@@ -106,7 +106,7 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return models.InstallerRevision(version)
 
 
-class InstallerIssueView(generics.ListAPIView, generics.CreateAPIView):
+class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
     """Returns all issues and their replies for a game"""
     serializer_class = serializers.InstallerIssueListSerializer
     lookup_field = 'slug'
@@ -144,7 +144,7 @@ class InstallerIssueCreateView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class InstallerIssueReplyView(generics.CreateAPIView, generics.RetrieveUpdateDestroyAPIView):
+class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     """Edit or post a reply to an issue"""
     serializer_class = serializers.InstallerIssueSerializer
     permission_classes = [IsAuthenticated]
@@ -169,3 +169,14 @@ class InstallerIssueReplyView(generics.CreateAPIView, generics.RetrieveUpdateDes
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
+    """View for interacting with individual replies"""
+    serializer_class = serializers.InstallerIssueReplySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """Return the installer issue reply from its ID"""
+        issue_id = self.request.parser_context['kwargs']['pk']
+        return models.InstallerIssueReply.objects.get(pk=issue_id)
