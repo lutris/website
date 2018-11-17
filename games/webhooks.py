@@ -9,6 +9,24 @@ LOGGER = logging.getLogger(__name__)
 
 
 def notify_issue_reply(issue, user, description):
+    """Notify of an issue reply"""
+    title = "Reply to issue by {} for {}".format(
+        issue.submitted_by,
+        issue.installer.version
+    )
+    notify_issue(issue, user, title, description)
+
+
+def notify_issue_creation(issue, user, description):
+    """Notify of an issue creation"""
+    title = "Issue submitted by {} for {}".format(
+        issue.submitted_by,
+        issue.installer.version
+    )
+    notify_issue(issue, user, title, description)
+
+
+def notify_issue(issue, user, title, description):
     """Sends a notification to Discord throught a Webhook"""
     hook_url = "https://discordapp.com/api/webhooks/{}/{}".format(
         settings.DISCORD_ISSUE_WEBHOOK_ID,
@@ -16,10 +34,7 @@ def notify_issue_reply(issue, user, description):
     )
     payload = {
         "embeds": [{
-            "title": "Reply to issue by {} for {}".format(
-                issue.submitted_by,
-                issue.installer.version
-            ),
+            "title": title,
             "description": description,
             "url": "https://lutris.net/games/{}".format(
                 issue.installer.game.slug

@@ -30,6 +30,7 @@ from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
                          ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
+from games.webhooks import notify_issue_creation
 from platforms.models import Platform
 
 LOGGER = logging.getLogger(__name__)
@@ -602,13 +603,13 @@ def submit_issue(request):
         response['message'] = 'The issue content is empty'
         return HttpResponse(json.dumps(response))
 
-    user = request.user
     installer_issue = InstallerIssue(
         installer=installer,
-        submitted_by=user,
+        submitted_by=request.user,
         description=content
     )
     installer_issue.save()
+    notify_issue_creation(installer_issue, request.user, content)
 
     return HttpResponse(json.dumps(response))
 

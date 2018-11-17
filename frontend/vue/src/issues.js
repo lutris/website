@@ -23,5 +23,4 @@ axios.defaults.baseURL = 'http://localhost:8000';
 new Vue({
   el: '#issues',
   components: { InstallerIssues },
-  template: '<InstallerIssues slug="league-of-legends"/>',
 });
