@@ -113,7 +113,9 @@ class IssueReplyInline(admin.StackedInline):
 
 class InstallerIssueAdmin(admin.ModelAdmin):
     """Admin config for issues"""
-    list_display = ('__str__', 'submitted_by', 'submitted_on', 'installer')
+    list_display = ('__str__', 'solved', 'submitted_by', 'submitted_on', 'installer')
+    list_filter = ('solved', )
+    search_fields = ('submitted_by__username', 'installer__game__name')
     readonly_fields = (
         'submitted_by',
         'submitted_on',
