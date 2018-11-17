@@ -28,6 +28,8 @@ def notify_issue_creation(issue, user, description):
 
 def notify_issue(issue, user, title, description):
     """Sends a notification to Discord throught a Webhook"""
+    if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
+        return
     hook_url = "https://discordapp.com/api/webhooks/{}/{}".format(
         settings.DISCORD_ISSUE_WEBHOOK_ID,
         settings.DISCORD_ISSUE_WEBHOOK_TOKEN

@@ -169,8 +169,8 @@ DISCOURSE_SSO_SECRET = os.environ.get('DISCOURSE_SSO_SECRET')
 DISCOURSE_URL = 'https://forums.lutris.net'
 
 DISCORD_URL = "https://discord.gg/C3uJjRD"
-DISCORD_ISSUE_WEBHOOK_ID = "512539530549526538"
-DISCORD_ISSUE_WEBHOOK_TOKEN = "_cFZZzHMWF3NbpgeJgjcg-vFpMbOvgExRvfw0RJIfA95QNdYINpaIk_kfBfkxlzUIL1Z"
+DISCORD_ISSUE_WEBHOOK_ID = os.environ.get('DISCORD_ISSUE_WEBHOOK_ID')
+DISCORD_ISSUE_WEBHOOK_TOKEN = os.environ.get('DISCORD_ISSUE_WEBHOOK_TOKEN')
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
