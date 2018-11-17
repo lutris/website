@@ -25,7 +25,6 @@ def get_config(context):
         env = 'staging'
     else:
         env = 'local'
-    print("Using env %s" % env)
     code_root = None
     if env == 'production':
         root = os.path.join('/srv/lutris')
@@ -190,8 +189,9 @@ def build_vue(c):
     """Build a production bundle of the Vue project"""
     config = get_config(c)
     with c.cd(config['vue_root']):
-        c.run("npm install")
-        c.run("npm run build:issues")
+        with nvm(c):
+            c.run("npm install")
+            c.run("npm run build:issues")
 
 
 @task
