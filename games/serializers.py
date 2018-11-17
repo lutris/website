@@ -1,3 +1,5 @@
+"""DRF serializers for Game models"""
+# pylint: disable=too-few-public-methods
 from rest_framework import serializers
 
 from games import models
@@ -5,22 +7,29 @@ from platforms.models import Platform
 
 
 class PlatformSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    """Serializer for Platforms"""
+    class Meta:
+        """Model and field definitions"""
         model = Platform
         fields = ('name',)
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    """Serializer for Genres"""
+
+    class Meta:
+        """Model and field definitions"""
         model = models.Genre
         fields = ('name',)
 
 
 class GameSerializer(serializers.ModelSerializer):
+    """Serializer for Games"""
     genres = GenreSerializer(many=True)
     platforms = PlatformSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.Game
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
@@ -30,14 +39,17 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class GameLibrarySerializer(serializers.ModelSerializer):
+    """Serializer for Games"""
     games = GameSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.GameLibrary
         fields = ('user', 'games')
 
 
 class InstallerSerializer(serializers.ModelSerializer):
+    """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
     game = serializers.HyperlinkedRelatedField(
         view_name='api_game_detail',
@@ -55,7 +67,8 @@ class InstallerSerializer(serializers.ModelSerializer):
 
     runner = serializers.SlugRelatedField(slug_field="slug", read_only=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.Installer
         fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
@@ -64,9 +77,11 @@ class InstallerSerializer(serializers.ModelSerializer):
 
 
 class GameInstallersSerializer(GameSerializer):
+    """Serializer for Installers belonging to a specific game"""
     installers = InstallerSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.Game
         fields = (
             'id', 'name', 'slug', 'year', 'platforms', 'genres',
@@ -75,8 +90,8 @@ class GameInstallersSerializer(GameSerializer):
         )
 
 
-# pylint: disable=W0223; No need for create and update methods now
 class InstallerRevisionSerializer(serializers.Serializer):
+    """Serializer for Installer revisions"""
     id = serializers.IntegerField()
     game = serializers.HyperlinkedRelatedField(
         view_name='api_game_detail',
@@ -109,9 +124,11 @@ class InstallerRevisionSerializer(serializers.Serializer):
 
 
 class InstallerWithRevisionsSerializer(InstallerSerializer):
+    """Serializer for Installers with their associated revisions"""
     revisions = InstallerRevisionSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.Installer
         fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
                   'notes', 'created_at', 'updated_at', 'published', 'rating',
@@ -119,12 +136,72 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
 
 
 class GameRevisionSerializer(GameSerializer):
+    """WAT"""
     installers = InstallerWithRevisionsSerializer(many=True)
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = models.Game
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
             'gogslug', 'humblestoreid', 'installers'
+        )
+
+
+class InstallerIssueReplySerializer(serializers.ModelSerializer):
+    """Serializer for Installer issues"""
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerIssueReply
+        fields = (
+            'id',
+            'issue',
+            'username',
+            'submitted_by',
+            'submitted_on',
+            'description'
+        )
+
+    def get_username(self, obj):
+        return obj.submitted_by.username
+
+
+class InstallerIssueSerializer(serializers.ModelSerializer):
+    """Serializer for installer issues"""
+    replies = InstallerIssueReplySerializer(many=True, required=False)
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerIssue
+        fields = (
+            'id',
+            'installer',
+            'username',
+            'submitted_by',
+            'submitted_on',
+            'description',
+            'solved',
+            'replies'
+        )
+
+    def get_username(self, obj):
+        return obj.submitted_by.username
+
+
+class InstallerIssueListSerializer(serializers.ModelSerializer):
+    """Serializer for grouping all issues from a installer together"""
+    issues = InstallerIssueSerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.Installer
+        fields = (
+            'id',
+            'slug',
+            'version',
+            'issues',
         )

@@ -27,9 +27,10 @@ from accounts.decorators import (check_installer_restrictions,
 from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
                          InstallerEditForm, InstallerForm,
-                         InstallerIssueReplyForm, ScreenshotForm)
+                         ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
+from games.webhooks import notify_issue_creation
 from platforms.models import Platform
 
 LOGGER = logging.getLogger(__name__)
@@ -195,8 +196,8 @@ class GameListByPlatform(GameList):
         return context
 
 
-def game_for_installer(request, slug):
-    """ Redirects to the game details page from a valid installer slug """
+def game_for_installer(_request, slug):
+    """Redirects to the game details page from a valid installer slug"""
     try:
         installers = models.Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
@@ -207,33 +208,13 @@ def game_for_installer(request, slug):
 
 
 def game_detail(request, slug):
+    """View rendering the details for a game"""
     game = get_object_or_404(models.Game, slug=slug)
-    banner_options = {'crop': 'top', 'blur': '14x6'}
-    banner_size = "940x352"
-    user = request.user
-
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
-    issues = models.InstallerIssue.objects.filter(installer__game=game).order_by('installer__slug')
-    if not request.GET.get('show-closed-issues'):
-        issues = issues.filter(solved=False)
-    issue_reply_form = InstallerIssueReplyForm(request.POST or None)
-    if request.method == 'POST' and issue_reply_form.is_valid():
-        reply = issue_reply_form.save(commit=False)
-        reply.submitted_by = request.user
-        reply.save()
-        if 'solve' in request.POST:
-            try:
-                issue = InstallerIssue.objects.get(pk=request.POST.get('issue'))
-            except InstallerIssue.DoesNotExist:
-                LOGGER.warning("Issue %s doesnt exist", request.POST.get('issue'))
-                issue = None
-            if issue and (issue.submitted_by == request.user or request.user.is_staff):
-                issue.solved = True
-                issue.save()
-        return redirect("game_detail", slug=game.slug)
     pending_change_subm_count = 0
 
+    user = request.user
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user,
@@ -245,25 +226,23 @@ def game_detail(request, slug):
         in_library = False
         screenshots = game.screenshot_set.published()
 
-    library_count = (models.GameLibrary.objects
-                     .filter(games__in=[game.id]).count())
-
-    auto_installers = game.get_default_installers()
-    return render(request, 'games/detail.html',
-                  {'game': game,
-                   'banner_options': banner_options,
-                   'banner_size': banner_size,
-                   'in_library': in_library,
-                   'library_count': library_count,
-                   'pending_change_subm_count': pending_change_subm_count,
-                   'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
-                   'can_edit': user.is_staff and user.has_perm('games.change_game'),
-                   'installers': installers,
-                   'auto_installers': auto_installers,
-                   'unpublished_installers': unpublished_installers,
-                   'screenshots': screenshots,
-                   'issues': issues,
-                   'issue_reply_form': issue_reply_form})
+    return render(
+        request, 'games/detail.html',
+        {
+            'game': game,
+            'banner_options': {'crop': 'top', 'blur': '14x6'},
+            'banner_size': "940x352",
+            'in_library': in_library,
+            'library_count': models.GameLibrary.objects.filter(games__in=[game.id]).count(),
+            'pending_change_subm_count': pending_change_subm_count,
+            'can_publish': user.is_staff and user.has_perm('games.can_publish_game'),
+            'can_edit': user.is_staff and user.has_perm('games.change_game'),
+            'installers': installers,
+            'auto_installers': game.get_default_installers(),
+            'unpublished_installers': unpublished_installers,
+            'screenshots': screenshots,
+        }
+    )
 
 
 @user_confirmed_required
@@ -624,13 +603,13 @@ def submit_issue(request):
         response['message'] = 'The issue content is empty'
         return HttpResponse(json.dumps(response))
 
-    user = request.user
     installer_issue = InstallerIssue(
         installer=installer,
-        submitted_by=user,
+        submitted_by=request.user,
         description=content
     )
     installer_issue.save()
+    notify_issue_creation(installer_issue, request.user, content)
 
     return HttpResponse(json.dumps(response))
 

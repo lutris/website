@@ -18,12 +18,14 @@ from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 from common.util import get_client_ip
 from games import models
 from games.forms import LibraryFilterForm
 
-from . import forms, sso, tasks
+from . import forms, sso, tasks, serializers
 from .models import AuthToken, EmailConfirmationToken, User
 
 REQUEST_LOGGER = logging.getLogger('django.request')
@@ -328,3 +330,13 @@ def discourse_sso(request):
     url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
                            request.user.id, request.user.username)
     return redirect(settings.DISCOURSE_URL + url)
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    """Return the information for the currently logged in user"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
+
+    def get_object(self):
+        return self.request.user

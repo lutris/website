@@ -19,7 +19,7 @@ def get_config(context):
     if host == PRODUCTION_IP:
         host = 'lutris.net'
 
-    if host in 'lutris.net':
+    if host == 'lutris.net':
         env = 'production'
     elif host == 'dev.lutris.net':
         env = 'staging'
@@ -32,15 +32,16 @@ def get_config(context):
         git_branch = 'master'
     elif env == 'staging':
         root = os.path.join('/srv/lutris_staging')
-        git_branch = 'py3'
+        git_branch = 'master'
     else:
         root = os.path.dirname(os.path.abspath(__file__))
         code_root = root
         git_branch = ''
-
+    code_root = code_root or os.path.join(root, host)
     return {
         'root': root,
-        'code_root': code_root or os.path.join(root, host),
+        'code_root': code_root,
+        'vue_root': os.path.join(code_root, 'frontend/vue'),
         'domain': host,
         'git_branch': git_branch,
         'env': env
@@ -185,6 +186,15 @@ def grunt(c):
 
 
 @task
+def build_vue(c):
+    """Build a production bundle of the Vue project"""
+    config = get_config(c)
+    with c.cd(config['vue_root']):
+        c.run("npm install")
+        c.run("npm run build:issues")
+
+
+@task
 def collect_static(c):
     config = get_config(c)
     with c.cd(config['code_root']):
@@ -265,6 +275,7 @@ def deploy(c):
     requirements(c)
     # bower(c)  # Bower install is disabled, some packages are broken
     grunt(c)
+    build_vue(c)
     collect_static(c)
     migrate(c)
     docs(c)

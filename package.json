@@ -22,6 +22,7 @@
   },
   "scripts": {
     "setup": "bower install --allow-root && grunt",
+    "build:issues": "vue-cli-service build --target wc --name installer-issues ./src/components/InstallerIssues.js",
     "watch": "grunt watch"
   },
   "repository": {

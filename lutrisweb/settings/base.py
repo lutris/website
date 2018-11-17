@@ -24,7 +24,6 @@ BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 ADMINS = (
     ('Mathieu Comandon', 'strycore@gmail.com'),
-    ('Pascal', 'dev@xod.me'),
 )
 MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
@@ -46,16 +45,12 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Remove when updated to Django 1.11
-SILENCED_SYSTEM_CHECKS = [
-    'urls.W002',
-]
-
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "public"),
+    os.path.join(BASE_DIR, "frontend/vue/dist"),
     os.path.join(BASE_DIR, "components"),
 )
 STATICFILES_FINDERS = (
@@ -135,6 +130,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'django_jcrop',
     'crispy_forms',
     'django_select2',
@@ -173,7 +169,8 @@ DISCOURSE_SSO_SECRET = os.environ.get('DISCOURSE_SSO_SECRET')
 DISCOURSE_URL = 'https://forums.lutris.net'
 
 DISCORD_URL = "https://discord.gg/C3uJjRD"
-
+DISCORD_ISSUE_WEBHOOK_ID = "512539530549526538"
+DISCORD_ISSUE_WEBHOOK_TOKEN = "_cFZZzHMWF3NbpgeJgjcg-vFpMbOvgExRvfw0RJIfA95QNdYINpaIk_kfBfkxlzUIL1Z"
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

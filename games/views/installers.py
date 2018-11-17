@@ -1,23 +1,26 @@
+"""Installer related API views"""
+# pylint: disable=too-many-ancestors
 from __future__ import absolute_import
+
 import logging
 
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics
-from rest_framework import mixins
+from django.utils import timezone
+from django.http import Http404
+from rest_framework import generics, mixins, status
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
 from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
-from rest_framework.permissions import IsAdminUser
 from games import models, serializers
+from games.webhooks import notify_issue_reply
 
 LOGGER = logging.getLogger(__name__)
 
 
 class InstallerListView(generics.ListAPIView):
-    """Lists all the installers"""
+    """Return a list of all installers"""
     serializer_class = serializers.InstallerSerializer
     queryset = models.Installer.objects.all()
 
@@ -33,6 +36,7 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
             LOGGER.info("Installer is published by %s", self.request.user)
             request.data['published_by'] = self.request.user.id
         return super().patch(request, *args, **kwargs)
+
 
 class GameInstallerListView(generics.ListAPIView):
     """Return the list of installers available for a game if a game slug is provided,
@@ -54,6 +58,7 @@ class GameRevisionListView(generics.RetrieveAPIView):
 
 
 class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
+    """Return a list of revisions for a given installer"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
@@ -61,11 +66,15 @@ class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
         installer = models.Installer.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         return installer.revisions
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, _request, *_args, **_kwargs):  # pylint: disable=no-self-use
+        """Prevent deletion
+        XXX Why is this needed?
+        """
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve a detailed view of an installer revision"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
@@ -96,3 +105,86 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         except Version.DoesNotExist:
             raise Http404
         return models.InstallerRevision(version)
+
+
+class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
+    """Returns all issues and their replies for a game"""
+    serializer_class = serializers.InstallerIssueListSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        slug = self.request.parser_context['kwargs']['slug']
+        game = models.Game.objects.get(slug=slug)
+        return game.installers.all()
+
+
+class InstallerIssueCreateView(generics.CreateAPIView):
+    """Create a new issue"""
+    serializer_class = serializers.InstallerIssueSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Return the Installer instance based off URL parameters"""
+        game_slug = self.request.parser_context['kwargs']['game_slug']
+        installer_slug = self.request.parser_context['kwargs']['installer_slug']
+        return models.Installer.objects.filter(game__slug=game_slug).get(slug=installer_slug)
+
+    def create(self, request, *args, **kwargs): # pylint: disable=unused-argument
+        """Create a new issue"""
+        issue_payload = dict(request.data)
+
+        # Complete the information with the current user
+        issue_payload['submitted_by'] = request.user.id
+        issue_payload['submitted_on'] = timezone.now()
+        issue_payload['installer'] = self.get_queryset().id
+
+        serializer = self.get_serializer(data=issue_payload)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyAPIView):
+    """Edit or post a reply to an issue"""
+    serializer_class = serializers.InstallerIssueSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """Return the installer issue from its ID"""
+        issue_id = self.request.parser_context['kwargs']['pk']
+        return models.InstallerIssue.objects.get(pk=issue_id)
+
+    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        """Create the reply"""
+        issue_id = self.request.parser_context["kwargs"]["pk"]
+        try:
+            issue = models.InstallerIssue.objects.get(pk=issue_id)
+        except models.InstallerIssue.DoesNotExist:
+            raise Http404
+
+        reply_payload = dict(request.data)
+        # Complete the information with the current user
+        reply_payload["submitted_by"] = request.user.id
+        reply_payload["submitted_on"] = timezone.now()
+        reply_payload["issue"] = issue_id
+
+        serializer = serializers.InstallerIssueReplySerializer(data=reply_payload)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        notify_issue_reply(issue, request.user, request.data['description'])
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
+    """View for interacting with individual replies"""
+    serializer_class = serializers.InstallerIssueReplySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """Return the installer issue reply from its ID"""
+        issue_id = self.request.parser_context['kwargs']['pk']
+        return models.InstallerIssueReply.objects.get(pk=issue_id)
