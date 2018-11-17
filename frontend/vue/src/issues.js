@@ -17,7 +17,7 @@ function formatTimeAgo(date) {
 }
 Vue.filter('formatTimeAgo', formatTimeAgo);
 
-axios.defaults.baseURL = 'http://localhost:8000';
+// axios.defaults.baseURL = 'http://localhost:8000';
 
 /* eslint-disable no-new */
 new Vue({
