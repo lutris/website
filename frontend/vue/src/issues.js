@@ -17,7 +17,11 @@ function formatTimeAgo(date) {
 }
 Vue.filter('formatTimeAgo', formatTimeAgo);
 
-axios.defaults.baseURL = 'https://lutris.net';
+if (process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = 'http://localhost:8000';
+} else {
+  axios.defaults.baseURL = 'https://lutris.net';
+}
 
 /* eslint-disable no-new */
 new Vue({
