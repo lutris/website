@@ -207,7 +207,7 @@
         {{ game.description|linebreaks }}
       </article>
       <div id="issues">
-        <installer-issues slug="{{game.slug}}"></installer-issues>
+        <installer-issues slug="{{game.slug}}" user-id="{{user.id|default:""}}"></installer-issues>
       </div>
     </div>
   </div>

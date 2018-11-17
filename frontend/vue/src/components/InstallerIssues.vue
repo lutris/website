@@ -40,6 +40,7 @@ export default {
   name: 'InstallerIssues',
   props: {
     slug: String,
+    userId: String,
   },
   data() {
     return {
@@ -66,14 +67,15 @@ export default {
       }
       this.installer_issues = response.data.results;
     });
-
-    axios.get('/api/users/me').then(response => {
-      if (response.data) {
-        this.user = response.data;
-      } else {
-        this.user = null;
-      }
-    });
+    if (this.userId) {
+        axios.get('/api/users/me').then(response => {
+            if (response.data) {
+                this.user = response.data;
+            } else {
+                this.user = null;
+            }
+        });
+    }
   },
   methods: {
     onToggleResolvedIssues() {
