@@ -3,7 +3,7 @@
     <template v-if="issue.solved">
       <span class="solved-badge">Solved!</span>
     </template>
-    <strong>{{ issue.username }}</strong> <strong>{{ installer_slug }}</strong>
+    <strong>{{ issue.username }}</strong>
     <em :title="getDate(issue.submitted_on)">
       {{ issue.submitted_on | formatTimeAgo }}
     </em>

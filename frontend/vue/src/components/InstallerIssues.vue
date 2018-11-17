@@ -14,6 +14,7 @@
         </span>
       </h3>
       <div v-for="installer in installer_issues" v-bind:key="installer.slug">
+        <h4>{{installer.version}}</h4>
         <div v-for="(issue, index) in installer.issues" v-bind:key="issue.id">
           <template v-if="!issue.solved || !hideResolvedIssues">
             <installer-issue
