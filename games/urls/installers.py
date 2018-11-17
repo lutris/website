@@ -38,9 +38,13 @@ urlpatterns = [
     url(r'id/(?P<pk>[\d]+)$',
         views.InstallerDetailView.as_view(),
         name='api_installer_detail'),
+<<<<<<< HEAD
 
     # Generic views
     url(r'(?P<slug>[\w\-]+)$',
+=======
+    url(r'/(?P<slug>[\w\-]+)$',
+>>>>>>> parent of 794da2f... I submit to the Django way, let's have trailing slashes for no good reason
         views.GameInstallerListView.as_view(),
         name='api_game_installer_list'),
     url(r'^$',

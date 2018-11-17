@@ -1,5 +1,4 @@
-"""Root URL conf"""
-# pylint: disable=invalid-name
+# pylint: disable=C0103
 import logging
 from importlib import import_module
 
@@ -15,6 +14,7 @@ from accounts.views import UserDetailView
 logger = logging.getLogger(__name__)
 admin.autodiscover()
 
+
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^grappelli/', include('grappelli.urls')),
@@ -28,11 +28,11 @@ urlpatterns = [
         r'^api/accounts/auth',
         include('rest_framework.urls', namespace='rest_framework')
     ),
-    re_path(r'^api/tosec/', include('tosec.urls')),
-    re_path(r'^api/runners/', include('runners.runner_urls')),
-    re_path(r'^api/runtime/', include('runners.runtime_urls')),
-    re_path(r'^api/games/', include('games.urls.games')),
-    re_path(r'^api/installers/', include('games.urls.installers')),
+    re_path(r'^api/tosec', include('tosec.urls')),
+    re_path(r'^api/runners', include('runners.runner_urls')),
+    re_path(r'^api/runtime', include('runners.runtime_urls')),
+    re_path(r'^api/games', include('games.urls.games')),
+    re_path(r'^api/installers', include('games.urls.installers')),
     re_path(r'^api/users/me', UserDetailView.as_view(), name='api_user_detail'),
     re_path(r'^games/', include('games.urls.pages')),
     re_path(r'^bundles', include('bundles.urls')),
@@ -44,7 +44,6 @@ urlpatterns = [
         name='steam_login'
     ),
     re_path(r'thegamesdb/', include('thegamesdb.urls')),
-    re_path(r'apidocs/', get_swagger_view('Lutris API')),
     re_path(r'^', include('common.urls')),
 ]
 
