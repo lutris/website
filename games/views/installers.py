@@ -14,6 +14,7 @@ from reversion.models import Version
 
 from common.permissions import IsAdminOrReadOnly
 from games import models, serializers
+from games.webhooks import notify_issue_reply
 
 LOGGER = logging.getLogger(__name__)
 
@@ -156,17 +157,24 @@ class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyA
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Create the reply"""
-        issue_id = self.request.parser_context['kwargs']['pk']
+        issue_id = self.request.parser_context["kwargs"]["pk"]
+        try:
+            issue = models.InstallerIssue.objects.get(pk=issue_id)
+        except models.InstallerIssue.DoesNotExist:
+            raise Http404
 
         reply_payload = dict(request.data)
         # Complete the information with the current user
-        reply_payload['submitted_by'] = request.user.id
-        reply_payload['submitted_on'] = timezone.now()
-        reply_payload['issue'] = issue_id
+        reply_payload["submitted_by"] = request.user.id
+        reply_payload["submitted_on"] = timezone.now()
+        reply_payload["issue"] = issue_id
 
         serializer = serializers.InstallerIssueReplySerializer(data=reply_payload)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        notify_issue_reply(issue, request.user, request.data['description'])
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
