@@ -154,10 +154,11 @@ class GameAdmin(admin.ModelAdmin):
     list_filter = (GameFilter, 'is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
     search_fields = ('name', 'steamid')
-    raw_id_fields = ('publisher', 'developer', 'genres', 'platforms')
+
+    raw_id_fields = ('publisher', 'developer', 'genres', 'platforms', 'change_for')
     autocomplete_lookup_fields = {
         'fk': ['publisher', 'developer'],
-        'm2m': ['genres', 'platforms']
+        'm2m': ['genres', 'platforms', 'change_for']
     }
     formfield_overrides = {
         BitField: {'widget': BitFieldCheckboxSelectMultiple}
@@ -207,16 +208,31 @@ class ScreenshotAdmin(admin.ModelAdmin):
     readonly_fields = ('game_link',)
     search_fields = ['game__name']
 
+    raw_id_fields = ('game', 'uploaded_by')
+    autocomplete_lookup_fields = {
+        'fk': ['game', 'uploaded_by'],
+    }
+
     def game_link(self, obj):
         return mark_safe("<a href='{0}'>{1}<a/>".format(
             reverse("admin:games_game_change", args=(obj.game.id, )),
             obj.game
         ))
+
     game_link.short_description = "Game (link)"
 
 
 class FeaturedAdmin(admin.ModelAdmin):
     list_display = ("__str__", "created_at")
+
+
+class GameLibraryAdmin(admin.ModelAdmin):
+    search_fields = ['user__username']
+    raw_id_fields = ('user', 'games')
+    autocomplete_lookup_fields = {
+        'fk': ['user'],
+        'm2m': ['games']
+    }
 
 
 class GameSubmissionAdmin(admin.ModelAdmin):
@@ -243,6 +259,6 @@ admin.site.register(models.Genre, GenreAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.InstallerIssue, InstallerIssueAdmin)
-admin.site.register(models.GameLibrary)
+admin.site.register(models.GameLibrary, GameLibraryAdmin)
 admin.site.register(models.Featured, FeaturedAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)
