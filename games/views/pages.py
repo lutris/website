@@ -18,6 +18,7 @@ from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from sorl.thumbnail import get_thumbnail
@@ -264,6 +265,7 @@ def new_installer(request, slug):
 
 @user_confirmed_required
 @check_installer_restrictions
+@never_cache
 def edit_installer(request, slug):
     """Display an edit form for install scripts
 
@@ -391,6 +393,7 @@ def get_installers(request, slug):
     return HttpResponse(installers_json, content_type='application/json')
 
 
+@never_cache
 def view_installer(request, id):
     try:
         installer = Installer.objects.get(pk=id)
