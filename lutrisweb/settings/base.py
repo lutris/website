@@ -87,14 +87,15 @@ TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 MIDDLEWARE = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # Caching disabled until proper invalidation is implemented
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'lutrisweb.urls'
