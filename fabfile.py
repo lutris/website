@@ -191,7 +191,7 @@ def build_vue(c):
     with c.cd(config['vue_root']):
         with nvm(c):
             c.run("npm install")
-            c.run("npm run build:issues")
+            c.run("NODE_ENV=production npm run build:issues")
 
 
 @task
