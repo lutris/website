@@ -38,13 +38,6 @@ TEMPLATE_LOADERS = (
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
-
 STEAM_API_KEY = os.environ['STEAM_API_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
