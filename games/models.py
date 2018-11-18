@@ -601,12 +601,12 @@ class Installer(BaseInstaller):
     """Game installer model"""
 
     RATINGS = {
-        'platinum': 'Platinum: installs and runs flawlessly',
-        'gold': 'Gold: works flawlessly with some minor tweaking',
-        'silver': ('Silver: works excellently for "normal" use but some '
-                   'features may be broken'),
-        'bronze': 'Bronze: works: but has some issues: even for normal use',
-        'garbage': 'Garbage: game is not playable'
+        '5': 'Platinum: installs and runs flawlessly',
+        '4': 'Gold: works flawlessly with some minor tweaking',
+        '3': ('Silver: works excellently for "normal" use but some '
+              'features may be broken'),
+        '2': 'Bronze: works: but has some issues: even for normal use',
+        '1': 'Garbage: game is not playable'
     }
 
     game = models.ForeignKey(Game, related_name='installers', on_delete=models.CASCADE)
@@ -637,7 +637,7 @@ class Installer(BaseInstaller):
     objects = InstallerManager()
 
     class Meta:
-        ordering = ('version', )
+        ordering = ('-rating', 'version', )
 
     def __str__(self):
         return self.slug
