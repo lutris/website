@@ -304,8 +304,13 @@ def edit_installer(request, slug):
                 break
         else:
             # Display the latest revision created by the current logged in user
-            if(version.revision.user == request.user and
-               version.revision.date_created > installer.updated_at):
+            if(
+                    (
+                        version.revision.user == request.user
+                        or request.user.is_staff
+                    )
+                    and version.revision.date_created > installer.updated_at
+            ):
                 draft_data = version.field_dict
                 revision_id = version.id
                 break
