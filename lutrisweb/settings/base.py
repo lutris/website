@@ -244,6 +244,10 @@ REST_FRAMEWORK = {
 # Shell Plus
 SHELL_PLUS_DONT_LOAD = ['tosec']
 
+SILENCED_SYSTEM_CHECKS = [
+    'urls.W002',
+]
+
 # Logging
 SEND_BROKEN_LINK_EMAILS = False
 LOGGING_HANDLERS = ['file', 'mail_admins', 'console']
