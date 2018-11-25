@@ -19,31 +19,25 @@ def user_confirmed_required(function):
     return decorator(function)
 
 
-def can_edit_installer(slug=None, is_game=False):
+def can_edit_installer(slug=None, is_new=False):
+    """Checks if the current installer can be edited"""
     if not slug:
         return False
-    game = None
-    if not is_game:
-        try:
-            installer = Installer.objects.get(slug=slug)
-        except Installer.DoesNotExist:
-            return True
-        game = installer.game
-    else:
-        try:
-            game = Game.objects.get(slug=slug)
-        except Game.DoesNotExist:
-            return True
-    if not game:
+    if is_new:
         return True
-    return not bool(game.flags.protected)
+
+    try:
+        installer = Installer.objects.get(slug=slug)
+    except Installer.DoesNotExist:
+        return True
+    return not bool(installer.protected)
 
 
 def check_installer_restrictions(view_func):
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         slug = kwargs.get('slug')
-        if request.user.is_staff or can_edit_installer(slug, is_game=request.path.endswith('new')):
+        if request.user.is_staff or can_edit_installer(slug, is_new=request.path.endswith('new')):
             return view_func(request, *args, **kwargs)
         else:
             raise PermissionDenied("Installers are protected")

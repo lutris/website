@@ -194,13 +194,7 @@
           {% if user.is_staff %}
             <a href="{% url 'installer_review' slug=game.slug %} ">Review installers</a>
           {% endif %}
-          {% if game.flags.protected %}
-          <span class='warning'>Installer creation is restricted
-            <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
-          </span>
-          {% else %}
-            <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
-          {% endif %}
+          <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
         </div>
       </div>
       <article>

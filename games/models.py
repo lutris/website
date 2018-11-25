@@ -628,6 +628,7 @@ class Installer(BaseInstaller):
                                      null=True)
     draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+    protected = models.BooleanField(default=False)
 
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
