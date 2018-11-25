@@ -286,6 +286,7 @@ def deploy(c):
 
 @task
 def pythonfix(c):
-    """Apply a fix fro Python code only (no migration, no frontend change)"""
+    """Apply a fix for Python code only (no frontend change)"""
     pull(c)
+    migrate(c)
     supervisor_restart(c)
