@@ -28,7 +28,6 @@ psycopg2==2.7.4
 factory_boy==2.11.1
 sorl-thumbnail==12.4.1
 -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
--e git+https://github.com/strycore/django-jcrop.git#egg=django-jcrop
 lxml==4.2.1
 Pillow==5.1.0
 premailer==3.2.0
