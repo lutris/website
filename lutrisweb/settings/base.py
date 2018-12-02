@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'django_jcrop',
+    'croppie',
     'crispy_forms',
     'django_select2',
     'markupfield',

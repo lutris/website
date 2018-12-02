@@ -4,14 +4,15 @@ import os
 from collections import OrderedDict
 
 import yaml
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Submit, ButtonHolder, Fieldset, HTML, Field
 from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django_select2.forms import (ModelSelect2Widget,
                                   Select2MultipleWidget, Select2Widget)
 from bitfield.forms import BitFieldCheckboxSelectMultiple
+from croppie.fields import CroppieField
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from games import models
@@ -47,6 +48,21 @@ class BaseGameForm(AutoSlugForm):
 
 
 class GameForm(forms.ModelForm):
+    
+    title_logo = CroppieField(
+        options={
+            'viewport': {
+                'width': 736,
+                'height': 276,
+            },
+            'boundary': {
+                'width': 875,
+                'height': 345,
+            },
+            'showZoomer': True,
+        },
+    )
+
     class Meta(object):
         model = models.Game
         fields = ('name', 'year', 'website',
@@ -80,21 +96,28 @@ class GameForm(forms.ModelForm):
         )
         self.fields['title_logo'].label = "Banner icon"
         self.fields['title_logo'].help_text = (
-            "The banner should include the full title in readable size (big). "
-            "You'll be able to crop the uploaded image to the right format. "
-            "The image will be converted to JPG (no transparency). "
-            "If you can't make a good banner, don't worry. Somebody will "
-            "eventually make a better one. Probably."
+            "The banner should include the game's title. "
+            "Please make sure that your banner doesn't rely on transparency as those won't be reflected in the final image"
         )
-
-        fields_order = [
-            'name', 'year', 'website', 'platforms', 'genres', 'description', 'title_logo'
-        ]
-        self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
 
         self.helper = FormHelper()
         self.helper.include_media = False
-        self.helper.add_input(Submit('submit', "Submit"))
+        self.helper.layout = Layout(
+            Fieldset(
+                None,
+                'name',
+                'year',
+                'website',
+                'platforms',
+                'genres',
+                'description',
+                Field('title_logo', template='includes/upload_button.html'),
+                HTML("<div id='cropper'></div>"),
+            ),
+            ButtonHolder(
+                Submit('submit', "Submit")
+            )
+        )
 
     def rename_uploaded_file(self, file_field, cleaned_data, slug):
         if self.files.get(file_field):
