@@ -40,9 +40,8 @@
       {% if installer.draft %}
       <input type="submit" class="btn btn-danger" name="delete" value="Delete this draft">
       {% endif %}
-      {% if revision_id %}
-      <a class='btn' href="lutris:{{game.slug}}?revision={{revision_id}}">Test this installer</a>
-      {% endif %}
+
+      <a class='btn' href="lutris:{{game.slug}}{% if revision_id %}?revision={{revision_id}}{% endif %}">Test this installer</a>
       <a class='btn' href="{{game.get_absolute_url}}">Cancel</a>
     </form>
     </div>
