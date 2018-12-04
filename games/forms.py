@@ -83,7 +83,7 @@ class GameForm(forms.ModelForm):
 
         self.fields["title_logo"] = CroppieField(
             options={
-                "viewport": {"width": 736, "height": 276},
+                "viewport": {"width": 875, "height": 345},
                 "boundary": {"width": 875, "height": 345},
                 "showZoomer": True,
             }
