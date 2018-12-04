@@ -532,7 +532,7 @@ def edit_game(request, slug):
         return HttpResponseBadRequest('You can only apply changes to a game')
 
     # Initialise form with rejected values or with the working copy
-    form = GameEditForm(request.POST or change_model, request.FILES or None, initial=initial)
+    form = GameEditForm(request.POST or change_model, request.FILES, initial=initial)
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
@@ -549,19 +549,14 @@ def edit_game(request, slug):
             reason=request.POST['reason']
         )
         change_suggestion_meta.save()
-
-        redirect_url = request.build_absolute_uri(reverse('game-submitted-changes'))
-
-        # Enforce https
-        if not settings.DEBUG:
-            redirect_url = redirect_url.replace('http:', 'https:')
-
-        LOGGER.info('Change-suggestions for game submitted, redirecting to %s', redirect_url)
-        return redirect(redirect_url)
+        return redirect(reverse('game-submitted-changes', kwargs={'slug': slug}))
 
     # Render template
     return render(request, 'games/submit.html', {'form': form, 'game': game})
-
+        
+def changes_submitted(request, slug):
+    game = get_object_or_404(Game, slug=slug)
+    return render(request, 'games/submitted-changes.html', {'game': game})
 
 def publish_game(request, id):
     if not request.user.has_perm('games.can_publish_game'):

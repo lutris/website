@@ -2,19 +2,23 @@
 {% block title %}Game submitted - Lutris{% endblock %}
 
 {% block content %}
-<div class="form-view">
-  <p>
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="message-view col-sm-6">
+    <p>
     Game submitted, thank you!
-  </p>
-  <p>
+    </p>
+    <p>
     We will review it as soon as possible. You will receive a
     notification by e-mail when your game is ready for publication.
-  </p>
-  <p>
-    All your submissions are listed on your
-    <a href="{% url "user_account" user.username %}">account</a> page.
-    You can preview this game there and submit an installer right away.
-  </p>
-  <a href="{% url "game_list" %}">Back to the games list</a>
+    </p>
+    <p>
+      All your submissions are listed on your
+      <a href="{% url "user_account" user.username %}">account</a> page.
+      You can preview this game there and submit an installer right away.
+    </p>
+    <a href="{% url "game_list" %}">Back to the games list</a>
+  </div>
+  <div class="col-sm-3"></div>
 </div>
 {% endblock %}

@@ -13,12 +13,6 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ["components/jcrop/css/Jcrop.gif"],
-            dest: "public/css/"
-          },
-          {
-            expand: true,
-            flatten: true,
             src: ["components/ace-builds/src-noconflict/*"],
             dest: "public/ace"
           },
@@ -59,14 +53,6 @@ module.exports = function(grunt) {
       }
     },
     concat: {
-      css: {
-        src: [
-          "components/jcrop/css/jquery.Jcrop.css",
-          "components/jcrop-fileinput/dist/jcrop-fileinput.css"
-        ],
-        dest: "public/css/libs.css",
-        nonull: true
-      },
       app: {
         src: ["frontend/js/*.js"],
         dest: "public/js/app.js",
@@ -77,8 +63,6 @@ module.exports = function(grunt) {
           "components/jquery/dist/jquery.js",
           "components/blueimp-canvas-to-blob/js/canvas-to-blob.js",
           "components/bootstrap/dist/js/bootstrap.js",
-          "components/jcrop/js/jquery.Jcrop.js",
-          "components/jcrop-fileinput/dist/jcrop-fileinput.js"
         ],
         dest: "public/js/libs.js",
         nonull: true
@@ -113,7 +97,7 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         banner:
-          '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+          "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\n"
       },
       dist: {
         files: {

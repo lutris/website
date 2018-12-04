@@ -6,6 +6,39 @@
 {% endblock %}
 {% block extra_head %}
 {{ form.media.css }}
+<style>
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;  
+}
+
+.file-upload-button label {
+  background-color: #991e02;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  height: 2rem;
+  line-height: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  transition: background-color 0.3s;
+}
+
+.file-upload-button label:hover {
+    background-color: #f15d22;
+}
+</style>
+
 {% endblock %}
 
 {% block content %}
@@ -58,20 +91,7 @@
         placeholder: ''
       });
       $('#id_search').select2();
-      $('#id_title_logo').JCropFileInput({
-        debug: false,
-        ratio: 8/3,
-        thumbMaxWidth: 184,
-        onSubmit: function (event) {
-          if(event.target.responseURL == window.location.href) {
-            document.open()
-            document.write(event.target.responseText)
-            document.close()
-          } else {
-            window.location = event.target.responseURL;
-          }
-        }
-      });
+
       $("#id_search").on('select2:select', function (event) {
         var game_id = event.target.value;
         if (!game_id) {
@@ -86,7 +106,7 @@
             $('#id_description').html(response.description);
             $('#id_platforms').val(response.platforms).trigger('change');
             if(response.banner) {
-              $('#id_title_logo').JCropFileInput('setImage', response.banner);
+              // TODO load image in banner field
             }
           }
         });
