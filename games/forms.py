@@ -80,15 +80,14 @@ class GameForm(forms.ModelForm):
             "it. Don't write your own. For old games, check Mobygame's Ad "
             "Blurbs, look for the English back cover text."
         )
+
         self.fields["title_logo"] = CroppieField(
             options={
                 "viewport": {"width": 736, "height": 276},
                 "boundary": {"width": 875, "height": 345},
                 "showZoomer": True,
-                "url": "",
             }
         )
-
         self.fields["title_logo"].label = "Banner icon"
         self.fields["title_logo"].help_text = (
             "The banner should include the game's title. "
