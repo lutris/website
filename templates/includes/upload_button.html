@@ -1,7 +1,7 @@
 {% load crispy_forms_field %}
 
 <div id="div_{{ field.auto_id }}" class="form-group{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
-    <div class="controls file-upload-button {{ field_class }}">        
+    <div class="controls file-upload-button {{ field_class }}">
         {{ field }}
         <label for="{{ field.id_for_label }}" class="upload-button">
             {{ field.label|safe }}

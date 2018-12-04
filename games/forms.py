@@ -1,9 +1,8 @@
 """Forms for the main app"""
 # pylint: disable=missing-docstring,too-few-public-methods
 import os
-from collections import OrderedDict
-
 import yaml
+
 from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit, ButtonHolder, Fieldset, HTML, Field
 from django import forms
@@ -48,25 +47,18 @@ class BaseGameForm(AutoSlugForm):
 
 
 class GameForm(forms.ModelForm):
-    
-    title_logo = CroppieField(
-        options={
-            'viewport': {
-                'width': 736,
-                'height': 276,
-            },
-            'boundary': {
-                'width': 875,
-                'height': 345,
-            },
-            'showZoomer': True,
-        },
-    )
 
     class Meta(object):
         model = models.Game
-        fields = ('name', 'year', 'website',
-                  'platforms', 'genres', 'description', 'title_logo')
+        fields = (
+            'name',
+            'year',
+            'website',
+            'platforms',
+            'genres',
+            'description',
+            'title_logo'
+        )
         widgets = {
             'platforms': Select2MultipleWidget,
             'genres': Select2MultipleWidget
@@ -74,7 +66,6 @@ class GameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
-
         self.fields['name'].label = "Title"
         self.fields['year'].label = "Release year"
         self.fields['website'].help_text = (
@@ -94,6 +85,21 @@ class GameForm(forms.ModelForm):
             "it. Don't write your own. For old games, check Mobygame's Ad "
             "Blurbs, look for the English back cover text."
         )
+        self.fields['title_logo'] = CroppieField(
+            options={
+                'viewport': {
+                    'width': 736,
+                    'height': 276,
+                },
+                'boundary': {
+                    'width': 875,
+                    'height': 345,
+                },
+                'showZoomer': True,
+                'url': ""
+            }
+        )
+
         self.fields['title_logo'].label = "Banner icon"
         self.fields['title_logo'].help_text = (
             "The banner should include the game's title. "
@@ -111,8 +117,8 @@ class GameForm(forms.ModelForm):
                 'platforms',
                 'genres',
                 'description',
-                Field('title_logo', template='includes/upload_button.html'),
-                HTML("<div id='cropper'></div>"),
+                'title_logo',
+                # Field('title_logo', template='includes/upload_button.html')
             ),
             ButtonHolder(
                 Submit('submit', "Submit")
@@ -165,8 +171,19 @@ class GameEditForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.Game
-        fields = ('name', 'year', 'developer', 'publisher',
-                  'website', 'platforms', 'genres', 'description', 'reason')
+        fields = (
+            'name',
+            'year',
+            'developer',
+            'publisher',
+            'website',
+            'platforms',
+            'genres',
+            'description',
+            'title_logo',
+            'reason'
+            )
+
         widgets = {
             'platforms': Select2MultipleWidget,
             'genres': Select2MultipleWidget,
@@ -180,21 +197,47 @@ class GameEditForm(forms.ModelForm):
             )
         }
 
-    def __init__(self, *args, **kwargs):
-        super(GameEditForm, self).__init__(*args, **kwargs)
-
+    def __init__(self, payload, files, *args, **kwargs):
+        super(GameEditForm, self).__init__(payload, files, **kwargs)
         self.fields['name'].label = 'Title'
         self.fields['year'].label = 'Release year'
 
-        fields_order = [
-            'name', 'year', 'developer', 'publisher',
-            'website', 'platforms', 'genres', 'description', 'reason'
-        ]
-        self.fields = OrderedDict((k, self.fields[k]) for k in fields_order)
+        self.fields['title_logo'] = CroppieField(
+            options={
+                'viewport': {
+                    'width': 875,
+                    'height': 345,
+                },
+                'boundary': {
+                    'width': 875,
+                    'height': 345,
+                },
+                'showZoomer': True,
+                'url': files['title_logo'].url
+            }
+        )
+        self.fields['title_logo'].required = False
 
         self.helper = FormHelper()
         self.helper.include_media = False
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.layout = Layout(
+            Fieldset(
+                None,
+                'name',
+                'year',
+                'developer',
+                'publisher',
+                'website',
+                'platforms',
+                'genres',
+                'description',
+                Field('title_logo', template='includes/upload_button.html'),
+                'reason'
+            ),
+            ButtonHolder(
+                Submit('submit', "Submit")
+            )
+        )
 
     def clean(self):
         """Overwrite clean to fail validation if unchanged form was submitted"""

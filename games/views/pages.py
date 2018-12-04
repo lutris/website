@@ -532,7 +532,14 @@ def edit_game(request, slug):
         return HttpResponseBadRequest('You can only apply changes to a game')
 
     # Initialise form with rejected values or with the working copy
-    form = GameEditForm(request.POST or change_model, request.FILES or None, initial=initial)
+    if change_model.get('title_logo'):
+        change_files = {
+            'title_logo': change_model.pop('title_logo')
+        }
+    else:
+        change_files = None
+
+    form = GameEditForm(request.POST or change_model, request.FILES or change_files, initial=initial)
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == 'POST' and form.is_valid():
