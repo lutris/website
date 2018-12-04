@@ -794,15 +794,15 @@ class GameSubmission(models.Model):
 
 class GameLink(models.Model):
     WEBSITE_CHOICES = (
-        ("wikipedia", "Wikipedia"),
-        ("pcgamingwiki", "PCGamingWiki"),
-        ("mobygames", "MobyGames"),
-        ("winehq", "WineHQ AppDB"),
-        ("lemonamiga", "Lemon Amiga"),
-        ("github", "Github"),
-        ("origin", "Origin"),
-        ("battlenet", "Battle.net"),
-        ("ubisoft", "Ubisoft"),
+        ('battlenet', 'Battle.net'),
+        ('github', 'Github'),
+        ('lemonamiga', 'Lemon Amiga'),
+        ('mobygames', 'MobyGames'),
+        ('origin', 'Origin'),
+        ('pcgamingwiki', 'PCGamingWiki'),
+        ('ubisoft', 'Ubisoft'),
+        ('wikipedia', 'Wikipedia'),
+        ('winehq', 'WineHQ AppDB'),
     )
     game = models.ForeignKey(Game, related_name="links", on_delete=models.CASCADE)
     website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
