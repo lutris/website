@@ -38,6 +38,11 @@ TEMPLATE_LOADERS = (
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
+        'anon': '10/min',
+        'user': '50/min'
+}
+
 STEAM_API_KEY = os.environ['STEAM_API_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
