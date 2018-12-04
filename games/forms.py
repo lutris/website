@@ -88,7 +88,7 @@ class GameForm(forms.ModelForm):
                 "showZoomer": True,
             }
         )
-        self.fields["title_logo"].label = "Banner icon"
+        self.fields["title_logo"].label = "Upload an image"
         self.fields["title_logo"].help_text = (
             "The banner should include the game's title. "
             "Please make sure that your banner doesn't rely on transparency as those won't be reflected in the final image"
@@ -195,6 +195,7 @@ class GameEditForm(forms.ModelForm):
                 "url": payload["title_logo"].url if payload.get("title_logo") else "",
             }
         )
+        self.fields["title_logo"].label = "Upload an image"
         self.fields["title_logo"].required = False
 
         self.helper = FormHelper()
