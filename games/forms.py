@@ -184,12 +184,10 @@ class GameEditForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, payload, files, *args, **kwargs):
-        super(GameEditForm, self).__init__(payload, files, **kwargs)
+    def __init__(self, payload, *args, **kwargs):
+        super(GameEditForm, self).__init__(payload, *args, **kwargs)
         self.fields["name"].label = "Title"
         self.fields["year"].label = "Release year"
-        print(payload)
-        print(kwargs)
         self.fields["title_logo"] = CroppieField(
             options={
                 "viewport": {"width": 875, "height": 345},
