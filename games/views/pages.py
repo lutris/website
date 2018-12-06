@@ -334,7 +334,7 @@ def edit_installer(request, slug):
             reversion.add_to_revision(installer)
 
         messages.info(request, "Installer saved")
-        if draft_data["draft"]:
+        if draft_data and draft_data["draft"]:
             return redirect("edit_installer", slug=installer.slug)
         else:
             return redirect("installer_complete", slug=installer.game.slug)
