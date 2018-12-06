@@ -314,12 +314,7 @@ def edit_installer(request, slug):
                 draft_data = version.field_dict
                 revision_id = version.id
                 break
-
     if draft_data:
-        messages.info(request,
-                      "You are viewing a draft of the installer which does not "
-                      "reflect the currently available installer. Changes will be "
-                      "published once it goes through moderation.")
         draft_data['reason'] = ""
         if 'runner_id' in draft_data:
             draft_data['runner'] = draft_data['runner_id']
@@ -337,7 +332,18 @@ def edit_installer(request, slug):
                 timezone.now()
             ))
             reversion.add_to_revision(installer)
-        return redirect("installer_complete", slug=installer.game.slug)
+
+        messages.info(request, "Installer saved")
+        if draft_data["draft"]:
+            return redirect("edit_installer", slug=installer.slug)
+        else:
+            return redirect("installer_complete", slug=installer.game.slug)
+
+    if draft_data:
+        messages.info(request,
+                "You are viewing a draft of the installer which does not "
+                "reflect the currently available installer. Changes will be "
+                "published once it goes through moderation.")
     return render(request, 'installers/form.html', {
         'form': form,
         'game': installer.game,
@@ -553,7 +559,7 @@ def edit_game(request, slug):
 
     # Render template
     return render(request, 'games/submit.html', {'form': form, 'game': game})
-        
+
 def changes_submitted(request, slug):
     game = get_object_or_404(Game, slug=slug)
     return render(request, 'games/submitted-changes.html', {'game': game})

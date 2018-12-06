@@ -15,11 +15,7 @@
 {% endblock %}
 
 {% block content %}
-{% if new %}
-  <h1>New installer for {{ game }}</h1>
-{% else %}
-  <h1>Edit installer for {{ game }}</h1>
-{% endif %}
+<h1>{% if new %}New{% else %}Edit{% endif %} installer for {{ game }}</h1>
 <div class="row">
   <div class="col-sm-7">
     <div class="well">
@@ -40,8 +36,13 @@
       {% if installer.draft %}
       <input type="submit" class="btn btn-danger" name="delete" value="Delete this draft">
       {% endif %}
-
-      <a class='btn' href="lutris:{{game.slug}}{% if revision_id %}?revision={{revision_id}}{% endif %}">Test this installer</a>
+      {% if installer %}
+      <a 
+        class='btn' 
+        id="test-installer-button"
+        href="lutris:{{game.slug}}{% if revision_id %}?revision={{revision_id}}{% endif %}"
+      >Test this installer</a>
+      {% endif %}
       <a class='btn' href="{{game.get_absolute_url}}">Cancel</a>
     </form>
     </div>
@@ -61,7 +62,7 @@
     $(function(){
       // ACE editor config
       const textarea = $('textarea[name="content"]').hide();
-      var editor = ace.edit("editor");
+      const editor = ace.edit("editor");
       editor.setTheme("ace/theme/twilight");
       editor.session.setMode("ace/mode/yaml");
       editor.session.setTabSize(4);
@@ -84,6 +85,7 @@
         window.location.replace(formUrl + "?revision=" + revisionId);
       })
       {% endif %}
+
     });
   </script>
   {{ block.super }}

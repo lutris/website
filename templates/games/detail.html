@@ -250,7 +250,6 @@
   function toggleUnpublishedInstallers(event) {
     event.preventDefault();
     var linkText = event.target.innerHTML;
-    console.log(linkText);
     if (linkText.indexOf('Show') === 0) {
       linkText = linkText.replace('Show', 'Hide');
     } else {
