@@ -704,6 +704,39 @@ class Installer(BaseInstaller):
             update_fields=update_fields,
         )
 
+class InstallerHistory(BaseInstaller):
+    """Past versions of installers
+
+    Yes, that's what django-reversion is supposed to be for but we used it in a backwards way,
+    to store submissions instead of past revisions.
+
+    This is a simplified version of the model anyway since we don't have to keep track  of the
+    published aspect of it.
+    """
+    installer = models.ForeignKey(Installer, related_name="past_versions", on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
+    version = models.CharField(max_length=32)
+    description = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.TextField(blank=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    @classmethod
+    def create_from_installer(cls, installer):
+        """Create a copy of the installer"""
+        return cls.objects.create(
+            installer=installer,
+            user=installer.user,
+            runner=installer.runner,
+            version=installer.version,
+            description=installer.description,
+            notes=installer.notes,
+            content=installer.content
+        )
+
+    def __str__(self):
+        return "Snapshot of installer %s at %s" % (self.installer, self.created_at)
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
@@ -869,6 +902,9 @@ class InstallerRevision(BaseInstaller):
     def accept(self, moderator):
         self._version.revert()
         installer = Installer.objects.get(pk=self.installer_id)
+
+        # Keep a snapshot of the current installer
+        InstallerHistory.create_from_installer(installer)
         installer.published = True
         LOGGER.info("Installer published by %s", moderator)
         installer.published_by = moderator

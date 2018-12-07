@@ -57,6 +57,20 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     list_display = ('__str__', 'id', 'website')
 
+class InstallerHistoryAdmin(admin.StackedInline):
+    """Admin config for installer snapshots"""
+    model = models.InstallerHistory
+    extra = 0
+    readonly_fields = (
+        'installer',
+        'user',
+        'runner',
+        'version',
+        'description',
+        'notes',
+        'content'
+    )
+
 
 class InstallerAdmin(VersionAdmin):
     list_display = ('__str__', 'runner', 'version', 'game_link', 'user',
@@ -71,6 +85,10 @@ class InstallerAdmin(VersionAdmin):
     autocomplete_lookup_fields = {
         'fk': ['game', 'user'],
     }
+
+    inlines = [
+        InstallerHistoryAdmin
+    ]
 
     def game_link(self, obj):
         return mark_safe("<a href='{0}'>{1}<a/>".format(
