@@ -204,6 +204,7 @@ class Game(models.Model):
     gogid = models.PositiveIntegerField(null=True, unique=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
+    popularity = models.IntegerField(default=0)
 
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
