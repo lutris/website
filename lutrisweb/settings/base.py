@@ -86,7 +86,7 @@ TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     # Caching disabled until proper invalidation is implemented
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -96,7 +96,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
-)
+]
 
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
@@ -125,7 +125,7 @@ TEMPLATES = [
     }
 ]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -156,7 +156,7 @@ INSTALLED_APPS = (
     'runners',
     'accounts',
     'tosec',
-)
+]
 
 BANNER_SIZE = "184x69"
 ICON_SIZE = "32x32"

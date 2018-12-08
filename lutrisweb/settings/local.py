@@ -4,6 +4,9 @@ from lutrisweb.settings.base import *  # noqa
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
+INSTALLED_APPS.append('debug_toolbar')
+MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+
 if not os.environ.get('USE_SQLITE'):
     DATABASES = {
         'default': {

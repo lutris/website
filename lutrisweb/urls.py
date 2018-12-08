@@ -3,7 +3,7 @@ import logging
 from importlib import import_module
 
 from django.conf import settings
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 from django.contrib import admin
 from django.views.static import serve
 from django_openid_auth.views import login_begin
@@ -48,11 +48,20 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
     urlpatterns += [
         re_path(r'^media/(?P<path>.*)$', serve,
                 {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     ]
 
+    urlpatterns = [
+
+        path('__debug__/', include(debug_toolbar.urls)),
+
+        # For django versions before 2.0:
+        # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+    ] + urlpatterns
 
 signal_modules = {}
 
