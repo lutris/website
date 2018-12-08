@@ -54,9 +54,7 @@ class GameList(ListView):
         search_params = [key for key in self.request.GET.keys() if key != 'page']
 
         if self.request.GET.get('sort-by-popularity') or not search_params:
-            queryset = queryset.annotate(
-                library_count=Count('gamelibrary', distinct=True)
-            ).order_by('-library_count')
+            queryset = queryset.order_by('-popularity')
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):

@@ -782,7 +782,7 @@ class InstallerIssueReply(BaseIssue):
 
 class GameLibrary(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    games = models.ManyToManyField(Game)
+    games = models.ManyToManyField(Game, related_name="libraries")
 
     class Meta:
         verbose_name_plural = "game libraries"
