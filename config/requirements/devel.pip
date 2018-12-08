@@ -5,3 +5,4 @@ pep8==1.7.1
 coverage==4.5.1
 isort==4.3.4
 ipdb==0.11
+django-debug-toolbar
