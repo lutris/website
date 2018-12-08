@@ -50,7 +50,7 @@ class GameList(ListView):
             queryset = queryset.filter(change_for__isnull=True)
         else:
             queryset = queryset.with_installer()
-
+        queryset = queryset.prefetch_related('genres', 'publisher', 'developer', 'platforms', 'installers')
         search_params = [key for key in self.request.GET.keys() if key != 'page']
 
         if self.request.GET.get('sort-by-popularity') or not search_params:

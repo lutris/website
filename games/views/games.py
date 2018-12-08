@@ -19,12 +19,13 @@ class GameListView(generics.GenericAPIView):
             game_slugs = self.request.data.get('games')
         else:
             game_slugs = []
+        base_query = models.Game.objects
         if game_slugs:
-            queryset = models.Game.objects.filter(change_for__isnull=True, slug__in=game_slugs)
+            queryset = base_query.filter(change_for__isnull=True, slug__in=game_slugs)
         elif 'random' in self.request.GET:
-            queryset = [models.Game.objects.get_random(self.request.GET['random'])]
+            queryset = [base_query.get_random(self.request.GET['random'])]
         else:
-            queryset = models.Game.objects.filter(change_for__isnull=True)
+            queryset = base_query.filter(change_for__isnull=True)
         return queryset
 
     def get_serializer_class(self):
