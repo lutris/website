@@ -1,10 +1,15 @@
+"""Account management handling forms"""
 # pylint: disable=W0232, R0903
+import logging
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
 from common.forms import get_bootstrap_helper
+
+LOGGER = logging.getLogger(__name__)
 
 
 class RegistrationForm(forms.ModelForm):
@@ -39,7 +44,8 @@ class RegistrationForm(forms.ModelForm):
         help_text="Enter the same password as above, for verification."
     )
 
-    class Meta(object):
+    class Meta:
+        """Model and field definitions"""
         model = User
         fields = ("username", "email")
 
@@ -58,6 +64,8 @@ class RegistrationForm(forms.ModelForm):
             User.objects.get(username__iexact=username)
         except User.DoesNotExist:
             return username
+        except User.MultipleObjectsReturned:
+            LOGGER.error("Mutiple users with username: %s", username)
         raise forms.ValidationError(self.error_messages['duplicate_username'])
 
     def clean_password2(self):
