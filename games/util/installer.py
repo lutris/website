@@ -198,6 +198,11 @@ def tasks_have_names(installer):
             continue
         step_name, arguments = next(iter(step.items()))
         if step_name == 'task':
+            if not arguments:
+                return (
+                    False,
+                    "Empty task %s" % step_name
+                )
             if 'name' not in arguments:
                 return (
                     False,
