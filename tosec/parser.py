@@ -49,7 +49,10 @@ class TosecParser(object):
 
     @staticmethod
     def parse_line(line):
-        key, raw_value = line.split(' ', 1)
+        try:
+            key, raw_value = line.split(' ', 1)
+        except ValueError:
+            raise ValueError("Invalid line %s" % line)
         return key, raw_value.strip("\"")
 
     @staticmethod
