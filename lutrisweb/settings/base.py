@@ -297,6 +297,11 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO',
         },
+        'scripts': {
+            'handlers': LOGGING_HANDLERS,
+            'propagate': True,
+            'level': 'DEBUG',
+        },
         'factory': {
             'handlers': ['null'],
             'propagate': False,
