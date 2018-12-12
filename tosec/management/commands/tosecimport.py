@@ -13,7 +13,7 @@ class Command(BaseCommand):
         if args:
             filenames = args
         else:
-            basepath = os.path.join(settings.TOSEC_DAT_PACK, 'TOSEC')
+            basepath = os.path.join(settings.TOSEC_DAT_PATH, 'TOSEC')
             if not os.path.exists(basepath):
                 self.stderr.write("No TOSEC database found in %s" % basepath)
                 return

@@ -73,8 +73,7 @@ FILES_ROOT = media_directory('files')
 FILES_URL = 'http://localhost:8000/media/files/'
 
 TOSEC_PATH = media_directory('tosec')
-TOSEC_CURRENT = "TOSEC - DAT Pack - Complete (2292) (TOSEC-v2014-10-31)"
-TOSEC_DAT_PACK = os.path.join(TOSEC_PATH, TOSEC_CURRENT)
+TOSEC_DAT_PATH = os.path.join(TOSEC_PATH)
 
 # TheGamesDB directories
 TGD_ROOT = media_directory('thegamesdb')
