@@ -84,8 +84,7 @@ start: deps setup run
 	echo "Running Lutris Website"
 
 sync:
-	# scp is limited to 1MB/s to avoid stalling
-	scp -l 8192 lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
+	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
 	gunzip lutris.tar.gz
 	sudo -u postgres pg_restore --clean --dbname=lutris lutris.tar
 	rm lutris.tar
