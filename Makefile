@@ -32,7 +32,10 @@ sysdeps:
 	pip install -r config/requirements/production.pip --exists-action=s
 
 deps:
-	pip install -r config/requirements/devel.pip --exists-action=w
+	pipenv install
+
+check-deps-update:
+	pipenv update --outdated
 
 migration:
 	-./manage.py makemigrations
@@ -40,9 +43,6 @@ migration:
 
 fixtures:
 	./manage.py dumpdata --indent=2 games > games/fixtures/initial_data.json
-
-check-deps-update:
-	pip list --outdated
 
 ctags:
 	ctags -R --languages=python --python-kinds=-v ${VIRTUAL_ENV}/lib/python2.7
