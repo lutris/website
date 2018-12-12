@@ -80,9 +80,6 @@ sqlsequencereset:
 	./manage.py sqlsequencereset tastypie >> sqlsequencereset.sql
 	cat sqlsequencereset.sql | psql -U lutris_staging -h localhost lutris_staging
 
-start: deps setup run
-	echo "Running Lutris Website"
-
 sync:
 	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
 	gunzip lutris.tar.gz
