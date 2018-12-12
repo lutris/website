@@ -83,13 +83,13 @@ class TosecParser(object):
             line = line.strip()
             if not line:
                 continue
-            if not headers_ok:
-                headers_ok = self.extract_line(line, self.headers)
-            else:
+            if headers_ok:
                 game_ok = self.extract_line(line, game)
                 if game_ok:
                     self.games.append(game)
                     game = {}
+            else:
+                headers_ok = self.extract_line(line, self.headers)
 
 
 class TosecNamingConvention(object):

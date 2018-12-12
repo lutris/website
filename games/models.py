@@ -353,7 +353,8 @@ class Game(models.Model):
         return True
 
     def get_default_installers(self):
-        installers = []
+        auto_installers = []
+
         for platform in self.platforms.all():
             if platform.default_installer:
                 installer = platform.default_installer
@@ -365,8 +366,8 @@ class Game(models.Model):
                 installer["description"] = ""
                 installer["published"] = True
                 installer["auto"] = True
-                installers.append(installer)
-        return installers
+                auto_installers.append(installer)
+        return auto_installers
 
     def check_for_submission(self):
         # Skip freshly created and unpublished objects
@@ -669,6 +670,10 @@ class Installer(BaseInstaller):
         return self.slug
 
     def set_default_installer(self):
+        """Creates the default content for installer when they are first created.
+
+        This method should load from installer templates once they are implemented.
+        """
         if self.game and self.game.steam_support():
             installer_data = {"game": {"appid": self.game.steamid}}
             self.version = "Steam"
