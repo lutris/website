@@ -1,8 +1,9 @@
 # pylint: disable=missing-docstring
 import logging
 import requests
-from games.models import Game
+from games.models import Game, Genre
 from games.util.steam import get_store_info, create_steam_installer
+from platforms.models import Platform
 from common.util import slugify
 
 LOGGER = logging.getLogger(__name__)
@@ -30,7 +31,8 @@ def run():
             continue
 
         if store_info["type"] != "game":
-            LOGGER.warning("%s: %s is not a game (type: %s)", game_id, store_info["name"], store_info["type"])
+            LOGGER.warning("%s: %s is not a game (type: %s)",
+                           game_id, store_info["name"], store_info["type"])
             continue
         slug = slugify(store_info["name"])
         if Game.objects.filter(slug=slug).count():
@@ -41,13 +43,24 @@ def run():
             name=store_info["name"],
             slug=slug,
             steamid=game_id,
-            description=store_info["about_the_game"],
+            description=store_info["short_description"],
             website=store_info["website"] or "",
             is_public=True,
         )
         game.set_logo_from_steam()
-        game.save()
         LOGGER.debug("%s created", game)
         if store_info["platforms"]["linux"]:
+            platform = Platform.objects.get(slug='linux')
             LOGGER.info("Creating installer for %s", game)
             create_steam_installer(game)
+        else:
+            platform = Platform.objects.get(slug='windows')
+        game.platforms.add(platform)
+        for steam_genre in store_info["genres"]:
+            genre, created = Genre.objects.get_or_create(slug=slugify(steam_genre["description"]))
+            if created:
+                genre.name = steam_genre["description"]
+                LOGGER.info("Created genre %s", genre.name)
+                genre.save()
+            game.genres.add(genre)
+        game.save()
