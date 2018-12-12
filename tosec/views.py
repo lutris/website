@@ -1,3 +1,4 @@
+"""TOSEC API views"""
 from rest_framework import generics, filters
 from tosec.models import Category, Game
 from tosec.serializers import CategorySerializer, GameSerializer

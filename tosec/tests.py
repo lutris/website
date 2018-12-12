@@ -1,4 +1,4 @@
-# pylint: disable=C0103
+# pylint: disable=missing-docstring,invalid-name
 import os
 from django.test import TestCase
 from .parser import TosecParser, TosecNamingConvention, smart_split

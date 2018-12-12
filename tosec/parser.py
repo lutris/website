@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+"""TOSEC database parser"""
 import re
 import logging
 from . import constants

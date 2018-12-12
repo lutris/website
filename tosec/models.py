@@ -1,4 +1,4 @@
-# pylint: disable=R0903
+"""TOSEC models"""
 from django.db import models
 
 

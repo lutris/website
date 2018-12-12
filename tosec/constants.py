@@ -1,3 +1,5 @@
+"""TOSEC related constants"""
+
 DEMO_FLAGS = {
     'demo': "General demonstration version",
     'demo-kiosk': "Retail demo units and kiosks",

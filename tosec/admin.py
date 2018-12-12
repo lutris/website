@@ -1,3 +1,4 @@
+"""Admin module for TOSEC management"""
 from django.contrib import admin
 
 from . import models
@@ -19,6 +20,7 @@ class GameAdmin(admin.ModelAdmin):
     inlines = [
         RomInline,
     ]
+
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Game, GameAdmin)
