@@ -50,7 +50,7 @@ ctags:
 	ctags -R -a --languages=python --python-kinds=-v .
 
 deploy:
-	fab staging deploy
+	fab -H lutris.net deploy
 
 client:
 	if [ -e lutris_client ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
