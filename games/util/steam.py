@@ -2,6 +2,8 @@ import logging
 import requests
 from django.conf import settings
 
+from games import models
+from accounts.models import User
 from common.util import slugify
 
 LOGGER = logging.getLogger(__name__)
@@ -10,7 +12,7 @@ STEAM_API_URL = "https://api.steampowered.com/"
 
 def get_capsule(steamid):
     steam_cdn = "http://cdn.akamai.steamstatic.com"
-    capsule_url = steam_cdn + "/steam/apps/%d/capsule_184x69.jpg"
+    capsule_url = steam_cdn + "/steam/apps/%s/capsule_184x69.jpg"
     response = requests.get(capsule_url % steamid)
     return response.content
 
@@ -54,20 +56,50 @@ def steam_sync(steamid):
 
 def create_game(game):
     """ Create game object from Steam API call """
+    appid = game['appid']
     from games.models import Game
     slug = slugify(game['name'])[:50]
-    LOGGER.info("Adding %s to library" % game['name'])
+    LOGGER.info("Adding %s to library", game['name'])
     steam_game = Game(
         name=game['name'],
-        steamid=game['appid'],
+        steamid=appid,
         slug=slug,
     )
-    if game['img_logo_url']:
-        steam_game.get_steam_logo(game['img_logo_url'])
-    steam_game.get_steam_icon(game['img_icon_url'])
+
+    if game.get('img_logo_url'):
+        steam_game.set_logo_from_steam_api(game['img_logo_url'])
+
+    if game.get('img_icon_url'):
+        steam_game.set_icon_from_steam_api(game['img_icon_url'])
     try:
         steam_game.save()
     except Exception as ex:
         LOGGER.error("Error while saving game %s: %s", game, ex)
         raise
     return steam_game
+
+
+def create_steam_installer(game):
+    """Create a Lutris installer for a given game instance"""
+    installer = models.Installer()
+    installer.runner = models.Runner.objects.get(slug='steam')
+    installer.user = User.objects.get(username='strider')
+    installer.game = game
+    installer.set_default_installer()
+    installer.published = True
+    installer.save()
+
+
+def get_store_info(appid):
+    """Return the Steam store information for a game by it's Steam ID"""
+    response = requests.get("https://store.steampowered.com/api/appdetails?appids=%s" % appid)
+    if response.status_code != 200:
+        LOGGER.error("Invalid response from the Steam store: %s", response.status_code)
+        LOGGER.error(response.content)
+        return
+    store_info = response.json()
+    if not store_info.get(appid, {}).get("success"):
+        LOGGER.error("Unsuccessful response from Steam store for app %s", appid)
+        LOGGER.error(store_info)
+        return
+    return store_info[appid]["data"]

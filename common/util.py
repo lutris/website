@@ -1,7 +1,7 @@
 """Various utility functions used across the website"""
 import yaml
 import romkan
-from lxml.html.clean import Cleaner
+from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
 from xpinyin import Pinyin
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
@@ -9,7 +9,7 @@ SLUG_MAX_LENGTH = 50
 
 
 def slugify(text):
-    """Version of slugify that supports Japanese characters"""
+    """Version of slugify that supports Japanese and Chinese characters"""
     if not text:
         return ""
     slug = django_slugify(text)

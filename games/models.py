@@ -323,22 +323,23 @@ class Game(models.Model):
             slug = self.slug
         return reverse("game_detail", kwargs={"slug": slug})
 
-    def download_steam_capsule(self):
+    def set_logo_from_steam(self):
         if self.title_logo or not self.steamid:
             return
-        else:
-            self.title_logo = ContentFile(
-                steam.get_capsule(self.steamid), "%d.jpg" % self.steamid
-            )
-
-    def get_steam_logo(self, img_url):
         self.title_logo = ContentFile(
-            steam.get_image(self.steamid, img_url), "%d.jpg" % self.steamid
+            steam.get_capsule(self.steamid), "%s.jpg" % self.steamid
         )
 
-    def get_steam_icon(self, img_url):
+    def set_logo_from_steam_api(self, img_url):
+        """Sets the game banner from the Steam API URLs"""
+        self.title_logo = ContentFile(
+            steam.get_image(self.steamid, img_url), "%s.jpg" % self.steamid
+        )
+
+    def set_icon_from_steam_api(self, img_url):
+        """Sets the game icon from the Steam API URLs"""
         self.icon = ContentFile(
-            steam.get_image(self.steamid, img_url), "%d.jpg" % self.steamid
+            steam.get_image(self.steamid, img_url), "%s.jpg" % self.steamid
         )
 
     def steam_support(self):
@@ -395,7 +396,7 @@ class Game(models.Model):
                 self.slug = slugify(self.name)[:50]
             if not self.slug:
                 raise ValueError("Can't generate a slug for name %s" % self.name)
-            self.download_steam_capsule()
+            self.set_logo_from_steam()
             self.check_for_submission()
         return super(Game, self).save(
             force_insert=force_insert,
