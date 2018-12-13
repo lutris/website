@@ -4,10 +4,11 @@ import re
 import json
 import time
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
-from django.db.utils import IntegrityError
+from django.db import IntegrityError
+from django.utils import timezone
 
 from games.models import Game, Genre
 from platforms.models import Platform
@@ -100,6 +101,20 @@ def iter_orphan_gog_games():
             yield gog_game
 
 
+def inspect_gog_game(gog_game):
+    """Fix problems with gog games"""
+
+    gogid = gog_game["id"]
+
+    # Fix duplicates GOG IDs
+    lutris_games = Game.objects.filter(gogid=gogid)
+    for game in lutris_games:
+        LOGGER.info("%s (%s) created: %s", game, game.year, game.created)
+        LOGGER.info("https://lutris.net" + game.get_absolute_url())
+        if timezone.now() - game.created < timedelta(days=1):
+            LOGGER.warning("Deleting %s as it was just created", game)
+            game.delete()
+
 
 def sync_slugs_with_ids():
     slug_counter = 0
@@ -113,7 +128,8 @@ def sync_slugs_with_ids():
             id_counter += 1
             continue
         except Game.MultipleObjectsReturned:
-            pass
+            LOGGER.warning("Games shoudn't share a gogid (id: %s)", gog_game["id"])
+            inspect_gog_game(gog_game)
         slug_counter += 1
     LOGGER.error("Found %s games by ID and saved %s ID to games", slug_counter, id_counter)
 
@@ -175,7 +191,9 @@ def run():
         cache_gog_games()
 
     sync_slugs_with_ids()
-    sync_ids_by_slug()
+
+    # CAUTION! This can cause some mismatchs
+    # sync_ids_by_slug()
 
     i = 0
     for gog_game in iter_orphan_gog_games():
