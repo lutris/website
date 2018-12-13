@@ -31,9 +31,8 @@ def clean_gog_slug(gog_game):
     cleaned_slug = gog_slug.replace('_', '-')
     if gog_slug.endswith('_a') and gog_title.startswith('a '):
         cleaned_slug = 'a-' + cleaned_slug[:-2]
-    if gog_slug.endswith('_the') and gog_title.startswith('the '):
+    if gog_slug.endswith('_the') and gog_title.endswith('the'):
         cleaned_slug = 'the-' + cleaned_slug[:-4]
-    LOGGER.info(cleaned_slug)
     return cleaned_slug
 
 
@@ -122,7 +121,7 @@ def sync_slugs_with_ids():
 def sync_ids_by_slug():
     game_counter = 0
     for game, gog_game in iter_lutris_games_by_lutris_slug():
-        LOGGER.info("Syncing GOG ID for %s", Game)
+        LOGGER.info("Syncing GOG ID for %s", game)
         game.gogslug = gog_game["slug"]
         game.gogid = gog_game["id"]
         game.save()
