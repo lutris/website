@@ -147,13 +147,8 @@ def crop_banner(img_path, dest_path):
     """Crop an image to fit the banner ratio
 
     Args:
-        img_path: path for the image to resize.
-        dest_path: path to store the modified image.
-        size: `(width, height)` tuple.
-    raises:
-        Exception: if can not open the file in img_path of there is problems
-            to save the image.
-        ValueError: if an invalid `crop_type` is provided.
+        img_path (str): path for the image to resize.
+        dest_path (str): path to store the modified image.
     """
     image = Image.open(img_path)
 
