@@ -3,6 +3,7 @@ import yaml
 import romkan
 from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
 from xpinyin import Pinyin
+from PIL import Image
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
 SLUG_MAX_LENGTH = 50
@@ -121,3 +122,52 @@ def dump_yaml(native_data):
     YAML mappings and not JSON.
     """
     return yaml.safe_dump(native_data, default_flow_style=False)
+
+
+def get_crop_size(image_size, target_ratio):
+    """Return size of the biggest image that can be cut out from the
+    original that will respect the target ratio.
+
+    Args:
+        size (tuple): Size of the original image
+        target_ratio (float): Ratio for the target image
+    """
+    image_width, image_height = image_size
+    original_ratio = image_width / float(image_height)
+    if target_ratio > original_ratio:
+        target_width = image_width
+        target_height = image_width / target_ratio
+    else:
+        target_width = image_height * target_ratio
+        target_height = image_height
+    return (target_width, target_height)
+
+
+def crop_banner(img_path, dest_path):
+    """Crop an image to fit the banner ratio
+
+    Args:
+        img_path: path for the image to resize.
+        dest_path: path to store the modified image.
+        size: `(width, height)` tuple.
+    raises:
+        Exception: if can not open the file in img_path of there is problems
+            to save the image.
+        ValueError: if an invalid `crop_type` is provided.
+    """
+    image = Image.open(img_path)
+
+    # Get current and desired ratio for the images
+    img_width = image.size[0]
+    img_height = image.size[1]
+    target_ratio = 184 / 69.0
+    target_width, target_height = get_crop_size(image.size, target_ratio)
+
+    img_ratio = img_width / float(img_height)
+    if target_ratio > img_ratio:
+        box = (0, (img_height - target_height) / 2, img_width, (img_height + target_height) / 2)
+    else:
+        box = ((img_width - target_width) / 2, 0, (img_width + target_width) / 2, img_height)
+
+    image = image.crop(box)
+    image.save(dest_path)
