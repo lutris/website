@@ -75,6 +75,10 @@ FILES_URL = 'http://localhost:8000/media/files/'
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = os.path.join(TOSEC_PATH)
 
+GOG_LOGO_PATH = os.path.join(BASE_DIR, 'gog-logos')
+GOG_LUTRIS_LOGO_PATH = os.path.join(BASE_DIR, 'gog-lutris-logos')
+
+
 # TheGamesDB directories
 TGD_ROOT = media_directory('thegamesdb')
 TGD_CLEAR_LOGO_PATH = media_directory('thegamesdb/clearlogo')

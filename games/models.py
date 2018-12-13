@@ -24,7 +24,7 @@ from django.urls import reverse
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from emails import messages
-from games.util import steam
+from games.util import steam, gog
 from platforms.models import Platform
 from runners.models import Runner
 
@@ -340,6 +340,14 @@ class Game(models.Model):
         """Sets the game icon from the Steam API URLs"""
         self.icon = ContentFile(
             steam.get_image(self.steamid, img_url), "%s.jpg" % self.steamid
+        )
+
+    def set_logo_from_gog(self, gog_game):
+        """Sets the game logo from the data retrieved from GOG"""
+        if self.title_logo or not self.gogid:
+            return
+        self.title_logo = ContentFile(
+            gog.get_logo(gog_game), "gog-%s.jpg" % self.gogid
         )
 
     def steam_support(self):
