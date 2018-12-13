@@ -25,3 +25,6 @@ npm-debug.log
 reports
 ENV
 celerybeat-schedule
+gog-cache
+gog-logos
+gog-lutris-logos
