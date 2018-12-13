@@ -13,20 +13,35 @@ class GameListView(generics.GenericAPIView):
     search_fields = ('slug', 'name')
 
     def get_queryset(self):
+        """Return the query set for the game list
+
+        This view can be queried by the client to get all lutris games
+        available based on a series of criteria such as a list of slugs or GOG
+        ids.
+        """
+
+        base_query = models.Game.objects
+
+        # Easter egg: Return a random game
+        if 'random' in self.request.GET:
+            return [base_query.get_random(self.request.GET['random'])]
+
+        # A list of slugs is sent from the client, we match them against Lutris
+        # games.
         if 'games' in self.request.GET:
             game_slugs = self.request.GET.getlist('games')
         elif 'games' in self.request.data:
             game_slugs = self.request.data.get('games')
         else:
-            game_slugs = []
-        base_query = models.Game.objects
+            game_slugs = None
         if game_slugs:
-            queryset = base_query.filter(change_for__isnull=True, slug__in=game_slugs)
-        elif 'random' in self.request.GET:
-            queryset = [base_query.get_random(self.request.GET['random'])]
-        else:
-            queryset = base_query.filter(change_for__isnull=True)
-        return queryset
+            return base_query.filter(change_for__isnull=True, slug__in=game_slugs)
+
+        if 'gogid' in self.request.data:
+            gog_ids = self.request.data.get('gogid')
+            return base_query.filter(change_for__isnull=True, gogid__in=gog_ids)
+
+        return base_query.filter(change_for__isnull=True)
 
     def get_serializer_class(self):
         """Return the appropriate serializer
