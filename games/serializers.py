@@ -87,7 +87,7 @@ class GameInstallersSerializer(GameSerializer):
         fields = (
             'id', 'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated',
-            'steamid', 'godid', 'gogslug', 'humblestoreid', 'installers'
+            'steamid', 'gogid', 'gogslug', 'humblestoreid', 'installers'
         )
 
 
