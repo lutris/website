@@ -8,7 +8,6 @@ from django.contrib import admin
 from django.views.static import serve
 from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework_swagger.views import get_swagger_view
 from accounts.views import UserDetailView
 
 logger = logging.getLogger(__name__)
@@ -55,12 +54,7 @@ if settings.DEBUG:
     ]
 
     urlpatterns = [
-
         path('__debug__/', include(debug_toolbar.urls)),
-
-        # For django versions before 2.0:
-        # url(r'^__debug__/', include(debug_toolbar.urls)),
-
     ] + urlpatterns
 
 signal_modules = {}

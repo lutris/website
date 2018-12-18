@@ -57,7 +57,7 @@ class Company(models.Model):
         return u"%s" % self.name
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         self.slug = slugify(self.name)
         if not self.slug:
@@ -102,7 +102,7 @@ class Genre(models.Model):
         return self.name
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -396,7 +396,7 @@ class Game(models.Model):
             submission.accept()
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
@@ -709,7 +709,7 @@ class Installer(BaseInstaller):
             pass
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save(

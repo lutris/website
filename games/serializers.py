@@ -1,9 +1,12 @@
 """DRF serializers for Game models"""
 # pylint: disable=too-few-public-methods
+import logging
 from rest_framework import serializers
 
 from games import models
 from platforms.models import Platform
+
+LOGGER = logging.getLogger(__name__)
 
 
 class PlatformSerializer(serializers.ModelSerializer):
@@ -124,6 +127,12 @@ class InstallerRevisionSerializer(serializers.Serializer):
     comment = serializers.CharField()
     installer_id = serializers.IntegerField()
 
+    def update(self, instance, validated_data):
+        LOGGER.error("Not supposed to do that")
+
+    def create(self, validated_data):
+        LOGGER.error("Not supposed to do that")
+
 
 class InstallerWithRevisionsSerializer(InstallerSerializer):
     """Serializer for Installers with their associated revisions"""
@@ -167,7 +176,8 @@ class InstallerIssueReplySerializer(serializers.ModelSerializer):
             'description'
         )
 
-    def get_username(self, obj):
+    def get_username(self, obj):  # pylint: disable=no-self-use
+        """Return the username from the submitted_by field"""
         return obj.submitted_by.username
 
 
@@ -190,7 +200,8 @@ class InstallerIssueSerializer(serializers.ModelSerializer):
             'replies'
         )
 
-    def get_username(self, obj):
+    def get_username(self, obj):  # pylint: disable=no-self-use
+        """Return the username from the submitted_by field"""
         return obj.submitted_by.username
 
 

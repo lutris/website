@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import datetime
 import hashlib
 import hmac
@@ -34,9 +35,10 @@ class User(AbstractUser):
         default_url = "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
         size = 64
         return (
-            "https://www.gravatar.com/avatar/" +
-            hashlib.md5(self.email.encode('utf-8').lower()).hexdigest() + "?" +
-            urlencode({'d': default_url, 's': str(size)})
+            "https://www.gravatar.com/avatar/%s?%s" % (
+                hashlib.md5(self.email.encode('utf-8').lower()).hexdigest(),
+                urlencode({'d': default_url, 's': str(size)})
+            )
         )
 
     def set_steamid(self):

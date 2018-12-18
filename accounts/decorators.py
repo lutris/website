@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.utils.decorators import available_attrs
 
-from games.models import Game, Installer
+from games.models import Installer
 
 
 def user_confirmed_required(function):

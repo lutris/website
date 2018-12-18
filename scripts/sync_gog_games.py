@@ -85,7 +85,7 @@ def iter_lutris_games_by_gog_slug():
             yield (game, gog_game)
 
 
-def iter_lutris_games_by_lutris_slug():
+def iter_games_by_lutris_slug():
     for gog_game in iter_gog_games():
         for game in Game.objects.filter(slug=clean_gog_slug(gog_game)):
             if not game.gogid:
@@ -110,7 +110,7 @@ def inspect_gog_game(gog_game):
     lutris_games = Game.objects.filter(gogid=gogid)
     for game in lutris_games:
         LOGGER.info("%s (%s) created: %s", game, game.year, game.created)
-        LOGGER.info("https://lutris.net" + game.get_absolute_url())
+        LOGGER.info("https://lutris.net%s", game.get_absolute_url())
         if timezone.now() - game.created < timedelta(days=1):
             LOGGER.warning("Deleting %s as it was just created", game)
             game.delete()
@@ -136,7 +136,7 @@ def sync_slugs_with_ids():
 
 def sync_ids_by_slug():
     game_counter = 0
-    for game, gog_game in iter_lutris_games_by_lutris_slug():
+    for game, gog_game in iter_games_by_lutris_slug():
         LOGGER.info("Syncing GOG ID for %s", game)
         game.gogslug = gog_game["slug"]
         game.gogid = gog_game["id"]
