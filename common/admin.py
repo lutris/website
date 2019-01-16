@@ -22,6 +22,7 @@ validate_upload.short_description = "Move uploads to destination"
 class UploadAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'destination', 'uploaded_by', 'uploaded_at')
     actions = [validate_upload]
+    readonly_fields = ['uploaded_by', 'uploaded_at']
 
 
 admin.site.register(models.News, NewsAdmin)
