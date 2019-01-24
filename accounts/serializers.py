@@ -9,13 +9,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = User
         fields = (
-            'id',
-            'username',
-            'email',
-            'website',
-            'avatar',
-            'steamid',
-            'is_staff',
+            "id",
+            "username",
+            "email",
+            "website",
+            "avatar_url",
+            "steamid",
+            "is_staff",
         )
