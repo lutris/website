@@ -48,65 +48,56 @@
             <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
           </button>
 
-          <button type="button"
-                  class="navbar-toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#search-games"
-                  aria-expanded="false"
-                  aria-controls="navbar">
-            <span class="sr-only">Search games</span>
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-          </button>
-
-          <a class="navbar-brand brand" href="/">
-            <img class="logo" src="{{ STATIC_URL }}images/logo.png" alt="Lutris" />
-            <p class="hidden-sm hidden-xs">
-              Lutris
-            </p>
+          <a href="/" class="logo navbar-nav">
+            <img src="{% static 'images/logo.png' %}" alt="Lutris" />
+            <span>Lutris</span>
           </a>
         </div>
 
-        <div id="search-games" class="navbar-collapse collapse">
-          <div class="search-games-content">
-            <form action="{% url 'game_list' %}" method="get" class="form-inline">
-              <div class="input-group">
-                <input type="text" name="q" class="search-query form-control" id="global-search"
-                    placeholder="Search…" />
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit">Search</button>
-                </span>
-              </div>
-            </form>
-          </div>
-        </div>
 
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right" id="main-nav">
-            <li><a href="{% url 'downloads' %}" class="action-button">Download</a></li>
+          <ul class="nav navbar-nav" id="main-nav">
+            <li><a href="{% url 'downloads' %}" class="main-nav-button">Download</a></li>
             <li><a href="{% url 'game_list' %}">Games</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
-            {% if user.is_authenticated %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <div class="search-games-content">
+                <form action="{% url 'game_list' %}" method="get" class="form-inline">
+                  <div class="input-group">
+                    <input type="text"
+                          name="q"
+                          class="search-query form-control"
+                          id="global-search"
+                          placeholder="Search…" />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit">
+                        <span class="sr-only">Search</span>
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            {% if not user.is_authenticated %}
+            {% else %}
               <li><a href="{% url 'library_show' user.username %}">My Library</a></li>
               <li><a href="{% url 'user_account' user.username %}">My Account</a></li>
               <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
               <li><a href="{% url 'login' %}">Login</a></li>
               <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
-            <li class="hidden-xs">
-              <a href="#" class="collapsed" data-toggle="collapse" data-target="#search-games"
-                  aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Search games</span>
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-            </a>
-            </li>
           </ul>
         </div>
 
       </div>
     </nav>
-  {% block nonpage_content %}{% endblock nonpage_content %}
-  <div id="content" class="container"><div class="page">{% block content %}{% endblock %}</div></div>
+  {% block nopage %}
+    <div id="content" class="container"><div class="page">{% block content %}{% endblock %}</div></div>
+  {% endblock %}
 
   <footer class="footer">
     <div class="container">
@@ -167,16 +158,6 @@
   </footer>
   <script src="{% static 'js/libs.js' %}"></script>
   <script src="{% static 'js/app.js' %}"></script>
-  <script>
-    $(document).ready(function() {
-      $('#search-games').on('show.bs.collapse', function() {
-        // Wait a little while: calling focus on hidden objects will blur immediately
-        setTimeout(function() {
-          document.getElementById('global-search').focus();
-        }, 50);
-      });
-    });
-  </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

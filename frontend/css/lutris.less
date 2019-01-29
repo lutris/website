@@ -56,9 +56,9 @@ article {
   }
 }
 
-.page > div {
+.page {
   background-color: #2f2f2f;
-  padding-top: 10px;
+  padding: 12px;
 }
 
 // jssor arrow configuration
@@ -92,7 +92,6 @@ article {
 
 h1, h2, h3, h4, h5 {
   font-weight: normal;
-  margin-bottom: .8em;
 }
 
 .page h1 {
@@ -119,7 +118,7 @@ h3 {
     font-weight: 600;
     font-size: 14px;
     color: #3F3F3F;
-    padding: 1em;
+    padding: 0 1em;
 }
 
 .page h3 {
@@ -491,131 +490,92 @@ input {
 
 /* == Page Layout */
 .navbar {
-  box-shadow: 0 0 5px #000;
+    border-bottom: 1px solid @brandColor;
+    box-shadow: 0 0 5px #000;
+    margin-bottom: 0;
 
-  .brand {
-    font-size: 2.2em;
-    position: relative;
-
-    img {
-      display: inline-block;
-    }
-
-    p {
-      vertical-align: middle;
-      display: inline-block;
-      margin-bottom: 0px;
-    }
-
-    span {
-      font-size: .5em;
-    }
-  }
-
-  #search-games {
-    &.collapsing,
-    &.collapse.in {
-      @media (min-width: @screen-sm-min) {
-        display: block !important;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 48px;
-        margin: 0;
-        padding: 0;
-        background-color: #222;
-        z-index: 10;
-        text-align: right;
-
-        .search-games-content {
-          padding-right: 15px;
-          padding-top: 9px;
+    .logo {
+        font-weight: 300;
+        font-size: 24px;
+        color: @brandColor;
+        text-decoration: none;
+        img {
+            padding: 6px;
+            width: 50px;
+            height: 50px;
         }
-      }
-
-      @media (min-width: @screen-md-min) {
-        .search-games-content {
-          padding-top: 47px;
-        }
-      }
-
-      @media (min-width: @screen-lg-min) {
-        right: 58px;
-      }
     }
 
-    &.collapse {
-      @media (min-width: @screen-sm-min) {
-        display: none !important;
-      }
-    }
-
-    .search-games-content {
-      padding-top: 5px;
-      padding-bottom: 5px;
-
-      @media (min-width: @screen-sm-min) {
-        padding: 5px;
-      }
-
-      input[type="text"] {
-        color: #aaa;
+    .navbar-header > button {
         background: none;
         border: none;
-        box-shadow: none;
-        outline: 0;
-      }
+        margin-right: 5px;
+        margin-bottom: 0;
+        color: #aaa;
     }
-  }
+    .nav > li > a {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 14px;
+        color: #E5E5E5;
 
-  .logo {
-    width: 34px;
-    height: 34px;
-    @media (min-width: @screen-md-min) {
-      width: 64px;
-      height: 64px;
+        &:hover {
+            color: #ccc;
+            background-color: transparent;
+        }
+        @media (min-width: @screen-sm-min) {
+            margin-top: 10px;
+            margin-right: 60px;
+            padding: 6px 18px;
+        }
+        @media (max-width: @screen-sm-max) {
+            margin-top: 10px;
+            margin-right: 20px;
+            padding: 6px;
+        }
+
+        @media (max-width: @screen-xs-max) {
+            margin-top: 4px;
+            display: block;
+        }
     }
-  }
-
-  .navbar-header > button {
-    background: none;
-    border: none;
-    margin-right: 5px;
-    margin-bottom: 0;
-    color: #aaa;
-  }
-  .nav > li > a {
-    color: #aaa;
-
-    @media (min-width: @screen-lg-min) {
-        padding-top: 54px;
+    .nav > li > .main-nav-button {
+        background-color: @brandColor;
+        border-radius: 4px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        color: #3F3F3F;
+        &:hover {
+            background-color: #FFBF5F;
+            color: #3F3F3F;
+        }
     }
-    @media (max-width: @screen-md-max) {
-        padding-top: 54px;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
+    .search-games-content {
+        margin-top: 6px;
+        font-size: 14px;
+        input, button {
+            color: #aaa;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+        input[type=text] {
+            font-size: 1.1em;
+            font-weight: 600;
+            max-width: 140px;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
 
-    @media (max-width: @screen-sm-max) {
-        margin-top: 4px;
-        padding-top: 12px;
-        padding-bottom: 12px;
-        display: block;
+        input[type=text]:focus {
+            background-color: #444;
+        }
     }
-
-    height: 100%;
-    display: inline-block;
-    text-transform: uppercase;
-    font-size: .8em;
-    font-weight: 400;
-
-    &:hover {
-      color: #ccc;
-      background-color: #555;
-    }
-  }
 }
+
+#main-nav {
+    margin-left: 160px;
+}
+
 
 .dropdown-menu {
   background-color: #555;
@@ -636,9 +596,6 @@ input {
   border-top: none;
   margin-top: 0;
   margin-bottom: 0;
-}
-.navbar {
-  border-radius: 0;
 }
 .block {
   margin-top: 20px;

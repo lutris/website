@@ -13,9 +13,12 @@ from games.models import Game
 
 def home(request):
     """Homepage view"""
-    games = Game.objects.with_installer().order_by('-created')[:6]
+    new_games = Game.objects.with_installer().order_by('-created')[:6]
+    updated_games = Game.objects.with_installer().order_by('installers__updated_at')[:6]
+
     return render(request, 'home.html', {
-        "latest_games": games
+        "new_games": new_games,
+        "updated_games": updated_games
     })
 
 
