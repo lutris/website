@@ -1,0 +1,65 @@
+{% load static from staticfiles %}
+<nav class="navbar navbar-default navbar-inverse">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#navbar"
+              aria-expanded="false"
+              aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+      </button>
+
+      <a href="/" class="logo navbar-nav">
+        <img src="{% static 'images/logo.png' %}" alt="Lutris" />
+        <span>Lutris</span>
+      </a>
+    </div>
+
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav" id="main-nav">
+        <li><a href="{% url 'downloads' %}" class="main-nav-button">Download</a></li>
+        <li><a href="{% url 'game_list' %}">Games</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <div class="search-games-content">
+            <form action="{% url 'game_list' %}" method="get" class="form-inline">
+              <div class="input-group">
+                <input type="text"
+                      name="q"
+                      class="search-query form-control"
+                      id="global-search"
+                      placeholder="Search…" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="sr-only">Search</span>
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </li>
+
+        {% if user.is_authenticated %}
+          <div class="account-info">
+            <a href="{% url 'user_account' user.username %}">
+              <img src="{{user.avatar_url}}" title="{{user.username}}"/>
+            </a>
+          </div>
+        {% else %}
+          <div class="account-action">
+            <a href="{% url 'login' %}">Sign-in</a>
+            <a href="{% url 'register' %}"><strong>Register</strong></a>
+          </div>
+        {% endif %}
+      </ul>
+    </div>
+
+  </div>
+</nav>

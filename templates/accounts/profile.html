@@ -43,6 +43,8 @@
       {% endif %}
       <br/>
       <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
+
+      <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
     </section>
     <section>
       <h4>Import your Steam library</h4>

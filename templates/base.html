@@ -34,67 +34,7 @@
   </ul>
   {% endif %}
 
-    <nav class="navbar navbar-default navbar-inverse">
-      <div class="container">
-
-        <div class="navbar-header">
-          <button type="button"
-                  class="navbar-toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#navbar"
-                  aria-expanded="false"
-                  aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
-          </button>
-
-          <a href="/" class="logo navbar-nav">
-            <img src="{% static 'images/logo.png' %}" alt="Lutris" />
-            <span>Lutris</span>
-          </a>
-        </div>
-
-
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav" id="main-nav">
-            <li><a href="{% url 'downloads' %}" class="main-nav-button">Download</a></li>
-            <li><a href="{% url 'game_list' %}">Games</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <div class="search-games-content">
-                <form action="{% url 'game_list' %}" method="get" class="form-inline">
-                  <div class="input-group">
-                    <input type="text"
-                          name="q"
-                          class="search-query form-control"
-                          id="global-search"
-                          placeholder="Search…" />
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="submit">
-                        <span class="sr-only">Search</span>
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      </button>
-                    </span>
-                  </div>
-                </form>
-              </div>
-            </li>
-
-            {% if not user.is_authenticated %}
-            {% else %}
-              <li><a href="{% url 'library_show' user.username %}">My Library</a></li>
-              <li><a href="{% url 'user_account' user.username %}">My Account</a></li>
-              <li><a href="{% url 'logout' %}">Logout</a></li>
-              <li><a href="{% url 'login' %}">Login</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
-            {% endif %}
-          </ul>
-        </div>
-
-      </div>
-    </nav>
+  {% include "includes/_header.html" %}
   {% block nopage %}
     <div id="content" class="container"><div class="page">{% block content %}{% endblock %}</div></div>
   {% endblock %}
