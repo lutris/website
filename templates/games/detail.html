@@ -50,7 +50,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3 col-md-push-9">
+    <div class="col-sm-3 col-sm-push-9">
       <div class="game-info">
         {% thumbnail game.title_logo "300" as img %}
           <img src="{{ img.url }}" class="banner" />
@@ -161,7 +161,7 @@
       </div>
     </div>
 
-    <div class="col-md-9 col-md-pull-3">
+    <div class="col-sm-9 col-sm-pull-3">
       {% include "includes/screenshots_slider.html" %}
       <div class="screenshots-bar actions-bar">
         <a href='{% url 'screenshot_add' game.slug %}'>Submit screenshot</a>
