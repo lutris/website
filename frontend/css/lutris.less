@@ -26,7 +26,7 @@
 @warning-color: #FD3750;
 
 @padding: 7px;
-@banner-width: 198px;
+@banner-width: 184px;
 
 html {
   background-color: rgba(204, 204, 204, 0.04);
@@ -56,9 +56,21 @@ article {
   }
 }
 
+.page > div {
+  background-color: #2f2f2f;
+  padding-top: 10px;
+}
+
+// jssor arrow configuration
+.jssora093 {display:block;position:absolute;cursor:pointer;}
+.jssora093 .c {fill:none;stroke:#fff;stroke-width:400;stroke-miterlimit:10;}
+.jssora093 .a {fill:none;stroke:#fff;stroke-width:400;stroke-miterlimit:10;}
+.jssora093:hover {opacity:.8;}
+.jssora093.jssora093dn {opacity:.6;}
+.jssora093.jssora093ds {opacity:.3;pointer-events:none;}
+
 .header-wrap {
   position: relative;
-
   .header-control {
     position: absolute;
     right: 7px; /* 15px padding like h1 on the left - 8px padding of a to span */
@@ -80,12 +92,10 @@ article {
 
 h1, h2, h3, h4, h5 {
   font-weight: normal;
-  word-spacing: .1em;
   margin-bottom: .8em;
-  font-family: @sansSerif;
 }
 
-h1 {
+.page h1 {
   border-bottom: 1px solid #444;
   font-weight: 300;
   box-shadow: 0px 4px 1px -2px rgba(0,0,0,.3);
@@ -101,11 +111,18 @@ h1 {
   }
 }
 
-h2 {
+.page h2 {
   font-size: 1.4em;
 }
 
 h3 {
+    font-weight: 600;
+    font-size: 14px;
+    color: #3F3F3F;
+    padding: 1em;
+}
+
+.page h3 {
   color: #BBB;
   font-size: 1.2em;
   background-color: #444;
@@ -113,7 +130,7 @@ h3 {
   font-weight: 300;
 }
 
-h4 {
+.page h4 {
   font-size: 1.1em;
   color: #CDCDCD;
   border-bottom: 1px solid #4D4D4D;
@@ -154,6 +171,35 @@ form {
   textarea {
     padding: 5px 10px;
   }
+}
+
+.intro-text {
+    font-weight: 300;
+    color: #3F3F3F;
+    padding: 1.2em;
+    margin: 20px;
+    h1 {
+        font-size: 36px;
+    }
+    p {
+        font-size: 18px;
+        line-height: 33px;
+        max-width: 666px;
+        margin: auto;
+    }
+}
+
+.action-button {
+    display: inline-block;
+    background: #FF9900;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #3F3F3F;
+    text-align: center;
+    padding: 6px 18px;
+    margin: 12px auto;
+    color: #3F3F3F;
 }
 
 .action-column {
@@ -225,16 +271,10 @@ input {
   }
 }
 
-.page {
-  background-color: #2f2f2f;
-  padding-top: 10px;
-}
-
 .container {
   .container-fixed();
   padding-left: 0;
   padding-right: 0;
-
   @media (min-width: @screen-sm-min) {
     width: @container-sm;
   }
@@ -244,10 +284,6 @@ input {
   @media (min-width: @screen-lg-min) {
     width: @container-lg;
   }
-}
-
-.row {
-  margin: 0;
 }
 
 .footer {
@@ -455,17 +491,11 @@ input {
 
 /* == Page Layout */
 .navbar {
-  box-shadow: 0 0 10px #000;
-  font-weight: 300;
-  margin: auto;
-  font-family: @sansSerif;
+  box-shadow: 0 0 5px #000;
 
   .brand {
-    color: #ccc;
-    padding: 10px;
     font-size: 2.2em;
     position: relative;
-    z-index: 100;
 
     img {
       display: inline-block;
@@ -542,7 +572,6 @@ input {
   .logo {
     width: 34px;
     height: 34px;
-
     @media (min-width: @screen-md-min) {
       width: 64px;
       height: 64px;
@@ -556,14 +585,6 @@ input {
     margin-bottom: 0;
     color: #aaa;
   }
-
-  .navbar-header > button:hover,
-  .navbar-header > button:active,
-  .navbar-header > button:focus {
-    color: #fff;
-    background: none;
-  }
-
   .nav > li > a {
     color: #aaa;
 
@@ -703,19 +724,6 @@ input {
   }
 }
 
-.sunken-box {
-  border-bottom: 1px solid @brandColor;
-  background-color: #222;
-  box-shadow: inset 0 0 30px #111;
-  font-weight: 300;
-  text-align: left;
-  padding: 20px;
-  line-height: 1.8em;
-  display: block;
-  h2 {
-    font-weight: 300;
-  }
-}
 
 .helptext {
   border: 1px solid #DEDEDE;
@@ -1307,17 +1315,9 @@ input {
     }
   }
   .game-cover {
-    float: left;
-    margin-right: 0;
-    width: 100%;
-    height: auto;
     overflow: hidden;
-
-    @media (min-width: @screen-sm-min) {
-      margin-right: 15px;
-      width: 184px;
-      height: 69px;
-    }
+    width: 184px;
+    height: 69px;
   }
   .game-title {
     font-size: 1.1em;
@@ -1358,8 +1358,12 @@ input {
 }
 
 .latest-games {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
+    .game-banner {
+        margin: auto;
+        padding: 9px;
+    }
 }
 
 .game-cover {
@@ -1382,19 +1386,21 @@ input {
 }
 
 .game-banner {
-  color: #EEE;
-  display: inline-block;
-  margin: 8px auto;
-  text-align: center;
-  width: @banner-width;
+    font-size: 11px;
+    text-align: center;
+    color: #E5E5E5;
+    display: inline-block;
+    width: @banner-width;
+
+    img{
+        border-bottom: 1px solid @brandColor;
+    }
   a {
     width: @banner-width;
     font-weight: 500;
-    font-size: .8em;
-    display: inline-block;
+    display: block;
     text-decoration: none;
-    padding: @padding;
-    background-color: #222;
+    background: rgba(63, 63, 63, 0.80);
     text-overflow:  hidden;
     &:hover, &:focus {
       background-color: #444;
@@ -1402,7 +1408,13 @@ input {
     }
   }
   .game-title {
-    &:extend(.discreet-text);
+    font-size: 11px;
+    text-align: center;
+    color: #E5E5E5;
+    width: 184px;
+    height: 48px;
+    display: block;
+    padding: 5px;
   }
 }
 
@@ -1502,7 +1514,6 @@ input {
 }
 
 .actions-bar {
-  background-color: #151515;
   background-color: #151515;
   text-align: right;
   padding: 4px;

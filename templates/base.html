@@ -82,7 +82,7 @@
 
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right" id="main-nav">
-            <li><a href="{% url 'downloads' %}" class="main-action">Download</a></li>
+            <li><a href="{% url 'downloads' %}" class="action-button">Download</a></li>
             <li><a href="{% url 'game_list' %}">Games</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             {% if user.is_authenticated %}
@@ -105,11 +105,8 @@
 
       </div>
     </nav>
-  <div class="container">
-    <div id="content" class="page">
-      {% block content %}{% endblock %}
-    </div>
-  </div>
+  {% block nonpage_content %}{% endblock nonpage_content %}
+  <div id="content" class="container"><div class="page">{% block content %}{% endblock %}</div></div>
 
   <footer class="footer">
     <div class="container">
