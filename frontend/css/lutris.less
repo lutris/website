@@ -1173,9 +1173,6 @@ input {
 }
 
 .game-info {
-  font-size: .8em;
-  color: #DDD;
-  padding: 0 14px;
 
   .banner {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
@@ -1190,17 +1187,15 @@ input {
     margin-bottom: 10px;
   }
   li {
-    padding: 7px 0;
-    border-bottom: 1px solid @darkerBackground;
-    &:last-child {
-      border-bottom: none;
-    }
+    padding: 5px 0;
   }
   .info-label {
     color: #888;
   }
   a {
     color: #DDD;
+    // md-button breaks this style
+    text-decoration: none !important;
   }
 
   .in-library {
