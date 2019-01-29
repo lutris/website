@@ -47,7 +47,23 @@
 
   </div>
   <div class="col-md-3">
-    {% latest_games %}
+    <h3>Latest games</h3>
+    <div class='latest-games'>
+    {% for game in latest_games %}
+      <div class='game-banner'>
+        <a href="{{ game.get_absolute_url }}">
+          {% thumbnail game.title_logo '184x69' crop="center" as img %}
+            <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
+          {% empty %}
+            <span class='game-cover'>no image</span>
+          {% endthumbnail %}
+          <span class='game-title'>
+          {{ game.name }}
+          </span>
+        </a>
+      </div>
+    {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock %}

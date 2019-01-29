@@ -8,17 +8,14 @@ from django.urls import reverse
 
 from common.forms import UploadForm
 from common.models import News
+from games.models import Game
 
 
 def home(request):
     """Homepage view"""
-    try:
-        article = News.objects.latest('pk')
-    except News.DoesNotExist:
-        article = None
+    games = Game.objects.with_installer().order_by('-created')[:6]
     return render(request, 'home.html', {
-        'article': article,
-        'client_version': settings.CLIENT_VERSION
+        "latest_games": games
     })
 
 
