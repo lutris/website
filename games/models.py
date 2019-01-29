@@ -805,22 +805,6 @@ class GameLibrary(models.Model):
         return u"%s's library" % self.user.username
 
 
-class Featured(models.Model):
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id")
-    image = models.ImageField(upload_to="featured", max_length=100)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    # pylint: disable=W0232, R0903
-    class Meta:
-        verbose_name = "Featured content"
-
-    def __str__(self):
-        return "[%s] %s" % (self.content_type, str(self.content_object))
-
-
 class GameSubmission(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

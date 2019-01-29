@@ -242,10 +242,6 @@ class ScreenshotAdmin(admin.ModelAdmin):
     game_link.short_description = "Game (link)"
 
 
-class FeaturedAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "created_at")
-
-
 class GameLibraryAdmin(admin.ModelAdmin):
     search_fields = ['user__username']
     raw_id_fields = ('user', 'games')
@@ -280,5 +276,4 @@ admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
 admin.site.register(models.InstallerIssue, InstallerIssueAdmin)
 admin.site.register(models.GameLibrary, GameLibraryAdmin)
-admin.site.register(models.Featured, FeaturedAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)

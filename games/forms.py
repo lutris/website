@@ -230,12 +230,6 @@ class GameEditForm(forms.ModelForm):
         return cleaned_data
 
 
-class FeaturedForm(forms.ModelForm):
-    class Meta:
-        model = models.Featured
-        exclude = ()
-
-
 class ScreenshotForm(forms.ModelForm):
     class Meta:
         model = models.Screenshot
