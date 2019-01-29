@@ -6,8 +6,9 @@
 @screenshotsHeight: 388px;
 
 @lightBackground: #666;
-@darkBackground: #444;
+@darkBackground: #3f3f3f;
 @darkerBackground: #222;
+@darkOnDarkText: #7a7a7a;
 @sansSerif: Montserrat, sans-serif;
 @brandColor: #ff9900;
 @linkColor: @brandColor;
@@ -251,24 +252,49 @@ input {
 
 .footer {
   border-top: 1px solid @brandColor;
-  background-color: #222;
-  box-shadow: inset 0 5px 20px #181818;
+  background-color: @darkBackground;
   margin-top: 20px;
-  padding: 30px 0;
+  padding: 30px 0 200px 0;
   font-size: .8em;
   ul {
     list-style-type:none;
     padding: 0;
   }
+  li {
+    padding: 6px 0;
+  }
+  h4 {
+    text-transform: uppercase;
+    color: @darkOnDarkText;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    color: #E5E5E5;
+    border: none;
+  }
+  h5 {
+    text-transform: uppercase;
+    color: @darkOnDarkText;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-size: 14px;
+  }
+  a {
+    font-size: 14px;
+    color: #E5E5E5;
+  }
   .icon-list {
+    display: flex;
     li {
-      display: inline
+      display: inline;
+      margin: auto;
     }
     a {
       display: inline-block;
+      margin: 0 6px;
       width: 38px;
-      height: 60px;
-      line-height: 60px;
+      height: 38px;
       border-radius: 4px;
       text-decoration: none;
       img {
