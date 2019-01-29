@@ -1,0 +1,58 @@
+{% load static from staticfiles %}
+<footer class="footer">
+  <div class="container">
+    <div class="col-sm-4">
+      <h5>The project</h5>
+      <ul>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'faq' %}">FAQ</a></li>
+        <li><a href="https://github.com/lutris/lutris/wiki">Wiki</a></li>
+        <li><a href="https://github.com/lutris/lutris/issues">Report an issue</a></li>
+        <li><a href="https://forums.lutris.net">Forums</a></li>
+        <li><a href="irc://irc.freenode.org:6667/lutris">IRC (#lutris on Freenode)</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <ul class="icon-list">
+        <li>
+          <a href="https://github.com/lutris">
+            <img src="{{ STATIC_URL }}images/icons/github-32.png" title="Github">
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/LutrisGaming">
+            <img src="{{ STATIC_URL }}images/icons/twitter-32.png" title="Twitter">
+          </a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/LutrisGaming/">
+            <img src="{{ STATIC_URL }}images/icons/facebook-32.png" title="Facebook">
+          </a>
+        </li>
+        <li>
+          <a href="{{ DISCORD_URL }}">
+            <img src="{{ STATIC_URL }}images/icons/discord-32.png" title="#lutris channel on Linux_Gamers_Group Discord">
+          </a>
+        </li>
+      </ul>
+      <h4>Support us on</h4>
+      <p class="centered">
+        <a href="https://patreon.com/lutris">
+          <img src="{% static 'images/patreon.png' %}" alt="Support Lutris on Patreon" />
+        </a>
+      </p>
+    </div>
+
+    <div class="col-sm-4">
+      <h5>Friends</h5>
+      <ul>
+        <li><a href="https://www.gamingonlinux.com/">Gaming on Linux</a>
+        <li><a href="https://linuxgamecast.com/">LinuxGameCast</a>
+        <li><a href="https://winehq.org">WineHQ</a></li>
+        <li><a href="https://www.playonlinux.com">PlayOnLinux</a>
+        <li><a href="https://linuxgameconsortium.com/">Linux Game Consortium</a>
+        <li><a href="https://rootgamer.com/">Root Gamer</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
