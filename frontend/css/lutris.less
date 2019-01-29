@@ -8,7 +8,7 @@
 @lightBackground: #666;
 @darkBackground: #444;
 @darkerBackground: #222;
-@sansSerif: "Roboto", Arial, sans;
+@sansSerif: Montserrat, sans-serif;
 @brandColor: #ff9900;
 @linkColor: @brandColor;
 
@@ -27,9 +27,13 @@
 @padding: 7px;
 @banner-width: 198px;
 
-/* == Defaults */
-html, body {
-  background-color: #121211;
+html {
+  background-color: rgba(204, 204, 204, 0.04);
+}
+
+body {
+  background: linear-gradient(180deg, rgba(153, 0, 255, 0.06) 0%, rgba(190, 156, 216, 0.0447411) 76.29%, rgba(204, 204, 204, 0.04) 100%);
+  background-repeat: no-repeat;
   font-size: 16px;
   color: #EFEFEF;
   font-family: @sansSerif;
