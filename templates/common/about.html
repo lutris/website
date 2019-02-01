@@ -1,211 +1,117 @@
 {% extends "base.html" %}
 {% load lutris %}
+{% load static from staticfiles %}
 {% block title %}About Lutris{% endblock %}
 
 
-{% block content %}
+{% block nopage %}
 
-<h1>About Lutris</h1>
-<div class='row'>
-  <div class='col-md-12'>
-    <article>
+<div class="container intro-text">
+  <div class="row">
+    <h1 class="centered">About Lutris</h1>
+    <div class='col-md-4'>
       <p>
-        Lutris is an open source gaming platform for GNU/Linux. It allows you
-        to gather and manage (install, configure and launch) all your games
-        acquired from any source, in a single interface.
-      </p>
-    </article>
-    <figure>
-      <img src="{{ STATIC_URL }}images/lutris-main-window.jpg" />
-      <figcaption>Lutris' main window</figcaption>
-    </figure>
-    <h2>Features</h2>
-    <article>
-      <ul>
-        <li>Manage your Linux games, Windows games, emulated console games and
-        browser games</li>
-        <li>Launch your Steam games</li>
-        <li>Community-written installers to ease up your games' installation</li>
-        <li>More than 20 emulators installed automatically or in a single
-        click, providing support for most gaming systems from the late 70's to
-        the present day</li>
-        <li>Download and play libre and freeware games</li>
-      </ul>
-    <p>There's a lot more to come, here are some of the planned
-    features that you can expect in future versions:</p>
-    <ul>
-      <li>Humble Bundle and GOG support</li>
-      <li>Mass import of emulator ROMs using the TOSEC database</li>
-      <li>Game saves management</li>
-      <li>Archive your installation files on external or network drives for a
-      fully automatic installation procedure</li>
-      <li>Joystick configuration GUI with keyboard mapping features</li>
-      <li>Community features: friends list, chat and multiplayer event
-      planning</li>
-    </ul>
-    </article>
+        Lutris is a gaming client for Linux. It gives you access to all your
+        video games with the exception of the current console generation.  You
+        can, in a single interface, run any game from your childhood memories
+        to the current multiplayer games.
 
-    <h2>Using Lutris</h2>
-    <article>
-      <p>
-        Like Steam, Lutris has two parts: a website and a client application,
-        which communicate. On the website, you can browse the supported games,
-        add them to your personal library and start their installation by
-        clicking on the Install link for the version of the game you possess
-        (if someone bothered to make an installer for it ;). Granted that you
-        have installed the client software, it will open the game installation
-        window, leading you through the steps to finalize the game's setup.
-        Once it's done, you will be able to launch the game directly or close
-        the installation window and the game will be present in your local
-        library the next time you start Lutris.
+        Integrations with stores like GOG and Steam allow you to import your
+        existing game library and community maintained install scripts give you
+        a completely automated setup.
       </p>
-      <p>
-        But first you will surely want to use our automated import tool to add
-        your existing game libraries. For now we only have import for Steam but
-        in the future Lutris should be able to import your GOG library, your
-        installed ScummVM games, your game roms and maybe scan your system for
-        other installed games. Oh and PlayOnLinux import, we should have it at
-        some point too.
-      </p>
-      <p>
-        To <strong>import your Steam library</strong>, go to your Lutris
-        profile and click the "Sign in through Steam" button. You will then be
-        redirected to Steam and will be asked to login. This steps associates
-        your Steam accout with your Lutris account. This procedure does not
-        grant Lutris any rights on your Steam account, the only info we get
-        from this is your Steam account identifier. Your Steam account has to
-        be public in order for the library sync to work, if you like it
-        private, you can make it public before the import and switch it back
-        when completed.<br/>
-        You can then start Lutris, connect it to your web account from the menu
-        Lutris → Connect, and all your Steam games will be  added. Your
-        games installed in Steam will also show up as installed in Lutris
-        (Linux Steam only). Please note that not all of your Steam games
-        will be playable out of the box: a lot of Windows games don't have
-        installers yet and some of them won't even start with Wine.
-      </p>
-      <p>
-        You also have the ability to <strong>manually add games</strong> to the
-        client, from the Game → Add menu or from the toolbar button. The Add
-        Game window will let you enter the game's name, pick the runner<sup>
-        <a href='#about-runners'>[1]</a></sup> (more runners can be installed
-        from the runners management window, available from the Lutris menu →
-        Manage runners), browse for the main executable/rom and enter other
-        necessary details before saving.
-      </p>
-      <p class='footnote' id='about-runners'><sup>[1]</sup> Runners are the
-      various pieces of software (Wine, emulators, Steam for Linux and Windows...)
-      that we use to launch games. By extension, Linux is also a runner.
-      </p>
-    </article>
-    <h2>Compatibility</h2>
-    <article>
-      <p>
-        Lutris should work on any modern Linux platform, the client tries to
-        minimize its dependencies and avoid relying on the system package manager
-        whenever it can. This allows to keep a predictable behavior between
-        different flavors of Linux.
-      </p>
-      <p>
-        Lutris is currently officially supported on current versions of Debian
-        Testing, Ubuntu LTS, Fedora, Gentoo, Arch Linux, Mageia and OpenSuse.
-        Maintainers for all other distributions are more than welcome.
-      </p>
-    </article>
+    </div>
+    <div class="col-md-8">
+      <figure>
+        <img src="{% static 'images/screenshots/main-window.png' %}" alt="Lutris main window"/>
+      </figure>
+    </div>
+  </div>
 
-    <h2>Supported gaming platforms</h2>
-    <article>
-      <ul>
-        <li>Native Linux</li>
-        <li>Windows</li>
-        <li>Steam (Linux and Windows)</li>
-        <li>MS-DOS</li>
-        <li>Arcade machines</li>
-        <li>Amiga computers</li>
-        <li>Atari 8 and 16bit computers and consoles</li>
-        <li>Browsers (Flash or HTML5 games)</li>
-        <li>Commmodore 8 bit computers</li>
-        <li>SCUMM based games and other point and click adventure games</li>
-        <li>Magnavox Odyssey², Videopac+</li>
-        <li>Mattel Intellivision</li>
-        <li>NEC PC-Engine Turbographx 16, Supergraphx, PC-FX</li>
-        <li>Nintendo NES, SNES, Game Boy, Game Boy Advance, DS</li>
-        <li>Game Cube and Wii</li>
-        <li>Sega Master Sytem, Game Gear, Genesis, Dreamcast</li>
-        <li>SNK Neo Geo, Neo Geo Pocket</li>
-        <li>Sony PlayStation</li>
-        <li>Sony PlayStation 2</li>
-        <li>Sony PSP</li>
-        <li>Z-Machine games like Zork</li>
-      </ul>
-    </article>
-    <article>
-      <p>We have planned support for the following systems:</p>
-      <ul>
-        <li>MSX computers</li>
-        <li>Sega Saturn</li>
-      </ul>
-    </article>
+  <div class="row">
+    <h1 class="centered">How does it work?</h1>
+    <div class="col-md-3 col-sm-6 hidden-xs">
+      <figure class="tiled">
+        <img src="{% static 'images/screenshots/install-dialog.png' %}"
+          alt="Installer selection window for The Sims 2" />
+      </figure>
+    </div>
+    <div class="col-md-9 col-sm-6">
+      <p>
+        Lutris uses what we  refer as runners. Runners are programs that the
+        client can control and launch. Our most popular runners include
+        RetroArch, DosBox, FS-UAE, ScummVM, MESS, Dolphin and of course Wine TkG,
+        a build of Wine optimized to give you the best performance out of your
+        system.
 
-    <h2>Reporting issues</h2>
-    <article>
-      <p>
-        You can post your issue
-        <a href="https://github.com/lutris/lutris/issues/new">on Github</a>.
-        If you don't have a Github account, you can also reach us on
-        <a href="https://plus.google.com/107661366128884529485">Google+</a>,
-        <a href="{{ DISCORD_URL }}">the #lutris channel on the Linux_Gamers_Group Discord</a> or on IRC:
-        <a href="irc://irc.freenode.org:6667/lutris">#lutris on freenode.org</a><br/>
-        We are grateful for any contribution helping make Lutris better!
+        It is also possible to launch Linux native games, we have a large
+        selection of free and Open Source games ready to install from the
+        client. Download the client and start playing in minutes!
       </p>
-    </article>
+    </div>
+  </div>
 
-    <h2>Contributing to the project</h2>
-    <article>
+  <div class="row">
+    <h1 class="centered">A focus on video game preservation</h1>
+    <div class="col-md-6">
       <p>
-        There are many ways to contribute to Lutris. The simplest way is to
-        submit games to the website's database (you'll see the "Submit a new
-        game" button on the <a href="/games">games list</a>) and writing
-        installers (look for the small link below the existing installers on
-        each game's page).<br/>
-        If you have some Python and PyGObject knowledge, you can grab the
-        source from git with:
-        <pre>git clone https://github.com/lutris/lutris</pre><br/>
-        If you know your way around Django, you can also help with the website:
-        <a href="https://github.com/lutris/website">github.com/lutris/website</a>.<br/>
-        If you want to get your hands real dirty and get into some C/C++ code,
-        we also maintain the emulators shipped with Lutris, you can help by
-        sending patches for better fullscreen or controller support or anything
-        you can think of that would make these emulators better. You can get
-        most of them at <a href="https://github.com/lutris">github.com/lutris</a>.
+        Video games are now part of our history and our culture. If we want to keep a
+        trace of the actual games and not just videos or articles about them, we need
+        have a way to play them in a way that would closely match how the game was
+        meant to be experienced. We also need to make sure that the games we have today
+        still work tomorrow. This is why the choice of Linux as a gaming environment is
+        so important. In a closed ecosystem, our legacy is at the mercy of software
+        vendors able to kill features required to run some games. While we cannot
+        support each and every recent AAA release, mostly due to DRM and anti-cheat
+        incompatibilities, Lutris does support a vast majority of every game ever
+        released in history, on a wide variety of hardware systems.
       </p>
-      <p>
-        To discuss development you can subscribe to our
-        <a href="https://lists.lutris.net/cgi-bin/mailman/listinfo/lutris">mailing list</a><!-- fixme: dead? -->
-        and join us on IRC: <br/>
-        <a href="irc://irc.freenode.org:6667/lutris">#lutris on freenode.org</a>
-      </p>
-      <p>
-        You can find some development information on the
-        <a href="https://github.com/lutris/lutris/wiki">wiki</a> and get a grasp of
-        some of the features worked on and to come on our
-        <a href="https://trello.com/b/jMe6TGr3/lutris">Trello board</a>.
-      </p>
-    </article>
+    </div>
+    <div class="col-md-6">
+      <figure class="tiled">
+        <img src="{% static 'images/games/turrican.png' %}" alt="Turrican 2 on Amiga"/>
+        <img src="{% static 'images/games/dark-forces.jpg' %}" alt="Dark Forces on MS Dos" />
+        <img src="{% static 'images/games/the-sims-2.jpg' %}" alt="The Sims 2 on Windows" />
+        <img src="{% static 'images/games/thps2.png' %}" alt="Tony Hawks Pro Skater 2 on PlayStation" />
+      </figure>
+    </div>
+  </div>
 
-    <h2>About the team</h2>
-    <article>
-    <p>The core team is currently:</p>
-    <ul>
-      <li><a href="http://strycore.com">Mathieu Comandon</a>, project founder and leader (aka Strider, or Strycore where Strider is not available)</li>
-      <li>Xodetaetl, France, joined somewhere between 2010 and 2013. Does a bit of everything.</li>
-    </ul>
-    <p>
-      Special thanks to all the contributors who have helped with the development
-      of Lutris, including but not limited to: Ryochan7, Freso, Frenchkiss,
-      Dennisjj, Medfreeman.
-    </p>
-    </article>
+  <div class="row">
+    <h1 class="centered">Meet the founder</h1>
+    <div class="col-md-3">
+      <figure class="centered tiled">
+        <img src="{% static 'images/strider.png' %}" alt="Photo of Mathieu Comandon"/>
+      </figure>
+    </div>
+    <div class="col-md-9">
+      <p>
+        Mathieu Comandon (aka Strider, or Strycore when “this username is not
+        available”) has been experimenting with Linux since 1997 and became a
+        full time user in 2006, driven away from Windows by the Vista
+        announcements and a general desire to take control back over his
+        machines.
+      </p>
+      <p>
+        Back in 2006, playing games on Linux wasn’t an easy or necessarily fun
+        task. Native ports were rare, we still had support from id Software
+        with ports of id Tech 4 games like Prey and Quake 4 but that was pretty
+        much it. Other options for gaming were playing open source games,
+        emulators or using wine, which was still struggling with DirectX 9
+        games at the time. Another product would later appear: Cedega, a
+        proprietary UI for a patched version of Wine (previously known as
+        WineX). This would let you play games such as Left 4 Dead and Call of
+        Duty 4 on Linux.
+      </p>
+      <p>
+        Seeing the potential of Linux as a gaming platform but being frustrated
+        by spending so much time setting up games, Mathieu started toying with
+        the idea of automating game setups. He spent a few days learning
+        Python and GTK to make a launcher for TES: Oblivion but then wanted to apply
+        the same principle to any game playable on Linux. In late 2009, after picking the
+        otter as the project’s mascot, Lutris was born…
+      </p>
+    </div>
   </div>
 </div>
 {% endblock %}
