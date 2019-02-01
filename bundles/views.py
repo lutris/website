@@ -19,7 +19,6 @@ class BundleDetail(DetailView):
 
 class BundleView(generics.RetrieveAPIView):
     serializer_class = serializers.BundleSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, slug):
         try:
