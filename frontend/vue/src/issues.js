@@ -2,7 +2,7 @@ import timeago from 'timeago.js';
 import axios from 'axios';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import 'vue-material/dist/vue-material.min.css';
+import './assets/material.css';
 
 import InstallerIssues from './components/InstallerIssues';
 
