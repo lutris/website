@@ -1,6 +1,9 @@
 from django.views.generic import DetailView, ListView
 
-from . import models
+from rest_framework import filters, generics, permissions
+from rest_framework.response import Response
+
+from . import models, serializers
 
 
 class BundleList(ListView):
@@ -12,3 +15,16 @@ class BundleList(ListView):
 class BundleDetail(DetailView):
     model = models.Bundle
     context_object_name = 'bundle'
+
+
+class BundleView(generics.RetrieveAPIView):
+    serializer_class = serializers.BundleSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, slug):
+        try:
+            bundle = models.Bundle.objects.get(slug=slug)
+        except models.Bundle.DoesNotExist:
+            return Response(status=404)
+        serializer = serializers.BundleSerializer(bundle)
+        return Response(serializer.data)
