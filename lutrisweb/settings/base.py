@@ -14,7 +14,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.4.23"
+CLIENT_VERSION = "0.5.0"
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -181,7 +181,7 @@ OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
 DISCOURSE_SSO_SECRET = os.environ.get('DISCOURSE_SSO_SECRET')
 DISCOURSE_URL = 'https://forums.lutris.net'
 
-DISCORD_URL = "https://discord.gg/C3uJjRD"
+DISCORD_URL = "https://discordapp.com/invite/Pnt5CuY"
 DISCORD_ISSUE_WEBHOOK_ID = os.environ.get('DISCORD_ISSUE_WEBHOOK_ID')
 DISCORD_ISSUE_WEBHOOK_TOKEN = os.environ.get('DISCORD_ISSUE_WEBHOOK_TOKEN')
 # Modify temporarily the session serializer because the json serializer in
