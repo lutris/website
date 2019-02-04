@@ -1013,28 +1013,24 @@ input {
   color: #EEE;
 }
 
-.game-header, .page-header {
-  position: relative;
-  margin: 0;
+.page-header {
   border: 0;
   .title {
     line-height: 33px;
+    display: flex;
+    .icon {
+        width: 32px;
+        height: 32px;
+    }
+    .buttons {
+        margin-left: 0.5em;
+    }
     span {
       color: #EDEDED;
       font-weight: 300;
       padding-left: 15px;
       font-size: 2em;
     }
-    img {
-      position: relative;
-      float: left;
-      top: 2px;
-    }
-  }
-  .buttons {
-    float: right;
-    margin-top: 1px;
-    padding-right: 3px;
   }
 }
 

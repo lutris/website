@@ -26,9 +26,9 @@
   <div class="page-header">
     <div class='title'>
       {% if game.icon %}
-        <img src='{{ MEDIA_URL }}{{ game.icon }}' width='32' height='32' />
+        <img src='{{ MEDIA_URL }}{{ game.icon }}' class="icon" />
       {% endif %}
-      <span>{{ game.name }}</span>
+      <span class="ellipse-text">{{ game.name }}</span>
         <div class="buttons">
           <a class="btn" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
           {% if user.is_staff %}
