@@ -1,8 +1,10 @@
-# pylint: disable=missing-docstring
+# pylint: disable=missing-docstring, too-many-ancestors
 import os
 
 from django.utils import timezone
 from django.conf import settings
+from django.views.generic import DetailView, ListView
+from django.http import Http404
 
 from rest_framework import status
 from rest_framework import generics, filters
@@ -12,6 +14,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from common.permissions import IsAdminOrReadOnly
 from runners.models import Runner, RunnerVersion, Runtime
 from runners.serializers import RunnerSerializer, RuntimeSerializer
+from games.models import Game
+from games.views.pages import GameList
 
 
 class RunnerListView(generics.ListAPIView):
@@ -111,3 +115,51 @@ class RuntimeView(generics.ListCreateAPIView):
             response_status = status.HTTP_200_OK
 
         return Response(serializer.data, status=response_status)
+
+
+class RunnersList(ListView):
+    model = Runner
+    context_object_name = 'runners'
+
+
+class RunnerGameList(ListView):
+    model = Game
+    context_object_name = "games"
+    paginate_by = 25
+    template_name = "runners/game_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(installers__runner__slug=self.kwargs["runner"]).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['runner'] = Runner.objects.get(slug=self.kwargs["runner"])
+        except Runner.DoesNotExist:
+            raise Http404
+        return context
+
+
+class RunnerVersionGameList(ListView):
+    model = Game
+    context_object_name = "games"
+    paginate_by = 25
+    template_name = "runners/game_list.html"
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(
+            installers__runner__slug=self.kwargs["runner"],
+            installers__content__icontains="  version: %s" % self.kwargs["version"]
+        ).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["version"] = self.kwargs["version"]
+        try:
+            context['runner'] = Runner.objects.get(slug=self.kwargs["runner"])
+        except Runner.DoesNotExist:
+            raise Http404
+        return context

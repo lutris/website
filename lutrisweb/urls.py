@@ -37,6 +37,7 @@ urlpatterns = [
     re_path(r'^api/bundles/(?P<slug>[\w\-]+)$', BundleView.as_view(), name='api_bundle_view'),
     re_path(r'^games/', include('games.urls.pages')),
     re_path(r'^bundles', include('bundles.urls')),
+    re_path(r'^runners', include('runners.urls')),
     re_path(r'^email/', include('emails.urls')),
     re_path(
         r'^steam-login/',
