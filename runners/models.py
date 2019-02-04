@@ -30,6 +30,11 @@ class Runner(models.Model):
         return ('name__icontains', )
 
     @property
+    def icon_url(self):
+        if self.icon:
+            return self.icon.url
+
+    @property
     def versions(self):
         def version_key(runner_version):
             version = runner_version.version
@@ -52,9 +57,9 @@ class RunnerVersion(models.Model):
         ordering = ('version', 'architecture')
 
     def __str__(self):
-        return u"{} v{} ({})".format(self.runner.name,
-                                     self.version,
-                                     self.architecture)
+        return u"{} {} ({})".format(self.runner.name,
+                                    self.version,
+                                    self.architecture)
 
     runner = models.ForeignKey(Runner, related_name='runner_versions', on_delete=models.CASCADE)
     version = models.CharField(max_length=32)
@@ -63,6 +68,11 @@ class RunnerVersion(models.Model):
                                     default='x86_64')
     url = models.URLField(blank=True)
     default = models.BooleanField(default=False)
+
+    @property
+    def full_version(self):
+        return "%s-%s" % (self.version, self.architecture)
+
 
 
 class Runtime(models.Model):
