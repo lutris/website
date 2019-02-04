@@ -420,6 +420,12 @@ class GameMetadata(models.Model):
     value = models.CharField(max_length=255)
 
 
+class GameAlias(models.Model):
+    game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
+    slug = models.SlugField()
+    name = models.CharField(max_length=255)
+
+
 class ScreenshotManager(models.Manager):
     def published(self, user=None, is_staff=False):
         query = self.get_queryset()

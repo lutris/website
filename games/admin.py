@@ -166,6 +166,10 @@ class GameLinkAdmin(admin.TabularInline):
     model = models.GameLink
 
 
+class GameAliasAdmin(admin.TabularInline):
+    model = models.GameAlias
+
+
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
@@ -185,7 +189,8 @@ class GameAdmin(admin.ModelAdmin):
     }
     inlines = [
         GameMetadataInline,
-        GameLinkAdmin
+        GameLinkAdmin,
+        GameAliasAdmin
     ]
     actions = ['reject_user_suggested_changes']
 

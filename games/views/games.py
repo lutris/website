@@ -1,6 +1,6 @@
 """API views module"""
 from __future__ import absolute_import
-
+from django.db.models import Q
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
 
@@ -35,7 +35,10 @@ class GameListView(generics.GenericAPIView):
         else:
             game_slugs = None
         if game_slugs:
-            return base_query.filter(change_for__isnull=True, slug__in=game_slugs)
+            return base_query.filter(
+                Q(slug__in=game_slugs) | Q(aliases__slug__in=game_slugs),
+                change_for__isnull=True
+            )
 
         if 'gogid' in self.request.data:
             gog_ids = self.request.data.get('gogid')

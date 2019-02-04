@@ -208,7 +208,14 @@ def game_for_installer(_request, slug):
 
 def game_detail(request, slug):
     """View rendering the details for a game"""
-    game = get_object_or_404(models.Game, slug=slug)
+    try:
+        game = models.Game.objects.get(slug=slug)
+    except models.Game.DoesNotExist:
+        try:
+            game = models.Game.objects.get(gamealias__slug=slug)
+            return redirect(reverse('game_detail', kwargs={'slug': game.slug}))
+        except models.Game.DoesNotExist:
+            raise Http404
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
     pending_change_subm_count = 0
