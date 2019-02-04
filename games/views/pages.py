@@ -212,7 +212,7 @@ def game_detail(request, slug):
         game = models.Game.objects.get(slug=slug)
     except models.Game.DoesNotExist:
         try:
-            game = models.Game.objects.get(gamealias__slug=slug)
+            game = models.Game.objects.get(aliases__slug=slug)
             return redirect(reverse('game_detail', kwargs={'slug': game.slug}))
         except models.Game.DoesNotExist:
             raise Http404
