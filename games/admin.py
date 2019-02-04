@@ -230,6 +230,7 @@ class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("-uploaded_at", )
     list_display = ("__str__", "game_link", "uploaded_at", "published")
     list_editable = ("published", )
+    list_filter = ("published", )
     readonly_fields = ('game_link',)
     search_fields = ['game__name']
 
