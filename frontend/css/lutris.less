@@ -505,9 +505,9 @@ input {
 }
 
 .ellipse-text {
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ul-reset {
@@ -1267,6 +1267,45 @@ input {
   }
 }
 
+.game-list {
+    list-style-type: none;
+    li {
+        display: flex;
+        background-color: @darkBackground;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+    .game-image {
+        width:  184px;
+        padding: 6px;
+    }
+    .game-image, .game-info {
+        padding: 6px;
+    }
+    .game-info {
+        width: 100%;
+        display: inline-block;
+        margin-left: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .game-meta {
+        a {
+            border-bottom: 1px dotted #666;
+        }
+        span {
+            margin-right: 1em;
+        }
+        font-size: 0.8em;
+    }
+    .game-title {
+        color: @brandColor;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+}
+
 .game-filter {
   float: right;
   margin-bottom: 20px;
@@ -1276,60 +1315,6 @@ input {
     color: #CCC;
     border: 1px solid #666;
     padding: 0 4px;
-  }
-}
-
-.game-list {
-  margin: 0;
-  .ul-reset;
-  li {
-    border-bottom: 2px solid #252525;
-    color: #999;
-    padding: 0;
-    margin-bottom: 5px;
-    background-color: @darkerBackground;
-
-    @media (min-width: @screen-sm-min) {
-      padding: 8px;
-    }
-  }
-  a {
-    color :#DDD;
-    text-decoration: none;
-    &:hover {
-        color: #b36b00;
-    }
-  }
-  .filter-link {
-    background-color: #666;
-  }
-  .with-installer {
-    background-color: @darkBackground;
-    .game-title {
-      color: @brandColor;
-    }
-  }
-  .game-cover {
-    overflow: hidden;
-    width: 184px;
-    height: 69px;
-  }
-  .game-title {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #D9B555;
-  }
-  .logo {
-    float: left;
-    vertical-align: top;
-    margin-right: 20px;
-  }
-  .info {
-    font-size: .8em;
-    a {
-      margin-right: 6px;
-      border-bottom: 1px dotted #666;
-    }
   }
 }
 
