@@ -47,7 +47,10 @@
       <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
     </section>
     <section>
-      <h4>Import your Steam library</h4>
+      <h4>Game library</h4>
+      <p>
+        <a href="{% url 'library_show' username=user.username %}" class="btn">Show library</a>
+      </p>
       <p>You can automatically import the list of your Steam games and add them to
       your Lutris library.</p>
       <p class="warning-message">Your steam profile must be public during the sync
