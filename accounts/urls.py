@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^register/$', views.register, name="register"),
     url(r'^verify/$', views.client_verify),
     url(r'^associate-steam/', views.associate_steam, name="associate_steam"),
+    url(r'^steam-disconnect', views.steam_disconnect, name="steam_disconnect"),
     url(r'^(?P<username>.*)/library/$', views.LibraryList.as_view(),
         name="library_show"),
     url(r'^library/add/(?P<slug>[\w-]+)/$', views.library_add,

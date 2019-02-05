@@ -56,6 +56,10 @@
       <p class="warning-message">Your steam profile must be public during the sync
       process.You can set it back to private after that.</p>
       <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+      {% if user.steamid %}
+      <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
+      <a href="{% url "steam_disconnect" %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your Steam information?')">Disconnect your account</a>
+      {% endif %}
     </section>
 
     <section>

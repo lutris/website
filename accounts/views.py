@@ -198,6 +198,14 @@ def associate_steam(request):
         return redirect(reverse("library_steam_sync"))
 
 
+def steam_disconnect(request):
+    """Clears the Steam ID and OpenID key"""
+    request.user.useropenid_set.all().delete()
+    request.user.steamid = ""
+    request.user.save()
+    return redirect(reverse("profile"))
+
+
 class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     template_name = 'accounts/library_show.html'
     context_object_name = 'games'
