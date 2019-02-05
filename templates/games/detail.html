@@ -114,9 +114,17 @@
             <span>Get it from:</span><br/>
             {% endif %}
             {% if game.steamid %}
-            <a href="http://store.steampowered.com/app/{{ game.steamid }}" title="Steam" class='external-link'>
+            <a href="http://store.steampowered.com/app/{{ game.steamid }}"
+               title="Steam"
+               class='external-link'>
               <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
               <span>Steam</span>
+            </a>
+            <a href="https://www.protondb.com/app/{{ game.steamid }}"
+               title="ProtonDB"
+               class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/protondb.png" alt="ProtonDB" />
+              <span>ProtonDB</span>
             </a>
             {% endif %}
             {% if game.humblestoreid %}
