@@ -1,0 +1,10 @@
+{% extends "emails/base.html" %}
+
+
+{% block content %}
+<p>
+  The game {{game_name}} has been added by {{username}}.
+<br>
+  It can be modified and published at {{admin_link}}
+</p>
+{% endblock content %}

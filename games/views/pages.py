@@ -507,14 +507,15 @@ def submit_game(request):
         submission.save()
 
         # Notify managers a game has been submitted
-        subject = u"New game submitted: {0}".format(game.name)
-        admin_url = reverse("admin:games_game_change", args=(game.id, ))
-        body = u"""
-        The game {0} has been added by {1}.
+        admin_url = "https://lutris.net" + reverse("admin:games_game_change", args=(game.id, ))
+        context = {
+            'game_name': game.name,
+            'username': request.user.username,
+            'admin_link': admin_url
+        }
+        subject = "New game submitted: {}".format(game.name)
+        messages.send_email('new_game', context, subject, settings.MANAGERS[0][1])
 
-        It can be modified and published at https://lutris.net{2}
-        """.format(game.name, request.user, admin_url)
-        mail_managers(subject, body)
         redirect_url = request.build_absolute_uri(reverse("game-submitted"))
 
         # Enforce https

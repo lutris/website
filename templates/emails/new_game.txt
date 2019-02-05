@@ -1,0 +1,3 @@
+The game {{game_name}} has been added by {{username}}.
+
+It can be modified and published at {{admin_link}}
