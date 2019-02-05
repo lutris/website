@@ -45,6 +45,14 @@
       <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
 
       <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+      <p>
+        You can log out from every computer you have Lutris installed on by regenerating a new authentication token.
+        <a href="{% url 'clear_auth_token' %}"
+           class="btn btn-danger"
+           onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')"
+           >Clear token</a>
+      </p>
+
     </section>
     <section>
       <h4>Game library</h4>

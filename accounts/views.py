@@ -20,6 +20,7 @@ from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 from common.util import get_client_ip
 from games import models
@@ -53,6 +54,23 @@ def client_verify(request):
         response_data = {'error': 'invalid token'}
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
+
+
+def clear_auth_token(request):
+    """Delete the REST API token for the currently logged in user"""
+    try:
+        token = Token.objects.get(user=request.user)
+    except Token.DoesNotExist:
+        raise Http404
+    token.delete()
+    messages.info(
+        request,
+        "You authentication token has been cleared. "
+        "Please sign-in in Lutris again to generate a new one."
+    )
+    return redirect(
+        reverse('user_account', kwargs={"username": request.user.username})
+    )
 
 
 @login_required
