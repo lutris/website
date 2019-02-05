@@ -62,7 +62,6 @@ class User(AbstractUser):
     def deactivate(self):
         self.gamelibrary.delete()
         self.groups.clear()
-        self.authtoken_set.all().delete()
         self.useropenid_set.all().delete()
         self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
         self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
@@ -74,19 +73,6 @@ class User(AbstractUser):
         self.steamid = ''
         self.key = ''
         self.save()
-
-
-class AuthToken(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    ip_address = models.GenericIPAddressField()
-    token = models.CharField(max_length=64)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        self.token = str(uuid.uuid4())
-        return super(AuthToken, self).save(force_insert=force_insert, force_update=force_update,
-                                           using=using, update_fields=update_fields)
 
 
 class EmailConfirmationToken(models.Model):

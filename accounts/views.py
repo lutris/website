@@ -1,5 +1,4 @@
 """Module for user account views"""
-import json
 import logging
 
 from django.conf import settings
@@ -8,7 +7,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+from django.http import (Http404, HttpResponseBadRequest,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -22,12 +21,11 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
-from common.util import get_client_ip
 from games import models
 from games.forms import LibraryFilterForm
 
 from . import forms, sso, tasks, serializers
-from .models import AuthToken, EmailConfirmationToken, User
+from .models import EmailConfirmationToken, User
 
 REQUEST_LOGGER = logging.getLogger('django.request')
 LOGGER = logging.getLogger(__name__)
@@ -40,20 +38,6 @@ def register(request):
         form.save()
         return HttpResponseRedirect('/')
     return render(request, 'accounts/registration_form.html', {'form': form})
-
-
-@csrf_exempt
-def client_verify(request):
-    """Verify that a token is valid for the current IP"""
-    token = request.POST.get('token')
-    try:
-        auth_token = AuthToken.objects.get(token=token,
-                                           ip_address=get_client_ip(request))
-        response_data = {'username': auth_token.user.username}
-    except AuthToken.DoesNotExist:
-        response_data = {'error': 'invalid token'}
-    return HttpResponse(json.dumps(response_data),
-                        content_type="application/json")
 
 
 def clear_auth_token(request):

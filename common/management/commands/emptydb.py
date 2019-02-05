@@ -18,7 +18,6 @@ class Command(BaseCommand):
 DELETE FROM "auth_group";
 DELETE FROM "django_site";
 DELETE FROM "accounts_user_user_permissions";
-DELETE FROM "accounts_authtoken";
 DELETE FROM "django_content_type";
 DELETE FROM "django_session";
 DELETE FROM "accounts_user";
