@@ -44,7 +44,7 @@ class GameSerializer(serializers.ModelSerializer):
         fields = (
             'name', 'slug', 'year', 'platforms', 'genres', 'aliases',
             'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogid', 'gogslug', 'humblestoreid'
+            'gogslug', 'humblestoreid'
         )
 
 
