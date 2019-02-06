@@ -12,7 +12,6 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
-from django.core.mail import mail_managers
 from django.db.models import Q
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -32,6 +31,7 @@ from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
 from games.webhooks import notify_issue_creation
+from emails.messages import send_email
 from platforms.models import Platform
 
 LOGGER = logging.getLogger(__name__)
@@ -514,7 +514,7 @@ def submit_game(request):
             'admin_link': admin_url
         }
         subject = "New game submitted: {}".format(game.name)
-        messages.send_email('new_game', context, subject, settings.MANAGERS[0][1])
+        send_email('new_game', context, subject, settings.MANAGERS[0][1])
 
         redirect_url = request.build_absolute_uri(reverse("game-submitted"))
 
