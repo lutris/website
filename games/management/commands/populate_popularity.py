@@ -7,6 +7,7 @@ from games.models import Game
 
 class Command(BaseCommand):
     """Command to update the popularity"""
+
     help = "My shiny new management command."
 
     def handle(self, *args, **options):

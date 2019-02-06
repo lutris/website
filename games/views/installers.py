@@ -129,7 +129,7 @@ class InstallerIssueCreateView(generics.CreateAPIView):
         installer_slug = self.request.parser_context['kwargs']['installer_slug']
         return models.Installer.objects.filter(game__slug=game_slug).get(slug=installer_slug)
 
-    def create(self, request, *args, **kwargs): # pylint: disable=unused-argument
+    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Create a new issue"""
         issue_payload = dict(request.data)
 

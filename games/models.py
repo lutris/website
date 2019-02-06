@@ -14,8 +14,6 @@ import reversion
 from reversion.models import Version
 from bitfield import BitField
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
@@ -725,6 +723,7 @@ class Installer(BaseInstaller):
             update_fields=update_fields,
         )
 
+
 class InstallerHistory(BaseInstaller):
     """Past versions of installers
 
@@ -758,6 +757,7 @@ class InstallerHistory(BaseInstaller):
 
     def __str__(self):
         return "Snapshot of installer %s at %s" % (self.installer, self.created_at)
+
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""

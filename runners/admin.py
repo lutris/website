@@ -8,16 +8,15 @@ class RunnerVersionInline(admin.TabularInline):
 
 
 class RunnerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'website')
+    list_display = ("name", "slug", "website")
     form = forms.RunnerForm
-    inlines = [
-        RunnerVersionInline,
-    ]
+    inlines = [RunnerVersionInline]
 
 
 class RuntimeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'architecture', 'created_at')
+    list_display = ("name", "architecture", "created_at")
     model = models.Runtime
+
 
 admin.site.register(models.Runner, RunnerAdmin)
 admin.site.register(models.Runtime, RuntimeAdmin)

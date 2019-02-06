@@ -14,10 +14,10 @@ class Command(BaseCommand):
     def add_arch_to_non_wine_installers(self, installer):
         script_updated = False
         script = load_yaml(installer.content)
-        for step in [step for step in script['installer'] if 'task' in step]:
-            task = step['task']
-            if task['name'] == 'wine.wineexec' and 'arch' not in task:
-                step['task']['arch'] = 'win32'
+        for step in [step for step in script["installer"] if "task" in step]:
+            task = step["task"]
+            if task["name"] == "wine.wineexec" and "arch" not in task:
+                step["task"]["arch"] = "win32"
                 script_updated = True
 
         if script_updated:
@@ -28,44 +28,46 @@ class Command(BaseCommand):
         script_updated = False
         script = load_yaml(installer.content)
         try:
-            game_config = script.get('game', {})
+            game_config = script.get("game", {})
         except AttributeError:
             LOGGER.error("The script %s is invalid", installer.slug)
             return False
 
         # Intaller ahs arch, we're good
-        if game_config.get('arch') in ('win32', 'win64'):
+        if game_config.get("arch") in ("win32", "win64"):
             # Game has architecture already set
             return False
-        if game_config.get('arch'):
-            raise ValueError("Weird value for arch: %s", game_config['arch'])
+        if game_config.get("arch"):
+            raise ValueError("Weird value for arch: %s", game_config["arch"])
 
         # Set a prefix so the game doesn't use ~/.wine
-        if 'prefix' not in game_config:
+        if "prefix" not in game_config:
             LOGGER.warning("No prefix found for %s", installer.slug)
             detected_prefix = None
-            for task in [step for step in script.get('installer', []) if 'task' in step]:
-                if 'prefix' in task:
-                    if detected_prefix and detected_prefix != task['prefix']:
+            for task in [
+                step for step in script.get("installer", []) if "task" in step
+            ]:
+                if "prefix" in task:
+                    if detected_prefix and detected_prefix != task["prefix"]:
                         raise ValueError("Different values of prefixes found")
-                    detected_prefix = task['prefix']
+                    detected_prefix = task["prefix"]
             if not detected_prefix:
-                detected_prefix = '$GAMEDIR'
+                detected_prefix = "$GAMEDIR"
             LOGGER.info("Setting prefix to %s", detected_prefix)
-            game_config['prefix'] = detected_prefix
+            game_config["prefix"] = detected_prefix
             script_updated = True
 
-        if 'Program Files (x86)' in installer.content:
+        if "Program Files (x86)" in installer.content:
             LOGGER.info("%s is a 64bit game?", installer.slug)
-            detected_arch = 'win64'
+            detected_arch = "win64"
         else:
-            detected_arch = 'win32'
+            detected_arch = "win32"
         LOGGER.info("Setting arch for %s to %s", installer.slug, detected_arch)
-        game_config['arch'] = detected_arch
+        game_config["arch"] = detected_arch
         script_updated = True
 
         if script_updated:
-            script['game'] = game_config
+            script["game"] = game_config
             installer.content = dump_yaml(script)
         return True
 

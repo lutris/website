@@ -2,11 +2,11 @@ from io import BytesIO
 from django.test import TestCase
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 from PIL import Image
 
 from games import forms
 from games.tests import factories
+
 
 def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='PNG'):
     """Generate a test image, returning the filename that it was saved as.
@@ -21,6 +21,7 @@ def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_for
         return data
     image_file = ContentFile(data.read())
     return storage.save(filename, image_file)
+
 
 class TestInstallerForm(TestCase):
     def setUp(self):
@@ -63,8 +64,7 @@ class TestGameForm(TestCase):
             'name': 'bliblu',
             'platforms': [self.platform.id],
             'genres': [self.genre.id]
-        },
-        {
+        }, {
             'title_logo': SimpleUploadedFile('front.png', image.getvalue())
         })
         # XXX there's a problem with django-croppie preventing testing this form properly

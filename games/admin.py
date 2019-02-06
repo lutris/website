@@ -57,6 +57,7 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     list_display = ('__str__', 'id', 'website')
 
+
 class InstallerHistoryAdmin(admin.StackedInline):
     """Admin config for installer snapshots"""
     model = models.InstallerHistory
