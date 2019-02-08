@@ -174,6 +174,7 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.SmarterModelBackend',
 )
 OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
