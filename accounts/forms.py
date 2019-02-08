@@ -66,7 +66,7 @@ class RegistrationForm(forms.ModelForm):
         except User.DoesNotExist:
             return username
         except User.MultipleObjectsReturned:
-            LOGGER.error("Mutiple users with username: %s", username)
+            LOGGER.warning("Mutiple users with username: %s", username)
         raise forms.ValidationError(self.error_messages["duplicate_username"])
 
     def clean_password2(self):
