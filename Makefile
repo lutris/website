@@ -1,4 +1,4 @@
-.PHONY: tags
+rst2html.PHONY: tags
 setup:
 	npm install
 	npm run setup
@@ -29,10 +29,10 @@ jenkins:
 
 sysdeps:
 	sudo apt-get -y install libpq-dev python-dev nginx supervisor rabbitmq-server libjpeg-dev libxml2-dev libxslt1-dev
-	pip install -r config/requirements/production.pip --exists-action=s
+	pip3 install -r config/requirements/production.pip --exists-action=s
 
 deps:
-	pip install -r config/requirements/devel.pip --exists-action=w
+	pip3 install -r config/requirements/devel.pip --exists-action=w
 
 migration:
 	-./manage.py makemigrations
@@ -42,7 +42,7 @@ fixtures:
 	./manage.py dumpdata --indent=2 games > games/fixtures/initial_data.json
 
 check-deps-update:
-	pip list --outdated
+	pip3 list --outdated
 
 ctags:
 	ctags -R --languages=python --python-kinds=-v ${VIRTUAL_ENV}/lib/python2.7
