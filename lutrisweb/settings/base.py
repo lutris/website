@@ -94,6 +94,7 @@ MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -143,6 +144,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'rest_framework_swagger',
     'croppie',
     'crispy_forms',
@@ -247,6 +249,13 @@ SHELL_PLUS_DONT_LOAD = ['tosec']
 SILENCED_SYSTEM_CHECKS = [
     'urls.W002',
 ]
+
+# CORS configuration
+CORS_ORIGIN_WHITELIST = (
+    'localhost:9527',
+    '0.0.0.0:9527',
+    'dashboard.lutris.net'
+)
 
 # Logging
 SEND_BROKEN_LINK_EMAILS = False

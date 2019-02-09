@@ -8,6 +8,7 @@ django-appconf==1.0.2
 django-crispy-forms==1.7.2
 django-extensions==2.0.7
 djangorestframework==3.8.2
+django-cors-headers==2.4.0
 django-compressor==2.2
 django_select2==6.0.2
 django-grappelli==2.11.1
