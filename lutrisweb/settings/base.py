@@ -223,6 +223,10 @@ CELERYBEAT_SCHEDULE = {
     'delete-unchanged-forks': {
         'task': 'games.tasks.delete_unchanged_forks',
         'schedule': crontab(hour=17, minute=59)
+    },
+    'clear-orphan-revisions': {
+        'task': 'games.tasks.clear_orphan_revisions',
+        'schedule': crontab(hour=17, minute=30)
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'
