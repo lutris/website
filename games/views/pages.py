@@ -643,22 +643,10 @@ def submit_issue(request):
     return HttpResponse(json.dumps(response))
 
 
-def get_revisions(filter):
-    """Utility function to return Version objects while deleting orphans."""
-    revisions = Version.objects.filter(revision__comment__startswith=filter)
-    orphans = [revision for revision in revisions if not revision.object]
-    if orphans:
-        for revision in revisions:
-            LOGGER.info("Deleting orphan revision %s", revision)
-            revision.delete()
-        revisions = Version.objects.filter(revision__comment__startswith=filter)
-    return revisions
-
-
 @staff_member_required
 def installer_submissions(request):
-    submissions = get_revisions("[submission]")
-    drafts = get_revisions("[draft]")
+    submissions = Version.objects.filter(revision__comment__startswith="[submission]")
+    drafts = Version.objects.filter(revision__comment__startswith="[draft]")
     installers = Installer.objects.filter(published=False)
     unpublished_games = (
         Game.objects.filter(change_for__isnull=True)
