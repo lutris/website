@@ -224,6 +224,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'games.tasks.delete_unchanged_forks',
         'schedule': crontab(hour=17, minute=59)
     },
+    'clear-orphan-versions': {
+        'task': 'games.tasks.clear_orphan_versions',
+        'schedule': crontab(hour=17, minute=29)
+    },
     'clear-orphan-revisions': {
         'task': 'games.tasks.clear_orphan_revisions',
         'schedule': crontab(hour=17, minute=30)
