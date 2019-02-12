@@ -10,7 +10,8 @@ from django.http import Http404
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from reversion.models import Version
+from rest_framework.pagination import PageNumberPagination
+from reversion.models import Version, Revision
 
 from common.permissions import IsAdminOrReadOnly
 from games import models, serializers
@@ -188,3 +189,23 @@ class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
         """Return the installer issue reply from its ID"""
         issue_id = self.request.parser_context['kwargs']['pk']
         return models.InstallerIssueReply.objects.get(pk=issue_id)
+
+
+class SmallResultsSetPagination(PageNumberPagination):
+    """Pagination used for heavier serializers that don't need a lot of data returned at once."""
+    page_size = 10
+    page_size_query_param = 'page'
+    max_page_size = 25
+
+
+class RevisionListView(generics.ListAPIView):
+    """View to list all installer revisions"""
+    serializer_class = serializers.RevisionSerializer
+    permission_classes = [IsAdminUser]
+    pagination_class = SmallResultsSetPagination
+
+    def get_queryset(self):
+        revision_type = self.request.GET.get('type')
+        if revision_type in ('submission', 'draft'):
+            return Revision.objects.filter(comment__startswith="[%s]" % revision_type)
+        return Revision.objects.all()

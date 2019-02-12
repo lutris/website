@@ -2,6 +2,7 @@
 # pylint: disable=too-few-public-methods
 import logging
 from rest_framework import serializers
+from reversion.models import Version, Revision
 
 from games import models
 from platforms.models import Platform
@@ -27,7 +28,9 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class GameAliasSerializer(serializers.ModelSerializer):
+    """Serializer for game aliases, used to provide an alias list to GameSerializer"""
     class Meta:
+        """Model and field definitions"""
         model = models.GameAlias
         fields = ('slug', 'name')
 
@@ -61,11 +64,7 @@ class GameLibrarySerializer(serializers.ModelSerializer):
 class InstallerSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
-    game = serializers.HyperlinkedRelatedField(
-        view_name='api_game_detail',
-        read_only=True,
-        lookup_field='slug'
-    )
+    game = serializers.PrimaryKeyRelatedField(read_only=True)
     game_slug = serializers.ReadOnlyField(source='game.slug')
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
@@ -102,13 +101,12 @@ class GameInstallersSerializer(GameSerializer):
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
-    """Serializer for Installer revisions"""
+    """Serializer for Installer revisions
+    This is not a ModelSerializer and is not directly mapped to revisions.
+    Use RevisionSerializer for that.
+    """
     id = serializers.IntegerField()
-    game = serializers.HyperlinkedRelatedField(
-        view_name='api_game_detail',
-        read_only=True,
-        lookup_field='slug'
-    )
+    game = serializers.PrimaryKeyRelatedField(read_only=True)
     game_slug = serializers.ReadOnlyField(source='game.slug')
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
@@ -224,4 +222,55 @@ class InstallerIssueListSerializer(serializers.ModelSerializer):
             'slug',
             'version',
             'issues',
+        )
+
+
+class GameRelatedField(serializers.RelatedField):
+    """A custom field to load games from generic relationship """
+
+    def to_representation(self, value):
+        """
+        Serialize tagged objects to a simple textual representation.
+        """
+        if isinstance(value, models.Installer):
+            serializer = InstallerSerializer(value)
+            return serializer.data
+        raise Exception('Unexpected type of tagged object')
+
+    def to_internal_value(self, _value):
+        """Raise an exception when trying to change back to internal values"""
+        raise Exception("This field is read-only")
+
+class VersionSerializer(serializers.ModelSerializer):
+    """Serializer for revision versions
+    Used in the RevisionSerializer
+    """
+    object = GameRelatedField(read_only=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = Version
+        fields = (
+            'id',
+            'revision_id',
+            'object',
+            'object_id',
+            'format',
+            'serialized_data',
+        )
+
+
+class RevisionSerializer(serializers.ModelSerializer):
+    """Serializer for installer revision raw objects
+    Used in the revision list view for the mod dashboard.
+    """
+    version_set = VersionSerializer(many=True)
+    class Meta:
+        """Model and field definitions"""
+        model = Revision
+        fields = (
+            'id',
+            'user_id',
+            'comment',
+            'version_set'
         )

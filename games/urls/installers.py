@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'revisions/(?P<pk>[\d]+)$',
         views.InstallerRevisionDetailView.as_view(),
         name="api_installer_revision_detail"),
+    url(r'revisions$', views.RevisionListView.as_view(), name="api_revision_list"),
 
     # Issues
     url(r'(?P<slug>[\w\-]+)/issues$',
