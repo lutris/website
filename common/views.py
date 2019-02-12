@@ -8,14 +8,21 @@ from django.urls import reverse
 
 from common.forms import UploadForm
 from common.models import News
-from games.models import Game
+from games.models import Game, Installer
 
 
 def home(request):
     """Homepage view"""
     new_games = Game.objects.with_installer().order_by('-created')[:6]
-    updated_games = Game.objects.with_installer().order_by('installers__updated_at')[:6]
-
+    updated_games = [
+        installer.game for installer in (
+            Installer
+                .objects
+                .prefetch_related('game')
+                .filter(published=True)
+                .order_by('-updated_at')
+        )[:6]
+    ]
     return render(request, 'home.html', {
         "new_games": new_games,
         "updated_games": updated_games
