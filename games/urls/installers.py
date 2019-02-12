@@ -6,20 +6,26 @@ from games.views import installers as views
 
 
 urlpatterns = [
-    # Revisions
+    # Revision access by game slug
     url(r'game/(?P<slug>[\w\-]+)/revisions$',
         views.GameRevisionListView.as_view(),
         name='api_game_revisions_list'),
     url(r'game/(?P<slug>[\w\-]+)/revisions/(?P<pk>[\d]+)',
         views.InstallerRevisionDetailView.as_view(),
         name="api_game_installer_revision_detail"),
+
+    # Revision access via installer pk
     url(r'(?P<pk>[\d]+)/revisions$',
         views.InstallerRevisionListView.as_view(),
         name="api_installer_revision_list"),
+
+    # Revision objects
     url(r'revisions/(?P<pk>[\d]+)$',
         views.InstallerRevisionDetailView.as_view(),
         name="api_installer_revision_detail"),
-    url(r'revisions$', views.RevisionListView.as_view(), name="api_revision_list"),
+    url(r'revisions$',
+        views.RevisionListView.as_view(),
+        name="api_revision_list"),
 
     # Issues
     url(r'(?P<slug>[\w\-]+)/issues$',
