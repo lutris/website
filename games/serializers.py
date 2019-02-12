@@ -64,7 +64,7 @@ class GameLibrarySerializer(serializers.ModelSerializer):
 class InstallerSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
-    game = serializers.PrimaryKeyRelatedField(read_only=True)
+    game_id = serializers.PrimaryKeyRelatedField(read_only=True)
     game_slug = serializers.ReadOnlyField(source='game.slug')
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
@@ -80,7 +80,7 @@ class InstallerSerializer(serializers.ModelSerializer):
     class Meta:
         """Model and field definitions"""
         model = models.Installer
-        fields = ('id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
+        fields = ('id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'published_by', 'rating', 'steamid', 'gogid', 'gogslug',
                   'humblestoreid', 'script', 'content')
@@ -106,7 +106,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     Use RevisionSerializer for that.
     """
     id = serializers.IntegerField()
-    game = serializers.PrimaryKeyRelatedField(read_only=True)
+    game_id = serializers.PrimaryKeyRelatedField(read_only=True)
     game_slug = serializers.ReadOnlyField(source='game.slug')
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
