@@ -101,9 +101,14 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get_object(self):
+
         try:
-            version = Version.objects.get(pk=self.request.parser_context['kwargs']['pk'])
-        except Version.DoesNotExist:
+            revision = Revision.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        except Revision.DoesNotExist:
+            raise Http404
+        try:
+            version = revision.version_set.all()[0]
+        except IndexError:
             raise Http404
         return models.InstallerRevision(version)
 
