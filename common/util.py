@@ -3,6 +3,7 @@ import yaml
 import romkan
 from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
 from xpinyin import Pinyin
+from transliterate import translit
 from PIL import Image
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
@@ -21,6 +22,9 @@ def slugify(text):
         # Title may be in Chinese
         pinyin = Pinyin()
         slug = django_slugify(pinyin.get_pinyin(text))
+    if not slug:
+        # Try transliterate which supports Cyryllic, Greek and other alphabets
+        slug = django_slugify(translit(text, reversed=True))
     return slug[:50]
 
 
