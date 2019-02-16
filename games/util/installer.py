@@ -124,7 +124,7 @@ def winesteam_scripts_use_correct_prefix(installer):
     if runner != 'winesteam':
         return SUCCESS
     script = get_installer_script(installer)
-    if 'game' not in script:
+    if not script.get("game"):
         return (
             False,
             "Missing section game"
