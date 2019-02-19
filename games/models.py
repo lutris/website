@@ -902,7 +902,7 @@ class InstallerRevision(BaseInstaller):
         return default_installer_data
 
     def delete(self, using=None, keep_parents=False):
-        self._version.delete()
+        self._version.revision.delete()
 
     def accept(self, moderator):
         self._version.revert()
