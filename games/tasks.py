@@ -1,3 +1,4 @@
+"""Celery tasks for account related jobs"""
 import logging
 from celery import task
 from reversion.models import Version, Revision
@@ -6,11 +7,13 @@ from games import models
 
 LOGGER = logging.getLogger(__name__)
 
+
 @task
 def delete_unchanged_forks():
     """Periodically delete forked installers that haven't received any changes"""
     for installer in models.Installer.objects.abandoned():
         installer.delete()
+
 
 @task
 def clear_orphan_versions():
@@ -21,6 +24,7 @@ def clear_orphan_versions():
             continue
         LOGGER.warning("Deleting orphan version %s", version)
         version.delete()
+
 
 @task
 def clear_orphan_revisions():

@@ -91,7 +91,8 @@ def installer_steps_have_one_key(installer):
             return (False, "'installer' section should be an array.")
         for step in script['installer']:
             if isinstance(step, dict) and len(step.keys()) > 1:
-                return (False, "Installer step %s shouldn't have more than one key (check your indentation)" % step)
+                return (False, "Installer step %s shouldn't have more "
+                               "than one key (check your indentation)" % step)
     return SUCCESS
 
 

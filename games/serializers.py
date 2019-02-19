@@ -249,6 +249,7 @@ class GameRelatedField(serializers.RelatedField):
         """Raise an exception when trying to change back to internal values"""
         raise Exception("This field is read-only")
 
+
 class VersionSerializer(serializers.ModelSerializer):
     """Serializer for revision versions
     Used in the RevisionSerializer
@@ -273,6 +274,7 @@ class RevisionSerializer(serializers.ModelSerializer):
     Used in the revision list view for the mod dashboard.
     """
     version_set = VersionSerializer(many=True)
+
     class Meta:
         """Model and field definitions"""
         model = Revision

@@ -11,7 +11,7 @@ from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from reversion.models import Version, Revision
+from reversion.models import Revision
 
 from common.permissions import IsAdminOrReadOnly
 from games import models, serializers
@@ -109,7 +109,8 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         try:
             version = revision.version_set.all()[0]
         except IndexError:
-            LOGGER.warning("Revision ID %s has no versions", self.request.parser_context['kwargs']['pk'])
+            LOGGER.warning("Revision ID %s has no versions",
+                           self.request.parser_context['kwargs']['pk'])
             raise Http404
         return models.InstallerRevision(version)
 
