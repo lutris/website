@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView
 
-from rest_framework import filters, generics, permissions
+from rest_framework import generics
 from rest_framework.response import Response
 
 from . import models, serializers

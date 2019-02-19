@@ -35,7 +35,7 @@ def smart_split(string, sep=None):
     return splits
 
 
-class TosecParser(object):
+class TosecParser:
     def __init__(self, contents):
         """contents is an list containing the lines of a Tosec dat file"""
         self.contents = contents

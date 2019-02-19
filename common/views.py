@@ -17,10 +17,10 @@ def home(request):
     updated_games = [
         installer.game for installer in (
             Installer
-                .objects
-                .prefetch_related('game')
-                .filter(published=True)
-                .order_by('-updated_at')
+            .objects
+            .prefetch_related('game')
+            .filter(published=True)
+            .order_by('-updated_at')
         )[:6]
     ]
     return render(request, 'home.html', {
