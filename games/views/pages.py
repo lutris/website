@@ -355,8 +355,7 @@ def edit_installer(request, slug):
         messages.info(request, "Installer saved")
         if draft_data and draft_data["draft"]:
             return redirect("edit_installer", slug=installer.slug)
-        else:
-            return redirect("installer_complete", slug=installer.game.slug)
+        return redirect("installer_complete", slug=installer.game.slug)
 
     if draft_data:
         messages.info(
@@ -387,7 +386,6 @@ def delete_installer(request, slug):
     if request.method == "POST" and "delete" in request.POST:
         game = installer.game
         installer_name = installer.slug
-        # TODO Delete revisions
         installer.delete()
         messages.warning(
             request, u"The installer {} has been deleted.".format(installer_name)
@@ -587,10 +585,11 @@ def changes_submitted(request, slug):
     return render(request, "games/submitted-changes.html", {"game": game})
 
 
-def publish_game(request, id):
+def publish_game(request, game_id):
+    """This view should be an API call"""
     if not request.user.has_perm("games.can_publish_game"):
         raise Http404
-    game = get_object_or_404(Game, id=id)
+    game = get_object_or_404(Game, id=game_id)
     game.is_public = True
     game.save()
     return redirect(reverse("game_detail", kwargs={"slug": game.slug}))
@@ -608,8 +607,9 @@ def screenshot_add(request, slug):
 
 
 @login_required
-def publish_screenshot(request, id):
-    screenshot = get_object_or_404(models.Screenshot, id=id)
+def publish_screenshot(request, screenshot_id):
+    """This view should be an API call"""
+    screenshot = get_object_or_404(models.Screenshot, id=screenshot_id)
     if not request.user.is_staff:
         raise Http404
     screenshot.published = True
