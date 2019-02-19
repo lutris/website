@@ -663,24 +663,3 @@ def installer_submissions(request):
             "unpublished_games": unpublished_games,
         },
     )
-
-
-@staff_member_required
-def installer_review(request, slug):
-    game = get_object_or_404(Game, slug=slug)
-    installers_data = []
-    installers = game.installers.all()
-    for installer in installers:
-        installers_data.append(
-            {
-                "installer": installer,
-                "versions": Version.objects.filter(
-                    content_type__model="installer", object_id=installer.id
-                ),
-            }
-        )
-    return render(
-        request,
-        "installers/review.html",
-        {"game": game, "installers_data": installers_data},
-    )

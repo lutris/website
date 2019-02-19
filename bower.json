@@ -17,14 +17,9 @@
     "jquery": "~2.2.4",
     "select2": "~4.0.5",
     "jssor": "~27.5.0",
-    "select2-bootstrap-theme": "git://github.com/select2/select2-bootstrap-theme#0.1.0-beta.9",
-    "jsdifflib": "*",
-    "polymer": "Polymer#^2.5.0",
-    "paper-button": "PolymerElements/paper-button#^2.1.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^2.1.3"
+    "select2-bootstrap-theme": "git://github.com/select2/select2-bootstrap-theme#0.1.0-beta.9"
   },
   "resolutions": {
-    "select2": "~4.0.5",
-    "polymer": "Polymer#^2.5.0"
+    "select2": "~4.0.5"
   }
 }

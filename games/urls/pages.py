@@ -80,9 +80,6 @@ urlpatterns = [
     url(r'installer/submissions$',
         views.installer_submissions,
         name='installer_submissions'),
-    url(r'installer/review/(?P<slug>[\w\-]+)$',
-        views.installer_review,
-        name='installer_review'),
 
     url(r'([\w\-]+)/screenshot/add/',
         views.screenshot_add,
