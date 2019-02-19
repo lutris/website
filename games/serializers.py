@@ -133,14 +133,18 @@ class InstallerRevisionSerializer(serializers.Serializer):
     installer_id = serializers.IntegerField()
 
     def update(self, instance, validated_data):
+        """That should probably be a valid call at some point"""
         LOGGER.error("Not supposed to do that")
 
     def create(self, validated_data):
+        """That should probably be a valid call at some point"""
         LOGGER.error("Not supposed to do that")
 
 
 class InstallerWithRevisionsSerializer(InstallerSerializer):
-    """Serializer for Installers with their associated revisions"""
+    """Serializer for Installers with their associated revisions
+    Used by GameRevisionSerializer
+    """
     revisions = InstallerRevisionSerializer(many=True)
 
     class Meta:
@@ -152,7 +156,11 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
 
 
 class GameRevisionSerializer(GameSerializer):
-    """WAT"""
+    """API view used to fetch all installers and their related revisions for a given
+    game.
+    This is used in the moderator dashboard to load all revisions for a game in a
+    single query.
+    """
     installers = InstallerWithRevisionsSerializer(many=True)
 
     class Meta:
