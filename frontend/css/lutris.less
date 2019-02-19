@@ -222,7 +222,6 @@ form {
   text-align: center;
   padding: 6px 18px;
   margin: 12px 96.55px;
-  color: #3F3F3F;
 }
 
 .action-container {
@@ -350,7 +349,6 @@ input {
 
   h4 {
     text-transform: uppercase;
-    color: @darkOnDarkText;
     font-weight: 600;
     font-size: 14px;
     text-align: center;
@@ -516,14 +514,6 @@ input {
   -moz-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
   -webkit-box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
   box-shadow: @offset @offset 0 @color, @offset @offset 0 @color inset;
-}
-
-.four-colors-gradient(@1, @2, @3, @4) {
-  background: @1;
-  background: linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
-  background: -webkit-linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
-  background: -moz-linear-gradient(@1 0%,  @2 10%, @3 90%, @4 100%);
-  filter: e("progid:DXImageTransform.Microsoft.gradient(startColorstr='@1', endColorstr='@3')");
 }
 
 .right {float: right;}
@@ -889,7 +879,6 @@ input {
   background-color: #222;
   overflow: hidden;
   display: inline-block;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
@@ -1521,7 +1510,6 @@ input {
 
 .main-button {
   @backgroundColor: @brandColor;
-  .four-colors-gradient(#FF9900, #FFC433, #DD7700, #CC4400);
   padding: 7px 14px;
   margin-right: 14px;
   color: #111;
@@ -1534,7 +1522,6 @@ input {
   box-shadow: 0 2px 3px rgba(0,0,0,0.5);
 
   &:hover {
-    .four-colors-gradient(#FF9900, #FFDF3D, #F29000, #CC4400);
     color: #222;
     text-decoration: none;
   }
