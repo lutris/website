@@ -158,6 +158,8 @@ def pull(c):
     config = get_config(c)
     with c.cd(config['code_root']):
         c.run("git checkout %s" % config['git_branch'])
+        c.run("git reset --hard")
+        c.run("git clean -df")
         c.run("git pull")
 
 
