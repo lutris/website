@@ -43,15 +43,6 @@
           {{submission.revision.user}}
           {{submission.revision.date_created}}
         </span>
-        {% if submission.object.game %}
-          <span>
-            <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
-          </span>
-        {% else %}
-          <span>
-            <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
-          </span>
-        {% endif %}
       </p>
     </li>
   {% endfor %}
@@ -71,15 +62,6 @@
           {{submission.revision.user}}
           {{submission.revision.date_created}}
         </span>
-        {% if submission.object.game %}
-          <span>
-            <a href="{% url 'installer_review' slug=submission.object.game.slug %}" class="btn">Review</a>
-          </span>
-        {% else %}
-          <span>
-            <a href="javascript:void(0)" class="btn" onclick="deleteRevision(this)" data-id="{{submission.revision.id}}">Delete</a>
-          </span>
-        {% endif %}
       </p>
     </li>
   {% endfor %}
@@ -96,9 +78,6 @@
     <span class="small">
       {{installer.user}}
       {{installer.created_at}}
-    </span>
-    <span>
-      <a href="{% url 'installer_review' slug=installer.game.slug %}" class="btn">Review</a>
     </span>
   </p>
 </li>
