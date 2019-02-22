@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^platform/(?P<slug>[\w\-]+)/?$',
         views.GameListByPlatform.as_view(),
         name="games_by_plaform"),
-    url(r'^publish/(?P<id>\d+)$',
+    url(r'^publish/(?P<game_id>\d+)$',
         views.publish_game,
         name='game-publish'),
     url(r'^add-game/$',
@@ -84,7 +84,7 @@ urlpatterns = [
     url(r'([\w\-]+)/screenshot/add/',
         views.screenshot_add,
         name='screenshot_add'),
-    url(r'screenshot/(?P<id>\d+)/publish/$',
+    url(r'screenshot/(?P<screenshot_id>\d+)/publish/$',
         views.publish_screenshot,
         name='publish_screenshot'),
 
