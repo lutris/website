@@ -39,7 +39,7 @@
               </a>
             {% endif %}
             {% if can_publish and not game.is_public %}
-              <a class="btn" href="{% url 'game-publish' id=game.id %}">Publish</a>
+              <a class="btn" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
             {% endif %}
             {% if can_edit %}
               <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
