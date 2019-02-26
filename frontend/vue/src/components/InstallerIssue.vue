@@ -18,6 +18,9 @@
     <span v-if="canSolveIssue">
       <a href="#" @click.prevent="onMarkAsSolved">mark as solved</a>
     </span>
+    <span v-if="canReopenIssue">
+      <a href="#" @click.prevent="onReopen">re-open</a>
+    </span>
     <span v-if="canDeleteIssue">
       <a href="#" @click.prevent="onDelete">delete</a>
     </span>
@@ -121,6 +124,12 @@ export default {
       }
       return this.user.is_staff || this.user.id === this.issue.submitted_by;
     },
+    canReopenIssue() {
+      if(!this.issue.solved || !this.user) {
+        return false;
+      }
+      return this.user.is_staff || this.user.id === this.issue.submitted_by;
+    }
   },
   methods: {
     canDeleteReply(reply) {
@@ -170,6 +179,13 @@ export default {
     },
     onMarkAsSolved() {
       this.showSolvedConfirmation = true;
+    },
+    onReopen() {
+      axios
+        .patch(`/api/installers/issues/${this.issue.id}`, { solved: false }, this.getAxiosConfig())
+        .then(response => {
+          this.issue.solved = false;
+        });
     },
     getAxiosConfig() {
       return {
