@@ -9,7 +9,7 @@
       {% if  user.is_staff %}
       <div class="screenshot-menu">
         {% if  not screenshot.published %}
-          {% url 'publish_screenshot' id=screenshot.id as publish_url %}
+          {% url 'publish_screenshot' screenshot_id=screenshot.id as publish_url %}
           <a href="{{ publish_url }}" class="btn">Publish</a>
         {% endif %}
         {% url 'admin:games_screenshot_change' screenshot.id as admin_url %}
