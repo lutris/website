@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load static from staticfiles %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'lightbox2/css/lightbox.min.css' %}">
+{% endblock stylesheets %}
 
 {% block title %}My account | Lutris{% endblock %}
 
@@ -59,10 +63,16 @@
       <p>
         <a href="{% url 'library_show' username=user.username %}" class="btn">Show library</a>
       </p>
-      <p>You can automatically import the list of your Steam games and add them to
-      your Lutris library.</p>
-      <p class="warning-message">Your steam profile must be public during the sync
-      process.You can set it back to private after that.</p>
+      <p>
+        You can automatically import the list of your Steam games and add them to your Lutris library.
+      </p>
+      <p class="warning-message">
+        Make sure to set <strong>both</strong> your Steam profile and the games
+        details set to public in your Steam account settings (available at <code>https://steamcommunity.com/profiles/<strong>&lt;your_steam_id&gt;</strong>/edit/settings</code>).
+        <a data-lightbox="steam-profile"
+          data-title="Check both checkboxes in your Steam profile"
+          href='{% static 'images/screenshots/steam-profile.png' %}'>See how</a>
+      </p>
       <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
       {% if user.steamid %}
       <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
@@ -105,7 +115,10 @@
   </div>
   </div>
 </div>
+<script src="{% static 'lightbox2/js/lightbox-plus-jquery.min.js' %}"></script
 {% endblock %}
+
+
 
 {% comment %}
 <a href="#" class="avatar-upload-link">
