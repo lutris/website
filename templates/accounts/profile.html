@@ -68,10 +68,12 @@
       </p>
       <p class="warning-message">
         Make sure to set <strong>both</strong> your Steam profile and the games
-        details set to public in your Steam account settings (available at <code>https://steamcommunity.com/profiles/<strong>&lt;your_steam_id&gt;</strong>/edit/settings</code>).
-        <a data-lightbox="steam-profile"
+        details set to public in your <a
+          href="https://steamcommunity.com/profiles/{{user.steamid}}/edit/settings"
+        >Steam account settings</a>. It should look <a data-lightbox="steam-profile"
           data-title="Check both checkboxes in your Steam profile"
-          href='{% static 'images/screenshots/steam-profile.png' %}'>See how</a>
+          href='{% static 'images/screenshots/steam-profile.png' %}'
+        >like this</a>.
       </p>
       <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
       {% if user.steamid %}
