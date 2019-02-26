@@ -704,7 +704,7 @@ class Installer(BaseInstaller):
         ]
 
     @property
-    def latest_revision(self):
+    def latest_version(self):
         try:
             return Version.objects.filter(
                 content_type__model="installer", object_id=self.id
