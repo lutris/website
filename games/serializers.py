@@ -131,6 +131,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     reason = serializers.CharField()
     comment = serializers.CharField()
     installer_id = serializers.IntegerField()
+    revision_id = serializers.IntegerField()
 
     def update(self, instance, validated_data):
         """That should probably be a valid call at some point"""

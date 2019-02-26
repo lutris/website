@@ -859,6 +859,7 @@ class InstallerRevision(BaseInstaller):
         super(InstallerRevision, self).__init__()
         self._version = version
         self.id = version.pk  # pylint: disable=C0103
+        self.revision_id = version.revision.id
         installer_data = self.get_installer_data()
         self.game = Game.objects.get(pk=installer_data["game"])
 
