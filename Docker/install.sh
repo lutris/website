@@ -11,4 +11,4 @@ make sysdeps
 make db
 make client
 make docs
-pip install Faker
+pip3 install Faker

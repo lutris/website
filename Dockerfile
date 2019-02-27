@@ -1,7 +1,9 @@
 FROM ubuntu:16.04
 MAINTAINER Joonatoona
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y git curl python python-pip imagemagick memcached libmemcached-dev mercurial bzr
+ENV LC_ALL=C.UTF-8
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y git curl python3 python3-pip imagemagick memcached libmemcached-dev mercurial bzr
 
 WORKDIR /app
 ADD . /app
