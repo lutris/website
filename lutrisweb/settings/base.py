@@ -187,6 +187,9 @@ DISCOURSE_URL = 'https://forums.lutris.net'
 DISCORD_URL = "https://discordapp.com/invite/Pnt5CuY"
 DISCORD_ISSUE_WEBHOOK_ID = os.environ.get('DISCORD_ISSUE_WEBHOOK_ID')
 DISCORD_ISSUE_WEBHOOK_TOKEN = os.environ.get('DISCORD_ISSUE_WEBHOOK_TOKEN')
+DISCORD_INSTALLER_WEBHOOK_ID = os.environ.get('DISCORD_INSTALLER_WEBHOOK_ID')
+DISCORD_INSTALLER_WEBHOOK_TOKEN = os.environ.get('DISCORD_INSTALLER_WEBHOOK_TOKEN')
+
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
