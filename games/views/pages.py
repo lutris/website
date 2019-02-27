@@ -327,7 +327,7 @@ def edit_installer(request, slug):
                 version.revision.user == request.user or request.user.is_staff
             ) and version.revision.date_created > installer.updated_at:
                 draft_data = version.field_dict
-                revision_id = version.id
+                revision_id = version.revision.id
                 break
     if draft_data:
         draft_data["reason"] = ""
