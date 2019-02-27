@@ -318,7 +318,7 @@ def edit_installer(request, slug):
     for version in versions:
         if revision_id:
             # Display the revision given in the GET parameters
-            if version.id == revision_id:
+            if version.revision.id == revision_id:
                 draft_data = version.field_dict
                 break
         else:
