@@ -34,7 +34,7 @@ from games.forms import (
 )
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
-from games.webhooks import notify_issue_creation
+from games.webhooks import notify_issue_creation, notify_installer
 from emails.messages import send_email
 from platforms.models import Platform
 
@@ -276,6 +276,7 @@ def new_installer(request, slug):
         installer.game_id = game.id
         installer.user = request.user
         installer.save()
+        notify_installer(installer)
         return redirect("installer_complete", slug=game.slug)
     return render(
         request, "installers/form.html", {"form": form, "game": game, "new": True}
