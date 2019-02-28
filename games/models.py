@@ -906,16 +906,35 @@ class InstallerRevision(BaseInstaller):
         self._version.revision.delete()
 
     def accept(self, moderator):
+        """Accepts an installer submission
+
+        Also clears any earlier draft created by the same user.
+        """
+        submission_author = self._version.revision.user
+        submission_date = self._version.revision.date_created
+        # Since the reversion package is used in a backwards way,
+        # the installer is "reverted" to its future state (versions are
+        # supposed to store past states of objects but they are used for
+        # storing potential future versions in our case).
         self._version.revert()
+
         installer = Installer.objects.get(pk=self.installer_id)
 
         # Keep a snapshot of the current installer
         InstallerHistory.create_from_installer(installer)
         installer.published = True
-        LOGGER.info("Installer published by %s", moderator)
         installer.published_by = moderator
         installer.draft = False
         installer.save()
+
+        # Clean earlier drafts from the same submitter
+        for revision in installer.revisions:
+            if any([
+                    revision.user != submission_author,
+                    revision.created_at > submission_date
+            ]):
+                continue
+            revision.delete()
         self.delete()
 
 
