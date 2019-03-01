@@ -302,7 +302,6 @@ def edit_installer(request, slug):
     # Handle installer deletion in a separate view
     if "delete" in request.POST:
         return redirect(reverse("delete_installer", kwargs={"slug": installer.slug}))
-
     # Extract optional revision ID from parameters
     revision_id = request.GET.get("revision")
     try:
@@ -325,7 +324,7 @@ def edit_installer(request, slug):
         else:
             # Display the latest revision created by the current logged in user
             if (
-                version.revision.user == request.user or request.user.is_staff
+                    version.revision.user == request.user or request.user.is_staff
             ) and version.revision.date_created > installer.updated_at:
                 draft_data = version.field_dict
                 revision_id = version.revision.id
@@ -353,9 +352,10 @@ def edit_installer(request, slug):
             )
             reversion.add_to_revision(installer)
 
-        messages.info(request, "Installer saved")
-        if draft_data and draft_data["draft"]:
+        if "save" in request.POST:
+            messages.info(request, "Draft saved")
             return redirect("edit_installer", slug=installer.slug)
+        messages.info(request, "Submission sent to moderation")
         return redirect("installer_complete", slug=installer.game.slug)
 
     if draft_data:
@@ -375,7 +375,7 @@ def edit_installer(request, slug):
             "installer": installer,
             "versions": versions,
             "revision_id": revision_id,
-        },
+        }
     )
 
 
