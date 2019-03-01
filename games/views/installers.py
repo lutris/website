@@ -23,7 +23,16 @@ LOGGER = logging.getLogger(__name__)
 class InstallerListView(generics.ListAPIView):
     """Return a list of all installers"""
     serializer_class = serializers.InstallerSerializer
-    queryset = models.Installer.objects.all()
+
+    def get_queryset(self):
+        installer_status = self.request.GET.get('status')
+        if installer_status == 'published':
+            return models.Installer.objects.published()
+        if installer_status == 'unpublished':
+            return models.Installer.objects.unpublished()
+        if installer_status == 'abandoned':
+            return models.Installer.objects.abandoned()
+        return models.Installer.objects.all()
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
