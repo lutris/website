@@ -30,6 +30,23 @@
         not report issues by email or by private message. Bug reports have to
         stay visible to the community.
       </p>
+
+      <a class="title" href="#ssl-issue">
+        <h3 id="ssl-issue">Runners and other lutris provided files fail to download</h3>
+      </a>
+      <p>
+        There seems to be some issues with CloudFlare and some ISPs (notably in
+        Turkey) when using older versions of libssl.<br>
+        <br>
+        A quick workaround so is to run lutris with <code>env LC_ALL=C
+          lutris</code> but a more reliable solution is to update your version of libssl.
+        The following repositories provide libssl 1.1.1.<br>
+        On Ubuntu 18.04 based systems (Linux Mint 19,etc):<br>
+        <code>sudo add-apt-repository ppa:mgrocock/openssl</code><br>
+        On Ubuntu 16.04 based systems ( Mint 18, etc):<br>
+        <code>sudo add-apt-repository ppa:carsten-uppenbrink-net/postfix</code>
+      </p>
+
       <a class="title" href="#game-dev">
         <h3 id="game-dev">I'm a game developer, can I publish my game on Lutris?</h3>
       </a>
