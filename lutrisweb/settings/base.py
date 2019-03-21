@@ -164,7 +164,7 @@ INSTALLED_APPS = [
 ]
 
 BANNER_SIZE = "184x69"
-ICON_SIZE = "32x32"
+ICON_SIZE = "64x64"
 ICON_LARGE_SIZE = "256x256"
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_COLORSPACE = "sRGB"
