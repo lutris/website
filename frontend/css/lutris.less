@@ -321,10 +321,10 @@ input {
   padding-left: 0;
   padding-right: 0;
   @media (min-width: @screen-sm-min) {
-    width: @container-sm;
+    width: 100%;
   }
   @media (min-width: @screen-md-min) {
-    width: @container-md;
+    width: 100%
   }
   @media (min-width: @screen-lg-min) {
     width: @container-lg;
@@ -591,7 +591,7 @@ input {
   .nav > li > a {
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 14px;
+    //font-size: 14px;
     color: #E5E5E5;
 
     &:hover {
@@ -600,15 +600,15 @@ input {
     }
     @media (min-width: @screen-sm-min) {
       margin-top: 10px;
-      margin-right: 60px;
-      padding: 6px 18px;
+      margin-right: 20px;
+      padding: 6px 12px;
+      font-size: 14px;
     }
     @media (max-width: @screen-sm-max) {
       margin-top: 10px;
-      margin-right: 20px;
+      margin-right: 10px;
       padding: 6px;
     }
-
     @media (max-width: @screen-xs-max) {
       margin-top: 4px;
       display: block;
@@ -629,8 +629,6 @@ input {
 
   .search-games-content {
     margin-top: 8px;
-    font-size: 14px;
-
     input, button {
       color: #aaa;
       background: transparent;
@@ -639,9 +637,8 @@ input {
     }
 
     input[type=text] {
-      font-size: 1.1em;
       font-weight: 600;
-      max-width: 140px;
+      max-width: 120px;
       padding: 4px 12px;
       border-radius: 6px;
     }
@@ -653,9 +650,9 @@ input {
 }
 
 #main-nav {
-  margin-left: 160px;
+  margin-left: 40px;
   @media (max-width: @screen-lg-min) {
-    margin-left: 40px;
+    margin-left: 12px;
   }
 }
 
