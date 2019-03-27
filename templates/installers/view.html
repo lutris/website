@@ -1,5 +1,18 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
+{% block extra_head %}
+<meta property="pageId" content="{{ installer.slug }}" />
+{% thumbnail installer.game.title_logo "300" as img %}
+<link rel='image_src' href="{{img.url}}">
+<meta property='og:image' content="{{img.url}}" />
+{% endthumbnail %}
+<meta property='og:title' content="{{ installer.game.name }} ({{ installer.version}})" />
+<meta property='og:site_name' content='Lutris' />
+<meta name="title" content="{{ installer.game.name }} ({{ installer.version }}) - Lutris" />
+<meta name="description" content="{{ installer.game.name }} ({{ installer.version }}) - Lutris" />
+<meta property="og:description" content="{{ installer.game.name }} ({{ installer.version }}) - Lutris" />
+{% endblock extra_head %}
 
 {% block content %}
 <h1>Installer {{installer.slug}}</h1>
