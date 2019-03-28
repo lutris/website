@@ -7,6 +7,7 @@ nvm install node
 npm install -g bower grunt-cli
 sed -i -e "s/sudo//g" Makefile
 make setup
+make deps
 make sysdeps
 make db
 make client
