@@ -1,0 +1,33 @@
+version: '3.4'
+
+volumes:
+  postgresql:
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/components
+      - /app/lutris_client
+      - /app/node_modules
+      - /app/public
+      - /app/src
+    ports:
+      - 8000:8000
+    environment:
+      DJANGO_SETTINGS_MODULE: "lutrisweb.settings.docker_compose"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+  db:
+    image: postgres:10
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'lutris'
+      POSTGRES_USER: 'lutris'
+      POSTGRES_PASSWORD: 'admin'
