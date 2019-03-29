@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/lutris_client
+      - /app/src
+    ports:
+      - 8000:8000
+    stdin_open: true
+    tty: true
