@@ -8,10 +8,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y build-es
 WORKDIR /app
 ADD . /app
 
-RUN touch docs/installers.html
-
 ENV SECRET_KEY="somethissecret" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local" USE_SQLITE=1
 RUN /bin/bash /app/Docker/install.sh
+
+RUN mkdir -p docs
+RUN touch templates/docs/installers.html
 
 EXPOSE 8000
 
