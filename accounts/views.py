@@ -221,8 +221,21 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     def get_ordering(self):
         return self.request.GET.get('ordering', self.ordering)
 
+    def get_user(self):
+        """Return a user object from the username url segment"""
+        try:
+            user = User.objects.get(username=self.kwargs['username'])
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(username__iexact=self.kwargs['username'])
+            except User.DoesNotExist:
+                raise Http404
+            except User.MultipleObjectsReturned:
+                raise Http404
+        return user
+
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.kwargs['username'])
+        user = self.get_user()
         queryset = models.GameLibrary.objects.get(user=user).games.all()
         search = self.request.GET.get('search', None)
         platforms = self.request.GET.getlist('platform', None)
@@ -248,7 +261,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
         context = super().get_context_data(**kwargs)
-        user = get_object_or_404(User, username=self.kwargs['username'])
+        user = self.get_user()
         if self.request.user != user:
             # Libraries are currently private. This will change once public
             # profiles are implemented

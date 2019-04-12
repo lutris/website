@@ -4,6 +4,7 @@ from django.db.models import Q
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
 
+from accounts.models import User
 from games import models, serializers
 
 
@@ -76,14 +77,24 @@ class GameListView(generics.GenericAPIView):
 
 
 class GameLibraryView(generics.RetrieveAPIView):
+    """List a user's library"""
     serializer_class = serializers.GameLibrarySerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
     def get(self, request, username):
         try:
-            library = models.GameLibrary.objects.get(user__username=username)
-        except models.GameLibrary.DoesNotExist:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(username__iexact=username)
+            except User.DoesNotExist:
+                return Response(status=404)
+            except User.MultipleObjectsReturned:
+                return Response(status=404)
+        if user != request.user and not user.is_staff:
             return Response(status=404)
+        library = models.GameLibrary.objects.get(user=user)
         serializer = serializers.GameLibrarySerializer(library)
         return Response(serializer.data)
 
