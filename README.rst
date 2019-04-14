@@ -1,30 +1,25 @@
 Getting the site up and running for development
 ===============================================
 
-With docker
+With docker-compose
 ===========
 
-Install docker for your system.
+Install docker and docker-compose for your system.
 
-Build the image
-
-::
-
-    docker build -t lutris/website .
-
-Start a new container using the image
+Spin up the web and db services
 
 ::
 
-    docker run --name lutrisweb -it -p 8000:8000 lutris/website
+    docker-compose up
 
-Attach to shell
+In a separate terminal run
 
 ::
 
-    docker start lutrisweb
-    docker exec -it lutrisweb /bin/bash
+    docker-compose run web make db
 
+You are now ready to develop. No need to rebuild the containers for simple
+code changes, as the containers will pick them up from the host system.
 
 Natively
 ========
