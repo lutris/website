@@ -168,8 +168,11 @@ class Game(models.Model):
         ("protected", "Installer modification is restricted"),
     )
 
-    # Those fields in the model are editable by the user
-    TRACKED_FIELDS = ["name", "year", "platforms", "genres", "website", "description", "title_logo"]
+    # These model fields are editable by the user
+    TRACKED_FIELDS = [
+        "name", "year", "platforms", "genres", "publisher", "developer",
+        "website", "description", "title_logo"
+    ]
 
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
@@ -265,10 +268,15 @@ class Game(models.Model):
         return {
             "name": self.name,
             "year": self.year,
-            "website": self.website,
-            "description": self.description,
             "platforms": [x.id for x in list(self.platforms.all())],
             "genres": [x.id for x in list(self.genres.all())],
+
+            # The Select2 dropdowns want ids instead of complete models
+            "publisher": self.publisher.id if self.publisher else None,
+            "developer": self.developer.id if self.developer else None,
+
+            "website": self.website,
+            "description": self.description,
             "title_logo": self.title_logo,
         }
 
@@ -303,6 +311,8 @@ class Game(models.Model):
         self.year = change_set.year
         self.platforms.set(change_set.platforms.all())
         self.genres.set(change_set.genres.all())
+        self.publisher = change_set.publisher
+        self.developer = change_set.developer
         self.website = change_set.website
         self.description = change_set.description
         self.title_logo = change_set.title_logo
