@@ -54,6 +54,8 @@ class TestGameForm(TestCase):
     def setUp(self):
         self.platform = factories.PlatformFactory()
         self.genre = factories.GenreFactory()
+        self.developer = factories.CompanyFactory()
+        self.publisher = factories.CompanyFactory()
         self.existing_game = factories.GameFactory(
             name="Hyperdimension Neptunia Re;Birth2: Sisters Generation"
         )
@@ -63,7 +65,9 @@ class TestGameForm(TestCase):
         form = forms.GameForm({
             'name': 'bliblu',
             'platforms': [self.platform.id],
-            'genres': [self.genre.id]
+            'genres': [self.genre.id],
+            'developer': self.developer.id,
+            'publisher': self.publisher.id
         }, {
             'title_logo': SimpleUploadedFile('front.png', image.getvalue())
         })
@@ -78,8 +82,7 @@ class TestGameForm(TestCase):
         form = forms.GameForm({
             'name': 'Hyperdimension Neptunia Re,Birth2: Sisters Generation',
             'platforms': [self.platform.id],
-            'genres': [self.genre.id],
-
+            'genres': [self.genre.id]
         })
         self.assertFalse(form.is_valid())
         self.assertIn('name', form.errors)

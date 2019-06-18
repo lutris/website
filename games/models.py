@@ -265,10 +265,15 @@ class Game(models.Model):
         return {
             "name": self.name,
             "year": self.year,
-            "website": self.website,
-            "description": self.description,
             "platforms": [x.id for x in list(self.platforms.all())],
             "genres": [x.id for x in list(self.genres.all())],
+
+            # The Select2 dropdowns want ids instead of complete models
+            "publisher": self.publisher.id if self.publisher else None,
+            "developer": self.developer.id if self.developer else None,
+
+            "website": self.website,
+            "description": self.description,
             "title_logo": self.title_logo,
         }
 
