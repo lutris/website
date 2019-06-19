@@ -9,7 +9,7 @@ WORKDIR /app
 ADD . /app
 
 ENV SECRET_KEY="somethissecret" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local" USE_SQLITE=1
-RUN /bin/bash /app/Docker/install.sh
+RUN /bin/bash /app/scripts/setup.sh
 
 EXPOSE 8000
 
