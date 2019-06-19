@@ -53,7 +53,7 @@ deploy:
 	fab -H lutris.net deploy
 
 client:
-	if [ -e lutris_client ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
+	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
 docs:
 	rst2html.py --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html

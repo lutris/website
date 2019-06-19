@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y sudo bui
 WORKDIR /app
 ADD . /app
 
-ENV SECRET_KEY="somethissecret" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local" USE_SQLITE=1
+ENV SECRET_KEY="somethissecret" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 RUN /app/scripts/setup.sh
 
 EXPOSE 8000

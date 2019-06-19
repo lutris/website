@@ -15,8 +15,6 @@ services:
       - /app/src
     ports:
       - 8000:8000
-    environment:
-      DJANGO_SETTINGS_MODULE: "lutrisweb.settings.docker_compose"
     stdin_open: true
     tty: true
     depends_on:
