@@ -10,6 +10,8 @@ ADD . /app
 ENV SECRET_KEY="somethissecret" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 RUN /app/scripts/setup.sh
 
+RUN sh -c "touch templates/docs/installers.html"
+
 EXPOSE 8000
 
 CMD ["make", "run"]

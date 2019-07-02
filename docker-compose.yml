@@ -13,6 +13,7 @@ services:
       - /app/node_modules
       - /app/public
       - /app/src
+      - /app/templates/docs
     ports:
       - 8000:8000
     stdin_open: true

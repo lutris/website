@@ -1,14 +1,15 @@
 language: python
-env:
-  - DJANGO=1.10.2 DJANGO_SETTINGS_MODULE='lutrisweb.settings.local' SECRET_KEY="ThisIsMySecretThereAreOtherLikeThisButThisOneIsMine" USE_SQLITE=1
 python:
   - 3.5
+env:
+  - BUILD=native
+  - BUILD=docker
 install:
-  - pip install -r config/requirements/devel.pip
+  - ci/install.sh
 before_script:
-  - touch templates/docs/installers.html
+  - ci/before_script.sh
 script:
-  - make test
+  - ci/script.sh
 
 # Build Notifications
 # https://docs.travis-ci.com/user/notifications/
