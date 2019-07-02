@@ -1,4 +1,3 @@
-import os
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
@@ -7,6 +6,13 @@ FILES_ROOT = '/srv/files'
 FILES_URL = 'https://lutris.net/files/'
 
 ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 DATABASES = {
     'default': {
@@ -39,8 +45,8 @@ TEMPLATE_LOADERS = (
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
-        'anon': '10/min',
-        'user': '50/min'
+    'anon': '10/min',
+    'user': '50/min'
 }
 
 STEAM_API_KEY = os.environ['STEAM_API_KEY']
