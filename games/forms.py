@@ -52,13 +52,24 @@ class GameForm(forms.ModelForm):
         fields = (
             "name",
             "year",
+            "developer",
+            "publisher",
             "website",
             "platforms",
             "genres",
             "description",
             "title_logo",
         )
-        widgets = {"platforms": Select2MultipleWidget, "genres": Select2MultipleWidget}
+        widgets = {
+            "platforms": Select2MultipleWidget,
+            "genres": Select2MultipleWidget,
+            "developer": ModelSelect2Widget(
+                model=models.Company, search_fields=["name__icontains"]
+            ),
+            "publisher": ModelSelect2Widget(
+                model=models.Company, search_fields=["name__icontains"]
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super(GameForm, self).__init__(*args, **kwargs)
@@ -102,6 +113,8 @@ class GameForm(forms.ModelForm):
                 None,
                 "name",
                 "year",
+                "developer",
+                "publisher",
                 "website",
                 "platforms",
                 "genres",
