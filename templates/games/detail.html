@@ -144,13 +144,21 @@
               </a>
               {% endfor %}
               {% if game.steamid %}
+              <a href="https://isthereanydeal.com/steam/app/{{ game.steamid }}"
+                title="IsThereAnyDeal"
+                class='external-link'>
+                <img src="{{ STATIC_URL }}images/icons/isthereanydeal.png" alt="IsThereAnyDeal" />
+                <span>IsThereAnyDeal</span>
+              </a>
               <a href="https://www.protondb.com/app/{{ game.steamid }}"
                 title="ProtonDB"
                 class='external-link'>
                 <img src="{{ STATIC_URL }}images/icons/protondb.png" alt="ProtonDB" />
                 <span>ProtonDB</span>
               </a>
-              <a href="https://steamdb.info/app/{{ game.steamid }}" title="SteamDB" class='external-link'>
+              <a href="https://steamdb.info/app/{{ game.steamid }}"
+                title="SteamDB"
+                class='external-link'>
                 <img src="{{ STATIC_URL }}images/icons/steamdb.png" alt="SteamDB" />
                 <span>SteamDB</span>
               </a>

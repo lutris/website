@@ -844,6 +844,7 @@ class GameLink(models.Model):
     WEBSITE_CHOICES = (
         ('battlenet', 'Battle.net'),
         ('github', 'Github'),
+        ('isthereanydeal', 'IsThereAnyDeal'),
         ('lemonamiga', 'Lemon Amiga'),
         ('mobygames', 'MobyGames'),
         ('origin', 'Origin'),
