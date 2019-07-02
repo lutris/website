@@ -128,3 +128,11 @@ class InstallerFactory(factory.DjangoModelFactory):
     version = 'test'
     published = True
     user = factory.SubFactory(UserNoLibraryFactory)
+
+
+class CompanyFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Company
+        django_get_or_create = ('name',)
+    name = factory.Iterator(['Valve', 'CD Projekt', 'Blizzard', 'Tripwire Interactive'])
+    slug = factory.Iterator(['valve', 'cd-projekt', 'blizzard', 'tripwire-interactive'])

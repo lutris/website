@@ -90,6 +90,8 @@ class TestGameEditForm(TestCase):
 
     def setUp(self):
         name = 'Horribly Misspelled Game Title'
+        developer = factories.CompanyFactory()
+        publisher = factories.CompanyFactory()
         platform = factories.PlatformFactory()
         genre = factories.GenreFactory()
         year = 2012
@@ -101,10 +103,14 @@ class TestGameEditForm(TestCase):
         self.game.website = website
         self.game.year = year
         self.game.description = ''
+        self.game.developer = developer
+        self.game.publisher = publisher
         self.game.save()
 
         self.inputs = {
             'name': name,
+            'developer': developer.id,
+            'publisher': publisher.id,
             'platforms': [platform.id],
             'genres': [genre.id],
             'website': website,
