@@ -67,7 +67,7 @@ worker:
 sync:
 	scp lutris.net:/srv/backup/sql/latest.tar.gz lutris.tar.gz
 	gunzip lutris.tar.gz
-	sudo -u postgres pg_restore --clean --dbname=lutris lutris.tar
+	pg_restore -h localhost -U lutris --clean --dbname=lutris lutris.tar
 	rm lutris.tar
 
 tags:

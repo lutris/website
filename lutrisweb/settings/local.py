@@ -7,7 +7,7 @@ TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 INSTALLED_APPS.append('debug_toolbar')
 MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
-if not os.environ.get('USE_SQLITE'):
+if os.environ.get('USE_SQLITE') != "1":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

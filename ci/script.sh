@@ -9,5 +9,5 @@ if [ "${BUILD}" == "native" ]; then
     make test
 elif [ "${BUILD}" == "docker" ]; then
     docker-compose build
-    docker-compose run web make test
+    docker-compose run -e USE_SQLITE=1 web make test
 fi
