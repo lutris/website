@@ -13,7 +13,6 @@ npm install -g bower grunt-cli
 make setup
 make deps
 make sysdeps
-make db
 make client
 make docs
 pip3 install Faker
