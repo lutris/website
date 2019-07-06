@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
   db:
-    image: postgres:10
+    image: postgres:11
     ports:
       - 5432:5432
     volumes:
