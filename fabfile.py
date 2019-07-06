@@ -8,7 +8,10 @@ from invoke import task
 LUTRIS_REMOTE = 'git@github.com:lutris/website.git'
 DJANGO_SETTINGS_MODULE = 'lutrisweb.settings.production'
 NVM_DIR = '/home/django/.nvm'
-PRODUCTION_IP = '62.210.136.153'
+PRODUCTION_IPS = (
+    "62.210.136.153",
+    "10.0.3.101"
+)
 
 def get_config(context):
     try:
@@ -16,7 +19,7 @@ def get_config(context):
     except AttributeError:
         host = 'localhost'
 
-    if host == PRODUCTION_IP:
+    if host in PRODUCTION_IPS:
         host = 'lutris.net'
 
     if host == 'lutris.net':
