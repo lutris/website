@@ -14,7 +14,7 @@ if os.environ.get('USE_SQLITE') != "1":
             'NAME': 'lutris',
             'USER': 'lutris',
             'PASSWORD': 'admin',
-            'HOST': 'localhost',
+            'HOST': os.environ.get("DB_HOST", "localhost"),
         }
     }
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

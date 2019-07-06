@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y sudo bui
 WORKDIR /app
 ADD . /app
 
-ENV SECRET_KEY="somethissecret" USE_SQLITE="$USE_SQLITE" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
+ENV SECRET_KEY="somethissecret" USE_SQLITE="$USE_SQLITE" DB_HOST="db" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 RUN /app/scripts/setup.sh
 
 RUN sh -c "touch templates/docs/installers.html"
