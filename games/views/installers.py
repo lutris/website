@@ -1,5 +1,5 @@
 """Installer related API views"""
-# pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors,too-few-public-methods
 from __future__ import absolute_import
 
 import logging
@@ -209,9 +209,9 @@ class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
 
 class SmallResultsSetPagination(PageNumberPagination):
     """Pagination used for heavier serializers that don't need a lot of data returned at once."""
-    page_size = 10
+    page_size = 25
     page_size_query_param = 'page'
-    max_page_size = 25
+    max_page_size = 100
 
 
 class RevisionListView(generics.ListAPIView):
