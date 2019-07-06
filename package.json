@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "main": "Gruntfile.js",
   "devDependencies": {
-    "bower": "^1.8.4",
+    "bower": "^1.8.8",
     "grunt": "^1.0.4",
     "grunt-browser-sync": "^2.2.0",
     "grunt-cli": "1.2.0",
