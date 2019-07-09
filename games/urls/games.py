@@ -7,6 +7,7 @@ from games.views import games as views
 urlpatterns = [
     url(r'^$', views.GameListView.as_view(),
         name='api_game_list'),
+    url(r'/stats', views.GameStatsView.as_view(), name='api_game_stats'),
     url(r'/library/(?P<username>.*)$', views.GameLibraryView.as_view(),
         name='api_game_library'),
     url(r'^/(?P<slug>[\w\-]+)$', views.GameDetailView.as_view(),

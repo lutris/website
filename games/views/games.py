@@ -1,6 +1,8 @@
 """API views module"""
+# pylint: disable=too-few-public-methods
 from __future__ import absolute_import
 from django.db.models import Q
+from rest_framework.views import APIView
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
 
@@ -109,3 +111,18 @@ class GameInstallersView(generics.RetrieveAPIView):
     serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.filter(change_for__isnull=True)
+
+
+class GameStatsView(APIView):
+    """View for game statistics"""
+    permission_classes = (permissions.IsAdminUser, )
+
+    def get(self, request, format=None):
+        """Return game statistics"""
+        statistics = {}
+        statistics["num_installer_submissions"] = models.GameSubmission.objects.filter(
+            accepted_at__isnull=True
+        ).count()
+        statistics["num_games"] = models.Game.objects.all().count()
+        statistics["num_published_games"] = models.Game.objects.filter(is_public=True).count()
+        return Response(statistics)
