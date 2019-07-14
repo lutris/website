@@ -36,6 +36,8 @@
     "url": "https://github.com/lutris/website/issues"
   },
   "dependencies": {
-    "ace-builds": "^1.4.5"
+    "ace-builds": "^1.4.5",
+    "jquery": "^3.4.1",
+    "select2": "^4.0.7"
   }
 }

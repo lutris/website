@@ -196,8 +196,8 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
 # Select2
-SELECT2_JS = '/static/js/select2.min.js'
-SELECT2_CSS = '/static/css/select2.min.css'
+SELECT2_JS = '/static/select2/dist/js/select2.min.js'
+SELECT2_CSS = '/static/select2/dist/css/select2.min.css'
 
 # Email
 
