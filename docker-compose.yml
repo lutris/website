@@ -10,7 +10,6 @@ services:
         - USE_SQLITE=${USE_SQLITE}
     volumes:
       - .:/app
-      - /app/components
       - /app/media
       - /app/templates/docs
     ports:
