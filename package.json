@@ -34,5 +34,8 @@
   ],
   "bugs": {
     "url": "https://github.com/lutris/website/issues"
+  },
+  "dependencies": {
+    "ace-builds": "^1.4.5"
   }
 }

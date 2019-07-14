@@ -52,6 +52,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "public"),
     os.path.join(BASE_DIR, "frontend/vue/dist"),
     os.path.join(BASE_DIR, "components"),
+    os.path.join(BASE_DIR, "node_modules"),
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
