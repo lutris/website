@@ -11,10 +11,7 @@ services:
     volumes:
       - .:/app
       - /app/components
-      - /app/lutris_client
-      - /app/node_modules
-      - /app/public
-      - /app/src
+      - /app/media
       - /app/templates/docs
     ports:
       - 8000:8000
