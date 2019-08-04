@@ -131,7 +131,10 @@ class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
 
     def get_queryset(self):
         slug = self.request.parser_context['kwargs']['slug']
-        game = models.Game.objects.get(slug=slug)
+        try:
+            game = models.Game.objects.get(slug=slug)
+        except models.Game.DoesNotExist:
+            return models.Game.objects.none()
         return game.installers.all()
 
 
