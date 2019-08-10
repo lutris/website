@@ -365,7 +365,7 @@ class Game(models.Model):
         platforms = [p.slug for p in self.platforms.all()]
         if "linux" in platforms:
             return "linux"
-        elif "windows" in platforms:
+        if "windows" in platforms:
             return "windows"
         return True
 
@@ -913,14 +913,31 @@ class InstallerRevision(BaseInstaller):
         default_installer_data.update(installer_data)
         return default_installer_data
 
-    def delete(self, using=None, keep_parents=False):
-        self._version.revision.delete()
+    def _clear_old_revisions(self, author, date):
+        """Delete revisions older than a given date and from a given author"""
+        installer = Installer.objects.get(pk=self.installer_id)
+        # Clean earlier drafts from the same submitter
+        for revision in installer.revisions:
+            if any([
+                    revision.user != author,
+                    revision.created_at >= date
+            ]):
+                continue
+            revision.delete()
+
+    def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
+        """Delete a submission and its previous revisions"""
+        self._clear_old_revisions(
+            self._version.revision.user,
+            self._version.revision.date_created
+        )
 
     def accept(self, moderator):
         """Accepts an installer submission
 
         Also clears any earlier draft created by the same user.
         """
+
         submission_author = self._version.revision.user
         submission_date = self._version.revision.date_created
         # Since the reversion package is used in a backwards way,
@@ -938,15 +955,7 @@ class InstallerRevision(BaseInstaller):
         installer.draft = False
         installer.save()
 
-        # Clean earlier drafts from the same submitter
-        for revision in installer.revisions:
-            if any([
-                    revision.user != submission_author,
-                    revision.created_at > submission_date
-            ]):
-                continue
-            revision.delete()
-        self.delete()
+        self._clear_old_revisions(submission_author, submission_date)
 
 
 class AutoInstaller(BaseInstaller):
