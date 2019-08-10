@@ -920,7 +920,7 @@ class InstallerRevision(BaseInstaller):
         for revision in installer.revisions:
             if any([
                     revision.user != author,
-                    revision.created_at >= date
+                    revision.created_at > date
             ]):
                 continue
             revision.delete()
