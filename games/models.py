@@ -923,14 +923,15 @@ class InstallerRevision(BaseInstaller):
                     revision.created_at > date
             ]):
                 continue
-            revision.delete()
+            revision._version.revision.delete()  # pylint: disable=protected-access
 
     def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
-        """Delete a submission and its previous revisions"""
+        """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(
             self._version.revision.user,
             self._version.revision.date_created
         )
+
 
     def accept(self, moderator):
         """Accepts an installer submission
