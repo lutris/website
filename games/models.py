@@ -922,7 +922,7 @@ class InstallerRevision(BaseInstaller):
             original_revision.delete()
             return
         if not author:
-            author = original_revision.author
+            author = original_revision.user
             date = original_revision.date
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:
