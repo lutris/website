@@ -913,9 +913,17 @@ class InstallerRevision(BaseInstaller):
         default_installer_data.update(installer_data)
         return default_installer_data
 
-    def _clear_old_revisions(self, author, date):
+    def _clear_old_revisions(self, original_revision=None, author=None, date=None):
         """Delete revisions older than a given date and from a given author"""
-        installer = Installer.objects.get(pk=self.installer_id)
+        try:
+            installer = Installer.objects.get(pk=self.installer_id)
+        except Installer.DoesNotExist:
+            # Revision is for a deleted installer
+            original_revision.delete()
+            return
+        if not author:
+            author = original_revision.author
+            date = original_revision.date
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:
             if any([
@@ -927,11 +935,7 @@ class InstallerRevision(BaseInstaller):
 
     def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
         """Delete the revision and the previous ones from the same author"""
-        self._clear_old_revisions(
-            self._version.revision.user,
-            self._version.revision.date_created
-        )
-
+        self._clear_old_revisions(original_revision=self._version.revision)
 
     def accept(self, moderator):
         """Accepts an installer submission
@@ -956,7 +960,7 @@ class InstallerRevision(BaseInstaller):
         installer.draft = False
         installer.save()
 
-        self._clear_old_revisions(submission_author, submission_date)
+        self._clear_old_revisions(author=submission_author, date=submission_date)
 
 
 class AutoInstaller(BaseInstaller):
