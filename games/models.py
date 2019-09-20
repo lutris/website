@@ -923,7 +923,8 @@ class InstallerRevision(BaseInstaller):
             return
         if not author:
             author = original_revision.user
-            date = original_revision.date
+            date = original_revision.date_created
+
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:
             if any([
