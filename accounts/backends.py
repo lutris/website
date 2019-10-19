@@ -37,7 +37,7 @@ class SmarterModelBackend(ModelBackend):
         """Tries to authenticate any user with the username exactly as given
         This should resolve most issues regarding duplicate usernames.
         """
-        LOGGER.error("Duplicate username %s", username)
+        LOGGER.info("Duplicate username %s", username)
         UserModel = get_user_model()  # pylint: disable=invalid-name
         try:
             user = UserModel._default_manager.get(  # pylint: disable=protected-access
