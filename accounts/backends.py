@@ -39,8 +39,11 @@ class SmarterModelBackend(ModelBackend):
         """
         LOGGER.error("Duplicate username %s", username)
         UserModel = get_user_model()  # pylint: disable=invalid-name
-        user = UserModel._default_manager.get(  # pylint: disable=protected-access
-            username=username
-        )
+        try:
+            user = UserModel._default_manager.get(  # pylint: disable=protected-access
+                username=username
+            )
+        except UserModel.DoesNotExist:
+            return
         if user.check_password(password) and self.user_can_authenticate(user):
             return user
