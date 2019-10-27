@@ -227,6 +227,11 @@ def game_detail(request, slug):
             return redirect(reverse("game_detail", kwargs={"slug": game.slug}))
         except models.Game.DoesNotExist:
             raise Http404
+        except models.Game.MultipleObjectsReturned:
+            games = models.Game.objects.filter(aliases__slug=slug)
+            LOGGER.error("The slug '%s' was used multiple times" % slug)
+            return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
+
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
     pending_change_subm_count = 0
