@@ -13,9 +13,13 @@ def send_webhook_payload(hook_url, payload):
     hook_response = requests.post(hook_url, json.dumps(payload), headers={
         "Content-Type": "application/json"
     })
-    LOGGER.info("Discord Webhook responded with status %s", hook_response.status_code)
     if hook_response.status_code >= 400:
-        LOGGER.error("Error sending the hook payload: %s", hook_response.text)
+        LOGGER.error(
+            "Discord responded with status %s while sending payload %s. Response text: %s",
+            hook_response.status_code,
+            payload,
+            hook_response.text
+        )
         return False
     return True
 
