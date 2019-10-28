@@ -110,7 +110,7 @@
             {% endif %}
           </p>
           <p>
-            {% if game.steamid or game.gogslug or game.humblestoreid %}
+            {% if game.steamid or game.gogslug or game.humblestoreid or game.epicgamesid %}
             <span>Get it from:</span><br/>
             {% endif %}
             {% if game.steamid %}
@@ -119,6 +119,12 @@
                class='external-link'>
               <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
               <span>Steam</span>
+            </a>
+            {% endif %}
+            {% if game.epicgamesid %}
+            <a href="https://www.epicgames.com/store/en-US/product/{{ game.epicgamesid }}" title="Epic Games Store" class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/epicgames.png" alt="Epic Games Store" />
+              <span>Epic Games Store</span>
             </a>
             {% endif %}
             {% if game.humblestoreid %}
