@@ -175,7 +175,7 @@ class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
     form = forms.BaseGameForm
     list_display = ('__str__', 'is_public', 'year', 'steamid', 'gogslug',
-                    'humblestoreid', 'epicgamesid', 'created', 'updated', 'custom_actions')
+                    'humblestoreid', 'created', 'updated', 'custom_actions')
     list_filter = (GameFilter, 'is_public', 'publisher', 'developer', 'genres')
     list_editable = ('is_public', )
     search_fields = ('name', 'steamid')

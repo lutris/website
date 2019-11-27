@@ -21,11 +21,6 @@ class Migration(migrations.Migration):
             name='humblestoreid',
             field=models.CharField(max_length=200, blank=True),
         ),
-        migrations.AddField(
-            model_name='game',
-            name='epicgamesid',
-            field=models.CharField(max_length=200, blank=True),
-        ),
         migrations.AlterField(
             model_name='game',
             name='is_public',

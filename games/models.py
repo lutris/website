@@ -204,7 +204,6 @@ class Game(models.Model):
     gogslug = models.CharField(max_length=200, blank=True)
     gogid = models.PositiveIntegerField(null=True, blank=True)
     humblestoreid = models.CharField(max_length=200, blank=True)
-    epicgamesid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
     popularity = models.IntegerField(default=0)
 
@@ -613,7 +612,6 @@ class BaseInstaller(models.Model):
             yaml_content["steamid"] = self.game.steamid
             yaml_content["gogslug"] = self.game.gogslug
             yaml_content["humblestoreid"] = self.game.humblestoreid
-            yaml_content["epicgamesid"] = self.game.epicgamesid
             try:
                 yaml_content["runner"] = self.runner.slug
             except ObjectDoesNotExist:
