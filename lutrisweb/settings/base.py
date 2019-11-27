@@ -14,7 +14,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.5.3"
+CLIENT_VERSION = "0.5.4"
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
