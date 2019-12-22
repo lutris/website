@@ -43,13 +43,25 @@
             {% if old_value %}
               <tr style="color: #770000; background-color: #fbe9eb; font-family: monospace;">
                 <th>--</th>
-                <td>{{ old_value }}</td>
+                <td>
+                {% if entry == "title_logo" %}
+                  <img src="{{ MEDIA_URL }}{{ old_value }}"/>
+                {% else %}
+                  {{ old_value }}
+                {% endif %}
+                </td>
               </tr>
             {% endif %}
             {% if new_value %}
               <tr style="color: #007700; background-color: #ecfdf0; font-family: monospace;">
                 <th>++</th>
-                <td>{{ new_value }}</td>
+                <td>
+                {% if entry == "title_logo" %}
+                  <img src="{{ MEDIA_URL }}{{ new_value }}"/>
+                {% else %}
+                  {{ new_value }}
+                {% endif %}
+                </td>
               </tr>
             {% endif %}
           {% endfor %}
