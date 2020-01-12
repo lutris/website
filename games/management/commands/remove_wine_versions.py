@@ -14,7 +14,6 @@ VERSIONS_TO_KEEP = (
     'tkg-osu-4.6-x86_64',
     'lutris-lol-4.20-x86_64',
     'lutris-mtga-4.21-x86_64',
-    'lutris-5.0-rc3-x86_64',
     'lutris-fshack-5.0-rc2-x86_64',
     'lutris-vkchildwindow-5.0-rc2-x86_64'
 )
