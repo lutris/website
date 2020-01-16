@@ -44,8 +44,15 @@ class GameListView(generics.GenericAPIView):
             )
 
         if 'gogid' in self.request.data:
-            gog_ids = self.request.data.get('gogid')
-            return base_query.filter(change_for__isnull=True, gogid__in=gog_ids)
+            return base_query.filter(
+                change_for__isnull=True,
+                gogid__in=self.request.data['gogid']
+            )
+        if 'humblestoreid' in self.request.data:
+            return base_query.filter(
+                change_for__isnull=True,
+                humblestoreid__in=self.request.data['humblestoreid']
+            )
 
         return base_query.filter(change_for__isnull=True)
 
