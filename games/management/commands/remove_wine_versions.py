@@ -33,7 +33,7 @@ class Command(BaseCommand):
     @classmethod
     def remove_wine_version(cls, script, slug):
         # pylint: disable=too-many-return-statements
-        wine_config = script.get("wine")
+        wine_config = script.get("wine") or script.get("winesteam")
         if not wine_config:
             return False
         wine_version = wine_config.get("version")
@@ -45,7 +45,9 @@ class Command(BaseCommand):
         LOGGER.info("Removing Wine version %s from %s", wine_version, slug)
         del wine_config["version"]
         if not wine_config:
-            del script["wine"]
+            LOGGER.info("Removing wine section from %s", slug)
+            script.pop("wine", None)
+            script.pop("winesteam", None)
         return True
 
     @staticmethod
@@ -58,7 +60,8 @@ class Command(BaseCommand):
 
         # Search for installers that have a Wine version specified.
         installers = Installer.objects.filter(
-            Q(content__contains="\nwine:")
+            (Q(content__contains="\nwine:")
+             | Q(content__contains="\nwinesteam:"))
             & Q(content__contains="  version: ")
         )
         for installer in installers:

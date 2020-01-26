@@ -25,7 +25,7 @@ class Command(BaseCommand):
     @staticmethod
     def clean_up_dxvk_d9vk(script, slug):
         try:
-            wine_config = script.get("wine")
+            wine_config = script.get("wine") or script.get("winesteam")
             if not wine_config:
                 return False
         except AttributeError:
@@ -70,6 +70,10 @@ class Command(BaseCommand):
 
         LOGGER.info("Removing D9VK from %s", slug)
         del wine_config["d9vk"]
+        if not wine_config:
+            LOGGER.info("Removing wine section from %s", slug)
+            script.pop("wine", None)
+            script.pop("winesteam", None)
         return True
 
     def handle(self, *args, **options):
@@ -78,7 +82,10 @@ class Command(BaseCommand):
 
         dry_run = options.get('dry_run')
 
-        installers = Installer.objects.filter(content__icontains="d9vk:")
+        installers = Installer.objects.filter(
+            Q(content__icontains="d9vk")
+            | Q(content__icontains="dxvk_version")
+        )
         for installer in installers:
             script = load_yaml(installer.content)
             changed = Command.clean_up_dxvk_d9vk(script, installer.slug)
