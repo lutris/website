@@ -3,6 +3,7 @@ all D9VK attributes and dxvk_version from installers."""
 import logging
 
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 
 from common.util import load_yaml, dump_yaml
 from games.models import Installer
@@ -11,6 +12,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
+    """Command to remove d9vk from scripts"""
     help = ("Enables DXVK where D9VK was active before and removes "
             "all D9VK attributes and dxvk_version from installers.")
 
@@ -97,4 +99,3 @@ class Command(BaseCommand):
             else:
                 LOGGER.info("Saving installer %s", installer)
                 installer.save()
-
