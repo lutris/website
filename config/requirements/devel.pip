@@ -1,9 +1,9 @@
 -r base.pip
-django-jenkins==0.110.0
+# django-jenkins is unmaintained, the lutris fork contains updates
+# to support current versions of Coverage and Pylint
+-e git+https://github.com/lutris/django-jenkins.git#egg=django-jenkins
 pylint==2.4.4
 pep8==1.7.1
-# django-jenkins is incompatible with coverage 5.x.x
-# See: https://github.com/kmmbvnr/django-jenkins/issues/374
-coverage==4.5.4
+coverage==5.0.3
 ipdb==0.12.3
 django-debug-toolbar==2.1

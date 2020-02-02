@@ -64,7 +64,8 @@ class RunnerUploadView(generics.CreateAPIView):
 
         return settings.FILES_URL + "runners/" + uploaded_file.name
 
-    def post(self, request, slug):
+    def post(self, request, *args, **kwargs):
+        slug = args[0]
         try:
             runner = Runner.objects.get(slug=slug)
         except Runner.DoesNotExist:
@@ -129,8 +130,9 @@ class RunnerGameList(ListView):
             installers__runner__slug=self.kwargs["runner"]
         ).distinct()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Get the context for this view"""
+        context = super().get_context_data(object_list=object_list, **kwargs)
         try:
             context["runner"] = Runner.objects.get(slug=self.kwargs["runner"])
         except Runner.DoesNotExist:
@@ -151,8 +153,9 @@ class RunnerVersionGameList(ListView):
             installers__content__icontains="  version: %s" % self.kwargs["version"],
         ).distinct()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Get the context for this view"""
+        context = super().get_context_data(object_list=object_list, **kwargs)
         context["version"] = self.kwargs["version"]
         try:
             context["runner"] = Runner.objects.get(slug=self.kwargs["runner"])
