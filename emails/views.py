@@ -1,3 +1,4 @@
+"""Views related to emails"""
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,7 @@ from django.conf import settings
 
 
 def example_email(request):
+    """Display an email with it's template in a view"""
     context = {
         'email_title': "The email title"
     }
@@ -14,6 +16,7 @@ def example_email(request):
 
 @login_required
 def email_sender_test(request):
+    """Test sending an email from the website"""
     user = request.user
     message = None
     if not user.is_superuser:

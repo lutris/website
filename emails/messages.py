@@ -1,3 +1,4 @@
+"""Email utility functions"""
 from six import string_types
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -6,6 +7,7 @@ from premailer import transform
 
 
 def send_game_accepted(user, game):
+    """Email an user when their game submission is accepted"""
     context = {
         'username': user.username,
         'name': game.name,
@@ -16,6 +18,7 @@ def send_game_accepted(user, game):
 
 
 def send_account_creation(user, confirmation_link):
+    """Email users on account creation"""
     context = {
         'username': user.username,
         'confirmation_link': confirmation_link
@@ -25,6 +28,7 @@ def send_account_creation(user, confirmation_link):
 
 
 def send_email(template, context, subject, recipients, sender=None):
+    """Send an email using a HTML template"""
     if not settings.SEND_EMAILS:
         return
     context.update({

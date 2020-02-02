@@ -1,3 +1,4 @@
+"""URLconf for email app"""
 from django.conf.urls import url
 from emails import views
 
