@@ -70,6 +70,3 @@ sync:
 	gunzip lutris.tar.gz
 	pg_restore -h localhost -U lutris --clean --dbname=lutris lutris.tar
 	rm lutris.tar
-
-tags:
-	ctags -R .
