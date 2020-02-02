@@ -1,9 +1,9 @@
-# pylint: disable=C0103
+"""URLconf for runners"""
 from django.conf.urls import url
 from . import views
 
 
-urlpatterns = [
+urlpatterns = [  # pylint: disable=invalid-name
     url(r'^$', views.RunnerListView.as_view(), name='runner_list'),
     url(r'^/(?P<slug>[\w\-]+)$', views.RunnerDetailView.as_view(),
         name='runner_detail'),

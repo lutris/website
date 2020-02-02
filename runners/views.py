@@ -64,8 +64,7 @@ class RunnerUploadView(generics.CreateAPIView):
 
         return settings.FILES_URL + "runners/" + uploaded_file.name
 
-    def post(self, request, *args, **kwargs):
-        slug = args[0]
+    def post(self, request, slug, *args, **kwargs):  # pylint: disable=arguments-differ
         try:
             runner = Runner.objects.get(slug=slug)
         except Runner.DoesNotExist:
