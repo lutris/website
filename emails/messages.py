@@ -47,6 +47,9 @@ def send_email(template, context, subject, recipients, sender=None):
         from_email=sender
     )
     html_body = render_to_string('emails/{}.html'.format(template), context)
-    html_part = transform(html_body, base_url='https://lutris.net')
+    # Premailer does not handle https links, the site can't access itself
+    # with HTTPS inside its container.
+    # Under no circumstances this should be switched to https.
+    html_part = transform(html_body, base_url='http://lutris.net')
     msg.attach_alternative(html_part, "text/html")
     return msg.send(False)
