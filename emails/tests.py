@@ -1,5 +1,5 @@
 """Email test suite"""
-# ylint: disable=C0103
+# pylint: disable=C0103
 from django.test import TestCase
 from django.urls import reverse
 from common.util import create_admin, create_user

@@ -13,7 +13,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta(object):
+    class Meta:
         verbose_name_plural = 'Categories'
         ordering = ('name', )
 
@@ -26,7 +26,7 @@ class Game(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta(object):
+    class Meta:
         ordering = ('category', 'name')
 
 

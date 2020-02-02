@@ -18,7 +18,7 @@ class News(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     # pylint: disable=W0232, R0903
-    class Meta(object):
+    class Meta:
         ordering = ['-publish_date']
         verbose_name_plural = "news"
         db_table = 'news'

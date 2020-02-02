@@ -1,11 +1,13 @@
-# pylint: disable=W0232,R0903
+"""Forms for platform management"""
 from games.forms import AutoSlugForm
 from . import models
 
 
 class PlatformForm(AutoSlugForm):
+    """Form for game platforms"""
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
+        """Model form configuration"""
         model = models.Platform
         fields = '__all__'
 

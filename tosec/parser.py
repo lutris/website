@@ -7,6 +7,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def smart_split(string, sep=None):
+    """Split a string while preserving separator groups"""
     sep_map = {
         '(': ')',
         '( ': ' )',
@@ -36,6 +37,7 @@ def smart_split(string, sep=None):
 
 
 class TosecParser:
+    """Parser for TOSEC dat files"""
     def __init__(self, contents):
         """contents is an list containing the lines of a Tosec dat file"""
         self.contents = contents
@@ -49,6 +51,7 @@ class TosecParser:
 
     @staticmethod
     def parse_line(line):
+        """Parse a single line of data"""
         try:
             key, raw_value = line.split(' ', 1)
         except ValueError:
@@ -57,6 +60,7 @@ class TosecParser:
 
     @staticmethod
     def extract_rom(line):
+        """Extract ROM information from a line"""
         line = line[1:-1]  # Strip parenthesis
         parts = smart_split(line, sep='"')
         game_dict = {}
@@ -67,19 +71,20 @@ class TosecParser:
         return game_dict
 
     def extract_line(self, line, item):
+        """This seems incomplete..."""
         if line == ')':
             return True
+        parts = self.parse_line(line)
+        if parts[1] == '(':
+            return
+        if parts[0] == 'rom':
+            # FIXME there can be multiple roms in one entry
+            item['rom'] = self.extract_rom(parts[1])
         else:
-            parts = self.parse_line(line)
-            if parts[1] == '(':
-                return
-            if parts[0] == 'rom':
-                # FIXME there can be multiple roms in one entry
-                item['rom'] = self.extract_rom(parts[1])
-            else:
-                item[parts[0]] = parts[1]
+            item[parts[0]] = parts[1]
 
     def parse(self):
+        """Parse the dat file"""
         headers_ok = False
         game = {}
         for line in self._iter_contents():
@@ -95,7 +100,8 @@ class TosecParser:
                 headers_ok = self.extract_line(line, self.headers)
 
 
-class TosecNamingConvention(object):
+class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
+    """Naming conventions used in TOSEC files"""
     tosec_re = (
         r'(?P<title>.*?) '
         r'(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*'
@@ -179,6 +185,7 @@ class TosecNamingConvention(object):
                 self.set_dump_flags(dump_flags)
 
     def set_flags(self, flags):
+        """Dispatch flag assignment to the class' set_* methods"""
         current_flag_index = self.parts.index('publisher') + 1
         for flag in flags:
             # if not flag.startswith('('):
@@ -193,6 +200,7 @@ class TosecNamingConvention(object):
                 current_flag_index += 1
 
     def set_dump_flags(self, dump_flags):
+        """Set attributes on the instance from the game's dump flags"""
         dump_flags_attrs = {
             'cr': 'cracked',
             'f': 'fixed',

@@ -40,14 +40,14 @@ class GameFilter(admin.SimpleListFilter):
         # Filter queryset according to the selected filter
         if self.value() is None:
             return queryset.filter(change_for__isnull=True)
-        elif self.value() == 'only-games-with-changes':
+        if self.value() == 'only-games-with-changes':
             subqueryset = (
                 queryset.values('change_for__id')
                 .filter(change_for__isnull=False)
                 .distinct()
             )
             return queryset.filter(change_for__isnull=True, id__in=subqueryset)
-        elif self.value() == 'only-changes':
+        if self.value() == 'only-changes':
             return queryset.filter(change_for__isnull=False)
 
 

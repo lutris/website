@@ -58,6 +58,7 @@ class RegistrationForm(forms.ModelForm):
         )
 
     def clean_username(self):
+        """Check that no similar username exist in a case insensitive way"""
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
         username = self.cleaned_data["username"]
@@ -70,6 +71,7 @@ class RegistrationForm(forms.ModelForm):
         raise forms.ValidationError(self.error_messages["duplicate_username"])
 
     def clean_password2(self):
+        """Check that passwords match"""
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
@@ -94,7 +96,7 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    class Meta(object):
+    class Meta:
         model = User
         fields = ("website", "avatar", "email")
 

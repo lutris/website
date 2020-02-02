@@ -69,22 +69,21 @@ def profile(request):
 def user_account(request, username):
     """Profile view"""
     user = get_object_or_404(User, username=username)
-    if request.user.username == username:
-        pending_submissions = models.GameSubmission.objects.filter(
-            user=user, accepted_at__isnull=True
-        )
-        accepted_submissions = models.GameSubmission.objects.filter(
-            user=user, accepted_at__isnull=False
-        )
-        return render(request, 'accounts/profile.html', {
-            'user': user,
-            'pending_submissions': pending_submissions,
-            'accepted_submissions': accepted_submissions
-        })
-    else:
+    if request.user.username != username:
         # Once public profiles are implemented, we'll return a view here,
         # currently, only throw a 404.
         raise Http404
+    pending_submissions = models.GameSubmission.objects.filter(
+        user=user, accepted_at__isnull=True
+    )
+    accepted_submissions = models.GameSubmission.objects.filter(
+        user=user, accepted_at__isnull=False
+    )
+    return render(request, 'accounts/profile.html', {
+        'user': user,
+        'pending_submissions': pending_submissions,
+        'accepted_submissions': accepted_submissions
+    })
 
 
 @login_required
@@ -110,11 +109,10 @@ def user_require_confirmation(request):
             u"you have confirmed your email address."
         )
         return redirect(reverse("user_account", args=(request.user.username,)))
-    else:
-        login_url = settings.LOGIN_URL
-        if 'next' in request.GET:
-            login_url += "?next=" + request.GET['next']
-        return redirect(login_url)
+    login_url = settings.LOGIN_URL
+    if 'next' in request.GET:
+        login_url += "?next=" + request.GET['next']
+    return redirect(login_url)
 
 
 def user_email_confirm(request):
@@ -171,28 +169,27 @@ def associate_steam(request):
     if not request.user.is_authenticated:
         LOGGER.info("User is authenticated, completing login")
         return login_complete(request)
-    else:
-        openid_response = parse_openid_response(request)
-        account_url = reverse('user_account', args=(request.user.username, ))
-        if openid_response.status == 'failure':
-            messages.warning(request, "Failed to associate Steam account")
-            LOGGER.warning("Failed to associate Steam account for %s", request.user.username)
-            return redirect(account_url)
-        openid_backend = OpenIDBackend()
-        try:
-            openid_backend.associate_openid(request.user, openid_response)
-        except IdentityAlreadyClaimed:
-            messages.warning(
-                request,
-                "This Steam account is already claimed by another Lutris "
-                "account.\nPlease contact an administrator if you want "
-                "to reattribute your Steam account to this current account."
-            )
-            return redirect(account_url)
+    openid_response = parse_openid_response(request)
+    account_url = reverse('user_account', args=(request.user.username, ))
+    if openid_response.status == 'failure':
+        messages.warning(request, "Failed to associate Steam account")
+        LOGGER.warning("Failed to associate Steam account for %s", request.user.username)
+        return redirect(account_url)
+    openid_backend = OpenIDBackend()
+    try:
+        openid_backend.associate_openid(request.user, openid_response)
+    except IdentityAlreadyClaimed:
+        messages.warning(
+            request,
+            "This Steam account is already claimed by another Lutris "
+            "account.\nPlease contact an administrator if you want "
+            "to reattribute your Steam account to this current account."
+        )
+        return redirect(account_url)
 
-        request.user.set_steamid()
-        request.user.save()
-        return redirect(reverse("library_steam_sync"))
+    request.user.set_steamid()
+    request.user.save()
+    return redirect(reverse("library_steam_sync"))
 
 
 def steam_disconnect(request):
@@ -204,6 +201,7 @@ def steam_disconnect(request):
 
 
 class LibraryList(ListView):  # pylint: disable=too-many-ancestors
+    """Access the user's game library"""
     template_name = 'accounts/library_show.html'
     context_object_name = 'games'
     paginate_by = 25

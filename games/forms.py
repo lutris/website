@@ -22,6 +22,12 @@ from games.util.installer import validate_installer
 
 
 class AutoSlugForm(forms.ModelForm):
+
+    class Meta:
+        # Override this in subclasses. Using a real model here not to confuse pylint
+        model = models.Game
+        fields = "__all__"
+
     def __init__(self, *args, **kwargs):
         super(AutoSlugForm, self).__init__(*args, **kwargs)
         self.fields["slug"].required = False
@@ -47,7 +53,7 @@ class BaseGameForm(AutoSlugForm):
 
 
 class GameForm(forms.ModelForm):
-    class Meta(object):
+    class Meta:
         model = models.Game
         fields = (
             "name",
@@ -341,10 +347,9 @@ class InstallerForm(forms.ModelForm):
             for error in errors:
                 self.errors["content"].append(error)
             raise forms.ValidationError("Invalid installer script")
-        else:
-            # Draft status depends on the submit button clicked
-            self.cleaned_data["draft"] = "save" in self.data
-            return self.cleaned_data
+        # Draft status depends on the submit button clicked
+        self.cleaned_data["draft"] = "save" in self.data
+        return self.cleaned_data
 
 
 class InstallerEditForm(InstallerForm):

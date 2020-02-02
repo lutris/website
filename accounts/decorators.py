@@ -1,3 +1,4 @@
+"""Account related function decorator, mostly used for permission handling"""
 from functools import wraps
 
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -34,11 +35,11 @@ def can_edit_installer(slug=None, is_new=False):
 
 
 def check_installer_restrictions(view_func):
+    """Checks if the current installer is protected against modifications"""
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         slug = kwargs.get('slug')
         if request.user.is_staff or can_edit_installer(slug, is_new=request.path.endswith('new')):
             return view_func(request, *args, **kwargs)
-        else:
-            raise PermissionDenied("Installers are protected")
+        raise PermissionDenied("Installers are protected")
     return _wrapped_view

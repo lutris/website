@@ -1,3 +1,4 @@
+"""Generic forms"""
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
 from django import forms
@@ -27,13 +28,14 @@ def get_bootstrap_helper(fields, submit_id, submit_label):
 
 
 class Bootstrap3ModelForm(forms.ModelForm):
+    """Base form using Bootstrap 3 helpers"""
     def __init__(self, *args, **kwargs):
         super(Bootstrap3ModelForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(list(self.Meta.fields),
-                                           'save', 'Save')
+        self.helper = get_bootstrap_helper(list(self.Meta.fields), 'save', 'Save')
 
 
 class NewsForm(forms.ModelForm):
+    """Form for editing news"""
 
     # pylint: disable=W0232, R0903
     class Meta:
@@ -42,7 +44,9 @@ class NewsForm(forms.ModelForm):
 
 
 class UploadForm(Bootstrap3ModelForm):
+    """Form for uploading files"""
+
     # pylint: disable=W0232, R0903
-    class Meta(object):
+    class Meta:
         model = models.Upload
         fields = ('uploaded_file', 'destination')

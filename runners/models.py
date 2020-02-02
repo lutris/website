@@ -19,8 +19,7 @@ class Runner(models.Model):
     icon = models.ImageField(upload_to="runners/icons", blank=True)
     platforms = models.ManyToManyField("platforms.Platform", related_name="runners")
 
-    # pylint: disable=W0232, R0903
-    class Meta(object):
+    class Meta:
         ordering = ["name"]
 
     def __str__(self):
@@ -55,7 +54,7 @@ class Runner(models.Model):
 
 
 class RunnerVersion(models.Model):
-    class Meta(object):
+    class Meta:
         ordering = ("version", "architecture")
 
     def __str__(self):
@@ -84,7 +83,7 @@ class Runtime(models.Model):
     architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
     url = models.URLField()
 
-    class Meta(object):
+    class Meta:
         ordering = ("-created_at",)
 
     def __str__(self):
