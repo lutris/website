@@ -47,9 +47,6 @@ def send_email(template, context, subject, recipients, sender=None):
         from_email=sender
     )
     html_body = render_to_string('emails/{}.html'.format(template), context)
-    # XXX Leave the following link to HTTP, the proxy redirects HTTP traffic to
-    # HTTPS anyway, the host can access itself over port 443, it will fail and
-    # crash.
-    html_part = transform(html_body, base_url='http://lutris.net')
+    html_part = transform(html_body, base_url='https://lutris.net')
     msg.attach_alternative(html_part, "text/html")
     return msg.send(False)
