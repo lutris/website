@@ -41,14 +41,14 @@ class Company(models.Model):
     logo = models.ImageField(upload_to="companies/logos", blank=True)
     website = models.CharField(max_length=128, blank=True)
 
-    # pylint: disable=W0232, R0903
-    class Meta(object):
+    class Meta:
         """Additional configuration for model"""
 
         verbose_name_plural = "companies"
         ordering = ["name"]
 
     def get_absolute_url(self):
+        """Return URL to a company's games"""
         return reverse("games_by_company", args=(self.slug,))
 
     def __str__(self):
@@ -69,11 +69,15 @@ class Company(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
+        """Autocomplete fields used in the Django admin"""
         return ("name__icontains", "slug__icontains")
 
 
 class GenreManager(models.Manager):
+    """Model manager for Genre"""
+
     def with_games(self):
+        """Query genres that have games assigned to them"""
         genre_list = (
             Game.objects.with_installer()
             .values_list("genres")
@@ -92,8 +96,8 @@ class Genre(models.Model):
 
     objects = GenreManager()
 
-    # pylint: disable=W0232, R0903
     class Meta:
+        """Model configuration"""
         ordering = ["name"]
 
     def __str__(self):
@@ -113,17 +117,23 @@ class Genre(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
+        """Autocomplete fields used in the Django admin"""
         return ("name__icontains",)
 
 
 class GameManager(models.Manager):
+    """Model manager for Game"""
+
     class Meta:
+        """Model configuration"""
         ordering = ["name"]
 
     def published(self):
+        """Query games that are published"""
         return self.get_queryset().filter(change_for__isnull=True, is_public=True)
 
     def with_installer(self):
+        """Query games that have an installer"""
         return (
             self.get_queryset()
             .filter(change_for__isnull=True)
@@ -137,6 +147,7 @@ class GameManager(models.Manager):
         )
 
     def get_random(self, option=""):
+        """Return a random game"""
         if not re.match(r"^[\w\d-]+$", option) or len(option) > 128:
             return
         pk_query = self.get_queryset()
@@ -216,8 +227,8 @@ class Game(models.Model):
 
     objects = GameManager()
 
-    # pylint: disable=W0232, R0903
-    class Meta(object):
+    class Meta:
+        """Model configuration"""
         ordering = ["name"]
         permissions = (("can_publish_game", "Can publish game"),)
 
@@ -228,6 +239,7 @@ class Game(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
+        """Autocomplete fields used in the Django admin"""
         return ("name__icontains",)
 
     @property
@@ -249,11 +261,13 @@ class Game(models.Model):
 
     @property
     def banner_url(self):
+        """Return URL for the game banner"""
         if self.title_logo:
             return reverse("get_banner", kwargs={"slug": self.slug})
 
     @property
     def icon_url(self):
+        """Return URL for the game icon"""
         if self.icon:
             return reverse("get_icon", kwargs={"slug": self.slug})
 
@@ -318,9 +332,11 @@ class Game(models.Model):
         self.title_logo = change_set.title_logo
 
     def has_installer(self):
+        """Return whether this game has an installer"""
         return self.installers.exists() or self.has_auto_installers()
 
     def has_auto_installers(self):
+        """Return whether this game has auto-generated installers"""
         return self.platforms.filter(default_installer__isnull=False).exists()
 
     def get_absolute_url(self):
@@ -332,6 +348,7 @@ class Game(models.Model):
         return reverse("game_detail", kwargs={"slug": slug})
 
     def set_logo_from_steam(self):
+        """Fetch the banner from Steam and use it for the game"""
         if self.title_logo or not self.steamid:
             return
         self.title_logo = ContentFile(
@@ -370,6 +387,7 @@ class Game(models.Model):
         return True
 
     def get_default_installers(self):
+        """Return all auto-installers for this game's platforms"""
         auto_installers = []
 
         for platform in self.platforms.all():
@@ -387,6 +405,10 @@ class Game(models.Model):
         return auto_installers
 
     def check_for_submission(self):
+        """What? This saves submissions on save? Why?
+        This is fully wrong. The name itself is a huge red flag since nothing
+        is checked and this method has side effects.
+        """
         # Skip freshly created and unpublished objects
         if not self.pk or not self.is_public:
             return
@@ -423,24 +445,29 @@ class Game(models.Model):
 
 
 class GameMetadata(models.Model):
+    """Additional key-value metadata attached to a game"""
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     key = models.CharField(max_length=16)
     value = models.CharField(max_length=255)
 
 
 class GameAlias(models.Model):
+    """Alternate names and spellings a game might be known as"""
     game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
     slug = models.SlugField()
     name = models.CharField(max_length=255)
 
 
 class ScreenshotManager(models.Manager):
+    """Model manager for game screenshots"""
+
     def published(self, user=None, is_staff=False):
+        """Return only published screenshots for regular users"""
         query = self.get_queryset()
         query = query.order_by("uploaded_at")
         if is_staff:
             return query
-        elif user:
+        if user:
             return query.filter(Q(published=True) | Q(uploaded_by=user))
         return query.filter(published=True)
 
@@ -463,10 +490,14 @@ class Screenshot(models.Model):
 
 
 class InstallerManager(models.Manager):
+    """Model manager for Installer"""
+
     def published(self):
+        """Return published installers"""
         return self.get_queryset().filter(published=True)
 
     def unpublished(self):
+        """Return unpublished installers"""
         return self.get_queryset().filter(published=False)
 
     def abandoned(self):
@@ -522,11 +553,13 @@ class InstallerManager(models.Manager):
             # A bit hackish, return_models is used for filter and not with get
             if return_models:
                 return self.none()
-            else:
-                raise
+            raise
 
     @staticmethod
     def get_auto_installer(slug, game, platform, return_models=False):
+        """Doesn't make a lot of sense, this is game specific and
+        should probably not be here.
+        """
         if return_models:
             try:
                 auto_installer = AutoInstaller(game, platform)
@@ -553,6 +586,7 @@ class InstallerManager(models.Manager):
         return self._fuzzy_search(slug, return_models=True)
 
     def get_json(self, slug):
+        """Return the installer identified by its slug as a JSON document"""
         try:
             installers = self.fuzzy_get(slug)
         except ObjectDoesNotExist:
@@ -576,17 +610,21 @@ class BaseInstaller(models.Model):
     """Base class for Installer-like classes."""
 
     class Meta:
+        """Model configuration"""
         abstract = True
 
     @property
     def raw_script(self):
+        """Return the installer script without its metadata"""
         return self.as_dict(with_metadata=False)
 
     @property
     def game_slug(self):
+        """Return the game slug, a bit useless... Maybe for a serializer?"""
         return self.game.slug
 
     def as_dict(self, with_metadata=True):
+        """Return the installer data as a dict"""
         try:
             yaml_content = load_yaml(self.content) or {}
         except yaml.parser.ParserError:
@@ -623,9 +661,11 @@ class BaseInstaller(models.Model):
         return yaml_content
 
     def as_yaml(self):
+        """Return the installer as a YAML document"""
         return dump_yaml(self.as_dict())
 
     def as_json(self):
+        """Return the installer as a JSON document"""
         return json.dumps(self.as_dict(), indent=2)
 
     def as_cleaned_yaml(self):
@@ -637,6 +677,7 @@ class BaseInstaller(models.Model):
         return json.dumps(self.as_dict(with_metadata=False), indent=2)
 
     def build_slug(self, version):
+        """Generate a slug that will prevent clashes with other installers"""
         slug = "%s-%s" % (slugify(self.game.name)[:29], slugify(version)[:20])
         return get_auto_increment_slug(self.__class__, self, slug)
 
@@ -687,6 +728,7 @@ class Installer(BaseInstaller):
     objects = InstallerManager()
 
     class Meta:
+        """Model configuration"""
         ordering = ("-rating", "version")
 
     def __str__(self):
@@ -706,6 +748,7 @@ class Installer(BaseInstaller):
 
     @property
     def revisions(self):
+        """Return the revisions for this installer"""
         return [
             InstallerRevision(version)
             for version in Version.objects.filter(
@@ -715,6 +758,7 @@ class Installer(BaseInstaller):
 
     @property
     def latest_version(self):
+        """Return the latest version for this installer"""
         try:
             return Version.objects.filter(
                 content_type__model="installer", object_id=self.id
@@ -811,10 +855,12 @@ class InstallerIssueReply(BaseIssue):
 
 
 class GameLibrary(models.Model):
+    """Model to store user libraries"""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     games = models.ManyToManyField(Game, related_name="libraries")
 
     class Meta:
+        """Model configuration"""
         verbose_name_plural = "game libraries"
 
     def __str__(self):
@@ -822,6 +868,7 @@ class GameLibrary(models.Model):
 
 
 class GameSubmission(models.Model):
+    """User submitted game"""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -829,18 +876,21 @@ class GameSubmission(models.Model):
     reason = models.TextField(blank=True, null=True)
 
     class Meta:
+        """Model configuration"""
         verbose_name = "User submitted game"
 
     def __str__(self):
         return u"{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
 
     def accept(self):
+        """Accept the submission and notify the author"""
         self.accepted_at = datetime.datetime.now()
         self.save()
         messages.send_game_accepted(self.user, self.game)
 
 
 class GameLink(models.Model):
+    """Web links associated to a game"""
     WEBSITE_CHOICES = (
         ('battlenet', 'Battle.net'),
         ('github', 'Github'),
@@ -858,14 +908,15 @@ class GameLink(models.Model):
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta(object):
+    class Meta:
         """Additional configuration for model"""
 
         verbose_name = "External link"
         ordering = ["website"]
 
 
-class InstallerRevision(BaseInstaller):
+class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-attributes
+    """Revision for an installer"""
     def __init__(self, version):
         super(InstallerRevision, self).__init__()
         self._version = version
@@ -905,6 +956,7 @@ class InstallerRevision(BaseInstaller):
             return self._version.revision.id
 
     def get_installer_data(self):
+        """Return the data saved in the revision in an usable format"""
         installer_data = json.loads(self._version.serialized_data)[0]["fields"]
         try:
             installer_data["script"] = load_yaml(installer_data["content"])
@@ -969,7 +1021,8 @@ class InstallerRevision(BaseInstaller):
         self._clear_old_revisions(author=submission_author, date=submission_date)
 
 
-class AutoInstaller(BaseInstaller):
+class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attributes
+    """Auto-generated installer"""
     published = True
     draft = False
     auto = True
