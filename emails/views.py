@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import HttpResponseForbidden
 from django.conf import settings
 
 
@@ -20,7 +20,7 @@ def email_sender_test(request):
     user = request.user
     message = None
     if not user.is_superuser:
-        raise Http404
+        return HttpResponseForbidden("Forbidden")
     if request.method == 'POST':
         email = request.POST['email']
         body = "Mail sent to %s" % email

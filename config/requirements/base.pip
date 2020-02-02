@@ -35,7 +35,7 @@ sorl-thumbnail==12.4.1
 -e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 lxml==4.2.1
 Pillow==5.1.0
-premailer==3.2.0
+premailer==3.6.1
 fabric==2.0.1
 Sphinx==1.7.4
 romkan==0.2.1

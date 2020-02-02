@@ -28,4 +28,4 @@ class TestEmailRendering(TestCase):
         """Normal users should not be able to send an email from the test page"""
         self.client.login(username='user', password='password')
         response = self.client.get(reverse('email_sender_test'))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
