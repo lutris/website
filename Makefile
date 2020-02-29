@@ -27,9 +27,12 @@ test:
 jenkins:
 	./manage.py jenkins $(test)
 
-sysdeps:
+builddeps:
+	sudo apt install libpq-dev python-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
+
+serverdeps:
 	sudo apt-get update
-	sudo apt-get -y --allow-unauthenticated install libpq-dev python-dev nginx supervisor rabbitmq-server libjpeg-dev libxml2-dev libxslt1-dev locales libffi-dev
+	sudo apt-get -y --allow-unauthenticated install nginx supervisor rabbitmq-server locales
 	pip3 install -r config/requirements/production.pip --exists-action=s
 
 deps:
