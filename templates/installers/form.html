@@ -78,10 +78,6 @@
         textarea.val(editor.getSession().getValue());
       });
 
-      // Select2 config
-      $.fn.select2.defaults.set("width", null);
-      $.fn.select2.defaults.set("theme", 'bootstrap');
-
       {% if versions %}
       $('#revision-select').on('change', function(event) {
         const formUrl = "{% url 'edit_installer' slug=installer.slug  %}";

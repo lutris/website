@@ -77,10 +77,6 @@
   {{ filter_form.media.js }}
   <script>
     $(function () {
-      // Workaround responsiveness bug:
-      // https://github.com/select2/select2-bootstrap-theme/issues/30
-      $.fn.select2.defaults.set("width", null);
-      $.fn.select2.defaults.set("theme", 'bootstrap');
       $('#id_platform').select2({
         closeOnSelect: false,
         placeholder: ''
