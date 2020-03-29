@@ -88,6 +88,8 @@ class RegistrationForm(forms.ModelForm):
 
 
 class LoginForm(AuthenticationForm):
+    """Subclass of AuthenticationForm with Bootstrap integration"""
+
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.helper = get_bootstrap_helper(
@@ -96,7 +98,10 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileForm(forms.ModelForm):
+    """Form to edit profile information"""
+
     class Meta:
+        """ModelForm configuration"""
         model = User
         fields = ("website", "avatar", "email")
 
@@ -111,11 +116,13 @@ class ProfileForm(forms.ModelForm):
 
 
 class ProfileDeleteForm(forms.Form):
+    """Form to ask confirmation for account deletion"""
     confirm_delete = forms.BooleanField(
         label="Yes, I confirm I want to delete my account"
     )
 
     def clean_confirm_delete(self):
+        """Only delete if the user has checked the corresponding checkbox"""
         confirm_delete = self.cleaned_data["confirm_delete"]
         if not confirm_delete:
             raise forms.ValidationError("You must confirm to delete your account")
