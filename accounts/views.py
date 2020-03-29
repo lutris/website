@@ -51,6 +51,9 @@ def register(request):
 
 def clear_auth_token(request):
     """Delete the REST API token for the currently logged in user"""
+    if not request.user.is_authenticated:
+        # Anonymous users fuck off
+        return redirect("/")
     try:
         token = Token.objects.get(user=request.user)
     except Token.DoesNotExist:
