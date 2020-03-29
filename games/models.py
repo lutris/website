@@ -627,9 +627,11 @@ class BaseInstaller(models.Model):
         """Return the installer data as a dict"""
         try:
             yaml_content = load_yaml(self.content) or {}
-        except yaml.parser.ParserError:
-            LOGGER.exception("Invalid YAML %s", self.content)
-            yaml_content = {}
+        except (yaml.parser.ParserError, yaml.scanner.ScannerError):
+            LOGGER.error("Installer with invalid YAML. Deleting immediatly.")
+            if self.id:
+                self.delete()
+            return {}
 
         # Allow pasting raw install scripts (which are served as lists)
         if isinstance(yaml_content, list):
