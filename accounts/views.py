@@ -34,7 +34,17 @@ def register(request):
     """Register a new user account"""
     form = forms.RegistrationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        try:
+            form.save()
+        except IntegrityError:
+            # We do username validation, so we shouldn't get IntegrityErrors
+            # and yet, they still happen from time to time. As a last resort,
+            # try to cause panic and havoc.
+            messages.error(
+                request,
+                "OH NO!!!! WHAT HAPPENED!??!?! YOU BROKE EVERYTHING !!"
+                "THIS IS BAD BAD BAD.SERIOUSLY, WHAT HAVE YOU DONE ???"
+            )
         return HttpResponseRedirect('/')
     return render(request, 'accounts/registration_form.html', {'form': form})
 
