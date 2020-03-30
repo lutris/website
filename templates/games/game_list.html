@@ -33,7 +33,7 @@
 
         <!-- GENERAL FILTER, SEARCH -->
         <h4>Filter</h4>
-        <form action="." method="get" class="form-inline">
+        <form action="{% url 'game_list' %}" method="get" class="form-inline">
           <div class="input-group">
             <input type="text" name="q" class="search-query form-control"
                 placeholder="Search…" value="{{ search_terms|default:"" }}" />
