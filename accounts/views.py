@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
@@ -180,10 +181,15 @@ def associate_steam(request):
     """Associate a Steam account with a Lutris account"""
     LOGGER.info("Associating Steam user with Lutris account")
     if not request.user.is_authenticated:
-        LOGGER.info("User is authenticated, completing login")
         return login_complete(request)
-    openid_response = parse_openid_response(request)
+
     account_url = reverse('user_account', args=(request.user.username, ))
+    try:
+        openid_response = parse_openid_response(request)
+    except HTTPFetchingError:
+        messages.warning(request, "Steam server is unreachable, please try again in a few moments")
+        return redirect(account_url)
+
     if openid_response.status == 'failure':
         messages.warning(request, "Failed to associate Steam account")
         LOGGER.warning("Failed to associate Steam account for %s", request.user.username)
