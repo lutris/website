@@ -82,14 +82,7 @@ class GameForm(forms.ModelForm):
         self.fields["name"].label = "Title"
         self.fields["year"].label = "Release year"
         self.fields["website"].help_text = (
-            "The official website (full address). If it doesn't exist, leave " "blank."
-        )
-        self.fields["platforms"].help_text = (
-            "Only select platforms expected to have an installer, "
-            "not all platforms the game was released for. <br/>"
-            "<strong class='obnoxious-warning'>Do not add Windows "
-            "for games with a native version unless there is a very good reason to!"
-            "</strong>"
+            "The official website (full address). If it doesn't exist, leave blank."
         )
         self.fields["genres"].help_text = ""
         self.fields["description"].help_text = (
