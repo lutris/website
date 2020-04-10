@@ -5,6 +5,7 @@ services:
   web:
     build:
       context: .
+    command: ['/app/manage.py', 'runserver', '0.0.0.0:8000']
     volumes:
       - type: volume
         source: media
@@ -15,13 +16,15 @@ services:
         source: .
         target: /app
     ports:
-      - 8000:8000
+      - "8000:8000"
+    restart: on-failure
     environment:
       - REDIS_HOST: cache
     stdin_open: true
     tty: true
     depends_on:
       - db
+      - cache
 
   celery_worker:
     build:
@@ -40,7 +43,7 @@ services:
   db:
     image: postgres:12
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
@@ -49,8 +52,10 @@ services:
       POSTGRES_PASSWORD: 'admin'
 
   cache:
-    restart: always
+    restart: on-failure
     image: redis:6.0.1
+    ports:
+      - "6379:6379"
     volumes:
       - redisdata:/data
 

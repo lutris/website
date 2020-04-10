@@ -1,6 +1,8 @@
 """Forms for the main app"""
 # pylint: disable=missing-docstring,too-few-public-methods
 import os
+from datetime import date
+
 import yaml
 
 from crispy_forms.helper import FormHelper, Layout
@@ -11,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django_select2.forms import (
     ModelSelect2Widget,
     Select2MultipleWidget,
-    Select2Widget,
+    Select2Widget, ModelSelect2MultipleWidget,
 )
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 from croppie.fields import CroppieField
@@ -386,15 +388,41 @@ class LibraryFilterForm(forms.Form):
         widget=forms.TextInput(attrs={"style": "width: 100%;"}),
         required=False,
     )
-    platform = forms.ModelMultipleChoiceField(
-        queryset=models.Platform.objects.all(),
-        widget=Select2MultipleWidget,
+    platforms = forms.MultipleChoiceField(
+        widget=Select2MultipleWidget(
+            choices=models.Platform.objects.values_list('pk', 'name'),
+            attrs={'data-width': '100%',
+                   'data-close-on-select': 'false',
+                   'data-placeholder': ''}
+        ),
         required=False,
     )
-    genre = forms.ModelMultipleChoiceField(
-        queryset=models.Genre.objects.all(),
-        widget=Select2MultipleWidget,
+    genres = forms.MultipleChoiceField(
+        widget=ModelSelect2MultipleWidget(
+            model=models.Genre,
+            search_fields=['name__icontains'],
+            attrs={'data-width': '100%',
+                   'data-close-on-select': 'false',
+                   'data-placeholder': ''}
+        ),
         required=False,
+    )
+    companies = forms.MultipleChoiceField(
+        widget=ModelSelect2MultipleWidget(
+            model=models.Company,
+            search_fields=['name__icontains'],
+            attrs={'data-width': '100%',
+                   'data-close-on-select': 'false',
+                   'data-placeholder': ''}
+        ),
+        required=False
+    )
+    years = forms.MultipleChoiceField(
+        choices=[(i, i) for i in range(date.today().year, 1970, -1)],
+        widget=Select2MultipleWidget(attrs={'data-width': '100%',
+                                            'data-close-on-select': 'false',
+                                            'data-placeholder': ''}),
+        required=False
     )
     flags = forms.MultipleChoiceField(
         choices=models.Game.GAME_FLAGS,
