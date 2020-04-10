@@ -9,7 +9,7 @@ watch:
 run:
 	./manage.py runserver 0.0.0.0:8000
 
-db:
+db: deps
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
 
@@ -28,7 +28,7 @@ jenkins:
 	./manage.py jenkins $(test)
 
 builddeps:
-	sudo apt install libpq-dev python-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
+	sudo apt install -y libpq-dev python-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
 
 serverdeps:
 	sudo apt-get update
