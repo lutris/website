@@ -460,6 +460,7 @@ def fork_installer(request, slug):
 
 
 class InstallerFeed(Feed):
+    """RSS feed for Lutris installers"""
     title = "Lutris installers"
     link = "/games/"
     description = u"Latest lutris installers"
@@ -469,7 +470,7 @@ class InstallerFeed(Feed):
         return Installer.objects.order_by("-created_at")[: self.feed_size]
 
     def item_title(self, item):
-        return item.title
+        return item.slug
 
     def item_description(self, item):
         return item.content
