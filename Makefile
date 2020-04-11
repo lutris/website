@@ -32,7 +32,7 @@ builddeps:
 
 serverdeps:
 	sudo apt-get update
-	sudo apt-get -y --allow-unauthenticated install nginx supervisor rabbitmq-server locales
+	sudo apt-get -y --allow-unauthenticated install nginx supervisor locales
 	pip3 install -r config/requirements/production.pip --exists-action=s
 
 deps:

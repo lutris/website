@@ -1,6 +1,5 @@
 import logging
 
-from celery import task
 from django.db import IntegrityError
 
 import games.models
@@ -9,10 +8,12 @@ from games.util.steam import create_game
 from accounts.models import User
 from common.util import slugify
 
+from lutrisweb import celery_app
+
 LOGGER = logging.getLogger()
 
 
-@task
+@celery_app.task
 def sync_steam_library(user_id):
     user = User.objects.get(pk=user_id)
     steamid = user.steamid
@@ -50,6 +51,6 @@ def sync_steam_library(user_id):
             pass
 
 
-@task
+@celery_app.task
 def daily_mod_mail():
     send_daily_mod_mail()

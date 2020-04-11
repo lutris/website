@@ -1,7 +1,7 @@
 beautifulsoup4==4.6.0
 PyYAML==3.12
 ipython==6.4.0
-Celery==4.1.0
+Celery==4.4.2
 cssselect==1.0.3
 Django==2.0.5
 django-appconf==1.0.2

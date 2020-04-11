@@ -82,6 +82,7 @@ TGD_FANART_PATH = media_directory('thegamesdb/fanart')
 TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
+MOBY_API_KEY = os.environ.get('MOBY_API_KEY', 'Provide API key')
 
 MIDDLEWARE = [
     # Caching disabled until proper invalidation is implemented
@@ -228,6 +229,10 @@ CELERYBEAT_SCHEDULE = {
     'clear-orphan-revisions': {
         'task': 'games.tasks.clear_orphan_revisions',
         'schedule': crontab(hour=17, minute=30)
+    },
+    'add-new-games': {
+        'task': 'games.tasks.add_new_games',
+        'schedule': crontab(minute=0, hour='*/3')
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'
