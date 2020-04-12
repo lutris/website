@@ -43,7 +43,7 @@ migration:
 	./manage.py migrate
 
 fixtures:
-	./manage.py dumpdata --indent=2 games > games/fixtures/initial_data.json
+	./manage.py dumpdata --indent=2 games > initial_data.json
 
 check-deps-update:
 	pip3 list --outdated
