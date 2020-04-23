@@ -10,7 +10,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 WORKDIR /app
 ADD . /app
 
-ENV SECRET_KEY="somethissecret" USE_SQLITE="$USE_SQLITE" DB_HOST="db" DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
+ENV SECRET_KEY="somethissecret"
+ENV DB_HOST="db"
+ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 RUN /app/scripts/setup.sh
 
 RUN sh -c "touch templates/docs/installers.html"

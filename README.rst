@@ -2,19 +2,15 @@ Getting the site up and running for development
 ===============================================
 
 With docker-compose
-===========
+-------------------
 
 Install docker and docker-compose for your system.
 
-Spin up the web and db services
-
-::
+Start the Django and PostgreSQL containers::
 
     docker-compose up
 
-In a separate terminal run
-
-::
+In a separate terminal run::
 
     docker-compose run web make db
 
@@ -22,7 +18,7 @@ You are now ready to develop. No need to rebuild the containers for simple
 code changes, as the containers will pick them up from the host system.
 
 Natively
-========
+--------
 
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on

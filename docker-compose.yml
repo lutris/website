@@ -6,10 +6,7 @@ services:
   web:
     build:
       context: .
-      args:
-        - USE_SQLITE=${USE_SQLITE}
     volumes:
-      - .:/app
       - /app/media
       - /app/templates/docs
     ports:
