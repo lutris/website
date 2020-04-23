@@ -1,4 +1,6 @@
+"""Models for user accounts"""
 # pylint: disable=no-member
+import os
 import datetime
 import hashlib
 import hmac
@@ -18,7 +20,8 @@ from emails import messages
 LOGGER = logging.getLogger(__name__)
 
 
-class User(AbstractUser):
+class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
+    """Model for user accounts"""
     avatar = models.ImageField(upload_to='avatars', blank=True)
     steamid = models.CharField("Steam id", max_length=32, blank=True)
     website = models.URLField(blank=True)
@@ -30,6 +33,7 @@ class User(AbstractUser):
 
     @property
     def avatar_url(self):
+        """Return the local avatar URL or one from Gravatar"""
         if self.avatar:
             return self.avatar.url
         default_url = "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
@@ -42,10 +46,11 @@ class User(AbstractUser):
         )
 
     def set_steamid(self):
+        """Set the Steam ID from the OpenID auth"""
         try:
             user_openid = UserOpenID.objects.get(user=self)
         except UserOpenID.DoesNotExist:
-            return False
+            return
         except UserOpenID.MultipleObjectsReturned:
             # TODO: Handle properly the case when a user has connected to
             # multiple Steam accounts.
@@ -54,12 +59,15 @@ class User(AbstractUser):
 
     @staticmethod
     def generate_key():
+        """Return a random key"""
         # Get a random UUID.
         new_uuid = uuid.uuid4()
         # Hmac that beast.
         return hmac.new(new_uuid.bytes, digestmod=hashlib.sha1).hexdigest()
 
     def deactivate(self):
+        """Deactivate a user
+        Leaves the user intact while suppressing any identifying information"""
         self.gamelibrary.delete()
         self.groups.clear()
         self.useropenid_set.all().delete()
@@ -73,6 +81,12 @@ class User(AbstractUser):
         self.steamid = ''
         self.key = ''
         self.save()
+
+    def delete(self, *args, **kwargs):
+        """Delete the user along with its avatar"""
+        if os.path.exists(self.avatar.path):
+            self.avatar.delete()
+        return super().delete(*args, **kwargs)
 
 
 class EmailConfirmationToken(models.Model):
