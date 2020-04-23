@@ -84,7 +84,7 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
 
     def delete(self, *args, **kwargs):
         """Delete the user along with its avatar"""
-        if os.path.exists(self.avatar.path):
+        if self.avatar and os.path.exists(self.avatar.path):
             self.avatar.delete()
         return super().delete(*args, **kwargs)
 
