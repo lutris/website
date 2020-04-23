@@ -1,3 +1,5 @@
+"""Models for the common app"""
+# pylint: disable=too-few-public-methods
 import os
 import shutil
 import datetime
@@ -10,6 +12,7 @@ from common.util import slugify
 
 
 class News(models.Model):
+    """News announcements, not currently used"""
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     content = MarkupField(markup_type='restructuredtext')
@@ -17,8 +20,8 @@ class News(models.Model):
     image = models.ImageField(upload_to='news', null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
-    # pylint: disable=W0232, R0903
     class Meta:
+        """Model configuration"""
         ordering = ['-publish_date']
         verbose_name_plural = "news"
         db_table = 'news'
@@ -26,8 +29,8 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
-    # pylint: disable=E0202
     def get_absolute_url(self):
+        """Return the news' absolute URL"""
         return reverse('news_details', kwargs={'slug': self.slug}) + "#article"
 
     def save(self, force_insert=False, force_update=False, using=False,
@@ -38,6 +41,7 @@ class News(models.Model):
 
 
 class Upload(models.Model):
+    """References to user uploaded files"""
     uploaded_file = models.FileField(upload_to='uploads')
     destination = models.CharField(max_length=256)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -47,6 +51,7 @@ class Upload(models.Model):
         return self.uploaded_file.name
 
     def validate(self):
+        """Validate an upload and move it to its destination"""
         destination = os.path.join(settings.FILES_ROOT, self.destination)
         if os.path.exists(destination):
             raise IOError("Can't overwrite files")
