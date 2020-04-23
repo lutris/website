@@ -1,3 +1,4 @@
+"""Celery tasks for user management"""
 import logging
 
 from celery import task
@@ -7,6 +8,7 @@ import games.models
 from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
 from accounts.models import User
+from accounts import spam_control
 from common.util import slugify
 
 LOGGER = logging.getLogger()
@@ -14,6 +16,7 @@ LOGGER = logging.getLogger()
 
 @task
 def sync_steam_library(user_id):
+    """Launch a Steam to Lutris library sync"""
     user = User.objects.get(pk=user_id)
     steamid = user.steamid
     library = games.models.GameLibrary.objects.get(user=user)
@@ -52,4 +55,12 @@ def sync_steam_library(user_id):
 
 @task
 def daily_mod_mail():
+    """Send a daily moderation mail to moderators"""
     send_daily_mod_mail()
+
+
+@task
+def clear_spammers():
+    """Delete spam accounts"""
+    spam_control.clear_users(spam_control.get_no_games_with_website())
+    spam_control.clear_users(spam_control.get_spam_avatar_users())
