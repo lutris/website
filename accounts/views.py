@@ -211,6 +211,7 @@ def associate_steam(request):
     return redirect(reverse("library_steam_sync"))
 
 
+@login_required
 def steam_disconnect(request):
     """Clears the Steam ID and OpenID key"""
     request.user.useropenid_set.all().delete()
