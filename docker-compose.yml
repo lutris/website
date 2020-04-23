@@ -8,6 +8,9 @@ services:
       context: .
       args:
         - USE_SQLITE=${USE_SQLITE}
+    environment:
+      MOBY_API_KEY
+    restart: on-failure
     volumes:
       - .:/app
       - /app/media
@@ -18,13 +21,20 @@ services:
     tty: true
     depends_on:
       - db
+      - rabbitmq
   db:
     image: postgres:11
     ports:
       - 5432:5432
+    restart: on-failure
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: 'lutris'
       POSTGRES_USER: 'lutris'
       POSTGRES_PASSWORD: 'admin'
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672:5672
+    restart: on-failure
