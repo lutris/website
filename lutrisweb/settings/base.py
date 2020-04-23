@@ -229,6 +229,10 @@ CELERYBEAT_SCHEDULE = {
     'clear-orphan-revisions': {
         'task': 'games.tasks.clear_orphan_revisions',
         'schedule': crontab(hour=17, minute=30)
+    },
+    'clear-spammers': {
+        'task': 'accounts.tasks.clear_spammers',
+        'schedule': crontab(hour=16, minute=20)
     }
 }
 BROKER_URL = 'amqp://guest:guest@localhost//'
