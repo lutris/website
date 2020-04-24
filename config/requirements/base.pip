@@ -1,6 +1,7 @@
 beautifulsoup4==4.6.0
 PyYAML==5.3.1
 ipython==6.4.0
+boto3==1.12.45
 Celery==4.1.0
 cssselect==1.1.0
 Django==2.0.5
