@@ -1,3 +1,4 @@
+"""Installer related utilities"""
 import logging
 from common.util import load_yaml
 from runners.models import Runner
@@ -31,6 +32,7 @@ def validate_installer(installer):
         no_duplicate_file_ids,
         files_have_correct_attributes,
         tasks_have_names,
+        no_home_in_files,
     ]
     for rule in rules:
         try:
@@ -209,4 +211,21 @@ def tasks_have_names(installer):
                     False,
                     'All tasks should have a name.'
                 )
+    return SUCCESS
+
+
+def no_home_in_files(installer):
+    """Installer files should not point to a local file."""
+    script = get_installer_script(installer)
+    for file_info in script.get('files') or []:
+        file_meta = file_info[next(iter(file_info.keys()))]
+        if isinstance(file_meta, dict):
+            url = file_meta["url"]
+        else:
+            url = file_meta
+        if url.startswith("/home"):
+            return (
+                False,
+                "Don't reference files from your own home folder."
+            )
     return SUCCESS
