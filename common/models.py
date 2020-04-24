@@ -46,9 +46,26 @@ class Upload(models.Model):
     destination = models.CharField(max_length=256)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    hosting = models.CharField(
+        max_length=8,
+        choices=[("local", "Local"), ("spaces", "Spaces")],
+        default="local"
+    )
 
     def __str__(self):
         return self.uploaded_file.name
+
+    @property
+    def source_path(self):
+        """Absolute path for the uploaded file"""
+        if self.uploaded_file:
+            return os.path.join(settings.MEDIA_ROOT, self.uploaded_file.name)
+        return None
+
+    def move_to_local_hosting(self, ):
+        """Move the file to its destination"""
+        destination = os.path.join(settings.FILES_ROOT, self.destination)
+        shutil.move(self.source_path, destination)
 
     def validate(self):
         """Validate an upload and move it to its destination"""
@@ -57,6 +74,8 @@ class Upload(models.Model):
             raise IOError("Can't overwrite files")
         if not os.path.exists(os.path.dirname(destination)):
             os.makedirs(os.path.dirname(destination))
-        source = os.path.join(settings.MEDIA_ROOT, self.uploaded_file.name)
-        shutil.move(source, destination)
+        if self.hosting == "local":
+            self.move_to_local_hosting()
+        else:
+            raise NotImplementedError("Spaces support coming")
         self.delete()
