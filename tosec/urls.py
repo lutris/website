@@ -1,12 +1,10 @@
 """TOSEC URLconf"""
 # pylint: disable=invalid-name
-from django.conf.urls import url
+from django.urls import path, re_path
 from . import views
 
 
 urlpatterns = [
-    url(r'^categories$', views.CategoryListView.as_view(),
-        name='tosec_categories'),
-    url(r'^games$', views.GameListView.as_view(),
-        name='tosec_games'),
+    path('categories', views.CategoryListView.as_view(), name='tosec_categories'),
+    path('games', views.GameListView.as_view(), name='tosec_games'),
 ]
