@@ -14,10 +14,10 @@ urlpatterns = [
     path('change-submission/<int:submission_id>/',
          views.review_change_submission_view,
          name='admin-change-submission'),
-    path('change-submission/<int:submission_id>/accept',
+    path('change-submission/<int:submission_id>/accept/',
          views.change_submission_accept,
          name='admin-change-submission-accept'),
-    path('change-submission/<int:submission_id>/reject',
+    path('change-submission/<int:submission_id>/reject/',
          views.change_submission_reject,
          name='admin-change-submission-reject'),
 ]
