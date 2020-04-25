@@ -267,7 +267,10 @@ SILENCED_SYSTEM_CHECKS = [
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:9527',
     'http://0.0.0.0:9527',
-    'http://dashboard.lutris.net'
+    'http://dashboard.lutris.net',
+    'https://localhost:9527',
+    'https://0.0.0.0:9527',
+    'https://dashboard.lutris.net'
 )
 
 # Logging
