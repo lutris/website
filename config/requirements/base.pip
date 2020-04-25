@@ -4,7 +4,7 @@ ipython==6.4.0
 boto3==1.12.45
 Celery==4.1.0
 cssselect==1.1.0
-Django==2.1.15
+Django==2.2.12
 django-crispy-forms==1.7.2
 django-extensions==2.2.9
 djangorestframework==3.8.2
