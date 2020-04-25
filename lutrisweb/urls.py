@@ -16,37 +16,37 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    re_path(r'^admin/', admin.site.urls),
-    re_path(r'^grappelli/', include('grappelli.urls')),
-    re_path(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    re_path(r'^admin/games/', include('games.urls.admin')),
-    re_path(r'^select2/', include('django_select2.urls')),
-    re_path(r'^openid/', include('django_openid_auth.urls')),
-    re_path(r'^user/', include('accounts.urls')),
-    re_path(r'^api/accounts/token', obtain_auth_token, name='accounts_get_token'),
-    re_path(
-        r'^api/accounts/auth',
+    path('admin/', admin.site.urls),
+    path('grappelli/', include('grappelli.urls')),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path('admin/games/', include('games.urls.admin')),
+    path('select2/', include('django_select2.urls')),
+    path('openid/', include('django_openid_auth.urls')),
+    path('user/', include('accounts.urls')),
+    path('api/accounts/token', obtain_auth_token, name='accounts_get_token'),
+    path(
+        'api/accounts/auth',
         include('rest_framework.urls', namespace='rest_framework')
     ),
-    re_path(r'^api/tosec', include('tosec.urls')),
-    re_path(r'^api/runners', include('runners.runner_urls')),
-    re_path(r'^api/runtime', include('runners.runtime_urls')),
-    re_path(r'^api/games', include('games.urls.games')),
-    re_path(r'^api/installers', include('games.urls.installers')),
-    re_path(r'^api/users/me', UserDetailView.as_view(), name='api_user_detail'),
-    re_path(r'^api/bundles/(?P<slug>[\w\-]+)$', BundleView.as_view(), name='api_bundle_view'),
-    re_path(r'^games/', include('games.urls.pages')),
-    re_path(r'^bundles', include('bundles.urls')),
-    re_path(r'^runners', include('runners.urls')),
-    re_path(r'^email/', include('emails.urls')),
-    re_path(
-        r'^steam-login/',
+    path('api/tosec/', include('tosec.urls')),
+    path('api/runners/', include('runners.runner_urls')),
+    path('api/runtime/', include('runners.runtime_urls')),
+    path('api/games/', include('games.urls.games')),
+    path('api/installers/', include('games.urls.installers')),
+    path('api/users/me/', UserDetailView.as_view(), name='api_user_detail'),
+    path('api/bundles/<slug:slug>/', BundleView.as_view(), name='api_bundle_view'),
+    path('games/', include('games.urls.pages')),
+    path('bundles/', include('bundles.urls')),
+    path('runners/', include('runners.urls')),
+    path('email/', include('emails.urls')),
+    path(
+        'steam-login/',
         login_begin,
         kwargs={'login_complete_view': 'associate_steam'},
         name='steam_login'
     ),
-    re_path(r'thegamesdb/', include('thegamesdb.urls')),
-    re_path(r'^', include('common.urls')),
+    path('thegamesdb/', include('thegamesdb.urls')),
+    path('', include('common.urls')),
 ]
 
 if settings.DEBUG:

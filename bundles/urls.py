@@ -1,9 +1,9 @@
 # pylint: disable=C0103
-from django.conf.urls import url
+from django.urls import path
 
 from bundles import views
 
 urlpatterns = [
-    url(r'^/(?P<slug>[\w\-]+)$', views.BundleDetail.as_view(), name='bundle_detail'),
-    url(r'^/?$', views.BundleList.as_view(), name='bundle_list'),
+    path('<slug:slug>/', views.BundleDetail.as_view(), name='bundle_detail'),
+    path('', views.BundleList.as_view(), name='bundle_list'),
 ]
