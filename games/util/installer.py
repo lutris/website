@@ -218,9 +218,11 @@ def no_home_in_files(installer):
     """Installer files should not point to a local file."""
     script = get_installer_script(installer)
     for file_info in script.get('files') or []:
+        if not isinstance(file_info, dict):
+            continue
         file_meta = file_info[next(iter(file_info.keys()))]
         if isinstance(file_meta, dict):
-            url = file_meta["url"]
+            url = file_meta.get("url")
         else:
             url = file_meta
         if url.startswith("/home"):
