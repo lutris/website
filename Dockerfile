@@ -14,6 +14,7 @@ ENV SECRET_KEY="somethissecret"
 ENV DB_HOST="db"
 ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 RUN /app/scripts/setup.sh
+RUN cd /app/frontend/vue/ && npm install && npm run build
 
 RUN sh -c "touch templates/docs/installers.html"
 
