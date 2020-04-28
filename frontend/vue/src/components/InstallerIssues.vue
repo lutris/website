@@ -68,13 +68,13 @@ export default {
       this.installer_issues = response.data.results;
     });
     if (this.userId) {
-        axios.get('/api/users/me').then(response => {
-            if (response.data) {
-                this.user = response.data;
-            } else {
-                this.user = null;
-            }
-        });
+      axios.get('/api/users/me').then(response => {
+        if (response.data) {
+          this.user = response.data;
+        } else {
+          this.user = null;
+        }
+      });
     }
   },
   methods: {

@@ -57,7 +57,7 @@
     <md-dialog-confirm
       :md-active.sync="showSolvedConfirmation"
       md-title="Close this issue?"
-      md-content="If this issue is solved, you can mark as closed. Make sure to indicate any solution you've used to help other users."
+      md-content="If this issue is solved, please close it. Also include any helpful information."
       md-confirm-text="Yes"
       md-cancel-text="No"
       @md-cancel="showSolvedConfirmation = false;"
@@ -125,11 +125,11 @@ export default {
       return this.user.is_staff || this.user.id === this.issue.submitted_by;
     },
     canReopenIssue() {
-      if(!this.issue.solved || !this.user) {
+      if (!this.issue.solved || !this.user) {
         return false;
       }
       return this.user.is_staff || this.user.id === this.issue.submitted_by;
-    }
+    },
   },
   methods: {
     canDeleteReply(reply) {
@@ -183,7 +183,7 @@ export default {
     onReopen() {
       axios
         .patch(`/api/installers/issues/${this.issue.id}`, { solved: false }, this.getAxiosConfig())
-        .then(response => {
+        .then(() => {
           this.issue.solved = false;
         });
     },
@@ -309,7 +309,9 @@ em {
     line-height: 26px;
 }
 .md-dialog {
-    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
+    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),
+                0 24px 38px 3px rgba(0,0,0,.14),
+                0 9px 46px 8px rgba(0,0,0,.12);
     min-width: 280px;
     max-width: 80%;
     max-height: 80%;
