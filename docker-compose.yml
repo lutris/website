@@ -6,9 +6,9 @@ services:
   web:
     build:
       context: .
+    command: ['/app/manage.py', 'runserver', '0.0.0.0:8000']
     volumes:
-      - /app/media
-      - /app/templates/docs
+      - ./:/app
     ports:
       - 8000:8000
     stdin_open: true
