@@ -26,7 +26,7 @@ python-memcached==1.59
 python-openid
 requests==2.23.0
 mimeparse==0.1.3
-mock==4.0.2
+mock==3.0.5
 jsonfield==3.0.0
 psycopg2==2.8.5
 factory_boy==2.12.0
