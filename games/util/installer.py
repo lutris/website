@@ -225,7 +225,7 @@ def no_home_in_files(installer):
             url = file_meta.get("url")
         else:
             url = file_meta
-        if url.startswith("/home"):
+        if url and url.startswith("/home"):
             return (
                 False,
                 "Don't reference files from your own home folder."
