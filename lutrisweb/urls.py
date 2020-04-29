@@ -10,6 +10,7 @@ from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
 from accounts.views import UserDetailView
 from bundles.views import BundleView
+from common.views import server_status
 
 logger = logging.getLogger(__name__)
 admin.autodiscover()
@@ -46,6 +47,7 @@ urlpatterns = [
         name='steam_login'
     ),
     path('thegamesdb/', include('thegamesdb.urls')),
+    path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
 ]
 

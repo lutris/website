@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring
 from django.shortcuts import render
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.views.generic import DetailView, TemplateView
@@ -82,3 +82,8 @@ def upload_file(request):
         upload.save()
         return HttpResponseRedirect(reverse('upload_file'))
     return render(request, 'common/upload.html', {'form': form})
+
+
+def server_status(_request):
+    """Simple availability check"""
+    return JsonResponse({"status": "ok"})
