@@ -6,7 +6,7 @@ from games.views import pages as views
 
 
 urlpatterns = [
-    path('', views.GameList.as_view(), name='game_list'),
+    re_path('^/?$', views.GameList.as_view(), name='game_list'),
     re_path(r'^/year/(\d+)/?$',
             views.GameListByYear.as_view(),
             name='games_by_year'),
