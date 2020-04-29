@@ -29,7 +29,7 @@ EMAIL_HOST = os.environ['EMAIL_HOST']
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
-EMAIL_PORT = 25
+EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", 25))
 
 STATICFILES_STORAGE = (
     'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
