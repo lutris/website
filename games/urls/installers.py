@@ -1,7 +1,7 @@
 """URL conf for the installer API"""
 # pylint: disable=invalid-name
 from __future__ import absolute_import
-from django.urls import path
+from django.urls import path, re_path
 from games.views import installers as views
 
 
@@ -28,9 +28,9 @@ urlpatterns = [
          name="api_revision_list"),
 
     # Issues
-    path('/<slug:slug>/issues',
-         views.InstallerIssueList.as_view(),
-         name='api_installer_issue'),
+    re_path(r'/<slug:slug>/issues/?',
+            views.InstallerIssueList.as_view(),
+            name='api_installer_issue'),
     path('/<slug:game_slug>/issues/<slug:installer_slug>',
          views.InstallerIssueCreateView.as_view(),
          name='api_installer_issue_create'),
