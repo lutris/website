@@ -5,18 +5,10 @@
   <div class="game-image">
     {% if not game.change_for %}
       <a href="{{ game.get_absolute_url }}">
-        {% thumbnail game.title_logo "184x69" crop="center" as img %}
-          <img src="{{ img.url }}" alt="{{ game.name }}"/>
-        {% empty %}
-          <span>no image</span>
-        {% endthumbnail %}
+        <img src="{{ game.banner_url }}" alt="{{ game.name }}"/>
       </a>
     {% else %}
-      {% thumbnail game.change_for.title_logo "184x69" crop="center" as img %}
-        <img src="{{ img.url }}" alt="{{ game.change_for.name }}"/>
-      {% empty %}
-        <span>no image</span>
-      {% endthumbnail %}
+      <img src="{{ game.banner_url }}" alt="{{ game.change_for.name }}"/>
     {% endif %}
   </div>
 
