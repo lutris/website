@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/tosec', include('tosec.urls')),
     path('api/runners', include('runners.runner_urls')),
     path('api/runtime', include('runners.runtime_urls')),
-    path('api/games', include('games.urls.games')),
+    re_path(r'api/games/?', include('games.urls.games')),
     path('api/installers', include('games.urls.installers')),
     path('api/users/me', UserDetailView.as_view(), name='api_user_detail'),
     path('api/bundles/<slug:slug>', BundleView.as_view(), name='api_bundle_view'),
