@@ -1,2 +1,7 @@
 User-agent: *
 Disallow: /files
+Disallow: /api
+Disallow: /user
+Disallow: /*/new$
+Disallow: /*/edit$
+Disallow: /*/add/$
