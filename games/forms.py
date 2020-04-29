@@ -7,6 +7,7 @@ from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit, ButtonHolder, Fieldset, Field
 from django import forms
 from django.conf import settings
+from django.forms import ImageField
 from django.utils.safestring import mark_safe
 from django_select2.forms import (
     ModelSelect2Widget,
@@ -64,7 +65,7 @@ class GameForm(forms.ModelForm):
             "platforms",
             "genres",
             "description",
-            "title_logo",
+            "banner",
         )
         widgets = {
             "platforms": Select2MultipleWidget,
@@ -90,19 +91,11 @@ class GameForm(forms.ModelForm):
             "it. Don't write your own. For old games, check Mobygame's Ad "
             "Blurbs, look for the English back cover text."
         )
-
-        self.fields["title_logo"] = CroppieField(
-            options={
-                "viewport": {"width": 875, "height": 345},
-                "boundary": {"width": 875, "height": 345},
-                "showZoomer": True,
-            }
-        )
-        self.fields["title_logo"].label = "Upload an image"
-        self.fields["title_logo"].help_text = (
+        self.fields["banner"].label = "Upload an image"
+        self.fields["banner"].help_text = (
             "The banner should include the game's title. "
-            "Please make sure that your banner doesn't rely on "
-            "transparency as those won't be reflected in the final image"
+            "Please make sure that your banner </em>doesn't rely on "
+            "transparency</em> as those won't be reflected in the final image."
         )
 
         self.helper = FormHelper()
@@ -118,7 +111,7 @@ class GameForm(forms.ModelForm):
                 "platforms",
                 "genres",
                 "description",
-                Field("title_logo", template="includes/upload_button.html"),
+                Field("banner", style='width: 100%'),
             ),
             ButtonHolder(Submit("submit", "Submit")),
         )
@@ -181,7 +174,7 @@ class GameEditForm(forms.ModelForm):
             "platforms",
             "genres",
             "description",
-            "title_logo",
+            "banner",
             "reason",
         )
 
@@ -200,19 +193,11 @@ class GameEditForm(forms.ModelForm):
         super(GameEditForm, self).__init__(payload, *args, **kwargs)
         self.fields["name"].label = "Title"
         self.fields["year"].label = "Release year"
-        self.fields["title_logo"] = CroppieField(
-            options={
-                "viewport": {"width": 875, "height": 345},
-                "boundary": {"width": 875, "height": 345},
-                "showZoomer": True,
-                "url": payload["title_logo"].url if payload.get("title_logo") else "",
-            }
-        )
-        self.fields["title_logo"].label = "Upload an image"
-        self.fields["title_logo"].required = False
+        self.fields["banner"].label = "Upload an image"
+        self.fields["banner"].required = False
 
         self.helper = FormHelper()
-        self.helper.include_media = False
+        self.helper.include_media = True
         self.helper.layout = Layout(
             Fieldset(
                 None,
@@ -224,7 +209,7 @@ class GameEditForm(forms.ModelForm):
                 "platforms",
                 "genres",
                 "description",
-                Field("title_logo", template="includes/upload_button.html"),
+                Field("banner", style='width: 100%'),
                 "reason",
             ),
             ButtonHolder(Submit("submit", "Submit")),

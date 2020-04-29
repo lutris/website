@@ -6,39 +6,6 @@
 {% endblock %}
 {% block extra_head %}
 {{ form.media.css }}
-<style>
-[type="file"] {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  white-space: nowrap;
-  width: 1px;
-}
-
-.file-upload-button label {
-  background-color: #991e02;
-  border-radius: 2px;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  height: 2rem;
-  line-height: 2rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  transition: background-color 0.3s;
-}
-
-.file-upload-button label:hover {
-    background-color: #f15d22;
-}
-</style>
-
 {% endblock %}
 
 {% block content %}

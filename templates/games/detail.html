@@ -6,10 +6,13 @@
 
 {% block extra_head %}
 <meta property="pageId" content="{{ game.slug }}" />
-{% thumbnail game.title_logo "300" as img %}
-<link rel='image_src' href="{{img.url}}">
-<meta property='og:image' content="{{img.url}}" />
-{% endthumbnail %}
+{% if game.banner %}
+    <link rel='image_src' href="{{ game.banner.url }}">
+    <meta property='og:image' content="{{ game.banner.url }}" />
+{% else %}
+    <link rel='image_src' href="{{ MEDIA_URL }}games/banners/no_banner.png">
+    <meta property='og:image' content="{{ MEDIA_URL }}games/banners/no_banner.png" />
+{% endif %}
 <meta property='og:title' content="{{ game.name }}" />
 <meta property='og:site_name' content='Lutris' />
 <meta name="title" content="{{ game.name }} - Lutris" />
@@ -52,9 +55,11 @@
   <div class="row">
     <div class="col-sm-3 col-sm-push-9">
       <div class="game-info">
-        {% thumbnail game.title_logo "300" as img %}
-          <img src="{{ img.url }}" class="banner" />
-        {% endthumbnail %}
+      {% if game.banner %}
+        <img src="{{ game.banner.url }}" class="banner" />
+      {% else %}
+        <img src="{{ MEDIA_URL }}games/banners/no_banner.png" class="banner"/>
+      {% endif %}
         <ul>
           {% if game.genres.count %}
           <li>

@@ -69,11 +69,11 @@ class TestGameForm(TestCase):
             'developer': self.developer.id,
             'publisher': self.publisher.id
         }, {
-            'title_logo': SimpleUploadedFile('front.png', image.getvalue())
+            'banner': SimpleUploadedFile('front.png', image.getvalue())
         })
         # XXX there's a problem with django-croppie preventing testing this form properly
         # The title_photo is made optional until this is fixed
-        form.fields['title_logo'].required = False
+        form.fields['banner'].required = False
         form.is_valid()
         # self.assertTrue(form.is_valid())
         self.assertFalse(form.errors)

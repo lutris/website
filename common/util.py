@@ -7,6 +7,8 @@ from transliterate import translit
 from PIL import Image
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
+from django.conf import settings
+from django.db.models.fields.files import ImageFieldFile
 SLUG_MAX_LENGTH = 50
 
 
@@ -160,3 +162,33 @@ def crop_banner(img_path, dest_path):
 
     image = image.crop(box)
     image.save(dest_path)
+
+
+def check_image_size(image_type: str, image: ImageFieldFile) -> bool:
+    image_size = '{0}x{1}'.format(image.width, image.height)
+    if image_type == 'icon' and image_size != settings.ICON_SIZE:
+        return False
+    if image_type == 'large icon' and image_size != settings.ICON_LARGE_SIZE:
+        return False
+    if image_type == 'banner' and image_size != settings.BANNER_SIZE:
+        return False
+    return True
+
+
+def resize_image(image_type: str, image: ImageFieldFile):
+    # using style of processing as described here: https://docs.djangoproject.com/en/2.2/topics/files/
+    image_size = None
+    if image_type not in ['icon', 'large icon', 'banner']:
+        raise ValueError("Unsupported image type: %s" % image_type)
+    if image_type == 'icon':
+        image_size = settings.ICON_SIZE.split('x')
+    if image_type == 'large icon':
+        image_size = settings.ICON_LARGE_SIZE.split('x')
+    if image_type == 'banner':
+        image_size = settings.BANNER_SIZE.split('x')
+    image.open()
+    pil_image = Image.open(image)
+    resized_image = pil_image.resize((int(image_size[0]), int(image_size[1])))
+    pil_image.close()
+    image.open(mode='w')
+    resized_image.save(image)

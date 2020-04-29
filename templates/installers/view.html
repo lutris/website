@@ -3,10 +3,13 @@
 
 {% block extra_head %}
 <meta property="pageId" content="{{ installer.slug }}" />
-{% thumbnail installer.game.title_logo "300" as img %}
-<link rel='image_src' href="{{img.url}}">
-<meta property='og:image' content="{{img.url}}" />
-{% endthumbnail %}
+{% if game.banner %}
+    <link rel='image_src' href="{{ game.banner.url }}">
+    <meta property='og:image' content="{{ game.banner.url }}" />
+{% else %}
+    <link rel='image_src' href="{{ MEDIA_URL }}games/banners/no_banner.png">
+    <meta property='og:image' content="{{ MEDIA_URL }}games/banners/no_banner.png" />
+{% endif %}
 <meta property='og:title' content="{{ installer.game.name }} ({{ installer.version}})" />
 <meta property='og:site_name' content='Lutris' />
 <meta name="title" content="{{ installer.game.name }} ({{ installer.version }}) - Lutris" />
