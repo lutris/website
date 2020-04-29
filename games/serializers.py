@@ -37,15 +37,16 @@ class GameAliasSerializer(serializers.ModelSerializer):
 
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
-    genres = GenreSerializer(many=True)
-    platforms = PlatformSerializer(many=True)
-    aliases = GameAliasSerializer(many=True)
+    # genres = GenreSerializer(many=True)
+    # platforms = PlatformSerializer(many=True)
+    # aliases = GameAliasSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
-            'name', 'slug', 'year', 'platforms', 'genres', 'aliases',
+            'name', 'slug', 'year',
+            # 'platforms', 'genres', 'aliases',
             'description', 'banner_url', 'icon_url', 'is_public',
             'updated', 'steamid', 'gogslug', 'humblestoreid'
         )
