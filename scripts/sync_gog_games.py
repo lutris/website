@@ -200,7 +200,7 @@ def run():
         game = create_game(gog_game)
         if not game:
             continue
-        if not game.title_logo:
+        if not game.banner:
             raise RuntimeError("No")
         LOGGER.info("Created game %s", game)
         i += 1

@@ -44,7 +44,7 @@
               <tr style="color: #770000; background-color: #fbe9eb; font-family: monospace;">
                 <th>--</th>
                 <td>
-                {% if entry == "title_logo" %}
+                {% if entry == "banner" %}
                   <img src="{{ MEDIA_URL }}{{ old_value }}"/>
                 {% else %}
                   {{ old_value }}
@@ -56,7 +56,7 @@
               <tr style="color: #007700; background-color: #ecfdf0; font-family: monospace;">
                 <th>++</th>
                 <td>
-                {% if entry == "title_logo" %}
+                {% if entry == "banner" %}
                   <img src="{{ MEDIA_URL }}{{ new_value }}"/>
                 {% else %}
                   {{ new_value }}

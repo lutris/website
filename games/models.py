@@ -3,6 +3,7 @@
 import datetime
 import json
 import logging
+import os
 import random
 import re
 from collections import defaultdict
@@ -33,12 +34,28 @@ DEFAULT_INSTALLER = {
 }
 
 
+# Path functions for ImageFields
+def company_logo_path(instance, filename):
+    file_ext = os.path.splitext(filename)[1]
+    return 'companies/logos/{0}{1}'.format(instance.slug, file_ext)
+
+
+def game_icon_path(instance, filename):
+    file_ext = os.path.splitext(filename)[1]
+    return 'games/icons/{0}{1}'.format(instance.slug, file_ext)
+
+
+def game_banner_path(instance, filename):
+    file_ext = os.path.splitext(filename)[1]
+    return 'games/banners/{0}{1}'.format(instance.slug, file_ext)
+
+
 class Company(models.Model):
     """Gaming company"""
 
     name = models.CharField(max_length=127)
     slug = models.SlugField(unique=True)
-    logo = models.ImageField(upload_to="companies/logos", blank=True)
+    logo = models.ImageField(upload_to=company_logo_path, blank=True)
     website = models.CharField(max_length=128, blank=True)
 
     class Meta:
@@ -182,7 +199,7 @@ class Game(models.Model):
     # These model fields are editable by the user
     TRACKED_FIELDS = [
         "name", "year", "platforms", "genres", "publisher", "developer",
-        "website", "description", "title_logo"
+        "website", "description", "banner"
     ]
 
     name = models.CharField(max_length=200)
@@ -205,8 +222,8 @@ class Game(models.Model):
         on_delete=models.SET_NULL,
     )
     website = models.CharField(max_length=200, blank=True)
-    icon = models.ImageField(upload_to="games/icons", blank=True)
-    title_logo = models.ImageField(upload_to="games/banners", blank=True)
+    icon = models.ImageField(upload_to=game_icon_path, blank=True)
+    banner = models.ImageField(upload_to=game_banner_path, blank=True)
     description = models.TextField(blank=True)
     is_public = models.BooleanField("Published", default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -262,14 +279,14 @@ class Game(models.Model):
     @property
     def banner_url(self):
         """Return URL for the game banner"""
-        if self.title_logo:
-            return reverse("get_banner", kwargs={"slug": self.slug})
+        if self.banner:
+            return self.banner.url
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return reverse("get_icon", kwargs={"slug": self.slug})
+            return self.icon.url
 
     @property
     def flag_labels(self):
@@ -291,7 +308,7 @@ class Game(models.Model):
 
             "website": self.website,
             "description": self.description,
-            "title_logo": self.title_logo,
+            "banner": self.banner,
         }
 
     def get_changes(self):
@@ -329,7 +346,7 @@ class Game(models.Model):
         self.developer = change_set.developer
         self.website = change_set.website
         self.description = change_set.description
-        self.title_logo = change_set.title_logo
+        self.banner = change_set.banner
 
     def has_installer(self):
         """Return whether this game has an installer"""
@@ -349,15 +366,15 @@ class Game(models.Model):
 
     def set_logo_from_steam(self):
         """Fetch the banner from Steam and use it for the game"""
-        if self.title_logo or not self.steamid:
+        if self.banner or not self.steamid:
             return
-        self.title_logo = ContentFile(
+        self.banner = ContentFile(
             steam.get_capsule(self.steamid), "%s.jpg" % self.steamid
         )
 
     def set_logo_from_steam_api(self, img_url):
         """Sets the game banner from the Steam API URLs"""
-        self.title_logo = ContentFile(
+        self.banner = ContentFile(
             steam.get_image(self.steamid, img_url), "%s.jpg" % self.steamid
         )
 
@@ -369,9 +386,9 @@ class Game(models.Model):
 
     def set_logo_from_gog(self, gog_game):
         """Sets the game logo from the data retrieved from GOG"""
-        if self.title_logo or not self.gogid:
+        if self.banner or not self.gogid:
             return
-        self.title_logo = ContentFile(
+        self.banner = ContentFile(
             gog.get_logo(gog_game), "gog-%s.jpg" % self.gogid
         )
 

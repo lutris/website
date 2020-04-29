@@ -11,9 +11,9 @@ class Command(BaseCommand):
             icon_path = os.path.join(settings.MEDIA_ROOT, game.icon.name)
             if game.icon.name and not os.path.exists(icon_path):
                 print("%s is missing icon" % game)
-            banner_path = os.path.join(settings.MEDIA_ROOT, game.title_logo.name)
-            if game.title_logo.name and not os.path.exists(banner_path):
+            banner_path = os.path.join(settings.MEDIA_ROOT, game.banner.name)
+            if game.banner.name and not os.path.exists(banner_path):
                 print("%s is missing banner" % game)
 
-            if game.is_public and not game.title_logo.name:
+            if game.is_public and not game.banner.name:
                 print("%s has no banner" % game)

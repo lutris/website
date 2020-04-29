@@ -105,11 +105,11 @@
       {% for game in new_games %}
         <div class='game-banner'>
           <a href="{{ game.get_absolute_url }}" title="{{game.name}}">
-            {% thumbnail game.title_logo '184x69' crop="center" as img %}
-              <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
-            {% empty %}
-              <span class='game-cover'>no image</span>
-            {% endthumbnail %}
+            {% if game.banner %}
+              <img class='game-cover' src='{{ game.banner.url }}' alt='{{ game.name }}'/>
+            {% else %}
+              <img class='game-cover' src='{{ MEDIA_URL }}games/banners/no_banner.png' alt="{{ game.name }}"/>
+            {% endif %}
             <span class='game-title'>{{game.name}}</span>
           </a>
         </div>
@@ -124,11 +124,11 @@
       {% for game in updated_games %}
         <div class='game-banner'>
           <a href="{{ game.get_absolute_url }}" title="{{game.name}}">
-            {% thumbnail game.title_logo '184x69' crop="center" as img %}
-              <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
-            {% empty %}
-              <span class='game-cover'>no image</span>
-            {% endthumbnail %}
+            {% if game.banner %}
+              <img class='game-cover' src='{{ game.banner.url }}' alt='{{ game.name }}'/>
+            {% else %}
+              <img class='game-cover' src='{{ MEDIA_URL }}games/banners/no_banner.png' alt="{{ game.name }}"/>
+            {% endif %}
             <span class='game-title'>{{game.name}}</span>
           </a>
         </div>

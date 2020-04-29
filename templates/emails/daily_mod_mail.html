@@ -42,11 +42,11 @@
   {% for installer in installers %}
     {% with installer.game as game %}
       <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.title_logo "184x69" crop="center" as img %}
-        <img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
-      {% empty %}
-        <span class="game-cover">no image</span>
-      {% endthumbnail %}
+        {% if game.banner %}
+          <img class='game-cover' src='{{ game.banner.url }}' alt='{{ game.name }}'/>
+        {% else %}
+          <img class='game-cover' src='{{ MEDIA_URL }}games/banners/no_banner.png' alt="{{ game.name }}"/>
+        {% endif %}
       </a>
     {% endwith %}
   {% endfor %}
@@ -68,11 +68,11 @@
   {% for submission in submissions %}
     {% with submission.game as game %}
       <a href="{{ game.get_absolute_url }}">
-      {% thumbnail game.title_logo "184x69" crop="center" as img %}
-        <img src="{{ img.url }}" alt="{{ game.name }}" class="game-cover"/>
-      {% empty %}
-        <span class="game-cover">no image</span>
-      {% endthumbnail %}
+        {% if game.banner %}
+            <img class='game-cover' src='{{ game.banner.url }}' alt='{{ game.name }}'/>
+        {% else %}
+            <img class='game-cover' src='{{ MEDIA_URL }}games/banners/no_banner.png' alt="{{ game.name }}"/>
+        {% endif %}
       </a>
     {% endwith %}
   {% endfor %}

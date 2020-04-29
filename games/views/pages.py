@@ -20,7 +20,6 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import check_installer_restrictions, user_confirmed_required
 from games import models
@@ -480,19 +479,14 @@ class InstallerFeed(Feed):
 
 
 def get_banner(request, slug):
-    """Serve game title in an appropriate format for the client."""
+    """Serve game banner in an appropriate format for the client."""
     try:
         game = Game.objects.get(slug=slug)
     except Game.DoesNotExist:
         game = None
-    if not game or not game.title_logo:
+    if not game or not game.banner:
         raise Http404
-    try:
-        thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE, crop="center")
-    except AttributeError:
-        game.title_logo.delete()
-        raise Http404
-    return redirect(thumbnail.url)
+    return redirect(game.banner.url)
 
 
 def get_icon(request, slug):
@@ -502,14 +496,7 @@ def get_icon(request, slug):
         game = None
     if not game or not game.icon:
         raise Http404
-    try:
-        thumbnail = get_thumbnail(
-            game.icon, settings.ICON_SIZE, crop="center", format="PNG"
-        )
-    except AttributeError:
-        game.icon.delete()
-        raise Http404
-    return redirect(thumbnail.url)
+    return redirect(game.icon.url)
 
 
 def game_list(request):
