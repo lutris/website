@@ -3,5 +3,10 @@ Disallow: /files
 Disallow: /api
 Disallow: /user
 Disallow: /*/new$
+Disallow: /*/new/$
 Disallow: /*/edit$
+Disallow: /*/edit/$
+Disallow: /*/add$
 Disallow: /*/add/$
+Disallow: /*/fork$
+Disallow: /*/fork/$
