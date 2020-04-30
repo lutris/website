@@ -13,7 +13,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -627,6 +627,9 @@ def publish_screenshot(request, screenshot_id):
 @require_POST
 @login_required
 def submit_issue(request):
+    """Create a new issue
+    This should really be done in the REST API
+    """
     response = {"status": "ok"}
     try:
         installer = Installer.objects.get(slug=request.POST.get("installer"))
@@ -647,7 +650,7 @@ def submit_issue(request):
     installer_issue.save()
     notify_issue_creation(installer_issue, request.user, content)
 
-    return HttpResponse(json.dumps(response))
+    return JsonResponse(response)
 
 
 @staff_member_required

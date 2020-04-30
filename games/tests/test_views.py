@@ -1,4 +1,5 @@
-# pylint: disable=missing-docstring
+"""Game views tests"""
+# pylint: disable=no-member
 import json
 from django.test import TestCase
 from django.urls import reverse
@@ -8,6 +9,7 @@ from . import factories
 
 
 class TestInstallerViews(TestCase):
+    """Test installer views"""
     def setUp(self):
         self.game = factories.GameFactory(name='doom', slug='doom')
         self.user = factories.UserFactory()
@@ -64,34 +66,29 @@ class TestInstallerIssues(TestCase):
 
     def test_cant_post_an_issue_if_not_logged_in(self):
         response = self.client.post(
-            reverse('api_installer_issue_create', kwargs={
-                'game_slug': self.game.slug,
-                'installer_slug': self.installer.slug
-            }),
+            reverse('game-submit-issue'),
             {
-                'slug': self.installer.slug,
-                'description': 'Game does not launch'
+                'installer': self.installer.slug,
+                'content': 'Game does not launch'
             }
         )
-        self.assertEqual(response.status_code, 401)
+        print(response)
+        print(response.content)
+        self.assertEqual(response.status_code, 302)
 
     def test_can_post_an_issue(self):
+        """A logged in user should be able to create an issue"""
         self.client.login(username=self.user.username, password="password")
         response = self.client.post(
-            reverse('api_installer_issue_create', kwargs={
-                'game_slug': self.game.slug,
-                'installer_slug': self.installer.slug
-            }),
-            json.dumps({
-                'slug': self.installer.slug,
-                'description': 'Game does not launch'
-            }),
-            content_type='application/json'
+            reverse('game-submit-issue'),
+            {
+                'installer': self.installer.slug,
+                'content': 'Game does not launch'
+            }
         )
         content = response.json()
-        self.assertEqual(content['submitted_by'], self.user.id)
-        self.assertEqual(content['description'], 'Game does not launch')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(content['status'], 'ok')
+        self.assertEqual(response.status_code, 200)
 
     def test_can_post_a_reply(self):
         self.client.login(username=self.user.username, password="password")
@@ -101,19 +98,16 @@ class TestInstallerIssues(TestCase):
             description="I can't launch the game hurr durr"
         )
         response = self.client.post(
-            reverse('api_installer_issue_by_id', kwargs={
-                'pk': issue.id
-            }),
+            reverse('api_installer_issue_by_id', kwargs={'pk': issue.id}),
             json.dumps({
                 'description': 'try blowing in the cartridge'
             }),
             content_type='application/json'
         )
         content = response.json()
-        # FIXME this is not good
-        # self.assertEqual(content['submitted_by'], self.user.id)
-        # self.assertIn('cartridge', content['description'])
-        # self.assertEqual(response.status_code, 201)
+        self.assertEqual(content['submitted_by'], self.user.id)
+        self.assertIn('cartridge', content['description'])
+        self.assertEqual(response.status_code, 201)
 
     def test_can_mark_an_issue_as_solved(self):
         self.client.login(username=self.user.username, password="password")
