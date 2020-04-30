@@ -253,7 +253,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100,
+    'PAGE_SIZE': 250,
 }
 
 # Shell Plus
@@ -267,7 +267,7 @@ SILENCED_SYSTEM_CHECKS = [
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:9527',
     'http://0.0.0.0:9527',
-    'https://dashboard.lutris.net',
+    'http://dashboard.lutris.net'
 )
 
 # Logging
