@@ -52,9 +52,9 @@ urlpatterns = [
          name='api_installer_detail'),
 
     # Generic views
-    path('/<slug:slug>',
-         views.GameInstallerListView.as_view(),
-         name='api_game_installer_list'),
+    re_path(r'/(?P<slug>[\w\-]+)/?',
+            views.GameInstallerListView.as_view(),
+            name='api_game_installer_list'),
     path('',
          views.InstallerListView.as_view(),
          name='api_installer_list'),
