@@ -1,4 +1,5 @@
-# pylint: disable=C0103
+"""URLconf for runners app"""
+# pylint: disable=invalid-name
 from django.urls import path, register_converter, re_path
 
 from runners import converters, views

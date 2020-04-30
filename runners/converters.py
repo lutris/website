@@ -1,8 +1,15 @@
-class VersionConverter:
-    regex = '[\w\-\.\_]+'
+"""URL converters"""
 
-    def to_python(self, value):
+class VersionConverter:
+    """URL converter to match version numbers"""
+    regex = r'[\w\-\.\_]+'
+
+    @staticmethod
+    def to_python(value):
+        """Dispatch the value in the URL to the python code"""
         return str(value)
 
-    def to_url(self, value):
+    @staticmethod
+    def to_url(value):
+        """Convert the python value to a suitable value for URLs"""
         return value
