@@ -14,6 +14,11 @@ urlpatterns = [
          views.InstallerRevisionDetailView.as_view(),
          name="api_game_installer_revision_detail"),
 
+    # There's a typo in the URL provided in the client
+    path('/games/<slug:slug>/revisions/<int:pk>',
+         views.InstallerRevisionDetailView.as_view(),
+         name="api_game_installer_revision_detail_client_typo_support"),
+
     # Revision access via installer pk
     path('/<int:pk>/revisions',
          views.InstallerRevisionListView.as_view(),
