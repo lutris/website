@@ -28,7 +28,7 @@ urlpatterns = [
          name="api_revision_list"),
 
     # Issues
-    path('/<slug:slug>/issues',
+    re_path(r'/(?P<slug>[\w\-]+)/issues',
             views.InstallerIssueList.as_view(),
             name='api_installer_issue'),
     path('/<slug:game_slug>/issues/<slug:installer_slug>',
