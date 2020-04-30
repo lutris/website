@@ -6,9 +6,9 @@ from runners import converters, views
 register_converter(converters.VersionConverter, 'version')
 
 urlpatterns = [
-    path("/", views.RunnersList.as_view(), name='runners_list'),
-    path("/<slug:runner>/<version:version>/games",
+    path("", views.RunnersList.as_view(), name='runners_list'),
+    path("<slug:runner>/<version:version>/games",
          views.RunnerVersionGameList.as_view(),
          name="games_by_runner_version"),
-    path("/<slug:runner>/games", views.RunnerGameList.as_view(), name="games_by_runner")
+    path("<slug:runner>/games/", views.RunnerGameList.as_view(), name="games_by_runner")
 ]
