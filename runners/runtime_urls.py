@@ -1,8 +1,8 @@
 # pylint: disable=C0103
-from django.urls import path
+from django.conf.urls import url
 from . import views
 
 
 urlpatterns = [
-    path('', views.RuntimeView.as_view(), name='runtime'),
+    url(r'^$', views.RuntimeView.as_view(), name='runtime'),
 ]

@@ -1,10 +1,10 @@
 # pylint: disable=E1120, C0103
-from django.urls import path, re_path
+from django.conf.urls import url
 from thegamesdb import views
 
 
 urlpatterns = [
-    path('', views.search, name='tgb.search'),
-    path('search.json', views.search_json, name='tgd.search_json'),
-    re_path(r'^(\d+).json$', views.detail_to_lutris, name='tgd.detail'),
+    url(r'^$', views.search, name='tgb.search'),
+    url(r'^search.json', views.search_json, name='tgd.search_json'),
+    url(r'^(\d+).json$', views.detail_to_lutris, name='tgd.detail'),
 ]

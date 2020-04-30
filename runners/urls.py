@@ -1,14 +1,14 @@
 # pylint: disable=C0103
-from django.urls import path, register_converter
+from django.conf.urls import url
 
-from runners import converters, views
-
-register_converter(converters.VersionConverter, 'version')
+from runners import views
 
 urlpatterns = [
-    path("", views.RunnersList.as_view(), name='runners_list'),
-    path("<slug:runner>/<version:version>/games",
-         views.RunnerVersionGameList.as_view(),
-         name="games_by_runner_version"),
-    path("<slug:runner>/games/", views.RunnerGameList.as_view(), name="games_by_runner")
+    url(r"^/?$", views.RunnersList.as_view(), name='runners_list'),
+    url(r"^/(?P<runner>[\w\-]+)/(?P<version>[\w\-\.\_]+)/games$",
+        views.RunnerVersionGameList.as_view(),
+        name="games_by_runner_version"),
+    url(r"^/(?P<runner>[\w\-]+)/games$",
+        views.RunnerGameList.as_view(),
+        name="games_by_runner")
 ]

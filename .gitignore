@@ -1,5 +1,4 @@
 .vscode/
-.idea/
 src
 *.pyc
 tags
