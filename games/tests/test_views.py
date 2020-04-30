@@ -101,7 +101,7 @@ class TestInstallerIssues(TestCase):
             description="I can't launch the game hurr durr"
         )
         response = self.client.post(
-            reverse('api_installer_issue_by_id', kwargs={
+            reverse('api_installer_issue', kwargs={
                 'pk': issue.id
             }),
             json.dumps({
@@ -122,7 +122,7 @@ class TestInstallerIssues(TestCase):
             description="I can't launch the game hurr durr"
         )
         response = self.client.patch(
-            reverse('api_installer_issue_by_id', kwargs={
+            reverse('api_installer_issue', kwargs={
                 'pk': issue.id
             }),
             json.dumps({

@@ -10,7 +10,6 @@ from django_openid_auth.views import login_begin
 from rest_framework.authtoken.views import obtain_auth_token
 from accounts.views import UserDetailView
 from bundles.views import BundleView
-from common.views import server_status
 
 logger = logging.getLogger(__name__)
 admin.autodiscover()
@@ -34,9 +33,9 @@ urlpatterns = [
     path('api/runtime', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
     path('api/installers', include('games.urls.installers')),
-    re_path('api/users/me/?', UserDetailView.as_view(), name='api_user_detail'),
+    path('api/users/me', UserDetailView.as_view(), name='api_user_detail'),
     path('api/bundles/<slug:slug>', BundleView.as_view(), name='api_bundle_view'),
-    path('games', include('games.urls.pages')),
+    path('games/', include('games.urls.pages')),
     path('bundles', include('bundles.urls')),
     path('runners', include('runners.urls')),
     path('email/', include('emails.urls')),
@@ -47,7 +46,6 @@ urlpatterns = [
         name='steam_login'
     ),
     path('thegamesdb/', include('thegamesdb.urls')),
-    path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
 ]
 
