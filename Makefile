@@ -22,7 +22,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	SEND_EMAILS=0 ./manage.py test --failfast $(test)
+	SEND_EMAILS=0 ./manage.py test --no-input --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)
