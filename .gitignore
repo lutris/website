@@ -26,6 +26,7 @@ reports
 .env*
 ENV
 venv
+.venv
 celerybeat-schedule
 gog-cache
 gog-logos

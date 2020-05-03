@@ -9,7 +9,7 @@ watch:
 run:
 	./manage.py runserver 0.0.0.0:8000
 
-db: deps
+db:
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
 

@@ -28,25 +28,25 @@
       <span>
       Platforms:
       {% for platform in game.platforms.all %}
-        <a href="{% url 'games_by_platform' platform=platform.slug %}" class="filter-link">{{ platform }}</a>
+        <a href="{% url 'games_by_platform' platform=platform.pk %}" class="filter-link">{{ platform }}</a>
       {% endfor %}
       </span>
       {% if game.developer %}
         <span>
-        Developed by <a href="{% url 'games_by_company' company=game.developer.slug %}" class="filter-link">{{ game.developer }}</a>
+        Developed by <a href="{% url 'games_by_company' company=game.developer.pk %}" class="filter-link">{{ game.developer }}</a>
         </span>
       {% endif %}
 
       {% if game.publisher %}
       <span>
-        Published by <a href="{% url 'games_by_company' company=game.publisher.slug %}" class="filter-link">{{ game.publisher }}</a>
+        Published by <a href="{% url 'games_by_company' company=game.publisher.pk %}" class="filter-link">{{ game.publisher }}</a>
       </span>
       {% endif %}
       <br>
       <span>
       Genre:
       {% for genre in game.genres.all %}
-        <a href="{% url 'games_by_genre' genre=genre.slug %}" class="filter-link">{{ genre }}</a>
+        <a href="{% url 'games_by_genre' genre=genre.pk %}" class="filter-link">{{ genre }}</a>
       {% endfor %}
       </span>
 

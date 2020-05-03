@@ -390,30 +390,34 @@ class LibraryFilterForm(forms.Form):
     )
     platforms = forms.MultipleChoiceField(
         widget=Select2MultipleWidget(
-            choices=models.Platform.objects.values_list('pk', 'name'),
             attrs={'data-width': '100%',
                    'data-close-on-select': 'false',
-                   'data-placeholder': ''}
+                   'data-placeholder': '',
+                   'data-minimum-input-length': 3}
         ),
         required=False,
     )
-    genres = forms.MultipleChoiceField(
+    genres = forms.ModelMultipleChoiceField(
+        queryset=models.Genre.objects.all(),
         widget=ModelSelect2MultipleWidget(
             model=models.Genre,
             search_fields=['name__icontains'],
             attrs={'data-width': '100%',
                    'data-close-on-select': 'false',
-                   'data-placeholder': ''}
+                   'data-placeholder': '',
+                   'data-minimum-input-length': 3}
         ),
         required=False,
     )
-    companies = forms.MultipleChoiceField(
+    companies = forms.ModelMultipleChoiceField(
+        queryset=models.Company.objects.all(),
         widget=ModelSelect2MultipleWidget(
             model=models.Company,
             search_fields=['name__icontains'],
             attrs={'data-width': '100%',
                    'data-close-on-select': 'false',
-                   'data-placeholder': ''}
+                   'data-placeholder': '',
+                   'data-minimum-input-length': 3}
         ),
         required=False
     )
@@ -429,3 +433,7 @@ class LibraryFilterForm(forms.Form):
         widget=BitFieldCheckboxSelectMultiple,
         required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['platforms'].choices = (models.Platform.objects.values_list('pk', 'name'))

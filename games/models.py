@@ -49,7 +49,7 @@ class Company(models.Model):
 
     def get_absolute_url(self):
         """Return URL to a company's games"""
-        return reverse("games_by_company", kwargs={'company': self.slug})
+        return reverse("games_by_company", kwargs={'company': self.pk})
 
     def __str__(self):
         return u"%s" % self.name

@@ -53,26 +53,19 @@ class GameList(ListView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.q_params = {
-            'search': '',
-            'platforms': [kwargs.get('platform')] if 'platform' in kwargs else [],
-            'genres': [kwargs.get('genre')] if 'genre' in kwargs else [],
-            'companies': [kwargs.get('company')] if 'company' in kwargs else [],
-            'years': [kwargs.get('year')] if 'year' in kwargs else [],
-            'flags': [],
-            'unpublished': False
-        }
+        self.q_params = {}
 
-    def get_query_params(self):
+    def get(self, request, *args, **kwargs):
         self.q_params = {
-            'search': self.request.GET.get('search', ''),
-            'platforms': self.request.GET.getlist('platform', self.q_params['platforms']),
-            'genres': self.request.GET.getlist('genre', self.q_params['genres']),
-            'companies': self.request.GET.getlist('company', self.q_params['companies']),
-            'years': self.request.GET.getlist('year', self.q_params['years']),
-            'flags': self.request.GET.getlist('flags', self.q_params['flags']),
-            'unpublished': self.request.GET.get('unpublished', False)
+            'search': request.GET.get('search', ''),
+            'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
+            'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
+            'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
+            'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
+            'flags': request.GET.getlist('flags', []),
+            'unpublished': request.GET.get('unpublished', False)
         }
+        return super().get(request, *args, **kwargs)
 
     def get_paginate_by(self, queryset):
         return self.request.GET.get('paginate_by', self.paginate_by)
@@ -81,7 +74,6 @@ class GameList(ListView):
         return self.request.GET.get('ordering', self.ordering)
 
     def get_queryset(self):
-        self.get_query_params()
         queryset = models.Game.objects
         if self.q_params['unpublished']:
             queryset = queryset.filter(change_for__isnull=True)
@@ -104,15 +96,13 @@ class GameList(ListView):
             query = SearchQuery(self.q_params['search'])
             queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if self.q_params['platforms']:
-            queryset = queryset.filter(Q(platforms__name__in=self.q_params['platforms'])
-                                       | Q(platforms__slug__in=self.q_params['platforms']))
+            queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
         if self.q_params['genres']:
-            queryset = queryset.filter(Q(genres__name__in=self.q_params['genres'])
-                                       | Q(genres__slug__in=self.q_params['genres']))
+            queryset = queryset.filter(genres__pk__in=self.q_params['genres'])
         if self.q_params['companies']:
             queryset = queryset.filter(
-                Q(publisher__slug__in=self.q_params['companies'])
-                | Q(developer__slug__in=self.q_params['companies'])
+                Q(publisher__pk__in=self.q_params['companies'])
+                | Q(developer__pk__in=self.q_params['companies'])
             )
         if self.q_params['years']:
             queryset = queryset.filter(Q(year__in=self.q_params['years']))
@@ -141,7 +131,7 @@ class GameList(ListView):
                 filter_string += '&company=%s' % company
         if self.q_params.get('years'):
             for year in self.q_params['years']:
-                filter_string += '&year=%d' % year
+                filter_string += '&year=%s' % year
         if self.q_params.get('flags'):
             for flag in self.q_params['flags']:
                 filter_string += '&flags=%s' % flag

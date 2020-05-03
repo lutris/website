@@ -24,6 +24,7 @@ django-redis-cache==2.1.1
 # django-croppie==1.3
 -e git+https://github.com/strycore/django-croppie.git#egg=django-croppie
 docutils==0.15.2
+wheel
 python-openid
 requests==2.23.0
 mimeparse==0.1.3

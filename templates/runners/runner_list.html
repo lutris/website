@@ -21,7 +21,7 @@
           <br>
           <strong>Supported platforms:</strong>
           {% for platform in runner.platforms.all %}
-            <a href="{% url 'games_by_platform' platform=platform.slug %}" class="filter-link">{{ platform }}</a>
+            <a href="{% url 'games_by_platform' platform=platform.pk %}" class="filter-link">{{ platform }}</a>
           {% endfor %}
           <br>
           <p><a href="{% url 'games_by_runner' runner=runner.slug %}">Browse games for all versions</a></p>
