@@ -28,7 +28,7 @@ jenkins:
 	./manage.py jenkins $(test)
 
 builddeps:
-	sudo apt install -y libpq-dev python-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
+	sudo apt install -y libpq-dev python3-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
 
 serverdeps:
 	sudo apt-get update
