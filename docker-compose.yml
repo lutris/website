@@ -2,13 +2,20 @@ version: '3.4'
 
 volumes:
   postgresql:
+  media:
 services:
   web:
     build:
       context: .
     volumes:
-      - /app/media
-      - /app/templates/docs
+      - type: volume
+        source: media
+        target: /app/media
+        volume:
+          nocopy: true
+      - type: bind
+        source: .
+        target: /app
     ports:
       - 8000:8000
     stdin_open: true
