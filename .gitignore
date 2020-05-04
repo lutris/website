@@ -23,6 +23,7 @@ public/fonts
 node_modules
 npm-debug.log
 reports
+.env*
 ENV
 venv
 celerybeat-schedule
