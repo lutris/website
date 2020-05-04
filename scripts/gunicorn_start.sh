@@ -1,6 +1,7 @@
 #!/bin/bash
 
 NAME="lutris"
+PORT=8080
 DJANGODIR=/srv/lutris/lutris.net
 SOCKFILE=/srv/lutris/run/gunicorn.sock
 USER=django
@@ -25,5 +26,5 @@ exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
     --workers $NUM_WORKERS \
     --user=$USER --group=$GROUP \
     --log-level=debug \
-    --bind=unix:$SOCKFILE
+    --bind=127.0.0.1:$PORT
 
