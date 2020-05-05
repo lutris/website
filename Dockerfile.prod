@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 
 ENV LC_ALL=C.UTF-8
+ENV DB_HOST="localhost"
+ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.production"
 
 ARG APP_USER=django
 ARG DEBIAN_FRONTEND=noninteractive
@@ -12,17 +14,16 @@ RUN apt-get update \
 
 ADD . /app
 WORKDIR /app
+EXPOSE 8080
 
 RUN useradd -ms /bin/bash -d /app django
-ENV DB_HOST="localhost"
-ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.production"
-
 USER ${APP_USER}:${APP_USER}
 
 RUN pip3 install --no-cache-dir -r config/requirements/production.pip
 RUN /app/scripts/setup.sh
 RUN cd /app/frontend/vue/ && npm install && npm run build:issues
 
-EXPOSE 8080
+
+RUN ./manage.py collectstatic --noinput
 
 CMD ["scripts/gunicorn_start.sh"]
