@@ -16,7 +16,7 @@ CACHES = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("POSTGRES_DB", "lutris"),
         'USER': os.environ.get("POSTGRES_USER", "lutris"),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
