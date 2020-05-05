@@ -4,7 +4,7 @@ volumes:
   postgresql:
   media:
 services:
-  web:
+  web_prod:
     restart: always
     build:
       context: .
@@ -22,7 +22,7 @@ services:
     tty: true
     depends_on:
       - db
-  db:
+  db_prod:
     restart: always
     image: postgres:11
     ports:
