@@ -19,8 +19,9 @@ ADD --chown=django:django . /app
 WORKDIR /app
 EXPOSE 8080
 
-USER ${APP_USER}:${APP_USER}
 RUN pip3 install --no-cache-dir -r config/requirements/production.pip
+
+USER ${APP_USER}:${APP_USER}
 RUN npm install
 RUN npm run setup
 RUN cd /app/frontend/vue/ && npm install && npm run build:issues
