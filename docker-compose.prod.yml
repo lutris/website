@@ -16,9 +16,6 @@ services:
         target: /app/media
         volume:
           nocopy: true
-      - type: bind
-        source: .
-        target: /app
     ports:
       - 8080:8080
     stdin_open: true
