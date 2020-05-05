@@ -12,17 +12,22 @@ RUN apt-get update \
                           libssl-dev libffi-dev npm libpq-dev locales \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g bower grunt-cli
+
 ADD . /app
 WORKDIR /app
 EXPOSE 8080
 
 RUN useradd -ms /bin/bash -d /app django
+RUN chown django -R /app
+
 USER ${APP_USER}:${APP_USER}
-
 RUN pip3 install --no-cache-dir -r config/requirements/production.pip
-RUN /app/scripts/setup.sh
+RUN npm install
+RUN npm run setup
 RUN cd /app/frontend/vue/ && npm install && npm run build:issues
-
+RUN make client
+RUN make docs
 
 RUN ./manage.py collectstatic --noinput
 
