@@ -17,17 +17,17 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["POSTGRES_DB"],
-        'USER': os.environ["POSTGRES_USER"],
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'NAME': os.environ.get("POSTGRES_DB", "lutris"),
+        'USER': os.environ.get("POSTGRES_USER", "lutris"),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'CONN_MAX_AGE': 600,
     }
 }
 
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", 25))
 
@@ -49,6 +49,6 @@ REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
     'user': '50/min'
 }
 
-STEAM_API_KEY = os.environ['STEAM_API_KEY']
+STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
