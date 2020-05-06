@@ -26,6 +26,13 @@ services:
   nginx:
     restart: always
     image: nginx/latest
+    ports:
+      - "80:80"
+    volumes:
+      - web-static:/www/static
+      - web-media:/www/media
+    links:
+      - web_prod:web_prod
   db_prod:
     restart: always
     image: postgres:11
