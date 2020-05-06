@@ -22,6 +22,7 @@ services:
     tty: true
     depends_on:
       - db_prod
+      - cache_prod
   db_prod:
     restart: always
     image: postgres:11
@@ -30,3 +31,8 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data
     env_file: .env.prod
+  cache_prod:
+    restart: always
+    image: redis:latest
+    ports:
+      - 6379:6379
