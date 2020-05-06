@@ -1,8 +1,5 @@
 version: '3.4'
 
-volumes:
-  postgresql:
-  media:
 services:
   web_prod:
     restart: always
@@ -23,6 +20,9 @@ services:
     depends_on:
       - db_prod
       - cache_prod
+  nginx:
+    restart: always
+    image: nginx/latest
   db_prod:
     restart: always
     image: postgres:11
@@ -35,4 +35,11 @@ services:
     restart: always
     image: redis:latest
     ports:
-      - 6379:6379
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  postgresql:
+  media:
+  redisdata:
