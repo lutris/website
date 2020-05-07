@@ -5,7 +5,7 @@ MEDIA_URL = '//lutris.net/media/'
 FILES_ROOT = '/srv/files'
 FILES_URL = 'https://lutris.net/files/'
 
-ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', '0.0.0.0']
+ALLOWED_HOSTS = ['.lutris.net', '0.0.0.0']
 
 CACHES = {
     'default': {
