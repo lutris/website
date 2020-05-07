@@ -51,6 +51,9 @@ check-deps-update:
 deploy:
 	fab -H lutris.net deploy
 
+deploy_staging:
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging docker-compose -f docker-compose.prod.yml up -d
+
 client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
