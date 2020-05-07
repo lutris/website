@@ -32,7 +32,7 @@ services:
       dockerfile: config/nginx/Dockerfile
     image: nginx/latest
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       - web-static:/srv/static
       - web-media:/srv/media
