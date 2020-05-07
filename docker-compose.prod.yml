@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     env_file: .env.prod
+    environment:
+      POSTGRES_PORT: 5433
     volumes:
       - type: volume
         source: web-media
@@ -16,8 +18,8 @@ services:
       - type: volume
         source: web-static
         target: /app/static
-    ports:
-      - 8080:8080
+    expose:
+      - "8080"
     stdin_open: true
     tty: true
     depends_on:
@@ -25,27 +27,32 @@ services:
       - cache_prod
   nginx:
     restart: always
+    build:
+      context: .
+      dockerfile: config/nginx/Dockerfile
     image: nginx/latest
     ports:
       - "80:80"
     volumes:
-      - web-static:/www/static
-      - web-media:/www/media
-    links:
-      - web_prod:web_prod
+      - web-static:/srv/static
+      - web-media:/srv/media
+      - web-files:/srv/files
+      - web-releases:/srv/releases
+    depends_on:
+      - web_prod
   db_prod:
     restart: always
     image: postgres:11
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - postgresql:/var/lib/postgresql/data
     env_file: .env.prod
   cache_prod:
     restart: always
     image: redis:latest
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
     volumes:
       - redisdata:/data
 
@@ -53,4 +60,6 @@ volumes:
   postgresql:
   web-media:
   web-static:
+  web-files:
+  web-releases:
   redisdata:
