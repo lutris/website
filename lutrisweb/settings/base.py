@@ -10,7 +10,10 @@ def media_directory(path):
     """
     abs_path = os.path.join(MEDIA_ROOT, path)
     if not os.path.isdir(abs_path):
-        os.makedirs(abs_path)
+        try:
+            os.makedirs(abs_path)
+        except OSError:
+            print("Failed to create %s" % abs_path)
     return abs_path
 
 
