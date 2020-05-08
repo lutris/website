@@ -238,7 +238,9 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(hour=16, minute=20)
     }
 }
-BROKER_URL = 'amqp://guest:guest@localhost//'
+REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
+BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
 # API Keys
 STEAM_API_KEY = "********************************"
 
