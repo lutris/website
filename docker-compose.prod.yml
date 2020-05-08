@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile.prod
     env_file: .env.prod
     environment:
-      POSTGRES_PORT: 5433
+      POSTGRES_PORT: 5432
     volumes:
       - type: volume
         source: web-media
@@ -51,8 +51,6 @@ services:
   cache_prod:
     restart: always
     image: redis:latest
-    expose:
-      - "6379"
     volumes:
       - redisdata:/data
 
