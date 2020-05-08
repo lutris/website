@@ -2,9 +2,9 @@
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
-MEDIA_URL = '//lutris.net/media/'
+MEDIA_URL = '//%s/media/' % DOMAIN_NAME
 FILES_ROOT = '/srv/files'
-FILES_URL = 'https://lutris.net/files/'
+FILES_URL = 'https://%s/files/' % DOMAIN_NAME
 
 ALLOWED_HOSTS = ('.lutris.net', '0.0.0.0')
 

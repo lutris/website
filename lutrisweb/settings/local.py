@@ -2,15 +2,8 @@
 import os
 from lutrisweb.settings.base import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
-DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
-
-ALLOWED_HOSTS = (
-    "0.0.0.0",
-    "127.0.0.1",
-    "localhost",
-)
 
 INSTALLED_APPS.append('debug_toolbar')
 MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')

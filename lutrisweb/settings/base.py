@@ -19,8 +19,8 @@ def media_directory(path):
 
 CLIENT_VERSION = "0.5.6"
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+DEBUG = True
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 THUMBNAIL_DEBUG = False
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -48,6 +48,15 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Allow customization of domain
+DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
+
+ALLOWED_HOSTS = (
+    "0.0.0.0",
+    "127.0.0.1",
+    "localhost",
+)
+
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -67,7 +76,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 FILES_ROOT = media_directory('files')
-FILES_URL = 'http://localhost:8000/media/files/'
+FILES_URL = 'http://%s/media/files/' % DOMAIN_NAME
 
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = os.path.join(TOSEC_PATH)
