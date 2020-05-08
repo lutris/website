@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   web_prod:
     restart: always
     build:
@@ -25,6 +26,7 @@ services:
     depends_on:
       - db_prod
       - cache_prod
+
   celery_worker:
     restart: always
     build:
@@ -41,6 +43,7 @@ services:
       - db_prod
       - cache_prod
     command: celery worker -A lutrisweb.celery.app -B -l info
+
   nginx:
     restart: always
     build:
@@ -56,6 +59,7 @@ services:
       - web-releases:/srv/releases
     depends_on:
       - web_prod
+
   db_prod:
     restart: always
     image: postgres:12
@@ -64,6 +68,7 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data
     env_file: .env.prod
+
   cache_prod:
     restart: always
     image: redis:latest
