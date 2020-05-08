@@ -20,7 +20,6 @@ def media_directory(path):
 CLIENT_VERSION = "0.5.6"
 
 DEBUG = True
-TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 THUMBNAIL_DEBUG = False
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -130,7 +129,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "common.context_processors.discord_url",
             ],
-            'debug': False
+            'debug': DEBUG
         }
     }
 ]
