@@ -1,3 +1,4 @@
+"""Production specific settings"""
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
@@ -5,7 +6,7 @@ MEDIA_URL = '//lutris.net/media/'
 FILES_ROOT = '/srv/files'
 FILES_URL = 'https://lutris.net/files/'
 
-ALLOWED_HOSTS = ['.lutris.net', '0.0.0.0']
+ALLOWED_HOSTS = ('.lutris.net', '0.0.0.0')
 
 CACHES = {
     'default': {
@@ -21,6 +22,7 @@ DATABASES = {
         'USER': os.environ.get("POSTGRES_USER", "lutris"),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         'CONN_MAX_AGE': 600,
     }
 }

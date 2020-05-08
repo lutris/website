@@ -18,13 +18,16 @@ MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 if os.environ.get('USE_SQLITE') != "1":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'lutris',
-            'USER': 'lutris',
-            'PASSWORD': 'admin',
-            'HOST': os.environ.get("DB_HOST", "localhost"),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get("POSTGRES_DB", "lutris"),
+            'USER': os.environ.get("POSTGRES_USER", "lutris"),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
+            'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+            'CONN_MAX_AGE': 600,
         }
     }
+
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/lutris-emails'
 
