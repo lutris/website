@@ -1,4 +1,5 @@
 .env*
 .git
+celerybeat-schedule
 media
 static

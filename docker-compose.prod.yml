@@ -25,6 +25,22 @@ services:
     depends_on:
       - db_prod
       - cache_prod
+  celery_worker:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file: .env.prod
+    volumes:
+      - type: volume
+        source: web-media
+        target: /app/media
+        volume:
+          nocopy: true
+    depends_on:
+      - db_prod
+      - cache_prod
+    command: celery worker -A lutrisweb.celery.app -B -l info
   nginx:
     restart: always
     build:
