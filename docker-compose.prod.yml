@@ -71,7 +71,7 @@ services:
 
   cache_prod:
     restart: always
-    image: redis:latest
+    image: redis:6.0.1
     volumes:
       - redisdata:/data
 
