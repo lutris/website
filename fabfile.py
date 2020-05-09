@@ -127,13 +127,6 @@ def requirements(c, environment='production'):
 
 
 @task
-def setup_scripts(c):
-    config = get_config(c)
-    c.put('config/celery_start.sh', remote='%(root)s/bin/celery_start.sh' % config)
-    c.put('config/gunicorn_start.sh', remote='%(root)s/bin/gunicorn_start.sh' % config)
-
-
-@task
 def supervisor_setup(c):
     config = get_config(c)
     config_filename = "lutris-supervisor.conf"

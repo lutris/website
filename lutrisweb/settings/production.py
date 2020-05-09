@@ -1,11 +1,12 @@
+"""Production specific settings"""
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
-MEDIA_URL = '//lutris.net/media/'
+MEDIA_URL = '//%s/media/' % DOMAIN_NAME
 FILES_ROOT = '/srv/files'
-FILES_URL = 'https://lutris.net/files/'
+FILES_URL = 'https://%s/files/' % DOMAIN_NAME
 
-ALLOWED_HOSTS = ['.lutris.net', '.lutris.net.', ]
+ALLOWED_HOSTS = ('.lutris.net', '0.0.0.0')
 
 CACHES = {
     'default': {
@@ -16,18 +17,19 @@ CACHES = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lutris',
-        'USER': 'lutris',
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("POSTGRES_DB", "lutris"),
+        'USER': os.environ.get("POSTGRES_USER", "lutris"),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         'CONN_MAX_AGE': 600,
     }
 }
 
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", 25))
 
@@ -49,6 +51,6 @@ REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
     'user': '50/min'
 }
 
-STEAM_API_KEY = os.environ['STEAM_API_KEY']
+STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

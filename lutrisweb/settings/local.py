@@ -2,15 +2,8 @@
 import os
 from lutrisweb.settings.base import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
-DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
-
-ALLOWED_HOSTS = (
-    "0.0.0.0",
-    "127.0.0.1",
-    "localhost",
-)
 
 INSTALLED_APPS.append('debug_toolbar')
 MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
@@ -18,13 +11,16 @@ MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 if os.environ.get('USE_SQLITE') != "1":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'lutris',
-            'USER': 'lutris',
-            'PASSWORD': 'admin',
-            'HOST': os.environ.get("DB_HOST", "localhost"),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get("POSTGRES_DB", "lutris"),
+            'USER': os.environ.get("POSTGRES_USER", "lutris"),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "admin"),
+            'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+            'CONN_MAX_AGE': 600,
         }
     }
+
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/lutris-emails'
 

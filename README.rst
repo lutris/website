@@ -149,3 +149,19 @@ PostgreSQL and run this script with cron::
     backup_file="lutris-$(date +%Y-%m-%d-%H-%M).tar"
     pg_dump --format=tar lutris > $backup_file
     gzip $backup_file
+
+
+Vue based code
+--------------
+
+Installer issues are using Vue based project stored in frontend/vue.
+
+If you wish to develop for it, first install the dependencies and make a dev
+build::
+
+    cd frontend/vue
+    npm install
+    npm run build:issues-dev
+
+The last command will run forever, watching for changes made to the
+source and rebuilding the project on each update. Press Ctrl+C to interrupt it.

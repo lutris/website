@@ -1,22 +1,44 @@
 version: '3.4'
 
-volumes:
-  postgresql:
 services:
+
   web:
     build:
       context: .
     volumes:
-      - /app/media
-      - /app/templates/docs
+      - type: volume
+        source: media
+        target: /app/media
+        volume:
+          nocopy: true
+      - type: bind
+        source: .
+        target: /app
     ports:
       - 8000:8000
+    environment:
+      - REDIS_HOST: cache
     stdin_open: true
     tty: true
     depends_on:
       - db
+
+  celery_worker:
+    build:
+      context: .
+    volumes:
+      - type: volume
+        source: media
+        target: /app/media
+        volume:
+          nocopy: true
+    depends_on:
+      - db
+      - cache
+    command: celery worker -A lutrisweb.celery.app -B -l info
+
   db:
-    image: postgres:11
+    image: postgres:12
     ports:
       - 5432:5432
     volumes:
@@ -25,3 +47,15 @@ services:
       POSTGRES_DB: 'lutris'
       POSTGRES_USER: 'lutris'
       POSTGRES_PASSWORD: 'admin'
+
+  cache:
+    restart: always
+    image: redis:6.0.1
+    volumes:
+      - redisdata:/data
+
+
+volumes:
+  postgresql:
+  media:
+  redisdata:
