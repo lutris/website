@@ -17,8 +17,6 @@ services:
       - type: volume
         source: web-static
         target: /app/static
-    stdin_open: true
-    tty: true
     depends_on:
       - db_prod
       - cache_prod
