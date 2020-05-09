@@ -91,6 +91,15 @@ run Django's internal web server::
 Postgresql configuration
 ========================
 
+You can get the same Postgres server used in the Docker setup by running the
+following command::
+
+    docker run --name lutrisdb \
+        -e POSTGRES_PASSWORD=admin \
+        -e POSGRES_DB=lutris \
+        -e POSTGRES_USER=lutris \
+        -p 5432:5432 -d postgres:12
+
 Quickstart::
 
     sudo -u postgres psql
