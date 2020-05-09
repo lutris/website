@@ -1,7 +1,4 @@
 .PHONY: tags
-setup:
-	npm install
-	npm run setup
 
 watch:
 	npm run watch
@@ -9,7 +6,7 @@ watch:
 run:
 	./manage.py runserver 0.0.0.0:8000
 
-db: deps
+db:
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
 
@@ -26,17 +23,6 @@ test:
 
 jenkins:
 	./manage.py jenkins $(test)
-
-builddeps:
-	sudo apt install -y libpq-dev python3-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
-
-serverdeps:
-	sudo apt-get update
-	sudo apt-get -y --allow-unauthenticated install nginx supervisor locales
-	pip3 install -r config/requirements/production.pip --exists-action=s
-
-deps:
-	pip3 install -r config/requirements/devel.pip --exists-action=w
 
 migration:
 	-./manage.py makemigrations

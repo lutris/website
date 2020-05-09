@@ -47,7 +47,7 @@ Once your virtualenv is created, you can install the system and python
 dependencies::
 
     sudo apt-get install imagemagick memcached libmemcached-dev libxml2-dev libxslt1-dev mercurial bzr python-dev
-    make deps
+    pip3 install -r config/requirements/devel.pip --exists-action=w
 
 In order to build the frontend code (javascript and css files), you'll
 need nodejs and npm installed on your system. If you are
