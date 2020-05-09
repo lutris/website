@@ -16,6 +16,8 @@ services:
         target: /app
     ports:
       - 8000:8000
+    environment:
+      - REDIS_HOST: cache
     stdin_open: true
     tty: true
     depends_on:
