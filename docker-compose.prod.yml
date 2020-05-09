@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
 
-  web_prod:
+  lutrisweb:
     restart: always
     build:
       context: .
@@ -18,10 +18,10 @@ services:
         source: web-static
         target: /app/static
     depends_on:
-      - db_prod
-      - cache_prod
+      - lutrisdb
+      - lutriscache
 
-  celery_worker:
+  lutrisworker:
     restart: always
     build:
       context: .
@@ -34,11 +34,11 @@ services:
         volume:
           nocopy: true
     depends_on:
-      - db_prod
-      - cache_prod
+      - lutrisdb
+      - lutriscache
     command: celery worker -A lutrisweb.celery.app -B -l info
 
-  nginx:
+  lutrisnginx:
     restart: always
     build:
       context: .
@@ -53,9 +53,9 @@ services:
       - web-files:/srv/files
       - web-releases:/srv/releases
     depends_on:
-      - web_prod
+      - lutrisweb
 
-  db_prod:
+  lutrisdb:
     restart: always
     image: postgres:12
     # Expose a port to do backups
@@ -63,9 +63,9 @@ services:
       - ${POSTGRES_HOST_PORT}:5432
     volumes:
       - postgresql:/var/lib/postgresql/data
-    env_file: .env.prod
+    env_file: .env.${DEPLOY_ENV}
 
-  cache_prod:
+  lutriscache:
     restart: always
     image: redis:6.0.1
     volumes:
