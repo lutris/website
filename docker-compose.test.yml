@@ -40,8 +40,7 @@ services:
   lutrisdb:
     image: postgres:12
     expose:
-      - "5430"
-    command: -p 5430
+      - "5432"
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
