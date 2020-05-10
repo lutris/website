@@ -109,7 +109,7 @@ class GameLibraryView(generics.RetrieveAPIView):
 
 
 class GameDetailView(generics.RetrieveAPIView):
-    serializer_class = serializers.GameSerializer
+    serializer_class = serializers.GameDetailSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.filter(change_for__isnull=True)
 
