@@ -6,8 +6,7 @@ ARG REQ_PATH=./config/requirements
 ENV LC_ALL=C.UTF-8
 ENV SECRET_KEY="somethissecret"
 ENV DB_HOST="lutrisdb"
-ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
-ENV REDIS_HOST='lutriscache'
+ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.test"
 
 RUN apt-get update && apt-get install -y sudo build-essential git curl python3 \
     python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev \
