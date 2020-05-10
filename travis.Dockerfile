@@ -10,7 +10,7 @@ ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.travis"
 
 RUN apt-get update && apt-get install -y sudo build-essential git curl python3 \
     python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev \
-    libpq-dev libxml2-dev libjpeg-dev nodejs && apt-get clean && rm -rf /var/lib/apt/lists/*
+    libpq-dev libxml2-dev libjpeg-dev npm nodejs && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY $REQ_PATH/travis.pip $REQ_PATH/base.pip /app/config/requirements/
 WORKDIR /app/config/requirements
