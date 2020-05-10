@@ -5,6 +5,7 @@ services:
   lutrisweb:
     build:
       context: .
+      dockerfile: dev.Dockerfile
     volumes:
       - type: volume
         source: media
@@ -27,7 +28,7 @@ services:
   lutrisvue:
     build:
       context: .
-      dockerfile: Dockerfile.dev.vue
+      dockerfile: dev.vue.Dockerfile
     command: bash -c "cd /app/frontend/vue && mkdir -p ./static && npm install && npm run build:issues-dev"
     volumes:
       - type: bind

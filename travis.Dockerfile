@@ -14,9 +14,9 @@ RUN apt-get update && apt-get install -y sudo build-essential git curl python3 \
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get install -y nodejs
 
-COPY $REQ_PATH/test.pip $REQ_PATH/base.pip /app/config/requirements/
+COPY $REQ_PATH/travis.pip $REQ_PATH/base.pip /app/config/requirements/
 WORKDIR /app/config/requirements
-RUN pip3 install -r ./test.pip --exists-action=w
+RUN pip3 install -r ./travis.pip --exists-action=w
 
 COPY ./*.json ./.bowerrc ./Gruntfile.js /app/
 WORKDIR /app

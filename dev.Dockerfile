@@ -16,7 +16,7 @@ RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get install -y nodejs
 
 COPY $REQ_PATH/devel.pip $REQ_PATH/base.pip /app/config/requirements/
-COPY ./src /app/src/
+COPY src /app/src/
 WORKDIR /app/config/requirements
 RUN pip3 install -r ./devel.pip --exists-action=w
 
