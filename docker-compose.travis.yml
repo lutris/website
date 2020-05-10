@@ -22,13 +22,13 @@ services:
     tty: true
     depends_on:
       - lutrisdb
-      - lutrisvue
+      - lutrisfrontend
 
-  lutrisvue:
+  lutrisfrontend:
     build:
       context: .
-      dockerfile: dev.vue.Dockerfile
-    command: bash -c "cd /app/frontend/vue && mkdir -p ./static && npm install && npm run build:issues-dev"
+      dockerfile: frontend.Dockerfile
+    command: bash -c "mkdir -p ./static && npm install && npm run build:issues-dev"
     volumes:
       - type: bind
         source: ./frontend

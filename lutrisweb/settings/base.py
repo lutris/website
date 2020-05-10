@@ -29,16 +29,6 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'lutris.db'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
 
 TIME_ZONE = 'Etc/UTC'
 LANGUAGE_CODE = 'en-us'
