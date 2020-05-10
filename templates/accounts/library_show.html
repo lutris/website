@@ -16,6 +16,8 @@
         <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
         <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
         <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
+        <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity &uarr;</option>
+        <option value="-popularity" {% if order_by == '-popularity' %} selected {% endif %}>Popularity &darr;</option>
         <option value="created" {% if order_by == 'created' %} selected {% endif %}>Created &uarr;</option>
         <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Created &darr;</option>
         <option value="updated" {% if order_by == 'updated' %} selected {% endif %}>Updated &uarr;</option>
@@ -75,16 +77,4 @@
 {% block scripts %}
   {{ block.super }}
   {{ filter_form.media.js }}
-  <script>
-    $(function () {
-      $('#id_platform').select2({
-        closeOnSelect: false,
-        placeholder: ''
-      });
-      $('#id_genre').select2({
-        closeOnSelect: false,
-        placeholder: ''
-      });
-    });
-  </script>
 {% endblock %}

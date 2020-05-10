@@ -6,7 +6,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     env_file: .env.${DEPLOY_ENV}
     volumes:
       - type: volume
@@ -25,7 +25,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     env_file: .env.${DEPLOY_ENV}
     volumes:
       - type: volume

@@ -359,3 +359,14 @@ LOGGING = {
         'thegamesdb': DEFAULT_LOGGING_CONFIG
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '%s:%s' % (os.getenv('REDIS_HOST', 'lutriscache'),
+                               os.getenv('REDIS_PORT', '6379')),
+    },
+}
+
+CELERY_CACHE_BACKEND = 'default'
+SELECT2_CACHE_BACKEND = 'default'

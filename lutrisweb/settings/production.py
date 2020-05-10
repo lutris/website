@@ -8,13 +8,6 @@ FILES_URL = 'https://%s/files/' % DOMAIN_NAME
 
 ALLOWED_HOSTS = ('.lutris.net', '0.0.0.0')
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

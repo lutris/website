@@ -6,6 +6,7 @@ import json
 import logging
 
 import reversion
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
@@ -30,7 +31,7 @@ from games.forms import (
     GameForm,
     InstallerEditForm,
     InstallerForm,
-    ScreenshotForm,
+    ScreenshotForm, LibraryFilterForm,
 )
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.util.pagination import get_page_range
@@ -43,166 +44,108 @@ LOGGER = logging.getLogger(__name__)
 
 class GameList(ListView):
     """Game list view"""
-
+    template_name = 'games/game_list.html'
     model = models.Game
     context_object_name = "games"
     paginate_by = 25
+    paginate_orphans = 10
+    ordering = 'name'
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.q_params = {}
+
+    def get(self, request, *args, **kwargs):
+        self.q_params = {
+            'search': request.GET.get('search', ''),
+            'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
+            'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
+            'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
+            'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
+            'flags': request.GET.getlist('flags', []),
+            'unpublished': request.GET.get('unpublished', False)
+        }
+        return super().get(request, *args, **kwargs)
+
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('paginate_by', self.paginate_by)
+
+    def get_ordering(self):
+        return self.request.GET.get('ordering', self.ordering)
 
     def get_queryset(self):
         queryset = models.Game.objects
-        unpublished_filter = self.request.GET.get("unpublished-filter")
-        if unpublished_filter:
+        if self.q_params['unpublished']:
             queryset = queryset.filter(change_for__isnull=True)
         else:
             queryset = queryset.with_installer()
         queryset = queryset.prefetch_related(
             "genres", "publisher", "developer", "platforms", "installers"
         )
-        search_params = [key for key in self.request.GET.keys() if key != "page"]
-
-        if self.request.GET.get("sort-by-popularity") or not search_params:
-            queryset = queryset.order_by("-popularity")
+        if self.q_params['search']:
+            queryset = queryset.order_by('-rank', self.get_ordering())
+        else:
+            queryset = queryset.order_by(self.get_ordering())
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
-        # Filter open source
-        filters = []
-        if self.request.GET.get("fully-libre-filter"):
-            filters.append("fully_libre")
-        if self.request.GET.get("open-engine-filter"):
-            filters.append("open_engine")
-        open_source_filters = " | ".join(
-            ["Q(flags=Game.flags.%s)" % flag for flag in filters]
-        )
-
-        # Filter free
-        filters = []
-        if self.request.GET.get("free-filter"):
-            filters.append("free")
-        if self.request.GET.get("freetoplay-filter"):
-            filters.append("freetoplay")
-        if self.request.GET.get("pwyw-filter"):
-            filters.append("pwyw")
-
-        free_filters = " | ".join(["Q(flags=Game.flags.%s)" % flag for flag in filters])
-        query_filters = ", ".join(
-            [filters for filters in (open_source_filters, free_filters) if filters]
-        )
-
-        if query_filters:
-            queryset = eval("queryset.filter(%s)" % query_filters)
-
-        search_terms = self.request.GET.get("q")
-        if "\x00" in str(search_terms):
-            search_terms = None
-        if search_terms:
-            search_terms = search_terms.strip()
-            if self.request.GET.get("search-installers"):
-                # Search in installer instead of the game name
-                queryset = queryset.filter(installers__content__icontains=search_terms)
-            else:
-                queryset = queryset.filter(name__icontains=search_terms)
+        if self.q_params['search']:
+            vector = SearchVector('name', weight='A') + \
+                     SearchVector('aliases__name', weight='A') + \
+                     SearchVector('description', weight='B')
+            query = SearchQuery(self.q_params['search'])
+            queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
+        if self.q_params['platforms']:
+            queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
+        if self.q_params['genres']:
+            queryset = queryset.filter(genres__pk__in=self.q_params['genres'])
+        if self.q_params['companies']:
+            queryset = queryset.filter(
+                Q(publisher__pk__in=self.q_params['companies'])
+                | Q(developer__pk__in=self.q_params['companies'])
+            )
+        if self.q_params['years']:
+            queryset = queryset.filter(Q(year__in=self.q_params['years']))
+        if self.q_params['flags']:
+            flag_q = Q()
+            for flag in self.q_params['flags']:
+                flag_q |= Q(flags=getattr(models.Game.flags, flag))
+            queryset = queryset.filter(flag_q)
         return queryset
 
-    def get_pages(self, context):
-        page = context["page_obj"]
-        paginator = page.paginator
-        page_indexes = get_page_range(paginator.num_pages, page.number)
-        page.page_count = page_indexes[-1]
-        page.diff_to_last_page = page.page_count - page.number
-        pages = []
-        for i in page_indexes:
-            if i:
-                pages.append(paginator.page(i))
-            else:
-                pages.append(None)
-        return pages
-
-    def get_context_data(self, **kwargs):
-        context = super(GameList, self).get_context_data(**kwargs)
-        context["page_range"] = self.get_pages(context)
-        get_args = self.request.GET
-        context["search_terms"] = get_args.get("q")
-        context["all_open_source"] = get_args.get("all-open-source")
-        context["fully_libre_filter"] = get_args.get("fully-libre-filter")
-        context["open_engine_filter"] = get_args.get("open-engine-filter")
-        context["all_free"] = get_args.get("all-free")
-        context["free_filter"] = get_args.get("free-filter")
-        context["freetoplay_filter"] = get_args.get("freetoplay-filter")
-        context["pwyw_filter"] = get_args.get("pwyw-filter")
-        context["unpublished_filter"] = get_args.get("unpublished-filter")
-        context["sort_by_popularity"] = get_args.get("sort-by-popularity")
-        context["search_installers"] = get_args.get("search-installers")
-        for key in context:
-            if key.endswith("_filter") and context[key]:
-                context["show_advanced"] = True
-                break
-        context["platforms"] = Platform.objects.with_games()
-        context["genres"] = models.Genre.objects.with_games()
+    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
+        """Display the Lutris library"""
+        context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
+        context['is_library'] = False
+        filter_string = ''
+        if self.q_params.get('search'):
+            filter_string = '&search=%s' % self.q_params['search']
+        if self.q_params.get('platforms'):
+            for platform in self.q_params['platforms']:
+                filter_string += '&platform=%s' % platform
+        if self.q_params.get('genres'):
+            for genre in self.q_params['genres']:
+                filter_string += '&genre=%s' % genre
+        if self.q_params.get('companies'):
+            for company in self.q_params['companies']:
+                filter_string += '&company=%s' % company
+        if self.q_params.get('years'):
+            for year in self.q_params['years']:
+                filter_string += '&year=%s' % year
+        if self.q_params.get('flags'):
+            for flag in self.q_params['flags']:
+                filter_string += '&flags=%s' % flag
+        if self.q_params.get('unpublished'):
+            filter_string += '&unpublished=%s' % self.q_params['unpublished']
+        context['filter_string'] = filter_string
+        context['filter_form'] = LibraryFilterForm(initial=self.q_params)
+        context['order_by'] = self.get_ordering()
+        context['paginate_by'] = self.get_paginate_by(None)
+        context['search_terms'] = self.q_params.get('search', '')
+        context["unpublished"] = self.q_params.get('unpublished', False)
         context["unpublished_match_count"] = self.get_filtered_queryset(
             models.Game.objects.filter(is_public=False)
         ).count()
-        return context
-
-
-class GameListByYear(GameList):
-    def get_filtered_queryset(self, queryset):
-        queryset = super(GameListByYear, self).get_filtered_queryset(queryset)
-        return queryset.filter(year=self.args[0])
-
-    def get_context_data(self, **kwargs):
-        context = super(GameListByYear, self).get_context_data(**kwargs)
-        context["year"] = self.args[0]
-        return context
-
-
-class GameListByGenre(GameList):
-    """View for games filtered by genre"""
-
-    def get_filtered_queryset(self, queryset):
-        queryset = super(GameListByGenre, self).get_filtered_queryset(queryset)
-        return queryset.filter(genres__slug=self.args[0])
-
-    def get_context_data(self, **kwargs):
-        context = super(GameListByGenre, self).get_context_data(**kwargs)
-        try:
-            context["genre"] = models.Genre.objects.get(slug=self.args[0])
-        except models.Genre.DoesNotExist:
-            raise Http404
-        return context
-
-
-class GameListByCompany(GameList):
-    """View for games filtered by publisher"""
-
-    def get_filtered_queryset(self, queryset):
-        queryset = super(GameListByCompany, self).get_filtered_queryset(queryset)
-        return queryset.filter(
-            Q(publisher__slug=self.args[0]) | Q(developer__slug=self.args[0])
-        )
-
-    def get_context_data(self, **kwargs):
-        context = super(GameListByCompany, self).get_context_data(**kwargs)
-        try:
-            context["company"] = models.Company.objects.get(slug=self.args[0])
-        except models.Company.DoesNotExist:
-            raise Http404
-        return context
-
-
-class GameListByPlatform(GameList):
-    """View for games filtered by platform"""
-
-    def get_filtered_queryset(self, queryset):
-        queryset = super(GameListByPlatform, self).get_filtered_queryset(queryset)
-        return queryset.filter(platforms__slug=self.kwargs["slug"])
-
-    def get_context_data(self, **kwargs):
-        context = super(GameListByPlatform, self).get_context_data(**kwargs)
-        try:
-            context["platform"] = Platform.objects.get(slug=self.kwargs["slug"])
-        except Platform.DoesNotExist:
-            raise Http404
         return context
 
 

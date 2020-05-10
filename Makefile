@@ -1,7 +1,4 @@
 .PHONY: tags
-setup:
-	npm install
-	npm run setup
 
 watch:
 	npm run watch
@@ -9,7 +6,7 @@ watch:
 run:
 	./manage.py runserver 0.0.0.0:8000
 
-db: deps
+db:
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
 
@@ -22,21 +19,10 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	SEND_EMAILS=0 ./manage.py test --failfast $(test)
+	SEND_EMAILS=0 ./manage.py test --no-input --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)
-
-builddeps:
-	sudo apt install -y libpq-dev python3-dev libjpeg-dev libxml2-dev libxslt1-dev libffi-dev
-
-serverdeps:
-	sudo apt-get update
-	sudo apt-get -y --allow-unauthenticated install nginx supervisor locales
-	pip3 install -r config/requirements/production.pip --exists-action=s
-
-deps:
-	pip3 install -r config/requirements/devel.pip --exists-action=w
 
 migration:
 	-./manage.py makemigrations
@@ -74,3 +60,10 @@ sync:
 	gunzip lutris.tar.gz
 	pg_restore -h localhost -U lutris --clean --dbname=lutris lutris.tar
 	rm lutris.tar
+
+dev_docker:
+	mkdir -p ./src
+	git clone https://github.com/strycore/django-croppie.git ./src/django-croppie
+	git clone https://github.com/strycore/django-openid-auth.git ./src/django-openid-auth
+	git clone https://github.com/lutris/django-jenkins.git ./src/django-jenkins
+	docker-compose build lutrisvue lutrisweb

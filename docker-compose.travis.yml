@@ -5,7 +5,7 @@ services:
   lutrisweb:
     build:
       context: .
-      dockerfile: dev.Dockerfile
+      dockerfile: travis.Dockerfile
     volumes:
       - type: volume
         source: media
@@ -22,7 +22,6 @@ services:
     tty: true
     depends_on:
       - lutrisdb
-      - lutriscache
       - lutrisvue
 
   lutrisvue:
@@ -38,25 +37,10 @@ services:
     #tty: true
     restart: on-failure
 
-  celery_worker:
-    build:
-      context: .
-    volumes:
-      - type: volume
-        source: media
-        target: /app/media
-        volume:
-          nocopy: true
-    depends_on:
-      - lutrisdb
-      - lutriscache
-    command: celery worker -A lutrisweb.celery.app -B -l info
-
   lutrisdb:
     image: postgres:12
     expose:
-      - "5430"
-    command: -p 5430
+      - "5432"
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
@@ -64,16 +48,7 @@ services:
       POSTGRES_USER: 'lutris'
       POSTGRES_PASSWORD: 'admin'
 
-  lutriscache:
-    restart: on-failure
-    image: redis:6.0.1
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisdata:/data
-
 
 volumes:
   postgresql:
   media:
-  redisdata:

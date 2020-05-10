@@ -1,9 +1,10 @@
 -r base.pip
-# The production release does resizing on the backend and doesn't support
-# updates
-# django-croppie==1.3
+git+https://github.com/lutris/django-jenkins.git#egg=django-jenkins
 git+https://github.com/strycore/django-croppie.git#egg=django-croppie
 git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
-gunicorn
-setproctitle
-newrelic
+pylint==2.4.4
+pep8==1.7.1
+coverage==5.0.3
+ipdb==0.13.2
+django-debug-toolbar==2.2
+Faker

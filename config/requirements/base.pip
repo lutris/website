@@ -17,13 +17,10 @@ django-rest-swagger==2.2.0
 django-reversion==3.0.5
 django-bitfield==2.0.1
 django-webpack-loader==0.7.0
-# The production release does resizing on the backend and doesn't support
-# updates
-# django-croppie==1.3
--e git+https://github.com/strycore/django-croppie.git#egg=django-croppie
-
+redis==3.4.1
+django-redis-cache==2.1.1
 docutils==0.15.2
-python-memcached==1.59
+wheel
 python-openid
 requests==2.23.0
 mimeparse==0.1.3
@@ -32,7 +29,6 @@ jsonfield==3.0.0
 psycopg2==2.8.5
 factory_boy==2.12.0
 sorl-thumbnail==12.6.3
--e git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
 lxml==4.5.0
 Pillow==7.1.1
 premailer==3.6.1

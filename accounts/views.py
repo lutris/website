@@ -24,6 +24,7 @@ from rest_framework.authtoken.models import Token
 
 from games import models
 from games.forms import LibraryFilterForm
+from games.views.pages import GameList
 
 from . import forms, sso, tasks, serializers
 from .models import EmailConfirmationToken, User
@@ -220,19 +221,13 @@ def steam_disconnect(request):
     return redirect(reverse("profile"))
 
 
-class LibraryList(ListView):  # pylint: disable=too-many-ancestors
+class LibraryList(GameList):  # pylint: disable=too-many-ancestors
     """Access the user's game library"""
     template_name = 'accounts/library_show.html'
     context_object_name = 'games'
     paginate_by = 25
     paginate_orphans = 10
     ordering = 'name'
-
-    def get_paginate_by(self, queryset):
-        return self.request.GET.get('paginate_by', self.paginate_by)
-
-    def get_ordering(self):
-        return self.request.GET.get('ordering', self.ordering)
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -249,31 +244,17 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
 
     def get_queryset(self):
         user = self.get_user()
-        queryset = models.GameLibrary.objects.get(user=user).games.all()
-        search = self.request.GET.get('search', None)
-        platforms = self.request.GET.getlist('platform', None)
-        genres = self.request.GET.getlist('genre', None)
-        flags = self.request.GET.getlist('flags', None)
+        queryset = models.GameLibrary.objects.get(user=user).games.filter(is_public=True)
+        search = self.request.GET.get('search', '')
         if search:
-            vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
-            query = SearchQuery(search)
-            queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
-        if platforms:
-            queryset = queryset.filter(Q(platforms__in=platforms))
-        if genres:
-            queryset = queryset.filter(Q(genres__in=genres))
-        if flags:
-            flag_q = Q()
-            for flag in flags:
-                flag_q |= Q(flags=getattr(models.Game.flags, flag))
-            queryset = queryset.filter(flag_q)
-        if search:
-            return queryset.order_by('-rank', self.get_ordering())
-        return queryset.order_by(self.get_ordering())
+            queryset = queryset.order_by('-rank', self.get_ordering())
+        else:
+            queryset = queryset.order_by(self.get_ordering())
+        return self.get_filtered_queryset(queryset)
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
-        context = super().get_context_data(**kwargs)
+        context = super(LibraryList, self).get_context_data(object_list=object_list, **kwargs)
         user = self.get_user()
         if self.request.user != user:
             # Libraries are currently private. This will change once public
@@ -281,31 +262,6 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
             raise Http404
         context['user'] = user
         context['is_library'] = True
-        search = self.request.GET.get('search', None)
-        platforms = self.request.GET.getlist('platform', None)
-        genres = self.request.GET.getlist('genre', None)
-        flags = self.request.GET.getlist('flags', None)
-        filter_string = ''
-        if search:
-            filter_string = '&search=%s' % search
-        if platforms:
-            for platform in platforms:
-                filter_string += '&platform=%s' % platform
-        if genres:
-            for genre in genres:
-                filter_string += '&genre=%s' % genre
-        if flags:
-            for flag in flags:
-                filter_string += '&flags=%s' % flag
-        context['filter_string'] = filter_string
-        context['filter_form'] = LibraryFilterForm(initial={
-            'search': self.request.GET.get('search', ''),
-            'platform': self.request.GET.getlist('platform', []),
-            'genre': self.request.GET.getlist('genre', []),
-            'flags': self.request.GET.getlist('flags', [])
-        })
-        context['order_by'] = self.get_ordering()
-        context['paginate_by'] = self.get_paginate_by(None)
         return context
 
 
