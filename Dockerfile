@@ -1,32 +1,28 @@
 FROM ubuntu:20.04
 
-ENV LC_ALL=C.UTF-8
-
 ARG DEBIAN_FRONTEND=noninteractive
+ARG REQ_PATH=./config/requirements
+
+ENV LC_ALL=C.UTF-8
+ENV SECRET_KEY="somethissecret"
+ENV DB_HOST="lutrisdb"
+ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
+ENV REDIS_HOST='lutriscache'
+
 RUN apt-get update && apt-get install -y sudo build-essential git curl python3 \
     python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev \
     libpq-dev libxml2-dev libjpeg-dev
-ADD ./config/requirements/devel.pip /devel.pip
-ADD ./config/requirements/base.pip /base.pip
-RUN pip3 install -r /devel.pip --exists-action=w
-RUN pip3 install Faker
-
-RUN curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get install -y nodejs
 
-ENV SECRET_KEY="somethissecret"
-ENV DB_HOST="db"
-ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
+COPY $REQ_PATH/devel.pip $REQ_PATH/base.pip /app/config/requirements/
+COPY ./src /app/src/
+WORKDIR /app/config/requirements
+RUN pip3 install -r ./devel.pip --exists-action=w
 
-ADD ./package.json /package.json
-ADD ./package-lock.json /package-lock.json
-ADD ./bower.json /bower.json
-ADD ./.bowerrc /.bowerrc
-ADD ./Gruntfile.js /Gruntfile.js
-ADD ./polymer.json /polymer.json
+COPY ./*.json ./.bowerrc ./Gruntfile.js /app/
+WORKDIR /app
 RUN npm install -g bower grunt-cli
 RUN npm install && npm run setup
-#ADD ./frontend/vue /frontend/vue
-#RUN mkdir /frontend/vue/static
-#WORKDIR /frontend/vue
-#RUN npm install && npm run build:issues
+
+CMD python3 manage.py runserver 0.0.0.0:8000

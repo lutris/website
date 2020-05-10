@@ -2,10 +2,9 @@ version: '3.4'
 
 services:
 
-  web:
+  lutrisweb:
     build:
       context: .
-    command: ['/app/manage.py', 'runserver', '0.0.0.0:8000']
     volumes:
       - type: volume
         source: media
@@ -18,13 +17,25 @@ services:
     ports:
       - "8000:8000"
     restart: on-failure
-    environment:
-      - REDIS_HOST: cache
     stdin_open: true
     tty: true
     depends_on:
-      - db
-      - cache
+      - lutrisdb
+      - lutriscache
+      - lutrisvue
+
+  lutrisvue:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev.vue
+    command: bash -c "cd /app/frontend/vue && mkdir -p ./static && npm install && npm run build:issues-dev"
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /app/frontend
+    #stdin_open: true
+    #tty: true
+    restart: on-failure
 
   celery_worker:
     build:
@@ -36,14 +47,15 @@ services:
         volume:
           nocopy: true
     depends_on:
-      - db
-      - cache
+      - lutrisdb
+      - lutriscache
     command: celery worker -A lutrisweb.celery.app -B -l info
 
-  db:
+  lutrisdb:
     image: postgres:12
-    ports:
-      - "5432:5432"
+    expose:
+      - "5430"
+    command: -p 5430
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
@@ -51,7 +63,7 @@ services:
       POSTGRES_USER: 'lutris'
       POSTGRES_PASSWORD: 'admin'
 
-  cache:
+  lutriscache:
     restart: on-failure
     image: redis:6.0.1
     ports:

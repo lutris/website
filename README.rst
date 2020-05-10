@@ -4,18 +4,26 @@ Getting the site up and running for development
 With docker-compose
 -------------------
 
-Install docker and docker-compose for your system.
+Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
 
-Start the Django and PostgreSQL containers::
+To build the required docker images use::
 
-    docker-compose up
+    make dev_docker
 
-In a separate terminal run::
+Start the required containers with::
 
-    docker-compose run web make db
+    docker-compose up lutrisweb
 
-You are now ready to develop. No need to rebuild the containers for simple
+To prepare the database run in a separate terminal::
+
+    docker-compose run lutrisweb make db
+
+You are now ready to develop. No need to rebuild the lutrisweb image for simple
 code changes, as the containers will pick them up from the host system.
+Operations requiring a rebuild:
+
+- changing dependencies (apt, pip or npm)
+- modifying source code of projects found in src folder
 
 Natively
 --------
@@ -46,8 +54,8 @@ also tell the project to fallback to SQLite::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install imagemagick memcached libmemcached-dev libxml2-dev libxslt1-dev mercurial bzr python-dev
-    make deps
+    sudo apt-get install imagemagick libxml2-dev libxslt1-dev python3-dev
+    pip3 install -r config/requirements/devel.pip --exists-action=w
 
 In order to build the frontend code (javascript and css files), you'll
 need nodejs and npm installed on your system. If you are
