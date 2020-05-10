@@ -2,14 +2,12 @@ language: python
 python:
   - 3.5
 env:
-  - BUILD=native
   - BUILD=docker
-install:
-  - ci/install.sh
 before_script:
-  - ci/before_script.sh
+  - sudo service postgresql stop
 script:
-  - ci/script.sh
+  - docker-compose -f docker-compose.travis.yml build lutrisfrontend lutrisweb
+  - docker-compose -f docker-compose.travis.yml run -e DJANGO_SETTINGS_MODULE='lutrisweb.settings.travis' -w '/app' lutrisweb bash -c "touch templates/docs/installers.html && make db && make test"
 
 # Build Notifications
 # https://docs.travis-ci.com/user/notifications/

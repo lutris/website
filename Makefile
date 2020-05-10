@@ -62,8 +62,4 @@ sync:
 	rm lutris.tar
 
 dev_docker:
-	mkdir -p ./src
-	git clone https://github.com/strycore/django-croppie.git ./src/django-croppie
-	git clone https://github.com/strycore/django-openid-auth.git ./src/django-openid-auth
-	git clone https://github.com/lutris/django-jenkins.git ./src/django-jenkins
-	docker-compose build lutrisvue lutrisweb
+	docker-compose build lutrisfrontend lutrisweb

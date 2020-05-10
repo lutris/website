@@ -46,15 +46,10 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 
-Optionnaly, if you don't want to setup a PostgreSQL database, you can
-also tell the project to fallback to SQLite::
-
-    export USE_SQLITE=1
-
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install imagemagick libxml2-dev libxslt1-dev python3-dev
+    sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
 In order to build the frontend code (javascript and css files), you'll

@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: dev.Dockerfile
+    container_name: lutrisweb
     volumes:
       - type: volume
         source: media
@@ -23,24 +24,26 @@ services:
     depends_on:
       - lutrisdb
       - lutriscache
-      - lutrisvue
+      - lutrisfrontend
 
-  lutrisvue:
+  lutrisfrontend:
     build:
       context: .
-      dockerfile: dev.vue.Dockerfile
-    command: bash -c "cd /app/frontend/vue && mkdir -p ./static && npm install && npm run build:issues-dev"
+      dockerfile: frontend.Dockerfile
+    container_name: lutrisfrontend
+    command: bash -c "mkdir -p ./static && npm install && npm run build:issues-dev"
     volumes:
       - type: bind
         source: ./frontend
         target: /app/frontend
-    #stdin_open: true
-    #tty: true
+    stdin_open: true
+    tty: true
     restart: on-failure
 
   celery_worker:
     build:
       context: .
+    container_name: celery_worker
     volumes:
       - type: volume
         source: media
@@ -54,6 +57,7 @@ services:
 
   lutrisdb:
     image: postgres:12
+    container_name: lutrisdb
     expose:
       - "5430"
     command: -p 5430
@@ -65,6 +69,7 @@ services:
       POSTGRES_PASSWORD: 'admin'
 
   lutriscache:
+    container_name: lutriscache
     restart: on-failure
     image: redis:6.0.1
     ports:

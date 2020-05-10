@@ -1,12 +1,7 @@
 -r base.pip
 # django-jenkins is unmaintained, the lutris fork contains updates
 # to support current versions of Coverage and Pylint
--e ../../src/django-jenkins
-# The production release does resizing on the backend and doesn't support
-# updates
-# django-croppie==1.3
--e ../../src/django-croppie
--e ../../src/django-openid-auth
+git+https://github.com/lutris/django-jenkins.git#egg=django-jenkins
 pylint==2.4.4
 pep8==1.7.1
 coverage==5.0.3
