@@ -9,6 +9,6 @@ if [ "${BUILD}" == "native" ]; then
     make db
     make test
 elif [ "${BUILD}" == "docker" ]; then
-    docker-compose build lutrisweb
+    docker-compose build -f Dockerfile.test lutrisweb
     docker-compose run -e DJANGO_SETTINGS_MODULE='lutrisweb.settings.test' -w '/app' lutrisweb bash -c "touch templates/docs/installers.html && make db && make test"
 fi
