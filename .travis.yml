@@ -6,7 +6,7 @@ env:
 before_script:
   - sudo service postgresql stop
 script:
-  - docker-compose -f docker-compose.travis.yml build lutrisfrontend lutrisweb
+  - docker-compose -f docker-compose.travis.yml build --no-cache lutrisfrontend lutrisweb
   - docker-compose -f docker-compose.travis.yml run -e DJANGO_SETTINGS_MODULE='lutrisweb.settings.travis' -w '/app' lutrisweb bash -c "touch templates/docs/installers.html && make db && make test"
 
 # Build Notifications
