@@ -45,9 +45,10 @@ function applyLibraryFilter(event) {
 }
 
 function clearLibraryFilter(event) {
-    $('#id_search').val('');
-    $('#id_platform').val([]).change();
-    $('#id_genre').val([]).change();
+    $('#id_q').val('');
+    $('#id_platforms').val([]).change();
+    $('#id_genres').val([]).change();
+    $('#id_companies').val([]).change();
     var order_by = $('#order_by').val();
     var paginate_by = $('#paginate_by').val();
     if (paginate_by !== undefined)

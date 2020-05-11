@@ -383,10 +383,11 @@ class ForkInstallerForm(forms.ModelForm):
 
 
 class LibraryFilterForm(forms.Form):
-    search = forms.CharField(
+    q = forms.CharField(
         max_length=50,
         widget=forms.TextInput(attrs={"style": "width: 100%;"}),
         required=False,
+        label="Search"
     )
     platforms = forms.MultipleChoiceField(
         widget=Select2MultipleWidget(

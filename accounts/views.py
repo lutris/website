@@ -245,8 +245,7 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
     def get_queryset(self):
         user = self.get_user()
         queryset = models.GameLibrary.objects.get(user=user).games.filter(is_public=True)
-        search = self.request.GET.get('search', '')
-        if search:
+        if self.q_params['q']:
             queryset = queryset.order_by('-rank', self.get_ordering())
         else:
             queryset = queryset.order_by(self.get_ordering())
