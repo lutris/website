@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y sudo build-essential git curl python3 \
     libpq-dev libxml2-dev libjpeg-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY $REQ_PATH/devel.pip $REQ_PATH/base.pip /app/config/requirements/
-COPY src /app/src/
 WORKDIR /app/config/requirements
 RUN pip3 install -r ./devel.pip --exists-action=w
 
