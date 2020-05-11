@@ -86,11 +86,11 @@
       <div class="panel-body" style="background-color:#444;">
         <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
           {{ filter_form.as_p }}
-          <li style="list-style-type: none;">
-            <input type="checkbox" id="unpublished-filter" name="unpublished"
-                {% if unpublished %}checked{% endif %} />
-            <label for="unpublished-filter"><span></span>Show unpublished games</label>
-          </li>
+          <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
+            <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
+                {% if unpublished_filter %}checked{% endif %} />
+            Show unpublished
+          </label>
           <input type="button" value="Apply filter" class="btn btn-default no-border"
                  onclick="applyLibraryFilter(event);">
           <input type="button" value="Clear filter" class="btn btn-default no-border"

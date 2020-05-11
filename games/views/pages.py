@@ -57,13 +57,13 @@ class GameList(ListView):
 
     def get(self, request, *args, **kwargs):
         self.q_params = {
-            'search': request.GET.get('search', ''),
+            'q': request.GET.get('q', ''),
             'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
             'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
             'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
             'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
             'flags': request.GET.getlist('flags', []),
-            'unpublished': request.GET.get('unpublished', False)
+            'unpublished-filter': request.GET.get('unpublished-filter', False)
         }
         return super().get(request, *args, **kwargs)
 
@@ -75,25 +75,25 @@ class GameList(ListView):
 
     def get_queryset(self):
         queryset = models.Game.objects
-        if self.q_params['unpublished']:
+        if self.q_params['unpublished-filter']:
             queryset = queryset.filter(change_for__isnull=True)
         else:
             queryset = queryset.with_installer()
         queryset = queryset.prefetch_related(
             "genres", "publisher", "developer", "platforms", "installers"
         )
-        if self.q_params['search']:
+        if self.q_params['q']:
             queryset = queryset.order_by('-rank', self.get_ordering())
         else:
             queryset = queryset.order_by(self.get_ordering())
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
-        if self.q_params['search']:
+        if self.q_params['q']:
             vector = SearchVector('name', weight='A') + \
                      SearchVector('aliases__name', weight='A') + \
                      SearchVector('description', weight='B')
-            query = SearchQuery(self.q_params['search'])
+            query = SearchQuery(self.q_params['q'])
             queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if self.q_params['platforms']:
             queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
@@ -118,8 +118,8 @@ class GameList(ListView):
         context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
         context['is_library'] = False
         filter_string = ''
-        if self.q_params.get('search'):
-            filter_string = '&search=%s' % self.q_params['search']
+        if self.q_params.get('q'):
+            filter_string = '&q=%s' % self.q_params['q']
         if self.q_params.get('platforms'):
             for platform in self.q_params['platforms']:
                 filter_string += '&platform=%s' % platform
@@ -135,14 +135,14 @@ class GameList(ListView):
         if self.q_params.get('flags'):
             for flag in self.q_params['flags']:
                 filter_string += '&flags=%s' % flag
-        if self.q_params.get('unpublished'):
-            filter_string += '&unpublished=%s' % self.q_params['unpublished']
+        if self.q_params.get('unpublished-filter'):
+            filter_string += '&unpublished-filter=%s' % self.q_params['unpublished-filter']
         context['filter_string'] = filter_string
         context['filter_form'] = LibraryFilterForm(initial=self.q_params)
         context['order_by'] = self.get_ordering()
         context['paginate_by'] = self.get_paginate_by(None)
         context['search_terms'] = self.q_params.get('search', '')
-        context["unpublished"] = self.q_params.get('unpublished', False)
+        context["unpublished_filter"] = self.q_params.get('unpublished-filter', False)
         context["unpublished_match_count"] = self.get_filtered_queryset(
             models.Game.objects.filter(is_public=False)
         ).count()
