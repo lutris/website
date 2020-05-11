@@ -38,10 +38,10 @@ deploy:
 	fab -H lutris.net deploy
 
 deploy_dev:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_dev POSTGRES_HOST_PORT=5434 HTTP_PORT=82 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_dev POSTGRES_HOST_PORT=5434 HTTP_PORT=82 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
 
 deploy_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
 
 client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi

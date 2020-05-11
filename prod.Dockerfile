@@ -32,6 +32,4 @@ RUN cd /app/frontend/vue/ && npm install && npm run build:issues
 RUN make client
 RUN make docs
 
-RUN ./manage.py collectstatic --clear --noinput --ignore less/test/* --ignore select2/docs/*
-
 CMD ["scripts/gunicorn_start.sh"]
