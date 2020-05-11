@@ -148,11 +148,11 @@ class GameForm(forms.ModelForm):
         else:
             if game.is_public:
                 msg = (
-                    "This game is <a href='games/%s'>already in our " "database</a>."
+                    "This game is <a href='/games/%s'>already in our " "database</a>."
                 ) % slug
             else:
                 msg = (
-                    "This game has <a href='games/%s'>already been "
+                    "This game has <a href='/games/%s'>already been "
                     "submitted</a>, you're welcome to nag us so we "
                     "publish it faster."
                 ) % slug
