@@ -61,5 +61,17 @@ sync:
 	pg_restore -h localhost -U lutris --clean --dbname=lutris lutris.tar
 	rm lutris.tar
 
-dev_docker:
+build_dev_docker:
 	docker-compose build lutrisfrontend lutrisweb
+
+start_dev_docker:
+	docker-compose up -d lutrisdb lutriscache
+	# Wait a bit for the cache and database to be ready
+	sleep 5
+	docker-compose up -d lutrisfrontend lutrisweb
+
+stop_dev_docker:
+	docker-compose down
+
+init_docker_db:
+	docker-compose run lutrisweb make db

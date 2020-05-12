@@ -8,22 +8,26 @@ Install docker (https://docs.docker.com/engine/install/) and docker-compose (htt
 
 To build the required docker images use::
 
-    make dev_docker
+    make build_dev_docker
 
 Start the required containers with::
 
-    docker-compose up lutrisweb
+    make start_dev_docker
 
 To prepare the database run in a separate terminal::
 
-    docker-compose run lutrisweb make db
+    make init_docker_db
 
-You are now ready to develop. No need to rebuild the lutrisweb image for simple
+You are now ready to develop. No need to rebuild the images for simple
 code changes, as the containers will pick them up from the host system.
 Operations requiring a rebuild:
 
 - changing dependencies (apt, pip or npm)
-- modifying source code of projects found in src folder
+- changing content of public/images, public/lightbox2 or public/robots.txt
+
+You can stop the containers with::
+
+    make stop_dev_docker
 
 Natively
 --------

@@ -8,8 +8,8 @@
     "build": "node build/build.js",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
-    "build:issues": "vue-cli-service build --target lib --name installer-issues ./src/issues.js",
-    "build:issues-dev": "vue-cli-service build --watch --target lib --name installer-issues ./src/issues.js",
+    "build:issues": "vue-cli-service build --no-clean --target lib --name installer-issues ./src/issues.js",
+    "build:issues-dev": "vue-cli-service build --no-clean --watch --target lib --name installer-issues ./src/issues.js",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage"
