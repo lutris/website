@@ -243,6 +243,11 @@ class Game(models.Model):
         return ("name__icontains",)
 
     @property
+    def user_count(self):
+        """How many users have the game in their libraries"""
+        return self.libraries.count()
+
+    @property
     def website_url(self):
         """Returns self.website guaranteed to be a valid URI"""
         if not self.website:

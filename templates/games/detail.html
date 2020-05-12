@@ -99,7 +99,7 @@
         </ul>
         <div class="centered">
 
-          <p>{{ library_count }} users have this game</p>
+          <p>{{ game.user_count }} users have this game</p>
           <p>
             {% if not in_library %}
             <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
