@@ -27,7 +27,7 @@ RUN pip3 install --no-cache-dir -r config/requirements/production.pip
 
 USER ${APP_USER}:${APP_USER}
 RUN npm install
-RUN npm run setup
+RUN npm run setup && npm run build
 RUN cd /app/frontend/vue/ && npm install && npm run build:issues
 RUN make client
 RUN make docs
