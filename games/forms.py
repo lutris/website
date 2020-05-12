@@ -385,7 +385,8 @@ class ForkInstallerForm(forms.ModelForm):
 class LibraryFilterForm(forms.Form):
     q = forms.CharField(
         max_length=50,
-        widget=forms.TextInput(attrs={"style": "width: 100%;"}),
+        widget=forms.TextInput(attrs={"style": "width: 100%;",
+                                      "class": "select2-lookalike"}),
         required=False,
         label="Search"
     )
@@ -394,7 +395,7 @@ class LibraryFilterForm(forms.Form):
             attrs={'data-width': '100%',
                    'data-close-on-select': 'false',
                    'data-placeholder': '',
-                   'data-minimum-input-length': 3}
+                   'data-minimum-input-length': 2}
         ),
         required=False,
     )

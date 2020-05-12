@@ -933,27 +933,6 @@ input {
   }
 }
 
-#filter-controls {
-  @media (min-width: @screen-sm-min) {
-    display: block !important; /* Controls should always be visible on large screens */
-  }
-
-  .filter-controls-content {
-    margin: 0;
-    margin-bottom: 20px;
-
-    .pane {
-      background-color: #444;
-      color: #DDD;
-      padding: 10px;
-
-      .input-group{
-        width: 100%;
-      }
-    }
-  }
-}
-
 .footnote {
   font-size: .75em;
   color: #999;
@@ -972,70 +951,16 @@ input {
 
 /* == Classes */
 
-.fold-btn {
-  color: #888;
-  font-size: .8em;
+input.select2-lookalike[type="text"] {
+    padding: 5px;
+    border-radius: 4px;
+    background-color: white;
+    outline: 0;
 
-  &:hover, &:focus {
-    text-decoration: none;
-    color: #AAA;
-  }
-}
-
-.fold-indicator {
-  color: #aaa;
-}
-
-.collapsable-panel {
-  display: none;
-
-  &.active {
-    display: block;
-  }
-}
-
-#advanced-search-panel {
-  ul {
-    list-style-type: none;
-    padding-left: 0;
-
-    ul {
-      padding-left: 16px;
+    &:focus {
+      border: solid 1px black;
     }
-  }
 }
-
-.search-options {
-  font-size: 0.9em;
-  margin-top: 7px;
-
-  input[type="checkbox"] {
-    display: none;
-  }
-  color: #aaa;
-
-  input[type="checkbox"] + label span {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin: 0 4px 0 0;
-    background: url("../images/checkboxes.png") left top no-repeat;
-    cursor: pointer;
-  }
-
-  input[type="checkbox"]:checked + label span {
-    background: url("../images/checkboxes.png") left -11px no-repeat;
-  }
-
-  input[type="checkbox"]:indeterminate + label span {
-    background: url("../images/checkboxes.png") left -22px no-repeat;
-  }
-
-  input[type="checkbox"]:checked + label {
-    color: #EEE;
-  }
-}
-
 
 .important-checkbox {
   display: block;

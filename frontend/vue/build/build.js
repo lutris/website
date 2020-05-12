@@ -14,7 +14,8 @@ const webpackConfig = require('./webpack.prod.conf')
 const spinner = ora('building for production...')
 spinner.start()
 
-rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
+// Only remove files in dir, not the dir itself (mapped to a docker volume)
+rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory, "*"), err => {
   if (err) throw err
   webpack(webpackConfig, (err, stats) => {
     spinner.stop()
