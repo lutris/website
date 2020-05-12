@@ -91,6 +91,11 @@
                 {% if unpublished_filter %}checked{% endif %} />
             Show unpublished
           </label>
+          <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
+            <input type="checkbox" id="search-installers" name="search-installers"
+                {% if search_installers %}checked{% endif %} />
+            Search in installers
+          </label>
           <input type="button" value="Apply filter" class="btn btn-default no-border"
                  onclick="applyLibraryFilter();">
           <input type="button" value="Clear filter" class="btn btn-default no-border"
