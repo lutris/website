@@ -100,12 +100,13 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
+        action = request.data.pop('action', None)
         try:
             instance = self.get_object()
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        if request.data.get('action') == 'accept':
-            instance.accept(self.request.user)
+        if action == 'accept':
+            instance.accept(self.request.user, request.data)
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_404_NOT_FOUND)
 

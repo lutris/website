@@ -997,10 +997,12 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(original_revision=self._version.revision)
 
-    def accept(self, moderator):
+    def accept(self, moderator, installer_data=None):
         """Accepts an installer submission
 
         Also clears any earlier draft created by the same user.
+        The data submitted by the user can be overridden by a moderator in the
+        installer_data dict.
         """
 
         submission_author = self._version.revision.user
@@ -1018,6 +1020,13 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         installer.published = True
         installer.published_by = moderator
         installer.draft = False
+        if installer_data:
+            # Only fields editable in the dashboard will be affected
+            # FIXME also persist runner
+            installer.version = installer_data["version"]
+            installer.notes = installer_data["notes"]
+            installer.description = installer_data["description"]
+            installer.content = installer_data["content"]
         installer.save()
 
         self._clear_old_revisions(author=submission_author, date=submission_date)
