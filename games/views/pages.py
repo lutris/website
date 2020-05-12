@@ -205,9 +205,6 @@ def game_detail(request, slug):
             "banner_options": {"crop": "top", "blur": "14x6"},
             "banner_size": "940x352",
             "in_library": in_library,
-            "library_count": models.GameLibrary.objects.filter(
-                games__in=[game.id]
-            ).count(),
             "pending_change_subm_count": pending_change_subm_count,
             "can_publish": user.is_staff and user.has_perm("games.can_publish_game"),
             "can_edit": user.is_staff and user.has_perm("games.change_game"),

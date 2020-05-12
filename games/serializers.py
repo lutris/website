@@ -62,7 +62,8 @@ class GameDetailSerializer(GameSerializer):
             'name', 'slug', 'year',
             'platforms', 'genres', 'aliases',
             'description', 'banner_url', 'icon_url', 'is_public',
-            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id'
+            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
+            'user_count'
         )
 
 
