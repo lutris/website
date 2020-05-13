@@ -35,48 +35,6 @@ class GameAliasSerializer(serializers.ModelSerializer):
         fields = ('slug', 'name')
 
 
-class GameSerializer(serializers.ModelSerializer):
-    """Serializer for Games"""
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.Game
-        fields = (
-            'name', 'slug', 'year',
-            'description', 'banner_url', 'icon_url', 'is_public',
-            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id'
-        )
-
-class GameDetailSerializer(GameSerializer):
-    """A serializer for games with it's associated meta-data.
-    Do not use in List views as it might cause performance issues.
-    """
-    genres = GenreSerializer(many=True)
-    platforms = PlatformSerializer(many=True)
-    aliases = GameAliasSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.Game
-        fields = (
-            'name', 'slug', 'year',
-            'platforms', 'genres', 'aliases',
-            'description', 'banner_url', 'icon_url', 'is_public',
-            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
-            'user_count'
-        )
-
-
-class GameLibrarySerializer(serializers.ModelSerializer):
-    """Serializer for Games"""
-    games = GameSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.GameLibrary
-        fields = ('user', 'games')
-
-
 class InstallerSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
@@ -100,20 +58,6 @@ class InstallerSerializer(serializers.ModelSerializer):
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'published_by', 'rating', 'steamid', 'gogid', 'gogslug',
                   'humblestoreid', 'script', 'content')
-
-
-class GameInstallersSerializer(GameSerializer):
-    """Serializer for Installers belonging to a specific game"""
-    installers = InstallerSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.Game
-        fields = (
-            'id', 'name', 'slug', 'year', 'platforms', 'genres',
-            'banner_url', 'icon_url', 'is_public', 'updated',
-            'steamid', 'gogid', 'gogslug', 'humblestoreid', 'installers'
-        )
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
@@ -170,6 +114,63 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
         fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
                   'notes', 'created_at', 'updated_at', 'published', 'rating',
                   'script', 'content', 'revisions')
+
+
+class GameSerializer(serializers.ModelSerializer):
+    """Serializer for Games"""
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.Game
+        fields = (
+            'name', 'slug', 'year',
+            'description', 'banner_url', 'icon_url', 'is_public',
+            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id'
+        )
+
+class GameDetailSerializer(GameSerializer):
+    """A serializer for games with it's associated meta-data.
+    Do not use in List views as it might cause performance issues.
+    """
+    genres = GenreSerializer(many=True)
+    platforms = PlatformSerializer(many=True)
+    aliases = GameAliasSerializer(many=True)
+    installers = InstallerWithRevisionsSerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.Game
+        fields = (
+            'name', 'slug', 'year',
+            'platforms', 'genres', 'aliases',
+            'description', 'banner_url', 'icon_url', 'is_public',
+            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
+            'user_count', 'installers'
+        )
+
+
+class GameLibrarySerializer(serializers.ModelSerializer):
+    """Serializer for Games"""
+    games = GameSerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.GameLibrary
+        fields = ('user', 'games')
+
+
+class GameInstallersSerializer(GameSerializer):
+    """Serializer for Installers belonging to a specific game"""
+    installers = InstallerSerializer(many=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.Game
+        fields = (
+            'id', 'name', 'slug', 'year', 'platforms', 'genres',
+            'banner_url', 'icon_url', 'is_public', 'updated',
+            'steamid', 'gogid', 'gogslug', 'humblestoreid', 'installers'
+        )
 
 
 class GameRevisionSerializer(GameSerializer):
