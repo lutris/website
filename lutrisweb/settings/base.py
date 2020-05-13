@@ -353,7 +353,7 @@ LOGGING = {
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '%s:%s' % (os.getenv('REDIS_HOST', 'lutriscache'),
+        'LOCATION': '%s:%s' % (os.getenv('REDIS_HOST', 'localhost'),
                                os.getenv('REDIS_PORT', '6379')),
     },
 }
