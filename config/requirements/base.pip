@@ -37,7 +37,6 @@ sorl-thumbnail==12.6.3
 lxml==4.5.0
 Pillow==7.1.1
 premailer==3.6.1
-fabric==2.5.0
 Sphinx==3.0.2
 romkan==0.2.1
 xpinyin==0.5.6
