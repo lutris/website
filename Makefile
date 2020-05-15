@@ -34,9 +34,6 @@ fixtures:
 check-deps-update:
 	pip3 list --outdated
 
-deploy:
-	fab -H lutris.net deploy
-
 deploy_staging:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
 
