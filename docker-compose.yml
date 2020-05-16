@@ -9,7 +9,6 @@ services:
     container_name: lutrisweb
     volumes:
       - ./:/app
-      - components:/app/components
       - media:/app/media
       - public:/app/public
       - vue_dist:/app/frontend/vue/dist
@@ -37,11 +36,10 @@ services:
       - ./frontend/vue/src:/app/frontend/vue/src
       - vue_dist:/app/frontend/vue/dist
       - vue_static:/app/frontend/vue/static
-      - components:/app/components
       - public:/app/public
     stdin_open: true
     tty: true
-    restart: on-failure
+#    restart: on-failure
 
   celery_worker:
     build:
@@ -86,6 +84,5 @@ volumes:
   media:
   redisdata:
   public:
-  components:
   vue_static:
   vue_dist:

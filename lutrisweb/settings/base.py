@@ -52,7 +52,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "public"),
     os.path.join(BASE_DIR, "frontend/vue/dist"),
-    os.path.join(BASE_DIR, "components"),
+    os.path.join(BASE_DIR, "node_modules"),
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -193,15 +193,15 @@ SPACES_ACCESS_KEY_SECRET = os.environ.get("SPACES_ACCESS_KEY_SECRET")
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
-# Select2
-SELECT2_JS = '/static/select2/dist/js/select2.min.js'
-SELECT2_CSS = '/static/select2/dist/css/select2.min.css'
+# Select2 - bundled using webpack
+SELECT2_JS = ''
+SELECT2_CSS = ''
 
 # Email
 

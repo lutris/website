@@ -1,4 +1,14 @@
 /* global $ */
+import 'bootstrap';
+import './library';
+import './admin-forms';
+import 'select2';
+import 'django-select2';
+import 'ace-builds';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
 
 (function() {
 
