@@ -3,7 +3,6 @@
 {% load append_to_get %}
 {% block title %}Games - Lutris{% endblock %}
 {% block extra_head %}
-{{ filter_form.media.css }}
 {% endblock %}
 {% block content %}
 
@@ -114,5 +113,4 @@
 
 {% block scripts %}
   {{ block.super }}
-  {{ filter_form.media.js }}
 {% endblock %}

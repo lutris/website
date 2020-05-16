@@ -5,7 +5,7 @@ boto3==1.13.3
 celery[redis]==4.4.2
 cssselect==1.1.0
 Django==2.2.12
-django-crispy-forms==1.7.2
+django-crispy-forms==1.9.1
 django-extensions==2.2.9
 djangorestframework==3.11.0
 django-cors-headers==3.2.1

@@ -5,26 +5,26 @@
   "author": "Mathieu Comandon",
   "homepage": "https://lutris.net",
   "license": "GPL-3.0",
-  "main": "Gruntfile.js",
   "devDependencies": {
-    "bower": "^1.8.8",
-    "grunt": "^1.0.4",
-    "grunt-browser-sync": "^2.2.0",
-    "grunt-cli": "1.2.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^2.2.1",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify": "~3.3.0",
-    "grunt-contrib-watch": "^1.1.0",
+    "autoprefixer": "^9.7.6",
+    "copy-webpack-plugin": "^6.0.0",
+    "css-loader": "^3.5.3",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^6.0.0",
     "hoek": "5.0.3",
-    "request": "^2.87.0"
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-loader": "^3.0.0",
+    "request": "^2.87.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
-    "setup": "bower install --allow-root",
-    "build": "grunt",
-    "build:issues": "vue-cli-service build --target wc --name installer-issues ./src/components/InstallerIssues.js",
-    "watch": "grunt watch"
+    "build": "webpack --mode=development --progress --hide-modules --config=webpack.dev.conf.js",
+    "watch": "webpack --mode=development --watch"
   },
   "repository": {
     "type": "git",
@@ -37,8 +37,14 @@
     "url": "https://github.com/lutris/website/issues"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@popperjs/core": "^2.4.0",
     "ace-builds": "^1.4.5",
-    "jquery": "^3.4.1",
+    "blueimp-gallery": "^2.43.0",
+    "bootstrap": "^4.5.0",
+    "django-select2": "^7.0.2",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
     "select2": "^4.0.7"
   }
 }

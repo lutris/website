@@ -11,10 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends sudo build-esse
 COPY ./public/favicon.ico ./public/robots.txt /app/public/
 COPY ./public/images /app/public/images/
 COPY ./public/lightbox2 /app/public/lightbox2/
-COPY ./*.json ./.bowerrc ./Gruntfile.js /app/
+COPY ./*.json ./webpack.dev.conf.js /app/
 WORKDIR /app
-RUN npm install -g bower grunt-cli
-RUN npm install && npm run setup
+RUN npm install
 
 COPY $VUE_PATH/*.json $VUE_PATH/.babelrc $VUE_PATH/.eslintignore $VUE_PATH/index.html $VUE_PATH/*.js /app/frontend/vue/
 COPY $VUE_PATH/build /app/frontend/vue/build/
@@ -23,4 +22,5 @@ WORKDIR /app/frontend/vue
 RUN npm install
 
 WORKDIR /app
-CMD npm run build ; npm run watch > /dev/null & cd /app/frontend/vue ; npm run build:issues-dev > /dev/null
+#CMD npm run build > /dev/null & cd /app/frontend/vue ; npm run build:issues-dev > /dev/null
+CMD npm run build
