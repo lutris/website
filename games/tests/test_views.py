@@ -44,10 +44,49 @@ class TestInstallerViews(TestCase):
 
 
 class TestGameViews(TestCase):
+    """Test game list view"""
     def test_can_get_game_list(self):
-        response = self.client.get(reverse('game_list'))
+        """Can get the basic game list"""
+        url = reverse('game_list')
+        self.assertEqual(url, "/games")
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_can_receive_garbage_flag(self):
+        """The view should ignore bad flags passed in the GET parameters"""
+        url = "/games?q=launcher&flags==name"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_ordering(self):
+        """The view should ignore bad values for ordering"""
+        url = "/games?ordering=name'A=0"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_page(self):
+        """The view should ignore bad values for page"""
+        url = "/games?page=xcvj234"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        url = "/games?page=-1"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        url = "/games?page=0"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_pagination_by(self):
+        """The view should ignore bad values for pagination_values"""
+        url = "/games?paginate_by=xcvj234"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        url = "/games?paginate_by=-1"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        url = "/games?paginate_by=0"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
 class TestInstallerIssues(TestCase):
     def setUp(self):
