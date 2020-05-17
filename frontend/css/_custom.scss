@@ -45,6 +45,7 @@ $banner-width: 184px;
 
 html {
   background-color: rgba(204, 204, 204, 0.04);
+  height:100vh;
 }
 
 body {
@@ -53,9 +54,11 @@ body {
   color: #EFEFEF;
   margin: 0;
   padding: 0;
-  height: 100%;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 article {
@@ -248,6 +251,7 @@ input {
 .container {
   padding-left: 0;
   padding-right: 0;
+  flex: 1;
   @include media-breakpoint-between(sm, md) {
     width: 100%;
   }
