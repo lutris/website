@@ -36,7 +36,6 @@ from games.forms import (
 from games.models import Game, GameSubmission, Installer, InstallerIssue
 from games.webhooks import notify_issue_creation, notify_installer
 from emails.messages import send_email
-from platforms.models import Platform
 
 LOGGER = logging.getLogger(__name__)
 
@@ -67,11 +66,29 @@ class GameList(ListView):
         }
         return super().get(request, *args, **kwargs)
 
+    def get_page(self):
+        """Return the page number for the paginated queryset"""
+        try:
+            page = int(self.request.GET.get("page"))
+        except ValueError:
+            return 1
+        if page < 1:
+            return 1
+        return page
+
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('paginate_by', self.paginate_by)
+        """Return the number of items per page"""
+        try:
+            return int(self.request.GET.get("paginate_by", self.paginate_by))
+        except ValueError:
+            return self.paginate_by
 
     def get_ordering(self):
-        return self.request.GET.get('ordering', self.ordering)
+        """Return the field used to order the query by"""
+        field = self.request.GET.get("ordering", self.ordering)
+        if field.strip('-') not in Game.valid_fields():
+            return None
+        return field
 
     def get_queryset(self):
         queryset = models.Game.objects
@@ -82,10 +99,12 @@ class GameList(ListView):
         queryset = queryset.prefetch_related(
             "genres", "publisher", "developer", "platforms", "installers"
         )
-        if self.q_params['q'] and not self.q_params['search-installers']:
-            queryset = queryset.order_by('-rank', self.get_ordering())
-        else:
-            queryset = queryset.order_by(self.get_ordering())
+        ordering = self.get_ordering()
+        if ordering:
+            if self.q_params['q'] and not self.q_params['search-installers']:
+                queryset = queryset.order_by('-rank', ordering)
+            else:
+                queryset = queryset.order_by(ordering)
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
@@ -111,13 +130,27 @@ class GameList(ListView):
             queryset = queryset.filter(Q(year__in=self.q_params['years']))
         if self.q_params['flags']:
             flag_q = Q()
-            for flag in self.q_params['flags']:
-                flag_q |= Q(flags=getattr(models.Game.flags, flag))
+            for flag_name in self.q_params['flags']:
+                try:
+                    flag = getattr(models.Game.flags, flag_name)
+                except AttributeError:
+                    continue
+                flag_q |= Q(flags=flag)
             queryset = queryset.filter(flag_q)
         return queryset
 
+    def clean_parameters(self):
+        """Validators used to prevent sending garbage data to Django views"""
+        # Set the GET QueryDict to mutable so we can corrrect the values
+        self.request.GET._mutable = True  # pylint: disable=protected-access
+        if "paginate_by" in self.request.GET:
+            self.request.GET["paginate_by"] = self.get_paginate_by(None)
+        if "page" in self.request.GET:
+            self.request.GET["page"] = self.get_page()
+
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the Lutris library"""
+        self.clean_parameters()
         context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
         context['is_library'] = False
         filter_string = ''

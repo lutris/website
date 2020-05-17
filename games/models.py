@@ -232,6 +232,11 @@ class Game(models.Model):
         ordering = ["name"]
         permissions = (("can_publish_game", "Can publish game"),)
 
+    @classmethod
+    def valid_fields(cls):
+        """Return a list of valid field names for the model"""
+        return [f.name for f in cls._meta.fields]
+
     def __str__(self):
         if self.change_for is None:
             return self.name
