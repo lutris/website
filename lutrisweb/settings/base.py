@@ -251,12 +251,16 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '60/min',
+        'user': '60/min'
+    },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100,
+    'PAGE_SIZE': 250,
 }
 
 # Shell Plus
