@@ -22,16 +22,12 @@ module.exports = {
     mode: "development",
     module: {
         rules: [
-            // {
-            //     test: require.resolve('jquery'),
-            //     use: [{
-            //       loader: 'expose-loader',
-            //       options: 'jQuery'
-            //     },{
-            //       loader: 'expose-loader',
-            //       options: '$'
-            //     }]
-            // },
+            {
+                test: /\.(jpg|png|svg|bmp|gif)$/,
+                use: {
+                  loader: 'url-loader',
+                },
+            },
             // styles loader
             {
                 test: /\.(sa|sc|c)ss$/,
@@ -67,7 +63,8 @@ module.exports = {
             jQuery: 'jquery',
             jquery: 'jquery',
             'window.jQuery': 'jquery',
-            Popper: ['popper.js', 'default']
+            'window.$': 'jquery',
+            Popper: ['popper.js', 'default'],
         }),
         // new CopyPlugin({
         //     patterns: [
