@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "webpack --mode=development --progress --hide-modules --config=webpack.dev.conf.js",
-    "watch": "webpack --mode=development --watch"
+    "watch": "webpack --mode=development --progress --hide-modules --watch --config=webpack.dev.conf.js"
   },
   "repository": {
     "type": "git",

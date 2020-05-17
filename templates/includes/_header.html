@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark container">
+<nav class="navbar navbar-expand-lg bg-darker">
   <a class="logo navbar-brand" href="/">
     <img src="{% static 'images/logo.png' %}" alt="Lutris" />
     <span>Lutris</span>
@@ -22,19 +22,14 @@
       <li class="nav-item"><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
     </ul>
-    <form class="search-games-content form-inline my-2 my-lg-0" action="{% url 'game_list' %}" method="get">
+    <form class="form-inline my-2 my-lg-0 mr-2" action="{% url 'game_list' %}" method="get">
       <div class="input-group">
+        <i class="fas fa-search fa-lg text-lighter my-auto mr-2" aria-hidden="true"></i>
         <input type="text"
               name="q"
-              class="search-query form-control"
+              class="form-control bg-dark text-primary border-0 shadow-none"
               id="global-search"
               placeholder="Search…" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="submit">
-            <span class="sr-only">Search</span>
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-          </button>
-        </span>
       </div>
     </form>
     {% if user.is_authenticated %}
@@ -45,8 +40,8 @@
       </div>
     {% else %}
       <div class="account-action">
-        <a href="{% url 'login' %}">Sign-in</a>
-        <a href="{% url 'register' %}"><strong>Register</strong></a>
+        <a href="{% url 'login' %}" data-toggle="tooltip" data-placement="bottom" title="Log in"><i class="fas fa-sign-in-alt fa-lg"></i></a>
+        <a href="{% url 'register' %}" data-toggle="tooltip" data-placement="bottom" title="Register"><i class="fas fa-file-signature fa-lg"></i></a>
       </div>
     {% endif %}
   </div>
