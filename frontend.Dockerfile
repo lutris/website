@@ -23,4 +23,4 @@ RUN npm install
 
 WORKDIR /app
 #CMD npm run build > /dev/null & cd /app/frontend/vue ; npm run build:issues-dev > /dev/null
-CMD npm run build
+CMD npm run watch

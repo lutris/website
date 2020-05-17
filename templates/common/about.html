@@ -4,11 +4,9 @@
 {% block title %}About Lutris{% endblock %}
 
 
-{% block nopage %}
-
-<div class="container intro-text">
+{% block content %}
+  <h1 class="text-center py-3">About Lutris</h1>
   <div class="row">
-    <h1 class="centered">About Lutris</h1>
     <div class='col-md-4'>
       <p>
         Lutris is a gaming client for Linux. It gives you access to all your
@@ -22,19 +20,18 @@
       </p>
     </div>
     <div class="col-md-8">
-      <figure>
-        <img src="{% static 'images/screenshots/main-window.png' %}" alt="Lutris main window"/>
-      </figure>
+        <img src="{% static 'images/screenshots/main-window.png' %}"
+             class="shadow w-100 text-primary"
+             alt="Lutris main window"/>
     </div>
   </div>
 
+  <h1 class="text-center pt-5 pb-3">How does it work?</h1>
   <div class="row">
-    <h1 class="centered">How does it work?</h1>
     <div class="col-md-4 col-sm-6 hidden-xs">
-      <figure>
         <img src="{% static 'images/screenshots/install-dialog.png' %}"
-          alt="Installer selection window for The Witcher 2" />
-      </figure>
+             class="shadow w-100 text-primary"
+             alt="Installer selection window for The Witcher 2"/>
     </div>
     <div class="col-md-8 col-sm-6">
       <p>
@@ -51,8 +48,8 @@
     </div>
   </div>
 
+  <h1 class="text-center pt-5 pb-3">A focus on video game preservation</h1>
   <div class="row">
-    <h1 class="centered">A focus on video game preservation</h1>
     <div class="col-md-6">
       <p>
         Video games are now part of our history and our culture. If we want to keep a
@@ -77,10 +74,10 @@
     </div>
   </div>
 
+  <h1 class="text-center">Meet the founder</h1>
   <div class="row">
-    <h1 class="centered">Meet the founder</h1>
     <div class="col-md-3">
-      <figure class="centered tiled">
+      <figure class="text-center tiled">
         <img src="{% static 'images/strider.png' %}" alt="Photo of Mathieu Comandon"/>
       </figure>
     </div>
@@ -113,5 +110,4 @@
       </p>
     </div>
   </div>
-</div>
 {% endblock %}

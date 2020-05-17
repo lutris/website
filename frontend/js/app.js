@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
+import * as blueimp_gallery from 'blueimp-gallery/js/blueimp-gallery';
 
 (function() {
 
@@ -73,3 +74,21 @@ import '@fortawesome/fontawesome-free/js/brands';
     }
   });
 }).call(this);
+
+$(window).on('load', function () {
+  if ($("#blueimp-gallery-carousel").length) {
+    blueimp_gallery(document.getElementById('carousel_links').getElementsByTagName('a'), {
+      container: '#blueimp-gallery-carousel',
+      carousel: true,
+      toggleControlsOnSlideClick: false,
+      stretchImages: true,
+      onslide: function (index, slide) {
+        let text = this.list[index].getAttribute('data-description', ''),
+            url = this.list[index].getAttribute('data-link', '#'),
+            node = $(this.container.find('#carousel_game_link'));
+        node.attr('href', url);
+        node.text(text);
+      }
+    })
+  }
+})

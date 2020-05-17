@@ -31,9 +31,9 @@
   {% endif %}
 
   {% include "includes/_header.html" %}
-  {% block nopage %}
-    <div id="content" class="container"><div class="page">{% block content %}{% endblock %}</div></div>
-  {% endblock %}
+  <div id="content" class="container-fluid bg-dark text-white px-5 w-75">
+    {% block content %}{% endblock %}
+  </div>
   {% include "includes/_footer.html" %}
   <script src="{% static 'js/app.js' %}"></script>
   <script>
