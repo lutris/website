@@ -34,7 +34,6 @@ from games.forms import (
     ScreenshotForm, LibraryFilterForm,
 )
 from games.models import Game, GameSubmission, Installer, InstallerIssue
-from games.util.pagination import get_page_range
 from games.webhooks import notify_issue_creation, notify_installer
 from emails.messages import send_email
 from platforms.models import Platform
