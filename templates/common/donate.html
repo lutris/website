@@ -3,53 +3,57 @@
 
 
 {% block content %}
-<h1>Support the project</h1>
+<h1 class="text-center pb-3">Support the project</h1>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 mb-3">
     <p>
       Lutris is a not-for-profit project that relies on the support of the
       community in order to cover its expenses.<br> If you like the project please consider donating by using
       one of the services listed below.
-    </p>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
   </div>
-  <div class="col-sm-4">
-    <section class="action-column">
+</div>
+  <div class="row row-cols-3">
+  <div class="col text-center">
       <img src="{{ STATIC_URL }}images/patreon.png" alt="Support Lutris on Patreon">
-      <p style="text-align:center;">Patreon offers a tier based reward system. Donations recur monthly.</p>
-      <a href="https://www.patreon.com/bePatron?u=672193" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+      <p>Patreon offers a tier based reward system. Donations recur monthly.</p>
+      <a href="https://www.patreon.com/bePatron?u=672193"
+         class="btn btn-primary rounded"
+         data-patreon-widget-type="become-patron-button"
+      >Become a Patron!</a>
       <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
-    </section>
   </div>
-  <div class="col-sm-4">
-    <section class="action-column">
-      <!-- PayPal Logo --><table cellspacing="0" cellpadding="10" border="0" align="center"><tbody><tr><td align="center"></td></tr><tr><td align="center"><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"><img src="https://www.paypalobjects.com/digitalassets/c/website/marketing/na/us/logo-center/15_nowaccepting_blue_badge.jpg" alt="Secured by PayPal" border="0"></a></td></tr></tbody></table><!-- PayPal Logo -->
-      <p style="text-align:center;">
+  <div class="col text-center">
+      <a href="https://www.paypal.com/webapps/mpp/paypal-popup"
+         title="How PayPal Works"
+         onclick="javascript:window.open('https://www.paypal.com/us/webapps/mpp/how-paypal-works/overview',
+         'WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes,' +
+          ' width=1060, height=700'); return false;">
+        <img src="https://www.paypalobjects.com/digitalassets/c/website/marketing/na/us/logo-center/15_nowaccepting_blue_badge.jpg"
+             alt="Secured by PayPal"
+        />
+      </a>
+      <p>
         For one-time donations you can use Paypal. Donate any amount
         of your choosing.
       </p>
       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
         <input type="hidden" name="cmd" value="_s-xclick">
         <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+        <button type="submit" class="btn btn-primary rounded" name="submit">Donate using PayPal</button>
+        <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
       </form>
-    </section>
   </div>
-  <div class="col-sm-4">
-    <section class="action-column">
+  <div class="col text-center">
       <img src="{{ STATIC_URL }}images/liberapay.svg" height=64 alt="Support Lutris on LiberaPay">
-
-      <p style="text-align:center;">
+      <p>
         LiberaPay is a platform for recurring donations mostly targeting Free Software projects.
       </p>
       <script src="https://liberapay.com/Lutris/widgets/button.js"></script>
-      <noscript><a href="https://liberapay.com/Lutris/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
-    </section>
+      <noscript>
+        <a href="https://liberapay.com/Lutris/donate">
+          <img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg">
+        </a>
+      </noscript>
   </div>
 </div>
 

@@ -182,52 +182,6 @@ form {
   }
 }
 
-.slide-legend {
-  position: absolute;
-  bottom: 30px;
-  right: 0;
-  padding: 24px;
-  font-size: 32px;
-  z-index: 1;
-  background-color: rgba(255, 153, 0, 0.8);
-  color: #eeeeee;
-
-  &:hover {
-    color: #eeeeee;
-    background-color: rgba(255, 153, 0, 0.95);
-  }
-}
-
-.action-container {
-  text-align: center;
-  padding-bottom: 32px;
-}
-
-.action-column {
-  text-align: center;
-  margin: auto;
-  padding-bottom: 4em;
-
-  form, a, iframe {
-    display: inline-block;
-  }
-
-  p {
-    padding: 1em 0;
-    text-align: left;
-    height: 5em;
-  }
-
-  textarea, input, button {
-    border: none;
-    background-color: transparent;
-  }
-
-  .patreon-widget {
-    width: 175px;
-  }
-}
-
 figure {
   padding: 0;
 
