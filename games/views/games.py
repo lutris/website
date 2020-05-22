@@ -23,7 +23,7 @@ class GameListView(generics.GenericAPIView):
         ids.
         """
 
-        base_query = models.Game.objects
+        base_query = models.Game.objects.filter(change_for__isnull=True)
 
         # Easter egg: Return a random game
         if 'random' in self.request.GET:
@@ -40,21 +40,19 @@ class GameListView(generics.GenericAPIView):
         if game_slugs:
             return base_query.filter(
                 Q(slug__in=game_slugs) | Q(aliases__slug__in=game_slugs),
-                change_for__isnull=True
             )
 
         if 'gogid' in self.request.data:
+            gogids = [gogid for gogid in self.request.data["gogid"] if gogid.isnumeric()]
             return base_query.filter(
-                change_for__isnull=True,
-                gogid__in=self.request.data['gogid']
+                gogid__in=gogids
             )
         if 'humblestoreid' in self.request.data:
             return base_query.filter(
-                change_for__isnull=True,
                 humblestoreid__in=self.request.data['humblestoreid']
             )
 
-        return base_query.filter(change_for__isnull=True)
+        return base_query
 
     def get_serializer_class(self):
         """Return the appropriate serializer
@@ -65,7 +63,7 @@ class GameListView(generics.GenericAPIView):
             return serializers.GameInstallersSerializer
         return serializers.GameSerializer
 
-    def get(self, request):
+    def get(self, _request):
         """GET request"""
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
@@ -91,7 +89,7 @@ class GameLibraryView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-    def get(self, request, username):
+    def get(self, request, username):  # pylint: disable=arguments-differ
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
@@ -109,12 +107,14 @@ class GameLibraryView(generics.RetrieveAPIView):
 
 
 class GameDetailView(generics.RetrieveAPIView):
+    """Return the details of a game referenced by its slug"""
     serializer_class = serializers.GameDetailSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.filter(change_for__isnull=True)
 
 
 class GameInstallersView(generics.RetrieveAPIView):
+    """Return game details along with installers"""
     serializer_class = serializers.GameInstallersSerializer
     lookup_field = 'slug'
     queryset = models.Game.objects.filter(change_for__isnull=True)
@@ -124,7 +124,8 @@ class GameStatsView(APIView):
     """View for game statistics"""
     permission_classes = (permissions.IsAdminUser, )
 
-    def get(self, request, format=None):
+    @staticmethod
+    def get(_request, _format=None):
         """Return game statistics"""
         statistics = {}
         statistics["game_submissions"] = models.GameSubmission.objects.filter(
@@ -135,6 +136,8 @@ class GameStatsView(APIView):
         statistics["installers"] = models.Installer.objects.published().count()
         statistics["unpublished_installers"] = models.Installer.objects.unpublished().count()
         statistics["screenshots"] = models.Screenshot.objects.filter(published=True).count()
-        statistics["unpublished_screenshots"] = models.Screenshot.objects.filter(published=False).count()
+        statistics["unpublished_screenshots"] = models.Screenshot.objects.filter(
+            published=False
+        ).count()
 
         return Response(statistics)

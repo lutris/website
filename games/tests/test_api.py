@@ -1,3 +1,4 @@
+"""Test cases for game API"""
 import json
 import logging
 
@@ -10,15 +11,17 @@ LOGGER = logging.getLogger(__name__)
 
 
 class TestGameApi(TestCase):
+    """Test case for game API views"""
+
     def setUp(self):
         self.num_games = 10
-        self.games = []
-        for n in range(self.num_games):
-            self.games.append(
-                factories.GameFactory(name='game_%d' % n, slug='game-%d' % n)
-            )
+        self.games = [
+            factories.GameFactory(name='game_%d' % index, slug='game-%d' % index)
+            for index in range(self.num_games)
+        ]
 
     def test_can_get_games(self):
+        """The API should return a list of games"""
         game_list_url = reverse('api_game_list')
         response = self.client.get(game_list_url)
         self.assertEqual(response.status_code, 200)
@@ -26,6 +29,7 @@ class TestGameApi(TestCase):
         self.assertEqual(len(games['results']), self.num_games)
 
     def test_can_get_subset_of_games(self):
+        """The API should filter by a given list of game slugs"""
         game_slugs = {'games': ['game-1', 'game-2', 'game-4']}
         game_list_url = reverse('api_game_list')
         response = self.client.get(game_list_url, data=game_slugs,
@@ -35,6 +39,9 @@ class TestGameApi(TestCase):
         self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_post_subset_of_games(self):
+        """The API can use a POST request to query a list of games, allowing
+        users to pass a longer list
+        """
         game_slugs = {'games': ['game-1', 'game-2', 'game-4']}
         game_list_url = reverse('api_game_list')
         response = self.client.post(
@@ -47,12 +54,15 @@ class TestGameApi(TestCase):
         self.assertEqual(len(games['results']), len(game_slugs['games']))
 
     def test_can_query_game_details(self):
+        """The API can return details about a game"""
         response = self.client.get(reverse('api_game_detail',
                                            kwargs={'slug': 'game-1'}))
         self.assertEqual(response.status_code, 200)
 
 
 class TestGameLibraryApi(TestCase):
+    """Test case for user library API views"""
+
     def setUp(self):
         game = factories.GameFactory
         games = [game() for i in range(5)]
@@ -61,6 +71,7 @@ class TestGameLibraryApi(TestCase):
         self.other_library = factories.GameLibraryFactory(games=other_games)
 
     def test_anonymous_requests_are_rejected(self):
+        """Anonymous users shouldn't be able to view a library"""
         user = self.library.user
         library_url = reverse('api_game_library',
                               kwargs={'username': user.username})
@@ -68,6 +79,7 @@ class TestGameLibraryApi(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_can_get_library(self):
+        """Users should be logged in to access a library"""
         user = self.library.user
         self.client.login(username=user.username, password='password')
         library_url = reverse('api_game_library',
@@ -77,16 +89,58 @@ class TestGameLibraryApi(TestCase):
 
 
 class TestInstallerApi(TestCase):
+    """Test case of installer API views"""
     def setUp(self):
         self.slug = 'strider'
         self.game = factories.GameFactory(name=self.slug)
         factories.RunnerFactory(name="Linux", slug='linux')
         platform = factories.PlatformFactory()
         platform.default_installer = {"game": {"rom": "foo"}, "runner": "linux"}
-        platform.save()
+        platform.save()  # pylint: disable=no-member
         self.game.platforms.add(platform)
 
     def test_can_get_installer_list_for_a_game(self):
+        """The API can return a list of installers for a game"""
         self.assertTrue(self.game.platforms.count())
         response = self.client.get(reverse('api_game_installer_list', kwargs={'slug': self.slug}))
         self.assertEqual(response.status_code, 200)
+
+
+class TestGameProviderApi(TestCase):
+    """Test case for 3rd party game services integration"""
+
+    def setUp(self):
+        self.games = [
+            factories.GameFactory(
+                name='game_%d' % index,
+                slug='game-%d' % index,
+                gogid=str(1234 + index)
+            )
+
+            for index in range(10)
+        ]
+
+    def test_can_get_games_by_gogid(self):
+        """The game list API can be queried by GOG ID"""
+        gogids = {'gogid': ['1234', '1235', '1236']}
+        response = self.client.post(
+            reverse('api_game_list'),
+            data=json.dumps(gogids),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+
+        games = json.loads(response.content.decode())
+        self.assertEqual(len(games['results']), 3)
+
+    def test_can_receive_garbage_in_gogids(self):
+        """The view should not crash when passed invalid GOG IDs"""
+        gogids = {'gogid': ['blerp', 'djoozn', 'ferglerb']}
+        response = self.client.post(
+            reverse('api_game_list'),
+            data=json.dumps(gogids),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        games = json.loads(response.content.decode())
+        self.assertEqual(len(games['results']), 0)
