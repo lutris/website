@@ -1,4 +1,5 @@
 """Models for game providers"""
+# pylint: disable=too-few-public-methods
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
@@ -7,7 +8,7 @@ class Provider(models.Model):
     """An entity that provides games like a Store (GOG, Humble Bundle) or a
     database (TOSEC, MobyGames).
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     website = models.URLField()
 
     def __str__(self):
@@ -24,6 +25,10 @@ class ProviderGame(models.Model):
         on_delete=models.PROTECT,
     )
     metadata = JSONField(null=True)
+
+    class Meta:
+        """Model configuration"""
+        unique_together = [["slug", "provider"]]
 
     def __str__(self):
         return "[%s] %s" % (self.provider, self.name or self.slug)
