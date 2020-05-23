@@ -25,6 +25,7 @@ from emails import messages
 from games.util import steam, gog
 from platforms.models import Platform
 from runners.models import Runner
+from providers.models import ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_INSTALLER = {
@@ -57,7 +58,8 @@ class Company(models.Model):
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        self.slug = slugify(self.name)
+        if self.name:
+            self.slug = slugify(self.name)
         if not self.slug:
             raise ValueError("Tried to save Company without a slug: %s" % self)
         return super(Company, self).save(
@@ -217,6 +219,7 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
     popularity = models.IntegerField(default=0)
+    provider_games = models.ManyToManyField(ProviderGame, related_name="games")
 
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
