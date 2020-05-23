@@ -40,6 +40,9 @@ deploy_staging:
 deploy_prod:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
 
+remote_shell:
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb make shell
+
 client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
