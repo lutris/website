@@ -1,6 +1,6 @@
 """Models for game providers"""
 from django.db import models
-
+from django.contrib.postgres.fields import JSONField
 
 
 class Provider(models.Model):
@@ -22,6 +22,7 @@ class ProviderGame(models.Model):
         related_name="games",
         on_delete=models.PROTECT,
     )
+    metadata = JSONField(null=True)
 
     def __str__(self):
         return "[%s] %s" % (self.provider, self.name or self.slug)
