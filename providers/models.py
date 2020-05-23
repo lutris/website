@@ -13,6 +13,7 @@ class Provider(models.Model):
     def __str__(self):
         return self.name
 
+
 class ProviderGame(models.Model):
     """Games from providers, along with any provider specific data."""
     name = models.CharField(max_length=255, blank=True)
@@ -26,3 +27,8 @@ class ProviderGame(models.Model):
 
     def __str__(self):
         return "[%s] %s" % (self.provider, self.name or self.slug)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        """Autocomplete fields used in the Django admin"""
+        return ("name__icontains", "slug__icontains")

@@ -180,10 +180,12 @@ class GameAdmin(admin.ModelAdmin):
     list_editable = ('is_public', )
     search_fields = ('name', 'steamid')
 
-    raw_id_fields = ('publisher', 'developer', 'genres', 'platforms', 'change_for')
+    raw_id_fields = (
+        'publisher', 'developer', 'genres', 'platforms', 'change_for', 'provider_games'
+    )
     autocomplete_lookup_fields = {
         'fk': ['publisher', 'developer'],
-        'm2m': ['genres', 'platforms', 'change_for']
+        'm2m': ['genres', 'platforms', 'change_for', 'provider_games']
     }
     formfield_overrides = {
         BitField: {'widget': BitFieldCheckboxSelectMultiple}
