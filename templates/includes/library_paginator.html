@@ -12,11 +12,10 @@
           </a>
         {% endif %}
         Page
-        <input type="text" id="id_current_page" value="{{ page_obj.number }}"
-               onkeyup="changeLibraryPage(event);"
+        <input type="text" id="current_page" value="{{ page_obj.number }}"
                data-max-page={{ paginator.num_pages }}
                data-url="&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}"
-               style="max-width: 35px;max-height: 25px;"
+               style="max-width: 5em;max-height: 1.5em;"
                class="form-control bg-dark text-primary border-0 shadow-none text-center mx-2"
         >
         of {{ paginator.num_pages }}
