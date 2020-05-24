@@ -13,8 +13,7 @@
   <span style="float: right;font-size: initial;margin-right: 1em;">
       Order by
       <select id="order_by" style="color:black;"
-              data-filter="{{ filter_string }}"
-              onchange="changeLibraryOrderBy();">
+              data-filter="{{ filter_string }}">
         <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
         <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
         <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
@@ -35,8 +34,7 @@
       <span style="float: right;">
           Show
           <select id="paginate_by" style="color:black;"
-                  data-filter="{{ filter_string }}"
-                  onchange="changeLibraryPaginateCount();">
+                  data-filter="{{ filter_string }}">
             <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
             <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
             <option value="100" {% if paginate_by == '100' %} selected {% endif %}>100</option>
@@ -83,9 +81,9 @@
         </label>
         <div class="text-center">
           <input type="button" value="Apply filter" class="btn btn-sm btn-primary"
-                 onclick="applyLibraryFilter();">
+                 id="apply_library_filter">
           <input type="button" value="Clear filter" class="btn btn-sm btn-secondary"
-                 onclick="clearLibraryFilter();">
+                 id="clear_library_filter">
         </div>
       </form>
     </div>
