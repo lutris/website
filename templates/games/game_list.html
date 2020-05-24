@@ -1,37 +1,37 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load append_to_get %}
-{% block title %}Games - Lutris{% endblock %}
+{% block title %}Games | Lutris{% endblock %}
 {% block extra_head %}
+{{ filter_form.media.css }}
 {% endblock %}
 {% block content %}
 
 <!-- HEADER -->
-<div class="header-wrap">
-  <h1>Games <small>{{ paginator.count }} entries
-    {% if unpublished_match_count > 0 %}<b>({{unpublished_match_count}} unpublished)</b> {% endif %}</small>
-    <span style="float: right;font-size: initial;margin-right: 1em;">
-        Order by
-        <select id="order_by" style="color:black;"
-                data-filter="{{ filter_string }}"
-                onchange="changeLibraryOrderBy();">
-          <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
-          <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
-          <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
-          <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
-          <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity &uarr;</option>
-          <option value="-popularity" {% if order_by == '-popularity' %} selected {% endif %}>Popularity &darr;</option>
-          <option value="created" {% if order_by == 'created' %} selected {% endif %}>Created &uarr;</option>
-          <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Created &darr;</option>
-          <option value="updated" {% if order_by == 'updated' %} selected {% endif %}>Updated &uarr;</option>
-          <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Updated &darr;</option>
-        </select>
-    </span>
-  </h1>
-  {% if is_paginated %}
+<h1>Games <span class="text-muted" style="font-size: 0.6em;">{{ paginator.count }} entries
+  {% if unpublished_match_count > 0 %}<b>({{unpublished_match_count}} unpublished)</b> {% endif %}</span>
+  <span style="float: right;font-size: initial;margin-right: 1em;">
+      Order by
+      <select id="order_by" style="color:black;"
+              data-filter="{{ filter_string }}"
+              onchange="changeLibraryOrderBy();">
+        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
+        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
+        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
+        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
+        <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity &uarr;</option>
+        <option value="-popularity" {% if order_by == '-popularity' %} selected {% endif %}>Popularity &darr;</option>
+        <option value="created" {% if order_by == 'created' %} selected {% endif %}>Created &uarr;</option>
+        <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Created &darr;</option>
+        <option value="updated" {% if order_by == 'updated' %} selected {% endif %}>Updated &uarr;</option>
+        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Updated &darr;</option>
+      </select>
+  </span>
+</h1>
+{% if is_paginated %}
   <div class="row">
     <div class="col-md-12">
-      <span style="line-height: 33px;">Games {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}</span>
+      <span style="line-height: 33px;">Games {{ page_obj.start_index }} - {{ page_obj.end_index }}</span>
       <span style="float: right;">
           Show
           <select id="paginate_by" style="color:black;"
@@ -47,64 +47,50 @@
   </div>
   {% include 'includes/library_paginator.html' %}
 {% endif %}
-</div>
 
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-lg-10">
     {% if games %}
-    <ul class="game-list">
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
-    </ul>
     {% else %}
-      <div class="filter-failure-message">
-        <p class="filter-failure-icon">
-          <span class="glyphicon glyphicon-alert"></span>
-        </p>
-        <p>No games found that match these criteria.</p>
+      <div class="alert alert-info mx-auto d-table">
+        <i class="fas fa-question fa-lg mr-3"></i>
+        No games found that match these criteria.
         {% if not unpublished and unpublished_match_count > 0 %}
-          <p>
             However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished
-            {% if unpublished_match_count == 1 %}
-              game</a> does.
-            {% else %}
-              games</a> do.
-            {% endif %}
-          </p>
+            game{{ unpublished_match_count|pluralize:"s" }}</a> d{{ unpublished_match_count|pluralize:"oes,o" }}.
         {% else %}
-          <p>
-            Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.
-          </p>
+            Feel free to <a href="{% url 'game-submit' %}" class="btn btn-sm btn-primary">add the game</a> to our database.
         {% endif %}
       </div>
     {% endif %}
   </div>
-  <div class="col-sm-3">
+  <div class="col-lg-2">
     <div class="action-container">
       <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">Submit a new game</a>
     </div>
     <div class="panel panel-default no-border">
-      <div class="panel-body" style="background-color:#444;">
-        <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
-          {{ filter_form.as_p }}
-          <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
-            <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
-                {% if unpublished_filter %}checked{% endif %} />
-            Show unpublished
-          </label>
-          <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
-            <input type="checkbox" id="search-installers" name="search-installers"
-                {% if search_installers %}checked{% endif %} />
-            Search in installers
-          </label>
-          <input type="button" value="Apply filter" class="btn btn-default no-border"
+      <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
+        {{ filter_form.as_p }}
+        <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
+          <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
+              {% if unpublished_filter %}checked{% endif %} />
+          Show unpublished
+        </label>
+        <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
+          <input type="checkbox" id="search-installers" name="search-installers"
+              {% if search_installers %}checked{% endif %} />
+          Search in installers
+        </label>
+        <div class="text-center">
+          <input type="button" value="Apply filter" class="btn btn-sm btn-primary"
                  onclick="applyLibraryFilter();">
-          <input type="button" value="Clear filter" class="btn btn-default no-border"
-                 style="margin-left: 10px;"
+          <input type="button" value="Clear filter" class="btn btn-sm btn-secondary"
                  onclick="clearLibraryFilter();">
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -116,4 +102,5 @@
 
 {% block scripts %}
   {{ block.super }}
+  {{ filter_form.media.js }}
 {% endblock %}

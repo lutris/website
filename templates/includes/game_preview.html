@@ -1,62 +1,61 @@
 {% load thumbnail %}
 
-<li class="{% if game.has_installer %} with-installer{% endif %}">
-
-  <div class="game-image">
-    {% if not game.change_for %}
-      <a href="{{ game.get_absolute_url }}">
-        <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
-      </a>
-    {% else %}
-      <img src="{{ game.change_for.banner_url }}" alt="{{ game.change_for.name }}"/>
-    {% endif %}
-  </div>
-
-  <div class="game-info">
-
+<div class="row bg-darker p-2 mx-0 mb-2 rounded">
+  <div class="mr-2">
     <a href="{{ game.get_absolute_url }}"
-        title="{{ game.name }}"
-        class="game-title">{{ game.name }}</a>
-
-    {% if is_library %}
-      <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="right-button">
+           title="{{ game.name }}">
+      <img src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+    </a>
+  </div>
+  <div class="col px-0">
+    <h5>
+      <a href="{{ game.get_absolute_url }}"
+         title="{{ game.name }}"
+         class="text-primary font-weight-bold">
+        {{ game.name }}
+      </a>
+      {% if is_library %}
+      <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="float-right">
         <i class="fas fa-trash-alt"></i>
       </a>
     {% endif %}
+    </h5>
+    <div class="row mx-0">
+      {% if game.platforms.all %}
+      <div class="mb-1 mr-2">
+        Platforms:
+        {% for platform in game.platforms.all %}
+          <a href="{% url 'games_by_platform' platform=platform.pk %}" class="filter-link">{{ platform }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
 
-    <div class="game-meta">
-      <span>
-      Platforms:
-      {% for platform in game.platforms.all %}
-        <a href="{% url 'games_by_platform' platform=platform.pk %}" class="filter-link">{{ platform }}</a>
-      {% endfor %}
-      </span>
+      {% if game.genres.all %}
+      <div class="mb-1 mr-2">
+        Genre:
+        {% for genre in game.genres.all %}
+          <a href="{% url 'games_by_genre' genre=genre.pk %}" class="filter-link">{{ genre }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       {% if game.developer %}
-        <span>
+      <div class="mb-1 mr-2">
         Developed by <a href="{% url 'games_by_company' company=game.developer.pk %}" class="filter-link">{{ game.developer }}</a>
-        </span>
+      </div>
       {% endif %}
 
       {% if game.publisher %}
-      <span>
+      <div class="mb-1 mr-2">
         Published by <a href="{% url 'games_by_company' company=game.publisher.pk %}" class="filter-link">{{ game.publisher }}</a>
-      </span>
+      </div>
       {% endif %}
-      <br>
-      <span>
-      Genre:
-      {% for genre in game.genres.all %}
-        <a href="{% url 'games_by_genre' genre=genre.pk %}" class="filter-link">{{ genre }}</a>
-      {% endfor %}
-      </span>
 
       {% if game.year %}
-        <span>
-          Released in <a href="{% url 'games_by_year' year=game.year %}" class="filter-link">{{ game.year }}</a>
-        </span>
+      <div class="mb-1 mr-2">
+      Released in <a href="{% url 'games_by_year' year=game.year %}" class="filter-link">{{ game.year }}</a>
+      </div>
       {% endif %}
-      <br>
     </div>
   </div>
-
-</li>
+</div>

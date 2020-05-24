@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}My Library - Lutris{% endblock %}
+{% block title %}My Library | Lutris{% endblock %}
 {% block extra_head %}
 {{ filter_form.media.css }}
 {% endblock %}
 {% block content %}
 
 <!-- HEADER -->
-<h1>My Library <small>{{ paginator.count }} games</small>
+<h1>My Library <span class="text-muted" style="font-size: 0.6em;">{{ paginator.count }} games</span>
   <span style="float: right;font-size: initial;margin-right: 1em;">
       Order by
       <select id="order_by" style="color:black;"
@@ -28,7 +28,7 @@
 {% if is_paginated %}
   <div class="row">
     <div class="col-md-12">
-      <span style="line-height: 33px;">Games {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}</span>
+      <span style="line-height: 33px;">Games {{ page_obj.start_index }} - {{ page_obj.end_index }}</span>
       <span style="float: right;">
           Show
           <select id="paginate_by" style="color:black;"
@@ -46,25 +46,22 @@
 {% endif %}
 
 <div class="row">
-  <div class="col-sm-9">
-    <ul class="game-list user-library">
+  <div class="col-lg-10">
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
-    </ul>
   </div>
-  <div class="col-sm-3">
-    <div class="panel panel-default no-border">
-      <div class="panel-body" style="background-color:#444;">
-        <form action="{% url 'library_show' username=user.username %}" method="get" id="library_filter_form">
-          {{ filter_form.as_p }}
-          <input type="button" value="Apply filter" class="btn btn-default no-border"
+  <div class="col-lg-2">
+    <div class="">
+      <form action="{% url 'library_show' username=user.username %}" method="get" id="library_filter_form">
+        {{ filter_form.as_p }}
+        <div class="text-center">
+          <input type="button" value="Apply filter" class="btn btn-sm btn-primary"
                  onclick="applyLibraryFilter();">
-          <input type="button" value="Clear filter" class="btn btn-default no-border"
-                 style="margin-left: 10px;"
+          <input type="button" value="Clear filter" class="btn btn-sm btn-secondary"
                  onclick="clearLibraryFilter();">
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
