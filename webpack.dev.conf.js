@@ -1,6 +1,5 @@
 'use strict'
 const webpack = require("webpack");
-// const jquery = require('jquery');
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -8,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: [
-            // "jquery",
             "./frontend/js/app.js",
             "./frontend/css/lutris.scss",
         ],
@@ -22,6 +20,17 @@ module.exports = {
     mode: "development",
     module: {
         rules: [
+            // expose jQuery to other scripts
+            {
+                test: require.resolve('jquery'),
+                use: [{
+                    loader: 'expose-loader',
+                    options: 'jQuery'
+                },{
+                    loader: 'expose-loader',
+                    options: '$'
+                }]
+            },
             {
                 test: /\.(jpg|png|svg|bmp|gif)$/,
                 use: {
