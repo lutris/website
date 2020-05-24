@@ -83,28 +83,6 @@ article {
   padding: 12px;
 }
 
-.header-wrap {
-  position: relative;
-
-  .header-control {
-    position: absolute;
-    right: 7px; /* 15px padding like h1 on the left - 8px padding of a to span */
-    bottom: 2px;
-
-    @include media-breakpoint-up(sm) {
-      display: none;
-    }
-
-    a {
-      background: none;
-      border: none;
-      margin: 0;
-      padding: 4px 8px;
-      color: theme-color('lighter');
-    }
-  }
-}
-
 h1, h2, h3, h4, h5 {
   font-weight: normal;
 }
@@ -146,15 +124,15 @@ h3 {
   border-bottom: 1px solid #4D4D4D;
 }
 
-a {
-  color: theme-color('primary');
-  text-decoration: none !important;
-
-  &:hover {
-    color: darken(theme-color('primary'), 15%);
-    text-decoration: underline;
-  }
-}
+//a {
+//  color: theme-color('primary');
+//  text-decoration: none !important;
+//
+//  &:hover {
+//    color: darken(theme-color('primary'), 15%);
+//    text-decoration: underline;
+//  }
+//}
 
 code {
   color: theme-color('lighter');
@@ -231,85 +209,73 @@ input {
   color: #333;
 }
 
-.simple-form {
-  label {
-    font-weight: normal;
-    display: block;
+//.container {
+//  padding-left: 0;
+//  padding-right: 0;
+//  flex: 1;
+//  @include media-breakpoint-between(sm, md) {
+//    width: 100%;
+//  }
+//}
+
+header {
+  border-bottom: 1px solid theme-color('primary');
+  box-shadow: 0 0 5px #000;
+  margin-bottom: 0;
+
+  .logo {
+    font-weight: 300;
+    font-size: 24px;
+    color: theme-color('primary');
+    text-decoration: none;
+
+    img {
+      padding: 6px;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  button {
+    background: none;
+    border: none;
+    margin-right: 5px;
+    margin-bottom: 0;
     color: theme-color('lighter');
-    font-size: .9em;
   }
 
-  input[type=text],input[type=password],input[type=email] {
-    border-radius: 4px;
-    padding: 4px;
-    width: 100%;
-    display: block;
-    border: 1px solid #444;
-  }
-}
+  .account-action {
+    float: right;
 
-.container {
-  padding-left: 0;
-  padding-right: 0;
-  flex: 1;
-  @include media-breakpoint-between(sm, md) {
-    width: 100%;
+    a {
+      line-height: 50px;
+      margin-right: 12px;
+    }
+  }
+
+  .account-info {
+    float: right;
+
+    img {
+      border-radius: 32px;
+      width: 50px;
+      height: 50px;
+      padding: 6px;
+    }
+  }
+
+  .dropdown-item {
+    color: theme-color('lighter');
+
+    &:hover {
+      background-color: theme-color('darker');
+      color: theme-color('primary');
+    }
   }
 }
 
 footer {
   border-top: 1px solid theme-color('primary');
-}
-
-.pagination-block-wrapper {
-  margin-top: 20px;
-
-  .meta-information {
-    position: absolute;
-    color: theme-color('lighter');
-    font-size: 12px;
-    left: 15px;
-  }
-
-  .pagination-block {
-    display: table;
-    margin: 0 auto;
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      background-color: theme-color('darker');
-      border-radius: 4px;
-      font-size: 14px;
-
-      li {
-        position: relative;
-        float: left;
-      }
-
-      li a,
-      li span {
-        display: inline-block;
-        color: #AEAEAE;
-        margin: 0;
-        padding: 10px 12px;
-      }
-
-      li span.glyphicon {
-        padding: 0;
-        font-size: 11px;
-      }
-
-      li a:hover span,
-      li a:focus span,
-      li a:hover,
-      li a:focus {
-        text-decoration: none;
-        color: #fff;
-      }
-    }
-  }
 }
 
 .discreet-text {
@@ -390,50 +356,6 @@ footer {
 
 /* == Page Layout */
 .navbar {
-  border-bottom: 1px solid theme-color('primary');
-  box-shadow: 0 0 5px #000;
-  margin-bottom: 0;
-
-  .logo {
-    font-weight: 300;
-    font-size: 24px;
-    color: theme-color('primary');
-    text-decoration: none;
-
-    img {
-      padding: 6px;
-      width: 50px;
-      height: 50px;
-    }
-  }
-
-  .navbar-header > button {
-    background: none;
-    border: none;
-    margin-right: 5px;
-    margin-bottom: 0;
-    color: theme-color('lighter');
-  }
-
-  .account-action {
-    float: right;
-
-    a {
-      line-height: 50px;
-      margin-right: 12px;
-    }
-  }
-
-  .account-info {
-    float: right;
-
-    img {
-      border-radius: 32px;
-      width: 50px;
-      height: 50px;
-      padding: 6px;
-    }
-  }
 
   .nav > li > a {
     text-transform: uppercase;
@@ -458,30 +380,23 @@ footer {
   }
 }
 
-#main-nav {
-  margin-left: 40px;
-  @include media-breakpoint-down(lg) {
-    margin-left: 12px;
-  }
-}
 
-
-.dropdown-menu {
-  background-color: #555;
-  border: 0;
-  border-radius: 0 2px 2px;
-  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5);
-  margin-top: -1px;
-
-  li a {
-    color: #ccc;
-
-    &:hover {
-      background-color: #666;
-      color: #ddd;
-    }
-  }
-}
+//.dropdown-menu {
+//  background-color: #555;
+//  border: 0;
+//  border-radius: 0 2px 2px;
+//  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5);
+//  margin-top: -1px;
+//
+//  li a {
+//    color: #ccc;
+//
+//    &:hover {
+//      background-color: #666;
+//      color: #ddd;
+//    }
+//  }
+//}
 
 .form-actions {
   border-top: none;
@@ -811,6 +726,10 @@ input.select2-lookalike[type="text"] {
   text-align: center;
   list-style-type: none;
   padding-left: 0;
+  position: absolute;
+  right: 20px;
+  top: 90px;
+  z-index: 9999;
 
   li {
     border-radius: 0;
@@ -897,37 +816,6 @@ input.select2-lookalike[type="text"] {
   }
 }
 
-.big-button {
-  color: #FFFFFF;
-  background-color: #fc6500;
-  display: block;
-  padding: 15px;
-  margin: 20px 10px;
-  font-size: 1.2em;
-  text-align: center;
-  width: 160px;
-  border: 2px solid #C85000;
-  text-decoration: none;
-  -moz-border-radius: 15px;
-}
-
-.game-list-header {
-  background-color: theme-color('darker');
-  color: #777;
-  font-size: .8em;
-  padding: 6px;
-  border-bottom: 2px solid theme-color('primary');
-
-  h2 {
-    display: inline;
-  }
-
-  span {
-    display: inline-block;
-    padding-left: 100px;
-  }
-}
-
 .game-list {
   list-style-type: none;
 
@@ -971,18 +859,6 @@ input.select2-lookalike[type="text"] {
     color: theme-color('primary');
     font-size: 1.2em;
     font-weight: bold;
-  }
-}
-
-.game-filter {
-  float: right;
-  margin-bottom: 20px;
-
-  input {
-    background-color: #444;
-    color: #CCC;
-    border: 1px solid #666;
-    padding: 0 4px;
   }
 }
 
@@ -1076,24 +952,6 @@ input.select2-lookalike[type="text"] {
   p {
     margin-top: 15px;
     color: #ACACAC;
-  }
-}
-
-.main-button {
-  padding: 7px 14px;
-  margin-right: 14px;
-  color: #111;
-  background-color: theme-color('primary');
-  text-align: center;
-  font-size: .95em;
-  font-weight: 500;
-  border-radius: 5px;
-  display: inline-flex;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.5);
-
-  &:hover {
-    color: theme-color('darker');
-    text-decoration: none;
   }
 }
 
