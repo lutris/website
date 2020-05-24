@@ -2,6 +2,8 @@
 # pylint: disable=W0232, R0903
 import logging
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Div
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.authtoken.models import Token
@@ -53,8 +55,18 @@ class RegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(
-            ["username", "email", "password1", "password2"], "register", "Register"
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'register'
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'username', 'email', 'password1', 'password2',
+            Div(
+                Submit('register', 'Register', css_class='btn btn-primary'),
+                css_class="text-center"
+            )
         )
 
     def clean_username(self):
@@ -92,8 +104,19 @@ class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(
-            ["username", "password"], "signin", "Sign in"
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'login'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            Div(
+                Submit('signin', 'Sign in', css_class='btn btn-primary'),
+                css_class="text-center"
+            )
         )
 
 

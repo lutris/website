@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
-
-{% block title %}Login - Lutris{% endblock %}
+{% block title %}Login | Lutris{% endblock %}
 
 
 {% block content %}
-<div class="row">
-  <div class="col-sm-3"></div>
-  <div class="form-view col-sm-6">
-    <h1>Sign in</h1>
+<div class="card bg-darker d-table mx-auto">
+  <div class="card-header">
+    <h4>Sign In</h4>
+  </div>
+  <div class="card-body">
     {% crispy form %}
+  </div>
+  <div class="card-footer">
     <a href="{% url 'password_reset' %}">Forgot your password?</a>
   </div>
-  <div class="col-sm-3"></div>
 </div>
 {% endblock %}

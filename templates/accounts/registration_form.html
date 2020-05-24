@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
-
 {% block title %}Register - Lutris{% endblock %}
 
 
 {% block content %}
-<div class="row">
-  <div class="col-sm-3"></div>
-  <div class="col-sm-6 form-view">
-    <h1>Register account</h4>
+<div class="card bg-darker d-table mx-auto">
+  <div class="card-header">
+    <h4>Register Account</h4>
+  </div>
+  <div class="card-body">
     {% crispy form %}
   </div>
-  <div class="col-sm-3"></div>
 </div>
 {% endblock %}
