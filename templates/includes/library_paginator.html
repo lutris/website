@@ -1,11 +1,13 @@
 <div class="row">
     <div class="col text-center">
-      <nav aria-label="Library navigation" style="margin-bottom: 1em;">
+      <nav aria-label="Library navigation" class="mb-3 py-2 px-3 bg-darker rounded d-inline-flex mx-auto">
         {% if page_obj.has_previous %}
-          <a title="First Page" href="?page=1&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+          <a title="First Page" class=""
+             href="?page=1&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
             <i class="fas fa-angle-double-left fa-lg"></i>
           </a>
-          <a title="Previous Page" href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+          <a title="Previous Page" class="mx-2"
+             href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
             <i class="fas fa-angle-left fa-lg"></i>
           </a>
         {% endif %}
@@ -14,13 +16,17 @@
                onkeyup="changeLibraryPage(event);"
                data-max-page={{ paginator.num_pages }}
                data-url="&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}"
-               style="max-width: 35px;border: grey 1px solid;background: transparent;color: white;">
+               style="max-width: 35px;max-height: 25px;"
+               class="form-control bg-dark text-primary border-0 shadow-none text-center mx-2"
+        >
         of {{ paginator.num_pages }}
         {% if page_obj.has_next %}
-          <a title="Next Page" href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+          <a title="Next Page" class="mx-2"
+             href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
             <i class="fas fa-angle-right fa-lg"></i>
           </a>
-          <a title="Last Page" href="?page={{ paginator.num_pages }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+          <a title="Last Page" class=""
+             href="?page={{ paginator.num_pages }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
             <i class="fas fa-angle-double-right fa-lg"></i>
           </a>
         {% endif %}
