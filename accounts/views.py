@@ -146,7 +146,7 @@ def user_email_confirm(request):
 
 @login_required
 def profile_edit(request, username):
-    """Change profile imformation"""
+    """Change profile information"""
     user = get_object_or_404(User, username=username)
     if user != request.user:
         raise Http404
@@ -159,7 +159,9 @@ def profile_edit(request, username):
             'Your account info has been updated.'
         )
         return redirect(reverse('user_account', args=(username, )))
-    return render(request, 'accounts/profile_edit.html', {'form': form})
+    return render(request,
+                  'accounts/partials/forms/profile_edit_form.html',
+                  {'form': form, 'form_action': reverse('profile_edit', args=[username])})
 
 
 @login_required

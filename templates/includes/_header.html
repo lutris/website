@@ -1,5 +1,6 @@
 {% load static from staticfiles %}
-<nav class="navbar navbar-expand-lg bg-darker sticky-top">
+<header class="sticky-top bg-darker">
+<nav class="navbar navbar-expand-lg">
   <a class="logo navbar-brand" href="/">
     <img src="{% static 'images/logo.png' %}" alt="Lutris" />
     <span>Lutris</span>
@@ -16,8 +17,8 @@
   </button>
 
   <div id="navbar" class="navbar-collapse collapse">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="main-nav">
-      <li class="nav-item"><a class="main-nav-button nav-link" href="{% url 'downloads' %}">Download</a></li>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="main-nav" style="font-size: 1.5em;">
+      <li class="nav-item"><a class="nav-link" href="{% url 'downloads' %}">Download</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'donate' %}">Support us!</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
@@ -33,11 +34,17 @@
       </div>
     </form>
     {% if user.is_authenticated %}
-      <div class="account-info">
-        <a href="{% url 'user_account' user.username %}">
-          <img src="{{user.avatar_url}}" title="{{user.username}}"/>
-        </a>
+    <div class="dropdown">
+      <button class="account-info" type="button" id="dropdownMenuButton"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img src="{{user.avatar_url}}" title="{{user.username}}" height="64px"/>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a>
+        <a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
       </div>
+    </div>
     {% else %}
       <div class="account-action">
         <a href="{% url 'login' %}" data-toggle="tooltip" data-placement="bottom" title="Log in"><i class="fas fa-sign-in-alt fa-lg"></i></a>
@@ -46,3 +53,4 @@
     {% endif %}
   </div>
 </nav>
+</header>

@@ -154,4 +154,15 @@ $(window).on('load', function () {
         window.location.href = '?page=' + target_page + url
     }
   })
+
+  $('#editProfileModal').on('show.bs.modal', function (event) {
+  let $modal = $(this);
+  let url = $(event.relatedTarget).data('url');
+  $.ajax({
+    url: url,
+    success: function (result) {
+      $modal.find('.modal-body').html(result);
+    }
+  })
+})
 })
