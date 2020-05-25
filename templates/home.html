@@ -79,7 +79,7 @@
   <div class="row mt-2">
     <div class="col-md-12">
       <h3>New games</h3>
-      <div class='latest-games'>
+      <div class='latest-games bg-darker rounded border border-primary'>
       {% for game in new_games %}
         {% include 'games/_mini_game_preview.html' %}
       {% endfor %}
@@ -89,7 +89,7 @@
   <div class="row mt-2">
     <div class="col-md-12">
       <h3>Updates</h3>
-      <div class='latest-games'>
+      <div class='latest-games bg-darker rounded border border-primary'>
       {% for game in updated_games %}
         {% include 'games/_mini_game_preview.html' %}
       {% endfor %}
