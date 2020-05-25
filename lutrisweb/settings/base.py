@@ -68,7 +68,7 @@ FILES_ROOT = media_directory('files')
 FILES_URL = 'http://%s/media/files/' % DOMAIN_NAME
 
 TOSEC_PATH = media_directory('tosec')
-TOSEC_DAT_PATH = os.path.join(TOSEC_PATH)
+TOSEC_DAT_PATH = TOSEC_PATH
 
 GOG_LOGO_PATH = os.path.join(BASE_DIR, 'gog-logos')
 GOG_LUTRIS_LOGO_PATH = os.path.join(BASE_DIR, 'gog-lutris-logos')

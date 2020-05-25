@@ -148,7 +148,7 @@ class GameForm(forms.ModelForm):
         else:
             if game.is_public:
                 msg = (
-                    "This game is <a href='/games/%s'>already in our " "database</a>."
+                    "This game is <a href='/games/%s'>already in our database</a>."
                 ) % slug
             else:
                 msg = (
@@ -257,7 +257,7 @@ class ScreenshotForm(forms.ModelForm):
 
     def save(self, commit=True):
         self.instance.game = self.game
-        return super(ScreenshotForm, self).save(commit=commit)
+        return super().save(commit=commit)
 
 
 class InstallerForm(forms.ModelForm):
