@@ -137,7 +137,7 @@ def get_crop_size(image_size, target_ratio):
     return (target_width, target_height)
 
 
-def crop_banner(img_path, dest_path):
+def crop_banner(img_path, dest_path, banner_size=(184, 69)):
     """Crop an image to fit the banner ratio
 
     Args:
@@ -149,7 +149,7 @@ def crop_banner(img_path, dest_path):
     # Get current and desired ratio for the images
     img_width = image.size[0]
     img_height = image.size[1]
-    target_ratio = 184 / 69.0
+    target_ratio = float(banner_size[0]) / float(banner_size[1])
     target_width, target_height = get_crop_size(image.size, target_ratio)
 
     img_ratio = img_width / float(img_height)
@@ -159,4 +159,5 @@ def crop_banner(img_path, dest_path):
         box = ((img_width - target_width) / 2, 0, (img_width + target_width) / 2, img_height)
 
     image = image.crop(box)
-    image.save(dest_path)
+    image.mode = "RGB"
+    image.save(dest_path, "JPEG")
