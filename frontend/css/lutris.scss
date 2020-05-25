@@ -13,3 +13,13 @@
   @extend .shadow-lg;
   box-shadow: 0 1rem 3rem !important;
 }
+
+a {
+  color: theme-color('primary');
+  text-decoration: none !important;
+
+  &:hover {
+    color: darken(theme-color('primary'), 15%);
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,12 @@
+{% load thumbnail %}
+
+<div class='game-banner m-2'>
+  <a href="{{ game.get_absolute_url }}" title="{{game.name}}">
+    {% thumbnail game.title_logo '184x69' crop="center" as img %}
+      <img class='game-cover' src='{{ img.url }}' alt='No image'/>
+    {% empty %}
+      <span class='game-cover'>no image</span>
+    {% endthumbnail %}
+    <span class='game-title'>{{game.name}}</span>
+  </a>
+</div>

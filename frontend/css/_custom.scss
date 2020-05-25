@@ -61,16 +61,18 @@ body {
   min-height: 100vh;
 }
 
-article {
-  color: #ccc;
-  font-weight: 400;
-  padding: 14px 15px;
-  max-width: 720px;
-  margin: auto;
-  @include media-breakpoint-up(lg) {
-    font-size: 1.2em;
-  }
-}
+
+
+//article {
+//  color: #ccc;
+//  font-weight: 400;
+//  padding: 14px 15px;
+//  max-width: 720px;
+//  margin: auto;
+//  @include media-breakpoint-up(lg) {
+//    font-size: 1.2em;
+//  }
+//}
 
 #global-search {
   @include media-breakpoint-up(lg) {
@@ -78,65 +80,9 @@ article {
   }
 }
 
-.page {
-  background-color: theme-color('dark');
-  padding: 12px;
-}
-
-h1, h2, h3, h4, h5 {
-  font-weight: normal;
-}
-
-.page h1 {
-  font-weight: 300;
-  padding: 3px;
-  font-size: 1.6em;
-  margin-top: 10px;
-
-  @include media-breakpoint-up(sm){
-    font-size: 2em;
-    margin-top: 20px;
-  }
-}
-
-.page h2 {
-  font-size: 1.4em;
-}
-
-h3 {
-  font-weight: 600;
-  font-size: 14px;
-  color: #3F3F3F;
-  padding: 0 1em;
-}
-
-.page h3 {
-  color: #BBB;
-  font-size: 1.2em;
-  background-color: #444;
-  padding: 7px 14px;
-  font-weight: 300;
-}
-
-.page h4 {
-  font-size: 1.1em;
-  color: #CDCDCD;
-  border-bottom: 1px solid #4D4D4D;
-}
-
-//a {
-//  color: theme-color('primary');
-//  text-decoration: none !important;
-//
-//  &:hover {
-//    color: darken(theme-color('primary'), 15%);
-//    text-decoration: underline;
-//  }
-//}
-
 code {
-  color: theme-color('lighter');
-  background-color: theme-color('darker');
+  color: theme-color('primary') !important;
+  background-color: theme-color('darker') !important;
   display: inline-block;
   border-radius: 2px;
   margin: 2px;
@@ -222,6 +168,13 @@ header {
   border-bottom: 1px solid theme-color('primary');
   box-shadow: 0 0 5px #000;
   margin-bottom: 0;
+
+  a {
+    color: theme-color('lighter');
+    &:hover {
+      color: theme-color('primary');
+    }
+  }
 
   .logo {
     font-weight: 300;
@@ -379,24 +332,6 @@ footer {
     }
   }
 }
-
-
-//.dropdown-menu {
-//  background-color: #555;
-//  border: 0;
-//  border-radius: 0 2px 2px;
-//  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5);
-//  margin-top: -1px;
-//
-//  li a {
-//    color: #ccc;
-//
-//    &:hover {
-//      background-color: #666;
-//      color: #ddd;
-//    }
-//  }
-//}
 
 .form-actions {
   border-top: none;
@@ -886,7 +821,7 @@ input.select2-lookalike[type="text"] {
   flex-wrap: wrap;
 
   .game-banner {
-    margin: auto;
+    margin: auto !important;
     padding: 9px;
   }
 }
@@ -936,7 +871,7 @@ input.select2-lookalike[type="text"] {
   }
 
   .game-title {
-    font-size: 11px;
+    font-size: 1.25em;
     text-align: center;
     color: #E5E5E5;
     width: 184px;
@@ -1290,3 +1225,20 @@ input.select2-lookalike[type="text"] {
   font-size: xx-large;
 }
 
+ol.toc a{
+  color: white;
+  text-decoration: none;
+
+  &:hover {
+    color: theme-color('primary');
+    text-decoration: none !important;
+  }
+}
+
+// Fix for anchor links
+:target:before {
+content:"";
+display:block;
+height:77px; /* fixed header height*/
+margin:-77px 0 0; /* negative fixed header height */
+}

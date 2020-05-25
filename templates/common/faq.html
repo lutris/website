@@ -2,220 +2,222 @@
 {% block title %}Lutris F.A.Q.{% endblock title %}
 
 {% block content %}
-<h1>Frequently asked questions</h1>
+<h1 class="text-center pb-3">Frequently asked questions</h1>
 
-<div class='row'>
-  <div class="col-md-12">
-    <article>
-      <h2>General</h2>
-      <a class="title" href="#sell-games">
-        <h3 id='sell-games'>Does Lutris sell games?</h3>
-      </a>
-      <p>
-        No, we don't sell commercial games on the platform, Lutris allows you
-        to install and play games purchased on a variety of different game stores such as
-        Steam, Humble Bundle, GOG, Battle.net etc.
-      </p>
+<h2 class="">Contents</h2>
+<ol class="toc">
+  <li>General
+    <ol>
+      <li><a href="#sell-games">Does Lutris sell games?</a></li>
+      <li><a href="#community">How do I get in touch with the Lutris community?</a></li>
+      <li><a href="#gnome">Is the Gnome desktop a dependency of Lutris?</a></li>
+      <li><a href="#ssl-issue">Runners and other Lutris provided files fail to download</a></li>
+      <li><a href="#game-dev">I'm a game developer, can I publish my game on Lutris?</a></li>
+      <li><a href="#runtime">What is the Lutris runtime?</a></li>
+      <li><a href="#game-crash">Game [x] crashes, what should I do?</a></li>
+      <li><a href="#url-handler">Clicking "Install" on the website's games doesn't do anything.</a></li>
+    </ol>
+  </li>
+  <li>Runners
+    <ol>
+      <li><a href="#runner">What is a "Runner"?</a></li>
+    </ol>
+  </li>
+  <li>Wine games
+    <ol>
+      <li><a href="#wine-systemwide">Wine is broken / I have dependency issues.</a></li>
+      <li><a href="#wine-patches">Some game requires a custom patch to work properly.</a></li>
+      <li><a href="#wine-versions">How do I change the Wine version used in a game?</a></li>
+      <li><a href="#wine-res">The resolution is messed up how can I fix that?</a></li>
+      <li><a href="#winemenubuilder">I get winemenubuilder.exe errors in the console output</a></li>
+      <li><a href="#overwatch">I'm just here for Overwatch, don't care about anything else</a></li>
+    </ol>
+  </li>
+</ol>
 
-      <a class="title" href="#community">
-        <h3 id="community">How do I get in touch with the Lutris community?</h3>
-      </a>
-      <p>
-        If you want to ask questions about Lutris or just hang out with other
-        Lutris users, you can join the
-        <a href="{{ DISCORD_URL }}">#lutris channel on the Linux_Gamers_Group Discord</a>
-        or our IRC channel
-        <a href="irc://irc.freenode.org:6667/lutris">#lutris on freenode.org</a>.
-        You can also use the <a href="https://forums.lutris.net/">forums</a> to ask questions.
-        Please do not privately contact Lutris developers for tech support, do
-        not report issues by email or by private message. Bug reports have to
-        stay visible to the community.
-      </p>
 
-      <a class="title" href="#gnome">
-        <h3 id="gnome">Is the Gnome desktop a dependency of Lutris?</h3>
-      </a>
-      <p>
-        No, not at all. The confusion comes from a library we ship
-        unfortunately named gnome-desktop, which is not the whole Gnome desktop
-        but a collection of utilities that are frequently used within the Gnome
-        desktop. This library is used by the Lutris client to support
-        resolution switching on Wayland.  This library itself is small and has
-        few dependencies.<br/>
-        You can install and use Lutris on any desktop environment. Installing
-        the client won't install other Gnome components.
-      </p>
+<h3 class="text-primary">General</h3>
+<hr class="border-primary"/>
+<h4 id='sell-games' class="text-primary">Does Lutris sell games?</h4>
+<p>
+  No, we don't sell commercial games on the platform, Lutris allows you
+  to install and play games purchased on a variety of different game stores such as
+  Steam, Humble Bundle, GOG, Battle.net etc.
+</p>
 
-      <a class="title" href="#ssl-issue">
-        <h3 id="ssl-issue">Runners and other lutris provided files fail to download</h3>
-      </a>
-      <p>
-        There seems to be some issues with CloudFlare and some ISPs (notably in
-        Turkey) when using older versions of libssl.<br>
-        <br>
-        A quick workaround so is to run lutris with <code>env LC_ALL=C
-          lutris</code> but a more reliable solution is to update your version of libssl.
-        The following repositories provide libssl 1.1.1.<br>
-        On Ubuntu 18.04 based systems:<br>
-        <code>sudo add-apt-repository ppa:mgrocock/openssl</code><br>
-        On Ubuntu 16.04 based systems:<br>
-        <code>sudo add-apt-repository ppa:carsten-uppenbrink-net/openssl</code>
-      </p>
+<h4 id="community" class="text-primary">How do I get in touch with the Lutris community?</h4>
+<p>
+  If you want to ask questions about Lutris or just hang out with other Lutris users, you can join the
+  <a href="{{ DISCORD_URL }}">#lutris channel on the Linux_Gamers_Group Discord</a> or our IRC channel
+  <a href="irc://irc.freenode.org:6667/lutris">#lutris on freenode.org</a>.
+  You can also use the <a href="https://forums.lutris.net/">forums</a> to ask questions.
+  Please do not privately contact Lutris developers for tech support, do not report issues by email or by
+  private message. Bug reports have to stay visible to the community.
+</p>
 
-      <a class="title" href="#game-dev">
-        <h3 id="game-dev">I'm a game developer, can I publish my game on Lutris?</h3>
-      </a>
-      <p>
-        You can create a page for your game and submit an installer for it but
-        as of now there aren't any special features for game developers. We do
-        have some plans to add a game developer role to the website, you can
-        follow its development <a href='https://github.com/lutris/website/issues/83'>on Github</a>.
-      </p>
-      <a class="title" href="#runtime">
-        <h3 id="runtime">What is the Lutris runtime?</h3>
-      </a>
-      <p>
-        The Lutris runtime is a collection of libraries we automatically
-        provide to ensure compatibility with all games and runners over all
-        Linux distributions. The runtime itself is composed of parts of the
-        <a href="https://github.com/ValveSoftware/steam-runtime">Steam runtime</a>,
-        some Ubuntu 16.04 libraries and a few extra libraries
-        from various places.
-      </p>
-        <p>
-          Of course, ensuring binary compatibility over all existing Linux
-          distributions is not an easy task and sometimes issues will arise. If
-          such a thing happens, try disabling the runtime in the system options of
-          your game. For more details on the runtime, see the <a href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">wiki</a>.
-        </p>
-      <a class="title" href="#game-crash">
-        <h3 id="game-crash">Game [x] crashes, what should I do?</h3>
-      </a>
-      <p>
-        First run Lutris from a command line to see potential errors from the game.
-        If you see errors related to Linux libraries, try running the game with
-        the <a href='#runtime'>runtime</a> disabled. If disabling the
-        runtime fixes the issue, please, notify the developers, we don't want
-        to ship a broken runtime and your input can help in fixing it.
-      </p>
-        <p>
-          If your game still doesn't launch try collecting as much info about
-          your setup (name of the game, your graphics drivers, Linux distribution,
-          hardware setup, desktop environment, etc.) and explain your issue to the
-          <a href="#community">community</a>.
-        </p>
-          <p>
-            If you want to troubleshoot the issue yourself, there are some good
-            resources you can look into. Start by looking up the game on
-            <a href="https://pcgamingwiki.com">PCGamingWiki</a>. You might run
-            into a known problem and they might have a workaround.
-          </p>
-            <p>
-               If you are trying to run a Windows game, also check out
-              <a href="https://appdb.winehq.org/">WineHQ's AppDB</a> or look for
-              issues other Windows users are running into, in the Steam forums for
-              example.
-            </p>
-      <a class="title" href="#url-handler">
-        <h3 id="url-handler">Clicking "Install" on the website's games doesn't do anything.</h3>
-      </a>
-      <p>
-        Some distributions do not configure URL handlers
-        correctly, this is not an issue with Lutris, the same thing will happen
-        with, for example, the Steam client.
-      </p>
-        <p>
-          To fix this issue, you can set <code>network.protocol-handler.expose-all</code> to
-          <strong>False</strong> in Firefox's about:config. With that flag disabled, you will now
-          see a pop-up when clicking "Install", prompting you to choose a program
-          to open the URL with. It is recommended you use <code>/usr/bin/xdg-open</code> to
-          handle lutris: <br> (or steam:) urls.
-        </p>
-    </article>
+<h4 id="gnome" class="text-primary">Is the Gnome desktop a dependency of Lutris?</h4>
+<p>
+  No, not at all. The confusion comes from a library we ship
+  unfortunately named gnome-desktop, which is not the whole Gnome desktop
+  but a collection of utilities that are frequently used within the Gnome
+  desktop. This library is used by the Lutris client to support
+  resolution switching on Wayland.  This library itself is small and has
+  few dependencies.<br/>
+  You can install and use Lutris on any desktop environment. Installing
+  the client won't install other Gnome components.
+</p>
 
-    <article>
-      <h2>Runners</h2>
-      <a class="title" href="#runner">
-        <h3 id="runner">What is a "Runner"?</h3>
-      </a>
-      <p>
-        A "runner" is the term we use to refer to programs that can run games,
-        it can be Linux itself, Wine, DOSBox, MAME, gzdoom, …
-        Runners are recognized as such in Lutris itself, not all programs that
-        run games are considered runners. For example Darkplaces, the open
-        source engine for Quake, is not a runner but gzdoom is. Usually,
-        programs become runners if they can run a variety of games, not just
-        one or two.
-      </p>
-    </article>
+<h4 id="ssl-issue" class="text-primary">Runners and other Lutris provided files fail to download</h4>
+<p>
+  There seems to be some issues with CloudFlare and some ISPs (notably in
+  Turkey) when using older versions of libssl.<br>
+  <br>
+  A quick workaround so is to run lutris with <code>env LC_ALL=C
+    lutris</code> but a more reliable solution is to update your version of libssl.
+  The following repositories provide libssl 1.1.1.<br>
+  On Ubuntu 18.04 based systems:<br>
+  <code>sudo add-apt-repository ppa:mgrocock/openssl</code><br>
+  On Ubuntu 16.04 based systems:<br>
+  <code>sudo add-apt-repository ppa:carsten-uppenbrink-net/openssl</code>
+</p>
 
-    <article>
-      <h2>Wine games</h2>
-      <a class="title" href="#wine-systemwide">
-        <h3 id="wine-systemwide">Wine is broken / I have dependency issues.</h3>
-      </a>
-      <p>
-        While Lutris can use a wide selection of Wine builds that we provide
-        ourselves, it is strongly encouraged to have Wine installed from your
-        operating system's package manager. This ensures that all required Wine
-        dependencies are present on the system and will produce better results
-        when using Lutris builds.
-      </p>
-      <a class="title" href="#wine-patches">
-        <h3 id="wine-patches">Some game requires a custom patch to work properly.</h3>
-      </a>
-      <p>
-        Lutris provides custom builds of wine to increase the number of playable games.
-        If there are patches out there that makes some game playable and we do
-        not distribute them, you can ask us to build it.
-      </p>
-        <p>
-          In order to build a patched version of Wine, we currently need a git
-          repository containing the fully patched source tree of Wine. If your
-          patches rely on Wine Staging, make sure to apply those as well.
-          Once you have patched Wine you can push it to a git repository of your
-          choice and notify the moderation team so we can publish the build.
-        </p>
-      <a class="title" href="#wine-versions">
-        <h3 id="wine-versions">How do I change the Wine version used in a game?</h3>
-      </a>
-      <p>
-        If you already have a version of Wine installed, you should see a Wine
-        entry on the sidebar, you can right click on it then select "Manage
-        versions". From there you can install or remove any Wine build we
-        provide. The wine versions are downloaded to <code>~/.local/share/lutris/runners/wine/</code>
-      </p>
-      <a class="title" href="#wine-res">
-        <h3 id="wine-res">The resolution is messed up how can I fix that?</h3>
-      </a>
-      <p>
-        Resolution switching for Wine games heavily depends on your hardware
-        and your desktop environment as well as the game itself.
-      </p>
-        <p>
-          If you are experiencing issues, try using a virtual desktop in the Wine
-          runner options then start the game and set it to use your monitor's
-          native resolution. Once the game is using your native resolution, you
-          should be able to turn off the virtual desktop.
-        </p>
-      <a class="title" href="#winemenubuilder">
-        <h3 id="winemenubuilder">I get winemenubuilder.exe errors in the console output</h3>
-      </a>
-      <p>
-        You shouldn't worry about those. We explicitly disable winemenubuilder
-        at runtime so it doesn't mess with your Linux desktop's file type
-        associations. Any error related to winemenubuilder can be safely
-        ignored.
-      </p>
-      <a class="title" href="#overwatch">
-        <h3 id="overwatch">I'm just here for Overwatch, don't care about anything else</h3>
-      </a>
-      <p>
-        Please refer to the following article <a
-          href="https://github.com/lutris/lutris/wiki/Game:-Overwatch">on the
-          Github wiki</a>.
-      </p>
-    </article>
-  </div>
-</div>
+<h4 id="game-dev" class="text-primary">I'm a game developer, can I publish my game on Lutris?</h4>
+<p>
+  You can create a page for your game and submit an installer for it but
+  as of now there aren't any special features for game developers. We do
+  have some plans to add a game developer role to the website, you can
+  follow its development <a href='https://github.com/lutris/website/issues/83'>on Github</a>.
+</p>
+
+<h4 id="runtime" class="text-primary">What is the Lutris runtime?</h4>
+<p>
+  The Lutris runtime is a collection of libraries we automatically
+  provide to ensure compatibility with all games and runners over all
+  Linux distributions. The runtime itself is composed of parts of the
+  <a href="https://github.com/ValveSoftware/steam-runtime">Steam runtime</a>,
+  some Ubuntu 16.04 libraries and a few extra libraries
+  from various places.
+</p>
+<p>
+  Of course, ensuring binary compatibility over all existing Linux
+  distributions is not an easy task and sometimes issues will arise. If
+  such a thing happens, try disabling the runtime in the system options of
+  your game. For more details on the runtime, see the <a href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">wiki</a>.
+</p>
+
+<h4 id="game-crash" class="text-primary">Game [x] crashes, what should I do?</h4>
+<p>
+  First run Lutris from a command line to see potential errors from the game.
+  If you see errors related to Linux libraries, try running the game with
+  the <a href='#runtime'>runtime</a> disabled. If disabling the
+  runtime fixes the issue, please, notify the developers, we don't want
+  to ship a broken runtime and your input can help in fixing it.
+</p>
+<p>
+  If your game still doesn't launch try collecting as much info about
+  your setup (name of the game, your graphics drivers, Linux distribution,
+  hardware setup, desktop environment, etc.) and explain your issue to the
+  <a href="#community">community</a>.
+</p>
+<p>
+  If you want to troubleshoot the issue yourself, there are some good
+  resources you can look into. Start by looking up the game on
+  <a href="https://pcgamingwiki.com">PCGamingWiki</a>. You might run
+  into a known problem and they might have a workaround.
+</p>
+<p>
+   If you are trying to run a Windows game, also check out
+  <a href="https://appdb.winehq.org/">WineHQ's AppDB</a> or look for
+  issues other Windows users are running into, in the Steam forums for
+  example.
+</p>
+
+
+<h4 id="url-handler" class="text-primary">Clicking "Install" on the website's games doesn't do anything.</h4>
+<p>
+  Some distributions do not configure URL handlers
+  correctly, this is not an issue with Lutris, the same thing will happen
+  with, for example, the Steam client.
+</p>
+<p>
+  To fix this issue, you can set <code>network.protocol-handler.expose-all</code> to
+  <strong>False</strong> in Firefox's about:config. With that flag disabled, you will now
+  see a pop-up when clicking "Install", prompting you to choose a program
+  to open the URL with. It is recommended you use <code>/usr/bin/xdg-open</code> to
+  handle lutris: <br> (or steam:) urls.
+</p>
+
+<h3 class="text-primary">Runners</h3>
+<hr class="border-primary"/>
+<h4 id="runner" class="text-primary">What is a "Runner"?</h4>
+<p>
+  A "runner" is the term we use to refer to programs that can run games,
+  it can be Linux itself, Wine, DOSBox, MAME, gzdoom, …
+  Runners are recognized as such in Lutris itself, not all programs that
+  run games are considered runners. For example Darkplaces, the open
+  source engine for Quake, is not a runner but gzdoom is. Usually,
+  programs become runners if they can run a variety of games, not just
+  one or two.
+</p>
+
+<h3 class="text-primary">Wine games</h3>
+<hr class="border-primary"/>
+<h4 id="wine-systemwide" class="text-primary">Wine is broken / I have dependency issues.</h4>
+<p>
+  While Lutris can use a wide selection of Wine builds that we provide
+  ourselves, it is strongly encouraged to have Wine installed from your
+  operating system's package manager. This ensures that all required Wine
+  dependencies are present on the system and will produce better results
+  when using Lutris builds.
+</p>
+
+<h4 id="wine-patches" class="text-primary">Some game requires a custom patch to work properly.</h4>
+<p>
+  Lutris provides custom builds of wine to increase the number of playable games.
+  If there are patches out there that makes some game playable and we do
+  not distribute them, you can ask us to build it.
+</p>
+<p>
+  In order to build a patched version of Wine, we currently need a git
+  repository containing the fully patched source tree of Wine. If your
+  patches rely on Wine Staging, make sure to apply those as well.
+  Once you have patched Wine you can push it to a git repository of your
+  choice and notify the moderation team so we can publish the build.
+</p>
+
+
+<h4 id="wine-versions" class="text-primary">How do I change the Wine version used in a game?</h4>
+<p>
+  If you already have a version of Wine installed, you should see a Wine
+  entry on the sidebar, you can right click on it then select "Manage
+  versions". From there you can install or remove any Wine build we
+  provide. The wine versions are downloaded to <code>~/.local/share/lutris/runners/wine/</code>
+</p>
+
+<h4 id="wine-res" class="text-primary">The resolution is messed up how can I fix that?</h4>
+<p>
+  Resolution switching for Wine games heavily depends on your hardware
+  and your desktop environment as well as the game itself.
+</p>
+<p>
+  If you are experiencing issues, try using a virtual desktop in the Wine
+  runner options then start the game and set it to use your monitor's
+  native resolution. Once the game is using your native resolution, you
+  should be able to turn off the virtual desktop.
+</p>
+
+<h4 id="winemenubuilder" class="text-primary">I get winemenubuilder.exe errors in the console output</h4>
+<p>
+  You shouldn't worry about those. We explicitly disable winemenubuilder
+  at runtime so it doesn't mess with your Linux desktop's file type
+  associations. Any error related to winemenubuilder can be safely
+  ignored.
+</p>
+
+<h4 id="overwatch" class="text-primary">I'm just here for Overwatch, don't care about anything else</h4>
+<p>
+  Please refer to the following article <a
+    href="https://github.com/lutris/lutris/wiki/Game:-Overwatch">on the
+    Github wiki</a>.
+</p>
 {% endblock content %}

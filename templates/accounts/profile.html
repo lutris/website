@@ -78,24 +78,13 @@
           <span class="badge badge-primary ml-2">{{ pending_submissions.count }}</span></h5>
         {% if pending_submissions %}
         <span class="card-text">The following contributions are awaiting approval from a moderator:</span>
-        <ul class="list-group">
+        <div class="d-flex flex-wrap">
         {% for submission in pending_submissions %}
         {% with submission.game as game %}
-           <li class="list-group-item p-0 mb-2">
-            <a href="{{ game.get_absolute_url }}"
-               title="{{ game.name }}" class="mr-2 text-decoration-none">
-        {#      <img src="{{ game.banner_url }}" alt="{{ game.name }}"/>#}
-              <img src="{% static 'images/no_banner.png' %}" class=""/>
-            </a>
-            <a href="{{ game.get_absolute_url }}"
-               title="{{ game.name }}"
-               class="text-primary font-weight-bold text-decoration-none">
-              {{ game.name }}
-            </a>
-           </li>
+           {% include 'games/_mini_game_preview.html' %}
         {% endwith %}
         {% endfor %}
-        </ul>
+        </div>
       {% else %}
         <span class="card-text">No submitted contributions awaiting approval.</span>
         {% endif %}
@@ -106,24 +95,13 @@
           <span class="badge badge-primary ml-2">{{ accepted_submissions.count }}</span></h5>
         {% if accepted_submissions %}
         <span class="card-text">These are the games you have previously submitted to Lutris:</span>
-        <ul class="list-group">
+        <div class="d-flex flex-wrap">
         {% for submission in accepted_submissions %}
         {% with submission.game as game %}
-         <li class="list-group-item p-0 mb-2">
-            <a href="{{ game.get_absolute_url }}"
-               title="{{ game.name }}" class="mr-2 text-decoration-none">
-        {#      <img src="{{ game.banner_url }}" alt="{{ game.name }}"/>#}
-              <img src="{% static 'images/no_banner.png' %}" class=""/>
-            </a>
-            <a href="{{ game.get_absolute_url }}"
-               title="{{ game.name }}"
-               class="text-primary font-weight-bold text-decoration-none">
-              {{ game.name }}
-            </a>
-         </li>
+          {% include 'games/_mini_game_preview.html' %}
         {% endwith %}
         {% endfor %}
-        </ul>
+        </div>
         {% else %}
         <span class="card-text">No approved contributions.</span>
         {% endif %}
