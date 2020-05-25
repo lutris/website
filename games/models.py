@@ -1,5 +1,7 @@
 """Models for main lutris app"""
 # pylint: disable=no-member,too-few-public-methods
+import os
+import shutil
 import datetime
 import json
 import logging
@@ -13,6 +15,7 @@ import yaml
 import reversion
 from reversion.models import Version
 from bitfield import BitField
+from sorl.thumbnail import get_thumbnail
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
@@ -187,6 +190,9 @@ class Game(models.Model):
         "website", "description", "title_logo"
     ]
 
+    ICON_PATH = os.path.join(settings.MEDIA_ROOT, "game-icons/128")
+    BANNER_PATH = os.path.join(settings.MEDIA_ROOT, "game-banners/184")
+
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
@@ -207,8 +213,8 @@ class Game(models.Model):
         on_delete=models.SET_NULL,
     )
     website = models.CharField(max_length=200, blank=True)
-    icon = models.ImageField(upload_to="games/icons", blank=True)
-    title_logo = models.ImageField(upload_to="games/banners", blank=True)
+    icon = models.ImageField(upload_to="uploads/icons", blank=True)
+    title_logo = models.ImageField(upload_to="uploads/banners", blank=True)
     description = models.TextField(blank=True)
     is_public = models.BooleanField("Published", default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -277,12 +283,14 @@ class Game(models.Model):
         """Return URL for the game banner"""
         if self.title_logo:
             return reverse("get_banner", kwargs={"slug": self.slug})
+        return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
             return reverse("get_icon", kwargs={"slug": self.slug})
+        return ""
 
     @property
     def flag_labels(self):
@@ -359,6 +367,40 @@ class Game(models.Model):
         else:
             slug = self.slug
         return reverse("game_detail", kwargs={"slug": slug})
+
+    def precache_media(self):
+        """Prerenders thumbnails so we can host them as static files"""
+        icon_path = os.path.join(settings.MEDIA_ROOT, self.icon.name)
+        if self.icon.name and os.path.exists(icon_path):
+            self.precache_icon()
+        banner_path = os.path.join(settings.MEDIA_ROOT, self.title_logo.name)
+        if self.title_logo.name and os.path.exists(banner_path):
+            self.precache_banner()
+
+    def precache_icon(self):
+        """Render the icon and place it in the icons folder"""
+        dest_file = os.path.join(self.ICON_PATH, "%s.png" % self.slug)
+        if os.path.exists(dest_file):
+            return
+        thumbnail = get_thumbnail(
+            self.icon,
+            settings.ICON_SIZE,
+            crop="center",
+            format="PNG"
+        )
+        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
+
+    def precache_banner(self):
+        """Render the icon and place it in the banners folder"""
+        dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
+        if os.path.exists(dest_file):
+            return
+        thumbnail = get_thumbnail(
+            self.title_logo,
+            settings.BANNER_SIZE,
+            crop="center"
+        )
+        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
     def set_logo_from_steam(self):
         """Fetch the banner from Steam and use it for the game"""
@@ -449,12 +491,16 @@ class Game(models.Model):
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.set_logo_from_steam()
             self.check_for_submission()
-        return super(Game, self).save(
+        super(Game, self).save(
             force_insert=force_insert,
             force_update=force_update,
             using=using,
             update_fields=update_fields,
         )
+        # Not ideal to have this here since this can generate disk IO activity
+        # Not a problem though, we want to discourage mass updates for games
+        # since that would DDOS the site.
+        self.precache_media()
 
 
 class GameMetadata(models.Model):
