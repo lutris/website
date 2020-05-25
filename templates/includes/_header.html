@@ -39,7 +39,7 @@
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img src="{{user.avatar_url}}" title="{{user.username}}" height="64px"/>
       </button>
-      <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow border border-primary" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a>
         <a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a>
         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
