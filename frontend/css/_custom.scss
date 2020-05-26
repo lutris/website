@@ -2,6 +2,7 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
 
 @import "./modules/profile";
 
@@ -25,6 +26,7 @@ $link-hover-color: theme-color('primary');
     color: theme-color('primary') !important;
   }
 }
+$font-family-base: Montserrat;
 
 // Custom
 $screenshotsWidth: 690px;
@@ -829,16 +831,19 @@ input.select2-lookalike[type="text"] {
 .game-cover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   margin-bottom: 0;
-  display: block;
   width: 184px;
   height: 69px;
   text-transform: uppercase;
-  line-height: 69px;
   background-color: #666;
   text-align: center;
   color: theme-color('lighter');
-  font-size: 1.5em;
+  line-height: 0.9em;
+  font-size: 1.3em;
   position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @include media-breakpoint-up(sm) {
     margin-bottom: 5px;
