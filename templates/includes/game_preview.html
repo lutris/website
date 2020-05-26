@@ -4,8 +4,7 @@
   <div class="mr-2">
     <a href="{{ game.get_absolute_url }}"
            title="{{ game.name }}">
-      <img src="{{ game.banner_url }}" alt="{{ game.name }}"/>
-{#      <img src="{% static 'images/no_banner.png' %}" class="m-1"/>#}
+      <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
     </a>
   </div>
   <div class="col px-0">
