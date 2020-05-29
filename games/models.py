@@ -196,8 +196,8 @@ class Game(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
-    platforms = models.ManyToManyField(Platform)
-    genres = models.ManyToManyField(Genre)
+    platforms = models.ManyToManyField(Platform, blank=True)
+    genres = models.ManyToManyField(Genre, blank=True)
     publisher = models.ForeignKey(
         Company,
         related_name="published_game",
@@ -225,7 +225,7 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
     popularity = models.IntegerField(default=0)
-    provider_games = models.ManyToManyField(ProviderGame, related_name="games")
+    provider_games = models.ManyToManyField(ProviderGame, related_name="games", blank=True)
 
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
