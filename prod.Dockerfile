@@ -15,10 +15,11 @@ RUN apt-get update \
 RUN npm install -g bower grunt-cli
 RUN useradd -ms /bin/bash -d /app django
 
+COPY ./config /config
+RUN pip3 install --no-cache-dir -r /config/requirements/production.pip
+
 ADD --chown=django:django . /app
 WORKDIR /app
-
-RUN pip3 install --no-cache-dir -r config/requirements/production.pip
 
 USER ${APP_USER}:${APP_USER}
 RUN npm install

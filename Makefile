@@ -35,7 +35,7 @@ check-deps-update:
 	pip3 list --outdated
 
 deploy_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
+	scripts/deploy.sh staging anaheim
 
 deploy_prod:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml up -d --remove-orphans --build
