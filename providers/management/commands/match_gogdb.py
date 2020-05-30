@@ -69,7 +69,6 @@ class Command(BaseCommand):
 
     def find_match(self, game):
         """Find matching Lutris game for a GOG game"""
-        gog_year = self.get_year(game)
         existing_games = self.get_existing_matches(game)
         if len(existing_games) > 1:
             print("Duplicates found for %s: %s" % (game, existing_games))
@@ -79,7 +78,11 @@ class Command(BaseCommand):
         return matches
 
     def handle(self, *args, **options):
-        arcade_platform = Platform.objects.get(slug="arcade")
+        platform_slugs = ['linux', 'windows']
+        platforms = {
+            slug: Platform.objects.get(slug=slug)
+            for slug in platform_slugs
+        }
         for game in models.ProviderGame.objects.filter(provider__name="GOGDB"):
             product_type = game.metadata.get("product_type")
             if product_type != "Game":
@@ -87,7 +90,7 @@ class Command(BaseCommand):
                 continue
             match = self.find_match(game)
             if not match and options.get("create_missing"):
-                gog_year = int(game.metadata["year"]) if game.metadata["year"] else None
+                gog_year = self.get_year(game)
                 publisher_slug = slugify(game.metadata.get("publisher", ""))
                 if publisher_slug:
                     publisher, created = Company.objects.get_or_create(slug=publisher_slug)
@@ -96,18 +99,21 @@ class Command(BaseCommand):
                         publisher.save()
                 else:
                     publisher = None
+                supported_systems = game.metadata.get("supported_systems", "").split(",")
                 lutris_game = Game.objects.create(
                     name=game.name,
                     slug=get_auto_increment_slug(Game, None, game.name),
                     year=gog_year,
                     publisher=publisher,
-                    is_public=True
+                    is_public=True,
+                    gogid=game.slug
                 )
-                lutris_game.platforms.add(arcade_platform)
+                for system in supported_systems:
+                    try:
+                        lutris_game.platforms.add(platforms[system])
+                    except KeyError:
+                        pass
                 lutris_game.provider_games.add(game)
                 print("Created %s" % lutris_game)
-            elif match:
-                print("Matched game %s with %s" % (game, match))
-                pass
-            else:
-                print("No match found for %s" % game)
+            elif not match:
+                print("No match found for %s" % game.metadata)
