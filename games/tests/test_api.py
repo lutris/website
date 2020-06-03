@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from . import factories
+from providers.models import Provider, ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 
@@ -119,6 +120,14 @@ class TestGameProviderApi(TestCase):
 
             for index in range(10)
         ]
+        provider = Provider.objects.create(name="GOGDB", website="https://gogdb.org")
+        for game in self.games:
+            provider_game = ProviderGame.objects.create(
+                name=game.name,
+                slug=game.gogid,
+                provider=provider
+            )
+            game.provider_games.add(provider_game)
 
     def test_can_get_games_by_gogid(self):
         """The game list API can be queried by GOG ID"""

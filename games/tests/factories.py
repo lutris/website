@@ -1,3 +1,5 @@
+"""Factories for test fixtures"""
+# pylint: disable=missing-docstring,too-few-public-methods,no-member
 import factory
 from django.db.models.signals import post_save
 
@@ -88,7 +90,7 @@ class UserNoLibraryFactory(UserFactory):
     @classmethod
     def _create(cls, target_class, *args, **kwargs):
         post_save.disconnect(create_library, User)
-        user = super(UserFactory, cls)._create(target_class, *args, **kwargs)
+        user = super()._create(target_class, *args, **kwargs)
         user.set_password('password')
         user.save()
         post_save.connect(create_library, User)
