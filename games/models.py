@@ -257,6 +257,16 @@ class Game(models.Model):
         return ("name__icontains",)
 
     @property
+    def humbleid(self):
+        """Humble Bundle ID, different from humblestoreid which is the store
+        page ID for Humble Bundle
+        """
+        gog_slugs = self.provider_games.filter(provider__name="HUMBLE").values_list("slug", flat=True)
+        if gog_slugs:
+            return gog_slugs[0]
+        return ""
+
+    @property
     def user_count(self):
         """How many users have the game in their libraries"""
         return self.libraries.count()

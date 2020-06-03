@@ -45,7 +45,9 @@ class InstallerSerializer(serializers.ModelSerializer):
     steamid = serializers.ReadOnlyField(source='game.steamid')
     gogid = serializers.ReadOnlyField(source='game.gogid')
     gogslug = serializers.ReadOnlyField(source='game.gogslug')
-    humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
+    humbleid = serializers.ReadOnlyField(source='game.humbleid')
+    humblestoreid = serializers.ReadOnlyField(source='game.humbleid')
+    humblestoreid_real = serializers.ReadOnlyField(source='game.humblestoreid')
 
     user = serializers.StringRelatedField()
 
@@ -57,7 +59,7 @@ class InstallerSerializer(serializers.ModelSerializer):
         fields = ('id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
                   'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
                   'published', 'published_by', 'rating', 'steamid', 'gogid', 'gogslug',
-                  'humblestoreid', 'script', 'content')
+                  'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content')
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
