@@ -50,7 +50,8 @@ class Command(BaseCommand):
             "soundtrack",
             "cd version",
             "deluxe edition",
-            "galaxy edition"
+            "galaxy edition",
+            "complete",
         )
         for extra in extras:
             if name.strip(")").lower().endswith(extra):
