@@ -3,3 +3,4 @@
 celerybeat-schedule
 media
 static
+node_modules
