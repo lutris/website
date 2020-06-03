@@ -12,6 +12,7 @@ class ProviderGameAdmin(admin.ModelAdmin):
     """Admin config for ProviderGame"""
     list_display = ("name", "provider")
     search_fields = ("name", )
+    list_filter = ("provider", )
 
 
 admin.site.register(models.Provider, ProviderAdmin)
