@@ -13,7 +13,9 @@ def send_game_accepted(user, game):
         'name': game.name,
         'game_url': game.get_absolute_url()
     }
-    subject = u"Your game submission for '{}' has been accepted!".format(game.name)
+    subject = u"Your game submission for '{}' has been accepted!".format(
+            game.name
+        )
     return send_email('game_accepted', context, subject, user.email)
 
 

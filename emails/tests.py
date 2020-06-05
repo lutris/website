@@ -25,7 +25,9 @@ class TestEmailRendering(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_regular_users_dont_have_access_to_tester(self):
-        """Normal users should not be able to send an email from the test page"""
+        """
+        Normal users should not be able to send an email from the test page
+        """
         self.client.login(username='user', password='password')
         response = self.client.get(reverse('email_sender_test'))
         self.assertEqual(response.status_code, 403)

@@ -26,4 +26,8 @@ def email_sender_test(request):
         body = "Mail sent to %s" % email
         send_mail("Email test", body, settings.DEFAULT_FROM_EMAIL, [email])
         message = 'The email was successfully sent to %s' % email
-    return render(request, 'emails/email_sender_test.html', {'message': message})
+    return render(
+        request,
+        'emails/email_sender_test.html',
+        {'message': message}
+    )
