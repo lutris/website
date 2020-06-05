@@ -32,7 +32,10 @@ class TestUtils(TestCase):
 
     def test_clean_html(self):
         dirty_markup = "This is <b> a string </b> with <span>tags</span>"
-        self.assertEqual(clean_html(dirty_markup), "This is <b> a string </b> with tags")
+        self.assertEqual(
+            clean_html(dirty_markup),
+            "This is <b> a string </b> with tags"
+        )
 
     def test_clean_html_keeps_links(self):
         dirty_markup = (
@@ -42,5 +45,6 @@ class TestUtils(TestCase):
         )
         self.assertEqual(
             clean_html(dirty_markup),
-            "Visit <a href=\"https://lutris.net\">Lutris.net</a> it's full of fun!"
+            "Visit <a href=\"https://lutris.net\">Lutris.net</a> \
+            it's full of fun!"
         )

@@ -7,11 +7,12 @@ class SpacesBucket():
     """Interact with Spaces buckets"""
     def __init__(self, space_name="lutris"):
         session = boto3.session.Session()
-        self._client = session.client('s3',
-                                      region_name='nyc3',
-                                      endpoint_url='https://nyc3.digitaloceanspaces.com',
-                                      aws_access_key_id=settings.SPACES_ACCESS_KEY_ID,
-                                      aws_secret_access_key=settings.SPACES_ACCESS_KEY_SECRET)
+        self._client = session.client(
+            's3',
+            region_name='nyc3',
+            endpoint_url='https://nyc3.digitaloceanspaces.com',
+            aws_access_key_id=settings.SPACES_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.SPACES_ACCESS_KEY_SECRET)
         self.space_name = space_name
 
     def create(self, name="new-space-name"):

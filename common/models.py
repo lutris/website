@@ -19,7 +19,8 @@ class News(models.Model):
     content = MarkupField(markup_type='restructuredtext')
     publish_date = models.DateTimeField(default=datetime.datetime.now)
     image = models.ImageField(upload_to='news', null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                             on_delete=models.SET_NULL)
 
     class Meta:
         """Model configuration"""
@@ -37,8 +38,10 @@ class News(models.Model):
     def save(self, force_insert=False, force_update=False, using=False,
              update_fields=False):
         self.slug = slugify(self.title)
-        return super(News, self).save(force_insert=force_insert, force_update=force_insert,
-                                      using=using, update_fields=update_fields)
+        return super(News, self).save(force_insert=force_insert,
+                                      force_update=force_insert,
+                                      using=using,
+                                      update_fields=update_fields)
 
 
 class Upload(models.Model):
@@ -46,7 +49,8 @@ class Upload(models.Model):
     uploaded_file = models.FileField(upload_to='uploads')
     destination = models.CharField("destination path", max_length=256)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                    on_delete=models.CASCADE)
     hosting = models.CharField(
         max_length=8,
         choices=[("local", "Local"), ("spaces", "Spaces")],

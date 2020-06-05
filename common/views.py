@@ -1,6 +1,9 @@
 # pylint: disable=missing-docstring
 from django.shortcuts import render
-from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
+from django.http import (
+    HttpResponseForbidden,
+    HttpResponseRedirect,
+    JsonResponse)
 from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.views.generic import DetailView, TemplateView

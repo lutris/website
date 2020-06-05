@@ -101,10 +101,12 @@ def clean_html(dirty_markup):
 def load_yaml(content):
     """Loads a YAML string and return a native structure.
 
-    ~~ Uses BaseLoader to convert everything as a string, it is just as safe if ~~
+    ~~ Uses BaseLoader to convert everything as a string,
+    it is just as safe if ~~
     ~~ not safer than SafeLoader since there is no type conversion. ~~
 
-    SafeLoader is used for now, the client doesn't parse boolean values correctly.
+    SafeLoader is used for now, the client doesn't parse boolean values
+    correctly.
     """
     return yaml.load(content, Loader=yaml.SafeLoader)
 
@@ -154,9 +156,11 @@ def crop_banner(img_path, dest_path, banner_size=(184, 69)):
 
     img_ratio = img_width / float(img_height)
     if target_ratio > img_ratio:
-        box = (0, (img_height - target_height) / 2, img_width, (img_height + target_height) / 2)
+        box = (0, (img_height - target_height) / 2, img_width,
+               (img_height + target_height) / 2)
     else:
-        box = ((img_width - target_width) / 2, 0, (img_width + target_width) / 2, img_height)
+        box = ((img_width - target_width) / 2, 0,
+               (img_width + target_width) / 2, img_height)
 
     image = image.crop(box)
     image.mode = "RGB"
