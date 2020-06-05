@@ -13,13 +13,13 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ["components/ace-builds/src-noconflict/*"],
+            src: ["node_modules/ace-builds/src-noconflict/*"],
             dest: "public/ace"
           },
           {
             expand: true,
             flatten: true,
-            src: ["components/ace-builds/src-noconflict/snippets/*"],
+            src: ["node_modules/ace-builds/src-noconflict/snippets/*"],
             dest: "public/ace/snippets"
           }
         ]
