@@ -19,10 +19,10 @@ class Command(BaseCommand):
         with open(file_path) as list_file:
             game_list = json.load(list_file)
         for game in game_list:
-            provider_game, _created = models.ProviderGame.objects.get_or_create(
-                slug=game["mameid"],
-                provider=provider
-            )
+            provider_game, _created = \
+                models.ProviderGame.objects.get_or_create(
+                    slug=game["mameid"], provider=provider
+                )
             provider_game.name = game["name"]
             provider_game.metadata = game
             provider_game.save()

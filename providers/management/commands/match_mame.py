@@ -1,9 +1,10 @@
 """Match MAME games with Lutris games"""
-import json
+# import json
 from django.core.management.base import BaseCommand
 from games.models import Game, Company, Platform
 from providers import models
 from common.util import get_auto_increment_slug, slugify
+
 
 class Command(BaseCommand):
 
@@ -21,12 +22,14 @@ class Command(BaseCommand):
         return lutris_game
 
     def find_matches(self, game):
-        mame_year = int(game.metadata["year"]) if game.metadata["year"] else None
+        mame_year = \
+            int(game.metadata["year"]) if game.metadata["year"] else None
         existing_games = Game.objects.filter(name=game.name)
         for existing_game in existing_games:
             lutris_year = existing_game.year
             if mame_year != lutris_year:
-                if all((lutris_year, mame_year)) and abs(lutris_year - mame_year) < 3:
+                if all((lutris_year, mame_year)) and abs(
+                        lutris_year - mame_year) < 3:
                     return self.match_game(game, existing_game)
                 continue
             return self.match_game(game, existing_game)
@@ -36,10 +39,13 @@ class Command(BaseCommand):
         for game in models.ProviderGame.objects.filter(provider__name="MAME"):
             match = self.find_matches(game)
             if not match and options.get("create_missing"):
-                mame_year = int(game.metadata["year"]) if game.metadata["year"] else None
+                mame_year = \
+                 int(game.metadata["year"]) if game.metadata["year"] else None
                 publisher_slug = slugify(game.metadata.get("publisher", ""))
                 if publisher_slug:
-                    publisher, created = Company.objects.get_or_create(slug=publisher_slug)
+                    publisher, created = Company.objects.get_or_create(
+                        slug=publisher_slug
+                    )
                     if created:
                         publisher.name = game.metadata["publisher"]
                         publisher.save()

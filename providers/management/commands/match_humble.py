@@ -1,8 +1,9 @@
 """Match GOGDB games with Lutris games"""
-import json
+# import json
 from django.core.management.base import BaseCommand
 from django.db.models import Q
-from games.models import Game, Company, Platform
+# from games.models import Game, Company, Platform
+from games.models import Game, Platform
 from providers import models
 from common.util import get_auto_increment_slug, slugify
 from providers.processors import clean_name
@@ -51,7 +52,9 @@ class Command(BaseCommand):
             slug: Platform.objects.get(slug=slug)
             for slug in platform_slugs
         }
-        for game in models.ProviderGame.objects.filter(provider__name="HUMBLE"):
+        for game in models.ProviderGame.objects.filter(
+                    provider__name="HUMBLE"
+        ):
             matches = self.find_matches(game)
             if not matches and options.get("create_missing"):
                 lutris_game = Game.objects.create(

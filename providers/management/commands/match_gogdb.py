@@ -1,10 +1,11 @@
 """Match GOGDB games with Lutris games"""
-import json
+# import json
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from games.models import Game, Company, Platform
 from providers import models
 from common.util import get_auto_increment_slug, slugify
+
 
 class Command(BaseCommand):
 
@@ -94,13 +95,17 @@ class Command(BaseCommand):
                 gog_year = self.get_year(game)
                 publisher_slug = slugify(game.metadata.get("publisher", ""))
                 if publisher_slug:
-                    publisher, created = Company.objects.get_or_create(slug=publisher_slug)
+                    publisher, created = Company.objects.get_or_create(
+                        slug=publisher_slug
+                    )
                     if created:
                         publisher.name = game.metadata["publisher"]
                         publisher.save()
                 else:
                     publisher = None
-                supported_systems = game.metadata.get("supported_systems", "").split(",")
+                supported_systems = game.metadata.get(
+                    "supported_systems", ""
+                ).split(",")
                 lutris_game = Game.objects.create(
                     name=game.name,
                     slug=get_auto_increment_slug(Game, None, game.name),
