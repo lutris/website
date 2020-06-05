@@ -183,7 +183,9 @@ DISCORD_URL = "https://discordapp.com/invite/Pnt5CuY"
 DISCORD_ISSUE_WEBHOOK_ID = os.environ.get('DISCORD_ISSUE_WEBHOOK_ID')
 DISCORD_ISSUE_WEBHOOK_TOKEN = os.environ.get('DISCORD_ISSUE_WEBHOOK_TOKEN')
 DISCORD_INSTALLER_WEBHOOK_ID = os.environ.get('DISCORD_INSTALLER_WEBHOOK_ID')
-DISCORD_INSTALLER_WEBHOOK_TOKEN = os.environ.get('DISCORD_INSTALLER_WEBHOOK_TOKEN')
+DISCORD_INSTALLER_WEBHOOK_TOKEN = os.environ.get(
+    'DISCORD_INSTALLER_WEBHOOK_TOKEN'
+)
 
 SPACES_ACCESS_KEY_ID = os.environ.get("SPACES_ACCESS_KEY_ID")
 SPACES_ACCESS_KEY_SECRET = os.environ.get("SPACES_ACCESS_KEY_SECRET")
@@ -258,7 +260,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 250,
 }
 

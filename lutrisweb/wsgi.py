@@ -1,4 +1,4 @@
-#pylint: disable=C0103
+# pylint: disable=C0103
 """ WSGI config for lutrisweb project.
 
 This module contains the WSGI application used by Django's development server
@@ -17,7 +17,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lutrisweb.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                      "lutrisweb.settings.production")
 os.environ.setdefault("PYTHONHASHSEED", "random")
 
 application = get_wsgi_application()

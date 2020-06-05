@@ -1,6 +1,7 @@
 """Settings specific to local development"""
 import os
-from lutrisweb.settings.base import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# pylint: disable=wildcard-import,unused-wildcard-import
+from lutrisweb.settings.base import *
 
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
