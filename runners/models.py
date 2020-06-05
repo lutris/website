@@ -17,7 +17,9 @@ class Runner(models.Model):
     slug = models.SlugField(unique=True)
     website = models.CharField(max_length=127, blank=True)
     icon = models.ImageField(upload_to="runners/icons", blank=True)
-    platforms = models.ManyToManyField("platforms.Platform", related_name="runners")
+    platforms = models.ManyToManyField(
+        "platforms.Platform", related_name="runners"
+    )
 
     class Meta:
         ordering = ["name"]
@@ -58,7 +60,9 @@ class RunnerVersion(models.Model):
         ordering = ("version", "architecture")
 
     def __str__(self):
-        return u"{} {} ({})".format(self.runner.name, self.version, self.architecture)
+        return u"{} {} ({})".format(
+            self.runner.name, self.version, self.architecture
+        )
 
     runner = models.ForeignKey(
         Runner, related_name="runner_versions", on_delete=models.CASCADE
@@ -80,11 +84,15 @@ class Runtime(models.Model):
 
     name = models.CharField(max_length=32)
     created_at = models.DateTimeField(auto_now=True)
-    architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
+    architecture = models.CharField(
+        max_length=8, choices=ARCH_CHOICES, default="all"
+    )
     url = models.URLField()
 
     class Meta:
         ordering = ("-created_at",)
 
     def __str__(self):
-        return u"{} runtime (uploaded on {})".format(self.name, self.created_at)
+        return u"{} runtime (uploaded on {})".format(
+            self.name, self.created_at
+        )

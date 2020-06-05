@@ -11,5 +11,6 @@ urlpatterns = [
     path("/<slug:runner>/<version:version>/games",
          views.RunnerVersionGameList.as_view(),
          name="games_by_runner_version"),
-    path("/<slug:runner>/games", views.RunnerGameList.as_view(), name="games_by_runner")
+    path("/<slug:runner>/games", views.RunnerGameList.as_view(),
+         name="games_by_runner")
 ]

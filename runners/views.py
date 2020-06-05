@@ -64,7 +64,8 @@ class RunnerUploadView(generics.CreateAPIView):
 
         return settings.FILES_URL + "runners/" + uploaded_file.name
 
-    def post(self, request, slug, *args, **kwargs):  # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
+    def post(self, request, slug, *args, **kwargs):
         try:
             runner = Runner.objects.get(slug=slug)
         except Runner.DoesNotExist:
@@ -149,7 +150,8 @@ class RunnerVersionGameList(ListView):
         queryset = super().get_queryset()
         return queryset.filter(
             installers__runner__slug=self.kwargs["runner"],
-            installers__content__icontains="  version: %s" % self.kwargs["version"],
+            installers__content__icontains="  version: %s" %
+            self.kwargs["version"],
         ).distinct()
 
     def get_context_data(self, *, object_list=None, **kwargs):
