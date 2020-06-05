@@ -24,7 +24,8 @@ def search_json(request):
         'results': [
             {
                 'text': u"{} ({}, {})".format(
-                    result['game_title'], result['release_date'], result['platform']
+                    result['game_title'], result['release_date'],
+                    result['platform']
                 ),
                 'id': result['id']
             } for result in results

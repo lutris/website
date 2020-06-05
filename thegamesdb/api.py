@@ -30,7 +30,9 @@ UNSUPPORTED_PLATFORMS = (
 
 
 def download_image(media_type, url):
-    """Download an image from TheGamesDB (is necessary) and return its local path"""
+    """
+    Download an image from TheGamesDB (is necessary) and return its local path
+    """
     media_type_map = {
         'clearlogo': settings.TGD_CLEAR_LOGO_PATH,
         'banner': settings.TGD_BANNER_PATH,
@@ -143,7 +145,8 @@ def get_games_list(query, remove_unsupported=True):
 
     Args:
         query (str): search query to send to TGDB
-        remove_unsupported (bool): Remove games from platforms unsupported by Lutris
+        remove_unsupported (bool): Remove games from platforms unsupported by
+        Lutris
 
     Returns:
         list: list of games

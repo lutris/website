@@ -1,5 +1,6 @@
 """URL converters"""
 
+
 class VersionConverter:
     """URL converter to match version numbers"""
     regex = r'[\w\-\.\_]+'
