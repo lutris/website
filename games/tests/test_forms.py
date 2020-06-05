@@ -8,7 +8,10 @@ from games import forms
 from games.tests import factories
 
 
-def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='PNG'):
+def create_image(
+    storage, filename, size=(100, 100), image_mode='RGB',
+    image_format='PNG'
+):
     """Generate a test image, returning the filename that it was saved as.
 
     If ``storage`` is ``None``, the BytesIO containing the image data
@@ -71,7 +74,8 @@ class TestGameForm(TestCase):
         }, {
             'title_logo': SimpleUploadedFile('front.png', image.getvalue())
         })
-        # XXX there's a problem with django-croppie preventing testing this form properly
+        # XXX there's a problem with django-croppie preventing testing
+        # this form properly
         # The title_photo is made optional until this is fixed
         form.fields['title_logo'].required = False
         form.is_valid()
@@ -125,7 +129,9 @@ class TestGameEditForm(TestCase):
         """Ensures that a user cannot submit an unchanged form"""
 
         # Create form
-        form = forms.GameEditForm(self.inputs, initial=self.game.get_change_model())
+        form = forms.GameEditForm(
+            self.inputs, initial=self.game.get_change_model()
+        )
 
         # Form should not be valid since no changes were made
         self.assertFalse(form.is_valid())
@@ -176,7 +182,9 @@ class TestGameEditForm(TestCase):
         self.inputs['name'] = ''
 
         # Create form
-        form = forms.GameEditForm(self.inputs, initial=self.game.get_change_model())
+        form = forms.GameEditForm(
+            self.inputs, initial=self.game.get_change_model()
+        )
 
         # Assert that form is invalid since the name must not be empty
         self.assertFalse(form.is_valid())

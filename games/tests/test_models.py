@@ -42,7 +42,9 @@ class TestGame(TestCase):
         """Ensures that URLs are uniform if http was specified"""
 
         # Create a game with an http:// website specified
-        game = factories.GameFactory(name='Game Title', website='http://example.com')
+        game = factories.GameFactory(
+            name='Game Title', website='http://example.com'
+        )
 
         # If a protocl was specified, it should be returned unchanged
         self.assertEqual(game.website_url, 'http://example.com')
@@ -54,7 +56,9 @@ class TestGame(TestCase):
         """Ensures that URLs are uniform if https was specified"""
 
         # Create a game with an https:// website specified
-        game = factories.GameFactory(name='Game Title', website='https://example.com')
+        game = factories.GameFactory(
+            name='Game Title', website='https://example.com'
+        )
 
         # If a protocl was specified, it should be returned unchanged
         self.assertEqual(game.website_url, 'https://example.com')
@@ -66,9 +70,12 @@ class TestGame(TestCase):
         """Ensures that trailing slashes are stripped for HR website_url"""
 
         # Create a game with a URL with trailing slash
-        game = factories.GameFactory(name='Game Title', website='http://example.com/')
+        game = factories.GameFactory(
+            name='Game Title', website='http://example.com/'
+        )
 
-        # If a trailing slash was given, it should not be stripped for website_url
+        # If a trailing slash was given,
+        # it should not be stripped for website_url
         self.assertEqual(game.website_url, 'http://example.com/')
 
         # HR URL should strip the http:// part and the trailing slash
@@ -103,7 +110,9 @@ class TestGame(TestCase):
         self.assertTrue(super_mario_world.has_installer())
 
     def test_get_change_model(self):
-        """Ensure that the form model properly represents the relevant attributes"""
+        """
+        Ensure that the form model properly represents the relevant attributes
+        """
 
         # Create a game and a change model
         game = factories.GameFactory(name='Game Title')
@@ -116,8 +125,12 @@ class TestGame(TestCase):
         self.assertEqual(game.description, change_model['description'])
 
         # Verify platforms and genres
-        self.assertListEqual([x.id for x in game.platforms.all()], change_model['platforms'])
-        self.assertListEqual([x.id for x in game.genres.all()], change_model['genres'])
+        self.assertListEqual(
+            [x.id for x in game.platforms.all()], change_model['platforms']
+        )
+        self.assertListEqual(
+            [x.id for x in game.genres.all()], change_model['genres']
+        )
 
     def test_get_changes(self):
         """Ensure that get_changes properly lists all differences"""

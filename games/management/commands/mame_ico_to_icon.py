@@ -5,7 +5,7 @@ from PIL import Image
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from common.util import crop_banner
+# from common.util import crop_banner
 from games.models import Game
 
 

@@ -11,7 +11,8 @@ from games import models
 
 def redirect_to(request, target):
     """Helper to redirect to the given target"""
-    redirect_url = target if target[0] == '/' else request.build_absolute_uri(reverse(target))
+    redirect_url = target if target[0] == '/' else request.build_absolute_uri(
+                                                   reverse(target))
 
     # Enforce https
     if not settings.DEBUG:
@@ -26,14 +27,20 @@ def list_change_submissions_view(request, game_id=None):
 
     # Check permissions
     if not request.user.has_perm('games.change_game'):
-        return HttpResponseForbidden("You don't have the permission to review changes")
+        return HttpResponseForbidden(
+            "You don't have the permission to review changes"
+        )
 
     # Filter changes if a game_id is given
     if game_id:
         game = get_object_or_404(models.Game, id=game_id)
-        change_suggestions_unfiltered = models.Game.objects.filter(change_for=game_id)
+        change_suggestions_unfiltered = models.Game.objects.filter(
+            change_for=game_id
+        )
     else:
-        change_suggestions_unfiltered = models.Game.objects.filter(change_for__isnull=False)
+        change_suggestions_unfiltered = models.Game.objects.filter(
+            change_for__isnull=False
+        )
 
     # Populate additional information into the model
     obsolete_changes = 0
@@ -77,7 +84,9 @@ def review_change_submission_view(request, submission_id):
 
     # Check permissions
     if not request.user.has_perm('games.change_game'):
-        return HttpResponseForbidden("You don't have the permission to review changes")
+        return HttpResponseForbidden(
+            "You don't have the permission to review changes"
+        )
 
     # Fetch game change DB entry
     change_suggestion = get_object_or_404(models.Game, id=submission_id)
@@ -108,7 +117,9 @@ def change_submission_accept(request, submission_id):
 
     # Check permissions
     if not request.user.has_perm('games.change_game'):
-        return HttpResponseForbidden("You don't have the permission to review changes")
+        return HttpResponseForbidden(
+            "You don't have the permission to review changes"
+        )
 
     # Fetch game change DB entry
     game_changes = get_object_or_404(models.Game, id=submission_id)
@@ -134,7 +145,9 @@ def change_submission_reject(request, submission_id):
 
     # Check permissions
     if not request.user.has_perm('games.change_game'):
-        return HttpResponseForbidden("You don't have the permission to review changes")
+        return HttpResponseForbidden(
+            "You don't have the permission to review changes"
+        )
 
     # Fetch game change DB entry
     game_changes = get_object_or_404(models.Game, id=submission_id)

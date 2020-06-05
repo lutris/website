@@ -7,7 +7,8 @@ from games.views import admin as views
 
 
 urlpatterns = [
-    path('change-submissions/', views.list_change_submissions_view, name='admin-change-submissions'),
+    path('change-submissions/', views.list_change_submissions_view,
+         name='admin-change-submissions'),
     path('change-submissions/<int:game_id>',
          views.list_change_submissions_view,
          name='admin-change-submissions'),

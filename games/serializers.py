@@ -28,7 +28,10 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class GameAliasSerializer(serializers.ModelSerializer):
-    """Serializer for game aliases, used to provide an alias list to GameSerializer"""
+    """
+    Serializer for game aliases, used to provide an
+    alias list to GameSerializer
+    """
     class Meta:
         """Model and field definitions"""
         model = models.GameAlias
@@ -56,10 +59,12 @@ class InstallerSerializer(serializers.ModelSerializer):
     class Meta:
         """Model and field definitions"""
         model = models.Installer
-        fields = ('id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
-                  'version', 'description', 'notes', 'created_at', 'updated_at', 'draft',
-                  'published', 'published_by', 'rating', 'steamid', 'gogid', 'gogslug',
-                  'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content')
+        fields = ('id', 'game_id', 'game_slug', 'name', 'year', 'user',
+                  'runner', 'slug', 'version', 'description', 'notes',
+                  'created_at', 'updated_at', 'draft', 'published',
+                  'published_by', 'rating', 'steamid', 'gogid',
+                  'gogslug', 'humbleid', 'humblestoreid',
+                  'humblestoreid_real', 'script', 'content')
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
@@ -113,9 +118,10 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
     class Meta:
         """Model and field definitions"""
         model = models.Installer
-        fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
-                  'notes', 'created_at', 'updated_at', 'published', 'rating',
-                  'script', 'content', 'revisions')
+        fields = ('id', 'game', 'user', 'runner', 'slug', 'version',
+                  'description', 'draft', 'notes', 'created_at',
+                  'updated_at', 'published', 'rating', 'script', 'content',
+                  'revisions')
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -129,6 +135,7 @@ class GameSerializer(serializers.ModelSerializer):
             'description', 'banner_url', 'icon_url', 'is_public',
             'updated', 'steamid', 'gogslug', 'humblestoreid', 'id'
         )
+
 
 class GameDetailSerializer(GameSerializer):
     """A serializer for games with it's associated meta-data.
@@ -176,10 +183,11 @@ class GameInstallersSerializer(GameSerializer):
 
 
 class GameRevisionSerializer(GameSerializer):
-    """API view used to fetch all installers and their related revisions for a given
-    game.
-    This is used in the moderator dashboard to load all revisions for a game in a
-    single query.
+    """API view used to fetch all installers and their related
+    revisions for a given game.
+
+    This is used in the moderator dashboard to load all revisions
+    for a game in a single query.
     """
     installers = InstallerWithRevisionsSerializer(many=True)
 

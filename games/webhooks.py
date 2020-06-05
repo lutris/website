@@ -15,7 +15,8 @@ def send_webhook_payload(hook_url, payload):
     })
     if hook_response.status_code >= 400:
         LOGGER.error(
-            "Discord responded with status %s while sending payload %s. Response text: %s",
+            "Discord responded with status %s while sending payload %s.\
+            Response text: %s",
             hook_response.status_code,
             payload,
             hook_response.text
@@ -59,19 +60,19 @@ def notify_issue(issue, user, title, description):
             ),
             "color": 13965399,
             "thumbnail": {
-                "url": "https://lutris.net{}".format(issue.installer.game.banner_url)
+                "url": "https://lutris.net{}".format(
+                    issue.installer.game.banner_url
+                )
             },
             "author": {
                 "name": user.username,
-                "url": "https://lutris.net/admin/accounts/user/{}/change/".format(
-                    user.id
-                )
+                "url": "https://lutris.net/admin/accounts/user/{}/change/"
+                .format(user.id)
             },
             "fields": []
         }]
     }
     return send_webhook_payload(hook_url, payload)
-
 
 
 def notify_installer(installer):
@@ -85,7 +86,9 @@ def notify_installer(installer):
     payload = {
         "embeds": [{
             "title": "Installer created: %s" % installer,
-            "description": "Installer %s for %s" % (installer.version, installer.runner),
+            "description": "Installer %s for %s" % (
+                installer.version, installer.runner
+            ),
             "url": "https://lutris.net/games/{}".format(
                 installer.game.slug
             ),
@@ -95,9 +98,8 @@ def notify_installer(installer):
             },
             "author": {
                 "name": installer.user.username,
-                "url": "https://lutris.net/admin/accounts/user/{}/change/".format(
-                    installer.user.id
-                )
+                "url": "https://lutris.net/admin/accounts/user/{}/change/"
+                .format(installer.user.id)
             },
             "fields": []
         }]

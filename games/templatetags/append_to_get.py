@@ -32,8 +32,9 @@ class AppendGetNode(template.Node):
         path = context['request'].META['PATH_INFO']
 
         if len(get):
-            path += "?%s" % "&".join(["%s=%s" % (key, value)
-                                      for (key, value) in get.items() if value])
+            path += "?%s" % "&".join([
+                "%s=%s" % (key, value) for (key, value) in get.items() if value
+            ])
         return path
 
 

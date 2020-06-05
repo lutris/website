@@ -43,7 +43,8 @@ class GameListView(generics.GenericAPIView):
             )
 
         if 'gogid' in self.request.data:
-            gogids = [gogid for gogid in self.request.data["gogid"] if gogid.isnumeric()]
+            gogids = [gogid for gogid in self.request.data["gogid"]
+                      if gogid.isnumeric()]
             return base_query.filter(
                 provider_games__slug__in=gogids,
                 provider_games__provider__name="GOGDB"
@@ -80,8 +81,9 @@ class GameListView(generics.GenericAPIView):
         """POST request"""
         # Using POST instead of GET is a violation of API rules but it's the
         # only way to send a huge payload to the server. GET querystrings only
-        # support a limited number of characters (depending on the web server or
-        # the browser used) whereas POST request do not have this limitation.
+        # support a limited number of characters (depending on the web server
+        # or the browser used) whereas POST request do not have this
+        # limitation.
         return self.get(request)
 
 
@@ -89,7 +91,6 @@ class GameLibraryView(generics.RetrieveAPIView):
     """List a user's library"""
     serializer_class = serializers.GameLibrarySerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
     def get(self, request, username):  # pylint: disable=arguments-differ
         try:
@@ -133,13 +134,19 @@ class GameStatsView(APIView):
         statistics["game_submissions"] = models.GameSubmission.objects.filter(
             accepted_at__isnull=True
         ).count()
-        statistics["games"] = models.Game.objects.filter(is_public=True).count()
-        statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
-        statistics["installers"] = models.Installer.objects.published().count()
-        statistics["unpublished_installers"] = models.Installer.objects.unpublished().count()
-        statistics["screenshots"] = models.Screenshot.objects.filter(published=True).count()
-        statistics["unpublished_screenshots"] = models.Screenshot.objects.filter(
-            published=False
+        statistics["games"] = models.Game.objects.filter(
+            is_public=True
         ).count()
+        statistics["unpublished_games"] = models.Game.objects.filter(
+            is_public=False
+        ).count()
+        statistics["installers"] = models.Installer.objects.published().count()
+        statistics["unpublished_installers"] = \
+            models.Installer.objects.unpublished().count()
+        statistics["screenshots"] = models.Screenshot.objects.filter(
+            published=True
+        ).count()
+        statistics["unpublished_screenshots"] = \
+            models.Screenshot.objects.filter(published=False).count()
 
         return Response(statistics)

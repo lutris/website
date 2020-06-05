@@ -49,8 +49,9 @@ class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GameInstallerListView(generics.ListAPIView):
-    """Return the list of installers available for a game if a game slug is provided,
-    or a particular installer if an installer slug is passed.
+    """
+    Return the list of installers available for a game if a game slug is
+    provided, or a particular installer if an installer slug is passed.
     """
     serializer_class = serializers.InstallerSerializer
 
@@ -67,16 +68,22 @@ class GameRevisionListView(generics.RetrieveAPIView):
     lookup_field = 'slug'
 
 
-class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
+class InstallerRevisionListView(
+      generics.ListAPIView,
+      mixins.DestroyModelMixin
+):
     """Return a list of revisions for a given installer"""
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = serializers.InstallerRevisionSerializer
 
     def get_queryset(self):
-        installer = models.Installer.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        installer = models.Installer.objects.get(
+            pk=self.request.parser_context['kwargs']['pk']
+        )
         return installer.revisions
 
-    def delete(self, _request, *_args, **_kwargs):  # pylint: disable=no-self-use
+    # pylint: disable=no-self-use
+    def delete(self, _request, *_args, **_kwargs):
         """Prevent deletion
         XXX Why is this needed?
         """
@@ -112,9 +119,14 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         try:
-            revision = Revision.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+            revision = Revision.objects.get(
+                pk=self.request.parser_context['kwargs']['pk']
+            )
         except Revision.DoesNotExist:
-            LOGGER.warning("No Revision with ID %s", self.request.parser_context['kwargs']['pk'])
+            LOGGER.warning(
+                "No Revision with ID %s",
+                self.request.parser_context['kwargs']['pk']
+            )
             raise Http404
         try:
             version = revision.version_set.all()[0]
@@ -147,10 +159,13 @@ class InstallerIssueCreateView(generics.CreateAPIView):
     def get_queryset(self):
         """Return the Installer instance based off URL parameters"""
         game_slug = self.request.parser_context['kwargs']['game_slug']
-        installer_slug = self.request.parser_context['kwargs']['installer_slug']
-        return models.Installer.objects.filter(game__slug=game_slug).get(slug=installer_slug)
+        installer_slug = \
+            self.request.parser_context['kwargs']['installer_slug']
+        return models.Installer.objects.filter(
+            game__slug=game_slug).get(slug=installer_slug)
 
-    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def create(self, request, *args, **kwargs):
         """Create a new issue"""
         issue_payload = dict(request.data)
 
@@ -163,10 +178,15 @@ class InstallerIssueCreateView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
-class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyAPIView):
+class InstallerIssueView(
+      generics.CreateAPIView,
+      generics.RetrieveUpdateDestroyAPIView
+):
     """Edit or post a reply to an issue"""
     serializer_class = serializers.InstallerIssueSerializer
     permission_classes = [IsAuthenticated]
@@ -176,7 +196,8 @@ class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyA
         issue_id = self.request.parser_context['kwargs']['pk']
         return models.InstallerIssue.objects.get(pk=issue_id)
 
-    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def create(self, request, *args, **kwargs):
         """Create the reply"""
         issue_id = self.request.parser_context["kwargs"]["pk"]
         try:
@@ -190,14 +211,18 @@ class InstallerIssueView(generics.CreateAPIView, generics.RetrieveUpdateDestroyA
         reply_payload["submitted_on"] = timezone.now()
         reply_payload["issue"] = issue_id
 
-        serializer = serializers.InstallerIssueReplySerializer(data=reply_payload)
+        serializer = serializers.InstallerIssueReplySerializer(
+            data=reply_payload
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
         notify_issue_reply(issue, request.user, request.data['description'])
 
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
@@ -212,7 +237,10 @@ class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class SmallResultsSetPagination(PageNumberPagination):
-    """Pagination used for heavier serializers that don't need a lot of data returned at once."""
+    """
+    Pagination used for heavier serializers that don't need a lot of data
+    returned at once.
+    """
     page_size = 25
     page_size_query_param = 'page'
     max_page_size = 100
@@ -227,5 +255,7 @@ class RevisionListView(generics.ListAPIView):
     def get_queryset(self):
         revision_type = self.request.GET.get('type')
         if revision_type in ('submission', 'draft'):
-            return Revision.objects.filter(comment__startswith="[%s]" % revision_type)
+            return Revision.objects.filter(
+                comment__startswith="[%s]" % revision_type
+            )
         return Revision.objects.all()

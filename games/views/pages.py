@@ -6,7 +6,11 @@ import json
 import logging
 
 import reversion
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import (
+    SearchVector,
+    SearchQuery,
+    SearchRank
+)
 from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
@@ -14,7 +18,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -23,7 +32,10 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import check_installer_restrictions, user_confirmed_required
+from accounts.decorators import (
+    check_installer_restrictions,
+    user_confirmed_required
+)
 from games import models
 from games.forms import (
     ForkInstallerForm,
@@ -56,10 +68,17 @@ class GameList(ListView):
     def get(self, request, *args, **kwargs):
         self.q_params = {
             'q': request.GET.get('q', ''),
-            'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
-            'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
-            'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
-            'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
+            'platforms': request.GET.getlist(
+                'platforms', [kwargs.get(
+                    'platform')] if 'platform' in kwargs else []),
+            'genres': request.GET.getlist(
+                'genres', [kwargs.get(
+                    'genre')] if 'genre' in kwargs else []),
+            'companies': request.GET.getlist(
+                'companies', [kwargs.get(
+                    'company')] if 'company' in kwargs else []),
+            'years': request.GET.getlist(
+                'years', [kwargs.get('year')] if 'year' in kwargs else []),
             'flags': request.GET.getlist('flags', []),
             'unpublished-filter': request.GET.get('unpublished-filter', False),
             'search-installers': request.GET.get('search-installers', False)
@@ -110,15 +129,20 @@ class GameList(ListView):
     def get_filtered_queryset(self, queryset):
         if self.q_params['q']:
             if self.q_params['search-installers']:
-                queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
+                queryset = queryset.filter(
+                    installers__content__icontains=self.q_params['q']
+                )
             else:
                 vector = SearchVector('name', weight='A') + \
                          SearchVector('aliases__name', weight='A') + \
                          SearchVector('description', weight='B')
                 query = SearchQuery(self.q_params['q'])
-                queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
+                queryset = queryset.annotate(
+                    rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if self.q_params['platforms']:
-            queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
+            queryset = queryset.filter(
+                platforms__pk__in=self.q_params['platforms']
+            )
         if self.q_params['genres']:
             queryset = queryset.filter(genres__pk__in=self.q_params['genres'])
         if self.q_params['companies']:
@@ -148,10 +172,12 @@ class GameList(ListView):
         if "page" in self.request.GET:
             self.request.GET["page"] = self.get_page()
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def get_context_data(self, *, object_list=None, **kwargs):
         """Display the Lutris library"""
         self.clean_parameters()
-        context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
+        context = super(GameList, self).get_context_data(
+            object_list=object_list, **kwargs)
         context['is_library'] = False
         filter_string = ''
         if self.q_params.get('q'):
@@ -172,16 +198,22 @@ class GameList(ListView):
             for flag in self.q_params['flags']:
                 filter_string += '&flags=%s' % flag
         if self.q_params.get('unpublished-filter'):
-            filter_string += '&unpublished-filter=%s' % self.q_params['unpublished-filter']
+            filter_string += '&unpublished-filter=%s' % self.q_params[
+                'unpublished-filter']
         if self.q_params.get('search-installers'):
-            filter_string += '&search-installers=%s' % self.q_params['search-installers']
+            filter_string += '&search-installers=%s' % self.q_params[
+                'search-installers']
         context['filter_string'] = filter_string
         context['filter_form'] = LibraryFilterForm(initial=self.q_params)
         context['order_by'] = self.get_ordering()
         context['paginate_by'] = self.get_paginate_by(None)
         context['search_terms'] = self.q_params.get('search', '')
-        context["unpublished_filter"] = self.q_params.get('unpublished-filter', False)
-        context["search_installers"] = self.q_params.get('search-installers', False)
+        context["unpublished_filter"] = self.q_params.get(
+            'unpublished-filter', False
+        )
+        context["search_installers"] = self.q_params.get(
+            'search-installers', False
+        )
         context["unpublished_match_count"] = self.get_filtered_queryset(
             models.Game.objects.filter(is_public=False)
         ).count()
@@ -212,7 +244,9 @@ def game_detail(request, slug):
         except models.Game.MultipleObjectsReturned:
             games = models.Game.objects.filter(aliases__slug=slug)
             LOGGER.error("The slug '%s' was used multiple times" % slug)
-            return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
+            return redirect(
+                reverse("game_detail", kwargs={"slug": games[0].slug})
+            )
 
     installers = game.installers.published()
     unpublished_installers = game.installers.unpublished()
@@ -221,10 +255,14 @@ def game_detail(request, slug):
     user = request.user
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
-        screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
+        screenshots = game.screenshot_set.published(
+            user=user, is_staff=user.is_staff
+        )
 
         if user.is_staff and user.has_perm("games.change_game"):
-            pending_change_subm_count = len(Game.objects.filter(change_for=game))
+            pending_change_subm_count = len(
+                Game.objects.filter(change_for=game)
+            )
     else:
         in_library = False
         screenshots = game.screenshot_set.published()
@@ -238,7 +276,9 @@ def game_detail(request, slug):
             "banner_size": "940x352",
             "in_library": in_library,
             "pending_change_subm_count": pending_change_subm_count,
-            "can_publish": user.is_staff and user.has_perm("games.can_publish_game"),
+            "can_publish": user.is_staff and user.has_perm(
+                "games.can_publish_game"
+            ),
             "can_edit": user.is_staff and user.has_perm("games.change_game"),
             "installers": installers,
             "auto_installers": game.get_default_installers(),
@@ -263,7 +303,8 @@ def new_installer(request, slug):
         notify_installer(installer)
         return redirect("installer_complete", slug=game.slug)
     return render(
-        request, "installers/form.html", {"form": form, "game": game, "new": True}
+        request, "installers/form.html",
+        {"form": form, "game": game, "new": True}
     )
 
 
@@ -285,7 +326,9 @@ def edit_installer(request, slug):
 
     # Handle installer deletion in a separate view
     if "delete" in request.POST:
-        return redirect(reverse("delete_installer", kwargs={"slug": installer.slug}))
+        return redirect(
+            reverse("delete_installer", kwargs={"slug": installer.slug})
+        )
     # Extract optional revision ID from parameters
     revision_id = request.GET.get("revision")
     try:
@@ -308,7 +351,10 @@ def edit_installer(request, slug):
         else:
             # Display the latest revision created by the current logged in user
             if (
-                    version.revision.user == request.user or request.user.is_staff
+                    (
+                        version.revision.user == request.user
+                        or request.user.is_staff
+                    )
             ) and version.revision.date_created > installer.updated_at:
                 draft_data = version.field_dict
                 revision_id = version.revision.id
@@ -373,7 +419,8 @@ def delete_installer(request, slug):
         installer_name = installer.slug
         installer.delete()
         messages.warning(
-            request, u"The installer {} has been deleted.".format(installer_name)
+            request,
+            u"The installer {} has been deleted.".format(installer_name)
         )
         return redirect(game.get_absolute_url())
     return render(request, "installers/delete.html", {"installer": installer})
@@ -433,7 +480,9 @@ def fork_installer(request, slug):
         installer.rating = ""
         installer.user = request.user
         installer.save()
-        return redirect(reverse("edit_installer", kwargs={"slug": installer.slug}))
+        return redirect(
+            reverse("edit_installer", kwargs={"slug": installer.slug})
+        )
     context = {"form": form, "installer": installer}
     return render(request, "installers/fork.html", context)
 
@@ -467,7 +516,9 @@ def get_banner(request, slug):
     if not game or not game.title_logo:
         raise Http404
     try:
-        thumbnail = get_thumbnail(game.title_logo, settings.BANNER_SIZE, crop="center")
+        thumbnail = get_thumbnail(
+            game.title_logo, settings.BANNER_SIZE, crop="center"
+        )
     except AttributeError:
         game.title_logo.delete()
         raise Http404
@@ -545,7 +596,9 @@ def edit_game(request, slug):
         return HttpResponseBadRequest("You can only apply changes to a game")
 
     # Initialise form with rejected values or with the working copy
-    form = GameEditForm(request.POST or change_model, request.FILES, initial=initial)
+    form = GameEditForm(
+        request.POST or change_model, request.FILES, initial=initial
+    )
 
     # If form was submitted and is valid, persist suggestion for moderation
     if request.method == "POST" and form.is_valid():
@@ -557,10 +610,13 @@ def edit_game(request, slug):
 
         # Save metadata (author + reason)
         change_suggestion_meta = GameSubmission(
-            user=request.user, game=change_suggestion, reason=request.POST["reason"]
+            user=request.user, game=change_suggestion,
+            reason=request.POST["reason"]
         )
         change_suggestion_meta.save()
-        return redirect(reverse("game-submitted-changes", kwargs={"slug": slug}))
+        return redirect(
+            reverse("game-submitted-changes", kwargs={"slug": slug})
+        )
 
     # Render template
     return render(request, "games/submit.html", {"form": form, "game": game})
@@ -584,7 +640,9 @@ def publish_game(request, game_id):
 @user_confirmed_required
 def screenshot_add(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    form = ScreenshotForm(request.POST or None, request.FILES or None, game_id=game.id)
+    form = ScreenshotForm(
+        request.POST or None, request.FILES or None, game_id=game.id
+    )
     if form.is_valid():
         form.instance.uploaded_by = request.user
         form.save()
@@ -634,7 +692,9 @@ def submit_issue(request):
 
 @staff_member_required
 def installer_submissions(request):
-    submissions = Version.objects.filter(revision__comment__startswith="[submission]")
+    submissions = Version.objects.filter(
+        revision__comment__startswith="[submission]"
+    )
     drafts = Version.objects.filter(revision__comment__startswith="[draft]")
     installers = Installer.objects.filter(published=False)
     unpublished_games = (

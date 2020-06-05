@@ -32,7 +32,8 @@ from providers.models import ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_INSTALLER = {
-    "files": [{"file_id": "http://location"}, {"unredistribuable_file": "N/A"}],
+    "files": [{"file_id": "http://location"},
+              {"unredistribuable_file": "N/A"}],
     "installer": [{"move": {"src": "file_id", "dst": "$GAMEDIR"}}],
 }
 
@@ -59,7 +60,8 @@ class Company(models.Model):
         return u"%s" % self.name
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None,
+            update_fields=None
     ):
         if self.name:
             self.slug = slugify(self.name)
@@ -109,7 +111,8 @@ class Genre(models.Model):
         return self.name
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None,
+            update_fields=None
     ):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -135,7 +138,8 @@ class GameManager(models.Manager):
 
     def published(self):
         """Query games that are published"""
-        return self.get_queryset().filter(change_for__isnull=True, is_public=True)
+        return self.get_queryset().filter(change_for__isnull=True,
+                                          is_public=True)
 
     def with_installer(self):
         """Query games that have an installer"""
@@ -225,7 +229,8 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
     popularity = models.IntegerField(default=0)
-    provider_games = models.ManyToManyField(ProviderGame, related_name="games", blank=True)
+    provider_games = models.ManyToManyField(ProviderGame, related_name="games",
+                                            blank=True)
 
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
@@ -261,7 +266,9 @@ class Game(models.Model):
         """Humble Bundle ID, different from humblestoreid which is the store
         page ID for Humble Bundle
         """
-        gog_slugs = self.provider_games.filter(provider__name="HUMBLE").values_list("slug", flat=True)
+        gog_slugs = self.provider_games.filter(
+            provider__name="HUMBLE"
+        ).values_list("slug", flat=True)
         if gog_slugs:
             return gog_slugs[0]
         return ""
@@ -277,16 +284,19 @@ class Game(models.Model):
         if not self.website:
             return None
 
-        # Fall back to http if no protocol specified (cannot assume that https will work)
+        # Fall back to http if no protocol
+        # specified (cannot assume that https will work)
         has_protocol = "://" in self.website
         return "http://" + self.website if not has_protocol else self.website
 
     @property
     def website_url_hr(self):
-        """Returns a human readable website URL (stripped protocols and trailing slashes)"""
+        """Returns a human readable website
+        URL (stripped protocols and trailing slashes)"""
         if not self.website:
             return None
-        return self.website.split("https:", 1)[-1].split("http:", 1)[-1].strip("/")
+        return self.website.split("https:", 1)[-1].split(
+            "http:", 1)[-1].strip("/")
 
     @property
     def banner_url(self):
@@ -306,7 +316,9 @@ class Game(models.Model):
     def flag_labels(self):
         """Return labels of active flags, suitable for display"""
         # pylint: disable=E1133; self.flags *is* iterable
-        return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
+        return [
+            self.flags.get_label(flag[0]) for flag in self.flags if flag[1]
+        ]
 
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
@@ -398,7 +410,8 @@ class Game(models.Model):
             crop="center",
             format="PNG"
         )
-        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
+        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name),
+                    dest_file)
 
     def precache_banner(self):
         """Render the icon and place it in the banners folder"""
@@ -410,7 +423,8 @@ class Game(models.Model):
             settings.BANNER_SIZE,
             crop="center"
         )
-        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
+        shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name),
+                    dest_file)
 
     def set_logo_from_steam(self):
         """Fetch the banner from Steam and use it for the game"""
@@ -461,7 +475,9 @@ class Game(models.Model):
                 installer["name"] = self.name
                 installer["game_slug"] = self.slug
                 installer["version"] = platform.name
-                installer["slug"] = "-".join((self.slug[:30], platform.slug[:20]))
+                installer["slug"] = "-".join((
+                    self.slug[:30], platform.slug[:20]
+                ))
                 installer["platform"] = platform.slug
                 installer["description"] = ""
                 installer["published"] = True
@@ -484,21 +500,28 @@ class Game(models.Model):
             return
 
         try:
-            submission = GameSubmission.objects.get(game=self, accepted_at__isnull=True)
+            submission = GameSubmission.objects.get(
+                game=self,
+                accepted_at__isnull=True
+            )
         except GameSubmission.DoesNotExist:
             pass
         else:
             submission.accept()
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None,
+            update_fields=None
     ):
-        # Only create slug etc. if this is a game submission, no change submission
+        # Only create slug etc. if this is a game submission,
+        # no change submission
         if not self.change_for:
             if not self.slug:
                 self.slug = slugify(self.name)[:50]
             if not self.slug:
-                raise ValueError("Can't generate a slug for name %s" % self.name)
+                raise ValueError(
+                    "Can't generate a slug for name %s" % self.name
+                )
             self.set_logo_from_steam()
             self.check_for_submission()
         super(Game, self).save(
@@ -522,7 +545,8 @@ class GameMetadata(models.Model):
 
 class GameAlias(models.Model):
     """Alternate names and spellings a game might be known as"""
-    game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, related_name="aliases",
+                             on_delete=models.CASCADE)
     slug = models.SlugField()
     name = models.CharField(max_length=255)
 
@@ -547,7 +571,8 @@ class Screenshot(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                    on_delete=models.CASCADE)
     description = models.CharField(max_length=256, null=True, blank=True)
     published = models.BooleanField(default=False)
 
@@ -570,7 +595,10 @@ class InstallerManager(models.Manager):
         return self.get_queryset().filter(published=False)
 
     def abandoned(self):
-        """Return the installer with 'Change Me' version that haven't received any modifications"""
+        """
+        Return the installer with 'Change Me' version that haven't received
+        any modifications
+        """
         return [
             installer
             for installer in self.get_queryset().filter(version="Change Me")
@@ -593,17 +621,24 @@ class InstallerManager(models.Manager):
                 game = None
 
             if game:
-                installers = self.get_queryset().filter(game=game, published=True)
+                installers = self.get_queryset().filter(
+                    game=game,
+                    published=True
+                )
 
                 auto_installers = []
-                for platform in game.platforms.exclude(default_installer__isnull=True):
+                for platform in game.platforms.exclude(
+                                default_installer__isnull=True
+                ):
                     auto_installers.append(AutoInstaller(game, platform))
 
                 if installers or auto_installers:
                     return list(chain(installers, auto_installers))
 
             # Try auto installers
-            for platform in Platform.objects.exclude(default_installer__isnull=True):
+            for platform in Platform.objects.exclude(
+                            default_installer__isnull=True
+            ):
                 suffix = "-" + platform.slug
                 if slug.endswith(suffix):
                     game_slug = slug[: -len(suffix)]
@@ -664,7 +699,9 @@ class InstallerManager(models.Manager):
             if installers and isinstance(installers[0], dict):
                 installer_data = installers
             else:
-                installer_data = [installer.as_dict() for installer in installers]
+                installer_data = [
+                    installer.as_dict() for installer in installers
+                ]
         try:
             game = Game.objects.get(slug=slug)
             installer_data += game.get_default_installers()
@@ -725,8 +762,9 @@ class BaseInstaller(models.Model):
                 yaml_content["runner"] = self.runner.slug
             except ObjectDoesNotExist:
                 yaml_content["runner"] = ""
-            # Set slug to both slug and installer_slug for backward compatibility
-            # reasons with the client. Remove installer_slug sometime in the future
+            # Set slug to both slug and installer_slug for backward
+            # compatibility reasons with the client. Remove installer_slug
+            # sometime in the future
             yaml_content["slug"] = self.slug
             yaml_content["installer_slug"] = self.slug
         return yaml_content
@@ -768,9 +806,12 @@ class Installer(BaseInstaller):
         "1": "Garbage: game is not playable",
     }
 
-    game = models.ForeignKey(Game, related_name="installers", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, related_name="installers",
+                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    runner = models.ForeignKey("runners.Runner",
+                               on_delete=models.CASCADE)
 
     slug = models.SlugField(unique=True)
     version = models.CharField(max_length=32)
@@ -788,7 +829,8 @@ class Installer(BaseInstaller):
         null=True,
     )
     draft = models.BooleanField(default=False)
-    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+    rating = models.CharField(max_length=24, choices=RATINGS.items(),
+                              blank=True)
     protected = models.BooleanField(default=False)
 
     # Relevant for edit submissions only: Reason why the proposed change
@@ -808,7 +850,8 @@ class Installer(BaseInstaller):
     def set_default_installer(self):
         """Creates the default content for installer when they are first created.
 
-        This method should load from installer templates once they are implemented.
+        This method should load from installer templates once they are
+        implemented.
         """
         if self.game and self.game.steam_support():
             installer_data = {"game": {"appid": self.game.steamid}}
@@ -838,7 +881,8 @@ class Installer(BaseInstaller):
             pass
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None,
+            update_fields=None
     ):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save(
@@ -852,14 +896,17 @@ class Installer(BaseInstaller):
 class InstallerHistory(BaseInstaller):
     """Past versions of installers
 
-    Yes, that's what django-reversion is supposed to be for but we used it in a backwards way,
-    to store submissions instead of past revisions.
+    Yes, that's what django-reversion is supposed to be for
+    but we used it in a backwards way, to store submissions
+    instead of past revisions.
 
-    This is a simplified version of the model anyway since we don't have to keep track  of the
-    published aspect of it.
+    This is a simplified version of the model anyway since we
+    don't have to keep track of the published aspect of it.
     """
-    installer = models.ForeignKey(Installer, related_name="past_versions", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    installer = models.ForeignKey(Installer, related_name="past_versions",
+                                  on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
@@ -881,13 +928,17 @@ class InstallerHistory(BaseInstaller):
         )
 
     def __str__(self):
-        return "Snapshot of installer %s at %s" % (self.installer, self.created_at)
+        return "Snapshot of installer %s at %s" % (
+            self.installer,
+            self.created_at
+        )
 
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
 
-    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                     on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
@@ -927,7 +978,8 @@ class InstallerIssueReply(BaseIssue):
 
 class GameLibrary(models.Model):
     """Model to store user libraries"""
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
     games = models.ManyToManyField(Game, related_name="libraries")
 
     class Meta:
@@ -940,7 +992,8 @@ class GameLibrary(models.Model):
 
 class GameSubmission(models.Model):
     """User submitted game"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
@@ -951,7 +1004,8 @@ class GameSubmission(models.Model):
         verbose_name = "User submitted game"
 
     def __str__(self):
-        return u"{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
+        return u"{0} submitted {1} on {2}".format(self.user, self.game,
+                                                  self.created_at)
 
     def accept(self):
         """Accept the submission and notify the author"""
@@ -974,8 +1028,10 @@ class GameLink(models.Model):
         ('wikipedia', 'Wikipedia'),
         ('winehq', 'WineHQ AppDB'),
     )
-    game = models.ForeignKey(Game, related_name="links", on_delete=models.CASCADE)
-    website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
+    game = models.ForeignKey(Game, related_name="links",
+                             on_delete=models.CASCADE)
+    website = models.CharField(blank=True, choices=WEBSITE_CHOICES,
+                               max_length=32)
     url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -986,7 +1042,8 @@ class GameLink(models.Model):
         ordering = ["website"]
 
 
-class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes
+class InstallerRevision(BaseInstaller):
     """Revision for an installer"""
     def __init__(self, version):
         super(InstallerRevision, self).__init__()
@@ -1041,7 +1098,8 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         default_installer_data.update(installer_data)
         return default_installer_data
 
-    def _clear_old_revisions(self, original_revision=None, author=None, date=None):
+    def _clear_old_revisions(self, original_revision=None, author=None,
+                             date=None):
         """Delete revisions older than a given date and from a given author"""
         try:
             installer = Installer.objects.get(pk=self.installer_id)
@@ -1060,9 +1118,11 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
                     revision.created_at > date
             ]):
                 continue
-            revision._version.revision.delete()  # pylint: disable=protected-access
+            # pylint: disable=protected-access
+            revision._version.revision.delete()
 
-    def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def delete(self, using=None, keep_parents=False):
         """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(original_revision=self._version.revision)
 
@@ -1098,10 +1158,12 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
             installer.content = installer_data["content"]
         installer.save()
 
-        self._clear_old_revisions(author=submission_author, date=submission_date)
+        self._clear_old_revisions(author=submission_author,
+                                  date=submission_date)
 
 
-class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes
+class AutoInstaller(BaseInstaller):
     """Auto-generated installer"""
     published = True
     draft = False

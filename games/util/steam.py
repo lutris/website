@@ -92,14 +92,20 @@ def create_steam_installer(game):
 
 def get_store_info(appid):
     """Return the Steam store information for a game by it's Steam ID"""
-    response = requests.get("https://store.steampowered.com/api/appdetails?appids=%s" % appid)
+    response = requests.get(
+        "https://store.steampowered.com/api/appdetails?appids=%s" % appid
+    )
     if response.status_code != 200:
-        LOGGER.error("Invalid response from the Steam store: %s", response.status_code)
+        LOGGER.error(
+            "Invalid response from the Steam store: %s", response.status_code
+        )
         LOGGER.error(response.content)
         return
     store_info = response.json()
     if not store_info.get(appid, {}).get("success"):
-        LOGGER.error("Unsuccessful response from Steam store for app %s", appid)
+        LOGGER.error(
+            "Unsuccessful response from Steam store for app %s", appid
+        )
         LOGGER.error(store_info)
         return
     return store_info[appid]["data"]

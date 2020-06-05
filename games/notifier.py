@@ -9,12 +9,16 @@ DEFAULT_COUNT = 12
 
 def get_unpublished_installers(count=DEFAULT_COUNT):
     """Return a random list of unpublished installers"""
-    return models.Installer.objects.filter(published=False).order_by('?')[:count]
+    return models.Installer.objects.filter(
+        published=False
+    ).order_by('?')[:count]
 
 
 def get_unpublished_screenshots(count=DEFAULT_COUNT):
     """Return a random list of unpublished screenshots"""
-    return models.Screenshot.objects.filter(published=False).order_by('?')[:count]
+    return models.Screenshot.objects.filter(
+        published=False
+    ).order_by('?')[:count]
 
 
 def get_unreviewed_game_submissions(count=DEFAULT_COUNT):

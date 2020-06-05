@@ -15,7 +15,8 @@ class PlatformFactory(factory.DjangoModelFactory):
     class Meta:
         model = Platform
         django_get_or_create = ('name',)
-    name = factory.Iterator(['Amiga', 'Super Nintendo', 'Sega Genesis', 'Sony Playstation'])
+    name = factory.Iterator(['Amiga', 'Super Nintendo', 'Sega Genesis',
+                             'Sony Playstation'])
 
 
 class GenreFactory(factory.DjangoModelFactory):
@@ -39,7 +40,9 @@ class GameFactory(factory.DjangoModelFactory):
 
 
 class GameChangeFactory(factory.DjangoModelFactory):
-    """Creates a change row model which is equal to the game given by change_for"""
+    """
+    Creates a change row model which is equal to the game given by change_for
+    """
 
     class Meta:
         model = models.Game
@@ -136,5 +139,7 @@ class CompanyFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.Company
         django_get_or_create = ('name',)
-    name = factory.Iterator(['Valve', 'CD Projekt', 'Blizzard', 'Tripwire Interactive'])
-    slug = factory.Iterator(['valve', 'cd-projekt', 'blizzard', 'tripwire-interactive'])
+    name = factory.Iterator(['Valve', 'CD Projekt', 'Blizzard',
+                             'Tripwire Interactive'])
+    slug = factory.Iterator(['valve', 'cd-projekt', 'blizzard',
+                             'tripwire-interactive'])

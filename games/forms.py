@@ -26,7 +26,8 @@ from games.util.installer import validate_installer
 class AutoSlugForm(forms.ModelForm):
 
     class Meta:
-        # Override this in subclasses. Using a real model here not to confuse pylint
+        # Override this in subclasses.
+        # Using a real model here not to confuse pylint
         model = models.Game
         fields = "__all__"
 
@@ -35,7 +36,12 @@ class AutoSlugForm(forms.ModelForm):
         self.fields["slug"].required = False
 
     def get_slug(self, name, slug=None):
-        return get_auto_increment_slug(self.Meta.model, self.instance, name, slug)
+        return get_auto_increment_slug(
+            self.Meta.model,
+            self.instance,
+            name,
+            slug
+        )
 
     def clean(self):
         self.cleaned_data["slug"] = self.get_slug(
@@ -84,7 +90,8 @@ class GameForm(forms.ModelForm):
         self.fields["name"].label = "Title"
         self.fields["year"].label = "Release year"
         self.fields["website"].help_text = (
-            "The official website (full address). If it doesn't exist, leave blank."
+            "The official website (full address). If it doesn't exist, \
+            leave blank."
         )
         self.fields["genres"].help_text = ""
         self.fields["description"].help_text = (
@@ -148,7 +155,8 @@ class GameForm(forms.ModelForm):
         else:
             if game.is_public:
                 msg = (
-                    "This game is <a href='/games/%s'>already in our database</a>."
+                    "This game is <a href='/games/%s'>already in our database\
+                    </a>."
                 ) % slug
             else:
                 msg = (
@@ -207,7 +215,8 @@ class GameEditForm(forms.ModelForm):
                 "viewport": {"width": 875, "height": 345},
                 "boundary": {"width": 875, "height": 345},
                 "showZoomer": True,
-                "url": payload["title_logo"].url if payload.get("title_logo") else "",
+                "url": payload["title_logo"].url if payload.get("title_logo")
+                else "",
             }
         )
         self.fields["title_logo"].label = "Upload an image"
@@ -233,7 +242,9 @@ class GameEditForm(forms.ModelForm):
         )
 
     def clean(self):
-        """Overwrite clean to fail validation if unchanged form was submitted"""
+        """
+        Overwrite clean to fail validation if unchanged form was submitted
+        """
 
         cleaned_data = super(GameEditForm, self).clean()
 
@@ -267,10 +278,13 @@ class InstallerForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.Installer
-        fields = ("runner", "version", "description", "notes", "content", "draft")
+        fields = ("runner", "version", "description", "notes", "content",
+                  "draft")
         widgets = {
             "runner": Select2Widget,
-            "description": forms.Textarea(attrs={"class": "installer-textarea"}),
+            "description": forms.Textarea(
+                attrs={"class": "installer-textarea"}
+            ),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
             "content": forms.Textarea(
                 attrs={"class": "code-editor", "spellcheck": "false"}
@@ -323,7 +337,8 @@ class InstallerForm(forms.ModelForm):
                 "Don't put 'version' at the end of the 'version' field"
             )
         version_exists = (
-            models.Installer.objects.filter(game=self.instance.game, version=version)
+            models.Installer.objects.filter(game=self.instance.game,
+                                            version=version)
             .exclude(id=self.instance.id)
             .count()
         )
@@ -334,7 +349,8 @@ class InstallerForm(forms.ModelForm):
         return version
 
     def clean(self):
-        dummy_installer = models.Installer(game=self.instance.game, **self.cleaned_data)
+        dummy_installer = models.Installer(game=self.instance.game,
+                                           **self.cleaned_data)
         is_valid, errors = validate_installer(dummy_installer)
         if not is_valid:
             if "content" not in self.errors:
@@ -366,7 +382,8 @@ class InstallerEditForm(InstallerForm):
     reason = forms.CharField(
         widget=forms.Textarea(attrs={"class": "installer-textarea"}),
         required=False,
-        help_text="Please describe briefly, why this change is necessary or useful. "
+        help_text="Please describe briefly, why this change is necessary or \
+        useful. "
         "This will help us moderate the changes.",
     )
 
@@ -438,4 +455,6 @@ class LibraryFilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['platforms'].choices = (models.Platform.objects.values_list('pk', 'name'))
+        self.fields['platforms'].choices = (
+            models.Platform.objects.values_list('pk', 'name')
+        )

@@ -65,7 +65,9 @@ def doesnt_contain_useless_fields(installer):
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
     ):
         if field in script:
-            return (False, "Don't put a '{}' field in the script.".format(field))
+            return (
+                False, "Don't put a '{}' field in the script.".format(field)
+            )
     return SUCCESS
 
 
@@ -140,7 +142,8 @@ def winesteam_scripts_use_correct_prefix(installer):
     if script['game'].get('prefix', '').strip() == '$GAMEDIR':
         return (
             False,
-            "Do not create the prefix directly in the game folder, use $GAMEDIR/prefix"
+            "Do not create the prefix directly in the game folder,\
+            use $GAMEDIR/prefix"
         )
     return SUCCESS
 

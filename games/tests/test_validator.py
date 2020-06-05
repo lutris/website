@@ -81,6 +81,8 @@ class TestScriptValidator(TestCase):
         is_valid, _errors = validate_installer(self.installer)
         self.assertFalse(is_valid)
 
-        self.installer.content = json.dumps({'game': {'foo': 'bar', 'bar': 'foo'}})
+        self.installer.content = json.dumps(
+            {'game': {'foo': 'bar', 'bar': 'foo'}}
+        )
         is_valid, _errors = validate_installer(self.installer)
         self.assertTrue(is_valid)

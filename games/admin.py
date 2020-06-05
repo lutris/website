@@ -115,11 +115,13 @@ class IssueReplyInline(admin.StackedInline):
         class DefaultUserFormSet(formset):
             """Sets every instance of the formset to a given user"""
 
-            def save_new_objects(self, commit=True):  # pylint: disable=unused-argument
+            # pylint: disable=unused-argument
+            def save_new_objects(self, commit=True):
                 """Force commit to false to prevent IntegrityErrors then set
                 the user. You must set this attribute yourself.
                 """
-                self.saved_forms = []  # pylint: disable=attribute-defined-outside-init
+                # pylint: disable=attribute-defined-outside-init
+                self.saved_forms = []
                 objects = super().save_new_objects(commit=False)
                 for obj in objects:
                     obj.submitted_by = self.user
@@ -132,7 +134,8 @@ class IssueReplyInline(admin.StackedInline):
 
 class InstallerIssueAdmin(admin.ModelAdmin):
     """Admin config for issues"""
-    list_display = ('__str__', 'solved', 'submitted_by', 'submitted_on', 'installer')
+    list_display = ('__str__', 'solved', 'submitted_by', 'submitted_on',
+                    'installer')
     list_filter = ('solved', )
     search_fields = ('submitted_by__username', 'installer__game__name')
     readonly_fields = (
@@ -181,7 +184,8 @@ class GameAdmin(admin.ModelAdmin):
     search_fields = ('name', 'steamid')
 
     raw_id_fields = (
-        'publisher', 'developer', 'genres', 'platforms', 'change_for', 'provider_games'
+        'publisher', 'developer', 'genres', 'platforms', 'change_for',
+        'provider_games'
     )
     autocomplete_lookup_fields = {
         'fk': ['publisher', 'developer'],
@@ -205,10 +209,14 @@ class GameAdmin(admin.ModelAdmin):
         if game.change_for is not None:
             actions += [self.review_changes_url(game)]
         else:
-            change_suggestions_count = models.Game.objects.filter(change_for=game).count()
+            change_suggestions_count = models.Game.objects.filter(
+                change_for=game).count()
 
             if change_suggestions_count > 0:
-                actions += [self.list_change_submissions(game, change_suggestions_count)]
+                actions += [self.list_change_submissions(
+                    game,
+                    change_suggestions_count
+                )]
 
         output = ', '.join(actions) if actions else '-'
         return format_html(output)
@@ -216,14 +224,21 @@ class GameAdmin(admin.ModelAdmin):
     def review_changes_url(self, game):
         """Add a link to review the changes of a change submission"""
 
-        url = reverse('admin-change-submission', kwargs={'submission_id': game.id})
-        return '<a href="{url}">{text}</a>'.format(url=url, text='Review changes')
+        url = reverse(
+            'admin-change-submission',
+            kwargs={'submission_id': game.id}
+        )
+        return '<a href="{url}">{text}</a>'.format(
+            url=url, text='Review changes'
+        )
 
     def list_change_submissions(self, game, count):
         """Add a link to review all change suggestions for a given game"""
 
         url = reverse('admin-change-submissions', kwargs={'game_id': game.id})
-        text = '{count} change submission{pl}'.format(count=count, pl='s' if count > 1 else '')
+        text = '{count} change submission{pl}'.format(
+            count=count, pl='s' if count > 1 else ''
+        )
         return '<a href="{url}">{text}</a>'.format(url=url, text=text)
 
     custom_actions.short_description = 'Actions'
@@ -261,7 +276,8 @@ class GameLibraryAdmin(admin.ModelAdmin):
 
 
 class GameSubmissionAdmin(admin.ModelAdmin):
-    list_display = ("game_link", "user_link", "created_at", "accepted_at", 'reason')
+    list_display = ("game_link", "user_link", "created_at", "accepted_at",
+                    "reason")
 
     def game_link(self, obj):
         return mark_safe("<a href='{0}'>{1}<a/>".format(

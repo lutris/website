@@ -10,7 +10,9 @@ LOGGER = logging.getLogger(__name__)
 
 @task
 def delete_unchanged_forks():
-    """Periodically delete forked installers that haven't received any changes"""
+    """
+    Periodically delete forked installers that haven't received any changes
+    """
     for installer in models.Installer.objects.abandoned():
         installer.delete()
 

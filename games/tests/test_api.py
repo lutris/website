@@ -17,8 +17,9 @@ class TestGameApi(TestCase):
     def setUp(self):
         self.num_games = 10
         self.games = [
-            factories.GameFactory(name='game_%d' % index, slug='game-%d' % index)
-            for index in range(self.num_games)
+            factories.GameFactory(
+                name='game_%d' % index, slug='game-%d' % index
+            ) for index in range(self.num_games)
         ]
 
     def test_can_get_games(self):
@@ -96,14 +97,17 @@ class TestInstallerApi(TestCase):
         self.game = factories.GameFactory(name=self.slug)
         factories.RunnerFactory(name="Linux", slug='linux')
         platform = factories.PlatformFactory()
-        platform.default_installer = {"game": {"rom": "foo"}, "runner": "linux"}
+        platform.default_installer = {
+            "game": {"rom": "foo"}, "runner": "linux"
+        }
         platform.save()  # pylint: disable=no-member
         self.game.platforms.add(platform)
 
     def test_can_get_installer_list_for_a_game(self):
         """The API can return a list of installers for a game"""
         self.assertTrue(self.game.platforms.count())
-        response = self.client.get(reverse('api_game_installer_list', kwargs={'slug': self.slug}))
+        response = self.client.get(reverse('api_game_installer_list',
+                                           kwargs={'slug': self.slug}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -120,7 +124,9 @@ class TestGameProviderApi(TestCase):
 
             for index in range(10)
         ]
-        provider = Provider.objects.create(name="GOGDB", website="https://gogdb.org")
+        provider = Provider.objects.create(
+            name="GOGDB", website="https://gogdb.org"
+        )
         for game in self.games:
             provider_game = ProviderGame.objects.create(
                 name=game.name,

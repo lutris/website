@@ -88,6 +88,7 @@ class TestGameViews(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+
 class TestInstallerIssues(TestCase):
     def setUp(self):
         self.user = factories.UserFactory()

@@ -73,10 +73,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Change install scripts to specify wine prefix architecture"""
-        installers = Installer.objects.filter(content__icontains="Program Files")
+        installers = Installer.objects.filter(
+            content__icontains="Program Files"
+        )
         for installer in installers:
             if installer.runner.slug != "wine":
-                script_updated = self.add_arch_to_non_wine_installers(installer)
+                script_updated = self.add_arch_to_non_wine_installers(
+                    installer
+                )
             else:
                 script_updated = self.add_arch_to_wine_installers(installer)
             if script_updated:
