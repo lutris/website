@@ -11,7 +11,8 @@ LOGGER = logging.getLogger(__name__)
 
 def run():
     response = requests.get(
-        "https://raw.githubusercontent.com/SteamDatabase/SteamLinux/master/GAMES.json"
+        "https://raw.githubusercontent.com/SteamDatabase/\
+        SteamLinux/master/GAMES.json"
     )
     linux_games = response.json()
     for game_id in linux_games:
@@ -36,7 +37,10 @@ def run():
             continue
         slug = slugify(store_info["name"])
         if Game.objects.filter(slug=slug).count():
-            LOGGER.warning("Game %s already in Lutris but does not have a Steam ID", game_id)
+            LOGGER.warning(
+                "Game %s already in Lutris but does not have a Steam ID",
+                game_id
+            )
             continue
 
         game = Game.objects.create(
@@ -57,7 +61,9 @@ def run():
             platform = Platform.objects.get(slug='windows')
         game.platforms.add(platform)
         for steam_genre in store_info["genres"]:
-            genre, created = Genre.objects.get_or_create(slug=slugify(steam_genre["description"]))
+            genre, created = Genre.objects.get_or_create(
+                slug=slugify(steam_genre["description"])
+            )
             if created:
                 genre.name = steam_genre["description"]
                 LOGGER.info("Created genre %s", genre.name)

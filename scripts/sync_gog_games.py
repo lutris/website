@@ -21,7 +21,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 def clean_name(name):
-    """Remove some special characters from game titles to allow for easier comparison"""
+    """
+    Remove some special characters from game titles to allow for easier
+    comparison
+    """
     return name.replace('™', '').replace('®', '').strip()
 
 
@@ -40,10 +43,13 @@ def clean_gog_slug(gog_game):
 def fetch_gog_games_page(page):
     """Saves one page of GOG games to disk"""
     print("Saving page %s" % page)
-    url = "https://embed.gog.com/games/ajax/filtered?mediaType=game&page={}".format(page)
+    url = "https://embed.gog.com/games/ajax/filtered?\
+    mediaType=game&page={}".format(page)
     response = requests.get(url)
     response_data = response.json()
-    with open(os.path.join(GOG_CACHE_PATH, '{}.json'.format(page)), 'w') as json_file:
+    with open(
+        os.path.join(GOG_CACHE_PATH, '{}.json'.format(page)), 'w'
+    ) as json_file:
         json.dump(response_data, json_file, indent=2)
     return response_data
 
@@ -69,9 +75,13 @@ def iter_gog_games():
         "_dlc",
         "_season_pass"
     )
-    num_pages = len([f for f in os.listdir(GOG_CACHE_PATH) if re.match(r'(\d+)\.json', f)])
+    num_pages = len(
+        [f for f in os.listdir(GOG_CACHE_PATH) if re.match(r'(\d+)\.json', f)]
+    )
     for page in range(1, num_pages + 1):
-        with open(os.path.join(GOG_CACHE_PATH, "{}.json".format(page))) as json_file:
+        with open(
+            os.path.join(GOG_CACHE_PATH, "{}.json".format(page))
+        ) as json_file:
             api_results = json.load(json_file)
             for product in api_results['products']:
                 if not product["slug"].endswith(excluded_suffixes):
@@ -128,10 +138,15 @@ def sync_slugs_with_ids():
             id_counter += 1
             continue
         except Game.MultipleObjectsReturned:
-            LOGGER.warning("Games shoudn't share a gogid (id: %s)", gog_game["id"])
+            LOGGER.warning(
+                "Games shoudn't share a gogid (id: %s)", gog_game["id"]
+            )
             inspect_gog_game(gog_game)
         slug_counter += 1
-    LOGGER.error("Found %s games by ID and saved %s ID to games", slug_counter, id_counter)
+    LOGGER.error(
+        "Found %s games by ID and saved %s ID to games", slug_counter,
+        id_counter
+    )
 
 
 def sync_ids_by_slug():

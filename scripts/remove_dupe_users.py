@@ -39,10 +39,16 @@ def run():
             print("Delete other old account with no games: %s" % other_user)
             other_user.delete()
 
-        if not first_confirmed and not first_has_games and other_confirmed and other_has_games:
+        if (
+            not first_confirmed and not first_has_games and
+            other_confirmed and other_has_games
+        ):
             print("Delete first: %s" % first_user)
             first_user.delete()
-        elif first_confirmed and first_has_games and not other_confirmed and not other_has_games:
+        elif (
+            first_confirmed and first_has_games and
+            not other_confirmed and not other_has_games
+        ):
             print("Delete other: %s" % other_user)
             other_user.delete()
 
