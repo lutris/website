@@ -6,14 +6,18 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Q
+# from django.db.models import Q
 from django.http import (Http404, HttpResponseBadRequest,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+# from django.views.generic import ListView
+# from django.contrib.postgres.search import (
+#     SearchQuery,
+#     SearchRank,
+#     SearchVector
+# )
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
@@ -23,7 +27,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 from games import models
-from games.forms import LibraryFilterForm
+# from games.forms import LibraryFilterForm
 from games.views.pages import GameList
 
 from . import forms, sso, tasks, serializers
@@ -74,7 +78,8 @@ def clear_auth_token(request):
 @login_required
 def profile(request):
     """Redirect to user account
-    Takes the username from the request, allows to have a unique URL for all profiles.
+    Takes the username from the request, allows to have a unique URL for all
+    profiles.
     """
     return HttpResponseRedirect(
         reverse('user_account', args=(request.user.username, ))
@@ -188,12 +193,16 @@ def associate_steam(request):
     try:
         openid_response = parse_openid_response(request)
     except HTTPFetchingError:
-        messages.warning(request, "Steam server is unreachable, please try again in a few moments")
+        messages.warning(
+            request,
+            "Steam server is unreachable, please try again in a few moments"
+        )
         return redirect(account_url)
 
     if openid_response.status == 'failure':
         messages.warning(request, "Failed to associate Steam account")
-        LOGGER.warning("Failed to associate Steam account for %s", request.user.username)
+        LOGGER.warning("Failed to associate Steam account for %s",
+                       request.user.username)
         return redirect(account_url)
     openid_backend = OpenIDBackend()
     try:
@@ -235,7 +244,9 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
             user = User.objects.get(username=self.kwargs['username'])
         except User.DoesNotExist:
             try:
-                user = User.objects.get(username__iexact=self.kwargs['username'])
+                user = User.objects.get(
+                    username__iexact=self.kwargs['username']
+                )
             except User.DoesNotExist:
                 raise Http404
             except User.MultipleObjectsReturned:
@@ -244,16 +255,21 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
 
     def get_queryset(self):
         user = self.get_user()
-        queryset = models.GameLibrary.objects.get(user=user).games.filter(is_public=True)
+        queryset = models.GameLibrary.objects.get(user=user).games.filter(
+            is_public=True
+        )
         if self.q_params['q']:
             queryset = queryset.order_by('-rank', self.get_ordering())
         else:
             queryset = queryset.order_by(self.get_ordering())
         return self.get_filtered_queryset(queryset)
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def get_context_data(self, *, object_list=None, **kwargs):
         """Display the user's library"""
-        context = super(LibraryList, self).get_context_data(object_list=object_list, **kwargs)
+        context = super(LibraryList, self).get_context_data(
+            object_list=object_list, **kwargs
+        )
         user = self.get_user()
         if self.request.user != user:
             # Libraries are currently private. This will change once public
@@ -310,7 +326,9 @@ def discourse_sso(request):
     """View used to sign in a user to the Discourse forums"""
     user = request.user
     if not user.email_confirmed:
-        return HttpResponseBadRequest('You must confirm your email to use the forums')
+        return HttpResponseBadRequest(
+            'You must confirm your email to use the forums'
+        )
     payload = request.GET.get('sso')
     signature = request.GET.get('sig')
     try:
@@ -318,8 +336,9 @@ def discourse_sso(request):
     except RuntimeError as ex:
         return HttpResponseBadRequest(ex.args[0])
 
-    url = sso.redirect_url(nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
-                           request.user.id, request.user.username)
+    url = sso.redirect_url(
+        nonce, settings.DISCOURSE_SSO_SECRET, request.user.email,
+        request.user.id, request.user.username)
     return redirect(settings.DISCOURSE_URL + url)
 
 

@@ -54,7 +54,8 @@ class RegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.helper = get_bootstrap_helper(
-            ["username", "email", "password1", "password2"], "register", "Register"
+            ["username", "email", "password1", "password2"],
+            "register", "Register"
         )
 
     def clean_username(self):
@@ -75,7 +76,9 @@ class RegistrationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(self.error_messages["password_mismatch"])
+            raise forms.ValidationError(
+                self.error_messages["password_mismatch"]
+            )
         return password2
 
     def save(self, commit=True):
@@ -107,7 +110,8 @@ class ProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(list(self.Meta.fields), "save", "Save")
+        self.helper = get_bootstrap_helper(list(self.Meta.fields), "save",
+                                           "Save")
 
     def save(self, commit=True):
         if "email" in self.changed_data:
@@ -125,5 +129,7 @@ class ProfileDeleteForm(forms.Form):
         """Only delete if the user has checked the corresponding checkbox"""
         confirm_delete = self.cleaned_data["confirm_delete"]
         if not confirm_delete:
-            raise forms.ValidationError("You must confirm to delete your account")
+            raise forms.ValidationError(
+                "You must confirm to delete your account"
+            )
         return confirm_delete

@@ -38,8 +38,10 @@ LOGGER = logging.getLogger(__name__)
 
 def validate(payload, signature, secret):
     """
-        payload: provided by Discourse HTTP call to your SSO endpoint as sso GET param
-        signature: provided by Discourse HTTP call to your SSO endpoint as sig GET param
+        payload: provided by Discourse HTTP call to your SSO endpoint as sso
+        GET param
+        signature: provided by Discourse HTTP call to your SSO endpoint as sig
+        GET param
         secret: the secret key you entered into Discourse sso secret
 
         return value: The nonce used by discourse to validate the redirect URL
@@ -85,7 +87,8 @@ def redirect_url(nonce, secret, email, external_id, username, **kwargs):
     })
 
     return_payload = base64.encodebytes(bytes(urlencode(kwargs), 'utf-8'))
-    hmac_ = hmac.new(bytes(secret, 'utf-8'), return_payload, digestmod=hashlib.sha256)
+    hmac_ = hmac.new(bytes(secret, 'utf-8'), return_payload,
+                     digestmod=hashlib.sha256)
     query_string = urlencode({'sso': return_payload, 'sig': hmac_.hexdigest()})
 
     return '/session/sso_login?%s' % query_string

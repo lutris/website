@@ -36,7 +36,8 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         """Return the local avatar URL or one from Gravatar"""
         if self.avatar:
             return self.avatar.url
-        default_url = "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
+        default_url = "https://lutris.net" \
+                      + settings.STATIC_URL + "images/default-avatar.png"
         size = 64
         return (
             "https://www.gravatar.com/avatar/%s?%s" % (
@@ -71,8 +72,13 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         self.gamelibrary.delete()
         self.groups.clear()
         self.useropenid_set.all().delete()
-        self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
-        self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
+        self.username = hmac.new(
+            uuid.uuid4().bytes,
+            digestmod=hashlib.md5
+        ).hexdigest()
+        self.set_password(
+            hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest()
+        )
         self.is_active = False
         self.is_staff = False
         self.email_confirmed = False
@@ -117,7 +123,10 @@ class EmailConfirmationToken(models.Model):
         try:
             user = User.objects.get(email=self.email)
         except User.DoesNotExist:
-            LOGGER.warning("%s tried to confirm but does not exist", self.email)
+            LOGGER.warning(
+                "%s tried to confirm but does not exist",
+                self.email
+            )
             return
         except User.MultipleObjectsReturned:
             user = User.objects.filter(email=self.email).order_by('-id')[0]

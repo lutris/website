@@ -12,7 +12,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=models.User)
-def create_library(sender, instance, created, **_kwargs):  # pylint: disable=unused-argument
+# pylint: disable=unused-argument
+def create_library(sender, instance, created, **_kwargs):
     """Create a new game library for new users"""
     from games.models import GameLibrary
     if created:
@@ -21,7 +22,8 @@ def create_library(sender, instance, created, **_kwargs):  # pylint: disable=unu
 
 
 @receiver(post_save, sender=models.User)
-def send_registration_email(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
+# pylint: disable=unused-argument
+def send_registration_email(sender, instance, created, **kwargs):
     """Send a confirmation email after user creation"""
     if created:
         token = models.EmailConfirmationToken(email=instance.email)

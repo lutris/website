@@ -11,7 +11,9 @@ from games.models import Installer
 
 
 def user_confirmed_required(function):
-    """Require that a user is logged in and has confirmed their email address"""
+    """
+    Require that a user is logged in and has confirmed their email address
+    """
     decorator = user_passes_test(
         lambda u: u.is_authenticated and u.email_confirmed,
         login_url=reverse_lazy("user_require_confirmation"),
@@ -39,7 +41,10 @@ def check_installer_restrictions(view_func):
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         slug = kwargs.get('slug')
-        if request.user.is_staff or can_edit_installer(slug, is_new=request.path.endswith('new')):
+        if (
+            request.user.is_staff or
+            can_edit_installer(slug, is_new=request.path.endswith('new'))
+           ):
             return view_func(request, *args, **kwargs)
         raise PermissionDenied("Installers are protected")
     return _wrapped_view

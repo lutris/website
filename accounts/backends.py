@@ -7,16 +7,23 @@ LOGGER = logging.getLogger(__name__)
 
 
 class SmarterModelBackend(ModelBackend):
-    """Authentication backend that is less moronic that the default Django one"""
+    """
+    Authentication backend that is less moronic that the default Django one
+    """
 
     def authenticate(self, request, username=None, password=None, **kwargs):
-        """Avoids being a complete dick to users by fetching usernames case insensitively"""
+        """
+        Avoids being a complete dick to users by fetching usernames case
+        insensitively
+        """
         UserModel = get_user_model()  # pylint: disable=invalid-name
         if username is None:
             username = kwargs.get(UserModel.USERNAME_FIELD)
         try:
-            case_insensitive_username_field = '{}__iexact'.format(UserModel.USERNAME_FIELD)
-            user = UserModel._default_manager.get(  # pylint: disable=protected-access
+            case_insensitive_username_field = '{}__iexact'.format(
+                UserModel.USERNAME_FIELD)
+            # pylint: disable=protected-access
+            user = UserModel._default_manager.get(
                 **{case_insensitive_username_field: username}
             )
         except UserModel.DoesNotExist:
@@ -30,7 +37,10 @@ class SmarterModelBackend(ModelBackend):
             # case sensitive password.
             return self.case_sensitive_authenticate(username, password)
         else:
-            if user.check_password(password) and self.user_can_authenticate(user):
+            if (
+                    user.check_password(password) and
+                    self.user_can_authenticate(user)
+               ):
                 return user
 
     def case_sensitive_authenticate(self, username, password):
@@ -40,7 +50,8 @@ class SmarterModelBackend(ModelBackend):
         LOGGER.info("Duplicate username %s", username)
         UserModel = get_user_model()  # pylint: disable=invalid-name
         try:
-            user = UserModel._default_manager.get(  # pylint: disable=protected-access
+            # pylint: disable=protected-access
+            user = UserModel._default_manager.get(
                 username=username
             )
         except UserModel.DoesNotExist:
