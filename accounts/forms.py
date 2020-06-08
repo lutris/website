@@ -5,7 +5,7 @@ import logging
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Div
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
@@ -56,18 +56,12 @@ class RegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_id = 'form_register'
         self.helper.form_method = 'post'
         self.helper.form_action = 'register'
         self.helper.form_class = "form-horizontal"
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
-        self.helper.layout = Layout(
-            'username', 'email', 'password1', 'password2',
-            Div(
-                Submit('register', 'Register', css_class='btn btn-primary'),
-                css_class="text-center"
-            )
-        )
 
     def clean_username(self):
         """Check that no similar username exist in a case insensitive way"""
@@ -105,19 +99,26 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_id = 'form_login'
         self.helper.form_method = 'post'
         self.helper.form_action = 'login'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
-        self.helper.layout = Layout(
-            'username',
-            'password',
-            Div(
-                Submit('signin', 'Sign in', css_class='btn btn-primary'),
-                css_class="text-center"
-            )
-        )
+
+
+class LutrisPasswordResetForm(PasswordResetForm):
+    """Subclass of PasswordResetForm with Bootstrap integration"""
+
+    def __init__(self, *args, **kwargs):
+        super(LutrisPasswordResetForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'form_password_reset'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'password_reset'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
 
 
 class ProfileForm(forms.ModelForm):

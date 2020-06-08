@@ -16,12 +16,9 @@
 </head>
 <body>
   {% if messages %}
-  <ul class="alerts">
+  <ul class="d-none" id="django_messages">
     {% for message in messages %}
-      <li{% if message.tags %} class="alert alert-dismissable alert-{{ message.tags }}"{% endif %}>
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      </li>
+      <li data-tags="{{ message.tags }}">{{ message }}</li>
     {% endfor %}
   </ul>
   {% endif %}
@@ -31,6 +28,13 @@
     {% block content %}{% endblock %}
   </div>
   {% include "includes/_footer.html" %}
+
+  {% if not user.is_authenticated %}
+    {% include 'accounts/partials/modals/_modal_login.html' %}
+    {% include 'accounts/partials/modals/_modal_password_reset.html' %}
+    {% include 'accounts/partials/modals/_modal_register.html' %}
+  {% endif %}
+
   <script src="{% static 'js/app.js' %}"></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

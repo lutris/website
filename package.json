@@ -38,12 +38,19 @@
   },
   "dependencies": {
     "ace-builds": "^1.4.11",
-    "jquery": "^3.5.1",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@popperjs/core": "^2.4.0",
+    "alertifyjs": "^1.13.1",
     "blueimp-gallery": "^2.43.0",
     "bootstrap": "^4.5.0",
+    "datatables.net": "^1.10.21",
+    "datatables.net-bs4": "^1.10.21",
+    "datatables.net-dt": "^1.10.21",
+    "datatables.net-responsive": "^2.2.5",
+    "datatables.net-responsive-bs4": "^2.2.5",
     "django-select2": "^7.0.2",
+    "jquery": "^3.5.1",
+    "js-cookie": "^2.2.1",
     "popper.js": "^1.16.1",
     "select2": "^4.0.7"
   }

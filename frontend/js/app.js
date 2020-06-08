@@ -9,72 +9,118 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import * as blueimp_gallery from 'blueimp-gallery/js/blueimp-gallery';
+import alertify from 'alertifyjs';
+import 'datatables.net-bs4';
+import 'datatables.net-responsive-bs4';
+import Cookies from 'js-cookie';
 
-(function() {
 
-  /**
-   * Return the cookie value referenced by name
-   * @param {string} name - Name of the cookie to return
-   * @returns {string} value of the cookie
-   */
-  function getCookie(name) {
-    var cookieValue = null;
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = $.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-    return cookieValue;
-  }
+let csrftoken = Cookies.get('csrftoken');
+let notification_queue = JSON.parse(sessionStorage.getItem('notification_queue')) || [];
 
-  /**
-   * Return true if the method does not require CSRF protection
-   * @param {string} method - Name of the method
-   * @returns {Boolean} True if the method is CSRF safe
-   */
-  function isCsrfSafeMethod(method) {
+function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
+}
 
-
-  /**
-   * Returns true if url is the same origin of current website
-   * @param {string} url - URL to test
-   * @returns {Boolean} Whether the url is same origin
-   */
-  function isSameOrigin(url) {
-    // test that a given url is a same-origin URL
-    // url could be relative or scheme relative or absolute
-    var host = document.location.host; // host + port
-    var protocol = document.location.protocol;
-    var srOrigin = '//' + host;
-    var origin = protocol + srOrigin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (url === origin || url.slice(0, origin.length + 1) === origin + '/') ||
-      (url === srOrigin || url.slice(0, srOrigin.length + 1) === srOrigin + '/') ||
-      // or any other URL that isn't scheme relative or absolute i.e relative.
-      !(/^(\/\/|http:|https:).*/.test(url));
-  }
-
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!isCsrfSafeMethod(settings.type) && isSameOrigin(settings.url)) {
-        // Send the token to same-origin, relative URLs only.
-        // Send the token only if the method warrants CSRF protection
-        // Using the CSRFToken value acquired earlier
-        var csrftoken = getCookie('csrftoken');
+function checkBeforeSend(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
     }
-  });
-}).call(this);
+}
 
-$(window).on('load', function () {
+function queue_notification(status, message) {
+    if (status && message) {
+        notification_queue.push({status: status, message: message});
+        sessionStorage.setItem('notification_queue', JSON.stringify(notification_queue));
+    }
+}
+
+function onAjaxPostDone(data) {
+    if (data.url) {
+        queue_notification(data.status, data.message);
+        window.location.replace(data.url);
+    }
+    else
+        show_notification(data.status, data.message);
+}
+
+function onAjaxFail(jqXHR, textStatus, errorThrown) {
+    alertify.error(jqXHR.responseText);
+}
+
+function configure_alertify() {
+    alertify.defaults.transition = "fade";
+    alertify.defaults.theme.ok = "btn btn-primary";
+    alertify.defaults.theme.cancel = "btn btn-danger";
+    alertify.defaults.theme.input = "form-control";
+    alertify.defaults.movable = false;
+    alertify.defaults.notifier.position = 'top-left';
+    alertify.defaults.notifier.delay = 0;
+}
+
+function link_form_submit(modal_id, form_id, url) {
+    let $form = $(form_id);
+    let $modal = $(modal_id);
+    $form.on('submit', function (event){
+        event.preventDefault();
+        if ($form[0].reportValidity()){
+            $.post({
+                url: url,
+                data: $form.serialize(),
+            }).done(function (response){
+                console.log(response);
+                if (response.status === 'invalid') {
+                    $modal.find('.modal-body').html(response.html);
+                    link_form_submit(modal_id, form_id, url);
+                } else {
+                    $modal.modal('hide');
+                    onAjaxPostDone(response);
+                }
+            });
+        }
+    });
+}
+
+function configure_modal_form(modal_id, form_id) {
+    $(modal_id).on('show.bs.modal', function (event) {
+        let $modal = $(this);
+        let $modal_body = $modal.find('.modal-body');
+        let url = $(event.relatedTarget).data('url');
+        $.get({
+            url: url,
+        }).done(function (response){
+            $modal_body.html(response);
+            let $form = $modal.find('form');
+            $form.attr('id', form_id.substring(1));
+            $form.attr('action', url);
+            link_form_submit(modal_id, form_id, url);
+        }).fail(function (){
+            alertify.error('Failed to retrieve modal data.', '5');
+            $modal.modal('hide');
+        })
+    });
+}
+
+function configure_modals() {
+    configure_modal_form('#modal_login', '#form_login');
+    configure_modal_form('#modal_register', '#form_register');
+    configure_modal_form('#modal_password_change', '#form_password_change');
+    configure_modal_form('#modal_password_reset', '#form_password_reset');
+
+    $('#editProfileModal').on('show.bs.modal', function (event) {
+      let $modal = $(this);
+      let url = $(event.relatedTarget).data('url');
+      $.ajax({
+        url: url,
+        success: function (response) {
+          $modal.find('.modal-body').html(response);
+        }
+      })
+    })
+}
+
+function configure_main_carousel(){
   if ($("#blueimp-gallery-carousel").length) {
     blueimp_gallery(document.getElementById('carousel_links').getElementsByTagName('a'), {
       container: '#blueimp-gallery-carousel',
@@ -90,6 +136,10 @@ $(window).on('load', function () {
       }
     })
   }
+}
+
+function configure_game_library(){
+  let $paginate_by = $('#paginate_by');
 
   $("#order_by").change(function (){
     let $order_by = $('#order_by');
@@ -103,7 +153,6 @@ $(window).on('load', function () {
   });
 
   $("#paginate_by").change(function () {
-    let $paginate_by = $('#paginate_by');
     let paginate_value = $paginate_by.val();
     let filter_value = $paginate_by.data('filter');
     let order_by = $('#order_by').val();
@@ -114,7 +163,7 @@ $(window).on('load', function () {
     let ordering = $("<input>").attr("type", "hidden").attr("name", "ordering").val($('#order_by').val());
     let $library_filter_form = $('#library_filter_form');
     $library_filter_form.append($(ordering));
-    if ($('#paginate_by').length > 0) {
+    if ($paginate_by.length > 0) {
         let paginate_by = $("<input>").attr("type", "hidden").attr("name", "paginate_by").val($('#paginate_by').val());
         $library_filter_form.append($(paginate_by));
     }
@@ -154,15 +203,57 @@ $(window).on('load', function () {
         window.location.href = '?page=' + target_page + url
     }
   })
+}
 
-  $('#editProfileModal').on('show.bs.modal', function (event) {
-  let $modal = $(this);
-  let url = $(event.relatedTarget).data('url');
-  $.ajax({
-    url: url,
-    success: function (result) {
-      $modal.find('.modal-body').html(result);
+function configure_profile(){
+
+}
+
+function show_notification(status, message) {
+    if (status && message) {
+        switch (status) {
+            case 'success':
+                alertify.success(message, '5');
+                break;
+            case 'info':
+                alertify.message(message, '5');
+                break;
+            case 'warning':
+                alertify.warning(message);
+                break;
+            case 'error':
+                alertify.error(message);
+                break;
+            default:
+                break;
+        }
     }
-  })
-})
+}
+
+function show_notifications(){
+    $('#django_messages li').each(function () {
+        let status = $(this).data('tags');
+        let message = $(this).text();
+        show_notification(status, message);
+    })
+
+    notification_queue.forEach(function (notification) {
+        show_notification(notification.status, notification.message);
+    });
+    notification_queue = [];
+    sessionStorage.removeItem('notification_queue');
+}
+
+$(window).on('load', function () {
+  $.ajaxSetup({
+      beforeSend: checkBeforeSend,
+      error: onAjaxFail,
+    });
+  configure_alertify();
+  configure_modals();
+
+  configure_main_carousel();
+  configure_game_library();
+  configure_profile();
+  show_notifications();
 })
