@@ -42,15 +42,19 @@
     {% if user.website %}
     <span class="card-text">Website: <a href="{{user.website}}">{{user.website}}</a></span>
     {% endif %}
-    <p class="card-text">
-      You can log out from every computer you have Lutris installed on by generating a new authentication token.
-        <a href="{% url 'clear_auth_token' %}"
+
+    <h4 class="card-title">Profile actions</h4>
+    <button type="button" class="btn btn-primary mr-2"
+            data-toggle="modal" data-target="#modal_password_change"
+            data-url="{% url 'password_change' %}"
+    >Change password</button>
+    <a href="{% url 'clear_auth_token' %}"
            class="btn btn-danger"
            onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')"
            >Clear token</a>
+  <p class="card-text mt-1">
+      You can log out from every computer you have Lutris installed on by generating a new authentication token.
     </p>
-
-    <h4 class="card-title">Profile actions</h4>
     <span class="card-text">
       You can automatically import the list of your Steam games and add them to your Lutris library.
     </span>
@@ -109,6 +113,8 @@
     </div>
   </div>
 </div>
+
+{% include 'accounts/partials/modals/_modal_password_change.html' %}
 
 <div class="modal fade" tabindex="-1" role="dialog" id="steamPublicProfile" aria-hidden="true">
   <div class="modal-dialog modal-lg">

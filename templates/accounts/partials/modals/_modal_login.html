@@ -1,0 +1,12 @@
+{% extends 'partials/modals/_modal.html' %}
+{% block modal_id %}modal_login{% endblock %}
+{% block modal_title %}Login to Lutris{% endblock %}
+{% block modal_footer %}
+  <button class="btn btn-secondary mr-auto"
+    data-url="{% url 'password_reset' %}"
+    data-toggle="modal"
+    data-target="#modal_password_reset"
+    data-dismiss="modal">
+    Forgot your password?</button>
+  <input class="btn btn-primary" type="submit" value="Sign In" form="form_login">
+{% endblock %}

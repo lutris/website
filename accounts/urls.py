@@ -5,49 +5,15 @@ from django.urls import path, re_path
 from . import forms, views
 
 urlpatterns = [
-    path('login/',
-         auth_views.LoginView.as_view(
-             template_name='accounts/login.html',
-             authentication_form=forms.LoginForm
-         ),
-         name='login'),
-    path('logout/',
-         auth_views.LogoutView.as_view(
-             template_name='accounts/logout.html'
-         ),
-         name='logout'),
-    path('password/change/',
-         auth_views.PasswordChangeView.as_view(
-             template_name='accounts/password_change.html'
-         ),
-         name='password_change'),
-    path('password/change/done/',
-         auth_views.PasswordChangeDoneView.as_view(
-             template_name='accounts/password_change_done.html'
-         ),
-         name='password_change_done'),
-    path('password/reset/',
-         auth_views.PasswordResetView.as_view(
-             template_name='accounts/password_reset.html'
-         ),
-         name='password_reset'),
+    path('login/', views.LutrisLoginView.as_view(), name='login'),
+    path('logout/', views.LutrisLogoutView.as_view(), name='logout'),
+    path('password/change/', views.LutrisPasswordChangeView.as_view(), name='password_change'),
+    path('password/reset/', views.LutrisPasswordResetView.as_view(), name='password_reset'),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',  # noqa
-            auth_views.PasswordResetConfirmView.as_view(
-                template_name='accounts/password_reset_confirm.html'
-            ),
+            views.LutrisPasswordResetConfirmView.as_view(),
             name='password_reset_confirm'),
-    path('password/reset/done/',
-         auth_views.PasswordResetDoneView.as_view(
-             template_name='accounts/password_reset_done.html'
-         ),
-         name='password_reset_done'),
-    path('password/reset/complete/',
-         auth_views.PasswordResetCompleteView.as_view(
-             template_name='accounts/password_reset_complete.html'
-         ),
-         name='password_reset_complete'),
 
-    path('register/', views.register, name="register"),
+    path('register/', views.LutrisRegisterView.as_view(), name="register"),
     path('clear-auth-token/', views.clear_auth_token, name="clear_auth_token"),
     path('associate-steam/', views.associate_steam, name="associate_steam"),
     path('steam-disconnect', views.steam_disconnect, name="steam_disconnect"),

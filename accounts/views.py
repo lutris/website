@@ -5,15 +5,18 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView, PasswordChangeView, \
+    PasswordResetConfirmView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import (Http404, HttpResponseBadRequest,
-                         HttpResponseRedirect)
+                         HttpResponseRedirect, JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.template.loader import render_to_string
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.views.generic import CreateView
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
@@ -23,7 +26,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 from games import models
-from games.forms import LibraryFilterForm
 from games.views.pages import GameList
 
 from . import forms, sso, tasks, serializers
@@ -32,23 +34,102 @@ from .models import EmailConfirmationToken, User
 LOGGER = logging.getLogger(__name__)
 
 
-def register(request):
-    """Register a new user account"""
-    form = forms.RegistrationForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        try:
-            form.save()
-        except IntegrityError:
-            # We do username validation, so we shouldn't get IntegrityErrors
-            # and yet, they still happen from time to time. As a last resort,
-            # try to cause panic and havoc.
-            messages.error(
-                request,
-                "OH NO!!!! WHAT HAPPENED!??!?! YOU BROKE EVERYTHING !!"
-                "THIS IS BAD BAD BAD.SERIOUSLY, WHAT HAVE YOU DONE ???"
-            )
-        return HttpResponseRedirect('/')
-    return render(request, 'accounts/registration_form.html', {'form': form})
+class LutrisRegisterView(CreateView):
+    form_class = forms.RegistrationForm
+    template_name = 'accounts/partials/forms/_form_crispy.html'
+    success_url = reverse_lazy('homepage')
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        response = {
+            'status': 'success',
+            'message': 'Account registered, you can now login to Lutris.'
+        }
+        return JsonResponse(response)
+
+    def form_invalid(self, form):
+        response = {
+            'status': 'invalid',
+            'html': render_to_string(self.template_name, self.get_context_data(form=form))
+        }
+        return JsonResponse(response)
+
+
+class LutrisLoginView(LoginView):
+    template_name = 'accounts/partials/forms/_form_crispy.html'
+    authentication_form = forms.LoginForm
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        response = {
+            'status': 'success',
+            'message': 'Welcome to Lutris!',
+            'url': self.get_success_url()
+        }
+        return JsonResponse(response)
+
+    def form_invalid(self, form):
+        response = {
+            'status': 'invalid',
+            'html': render_to_string(self.template_name, self.get_context_data(form=form))
+        }
+        return JsonResponse(response)
+
+
+class LutrisLogoutView(LogoutView):
+    next_page = 'homepage'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, 'You are now logged out of Lutris.')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class LutrisPasswordResetView(PasswordResetView):
+    template_name = 'accounts/partials/forms/_form_crispy.html'
+    form_class = forms.PasswordResetForm
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        response = {
+            'status': 'success',
+            'message': 'Password reset email has been sent to specified address.'
+        }
+        return JsonResponse(response)
+
+    def form_invalid(self, form):
+        response = {
+            'status': 'invalid',
+            'html': render_to_string(self.template_name, self.get_context_data(form=form))
+        }
+        return JsonResponse(response)
+
+
+class LutrisPasswordChangeView(PasswordChangeView):
+    template_name = 'accounts/partials/forms/_form_crispy.html'
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        response = {
+            'status': 'success',
+            'message': 'Your password has been updated.'
+        }
+        return JsonResponse(response)
+
+    def form_invalid(self, form):
+        response = {
+            'status': 'invalid',
+            'html': render_to_string(self.template_name, self.get_context_data(form=form))
+        }
+        return JsonResponse(response)
+
+
+class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('homepage')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password has been updated.')
+        return super().form_valid(form)
 
 
 def clear_auth_token(request):
