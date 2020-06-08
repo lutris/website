@@ -217,6 +217,17 @@ function configure_profile(){
 
 }
 
+function configure_game_screenshots() {
+    if ($("#game_screenshots_carousel").length) {
+    blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
+      container: '#game_screenshots_carousel',
+      carousel: true,
+      toggleControlsOnSlideClick: false,
+      stretchImages: true,
+    });
+  }
+}
+
 function show_notification(status, message) {
     if (status && message) {
         switch (status) {
@@ -263,5 +274,6 @@ $(window).on('load', function () {
   configure_main_carousel();
   configure_game_library();
   configure_profile();
+  configure_game_screenshots();
   show_notifications();
 })

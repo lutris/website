@@ -22,35 +22,34 @@
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
-<div class="page">
-  <div class="page-header">
-    <div class='title'>
-      {% if game.icon %}
-        <img src='{{ MEDIA_URL }}{{ game.icon }}' class="icon" />
-      {% endif %}
-      <span class="ellipse-text">{{ game.name }}</span>
-        <div class="buttons">
-          <a class="btn" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
-          {% if user.is_staff %}
-            {% if can_edit and pending_change_subm_count > 0 %}
-              <a class="btn" href="{% url 'admin-change-submissions' game.id %}">
-                {{ pending_change_subm_count }} pending change
-                suggestion{% if pending_change_subm_count > 1 %}s{% endif %}
-              </a>
-            {% endif %}
-            {% if can_publish and not game.is_public %}
-              <a class="btn" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
-            {% endif %}
-            {% if can_edit %}
-              <a class="btn" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
-            {% endif %}
-          {% endif %}
-        </div>
+  <h1 class="text-center pb-3">
+    {% if game.icon %}
+        <img src='{{ MEDIA_URL }}{{ game.icon }}' class="mr-2" style="height:64px" />
+    {% endif %}{{ game.name }}
+  {% if user.is_staff %}
+  <div class="dropdown float-right">
+    <button class="btn btn-dark btn-lg" type="button" data-toggle="dropdown">
+      <i class="fas fa-cog fa-2x"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow border border-primary">
+    {% if can_edit and pending_change_subm_count > 0 %}#}
+      <a class="dropdown-item bg-dark text-white" href="{% url 'admin-change-submissions' game.id %}">
+        {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
+      </a>
+    {% endif %}
+    {% if can_publish and not game.is_public %}
+      <a class="dropdown-item bg-dark text-white" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
+    {% endif %}
+    {% if can_edit %}
+      <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+    {% endif %}
     </div>
   </div>
+  {% endif %}
+  </h1>
 
   <div class="row">
-    <div class="col-sm-3 col-sm-push-9">
+    <div class="col-12 col-md-3">
       <div class="game-info">
         {% thumbnail game.title_logo "300" as img %}
           <img src="{{ img.url }}" class="banner" />
@@ -99,13 +98,13 @@
         </ul>
         <div class="centered">
 
-          <p>{{ game.user_count }} users have this game</p>
+          <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
             {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn">Add to my library</a>
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-primary text-dark">Add to my library</a>
             {% else %}
-            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn in-library">
-              <span>In my library</span>
+            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-danger">
+              <span>Remove from my library</span>
             </a>
             {% endif %}
           </p>
@@ -177,8 +176,8 @@
       </div>
     </div>
 
-    <div class="col-sm-9 col-sm-pull-3">
-      {% include "includes/screenshots_slider.html" %}
+    <div class="col-12 col-md-9">
+      {% include 'games/partials/_screenshots.html' %}
       <div class="screenshots-bar actions-bar">
         <a href='{% url 'screenshot_add' game.slug %}'>Submit screenshot</a>
       </div>
@@ -247,7 +246,6 @@
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
