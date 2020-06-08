@@ -129,10 +129,6 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ("website", "avatar", "email")
 
-    def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(list(self.Meta.fields), "save", "Save")
-
     def save(self, commit=True):
         if "email" in self.changed_data:
             self.instance.email_confirmed = False

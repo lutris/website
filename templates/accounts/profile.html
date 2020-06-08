@@ -19,8 +19,8 @@
   </div>
   <div class="card-body">
     <h4 class="card-title">Profile details
-      <a class="mx-2 text-decoration-none" data-toggle="modal" data-target="#editProfileModal"
-      data-url="{% url 'profile_edit' user.username %}">
+      <a class="mx-2 text-decoration-none" data-toggle="modal" data-target="#modal_profile_edit"
+      data-url="{% url 'profile_edit' %}">
       <i class="fas fa-pencil-alt" title="Edit Profile"></i></a>
     </h4>
     <span class="card-text">Email: {{ user.email }}</span>
@@ -114,7 +114,8 @@
   </div>
 </div>
 
-{% include 'accounts/partials/modals/_modal_password_change.html' %}
+  {% include 'accounts/partials/modals/_modal_password_change.html' %}
+  {% include 'accounts/partials/modals/_modal_profile_edit.html' %}
 
 <div class="modal fade" tabindex="-1" role="dialog" id="steamPublicProfile" aria-hidden="true">
   <div class="modal-dialog modal-lg">

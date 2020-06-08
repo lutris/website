@@ -1,8 +1,7 @@
 # pylint: disable=C0103, C0301, missing-docstring
-from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
 
-from . import forms, views
+from . import views
 
 urlpatterns = [
     path('login/', views.LutrisLoginView.as_view(), name='login'),
@@ -26,7 +25,7 @@ urlpatterns = [
     path('require-confirmation', views.user_require_confirmation, name='user_require_confirmation'),
     path('confirm', views.user_email_confirm, name='user_email_confirm'),
     path('discourse-sso', views.discourse_sso, name='discourse_sso'),
-    path('<username>/edit', views.profile_edit, name='profile_edit'),
+    path('edit/', views.ProfileUpdateView.as_view(), name='profile_edit'),
     path('<username>/delete', views.profile_delete, name='profile_delete'),
     path('<username>', views.user_account, name="user_account"),
 ]
