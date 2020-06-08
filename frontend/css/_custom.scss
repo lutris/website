@@ -84,6 +84,18 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
           transition:none;
 }
 
+// Blueimp gallery
+.blueimp-gallery > .prev, .blueimp-gallery > .next {
+  font-family: $font-family-base;
+  background: None;
+  border: None;
+  opacity: 0.75;
+}
+
+.blueimp-gallery > .play-pause {
+
+}
+
 // Custom
 $screenshotsWidth: 690px;
 $screenshotsHeight: 388px;
@@ -626,6 +638,11 @@ input.select2-lookalike[type="text"] {
     &:focus {
       border: solid 1px black;
     }
+}
+
+.game-icon {
+  width: 32px;
+  height: 32px;
 }
 
 .important-checkbox {
@@ -1209,38 +1226,38 @@ input.select2-lookalike[type="text"] {
   color: theme-color('warning');
 }
 
-//.external-link {
-//  outline: 1px solid #444;
-//  margin: 8px auto;
-//  display: flex;
-//  height: 36px;
-//  width: 174px;
-//  padding: 2px;
-//
-//  &:hover {
-//    outline: 1px solid #444;
-//    text-decoration: none;
-//  }
-//
-//  img {
-//    display: inline-block;
-//    width: 32px;
-//    height: 32px;
-//    background-color: #444;
-//    vertical-align: middle;
-//  }
-//
-//  span {
-//    display: inline-block;
-//    background-color: #444;
-//    width: 138px;
-//    line-height: 32px;
-//    vertical-align: middle;
-//    font-size: 0.90em;
-//    padding: 0;
-//    margin: 0 0 0 2px;
-//  }
-//}
+.external-link {
+  outline: 1px solid theme-color('primary');
+  margin: 8px auto;
+  display: flex;
+  height: 36px;
+  width: 174px;
+  padding: 2px;
+
+  &:hover {
+    outline: 1px solid theme-color('primary');
+    text-decoration: none;
+  }
+
+  img {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-color: theme-color('darker');
+    vertical-align: middle;
+  }
+
+  span {
+    display: inline-block;
+    background-color: theme-color('darker');
+    width: 138px;
+    line-height: 32px;
+    vertical-align: middle;
+    font-size: 0.90em;
+    padding: 0;
+    margin: 0 0 0 2px;
+  }
+}
 
 /*Library game filter, flags selection*/
 #id_flags {
