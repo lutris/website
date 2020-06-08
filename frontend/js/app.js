@@ -59,30 +59,48 @@ function configure_alertify() {
     alertify.defaults.notifier.delay = 0;
 }
 
-function link_form_submit(modal_id, form_id, url) {
+function link_form_submit(modal_id, form_id, url, has_files) {
     let $form = $(form_id);
     let $modal = $(modal_id);
     $form.on('submit', function (event){
         event.preventDefault();
         if ($form[0].reportValidity()){
-            $.post({
-                url: url,
-                data: $form.serialize(),
-            }).done(function (response){
-                console.log(response);
-                if (response.status === 'invalid') {
-                    $modal.find('.modal-body').html(response.html);
-                    link_form_submit(modal_id, form_id, url);
-                } else {
-                    $modal.modal('hide');
-                    onAjaxPostDone(response);
-                }
-            });
+            if (has_files){
+                let formData = new FormData($form[0]);
+                $.post({
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json"
+                }).done(function (response){
+                    if (response.status === 'invalid') {
+                        $modal.find('.modal-body').html(response.html);
+                        link_form_submit(modal_id, form_id, url, has_files);
+                    } else {
+                        $modal.modal('hide');
+                        onAjaxPostDone(response);
+                    }
+                });
+            } else {
+                $.post({
+                    url: url,
+                    data: $form.serialize(),
+                }).done(function (response){
+                    if (response.status === 'invalid') {
+                        $modal.find('.modal-body').html(response.html);
+                        link_form_submit(modal_id, form_id, url, has_files);
+                    } else {
+                        $modal.modal('hide');
+                        onAjaxPostDone(response);
+                    }
+                });
+            }
         }
     });
 }
 
-function configure_modal_form(modal_id, form_id) {
+function configure_modal_form(modal_id, form_id, has_files=false) {
     $(modal_id).on('show.bs.modal', function (event) {
         let $modal = $(this);
         let $modal_body = $modal.find('.modal-body');
@@ -94,7 +112,7 @@ function configure_modal_form(modal_id, form_id) {
             let $form = $modal.find('form');
             $form.attr('id', form_id.substring(1));
             $form.attr('action', url);
-            link_form_submit(modal_id, form_id, url);
+            link_form_submit(modal_id, form_id, url, has_files);
         }).fail(function (){
             alertify.error('Failed to retrieve modal data.', '5');
             $modal.modal('hide');
@@ -107,17 +125,7 @@ function configure_modals() {
     configure_modal_form('#modal_register', '#form_register');
     configure_modal_form('#modal_password_change', '#form_password_change');
     configure_modal_form('#modal_password_reset', '#form_password_reset');
-
-    $('#editProfileModal').on('show.bs.modal', function (event) {
-      let $modal = $(this);
-      let url = $(event.relatedTarget).data('url');
-      $.ajax({
-        url: url,
-        success: function (response) {
-          $modal.find('.modal-body').html(response);
-        }
-      })
-    })
+    configure_modal_form('#modal_profile_edit', '#form_profile_edit', true);
 }
 
 function configure_main_carousel(){

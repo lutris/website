@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView, PasswordChangeView, \
     PasswordResetConfirmView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -15,8 +16,9 @@ from django.http import (Http404, HttpResponseBadRequest,
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
@@ -225,24 +227,30 @@ def user_email_confirm(request):
                   {'confirmation_token': confirmation_token})
 
 
-@login_required
-def profile_edit(request, username):
-    """Change profile information"""
-    user = get_object_or_404(User, username=username)
-    if user != request.user:
-        raise Http404
-    form = forms.ProfileForm(request.POST or None, request.FILES or None,
-                             instance=user)
-    if form.is_valid():
-        form.save()
-        messages.success(
-            request,
-            'Your account info has been updated.'
-        )
-        return redirect(reverse('user_account', args=(username, )))
-    return render(request,
-                  'accounts/partials/forms/profile_edit_form.html',
-                  {'form': form, 'form_action': reverse('profile_edit', args=[username])})
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'accounts/partials/forms/_form_crispy.html'
+    form_class = forms.ProfileForm
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        response = {
+            'status': 'success',
+            'message': 'Your profile has been updated.',
+            'url': self.success_url
+        }
+        return JsonResponse(response)
+
+    def form_invalid(self, form):
+        super().form_invalid(form)
+        response = {
+            'status': 'invalid',
+            'html': render_to_string(self.template_name, self.get_context_data(form=form))
+        }
+        return JsonResponse(response)
 
 
 @login_required
