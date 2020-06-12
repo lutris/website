@@ -56,26 +56,43 @@ dependencies::
     sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
-In order to build the frontend code (javascript and css files), you'll
-need nodejs and npm installed on your system. If you are
-running Ubuntu, it is advised to use nvm to get the most recent
-version of node, you can install it following the instructions on the github
-page ::
+To build the frontend assets (javascript and css files), you'll
+need Node and NPM available. If your distribution offers a version of
+Node that is too old, you can use NVM (https://github.com/creationix/nvm)
+to install a more recent version.
 
-    https://github.com/creationix/nvm
+You can then build the frontend assets::
 
-Once you installed a recent version of npm, you can run the following commands::
+    npm install
+    npm run setup
+    run run build
 
-    make setup  # Will install the project's npm and bower dependencies
-                # and build the static files
-    make watch  # Watch for JS/CSS changes and compile them
+To watch for file changes and recompile assets on the fly, you can run in a
+separate terminal::
 
-You'll need to setup the database, if you want to use a PostgreSQL database,
-follow the instructions found in the next paragraph before running this
-command. The database setup will also create a superuser account with the
-credentials admin/admin::
+    npm run watch
 
-    make db
+The installer issues use another frontend stack based on VueJS. It is not
+required to build them to work on other areas of the site. To build those
+assets, run::
+
+    cd frontend/vue
+    npm install
+    npm run build:issues  # for a production build
+    npm run build:issues  # for a development build and watch file changes
+
+Once your PostgreSQL database is configured (explained in the paragraph below),
+run the database migrations to populate the database with tables::
+
+    ./manage.py migrate
+
+You can create a new admin user with the command::
+
+    ./manage.py createsuperuser
+
+Alternatively, if you want a database that is already populated with games,
+there are snapshots on the Github releases page:
+https://github.com/lutris/website/releases
 
 The installer scripting documentation is not shipped with the website but
 with the client, if you want to build the docs, you'll need to get the
@@ -90,8 +107,7 @@ suite without any failures::
 
     make test
 
-You can now start developing on the website. Open your favorite editor and
-run Django's internal web server::
+Run the development server with::
 
     make run
 
