@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "A Vue.js project",
-  "author": "Mathieu Comandon <strycore@gmail.com>",
+  "author": "Mathieu Comandon <strider@strycore.com>",
   "scripts": {
     "build": "node build/build.js",
     "test": "npm run unit",
