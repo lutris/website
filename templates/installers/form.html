@@ -23,7 +23,7 @@
       <p>Load a previous revision </p>
       <select class='django-select2' id='revision-select'>
         {% for version in versions %}
-        <option value="{{version.id}}">{{version.revision.comment}}</option>
+        <option value="{{version.id}}" {% if version.id == revision_id %}selected{% endif %}>{{version.revision.comment}}</option>
         {% endfor %}
       </select>
     {% endif %}
