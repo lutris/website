@@ -158,16 +158,16 @@ class GameList(ListView):
             filter_string = '&q=%s' % self.q_params['q']
         if self.q_params.get('platforms'):
             for platform in self.q_params['platforms']:
-                filter_string += '&platform=%s' % platform
+                filter_string += '&platforms=%s' % platform
         if self.q_params.get('genres'):
             for genre in self.q_params['genres']:
-                filter_string += '&genre=%s' % genre
+                filter_string += '&genres=%s' % genre
         if self.q_params.get('companies'):
             for company in self.q_params['companies']:
-                filter_string += '&company=%s' % company
+                filter_string += '&companies=%s' % company
         if self.q_params.get('years'):
             for year in self.q_params['years']:
-                filter_string += '&year=%s' % year
+                filter_string += '&years=%s' % year
         if self.q_params.get('flags'):
             for flag in self.q_params['flags']:
                 filter_string += '&flags=%s' % flag
