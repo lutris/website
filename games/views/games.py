@@ -2,6 +2,8 @@
 # pylint: disable=too-few-public-methods
 from __future__ import absolute_import
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
@@ -90,7 +92,6 @@ class GameLibraryView(generics.RetrieveAPIView):
     serializer_class = serializers.GameLibrarySerializer
     permission_classes = [permissions.IsAuthenticated]
 
-
     def get(self, request, username):  # pylint: disable=arguments-differ
         try:
             user = User.objects.get(username=username)
@@ -143,3 +144,19 @@ class GameStatsView(APIView):
         ).count()
 
         return Response(statistics)
+
+
+class GameMergeView(APIView):
+    """View used to merge 2 games together"""
+
+    @staticmethod
+    def post(request, slug, other_slug):
+        """Merge a game with another one.
+        This view is restricted to staff members
+        """
+        if not request.user.is_staff:
+            raise PermissionDenied
+        original_game = get_object_or_404(models.Game, slug=slug)
+        other_game = get_object_or_404(models.Game, slug=other_slug)
+        original_game.merge_with_game(other_game)
+        return Response({})
