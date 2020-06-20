@@ -217,10 +217,6 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
 CELERYBEAT_SCHEDULE = {
-    'send-daily-mod-mail': {
-        'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=18, minute=0),
-    },
     'delete-unchanged-forks': {
         'task': 'games.tasks.delete_unchanged_forks',
         'schedule': crontab(hour=17, minute=59)
@@ -238,6 +234,13 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(hour=16, minute=20)
     }
 }
+
+if DOMAIN_NAME == "lutris.net":
+    CELERYBEAT_SCHEDULE['send-daily-mod-mail'] = {
+        'task': 'accounts.tasks.daily_mod_mail',
+        'schedule': crontab(hour=18, minute=0),
+    }
+
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
