@@ -362,6 +362,90 @@ class Game(models.Model):
         self.description = change_set.description
         self.title_logo = change_set.title_logo
 
+    def merge_with_game(self, other_game):
+        """Merge the information of another game into this game.
+        This is a destructive operation the other game gets deleted
+        after the merge is done.
+        """
+        # Move screenshots
+        for screenshot in other_game.screenshot_set.all():
+            screenshot.game = self
+            screenshot.save()
+
+        # Move installers
+        for installer in other_game.installers.all():
+            installer.game = self
+            installer.save()
+
+        # Move aliases
+        for alias in other_game.aliases.all():
+            alias.game = self
+            alias.save()
+
+        # Create a new alias from the other game
+        GameAlias.objects.create(
+            game=self,
+            name=other_game.name,
+            slug=other_game.slug
+        )
+
+        # Merge genres
+        for genre in other_game.genres.all():
+            self.genres.add(genre)
+
+        # Merge platforms
+        for platform in other_game.platforms.all():
+            self.platforms.add(platform)
+
+        # Move user libraries
+        for library in other_game.libraries.all():
+            library.games.add(self)
+
+        # Move provider games
+        for provider_game in other_game.provider_games.all():
+            self.provider_games.add(provider_game)
+
+        # Merge Steam ID if none is present
+        if not self.steamid:
+            self.steamid = other_game.steam_id
+
+        # Merge year if none is provided
+        if not self.year:
+            self.year = other_game.year
+
+        # Merge icon if none exist
+        if not self.icon:
+            self.icon = other_game.icon
+
+        # Merge banner if there is none
+        if not self.title_logo:
+            self.title_logo = other_game.title_logo
+
+        # Merge weblinks
+        for link in other_game.links.all():
+            link.game = self
+            link.save()
+
+        # Merge publisher
+        if not self.publisher:
+            self.publisher = other_game.publisher
+
+        # Merge developer
+        if not self.developer:
+            self.developer = other_game.developer
+
+        # Merge website
+        if not self.website:
+            self.website = other_game.website
+
+        # Merge description
+        if not self.description:
+            self.description = other_game.description
+
+        # Delete game
+        delete_results = other_game.delete()
+        LOGGER.info("Merged and deleted game: %s", delete_results)
+
     def has_installer(self):
         """Return whether this game has an installer"""
         return self.installers.exists() or self.has_auto_installers()
