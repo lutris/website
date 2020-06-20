@@ -79,7 +79,7 @@ assets, run::
     cd frontend/vue
     npm install
     npm run build:issues  # for a production build
-    npm run build:issues  # for a development build and watch file changes
+    npm run build:issues-dev  # for a development build and watch file changes
 
 Once your PostgreSQL database is configured (explained in the paragraph below),
 run the database migrations to populate the database with tables::
@@ -117,11 +117,14 @@ Postgresql configuration
 You can get the same Postgres server used in the Docker setup by running the
 following command::
 
-    docker run --name lutrisdb \
+    docker run -d \
+        --name lutrisdb \
+        --restart unless-stopped \
         -e POSTGRES_PASSWORD=admin \
         -e POSGRES_DB=lutris \
         -e POSTGRES_USER=lutris \
-        -p 5432:5432 -d postgres:12
+        -p 5432:5432 \
+        postgres:12
 
 Quickstart::
 
