@@ -39,6 +39,4 @@ TEMPLATE_LOADERS = (
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
-
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

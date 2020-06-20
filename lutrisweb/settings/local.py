@@ -22,5 +22,3 @@ DATABASES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/lutris-emails'
-
-STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
