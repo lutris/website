@@ -45,11 +45,23 @@ class TestInstallerViews(TestCase):
 
 class TestGameViews(TestCase):
     """Test game list view"""
+
+    def setUp(self):
+        factories.CompanyFactory(name='Team 17', slug='team-17')
+
     def test_can_get_game_list(self):
         """Can get the basic game list"""
         url = reverse('game_list')
         self.assertEqual(url, "/games")
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_company(self):
+        """The view should ignore bad flags passed in the GET parameters"""
+        response = self.client.get("/games/by/1?companies=1'A=0")
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get("/games/by/1?companies=1")
         self.assertEqual(response.status_code, 200)
 
     def test_can_receive_garbage_flag(self):
@@ -73,6 +85,9 @@ class TestGameViews(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         url = "/games?page=0"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        url = "/games?page=1"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
