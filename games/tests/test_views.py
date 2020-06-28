@@ -57,12 +57,24 @@ class TestGameViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_receive_garbage_company(self):
-        """The view should ignore bad flags passed in the GET parameters"""
+        """The view should ignore bad company id values"""
         response = self.client.get("/games/by/1?companies=1'A=0")
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get("/games/by/1?companies=1")
         self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_year(self):
+        """The view should ignore bad year values"""
+        url = (
+            "/games/year/2009?page=2&paginate_by=25&ordering=name"
+            "&years=2009%22%20or%20(1,2)=(select*from(select%20"
+            "name_const(CHAR(111,108,111,108,111,115,104,101,114),1),"
+            "name_const(CHAR(111,108,111,108,111,115,104,101,114),1))a)"
+            "%20--%20%22x%22=%22x"
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_can_receive_garbage_flag(self):
         """The view should ignore bad flags passed in the GET parameters"""
