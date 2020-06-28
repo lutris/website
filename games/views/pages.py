@@ -108,6 +108,8 @@ class GameList(ListView):
         return self.get_filtered_queryset(queryset)
 
     def get_filtered_queryset(self, queryset):
+        """Build search query from the search parameters"""
+        self.clean_search_query()
         if self.q_params['q']:
             if self.q_params['search-installers']:
                 queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
@@ -138,6 +140,16 @@ class GameList(ListView):
                 flag_q |= Q(flags=flag)
             queryset = queryset.filter(flag_q)
         return queryset
+
+    def clean_search_query(self):
+        """Validators used to remove garbage input sent in search data."""
+        if "companies" in self.q_params:
+            try:
+                self.q_params["companies"] = [
+                    int(company) for company in self.q_params["companies"]
+                ]
+            except ValueError:
+                self.q_params["companies"] = []
 
     def clean_parameters(self):
         """Validators used to prevent sending garbage data to Django views"""
