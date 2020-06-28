@@ -82,6 +82,9 @@
     {% endif %}
   </div>
   <div class="col-sm-3">
+    <div class="action-container">
+      <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">Submit a new game</a>
+    </div>
     <div class="panel panel-default no-border">
       <div class="panel-body" style="background-color:#444;">
         <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
