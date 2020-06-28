@@ -143,13 +143,15 @@ class GameList(ListView):
 
     def clean_search_query(self):
         """Validators used to remove garbage input sent in search data."""
-        if "companies" in self.q_params:
-            try:
-                self.q_params["companies"] = [
-                    int(company) for company in self.q_params["companies"]
-                ]
-            except ValueError:
-                self.q_params["companies"] = []
+        int_lists = ("companies", "years")  # those fields should only contain ints.
+        for field in int_lists:
+            if field in self.q_params:
+                try:
+                    self.q_params[field] = [
+                        int(f) for f in self.q_params[field]
+                    ]
+                except ValueError:
+                    self.q_params[field] = []
 
     def clean_parameters(self):
         """Validators used to prevent sending garbage data to Django views"""
