@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 services:
 
@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: dev.Dockerfile
-    container_name: lutrisweb
     volumes:
       - ./:/app
       - media:/app/media
@@ -28,7 +27,6 @@ services:
     build:
       context: .
       dockerfile: frontend.Dockerfile
-    container_name: lutrisfrontend
     volumes:
       - ./frontend/css:/app/frontend/css
       - ./frontend/image:/app/frontend/image
@@ -39,12 +37,10 @@ services:
       - public:/app/public
     stdin_open: true
     tty: true
-#    restart: on-failure
 
   celery_worker:
     build:
       context: .
-    container_name: celery_worker
     volumes:
       - type: volume
         source: media
@@ -57,8 +53,8 @@ services:
     command: celery worker -A lutrisweb.celery.app -B -l info
 
   lutrisdb:
+    restart: unless-stopped
     image: postgres:12
-    container_name: lutrisdb
     expose:
       - "5430"
     command: -p 5430
@@ -70,11 +66,8 @@ services:
       POSTGRES_PASSWORD: 'admin'
 
   lutriscache:
-    container_name: lutriscache
-    restart: on-failure
+    restart: unless-stopped
     image: redis:6.0.1
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/data
 
