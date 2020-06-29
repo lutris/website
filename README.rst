@@ -4,7 +4,8 @@ Getting the site up and running for development
 With docker-compose
 -------------------
 
-Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
+Install docker (https://docs.docker.com/engine/install/) and
+docker-compose (https://docs.docker.com/compose/install/) on your system.
 
 To build the required docker images use::
 
@@ -53,7 +54,9 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
+    sudo apt-get install build-essential git curl python3 python3-pip \
+        python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev \
+        libffi-dev libpq-dev libxml2-dev libjpeg-dev
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
 To build the frontend assets (javascript and css files), you'll
