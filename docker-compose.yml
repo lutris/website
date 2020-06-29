@@ -14,7 +14,7 @@ services:
       - vue_static:/app/frontend/vue/static
 
     ports:
-      - "8000:8000"
+      - "8008:8000"
     restart: on-failure
     stdin_open: true
     tty: true
@@ -55,9 +55,8 @@ services:
   lutrisdb:
     restart: unless-stopped
     image: postgres:12
-    expose:
-      - "5430"
-    command: -p 5430
+    ports:
+      - "5430:5432"
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:

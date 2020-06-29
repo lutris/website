@@ -7,7 +7,6 @@ ENV LC_ALL=C.UTF-8
 ENV SECRET_KEY="somethissecret"
 ENV DB_HOST="lutrisdb"
 ENV POSTGRES_HOST="lutrisdb"
-ENV POSTGRES_PORT="5430"
 ENV DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 ENV REDIS_HOST='lutriscache'
 

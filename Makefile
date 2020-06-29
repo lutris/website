@@ -78,7 +78,7 @@ build_dev_docker:
 start_dev_docker:
 	docker-compose up -d lutrisdb lutriscache
 	# Wait a bit for the cache and database to be ready
-	sleep 5
+	sleep 2
 	docker-compose up -d lutrisfrontend lutrisweb
 
 stop_dev_docker:
