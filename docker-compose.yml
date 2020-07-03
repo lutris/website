@@ -7,11 +7,9 @@ services:
       context: .
       dockerfile: dev.Dockerfile
     volumes:
-      - ./:/app
-      - media:/app/media
-      - public:/app/public
-      - vue_dist:/app/frontend/vue/dist
-      - vue_static:/app/frontend/vue/static
+      - type: bind
+        source: .
+        target: /app
 
     ports:
       - "8008:8000"
@@ -28,13 +26,9 @@ services:
       context: .
       dockerfile: frontend.Dockerfile
     volumes:
-      - ./frontend/css:/app/frontend/css
-      - ./frontend/image:/app/frontend/image
-      - ./frontend/js:/app/frontend/js
-      - ./frontend/vue/src:/app/frontend/vue/src
-      - vue_dist:/app/frontend/vue/dist
-      - vue_static:/app/frontend/vue/static
-      - public:/app/public
+      - type: bind
+        source: .
+        target: /app
     stdin_open: true
     tty: true
 
@@ -75,6 +69,3 @@ volumes:
   postgresql:
   media:
   redisdata:
-  public:
-  vue_static:
-  vue_dist:
