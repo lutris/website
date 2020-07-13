@@ -143,7 +143,7 @@ class GameList(ListView):
 
     def clean_search_query(self):
         """Validators used to remove garbage input sent in search data."""
-        int_lists = ("companies", "years")  # those fields should only contain ints.
+        int_lists = ("companies", "years", "genres", "platforms")  # those fields should only contain ints.
         for field in int_lists:
             if field in self.q_params:
                 try:
