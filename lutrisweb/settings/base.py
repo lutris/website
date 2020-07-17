@@ -94,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'lutrisweb.urls'
@@ -147,6 +148,7 @@ INSTALLED_APPS = [
     'django_openid_auth',
     'django_extensions',
     'reversion',
+    'axes',
 
     'common',
     'platforms',
@@ -170,6 +172,7 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
 AUTHENTICATION_BACKENDS = (
+    'axes.backends.AxesBackend',
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.SmarterModelBackend',
