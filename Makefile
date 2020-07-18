@@ -19,7 +19,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	SEND_EMAILS=0 ./manage.py test --no-input --failfast $(test)
+	DJANGO_TESTS=1 ./manage.py test --no-input --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)
