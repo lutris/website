@@ -214,10 +214,12 @@ SELECT2_CSS = '/static/select2/dist/css/select2.min.css'
 
 # Email
 
-try:
-    SEND_EMAILS = bool(int(os.environ.get('SEND_EMAILS', '1')))
-except ValueError:
-    SEND_EMAILS = True
+
+SEND_EMAILS = True
+if os.environ.get('DJANGO_TESTS') == "1":
+    SEND_EMAILS = False
+    AXES_ENABLED = False
+
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "

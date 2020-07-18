@@ -2,6 +2,7 @@ from lutrisweb.settings.base import *  # noqa
 
 SEND_EMAILS = False
 DEBUG = False
+AXES_ENABLED = False
 
 DATABASES = {
     'default': {
