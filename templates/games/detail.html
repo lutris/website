@@ -31,7 +31,7 @@
     <button class="btn btn-dark btn-lg" type="button" data-toggle="dropdown">
       <i class="fas fa-cog fa-2x"></i>
     </button>
-    <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow border border-primary">
+    <div class="dropdown-menu dropdown-menu-right bg-dark rounded shadow border border-primary">
     {% if can_edit and pending_change_subm_count > 0 %}#}
       <a class="dropdown-item bg-dark text-white" href="{% url 'admin-change-submissions' game.id %}">
         {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
@@ -101,9 +101,9 @@
           <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
             {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-primary text-dark">Add to my library</a>
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-primary text-dark font-weight-bold">Add to my library</a>
             {% else %}
-            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-danger">
+            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-danger font-weight-bold">
               <span>Remove from my library</span>
             </a>
             {% endif %}
@@ -177,42 +177,48 @@
     </div>
 
     <div class="col-12 col-md-9">
-      {% include 'games/partials/_screenshots.html' %}
-      <div class="screenshots-bar actions-bar">
-        <a href='{% url 'screenshot_add' game.slug %}'>Submit screenshot</a>
-      </div>
-      <div class="installer-list">
-        {% if installers %}
-        <ul>
-          {% for installer in installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% if auto_installers %}
-        <ul>
-          {% for installer in auto_installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% if unpublished_installers %}
-        <ul id="unpublished-installers" class="hide-unpublished">
-          {% for installer in unpublished_installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        <div class="installer-actions actions-bar">
-          {% if unpublished_installers %}
-            <a href="#" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</a>
+      <div class="card bg-dark border-0">
+        <div class="card-body">
+          <h3 class="card-title">Screenshots <button class="btn btn-success ml-2"><i class="fas fa-plus"></i></button></h3>
+          {% include 'games/partials/_screenshots.html' %}
+
+          <h3 class="card-title">Description</h3>
+          {{ game.description|linebreaks }}
+
+          <h3 class="card-title">Installers
+            {% if unpublished_installers %}
+              <span class="text-muted">({{ unpublished_installers.count }} unpublished)</span>
+              <button class="btn btn-primary" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</button>
+            {% endif %}
+            <a class="btn btn-success ml-2" href="{% url "new_installer" slug=game.slug %}" title="Write a new installer">
+              <i class="fas fa-pencil-alt"></i></a>
+          </h3>
+          <div class="installer-list">
+          {% if installers %}
+          <ul class="list-group">
+            {% for installer in installers %}
+              {% include "games/_installer.html" %}
+            {% endfor %}
+          </ul>
           {% endif %}
-          <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
+          {% if auto_installers %}
+          <ul class="list-group-item">
+            {% for installer in auto_installers %}
+              {% include "games/_installer.html" %}
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% if unpublished_installers %}
+          <ul id="unpublished-installers" class="list-group hide-unpublished">
+            {% for installer in unpublished_installers %}
+              {% include "games/_installer.html" %}
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
         </div>
       </div>
-      <article>
-        {{ game.description|linebreaks }}
-      </article>
+
       <div id="issues">
         <installer-issues slug="{{game.slug}}" user-id="{{user.id|default:""}}"></installer-issues>
       </div>
