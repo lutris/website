@@ -46,7 +46,10 @@ services:
     image: nginx/latest
     # Expose a port for the Nginx proxy
     ports:
-      - "127.0.0.1:${HTTP_PORT}:80"
+      - target: 80
+        published: ${HTTP_PORT}
+        mode: host
+        protocol: tcp
     volumes:
       - web-static:/srv/static
       - web-media:/srv/media
