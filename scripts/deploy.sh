@@ -30,7 +30,7 @@ docker-compose -f docker-compose.prod.yml build $COMPOSE_OPTS lutrisworker
 
 echo "Bringing Docker Compose up"
 docker-compose -f docker-compose.prod.yml up -d
-docker-compose -f docker-compose.prod.yml run $COMPOSE_OPTS lutrisweb ./manage.py migrate
+docker-compose -f docker-compose.prod.yml run $COMPOSE_OPTS lutrisweb run ./manage.py migrate
 
 echo "Restarting NGinx"
 docker-compose -f docker-compose.prod.yml restart lutrisnginx
