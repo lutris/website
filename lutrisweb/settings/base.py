@@ -96,6 +96,12 @@ MIDDLEWARE = [
     # 'django.middleware.cache.FetchFromCacheMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
+AXES_META_PRECEDENCE_ORDER = [
+    'HTTP_X_FORWARDED_FOR',
+    'HTTP_X_REAL_IP',
+    'REMOTE_ADDR',
+]
+
 
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
