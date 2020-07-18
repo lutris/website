@@ -41,6 +41,9 @@ deploy_prod:
 	scripts/deploy.sh prod anaheim
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml restart lutrisnginx
 
+migrate_staging:
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
+
 remote_shell_staging:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb bash
 
