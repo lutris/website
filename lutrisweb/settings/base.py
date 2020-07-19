@@ -102,6 +102,7 @@ AXES_META_PRECEDENCE_ORDER = [
     'REMOTE_ADDR',
 ]
 
+AXES_FAILURE_LIMIT = 50
 
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
