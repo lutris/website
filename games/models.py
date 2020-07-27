@@ -13,7 +13,7 @@ from itertools import chain
 import six
 import yaml
 import reversion
-from reversion.models import Version
+from reversion.models import Version, Revision
 from bitfield import BitField
 from sorl.thumbnail import get_thumbnail
 from django.conf import settings
@@ -1081,9 +1081,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
 
         self.name = self.game.name
 
-        self.comment = self._version.revision.comment
-        self.user = self._version.revision.user
-        self.created_at = self._version.revision.date_created
+        try:
+            self.comment = self._version.revision.comment
+            self.user = self._version.revision.user
+            self.created_at = self._version.revision.date_created
+        except Revision.DoesNotExist:
+            LOGGER.warning("No revision found for %s", self._version)
+            self.comment = ""
+            self.user = None
+            self.created_at = None
         self.draft = installer_data["draft"]
         self.published = installer_data["published"]
         self.rating = installer_data["rating"]
