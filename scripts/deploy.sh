@@ -5,7 +5,7 @@ set -e
 export DEPLOY_ENV=$1
 export DEPLOY_HOST=$2
 
-COMPOSE_OPTS="--compress --parallel"
+COMPOSE_OPTS="--compress"
 if [[ "$3" == "--no-cache" ]]; then
     # Add --no-cache to build to disable cache and rebuild documentation.
     COMPOSE_OPTS="$COMPOSE_OPTS --no-cache"
@@ -24,9 +24,8 @@ else
     export HTTP_PORT=81
 fi
 
-docker-compose -f docker-compose.prod.yml build $COMPOSE_OPTS lutrisweb
-
-docker-compose -f docker-compose.prod.yml build $COMPOSE_OPTS lutrisworker
+docker-compose --verbose -f docker-compose.prod.yml build $COMPOSE_OPTS lutrisweb
+docker-compose --verbose -f docker-compose.prod.yml build $COMPOSE_OPTS lutrisworker
 
 echo "Bringing Docker Compose up"
 docker-compose -f docker-compose.prod.yml up -d
