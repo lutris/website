@@ -407,7 +407,7 @@ class Game(models.Model):
 
         # Merge Steam ID if none is present
         if not self.steamid:
-            self.steamid = other_game.steam_id
+            self.steamid = other_game.steamid
 
         # Merge year if none is provided
         if not self.year:
