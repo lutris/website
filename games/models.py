@@ -154,7 +154,7 @@ class GameManager(models.Manager):
     def get_random(self, option=""):
         """Return a random game"""
         if not re.match(r"^[\w\d-]+$", option) or len(option) > 128:
-            return
+            return None
         pk_query = self.get_queryset()
         if option == "incomplete":
             pk_query = pk_query.filter(change_for__isnull=True, year=None)
@@ -166,7 +166,7 @@ class GameManager(models.Manager):
             )
         pks = pk_query.values_list("pk", flat=True)
         if not pks:
-            return
+            return None
         random_pk = random.choice(pks)
         return self.get_queryset().get(pk=random_pk)
 

@@ -25,11 +25,11 @@ class GameListView(generics.GenericAPIView):
         ids.
         """
 
-        base_query = models.Game.objects.filter(change_for__isnull=True)
-
         # Easter egg: Return a random game
         if 'random' in self.request.GET:
-            return [base_query.get_random(self.request.GET['random'])]
+            return [models.Game.objects.get_random(self.request.GET['random'])]
+
+        base_query = models.Game.objects.filter(change_for__isnull=True)
 
         # A list of slugs is sent from the client, we match them against Lutris
         # games.
