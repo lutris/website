@@ -43,17 +43,17 @@ class GameListView(generics.GenericAPIView):
             return base_query.filter(
                 Q(slug__in=game_slugs) | Q(aliases__slug__in=game_slugs),
             )
-
+        # This is to be deprecated, starting from 0.5.8, the client won't use that anymore
         if 'gogid' in self.request.data:
             gogids = [gogid for gogid in self.request.data["gogid"] if gogid.isnumeric()]
             return base_query.filter(
                 provider_games__slug__in=gogids,
-                provider_games__provider__name="GOGDB"
+                provider_games__provider__name="gog"
             )
         if 'humblestoreid' in self.request.data:
             return base_query.filter(
                 provider_games__slug__in=self.request.data['humblestoreid'],
-                provider_games__provider__name="HUMBLE"
+                provider_games__provider__name="humblebundle"
             )
 
         return base_query
@@ -85,6 +85,39 @@ class GameListView(generics.GenericAPIView):
         # support a limited number of characters (depending on the web server or
         # the browser used) whereas POST request do not have this limitation.
         return self.get(request)
+
+
+class ServiceGameListView(generics.GenericAPIView):
+    """API view to match service games with Lutris games"""
+    PROVIDERS = {
+        'humblebundle': 'HUMBLE',
+        'gog': 'GOGDB',
+        'steam': 'STEAM'
+    }
+    serializer_class = serializers.GameSerializer
+
+    def get_queryset(self, service):  # pylint: disable=arguments-differ
+        """Match lutris games against service appids"""
+        appids = self.request.data.get('appids')
+        provider = self.PROVIDERS.get(service)
+        if not appids or not provider:
+            print(self.request.data)
+            return models.Game.objects.none()
+        return models.Game.objects.filter(
+            change_for__isnull=True,
+            provider_games__slug__in=appids,
+            provider_games__provider__name=provider
+        )
+
+    def post(self, _request, service):
+        """This view is post only and accepts a payload in JSON"""
+        queryset = self.filter_queryset(self.get_queryset(service))
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class GameLibraryView(generics.RetrieveAPIView):

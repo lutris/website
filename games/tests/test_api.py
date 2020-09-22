@@ -120,7 +120,7 @@ class TestGameProviderApi(TestCase):
 
             for index in range(10)
         ]
-        provider = Provider.objects.create(name="GOGDB", website="https://gogdb.org")
+        provider = Provider.objects.create(name="gog", website="https://gogdb.org")
         for game in self.games:
             provider_game = ProviderGame.objects.create(
                 name=game.name,
