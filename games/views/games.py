@@ -89,24 +89,15 @@ class GameListView(generics.GenericAPIView):
 
 class ServiceGameListView(generics.GenericAPIView):
     """API view to match service games with Lutris games"""
-    PROVIDERS = {
-        'humblebundle': 'HUMBLE',
-        'gog': 'GOGDB',
-        'steam': 'STEAM'
-    }
     serializer_class = serializers.GameSerializer
 
     def get_queryset(self, service):  # pylint: disable=arguments-differ
         """Match lutris games against service appids"""
         appids = self.request.data.get('appids')
-        provider = self.PROVIDERS.get(service)
-        if not appids or not provider:
-            print(self.request.data)
-            return models.Game.objects.none()
         return models.Game.objects.filter(
             change_for__isnull=True,
             provider_games__slug__in=appids,
-            provider_games__provider__name=provider
+            provider_games__provider__name=service
         )
 
     def post(self, _request, service):
