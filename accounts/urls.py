@@ -31,7 +31,7 @@ urlpatterns = [
              template_name='accounts/password_reset.html'
          ),
          name='password_reset'),
-    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',  # noqa
+    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$',  # noqa
             auth_views.PasswordResetConfirmView.as_view(
                 template_name='accounts/password_reset_confirm.html'
             ),
