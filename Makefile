@@ -92,3 +92,7 @@ stop_dev_docker:
 
 init_docker_db:
 	docker-compose run lutrisweb make db
+
+docker_email_logs:
+	# Outputs all the email logs found in the lutrisweb container
+	docker exec lutrisweb /bin/sh -c 'cat /tmp/lutris-emails/*.log'
