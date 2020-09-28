@@ -16,11 +16,11 @@
   <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy" crossorigin="anonymous"></script>
   {% block stylesheets %}{% endblock %}
   {% block extra_head %}{% endblock %}
+  <style>
+    a.title:link {text-decoration:none;}
+    a.title:hover {color:#ff9900;text-decoration:underline;}
+  </style>
 </head>
-<style>
-  a.title:link {text-decoration:none;}
-  a.title:hover {color:#ff9900;text-decoration:underline;}
-</style>
 <body>
   {% if messages %}
   <ul class="alerts">

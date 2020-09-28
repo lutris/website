@@ -9,6 +9,8 @@ from django.urls import reverse
 from common.forms import UploadForm
 from common.models import News
 from games.models import Game, Installer
+import random
+import datetime as dt
 
 
 def home(request):
@@ -23,10 +25,51 @@ def home(request):
             .order_by('-updated_at')
         )[:6]
     ]
+    samples = [
+        {
+            "image": "images/carousel/overwatch.jpg",
+            "href": "/games/overwatch",
+            "text": "Play Overwatch on Battle.net",
+        },
+        {
+            "image": "images/carousel/the-witcher.jpg",
+            "href": "/games/the-witcher-3-wild-hunt",
+            "text": "Install The Witcher 3 from GOG or Steam",
+        },
+        {
+            "image": "images/carousel/warframe.jpg",
+            "href": "/games/warframe",
+            "text": "Play Warframe",
+        },
+        {
+            "image": "images/carousel/battlefield5.jpg",
+            "href": "/games/battlefield-v",
+            "text": "Play Battlefield V on Origin",
+        },
+        {
+            "image": "images/carousel/eso.jpg",
+            "href": "/games/the-elder-scrolls-online-tamriel-unlimited",
+            "text": "Play The Elders Scrolls: Online",
+        },
+        {
+            "image": "images/carousel/warcraft.jpg",
+            "href": "/games/world-of-warcraft",
+            "text": "Play World of Warcraft",
+        }
+    ]
+    random.shuffle(samples, shuffle_by_hour)
     return render(request, 'home.html', {
         "new_games": new_games,
-        "updated_games": updated_games
+        "updated_games": updated_games,
+        "sample_banners": samples
     })
+
+
+def shuffle_by_hour():
+    """
+    Converts the current hour into a float between 0.0 and 1.0 for use in shuffling arrays.
+    """
+    return dt.datetime.now().hour / 24
 
 
 class Downloads(TemplateView):
