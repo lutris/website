@@ -42,7 +42,7 @@ def list_change_submissions_view(request, game_id=None):
         # Generate diff
         diff = change_suggestion.get_changes()
 
-        # If the diff is empty, this change is obselete and can be deleted
+        # If the diff is empty, this change is obsolete and can be deleted
         if not diff:
             change_suggestion.delete()
             obsolete_changes += 1
