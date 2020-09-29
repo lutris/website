@@ -18,7 +18,10 @@ def send_game_accepted(user, game):
 
 
 def send_account_creation(user, confirmation_link):
-    """Email users on account creation"""
+    """
+    Email users on account creation
+    confirmation_link should be the full absolute URL
+    """
     context = {
         'username': user.username,
         'confirmation_link': confirmation_link

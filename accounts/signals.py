@@ -27,4 +27,5 @@ def send_registration_email(sender, instance, created, **kwargs):  # pylint: dis
         token = models.EmailConfirmationToken(email=instance.email)
         token.create_token()
         token.save()
-        messages.send_account_creation(instance, token.get_token_url())
+        confirmation_link = 'https://lutris.net' + token.get_token_url()
+        messages.send_account_creation(instance, confirmation_link)
