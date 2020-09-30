@@ -1,4 +1,6 @@
-Getting the site up and running for development
+Getting the site up and running for development 
+
+An Amazing Project
 ===============================================
 
 With docker-compose
