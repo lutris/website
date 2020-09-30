@@ -1,3 +1,4 @@
+Logger - this is amazing website
 Getting the site up and running for development
 ===============================================
 
