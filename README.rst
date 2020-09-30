@@ -1,10 +1,10 @@
-Getting the site up and running for development
+Getting the Site up and Running for development
 ===============================================
 
 With docker-compose
 -------------------
 
-Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
+Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system .
 
 To build the required docker images use::
 
@@ -18,8 +18,8 @@ To prepare the database run in a separate terminal::
 
     make init_docker_db
 
-You are now ready to develop. No need to rebuild the images for simple
-code changes, as the containers will pick them up from the host system.
+You are now ready to develop. No need to rebuild the images for a simple
+code changes, as the containers will pick up them from the host system.
 Operations requiring a rebuild:
 
 - changing dependencies (apt, pip or npm)
@@ -42,8 +42,8 @@ their website: https://virtualenvwrapper.readthedocs.org/en/latest/
     cd lutrisweb
     setvirtualenvproject
 
-Once the virtualenv is created, you need to make sure that some
-environment variables are exported and are set to valid values, the
+Once the virtualenv is created, you  should need to make sure that some
+environment variables are exported and are set to a valid values, the
 simplest way to achieve that is to edit the postactivate script in
 `$VIRTUAL_ENV/lutrisweb/bin/postactivate` and add your exports here.
 The only required environment varible is the DJANGO_SETTINGS_MODULE one::
