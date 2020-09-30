@@ -1,3 +1,4 @@
+Logr- an amazing project
 Getting the site up and running for development
 ===============================================
 
