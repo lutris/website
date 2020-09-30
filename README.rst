@@ -185,6 +185,8 @@ PostgreSQL and run this script with cron::
     pg_dump --format=tar lutris > $backup_file
     gzip $backup_file
 
+<h2>i can some changes in your code to make awesome website </br> you need to improve your manage.py file</h2>
+
 
 Vue based code
 --------------
