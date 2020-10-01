@@ -1,4 +1,5 @@
 Getting the site up and running for development
+Amazing Project
 ===============================================
 
 With docker-compose
