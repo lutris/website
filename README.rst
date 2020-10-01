@@ -6,15 +6,15 @@ With docker-compose
 
 Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
 
-To build the required docker images use::
+1. To build the required docker images use::
 
     make build_dev_docker
 
-Start the required containers with::
+2. Start the required containers with::
 
     make start_dev_docker
 
-To prepare the database run in a separate terminal::
+3. To prepare the database run in a separate terminal::
 
     make init_docker_db
 
