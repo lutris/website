@@ -111,7 +111,7 @@ Run the development server with::
 
     make run
 
-Postgresql configuration
+configuration of an amazing project
 ========================
 
 You can get the same Postgres server used in the Docker setup by running the
