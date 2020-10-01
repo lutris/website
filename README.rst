@@ -1,3 +1,5 @@
+Journey of an Amazing projects
+
 Getting the site up and running for development
 ===============================================
 
@@ -50,7 +52,7 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 
-Once your virtualenv is created, you can install the system and python
+Once your virtualenv is created, you can install the system and 
 dependencies::
 
     sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
@@ -67,7 +69,7 @@ You can then build the frontend assets::
     npm run setup
     run run build
 
-To watch for file changes and recompile assets on the fly, you can run in a
+To watch for file changes and recompile assets on the , you can run in a
 separate terminal::
 
     npm run watch
@@ -139,7 +141,7 @@ Create a user::
 
     sudo -u postgres create user lutris
 
-Note that the user will need to be able to create databases in order to
+Note that the user will need to be able to create databases in  to
 run tests. If you have created an user without this permission, run::
 
     sudo -u postgres psql
