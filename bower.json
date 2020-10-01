@@ -1,4 +1,4 @@
-{
+  {
   "name": "lutris",
   "version": "0.5.0",
   "homepage": "https://github.com/lutris/website",
@@ -22,4 +22,4 @@
   "resolutions": {
     "select2": "~4.0.5"
   }
-}
+  }
