@@ -1,5 +1,5 @@
-Getting the site up and running for development
-===============================================
+Getting the site up and running for development just follow the steps
+=====================================================================
 
 With docker-compose
 -------------------
