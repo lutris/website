@@ -1,4 +1,4 @@
-Getting the site up and running for development
+Getting the site up and running for development with python 
 ===============================================
 
 With docker-compose
