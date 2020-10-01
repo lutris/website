@@ -1,7 +1,7 @@
 Getting the site up and running for development
 ===============================================
 
-With docker-compose
+With docker-compose-File
 -------------------
 
 Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
