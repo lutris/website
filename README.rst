@@ -1,4 +1,4 @@
-Getting the site up and running for development
+NICE PROOJECT BY LUTRIS RESPECT MAN! 
 ===============================================
 
 With docker-compose
