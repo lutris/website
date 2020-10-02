@@ -1,3 +1,4 @@
+An amazing Website
 Getting the site up and running for development
 ===============================================
 
