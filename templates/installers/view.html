@@ -23,22 +23,22 @@
       in the Lutris client. To install the game, <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">download</a> the full script.
     </p>
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
-        <a href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
+      <li role="presentation" class="nav-item">
+        <a class="nav-link active" href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
       </li>
-      <li role="presentation">
-        <a href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
+      <li role="presentation" class="nav-item">
+        <a class="nav-link" href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
       </li>
     </ul>
-    <div class="tab-content">
+    <div class="tab-content card-body border bg-light">
       <div role="tabpanel" class="tab-pane active" id="installer-yaml">
-        <pre>{{installer.as_cleaned_yaml}}</pre>
+        <pre class="text-white">{{installer.as_cleaned_yaml}}</pre>
       </div>
       <div role="tabpanel" class="tab-pane" id="installer-json">
-        <pre>{{installer.as_cleaned_json}}</pre>
+        <pre class="text-white">{{installer.as_cleaned_json}}</pre>
       </div>
     </div>
-    <a class="btn" href="{% url "game_detail" slug=installer.game.slug %}">Back to game</a>
+    <a class="btn btn-primary mt-2" href="{% url "game_detail" slug=installer.game.slug %}">Back to game</a>
   </div>
 </div>
 {% endblock content %}
