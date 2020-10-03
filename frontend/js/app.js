@@ -219,13 +219,25 @@ function configure_profile(){
 
 function configure_game_screenshots() {
     if ($("#game_screenshots_carousel").length) {
-    blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
-      container: '#game_screenshots_carousel',
-      carousel: true,
-      toggleControlsOnSlideClick: false,
-      stretchImages: true,
-    });
-  }
+        blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
+          container: '#game_screenshots_carousel',
+          carousel: true,
+          toggleControlsOnSlideClick: false,
+          stretchImages: true,
+        });
+    }
+    $('#game_screenshots').on('hide.bs.collapse', function () {
+      $('#collapse_screenshots').find('svg').toggleClass('fa-chevron-right');
+    })
+    $('#game_screenshots').on('show.bs.collapse', function () {
+      $('#collapse_screenshots').find('svg').toggleClass('fa-chevron-down');
+    })
+    $('#game_description').on('hide.bs.collapse', function () {
+      $('#collapse_description').find('svg').toggleClass('fa-chevron-right');
+    })
+    $('#game_description').on('show.bs.collapse', function () {
+      $('#collapse_description').find('svg').toggleClass('fa-chevron-down');
+    })
 }
 
 function show_notification(status, message) {
