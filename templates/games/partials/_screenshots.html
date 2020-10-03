@@ -1,0 +1,26 @@
+<div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
+  <div class="slides"></div>
+  <a
+    class="prev"
+    aria-controls="blueimp-gallery-carousel"
+    aria-label="previous slide"
+    ><</a
+  >
+  <a
+    class="next"
+    aria-controls="blueimp-gallery-carousel"
+    aria-label="next slide"
+    >></a>
+  <a
+    class="play-pause"
+    aria-controls="blueimp-gallery-carousel"
+    aria-label="play slideshow"
+    aria-pressed="true"
+    role="button"
+  ></a>
+  <div id="screenshots" class="d-none">
+    {% for screenshot in screenshots %}
+    <a href="{{ MEDIA_URL }}{{ screenshot.image }}" title="{{ screenshot.description }}"></a>
+    {% endfor %}
+  </div>
+</div>

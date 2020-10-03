@@ -182,7 +182,9 @@
           <h3 class="card-title">
             <button id="collapse_screenshots" class="btn btn-outline-primary border-0" data-toggle="collapse" data-target="#game_screenshots"><i class="fas fa-chevron-down"></i></button>
             Screenshots
-            <button class="btn btn-success ml-2"><i class="fas fa-plus"></i></button>
+            {% if user.is_authenticated %}
+              <button class="btn btn-success ml-2"><i class="fas fa-plus"></i></button>
+            {% endif %}
           </h3>
           <div id="game_screenshots" class="show">
             {% include 'games/partials/_screenshots.html' %}
@@ -201,8 +203,10 @@
               <span class="text-muted">({{ unpublished_installers.count }} unpublished)</span>
               <button class="btn btn-primary" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</button>
             {% endif %}
+            {% if user.is_authenticated %}
             <a class="btn btn-success ml-2" href="{% url "new_installer" slug=game.slug %}" title="Write a new installer">
               <i class="fas fa-pencil-alt"></i></a>
+            {% endif %}
           </h3>
           <div class="installer-list">
           {% if installers %}
