@@ -1,10 +1,10 @@
 """Match GOGDB games with Lutris games"""
-import json
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from games.models import Game, Company, Platform
 from providers import models
 from common.util import get_auto_increment_slug, slugify
+
 
 class Command(BaseCommand):
 
