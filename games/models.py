@@ -594,7 +594,10 @@ class Game(models.Model):
         # Not ideal to have this here since this can generate disk IO activity
         # Not a problem though, we want to discourage mass updates for games
         # since that would DDOS the site.
-        self.precache_media()
+        try:
+            self.precache_media()
+        except Exception as ex:
+            LOGGER.error("Failed to precache media for %s", self)
 
 
 class GameMetadata(models.Model):
