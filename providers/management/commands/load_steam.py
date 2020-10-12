@@ -7,7 +7,7 @@ API_URL = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?"
 
 
 class Command(BaseCommand):
-
+    """Load all Steam games from the Steam API"""
     provider_id = "steam"
 
     def handle(self, *args, **options):

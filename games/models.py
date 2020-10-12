@@ -596,8 +596,8 @@ class Game(models.Model):
         # since that would DDOS the site.
         try:
             self.precache_media()
-        except Exception as ex:
-            LOGGER.error("Failed to precache media for %s", self)
+        except Exception as ex:  # pylint: disable=broad-except
+            LOGGER.error("Failed to precache media for %s: %s", self, ex)
 
 
 class GameMetadata(models.Model):

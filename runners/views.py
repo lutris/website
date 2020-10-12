@@ -12,8 +12,8 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from common.permissions import IsAdminOrReadOnly
-from runners.models import Runner, RunnerVersion, Runtime
-from runners.serializers import RunnerSerializer, RuntimeSerializer
+from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
+from runners.serializers import RunnerSerializer, RuntimeSerializer, RuntimeDetailSerializer
 from games.models import Game
 
 
@@ -85,7 +85,7 @@ class RunnerUploadView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class RuntimeView(generics.ListCreateAPIView):
+class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
     queryset = Runtime.objects.all()
     parser_classes = (MultiPartParser, FormParser)
@@ -110,6 +110,33 @@ class RuntimeView(generics.ListCreateAPIView):
             response_status = status.HTTP_200_OK
 
         return Response(serializer.data, status=response_status)
+
+
+class RuntimeDetailView(generics.RetrieveAPIView):
+    """View the details of a runtime item with all its indiviual components"""
+    serializer_class = RuntimeDetailSerializer
+    queryset = Runtime.objects.all()
+    lookup_field = "name"
+    permission_classes = (IsAdminOrReadOnly, )
+
+    def post(self, request, name):
+        """POST creates a new component in the current runtime item"""
+        try:
+            runtime = Runtime.objects.get(name=name)
+        except Runtime.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        url = request.data.get("url")
+        filename = request.data.get("filename")
+        if not url or not filename:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        component, _created = RuntimeComponent.objects.get_or_create(
+            runtime=runtime,
+            filename=filename
+        )
+        component.url = url
+        component.save()
+        return Response("", status=status.HTTP_201_CREATED)
 
 
 class RunnersList(ListView):
