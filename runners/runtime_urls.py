@@ -5,6 +5,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.RuntimeListView.as_view(), name='runtime'),
+    path('', views.RuntimeListView.as_view(), name='runtime_list'),
     path('/<slug:name>', views.RuntimeDetailView.as_view(), name='runtime_detail'),
 ]
