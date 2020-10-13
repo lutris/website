@@ -68,7 +68,7 @@ worker:
 localdb:
 	# Create a local Postgres database for development
 	docker volume create lutrisdb_backups
-	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
+	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
 
 syncdb:
 	# Syncs the production database to the local db
