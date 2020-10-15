@@ -1,6 +1,6 @@
 Getting the site up and running for development
 ===============================================
-
+<<<USE DOCKER FOR THIS PROJECT>>>
 With docker-compose
 -------------------
 
