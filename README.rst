@@ -1,6 +1,7 @@
 Getting the site up and running for development
 ===============================================
-
+Docker is an open-source tool that automates the deployment of an application inside a software container. The easiest way to grasp the idea behind Docker is to compare it to, well... standard shipping containers.
+===============================================
 With docker-compose
 -------------------
 
