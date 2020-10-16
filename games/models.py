@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=no-member,too-few-public-methods
+# pylint: disable=no-member,too-few-public-methods,too-many-lines
 import os
 import shutil
 import datetime
@@ -258,10 +258,12 @@ class Game(models.Model):
 
     @property
     def humbleid(self):
-        """Humble Bundle ID, different from humblestoreid which is the store
-        page ID for Humble Bundle
+        """Humble Bundle ID, different from humblestoreid (store page ID for Humble Bundle)
+        This should really get deprecated.
         """
-        gog_slugs = self.provider_games.filter(provider__name="HUMBLE").values_list("slug", flat=True)
+        gog_slugs = self.provider_games.filter(
+            provider__name="humblebundle"
+        ).values_list("slug", flat=True)
         if gog_slugs:
             return gog_slugs[0]
         return ""
@@ -292,14 +294,16 @@ class Game(models.Model):
     def banner_url(self):
         """Return URL for the game banner"""
         if self.title_logo:
-            return reverse("get_banner", kwargs={"slug": self.slug})
+            # Hardcoded domain isn't ideal but we have to find another solution for storing
+            # and referencing banners and icons anyway so this will do for the time being.
+            return "https://lutris.net" + reverse("get_banner", kwargs={"slug": self.slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return reverse("get_icon", kwargs={"slug": self.slug})
+            return "https://lutris.net" + reverse("get_icon", kwargs={"slug": self.slug})
         return ""
 
     @property
