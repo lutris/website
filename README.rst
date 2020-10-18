@@ -1,4 +1,4 @@
-Getting the site up and running for development
+Get the site up and run  for development
 ===============================================
 
 With docker-compose
@@ -18,7 +18,7 @@ To prepare the database run in a separate terminal::
 
     make init_docker_db
 
-You are now ready to develop. No need to rebuild the images for simple
+if You are now ready to develop. No need to rebuild the images for simple
 code changes, as the containers will pick them up from the host system.
 Operations requiring a rebuild:
 
@@ -67,7 +67,7 @@ You can then build the frontend assets::
     npm run setup
     run run build
 
-To watch for file changes and recompile assets on the fly, you can run in a
+Here To watch for file changes and recompile assets on the fly, you can run in a
 separate terminal::
 
     npm run watch
