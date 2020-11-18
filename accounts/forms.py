@@ -54,7 +54,7 @@ class RegistrationForm(forms.ModelForm):
         fields = ("username", "email")
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'form_register'
         self.helper.form_method = 'post'
@@ -97,7 +97,7 @@ class LoginForm(AuthenticationForm):
     """Subclass of AuthenticationForm with Bootstrap integration"""
 
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'form_login'
         self.helper.form_method = 'post'
@@ -111,7 +111,7 @@ class LutrisPasswordResetForm(PasswordResetForm):
     """Subclass of PasswordResetForm with Bootstrap integration"""
 
     def __init__(self, *args, **kwargs):
-        super(LutrisPasswordResetForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'form_password_reset'
         self.helper.form_method = 'post'

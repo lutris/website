@@ -188,12 +188,20 @@ def user_account(request, username):
 def user_send_confirmation(request):
     """Send an email with a confirmation link"""
     user = request.user
-    if not user.email_confirmed:
-        token = EmailConfirmationToken(email=user.email)
-        token.create_token()
-        token.save()
-        token.send(request)
-    return render(request, 'accounts/confirmation_send.html', {'user': user})
+    if user.email_confirmed:
+        messages.info(request, "Your email has already been confirmed.")
+        return HttpResponseRedirect(
+            reverse('user_account', args=(user.username, ))
+        )
+    token = EmailConfirmationToken(email=user.email)
+    token.create_token()
+    token.save()
+    token.send(request)
+    messages.info(request, 'An email with a confirmation link has been sent to the specified '
+                           'address. Click the link to confirm your email address.')
+    return HttpResponseRedirect(
+        reverse('user_account', args=(user.username,))
+    )
 
 
 def user_require_confirmation(request):

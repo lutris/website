@@ -8,13 +8,16 @@
 
 /* == Variables */
 // Bootstrap specific
-$theme-colors: (
-  "primary": #ff9900,
-  "light": #666,
-  "lighter": #aaa,
-  "dark": #3f3f3f,
-  "darker": #222,
-  "warning": #FD3750
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    "primary": #ff9900,
+    "light": #666,
+    "lighter": #aaa,
+    "dark": #3f3f3f,
+    "darker": #222,
+    "warning": #FD3750
+  )
 );
 //$border-radius: 5px;
 
@@ -58,16 +61,17 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
 
 .alertify-notifier .ajs-message {
   @extend .rounded;
-  color: theme-color("lighter");
+  color: $white;
   background: theme-color("info");
-  text-align: center;
+  max-width: 500px;
+  width: max-content;
 }
 .alertify-notifier .ajs-message.ajs-success {
   color: theme-color("darker");
   background: theme-color("success");
 }
 .alertify-notifier .ajs-message.ajs-error {
-  color: theme-color("lighter");
+  color: white;
   background: theme-color("danger");
 }
 .alertify-notifier .ajs-message.ajs-warning {

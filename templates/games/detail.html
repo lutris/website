@@ -101,7 +101,7 @@
           <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
             {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-primary text-dark font-weight-bold">Add to my library</a>
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-outline-success font-weight-bold">Add to my library</a>
             {% else %}
             <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-danger font-weight-bold">
               <span>Remove from my library</span>

@@ -47,7 +47,7 @@
     </div>
     {% else %}
       <div class="account-action">
-        <a data-toggle="modal" data-target="#modal_login" data-url="{% url 'login' %}"
+        <a data-toggle="modal" data-target="#modal_login" data-url="{% url 'login' %}?next={{ request.get_full_path }}"
            title="Log in"><i class="fas fa-sign-in-alt fa-lg"></i></a>
         <a data-toggle="modal" data-target="#modal_register" data-url="{% url 'register' %}"
            title="Register"><i class="fas fa-file-signature fa-lg"></i></a>
