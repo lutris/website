@@ -111,6 +111,18 @@ Run the development server with::
 
     make run
 
+Redis configuration
+===================
+
+The lutris websites uses Redis as a cache. Install with::
+
+    docker run -d \
+        --name lutriscache \
+        --restart unless-stopped \
+        -p 6379:6379 \
+        redis:latest
+
+
 Postgresql configuration
 ========================
 

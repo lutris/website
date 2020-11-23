@@ -260,6 +260,12 @@ BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
 # API Keys
 STEAM_API_KEY = os.environ.get('STEAM_API_KEY', 'NO_STEAM_API_KEY_SET')
 
+if DEBUG:
+    ANON_RATE = '99/second'
+    USER_RATE = '99/second'
+else:
+    ANON_RATE = '4/second'
+    USER_RATE = '6/second'
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
@@ -267,8 +273,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '4/second',
-        'user': '6/second'
+        'anon': ANON_RATE,
+        'user': USER_RATE
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
