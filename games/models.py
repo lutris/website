@@ -1149,6 +1149,9 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         if not author:
             author = original_revision.user
             date = original_revision.date_created
+        if not author or not date:
+            LOGGER.warning("Missing revision information for %s", installer)
+            return
 
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:
