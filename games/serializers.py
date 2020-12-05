@@ -6,6 +6,7 @@ from reversion.models import Version, Revision
 
 from games import models
 from platforms.models import Platform
+from providers.serializers import ProviderGameSerializer
 
 LOGGER = logging.getLogger(__name__)
 
@@ -121,14 +122,17 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
 
+    provider_games = ProviderGameSerializer(many=True)
+
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
             'name', 'slug', 'year',
             'description', 'banner_url', 'icon_url', 'is_public',
-            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id'
+            'updated', 'provider_games', 'steamid', 'gogid', 'gogslug', 'humblestoreid', 'id'
         )
+
 
 class GameDetailSerializer(GameSerializer):
     """A serializer for games with it's associated meta-data.

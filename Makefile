@@ -19,7 +19,7 @@ cleanthumbs:
 	rm -rf ./media/cache/
 
 test:
-	SEND_EMAILS=0 ./manage.py test --no-input --failfast $(test)
+	DJANGO_TESTS=1 ./manage.py test --no-input --failfast $(test)
 
 jenkins:
 	./manage.py jenkins $(test)
@@ -40,6 +40,12 @@ deploy_staging:
 deploy_prod:
 	scripts/deploy.sh prod anaheim
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml restart lutrisnginx
+
+migrate_prod:
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
+
+migrate_staging:
+	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
 
 remote_shell_staging:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb bash
@@ -62,7 +68,7 @@ worker:
 localdb:
 	# Create a local Postgres database for development
 	docker volume create lutrisdb_backups
-	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
+	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
 
 syncdb:
 	# Syncs the production database to the local db

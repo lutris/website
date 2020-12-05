@@ -88,6 +88,18 @@ class TestGameViews(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_can_receive_garbage_genre(self):
+        """The view should ignore bad values for ordering"""
+        url = "/games?ordering=name&genres=13'"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_receive_garbage_platform(self):
+        """The view should ignore bad values for ordering"""
+        url = "/games?ordering=name&platforms=16'A-"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
     def test_can_receive_garbage_page(self):
         """The view should ignore bad values for page"""
         url = "/games?page=xcvj234"

@@ -1,3 +1,4 @@
+"""Base settings"""
 import os
 from os.path import dirname, abspath
 
@@ -17,7 +18,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.5.6"
+CLIENT_VERSION = "0.5.8.1"
 
 DEBUG = True
 THUMBNAIL_DEBUG = False
@@ -94,7 +95,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
+AXES_META_PRECEDENCE_ORDER = [
+    'HTTP_X_FORWARDED_FOR',
+    'HTTP_X_REAL_IP',
+    'REMOTE_ADDR',
+]
+
+AXES_FAILURE_LIMIT = 50
 
 ROOT_URLCONF = 'lutrisweb.urls'
 WSGI_APPLICATION = 'lutrisweb.wsgi.application'
@@ -147,6 +156,7 @@ INSTALLED_APPS = [
     'django_openid_auth',
     'django_extensions',
     'reversion',
+    'axes',
 
     'common',
     'platforms',
@@ -170,6 +180,7 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login/"
 AUTHENTICATION_BACKENDS = (
+    'axes.backends.AxesBackend',
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.SmarterModelBackend',
@@ -205,10 +216,12 @@ SELECT2_CSS = ''
 
 # Email
 
-try:
-    SEND_EMAILS = bool(int(os.environ.get('SEND_EMAILS', '1')))
-except ValueError:
-    SEND_EMAILS = True
+
+SEND_EMAILS = True
+if os.environ.get('DJANGO_TESTS') == "1":
+    SEND_EMAILS = False
+    AXES_ENABLED = False
+
 DEFAULT_FROM_EMAIL = "admin@lutris.net"
 SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
@@ -247,6 +260,12 @@ BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
 # API Keys
 STEAM_API_KEY = os.environ.get('STEAM_API_KEY', 'NO_STEAM_API_KEY_SET')
 
+if DEBUG:
+    ANON_RATE = '99/second'
+    USER_RATE = '99/second'
+else:
+    ANON_RATE = '4/second'
+    USER_RATE = '6/second'
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
@@ -254,8 +273,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '60/min',
-        'user': '60/min'
+        'anon': ANON_RATE,
+        'user': USER_RATE
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',

@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=no-member,too-few-public-methods
+# pylint: disable=no-member,too-few-public-methods,too-many-lines
 import os
 import shutil
 import datetime
@@ -13,7 +13,7 @@ from itertools import chain
 import six
 import yaml
 import reversion
-from reversion.models import Version
+from reversion.models import Version, Revision
 from bitfield import BitField
 from sorl.thumbnail import get_thumbnail
 from django.conf import settings
@@ -154,7 +154,7 @@ class GameManager(models.Manager):
     def get_random(self, option=""):
         """Return a random game"""
         if not re.match(r"^[\w\d-]+$", option) or len(option) > 128:
-            return
+            return None
         pk_query = self.get_queryset()
         if option == "incomplete":
             pk_query = pk_query.filter(change_for__isnull=True, year=None)
@@ -166,7 +166,7 @@ class GameManager(models.Manager):
             )
         pks = pk_query.values_list("pk", flat=True)
         if not pks:
-            return
+            return None
         random_pk = random.choice(pks)
         return self.get_queryset().get(pk=random_pk)
 
@@ -258,10 +258,12 @@ class Game(models.Model):
 
     @property
     def humbleid(self):
-        """Humble Bundle ID, different from humblestoreid which is the store
-        page ID for Humble Bundle
+        """Humble Bundle ID, different from humblestoreid (store page ID for Humble Bundle)
+        This should really get deprecated.
         """
-        gog_slugs = self.provider_games.filter(provider__name="HUMBLE").values_list("slug", flat=True)
+        gog_slugs = self.provider_games.filter(
+            provider__name="humblebundle"
+        ).values_list("slug", flat=True)
         if gog_slugs:
             return gog_slugs[0]
         return ""
@@ -292,14 +294,16 @@ class Game(models.Model):
     def banner_url(self):
         """Return URL for the game banner"""
         if self.title_logo:
-            return reverse("get_banner", kwargs={"slug": self.slug})
+            # Hardcoded domain isn't ideal but we have to find another solution for storing
+            # and referencing banners and icons anyway so this will do for the time being.
+            return "https://lutris.net" + reverse("get_banner", kwargs={"slug": self.slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return reverse("get_icon", kwargs={"slug": self.slug})
+            return "https://lutris.net" + reverse("get_icon", kwargs={"slug": self.slug})
         return ""
 
     @property
@@ -407,7 +411,7 @@ class Game(models.Model):
 
         # Merge Steam ID if none is present
         if not self.steamid:
-            self.steamid = other_game.steam_id
+            self.steamid = other_game.steamid
 
         # Merge year if none is provided
         if not self.year:
@@ -594,7 +598,10 @@ class Game(models.Model):
         # Not ideal to have this here since this can generate disk IO activity
         # Not a problem though, we want to discourage mass updates for games
         # since that would DDOS the site.
-        self.precache_media()
+        try:
+            self.precache_media()
+        except Exception as ex:  # pylint: disable=broad-except
+            LOGGER.error("Failed to precache media for %s: %s", self, ex)
 
 
 class GameMetadata(models.Model):
@@ -1081,9 +1088,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
 
         self.name = self.game.name
 
-        self.comment = self._version.revision.comment
-        self.user = self._version.revision.user
-        self.created_at = self._version.revision.date_created
+        try:
+            self.comment = self._version.revision.comment
+            self.user = self._version.revision.user
+            self.created_at = self._version.revision.date_created
+        except Revision.DoesNotExist:
+            LOGGER.warning("No revision found for %s", self._version)
+            self.comment = ""
+            self.user = None
+            self.created_at = None
         self.draft = installer_data["draft"]
         self.published = installer_data["published"]
         self.rating = installer_data["rating"]
@@ -1136,6 +1149,9 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         if not author:
             author = original_revision.user
             date = original_revision.date_created
+        if not author or not date:
+            LOGGER.warning("Missing revision information for %s", installer)
+            return
 
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:

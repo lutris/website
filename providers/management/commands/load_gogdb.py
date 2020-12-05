@@ -5,8 +5,7 @@ from providers import models
 
 
 class Command(BaseCommand):
-
-    provider_id = "GOGDB"
+    provider_id = "gog"
 
     def add_arguments(self, parser):
         parser.add_argument(

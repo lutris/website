@@ -18,6 +18,7 @@ django-reversion==3.0.5
 django-bitfield==2.0.1
 django-webpack-loader==0.7.0
 django-libs==2.0.3
+django-axes==5.4.1
 redis==3.4.1
 django-redis-cache==2.1.1
 # The production release does resizing on the backend and doesn't support

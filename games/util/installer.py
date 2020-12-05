@@ -28,7 +28,6 @@ def validate_installer(installer):
         installer_steps_have_one_key,
         scummvm_has_gameid,
         winesteam_scripts_use_correct_prefix,
-        dont_disable_monitor,
         no_duplicate_file_ids,
         files_have_correct_attributes,
         tasks_have_names,
@@ -145,19 +144,6 @@ def winesteam_scripts_use_correct_prefix(installer):
     return SUCCESS
 
 
-def dont_disable_monitor(installer):
-    script = get_installer_script(installer)
-    if 'system' not in script:
-        return SUCCESS
-    if 'disable_monitor' in script.get('system') or {}:
-        return (
-            False,
-            "Do not disable the process monitor in installers, if you have "
-            "issues with the process monitor, submit an issue on Github"
-        )
-    return SUCCESS
-
-
 def no_duplicate_file_ids(installer):
     """Check that all file identifiers are unique"""
     script = get_installer_script(installer)
@@ -225,7 +211,7 @@ def no_home_in_files(installer):
             url = file_meta.get("url")
         else:
             url = file_meta
-        if url and url.startswith("/home"):
+        if url and str(url).startswith("/home"):
             return (
                 False,
                 "Don't reference files from your own home folder."
