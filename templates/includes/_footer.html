@@ -1,54 +1,25 @@
 {% load static from staticfiles %}
-<footer class="bg-darker py-3 text-lighter d-flex justify-content-center">
+<footer id="footer" class="bg-darker py-3 text-lighter d-flex justify-content-center">
   <div class="row">
     <div class="col mx-3">
-      <h5>The project</h5>
-      <ul class="list-group">
-        <a href="{% url 'about' %}" class="list-group-item list-group-item-action">About</a>
-        <a href="{% url 'faq' %}" class="list-group-item list-group-item-action">FAQ</a>
-        <a href="{% url 'runners_list' %}" class="list-group-item list-group-item-action">Runners</a>
-        <a href="https://github.com/lutris/lutris/wiki" class="list-group-item list-group-item-action">Wiki</a>
-        <a href="https://github.com/lutris/lutris/issues" class="list-group-item list-group-item-action">Report an issue</a>
-        <a href="https://forums.lutris.net" class="list-group-item list-group-item-action">Forums</a>
-        <a href="irc://irc.freenode.org:6667/lutris" class="list-group-item list-group-item-action">IRC (#lutris on Freenode)</a>
-      </ul>
+      <a href="https://github.com/lutris" class="border-0">
+        <i class="fab fa-github fa-2x"></i>
+      </a>
     </div>
     <div class="col mx-3">
-      <ul class="list-group list-group-horizontal justify-content-center">
-        <a href="https://github.com/lutris" class="list-group-item list-group-item-action border-0">
-          <i class="fab fa-github fa-2x"></i>
-        </a>
-        <a href="https://twitter.com/LutrisGaming" class="list-group-item list-group-item-action border-0">
-          <i class="fab fa-twitter fa-2x"></i>
-        </a>
-        <a href="https://www.facebook.com/LutrisGaming/" class="list-group-item list-group-item-action border-0">
-          <i class="fab fa-facebook fa-2x"></i>
-        </a>
-        <a href="{{ DISCORD_URL }}" class="list-group-item list-group-item-action border-0">
+      <a href="https://twitter.com/LutrisGaming" class="border-0">
+        <i class="fab fa-twitter fa-2x"></i>
+      </a>
+    </div>
+    <div class="col mx-3">
+      <a href="{{ DISCORD_URL }}" class="border-0">
           <i class="fab fa-discord fa-2x"></i>
-        </a>
-        <a href="https://patreon.com/lutris" class="list-group-item list-group-item-action border-0">
-          <i class="fab fa-patreon fa-2x"></i>
-        </a>
-      </ul>
-      <h4 class="mt-3">Support us on</h4>
-      <p>
-        <a href="https://patreon.com/lutris">
-          <img src="{% static 'images/patreon.png' %}" alt="Support Lutris on Patreon" />
-        </a>
-      </p>
+      </a>
     </div>
     <div class="col mx-3">
-      <h5>Friends</h5>
-      <ul class="list-group">
-        <a href="https://www.gamingonlinux.com/" class="list-group-item list-group-item-action">Gaming on Linux</a>
-        <a href="https://linuxgamecast.com/" class="list-group-item list-group-item-action">LinuxGameCast</a>
-        <a href="https://www.youtube.com/channel/UCv1Kcz-CuGM6mxzL3B1_Eiw" class="list-group-item list-group-item-action">The Linux Gamer</a>
-        <a href="https://winehq.org" class="list-group-item list-group-item-action">WineHQ</a>
-        <a href="https://www.playonlinux.com" class="list-group-item list-group-item-action">PlayOnLinux</a>
-        <a href="https://linuxgameconsortium.com/" class="list-group-item list-group-item-action">Linux Game Consortium</a>
-        <a href="https://rootgamer.com/" class="list-group-item list-group-item-action">Root Gamer</a>
-      </ul>
+      <a href="https://patreon.com/lutris">
+        <img src="{% static 'images/patreon.png' %}" alt="Support Lutris on Patreon" />
+      </a>
     </div>
   </div>
 </footer>

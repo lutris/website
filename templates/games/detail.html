@@ -22,7 +22,7 @@
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
-  <h1 class="text-center pb-3">
+  <h1 class="pb-3">
     {% if game.icon %}
         <img src='{{ MEDIA_URL }}{{ game.icon }}' class="mr-2" style="height:64px" />
     {% endif %}{{ game.name }}
@@ -97,7 +97,6 @@
           {% endif %}
         </ul>
         <div class="centered">
-
           <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
             {% if not in_library %}

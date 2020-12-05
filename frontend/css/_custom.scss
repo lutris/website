@@ -39,6 +39,13 @@ $list-group-hover-bg: theme-color('dark');
 
 $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+#footer a {
+  color: #EEE;
+}
+#footer svg {
+  margin: 16px;
+}
+
 .modal-footer {
   border-top: 1px solid #666 !important;
 }
