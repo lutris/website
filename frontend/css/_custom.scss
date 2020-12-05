@@ -19,7 +19,6 @@ $theme-colors: map-merge(
     "warning": #FD3750
   )
 );
-//$border-radius: 5px;
 
 $body-bg: theme-color("dark");
 $body-color: $gray-200;
@@ -100,9 +99,6 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
   opacity: 0.75;
 }
 
-.blueimp-gallery > .play-pause {
-
-}
 
 // Custom
 $screenshotsWidth: 690px;
@@ -123,17 +119,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
-
-//article {
-//  color: #ccc;
-//  font-weight: 400;
-//  padding: 14px 15px;
-//  max-width: 720px;
-//  margin: auto;
-//  @include media-breakpoint-up(lg) {
-//    font-size: 1.2em;
-//  }
-//}
 
 #global-search {
   @include media-breakpoint-up(lg) {
@@ -215,15 +200,6 @@ input {
 .select2, .select2-dropdown {
   color: #333;
 }
-
-//.container {
-//  padding-left: 0;
-//  padding-right: 0;
-//  flex: 1;
-//  @include media-breakpoint-between(sm, md) {
-//    width: 100%;
-//  }
-//}
 
 header {
   border-bottom: 1px solid theme-color('primary');
@@ -722,34 +698,6 @@ input.select2-lookalike[type="text"] {
   }
 }
 
-//.alerts {
-//  margin: auto;
-//  text-align: center;
-//  list-style-type: none;
-//  padding-left: 0;
-//  position: absolute;
-//  right: 20px;
-//  top: 90px;
-//  z-index: 9999;
-//
-//  li {
-//    border-radius: 0;
-//    width: 100%;
-//    margin: 0;
-//    font-weight: bold;
-//  }
-//
-//  .alert-error {
-//    background-color: red;
-//  }
-//
-//  .alert-warning {
-//    background-color: #ffd01f;
-//    color: #ff4a31;
-//    border: 1px solid
-//  }
-//}
-
 .message-view {
   border: 1px solid theme-color('dark');
   border-radius: 4px;
@@ -1214,15 +1162,6 @@ input.select2-lookalike[type="text"] {
   width: 200px;
 }
 
-//.main-search-form {
-//  text-align: center;
-//  border-radius: 5px;
-//  border: 1px solid #333;
-//  background-color: #777;
-//  margin: 3em;
-//  padding: 2em;
-//}
-
 .warning {
   font-weight: bold;
   color: theme-color('warning');
@@ -1306,8 +1245,8 @@ ol.toc a{
 
 // Fix for anchor links
 :target:before {
-content:"";
-display:block;
-height:77px; /* fixed header height*/
-margin:-77px 0 0; /* negative fixed header height */
+  content:"";
+  display:block;
+  height:77px; /* fixed header height*/
+  margin:-77px 0 0; /* negative fixed header height */
 }
