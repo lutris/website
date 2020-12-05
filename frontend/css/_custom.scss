@@ -14,14 +14,14 @@ $theme-colors: map-merge(
     "primary": #ff9900,
     "light": #666,
     "lighter": #aaa,
-    "dark": #3f3f3f,
+    "dark": #1a1a1a,
     "darker": #222,
     "warning": #FD3750
   )
 );
 //$border-radius: 5px;
 
-$body-bg: theme-color-level("dark", 3);
+$body-bg: theme-color("dark");
 $body-color: $gray-200;
 
 $link-color: theme-color('lighter');
@@ -33,13 +33,10 @@ $pagination-active-bg: #FFF;
 $pagination-active-color: #666;
 $pagination-disabled-color: #888;
 
-.list-group-item {
-  background-color: theme-color('dark') !important;
-  color: theme-color('lighter') !important;
-  &:hover {
-    color: theme-color('primary') !important;
-  }
-}
+$list-group-color: theme-color('lighter');
+$list-group-bg: theme-color('darker');
+$list-group-hover-bg: theme-color('dark');
+
 $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 .modal-footer {
