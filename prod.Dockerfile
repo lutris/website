@@ -16,7 +16,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-COPY *.json /web/
+COPY *.json *.js /web/
 COPY frontend/ /web/frontend/
 
 WORKDIR /web
@@ -48,6 +48,5 @@ COPY ./config /config
 COPY --from=sphinxbuild /docs/installers.html /app/templates/docs/
 COPY --from=frontend /web/public/ /app/public/
 COPY --from=frontend /web/frontend/vue/dist/ /app/frontend/vue/dist/
-COPY --from=frontend /web/components/ /app/components/
 
 CMD ["scripts/gunicorn_start.sh"]
