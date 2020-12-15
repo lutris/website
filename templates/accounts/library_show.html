@@ -54,10 +54,8 @@
       <form action="{% url 'library_show' username=user.username %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
         <div class="text-center">
-          <input type="button" value="Apply filter" class="btn btn-sm btn-primary"
+          <input type="button" value="Apply filter" class="btn btn-lg btn-primary"
                  id="apply_library_filter">
-          <input type="button" value="Clear filter" class="btn btn-sm btn-secondary"
-                 id="clear_library_filter">
         </div>
       </form>
     </div>

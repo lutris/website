@@ -178,26 +178,17 @@
     <div class="col-12 col-md-9">
       <div class="card bg-dark border-0">
         <div class="card-body">
-          <h3 class="card-title">
-            <button id="collapse_screenshots" class="btn btn-outline-primary border-0" data-toggle="collapse" data-target="#game_screenshots"><i class="fas fa-chevron-down"></i></button>
-            Screenshots
+          <div>
             {% if user.is_authenticated %}
               <button class="btn btn-success ml-2"><i class="fas fa-plus"></i></button>
             {% endif %}
-          </h3>
-          <div id="game_screenshots" class="show">
             {% include 'games/partials/_screenshots.html' %}
+          </div>
+          <div>
+            {{ game.description | linebreaks }}
           </div>
 
           <h3 class="card-title">
-            <button id="collapse_description" class="btn btn-outline-primary border-0" data-toggle="collapse" data-target="#game_description"><i class="fas fa-chevron-down"></i></button>
-            Description
-          </h3>
-          <div id="game_description" class="show">
-            {{ game.description|linebreaks }}
-          </div>
-
-          <h3 class="card-title">Installers
             {% if unpublished_installers %}
               <span class="text-muted">({{ unpublished_installers.count }} unpublished)</span>
               <button class="btn btn-primary" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</button>

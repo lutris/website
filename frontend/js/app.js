@@ -149,7 +149,7 @@ function configure_main_carousel(){
 function configure_game_library(){
   let $paginate_by = $('#paginate_by');
 
-  $("#order_by").change(function (){
+  $("#order_by").on("change", function (){
     let $order_by = $('#order_by');
     let order_value = $order_by.val();
     let paginate_by = $('#paginate_by').val();
@@ -160,7 +160,7 @@ function configure_game_library(){
         window.location.href = '?ordering=' + order_value + filter_value;
   });
 
-  $("#paginate_by").change(function () {
+  $("#paginate_by").on("change", function () {
     let paginate_value = $paginate_by.val();
     let filter_value = $paginate_by.data('filter');
     let order_by = $('#order_by').val();
@@ -179,7 +179,7 @@ function configure_game_library(){
   };
 
   $("#apply_library_filter").click($library_filter_function);
-  $('#id_q').keypress(function (event){
+  $('#id_q').on("keypress", function (event){
     if (event.key === 'Enter'){
       $library_filter_function();
     }
@@ -187,9 +187,9 @@ function configure_game_library(){
 
   $("#clear_library_filter").click(function () {
     $('#id_q').val('');
-    $('#id_platforms').val([]).change();
-    $('#id_genres').val([]).change();
-    $('#id_companies').val([]).change();
+    $('#id_platforms').val([]).on("change");
+    $('#id_genres').val([]).on("change");
+    $('#id_companies').val([]).on("change");
     let order_by = $('#order_by').val();
     let paginate_by = $('#paginate_by').val();
     if (paginate_by !== undefined)
@@ -226,18 +226,6 @@ function configure_game_screenshots() {
           stretchImages: true,
         });
     }
-    $('#game_screenshots').on('hide.bs.collapse', function () {
-      $('#collapse_screenshots').find('svg').toggleClass('fa-chevron-right');
-    })
-    $('#game_screenshots').on('show.bs.collapse', function () {
-      $('#collapse_screenshots').find('svg').toggleClass('fa-chevron-down');
-    })
-    $('#game_description').on('hide.bs.collapse', function () {
-      $('#collapse_description').find('svg').toggleClass('fa-chevron-right');
-    })
-    $('#game_description').on('show.bs.collapse', function () {
-      $('#collapse_description').find('svg').toggleClass('fa-chevron-down');
-    })
 }
 
 function show_notification(status, message) {

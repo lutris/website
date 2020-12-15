@@ -52,9 +52,10 @@
         {% endif %}
       {% endif %}
 
+      {% if installer.id %}
         <a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
           <i class='far fa-eye fa-fw mr-2'></i>View install script</a>
-
+      {% endif %}
         <a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
           <i class='fas fa-file-download fa-fw mr-2'></i>Download install script</a>
       {% if user.is_authenticated %}
