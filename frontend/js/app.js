@@ -175,46 +175,15 @@ function configure_game_library(){
         let paginate_by = $("<input>").attr("type", "hidden").attr("name", "paginate_by").val($('#paginate_by').val());
         $library_filter_form.append($(paginate_by));
     }
-    $library_filter_form.submit();
+    $library_filter_form.trigger("submit");
   };
 
-  $("#apply_library_filter").click($library_filter_function);
+  $("#apply_library_filter").on("click", $library_filter_function);
   $('#id_q').on("keypress", function (event){
     if (event.key === 'Enter'){
       $library_filter_function();
     }
   })
-
-  $("#clear_library_filter").click(function () {
-    $('#id_q').val('');
-    $('#id_platforms').val([]).on("change");
-    $('#id_genres').val([]).on("change");
-    $('#id_companies').val([]).on("change");
-    let order_by = $('#order_by').val();
-    let paginate_by = $('#paginate_by').val();
-    if (paginate_by !== undefined)
-        window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_by
-    else
-        window.location.href = '?ordering=' + order_by
-  })
-
-  $('#current_page').keypress(function (event) {
-    if (event.key === 'Enter') {
-        let source = $(event.currentTarget);
-        let url = source.data('url');
-        let max_page = source.data('maxPage');
-        let target_page = source.val();
-        if (target_page > max_page)
-            target_page = max_page;
-        if (target_page < 1)
-            target_page = 1;
-        window.location.href = '?page=' + target_page + url
-    }
-  })
-}
-
-function configure_profile(){
-
 }
 
 function configure_game_screenshots() {
@@ -270,10 +239,8 @@ $(window).on('load', function () {
     });
   configure_alertify();
   configure_modals();
-
   configure_main_carousel();
   configure_game_library();
-  configure_profile();
   configure_game_screenshots();
   show_notifications();
 })

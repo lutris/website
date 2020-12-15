@@ -31,7 +31,7 @@
     {% endif %}
   </div>
   <div class="col-lg-3">
-    <div>
+    <div class="pb-4">
         Show <select id="paginate_by" data-filter="{{ filter_string }}">
           <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
           <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
@@ -40,7 +40,7 @@
         per page
     </div>
     
-    <div>
+    <div class="pb-4">
       Sort by
       <select id="order_by" style="color:black;" data-filter="{{ filter_string }}">
         <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
@@ -53,7 +53,7 @@
     </div>
 
 
-    <div class="card">
+    <div class="card bg-dark">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
         <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
@@ -66,15 +66,19 @@
               {% if search_installers %}checked{% endif %} />
           Search in installers
         </label>
-        <div class="text-center">
+        <div>
           <input type="button" value="Filter" class="btn btn-primary"
-                 id="apply_library_filter">
+                  id="apply_library_filter">
         </div>
       </form>
     </div>
 
-    <div class="card">
-      <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">Submit a new game</a>
+    <div class="card bg-dark">
+      <p class="py-4">
+        If we don't have the game in our database, you can 
+        <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">submit a new game</a>.
+      </p>
+      
     </div>
   </div>
 </div>
