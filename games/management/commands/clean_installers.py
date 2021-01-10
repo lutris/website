@@ -56,8 +56,11 @@ class Command(BaseCommand):
             ):
                 LOGGER.info("No change in submission, deleting %s", submission)
                 submission.delete()
+                continue
+
             if original.version == "Change Me":
                 LOGGER.info("Deleting garbage fork %s", submission)
+                submission.delete()
                 continue
 
             LOGGER.info("-- %s for %s --", submission, submission.game)
