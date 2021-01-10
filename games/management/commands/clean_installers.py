@@ -49,8 +49,10 @@ class Command(BaseCommand):
                 continue
             if not submission.description:
                 submission.description = ""
+            if not original.description:
+                original.description = ""
             if (
-                str(submission.description) == str(original.description)
+                submission.description.strip() == original.description.strip()
                 and submission.notes.strip() == original.notes.strip()
                 and submission.version.strip() == original.version.strip()
             ):
