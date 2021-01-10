@@ -16,7 +16,11 @@ class Command(BaseCommand):
             version = revision.version_set.first()
             if not version:
                 continue
-            submission = InstallerRevision(version)
+            try:
+                submission = InstallerRevision(version)
+            except Exception:  # pylint: disable=broad-except
+                LOGGER.error("%s is corrupt and should be deleted", version)
+                continue
             original = version.object
             if submission.content != original.content:
                 # Content change needs manual review
@@ -29,3 +33,13 @@ class Command(BaseCommand):
                     continue
                 LOGGER.info("Rejecting %s (%s > %s)", submission, original.runner, submission.runner)
                 submission.delete()
+                continue
+            if (
+                submission.description == original.description
+                and submission.notes == original.notes
+                and submission.version == original.version
+            ):
+                LOGGER.info("No change in submission, deleting %s", submission)
+                submission.delete()
+
+            # LOGGER.info(submission)
