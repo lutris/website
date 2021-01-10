@@ -252,12 +252,6 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
-if DOMAIN_NAME == "lutris.net":
-    CELERYBEAT_SCHEDULE['send-daily-mod-mail'] = {
-        'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=18, minute=0),
-    }
-
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
