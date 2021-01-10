@@ -29,7 +29,11 @@ class Command(BaseCommand):
                 LOGGER.error("%s is corrupt and should be deleted", version)
                 continue
             original = version.object
-            if submission.content != original.content:
+            if not original:
+                LOGGER.warning("Could not find original, deleting %s", submission)
+                submission.delete()
+                continue
+            if submission.content.strip() != original.content.strip():
                 # Content change needs manual review
                 continue
 
@@ -43,12 +47,20 @@ class Command(BaseCommand):
                             submission, original.runner, submission.runner)
                 submission.delete()
                 continue
+            if not submission.description:
+                submission.description = ""
             if (
-                submission.description == original.description
-                and submission.notes == original.notes
-                and submission.version == original.version
+                str(submission.description) == str(original.description)
+                and submission.notes.strip() == original.notes.strip()
+                and submission.version.strip() == original.version.strip()
             ):
                 LOGGER.info("No change in submission, deleting %s", submission)
                 submission.delete()
+            if original.version == "Change Me":
+                LOGGER.info("Deleting garbage fork %s", submission)
+                continue
 
-            LOGGER.info("!!! %s", submission)
+            LOGGER.info("-- %s for %s --", submission, submission.game)
+            LOGGER.info("'%s' > '%s'", original.description, submission.description)
+            LOGGER.info("'%s' > '%s'", original.notes, submission.notes)
+            LOGGER.info("'%s' > '%s'", original.version, submission.version)
