@@ -54,7 +54,6 @@ class Command(BaseCommand):
             if (
                 submission.description.strip() == original.description.strip()
                 and submission.notes.strip() == original.notes.strip()
-                and submission.version.strip() == original.version.strip()
             ):
                 LOGGER.info("No change in submission, deleting %s", submission)
                 submission.delete()
