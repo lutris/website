@@ -14,6 +14,8 @@ class Command(BaseCommand):
         # filter(comment__startswith="[submission]")
         for revision in revisions:
             version = revision.version_set.first()
+            if not version:
+                continue
             submission = InstallerRevision(version)
             original = version.object
             if submission.content != original.content:
