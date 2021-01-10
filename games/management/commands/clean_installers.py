@@ -60,6 +60,11 @@ class Command(BaseCommand):
                 submission.delete()
                 continue
 
+            if "[draft]" in revision.comment:
+                LOGGER.info("Deleting draft  with only meta changes %s", submission)
+                submission.delete()
+                continue
+
             if original.version == "Change Me":
                 LOGGER.info("Deleting garbage fork %s", submission)
                 submission.delete()
