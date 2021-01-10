@@ -23,7 +23,7 @@ class Command(BaseCommand):
             if submission.runner != original.runner:
                 if submission.runner.slug == "steam" and original.runner.slug == "winesteam":
                     LOGGER.info("Accepting %s (%s > %s)", submission, original.runner, submission.runner)
-                    # submission.accept()
+                    submission.accept()
                     continue
                 LOGGER.info("Rejecting %s (%s > %s)", submission, original.runner, submission.runner)
-                # submission.delete()
+                submission.delete()
