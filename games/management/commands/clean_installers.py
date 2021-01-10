@@ -27,6 +27,7 @@ class Command(BaseCommand):
                 submission = InstallerRevision(version)
             except Exception:  # pylint: disable=broad-except
                 LOGGER.error("%s is corrupt and should be deleted", version)
+                submission.delete()
                 continue
             original = version.object
             if not original:
