@@ -2,14 +2,21 @@ import logging
 
 from django.core.management.base import BaseCommand
 from reversion.models import Revision
-from games.models import InstallerRevision
+from games.models import InstallerRevision, Installer
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **kwargs):
+    """Auto rejects or accepts some installer submissions"""
+
+    def handle(self, *args, **_kwargs):
+        # Delete abandoned forks
+        for installer in Installer.objects.abandoned():
+            LOGGER.info("Deleting fork %s", installer)
+            installer.delete()
+
         revisions = Revision.objects.all()
         # filter(comment__startswith="[submission]")
         for revision in revisions:
@@ -28,10 +35,12 @@ class Command(BaseCommand):
 
             if submission.runner != original.runner:
                 if submission.runner.slug == "steam" and original.runner.slug == "winesteam":
-                    LOGGER.info("Accepting %s (%s > %s)", submission, original.runner, submission.runner)
+                    LOGGER.info("Accepting %s (%s > %s)",
+                                submission, original.runner, submission.runner)
                     submission.accept()
                     continue
-                LOGGER.info("Rejecting %s (%s > %s)", submission, original.runner, submission.runner)
+                LOGGER.info("Rejecting %s (%s > %s)",
+                            submission, original.runner, submission.runner)
                 submission.delete()
                 continue
             if (
@@ -42,4 +51,4 @@ class Command(BaseCommand):
                 LOGGER.info("No change in submission, deleting %s", submission)
                 submission.delete()
 
-            # LOGGER.info(submission)
+            LOGGER.info("!!! %s", submission)

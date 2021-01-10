@@ -1126,11 +1126,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def get_installer_data(self):
         """Return the data saved in the revision in an usable format"""
         installer_data = json.loads(self._version.serialized_data)[0]["fields"]
-        try:
-            installer_data["script"] = load_yaml(installer_data["content"])
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError) as ex:
-            LOGGER.exception(ex)
-            installer_data["script"] = ["This installer is f'd up."]
+        installer_data["script"] = load_yaml(installer_data["content"])
         installer_data["id"] = self.id
         # Return a defaultdict to prevent key errors for new fields that
         # weren't present in previous revisions
