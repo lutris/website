@@ -164,15 +164,17 @@
       <li>
         <ul>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/centos.png' alt='CentOS'>CentOS
+            <img src='{{ STATIC_URL }}images/icons/centos.png' alt='CentOS'>CentOS Stream
           </li>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/redhat.png' alt='RHEL'>RHEL 8
+          </li>  
         </ul>
         <p>
-        For CentOS 8 and RHEL 8 You can clone
+        For CentOS Stream and derivatives like RHEL 8 You can clone
         <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8">
-          this github repository</a> to install Lutris.
-        Please contribute to <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8">@jatin-cbs' repo on Github</a> to improve
-        Lutris support on CentOS.
+          this github repository</a> and then install cabextract and lutris:<br/><code>sudo dnf install cabextract-*.el8.x86_64.rpm lutris-*.el8.x86_64.rpm</code>
+	  <br/>Note: Enable EPEL, you can follow the <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8/blob/master/README.md">README </a>for more information.
         </p>
       </li>
       <li>
