@@ -8,33 +8,31 @@
 
 /* == Variables */
 // Bootstrap specific
+
 $theme-colors: map-merge(
   $theme-colors,
   (
     "primary": #ff9900,
     "light": #666,
-    "lighter": #aaa,
     "dark": #1a1a1a,
-    "darker": #222,
     "warning": #FD3750
   )
 );
 
-$body-bg: theme-color("dark");
+$body-bg: $dark;
 $body-color: $gray-200;
-
-$link-color: theme-color('lighter');
-$link-hover-color: theme-color('primary');
-$pagination-bg: theme-color('darker');
+$link-color: #AAA;
+$link-hover-color: $primary;
+$pagination-bg: $dark;
 $pagination-border: #444;
 $pagination-hover-bg: #444;
 $pagination-active-bg: #FFF;
 $pagination-active-color: #666;
 $pagination-disabled-color: #888;
 
-$list-group-color: theme-color('lighter');
-$list-group-bg: theme-color('darker');
-$list-group-hover-bg: theme-color('dark');
+$list-group-color: $light;
+$list-group-bg: $dark;
+$list-group-hover-bg: $dark;
 
 $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -65,20 +63,20 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
 .alertify-notifier .ajs-message {
   @extend .rounded;
   color: $white;
-  background: theme-color("info");
+  background: $info;
   max-width: 500px;
   width: max-content;
 }
 .alertify-notifier .ajs-message.ajs-success {
-  color: theme-color("darker");
-  background: theme-color("success");
+  color: $dark;
+  background: $success;
 }
 .alertify-notifier .ajs-message.ajs-error {
   color: white;
-  background: theme-color("danger");
+  background: $danger;
 }
 .alertify-notifier .ajs-message.ajs-warning {
-  color: theme-color("darker");
+  color: $dark;
   background: color("orange");
 }
 
@@ -101,7 +99,7 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
 
 
 // Custom
-$modal-content-bg: theme-color("darker");
+$modal-content-bg: #222;
 $modal-header-border-color: #666;
 
 $padding: 7px;
@@ -124,8 +122,8 @@ body {
 }
 
 code {
-  color: theme-color('primary') !important;
-  background-color: theme-color('darker') !important;
+  color: $primary !important;
+  background-color: $dark !important;
   display: inline-block;
   border-radius: 2px;
   margin: 2px;
@@ -144,7 +142,7 @@ form {
     border-radius: 0;
     border: 1px solid #999;
     background-color: #DEDEDE;
-    color: theme-color('darker');
+    color: $dark;
   }
 
   textarea {
@@ -191,7 +189,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 input {
   background-color: #EEE;
-  color: theme-color('darker');
+  color: $dark;
 }
 
 .select2, .select2-dropdown {
@@ -199,21 +197,21 @@ input {
 }
 
 header {
-  border-bottom: 1px solid theme-color('primary');
+  border-bottom: 1px solid $primary;
   box-shadow: 0 0 5px #000;
   margin-bottom: 0;
 
   a {
-    color: theme-color('lighter');
+    color: $light;
     &:hover {
-      color: theme-color('primary');
+      color: $primary;
     }
   }
 
   .logo {
     font-weight: 300;
     font-size: 24px;
-    color: theme-color('primary');
+    color: $primary;
     text-decoration: none;
 
     img {
@@ -228,7 +226,7 @@ header {
     border: none;
     margin-right: 5px;
     margin-bottom: 0;
-    color: theme-color('lighter');
+    color: $light;
   }
 
   .account-action {
@@ -250,19 +248,17 @@ header {
       padding: 6px;
     }
   }
-
   .dropdown-item {
-    color: theme-color('lighter');
-
+    color: $light;
     &:hover {
-      background-color: theme-color('darker');
-      color: theme-color('primary');
+      background-color: $dark;
+      color: $primary;
     }
   }
 }
 
 footer {
-  border-top: 1px solid theme-color('primary');
+  border-top: 1px solid $primary;
 }
 
 .discreet-text {
@@ -382,7 +378,7 @@ footer {
   background-color: #F0F0F0;
   box-sizing: border-box;
   padding: 20px;
-  color: theme-color('darker');
+  color: $dark;
 }
 
 .well {
@@ -393,7 +389,7 @@ footer {
   tt {
     white-space: nowrap;
     font-family: monospace;
-    border: 1px solid theme-color('lighter');
+    border: 1px solid $light;
     border-radius: 2px;
     background-color: #ddd;
     font-size: .9em;
@@ -441,7 +437,7 @@ footer {
 .code-editor {
   font-family: monospace;
   color: #EEE;
-  background-color: theme-color('darker');
+  background-color: $dark;
   width: 100%;
   height: 500px;
 }
@@ -528,7 +524,7 @@ footer {
   padding: 8px 10px;
   width: 100%;
   list-style: none;
-  background-color: theme-color('darker');
+  background-color: $dark;
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
@@ -562,7 +558,7 @@ footer {
       &:after {
         border-top: 30px solid transparent;
         border-bottom: 30px solid transparent;
-        border-left: 30px solid theme-color('darker');
+        border-left: 30px solid $dark;
         right: -30px;
         z-index: 2;
       }
@@ -597,18 +593,16 @@ footer {
   color: #999;
 
   a {
-    color: theme-color('lighter');
+    color: $light;
     border-bottom: 1px dotted rgba(150, 150, 150, .3);
 
     &:hover {
       text-decoration: none;
-      border-bottom-color: theme-color('lighter');
+      border-bottom-color: $light;
 
     }
   }
 }
-
-/* == Classes */
 
 input.select2-lookalike[type="text"] {
     padding: 5px;
@@ -696,9 +690,9 @@ input.select2-lookalike[type="text"] {
 }
 
 .message-view {
-  border: 1px solid theme-color('dark');
+  border: 1px solid $dark;
   border-radius: 4px;
-  background-color: theme-color('darker');
+  background-color: $dark;
   padding: 30px;
 }
 
@@ -706,7 +700,7 @@ input.select2-lookalike[type="text"] {
   margin: 100px auto;
   width: 500px;
   padding: 40px;
-  border: 1px solid theme-color('dark');
+  border: 1px solid $dark;
   border-radius: 3px;
 }
 
@@ -767,7 +761,7 @@ input.select2-lookalike[type="text"] {
 
   li {
     display: flex;
-    background-color: theme-color('dark');
+    background-color: $dark;
     margin-bottom: 12px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   }
@@ -802,7 +796,7 @@ input.select2-lookalike[type="text"] {
   }
 
   .game-title {
-    color: theme-color('primary');
+    color: $primary;
     font-size: 1.2em;
     font-weight: bold;
   }
@@ -845,7 +839,7 @@ input.select2-lookalike[type="text"] {
   text-transform: uppercase;
   background-color: #666;
   text-align: center;
-  color: theme-color('lighter');
+  color: $light;
   line-height: 0.9em;
   font-size: 1.3em;
   position: relative;
@@ -867,7 +861,7 @@ input.select2-lookalike[type="text"] {
   width: $banner-width;
 
   img{
-    border-bottom: 1px solid theme-color('primary');
+    border-bottom: 1px solid $primary;
   }
 
   a {
@@ -913,7 +907,7 @@ input.select2-lookalike[type="text"] {
   }
 
   a {
-    background-color: theme-color('darker');
+    background-color: $dark;
     border-radius: 2px;
     padding: 4px 14px;
     display: block;
@@ -933,7 +927,7 @@ input.select2-lookalike[type="text"] {
 }
 
 .installer-list {
-  background-color: theme-color('darker');
+  background-color: $dark;
 
   .installer-name {
     vertical-align: text-top;
@@ -1049,7 +1043,7 @@ input.select2-lookalike[type="text"] {
 
 .box-link {
   margin: 5px 0;
-  border: 1px solid theme-color('dark');
+  border: 1px solid $dark;
   padding: 2px 7px 2px 2px;
   display: inline-block;
 
@@ -1059,7 +1053,7 @@ input.select2-lookalike[type="text"] {
 
   &:hover {
     text-decoration: none;
-    background-color: theme-color('darker');
+    background-color: $dark;
   }
 }
 
@@ -1113,7 +1107,7 @@ input.select2-lookalike[type="text"] {
 
   pre {
     font-size: 0.9em;
-    background-color: theme-color('dark');
+    background-color: $dark;
     color: #EDEDED;
     white-space: pre-wrap;
     border-radius: 0;
@@ -1124,8 +1118,8 @@ input.select2-lookalike[type="text"] {
   textarea {
     width: 100%;
     height: 4.5em;
-    background-color: theme-color('darker');
-    border-color: theme-color('dark');
+    background-color: $dark;
+    border-color: $dark;
     color: #ADADAD;
     margin-top: 0.5em;
   }
@@ -1133,7 +1127,7 @@ input.select2-lookalike[type="text"] {
   input[type=submit] {
     background-color: transparent;
     border: none;
-    color: theme-color('primary');
+    color: $primary;
     text-decoration: underline;
     font-size: 1em;
     font-weight: 500;
@@ -1141,7 +1135,7 @@ input.select2-lookalike[type="text"] {
 
   form {
     padding-bottom: 1em;
-    border-bottom: 3px solid theme-color('dark');
+    border-bottom: 3px solid $dark;
   }
 }
 
@@ -1149,8 +1143,8 @@ input.select2-lookalike[type="text"] {
   width: 100%;
   height: 5em;
   background-color: #e3e3e3;
-  color: theme-color('darker');
-  border: 1px solid theme-color('dark');
+  color: $dark;
+  border: 1px solid $dark;
   padding: .2em;
 }
 
@@ -1161,17 +1155,17 @@ input.select2-lookalike[type="text"] {
 
 .warning {
   font-weight: bold;
-  color: theme-color('warning');
+  color: $warning;
 }
 
 .obnoxious-warning {
   font-size: 1.2em;
   text-transform: uppercase;
-  color: theme-color('warning');
+  color: $warning;
 }
 
 .external-link {
-  outline: 1px solid theme-color('primary');
+  outline: 1px solid $primary;
   margin: 8px auto;
   display: flex;
   height: 36px;
@@ -1179,7 +1173,7 @@ input.select2-lookalike[type="text"] {
   padding: 2px;
 
   &:hover {
-    outline: 1px solid theme-color('primary');
+    outline: 1px solid $primary;
     text-decoration: none;
   }
 
@@ -1187,13 +1181,13 @@ input.select2-lookalike[type="text"] {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-color: theme-color('darker');
+    background-color: $dark;
     vertical-align: middle;
   }
 
   span {
     display: inline-block;
-    background-color: theme-color('darker');
+    background-color: $dark;
     width: 138px;
     line-height: 32px;
     vertical-align: middle;
@@ -1235,7 +1229,7 @@ ol.toc a{
   text-decoration: none;
 
   &:hover {
-    color: theme-color('primary');
+    color: $primary;
     text-decoration: none !important;
   }
 }

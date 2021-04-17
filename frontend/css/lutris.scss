@@ -18,11 +18,11 @@
 }
 
 a {
-  color: theme-color('primary');
+  color: $primary;
   text-decoration: none !important;
 
   &:hover {
-    color: darken(theme-color('primary'), 15%);
+    color: darken($primary, 15%);
     text-decoration: underline;
   }
 }

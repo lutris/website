@@ -2,7 +2,7 @@ $avatarHeight: 64px;
 $headerMargin: 12px;
 
 .profile-header {
-    background-color: theme-color('dark');
+    background-color: $dark;
     height: calc(#{$avatarHeight} + #{$headerMargin} * 2);
     .avatar {
         float: left;
