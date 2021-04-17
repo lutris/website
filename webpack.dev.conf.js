@@ -23,12 +23,10 @@ module.exports = {
         use: [
           {
             loader: "expose-loader",
-            options: "jQuery",
-          },
-          {
-            loader: "expose-loader",
-            options: "$",
-          },
+            options: {
+              exposes: ["jQuery", "$"]
+            }
+          }
         ],
       },
       {
@@ -42,7 +40,6 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
-
       // fonts loader
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -71,21 +68,5 @@ module.exports = {
       "window.$": "jquery",
       Popper: ["popper.js", "default"],
     }),
-    // new CopyPlugin({
-    //     patterns: [
-    //         { from: path.resolve(__dirname, 'node_modules/ace-builds/src-noconflict/*'),
-    //             to: path.resolve(__dirname, 'public/ace'),
-    //             flatten: true },
-    //         { from: path.resolve(__dirname, 'node_modules/ace-builds/src-noconflict/snippets/*'),
-    //             to: path.resolve(__dirname, 'public/ace/snippets'),
-    //             flatten: true },
-    //     ]
-    // }),
-  ],
-  // watch: true,
-  // watchOptions: {
-  //     ignored: /node_modules/,
-  //     aggregateTimeout: 300,
-  //     poll: 500
-  //   },
+  ]
 };

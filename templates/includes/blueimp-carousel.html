@@ -1,0 +1,32 @@
+  {% load static %}
+
+  <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+    <div class="slides"></div>
+    <a id="carousel_game_link" class="bg-primary text-white p-3"></a>
+    <div id="carousel_links" class="d-none">
+      <a href="{% static 'images/carousel/overwatch.jpg' %}"
+         data-description="Play Overwatch using Battle.net"
+         data-link="/games/overwatch"
+      ></a>
+      <a href="{% static 'images/carousel/the-witcher.jpg' %}"
+         data-description="Play The Witcher 3 using GOG or Steam"
+         data-link="/games/the-witcher-3-wild-hunt"
+      ></a>
+      <a href="{% static 'images/carousel/warframe.jpg' %}"
+         data-description="Play Warframe"
+         data-link="/games/warframe"
+      ></a>
+      <a href="{% static 'images/carousel/battlefield5.jpg' %}"
+         data-description="Play Battlefield V using Origin"
+         data-link="/games/battlefield-v"
+      ></a>
+      <a href="{% static 'images/carousel/eso.jpg' %}"
+         data-description="Play The Elders Scrolls: Online"
+         data-link="/games/the-elder-scrolls-online-tamriel-unlimited"
+      ></a>
+      <a href="{% static 'images/carousel/warcraft.jpg' %}"
+         data-description="Play World of Warcraft"
+         data-link="/games/world-of-warcraft"
+      ></a>
+    </div>
+  </div>
