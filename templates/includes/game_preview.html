@@ -1,59 +1,44 @@
 {% load thumbnail %}
 
-<div class="row bg-darker p-2 mx-0 mb-2 rounded">
-  <div class="mr-2">
-    <a href="{{ game.get_absolute_url }}"
-           title="{{ game.name }}">
-      <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
-    </a>
-  </div>
-  <div class="col px-0">
-    <h5>
-      <a href="{{ game.get_absolute_url }}"
-         title="{{ game.name }}"
-         class="text-primary font-weight-bold">
-        {{ game.name }}
-      </a>
+<div class="game-preview">
+  <a href="{{ game.get_absolute_url }}" title="{{ game.name }}">
+    <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+  </a>
+  <div class="game-details">
+
+      <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
+      <span class="small-text">
+      (
+      <a href="{% url 'games_by_year' year=game.year %}">{{ game.year }}</a>
+      {% if game.developer %}
+        by <a href="{% url 'games_by_company' company=game.developer.pk %}">{{ game.developer }}</a>
+      {% endif %}
+      {% if game.publisher %}
+        published by <a href="{% url 'games_by_company' company=game.publisher.pk %}">{{ game.publisher }}</a>
+      {% endif %}
+      )
+      </span>
       {% if is_library %}
       <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="float-right">
         <i class="fas fa-trash-alt"></i>
       </a>
     {% endif %}
-    </h5>
-    <div class="row mx-0">
+    <div>
       {% if game.platforms.all %}
-      <div class="mb-1 mr-2">
+      <div class="small-text">
         Platforms:
         {% for platform in game.platforms.all %}
-          <a href="{% url 'games_by_platform' platform=platform.pk %}" class="filter-link">{{ platform }}</a>
+          <a href="{% url 'games_by_platform' platform=platform.pk %}">{{ platform }}</a>
         {% endfor %}
       </div>
       {% endif %}
 
       {% if game.genres.all %}
-      <div class="mb-1 mr-2">
+      <div class="small-text">
         Genre:
         {% for genre in game.genres.all %}
-          <a href="{% url 'games_by_genre' genre=genre.pk %}" class="filter-link">{{ genre }}</a>
+          <a href="{% url 'games_by_genre' genre=genre.pk %}">{{ genre }}</a>
         {% endfor %}
-      </div>
-      {% endif %}
-
-      {% if game.developer %}
-      <div class="mb-1 mr-2">
-        Developed by <a href="{% url 'games_by_company' company=game.developer.pk %}" class="filter-link">{{ game.developer }}</a>
-      </div>
-      {% endif %}
-
-      {% if game.publisher %}
-      <div class="mb-1 mr-2">
-        Published by <a href="{% url 'games_by_company' company=game.publisher.pk %}" class="filter-link">{{ game.publisher }}</a>
-      </div>
-      {% endif %}
-
-      {% if game.year %}
-      <div class="mb-1 mr-2">
-      Released in <a href="{% url 'games_by_year' year=game.year %}" class="filter-link">{{ game.year }}</a>
       </div>
       {% endif %}
     </div>

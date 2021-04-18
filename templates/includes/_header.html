@@ -1,6 +1,7 @@
 {% load static from staticfiles %}
 <header class="sticky-top bg-darker">
-<nav class="navbar navbar-expand-lg">
+  <div class="container">
+  <nav class="navbar navbar-expand-lg">
   <a class="logo navbar-brand" href="/">
     <img src="{% static 'images/logo.png' %}" alt="Lutris" />
     <span>Lutris</span>
@@ -17,7 +18,7 @@
   </button>
 
   <div id="navbar" class="navbar-collapse collapse">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="main-nav" style="font-size: 1.5em;">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="main-nav">
       <li class="nav-item"><a class="nav-link" href="{% url 'downloads' %}">Download</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'donate' %}">Support us!</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
@@ -48,12 +49,11 @@
     </div>
     {% else %}
       <div class="account-action">
-        <a data-toggle="modal" data-target="#modal_login" data-url="{% url 'login' %}?next={{ request.get_full_path }}"
-           title="Log in"><i class="fas fa-sign-in-alt fa-lg"></i></a>
-        <a data-toggle="modal" data-target="#modal_register" data-url="{% url 'register' %}"
-           title="Register"><i class="fas fa-file-signature fa-lg"></i></a>
+        <a href="{% url 'login' %}?next={{ request.get_full_path }}">Log in</a>
+        <a href="{% url 'register' %}">Register</a>
       </div>
     {% endif %}
   </div>
-</nav>
+  </nav>
+  </div>
 </header>

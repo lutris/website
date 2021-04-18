@@ -634,7 +634,6 @@ class ScreenshotManager(models.Manager):
 
 class Screenshot(models.Model):
     """Screenshots for games"""
-
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)

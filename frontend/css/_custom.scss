@@ -9,10 +9,12 @@
 /* == Variables */
 // Bootstrap specific
 
+$primary:#FF9900;
+
 $theme-colors: map-merge(
   $theme-colors,
   (
-    "primary": #ff9900,
+    "primary": $primary,
     "light": #666,
     "dark": #1a1a1a,
     "warning": #FD3750
@@ -261,9 +263,17 @@ footer {
   border-top: 1px solid $primary;
 }
 
-.discreet-text {
+.small-text {
   color: #888;
   font-size: .8em;
+  line-height: 1.7em;
+  a {
+    color: #FDAA5d;
+    font-weight: 600;
+    background: rgba(127, 127, 127, .3);
+    border-radius: 5px;
+    padding: 2px 6px;
+  }
 }
 
 .warning-message {
@@ -339,12 +349,10 @@ footer {
 
 /* == Page Layout */
 .navbar {
-
   .nav > li > a {
     text-transform: uppercase;
     font-weight: 600;
     color: #E5E5E5;
-
     @include media-breakpoint-up(sm) {
       margin-top: 10px;
       margin-right: 20px;
@@ -396,31 +404,6 @@ footer {
     padding: 1px 3px;
   }
 }
-
-.news-list {
-  article {
-    margin-left: 140px;
-  }
-}
-
-.news-image-preview {
-  float: left;
-  padding: 15px;
-}
-
-.news-header {
-  p {
-    padding: 0 15px;
-    color: #999;
-    font-size: .8em;
-  }
-
-  img {
-    display: block;
-    margin: auto;
-  }
-}
-
 
 .helptext {
   border: 1px solid #DEDEDE;
@@ -582,7 +565,6 @@ footer {
       padding-left: 10px;
     }
   }
-
   & > .active {
     color: #999999;
   }
@@ -591,15 +573,12 @@ footer {
 .footnote {
   font-size: .75em;
   color: #999;
-
   a {
     color: $light;
     border-bottom: 1px dotted rgba(150, 150, 150, .3);
-
     &:hover {
       text-decoration: none;
       border-bottom-color: $light;
-
     }
   }
 }
@@ -609,7 +588,6 @@ input.select2-lookalike[type="text"] {
     border-radius: 4px;
     background-color: white;
     outline: 0;
-
     &:focus {
       border: solid 1px black;
     }
@@ -622,15 +600,12 @@ input.select2-lookalike[type="text"] {
 
 .important-checkbox {
   display: block;
-
   label {
     line-height: 24px;
     font-size: 1.2em;
     display: inline-block;
     padding-top: 4px;
-
   }
-
   input[type="checkbox"] {
     font-size: 24px;
     width: 24px;
@@ -653,20 +628,16 @@ input.select2-lookalike[type="text"] {
 
 .page-header {
   border: 0;
-
   .title {
     line-height: 33px;
     display: flex;
-
     .icon {
       width: 32px;
       height: 32px;
     }
-
     .buttons {
       margin-left: 0.5em;
     }
-
     span {
       flex-grow: 1;
       color: #EDEDED;
@@ -682,7 +653,6 @@ input.select2-lookalike[type="text"] {
   @include media-breakpoint-down(sm) {
     min-height: 100px;
   }
-
   img {
     width: 100%;
     height: auto;
@@ -706,7 +676,6 @@ input.select2-lookalike[type="text"] {
 
 .form-view {
   @extend .message-view;
-
   & > h1 {
     margin-top: 0;
   }
@@ -724,57 +693,45 @@ input.select2-lookalike[type="text"] {
     margin: 0 auto 14px;
     width: 100%;
   }
-
   ul {
     @extend .ul-reset;
     margin-bottom: 10px;
   }
-
   li {
     padding: 5px 0;
   }
-
   .info-label {
     color: #888;
   }
-
   a {
     color: #DDD;
     // md-button breaks this style
     text-decoration: none !important;
   }
-
   .in-library {
     width: 112px;
     background-color: #365278;
-
     &:hover { background-color: #7e2b2b; }
-
     &:hover span { display: none; }
-
     &:hover:before { content: "Remove it"; }
   }
 }
 
 .game-list {
   list-style-type: none;
-
   li {
     display: flex;
     background-color: $dark;
     margin-bottom: 12px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   }
-
   .game-image {
     width: 184px;
     padding: 6px;
   }
-
   .game-image, .game-info {
     padding: 6px;
   }
-
   .game-info {
     width: 100%;
     display: inline-block;
@@ -783,18 +740,15 @@ input.select2-lookalike[type="text"] {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .game-meta {
     a {
       border-bottom: 1px dotted #666;
     }
-
     span {
       margin-right: 1em;
     }
     font-size: 0.8em;
   }
-
   .game-title {
     color: $primary;
     font-size: 1.2em;
@@ -810,30 +764,29 @@ input.select2-lookalike[type="text"] {
   width: 100%;
   text-align: center;
   font-style: italic;
-
   & > .filter-failure-icon {
     color: #444;
     font-size: 60px;
   }
-
   & > p {
     margin-top: 0 !important;
   }
 }
-
-.latest-games {
+.game-preview {
+  padding: 0;
+  margin-bottom: 1em;
   display: flex;
-  flex-wrap: wrap;
-
-  .game-banner {
-    margin: auto !important;
-    padding: 9px;
+  .game-name {
+    font-weight: bold;
+    color: $primary;
+  }
+  .game-details {
+    padding-left: .5em;
   }
 }
 
 .game-cover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  margin-bottom: 0;
+  margin: 0;
   width: 184px;
   height: 69px;
   text-transform: uppercase;
