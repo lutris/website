@@ -117,10 +117,8 @@ body {
   min-height: 100vh;
 }
 
-#global-search {
-  @include media-breakpoint-up(lg) {
-    min-width: 250px;
-  }
+footer {
+  border-top: 1px solid $primary;
 }
 
 code {
@@ -204,6 +202,9 @@ header {
     margin-right:24px;
     color: $primary;
     text-decoration: none;
+    span {
+      padding: 12px;
+    }
   }
   button {
     background: none;
@@ -214,9 +215,6 @@ header {
   }
 }
 
-footer {
-  border-top: 1px solid $primary;
-}
 
 .small-text {
   color: #888;
@@ -231,12 +229,17 @@ footer {
   }
 }
 
+#global-search {
+  @include media-breakpoint-up(lg) {
+    min-width: 250px;
+  }
+}
+
 .warning-message {
   font-weight: bold;
   color: #FDAA5d;
 }
 
-/* == Helpers */
 .right {float: right;}
 
 .centered-vertical {
@@ -262,8 +265,6 @@ footer {
   padding: 0;
   list-style-type: none;
 }
-
-/* == Page Layout */
 
 .form-actions {
   border-top: none;
@@ -535,7 +536,19 @@ input.select2-lookalike[type="text"] {
     &:hover:before { content: "Remove it"; }
   }
 }
+.game-header-title {
+  display: flex;
+  padding: 12px 0;
+  div {
+    display: inline-block;
+    padding-left: 12px;
+  }
+  h1 {
+    margin-bottom: 0;
+    // line-height: 1.1em;
+  }
 
+}
 .game-list {
   list-style-type: none;
   li {
@@ -575,10 +588,8 @@ input.select2-lookalike[type="text"] {
   }
 }
 
-/**
- * Box which shows a error message if applied filters returned
- * an empty response in a list view
- */
+// Box which shows a error message if applied filters returned
+// an empty response in a list view
 .filter-failure-message {
   width: 100%;
   text-align: center;
@@ -672,12 +683,10 @@ input.select2-lookalike[type="text"] {
 
 .choice-list {
   @extend .ul-reset;
-
   li {
     margin: 10px 20px 3px 0;
     min-width: 130px;
   }
-
   a {
     background-color: $dark;
     border-radius: 2px;
@@ -686,13 +695,11 @@ input.select2-lookalike[type="text"] {
     text-transform: capitalize;
     font-size: 1.1em;
     color: #EDEDED;
-
     &:hover {
       background-color: #444;
       text-decoration: none;
     }
   }
-
   img {
     margin-right: 4px;
   }
@@ -790,6 +797,12 @@ input.select2-lookalike[type="text"] {
   a {
     display: block;
   }
+}
+
+.admin-link {
+  border-bottom: 1px dotted #EDEDED;
+  font-size: .75em;
+  color: #EDEDED;
 }
 
 .filter-link {

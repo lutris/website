@@ -21,15 +21,47 @@
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
-  <h1 class="game-header-title">
-    {% thumbnail game.title_logo "184" as img %}
-      <img src="{{ img.url }}" class="banner" />
-    {% endthumbnail %}
-    {{ game.name }}
-  </h1>
+  <div class="row">
+    <div class="game-header-title col-11">
+      {% thumbnail game.title_logo "184" as img %}
+        <img src="{{ img.url }}" class="banner" />
+      {% endthumbnail %}
+      <div class="game-header-text">
+        <h1>{{ game.name }}</h1>
+        <span class="text-muted">
+          {% if game.year %}
+            released in
+            {{ game.year }}
+          {% endif %}
+          {% if game.developer %}
+            by
+            <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
+          {% endif %}
+          {% if game.publisher %}
+            published by
+            <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="col-1">
+        {% if user.is_staff %}
+          {% if can_edit and pending_change_subm_count > 0 %}
+            <a class="admin-link" href="{% url 'admin-change-submissions' game.id %}">
+              {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
+            </a>
+          {% endif %}
+          {% if can_publish and not game.is_public %}
+            <a class="admin-link" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
+          {% endif %}
+          {% if can_edit %}
+            <a class="admin-link" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+          {% endif %}
+        {% endif %}
+    </div>
+  </div>
 
   <div class="row">
-
     <div class="col-12 col-md-9">
       {% if screenshots %}
         {% include 'games/partials/_screenshots.html' %}
@@ -64,13 +96,9 @@
 
     <div class="col-12 col-md-3">
       <div class="game-info">
+
         <ul>
-          {% if game.year %}
-          <li>
-            <span class="info-label">Release year: </span>
-            {{ game.year }}
-          </li>
-          {% endif %}
+
           {% if game.genres.count %}
           <li>
             <span class="info-label">Genre: </span>
@@ -87,18 +115,7 @@
             {% endfor %}
           </li>
           {% endif %}
-          {% if game.developer %}
-          <li>
-            <span class="info-label">Developer: </span>
-            <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
-          </li>
-          {% endif %}
-          {% if game.publisher %}
-          <li>
-            <span class="info-label">Publisher: </span>
-            <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
-          </li>
-          {% endif %}
+
 
           {% if game.website %}
           <li class="ellipse-text">
@@ -175,19 +192,7 @@
             </p>
           {% endfor %}
 
-          {% if user.is_staff %}
-            {% if can_edit and pending_change_subm_count > 0 %}
-              <a class="dropdown-item bg-dark text-white" href="{% url 'admin-change-submissions' game.id %}">
-                {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
-              </a>
-            {% endif %}
-            {% if can_publish and not game.is_public %}
-              <a class="dropdown-item bg-dark text-white" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
-            {% endif %}
-            {% if can_edit %}
-              <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
-            {% endif %}
-          {% endif %}
+
         </div>
       </div>
     </div>
