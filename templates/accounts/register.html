@@ -1,6 +1,17 @@
-{% extends 'partials/modals/_modal.html' %}
-{% block modal_id %}modal_register{% endblock %}
-{% block modal_title %}Register on Lutris{% endblock %}
-{% block modal_footer %}
-  <input class="btn btn-primary" type="submit" value="Register" form="form_register">
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Register - Lutris{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6 form-view">
+    <h1>Register account</h4>
+    {% crispy form form.helper %}
+  </div>
+  <div class="col-sm-3"></div>
+</div>
 {% endblock %}

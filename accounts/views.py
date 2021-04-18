@@ -61,22 +61,6 @@ class LutrisLoginView(LoginView):
     template_name = 'accounts/login.html'
     authentication_form = forms.LoginForm
 
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = {
-            'status': 'success',
-            'message': 'Welcome to Lutris!',
-            'url': self.get_success_url()
-        }
-        return JsonResponse(response)
-
-    def form_invalid(self, form):
-        response = {
-            'status': 'invalid',
-            'html': render_to_string(self.template_name, self.get_context_data(form=form))
-        }
-        return JsonResponse(response)
-
 
 class LutrisLogoutView(LogoutView):
     next_page = 'homepage'
@@ -88,7 +72,7 @@ class LutrisLogoutView(LogoutView):
 
 class LutrisPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
-    form_class = forms.PasswordResetForm
+    form_class = forms.LutrisPasswordResetForm
 
     def form_valid(self, form):
         super().form_valid(form)

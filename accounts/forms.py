@@ -62,6 +62,7 @@ class RegistrationForm(forms.ModelForm):
         self.helper.form_class = "form-horizontal"
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Register'))
 
     def clean_username(self):
         """Check that no similar username exist in a case insensitive way"""
@@ -105,6 +106,7 @@ class LoginForm(AuthenticationForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Sign in'))
 
 
 class LutrisPasswordResetForm(PasswordResetForm):
@@ -119,7 +121,7 @@ class LutrisPasswordResetForm(PasswordResetForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
-
+        self.helper.add_input(Submit('submit', 'Reset password'))
 
 class ProfileForm(forms.ModelForm):
     """Form to edit profile information"""
