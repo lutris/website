@@ -9,7 +9,7 @@
 /* == Variables */
 // Bootstrap specific
 
-$primary:#FF9900;
+$primary: #F90;
 
 $theme-colors: map-merge(
   $theme-colors,
@@ -140,13 +140,6 @@ form {
     }
   }
 
-  textarea, input {
-    border-radius: 0;
-    border: 1px solid #999;
-    background-color: #DEDEDE;
-    color: $dark;
-  }
-
   textarea {
     padding: 5px 10px;
   }
@@ -189,11 +182,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
   outline : 0;
 }
 
-input {
-  background-color: #EEE;
-  color: $dark;
-}
-
 .select2, .select2-dropdown {
   color: #333;
 }
@@ -202,60 +190,27 @@ header {
   border-bottom: 1px solid $primary;
   box-shadow: 0 0 5px #000;
   margin-bottom: 0;
-
-  a {
-    color: $light;
+  .nav-link {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #E5E5E5;
     &:hover {
       color: $primary;
     }
   }
-
   .logo {
     font-weight: 300;
     font-size: 24px;
+    margin-right:24px;
     color: $primary;
     text-decoration: none;
-
-    img {
-      padding: 6px;
-      width: 50px;
-      height: 50px;
-    }
   }
-
   button {
     background: none;
     border: none;
     margin-right: 5px;
     margin-bottom: 0;
     color: $light;
-  }
-
-  .account-action {
-    float: right;
-
-    a {
-      line-height: 50px;
-      margin-right: 12px;
-    }
-  }
-
-  .account-info {
-    float: right;
-
-    img {
-      border-radius: 32px;
-      width: 50px;
-      height: 50px;
-      padding: 6px;
-    }
-  }
-  .dropdown-item {
-    color: $light;
-    &:hover {
-      background-color: $dark;
-      color: $primary;
-    }
   }
 }
 
@@ -279,45 +234,6 @@ footer {
 .warning-message {
   font-weight: bold;
   color: #FDAA5d;
-}
-
-.rating {
-  line-height: 16px;
-
-  i {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border-radius: 16px;
-    position: relative;
-    bottom: -2px;
-    box-shadow: 0 0 5px rgba(255,255,255,.8);
-  }
-
-  span {
-    font-size: .9em;
-    padding: 0 8px;
-  }
-
-  .rating-5 {
-    background-color: #ECECEC;
-  }
-
-  .rating-4 {
-    background-color: #FFF600;
-  }
-
-  .rating-3 {
-    background-color: #C0C0C0;
-  }
-
-  .rating-2 {
-    background-color: #FCBA0A;
-  }
-
-  .rating-1 {
-    background-color: #999666;
-  }
 }
 
 /* == Helpers */
@@ -348,28 +264,6 @@ footer {
 }
 
 /* == Page Layout */
-.navbar {
-  .nav > li > a {
-    text-transform: uppercase;
-    font-weight: 600;
-    color: #E5E5E5;
-    @include media-breakpoint-up(sm) {
-      margin-top: 10px;
-      margin-right: 20px;
-      padding: 6px 12px;
-      font-size: 14px;
-    }
-    @include media-breakpoint-down(sm) {
-      margin-top: 10px;
-      margin-right: 10px;
-      padding: 6px;
-    }
-    @include media-breakpoint-down(xs) {
-      margin-top: 4px;
-      display: block;
-    }
-  }
-}
 
 .form-actions {
   border-top: none;
@@ -382,7 +276,7 @@ footer {
   border-radius: 3px;
   border: 1px solid #444;
   box-shadow: 0 1px 1px rgba(200,200,200,.6) inset,
-  0 1px 1px rgba(230,230,230, .7);
+              0 1px 1px rgba(230,230,230, .7);
   background-color: #F0F0F0;
   box-sizing: border-box;
   padding: 20px;
@@ -438,14 +332,11 @@ footer {
 
 .errorlist {
   padding: 0;
-
   li {
     padding: 8px 16px;
     list-style-type: none;
-
     font-size: .9em;
     font-weight: bold;
-
     color: white;
     background-color: #FD3750;
     border-radius: 2px;
@@ -454,23 +345,18 @@ footer {
 
 .download-list {
   padding: 0;
-
   li {
     list-style-type: none;
   }
-
   &>li {
     padding: 14px 15px;
     border-bottom: 1px solid #555;
-
     @include media-breakpoint-up(sm) {
       padding: 15px 20px;
     }
-
     &:last-child {
       border-bottom: none;
     }
-
     ul {
       width: 200px;
       padding-left: 0;
@@ -499,74 +385,6 @@ footer {
 
   img {
     margin: 7px;
-  }
-}
-
-.breadcrumb {
-  margin: 0 0 20px;
-  padding: 8px 10px;
-  width: 100%;
-  list-style: none;
-  background-color: $dark;
-  overflow: hidden;
-  display: inline-block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  li {
-    position: relative;
-    text-shadow: 0 1px 0 #ffffff;
-    display: inline;
-    padding-left: 0;
-
-    &:before {
-      content: "" !important;
-    }
-
-    a {
-      text-shadow: none;
-      padding: 8px 0 8px 35px;
-      color: #AEAEAE;
-
-      &:before, &:after {
-        content: " ";
-        display: block;
-        width: 0;
-        height: 0;
-        position: absolute;
-        top: 50%;
-        margin-top: -30px;
-      }
-
-      &:after {
-        border-top: 30px solid transparent;
-        border-bottom: 30px solid transparent;
-        border-left: 30px solid $dark;
-        right: -30px;
-        z-index: 2;
-      }
-
-      &:before {
-        border-top: 30px solid transparent;
-        border-bottom: 30px solid transparent;
-        border-left: 30px solid #666;
-        right: -31px;
-        z-index: 1;
-        color: blue;  // Weird webkit bug on links with href
-      }
-
-      &:hover {
-        color: #FFF;
-        text-decoration: none;
-      }
-    }
-
-    &:first-child a {
-      padding-left: 10px;
-    }
-  }
-  & > .active {
-    color: #999999;
   }
 }
 
@@ -691,7 +509,8 @@ input.select2-lookalike[type="text"] {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
     display: block;
     margin: 0 auto 14px;
-    width: 100%;
+    width: 184px;
+    height: 69px;
   }
   ul {
     @extend .ul-reset;
@@ -806,6 +625,7 @@ input.select2-lookalike[type="text"] {
   }
 }
 
+
 .game-banner {
   font-size: 11px;
   text-align: center;
@@ -830,7 +650,6 @@ input.select2-lookalike[type="text"] {
       outline: 0;
     }
   }
-
   .game-title {
     font-size: 1.25em;
     text-align: center;
@@ -1118,7 +937,6 @@ input.select2-lookalike[type="text"] {
 }
 
 .external-link {
-  outline: 1px solid $primary;
   margin: 8px auto;
   display: flex;
   height: 36px;
@@ -1126,7 +944,6 @@ input.select2-lookalike[type="text"] {
   padding: 2px;
 
   &:hover {
-    outline: 1px solid $primary;
     text-decoration: none;
   }
 

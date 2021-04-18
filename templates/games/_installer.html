@@ -1,93 +1,68 @@
-{% load rating %}
 {% load lutris %}
 {% load humanize %}
 {% load static %}
-{% get_media_prefix as MEDIA_PREFIX %}
-{% get_static_prefix as STATIC_PREFIX %}
+
 <li class="list-group-item bg-darker{% if not installer.published %} border-warning{% endif %}">
-  <div class="">
-    <a class="btn btn-outline-primary" href="lutris:{{ installer.slug }}">
-      <i class="fas fa-download fa-2x"></i>
-    </a>
-    <img src="{{ MEDIA_PREFIX }}{{ installer.runner.icon }}"
-         title="{{ installer.runner.name }}"
-         alt="{{ installer.runner.name}}" width="48px" height="48px"
-         class="mx-2"
-    />
-    <img src="{{ STATIC_PREFIX }}images/icons/{{ installer.version|lower }}.png"
-         title="{{ installer.version|capfirst }}"
-         alt="{{ installer.version|capfirst }}" width="48px" height="48px"
-         class="mx-2"
-    />
-    <small class="text-muted">
-      {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
-      {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
-        {% if user.is_staff %}
-          <a href="https://dashboard.lutris.net/#/installers/submissions/{{installer.latest_version.revision.id}}"
-             class="btn btn-sm btn-outline-primary mx-2">Review installer</a>
-        {% endif %}
-      {% endif %}
-    </small>
-    <div class="dropdown d-inline float-right align-middle">
-      <button class="btn btn-dark" type="button" data-toggle="dropdown">
-        <i class="fas fa-cog"></i>
+  <div>
+    <div class="btn-group right">
+      <a type="button" class="btn btn-sm btn-secondary" href="lutris:{{ installer.slug }}">Install</a>
+      <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+        <span class="visually-hidden">Toggle Dropdown</span>
       </button>
-      <div class="dropdown-menu dropdown-menu-right bg-dark rounded shadow border border-primary" role="menu">
-      {% if not installer.auto %}
-        {% if not installer.protected or user.is_staff %}
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+        {% if not installer.auto %}
+          {% if not installer.protected or user.is_staff %}
+
             <a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.slug %}">
-              <i class='fas fa-edit fa-fw mr-2'></i>Edit installer</a>
+              <i class='fas fa-edit fa-fw mr-2'></i>Edit installer
+            </a>
+
             <a class="dropdown-item bg-dark text-white" href="{% url 'fork_installer' slug=installer.slug %}">
-              <i class='fas fa-code-branch fa-fw mr-2'></i>Fork installer</a>
-        {% endif %}
+              <i class='fas fa-code-branch fa-fw mr-2'></i>Fork installer
+            </a>
+            {% if user.is_staff %}
+              <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
+                <i class='fas fa-lock fa-fw mr-2'></i>Admin installer
+              </a>
+            {% endif %}
+            {% if not installer.published and user.is_staff %}
+              <a class="dropdown-item bg-dark text-white" href="{% url 'publish_installer' slug=installer.slug %}">
+                <i class='fas fa-thumbs-up fa-fw mr-2'></i>Publish installer
+              </a>
+            {% endif %}
+          {% endif %}
 
-        {% if user.is_staff %}
-            <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
-              <i class='fas fa-lock fa-fw mr-2'></i>Admin installer</a>
-        {% endif %}
+          {% if installer.id %}
+            <a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
+              <i class='far fa-eye fa-fw mr-2'></i>View install script
+            </a>
+          {% endif %}
 
-        {% if not installer.published and user.is_staff %}
-            <a class="dropdown-item bg-dark text-white" href="{% url 'publish_installer' slug=installer.slug %}">
-              <i class='fas fa-thumbs-up fa-fw mr-2'></i>Publish installer</a>
+          <a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
+            <i class='fas fa-file-download fa-fw mr-2'></i>Download script
+          </a>
         {% endif %}
-      {% endif %}
-
-      {% if installer.id %}
-        <a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
-          <i class='far fa-eye fa-fw mr-2'></i>View install script</a>
-      {% endif %}
-        <a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
-          <i class='fas fa-file-download fa-fw mr-2'></i>Download install script</a>
-      {% if user.is_authenticated %}
-        <a class="dropdown-item bg-dark text-white" href="#"
-           onclick="submitInstallerIssue(event)" data-slug="{{installer.slug}}">
-          <i class='fas fa-bug fa-fw mr-2'></i>Report issue</a>
-      {% endif %}
-      </div>
+      </ul>
+    </div>
+    <div class="centered-vertical">
+      <span class='filter-link'>{{ installer.runner }}</span>
+      <span class='installer-name'>{{ installer.version|capfirst }} version</span>
+      <small class="text-muted">
+        {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
+        {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
+          {% if user.is_staff %}
+            <a href="https://dashboard.lutris.net/#/installers/submissions/{{installer.latest_version.revision.id}}"
+              class="btn btn-sm btn-danger">Review installer</a>
+          {% endif %}
+        {% endif %}
+      </small>
     </div>
   </div>
 
-
-  {% if installer.rating %}{% rating %}{% endif %}
-
-  {% if installer.draft %}
-  <div class="alert alert-warning my-1">
-    <i class="fas fa-exclamation-triangle mr-2"></i>This installer is a draft. It hasn't been reviewed and might be incomplete.
-  </div>
-  {% endif %}
-  {% if not installer.published %}
-  <div class="alert alert-warning my-1">
-    <i class="fas fa-exclamation-triangle mr-2"></i>This installer has not been published, use with caution.
-  </div>
-  {% endif %}
   {% if installer.description %}
-  <div class="alert alert-dark my-1">
-    <i class="fas fa-info fa-lg mr-2"></i>{{ installer.description|clean_html|safe|linebreaksbr }}
-  </div>
+  <div class="small-text">{{ installer.description|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
   {% if installer.notes %}
-  <div class="alert alert-info my-1" role="alert">
-    <i class="far fa-sticky-note fa-lg mr-2"></i>{{ installer.notes|clean_html|safe|linebreaksbr }}
-  </div>
+  <div class="small-text">{{ installer.notes|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
 </li>

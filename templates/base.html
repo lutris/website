@@ -16,7 +16,7 @@
   {% block stylesheets %}{% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
   {% if messages %}
   <ul class="d-none" id="django_messages">
     {% for message in messages %}
@@ -27,17 +27,12 @@
 
   {% include "includes/_header.html" %}
 
-  <div id="content" class="container bg-dark text-white">
+  <div id="content" class="container text-white">
     {% block content %}{% endblock %}
   </div>
+  <div class="footer mt-auto">
   {% include "includes/_footer.html" %}
-
-  {% if not user.is_authenticated %}
-    {% include 'accounts/partials/modals/_modal_login.html' %}
-    {% include 'accounts/partials/modals/_modal_password_reset.html' %}
-    {% include 'accounts/partials/modals/_modal_register.html' %}
-  {% endif %}
-
+  </div>
   <script src="{% static 'js/app.js' %}"></script>
 
   {% block scripts %}{% endblock %}

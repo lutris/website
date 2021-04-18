@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load append_to_get %}
+
+
 {% block title %}Games | Lutris{% endblock %}
+
+
 {% block extra_head %}
 {{ filter_form.media.css }}
 {% endblock %}
+
+
 {% block content %}
-
-<h1>Games</h1>
-
-
-
 <div class="row">
   <div class="col-lg-9">
     {% if games %}
@@ -39,7 +40,6 @@
         </select>
         per page
     </div>
-    
     <div class="pb-4">
       Sort by
       <select id="order_by" style="color:black;" data-filter="{{ filter_string }}">
@@ -51,7 +51,6 @@
         <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Last updated</option>
       </select>
     </div>
-
 
     <div class="card bg-dark">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
@@ -75,10 +74,9 @@
 
     <div class="card bg-dark">
       <p class="py-4">
-        If we don't have the game in our database, you can 
+        If we don't have the game in our database, you can
         <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">submit a new game</a>.
       </p>
-      
     </div>
   </div>
 </div>

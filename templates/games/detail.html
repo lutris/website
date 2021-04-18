@@ -6,7 +6,7 @@
 
 {% block extra_head %}
 <meta property="pageId" content="{{ game.slug }}" />
-{% thumbnail game.title_logo "300" as img %}
+{% thumbnail game.title_logo "184" as img %}
 <link rel='image_src' href="{{img.url}}">
 <meta property='og:image' content="{{img.url}}" />
 {% endthumbnail %}
@@ -15,46 +15,62 @@
 <meta name="title" content="{{ game.name }} - Lutris" />
 <meta name="description" content="{{ game.name }} - Lutris" />
 <meta property="og:description" content="{{ game.name }} - Lutris" />
-<link rel="stylesheet" href="{% static 'installer-issues.css' %}" type="text/css">
 {% endblock extra_head %}
 
 
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
-  <h1 class="pb-3">
-    {% if game.icon %}
-        <img src='{{ MEDIA_URL }}{{ game.icon }}' class="mr-2" style="height:64px" />
-    {% endif %}{{ game.name }}
-  {% if user.is_staff %}
-  <div class="dropdown float-right">
-    <button class="btn btn-dark btn-lg" type="button" data-toggle="dropdown">
-      <i class="fas fa-cog fa-2x"></i>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right bg-dark rounded shadow border border-primary">
-    {% if can_edit and pending_change_subm_count > 0 %}#}
-      <a class="dropdown-item bg-dark text-white" href="{% url 'admin-change-submissions' game.id %}">
-        {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
-      </a>
-    {% endif %}
-    {% if can_publish and not game.is_public %}
-      <a class="dropdown-item bg-dark text-white" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
-    {% endif %}
-    {% if can_edit %}
-      <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
-    {% endif %}
-    </div>
-  </div>
-  {% endif %}
+  <h1 class="game-header-title">
+    {% thumbnail game.title_logo "184" as img %}
+      <img src="{{ img.url }}" class="banner" />
+    {% endthumbnail %}
+    {{ game.name }}
   </h1>
 
   <div class="row">
+
+    <div class="col-12 col-md-9">
+      {% if screenshots %}
+        {% include 'games/partials/_screenshots.html' %}
+      {% endif %}
+
+      <div class="installer-list">
+        {% if installers %}
+        <ul class="list-group">
+          {% for installer in installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if auto_installers %}
+        <ul class="list-group-item">
+        {% for installer in auto_installers %}
+          {% include "games/_installer.html" %}
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="actions-bar">
+        {% if user.is_authenticated %}
+          <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
+        {% endif %}
+        </div>
+      </div>
+      <div>
+        {{ game.description | linebreaks }}
+      </div>
+    </div>
+
     <div class="col-12 col-md-3">
       <div class="game-info">
-        {% thumbnail game.title_logo "300" as img %}
-          <img src="{{ img.url }}" class="banner" />
-        {% endthumbnail %}
         <ul>
+          {% if game.year %}
+          <li>
+            <span class="info-label">Release year: </span>
+            {{ game.year }}
+          </li>
+          {% endif %}
           {% if game.genres.count %}
           <li>
             <span class="info-label">Genre: </span>
@@ -83,58 +99,38 @@
             <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
           </li>
           {% endif %}
-          {% if game.year %}
-          <li>
-            <span class="info-label">Release year: </span>
-            {{ game.year }}
-          </li>
-          {% endif %}
+
           {% if game.website %}
           <li class="ellipse-text">
-              <span class="info-label">Website: </span>
-              <a href='{{ game.website_url }}'>{{ game.website_url_hr }}</a>
+            <span class="info-label">Website: </span>
+            <a href='{{ game.website_url }}'>{{ game.website_url_hr }}</a>
           </li>
           {% endif %}
         </ul>
-        <div class="centered">
-          <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
+
+        <div>
           <p>
-            {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-outline-success font-weight-bold">Add to my library</a>
-            {% else %}
-            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-danger font-weight-bold">
-              <span>Remove from my library</span>
-            </a>
-            {% endif %}
-          </p>
-          <p>
-            {% if game.steamid or game.gogslug or game.humblestoreid %}
-            <span>Get it from:</span><br/>
-            {% endif %}
             {% if game.steamid %}
-            <a href="http://store.steampowered.com/app/{{ game.steamid }}"
-               title="Steam"
-               class='external-link'>
-              <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
-              <span>Steam</span>
-            </a>
+              <a href="http://store.steampowered.com/app/{{ game.steamid }}"
+                 title="Steam"
+                 class='external-link'>
+                <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
+                <span>Steam</span>
+              </a>
             {% endif %}
             {% if game.humblestoreid %}
-            <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" class='external-link'>
-              <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
-              <span>Humble Store</span>
-            </a>
+              <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" class='external-link'>
+                <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
+                <span>Humble Store</span>
+              </a>
             {% endif %}
             {% if game.gogslug %}
-            <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG.com" class='external-link'>
-              <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
-              <span>GOG</span>
-            </a>
+              <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG.com" class='external-link'>
+                <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
+                <span>GOG</span>
+              </a>
             {% endif %}
-          </p>
-          {% if game.links.count %}
-            <p>
-              <span>See also:</span><br/>
+            {% if game.links.count %}
               {% for link in game.links.all %}
               <a href="{{link.url}}" class='external-link'>
                 <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
@@ -161,157 +157,39 @@
                 <span>SteamDB</span>
               </a>
               {% endif %}
-            </p>
-          {% endif %}
-
+            {% endif %}
+          </p>
+          <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
+          <p>
+            {% if not in_library %}
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn font-weight-bold">Add to my library</a>
+            {% else %}
+            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn font-weight-bold">
+              <span>Remove from my library</span>
+            </a>
+            {% endif %}
+          </p>
           {% for flag in game.flag_labels %}
             <p class='badge'>
              {{flag}}
             </p>
           {% endfor %}
-          <p>
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-12 col-md-9">
-      <div class="card bg-dark border-0">
-        <div class="card-body">
-          <div>
-            {% if user.is_authenticated %}
-              <button class="btn btn-success ml-2"><i class="fas fa-plus"></i></button>
+          {% if user.is_staff %}
+            {% if can_edit and pending_change_subm_count > 0 %}
+              <a class="dropdown-item bg-dark text-white" href="{% url 'admin-change-submissions' game.id %}">
+                {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
+              </a>
             {% endif %}
-            {% include 'games/partials/_screenshots.html' %}
-          </div>
-          <div>
-            {{ game.description | linebreaks }}
-          </div>
-
-          <h3 class="card-title">
-            {% if unpublished_installers %}
-              <span class="text-muted">({{ unpublished_installers.count }} unpublished)</span>
-              <button class="btn btn-primary" onclick="toggleUnpublishedInstallers(event)">Show unpublished installers</button>
+            {% if can_publish and not game.is_public %}
+              <a class="dropdown-item bg-dark text-white" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
             {% endif %}
-            {% if user.is_authenticated %}
-            <a class="btn btn-success ml-2" href="{% url "new_installer" slug=game.slug %}" title="Write a new installer">
-              <i class="fas fa-pencil-alt"></i></a>
+            {% if can_edit %}
+              <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
             {% endif %}
-          </h3>
-          <div class="installer-list">
-          {% if installers %}
-          <ul class="list-group">
-            {% for installer in installers %}
-              {% include "games/_installer.html" %}
-            {% endfor %}
-          </ul>
           {% endif %}
-          {% if auto_installers %}
-          <ul class="list-group-item">
-            {% for installer in auto_installers %}
-              {% include "games/_installer.html" %}
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% if unpublished_installers %}
-          <ul id="unpublished-installers" class="list-group hide-unpublished">
-            {% for installer in unpublished_installers %}
-              {% include "games/_installer.html" %}
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </div>
-        </div>
-      </div>
-
-      <div id="issues">
-        <installer-issues slug="{{game.slug}}" user-id="{{user.id|default:""}}"></installer-issues>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id='installer-issue-modal'>
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Report a problem or an outdated installer</h4>
-        </div>
-        <div class="modal-body">
-          <p>
-            Report any problem you might encounter with the installer. You can
-            also report here outdated installers. If you have problems
-            installing or running the game, don't forget to specify your
-            distribution, (+ version and architecture), your graphics chipset
-            model and the driver used.
-          </p>
-          <p>
-            <label for="issue-content">Describe your issue:</label>
-          </p>
-          <textarea id="issue-content" class="issue-content"></textarea>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="issue-submit">Submit</button>
         </div>
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://unpkg.com/vue"></script>
-<script src="{% static 'installer-issues.umd.min.js' %}"></script>
-<script>
-  function submitInstallerIssue(event) {
-    event.preventDefault();
-    var installerSlug = event.target.getAttribute('data-slug');
-    var $issueModal = $('#installer-issue-modal');
-    $issueModal.attr('data-slug', installerSlug);
-    $issueModal.modal();
-  }
-
-  function toggleUnpublishedInstallers(event) {
-    event.preventDefault();
-    var linkText = event.target.innerHTML;
-    if (linkText.indexOf('Show') === 0) {
-      linkText = linkText.replace('Show', 'Hide');
-    } else {
-      linkText = linkText.replace('Hide', 'Show');
-    }
-    event.target.innerHTML = linkText;
-    var unpublishedInstallers = document.getElementById('unpublished-installers');
-    unpublishedInstallers.classList.toggle('hide-unpublished');
-  }
-  (function () {
-    $("#screenshots").carousel('cycle');
-
-    var issueSubmit = document.getElementById('issue-submit');
-    issueSubmit.addEventListener('click', function (event) {
-
-      var issueModal = document.getElementById('installer-issue-modal');
-      var issueContent = document.getElementById('issue-content');
-      var issueData = {
-        content: issueContent.value,
-        installer: issueModal.getAttribute('data-slug')
-      };
-      $.ajax({
-        url: "{% url "game-submit-issue" %}",
-        method: "POST",
-        data: issueData,
-        dataType: "json",
-        success: function (response) {
-          if(response.status === 'error') {
-            alert(response.message);
-          } else {
-            issueContent.value = "";
-            $('#installer-issue-modal').modal('toggle');
-            alert("Thank you for your feedback");
-          }
-        }
-      })
-    });
-  })();
-</script>
-
 {% endblock %}

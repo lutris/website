@@ -5,18 +5,17 @@
     <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
   </a>
   <div class="game-details">
-
       <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
       <span class="small-text">
-      (
+      {% if game.year %}
       <a href="{% url 'games_by_year' year=game.year %}">{{ game.year }}</a>
+      {% endif %}
       {% if game.developer %}
         by <a href="{% url 'games_by_company' company=game.developer.pk %}">{{ game.developer }}</a>
       {% endif %}
       {% if game.publisher %}
         published by <a href="{% url 'games_by_company' company=game.publisher.pk %}">{{ game.publisher }}</a>
       {% endif %}
-      )
       </span>
       {% if is_library %}
       <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="float-right">

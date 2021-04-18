@@ -1,59 +1,44 @@
 {% load static from staticfiles %}
-<header class="sticky-top bg-darker">
-  <div class="container">
-  <nav class="navbar navbar-expand-lg">
-  <a class="logo navbar-brand" href="/">
-    <img src="{% static 'images/logo.png' %}" alt="Lutris" />
-    <span>Lutris</span>
-  </a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbar"
-    aria-controls="navbar"
-    aria-expanded="false"
-    aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
-  <div id="navbar" class="navbar-collapse collapse">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="main-nav">
-      <li class="nav-item"><a class="nav-link" href="{% url 'downloads' %}">Download</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'donate' %}">Support us!</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-      <li class="nav-item"><a class="nav-link" href="https://forums.lutris.net">Forums</a></li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0 mr-2" action="{% url 'game_list' %}" method="get">
-      <div class="input-group">
-        <i class="fas fa-search fa-lg text-lighter my-auto mr-2" aria-hidden="true"></i>
-        <input type="text"
-              name="q"
-              class="form-control bg-dark text-primary border-0 shadow-none"
-              id="global-search"
-              placeholder="Search…" />
-      </div>
-    </form>
-    {% if user.is_authenticated %}
-    <div class="dropdown">
-      <button class="account-info" type="button" id="dropdownMenuButton"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img src="{{user.avatar_url}}" title="{{user.username}}" height="64px"/>
-      </button>
-      <div class="dropdown-menu dropdown-menu-right bg-darker rounded shadow border border-primary" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a>
-        <a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a>
-        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-      </div>
+
+<header class="bg-darker">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none logo">
+        <img src="{% static 'images/logo.png' %}" alt="Lutris" width="32" height="32" />
+        <span class="centered-vertical">Lutris</span>
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a class="nav-link" href="{% url 'downloads' %}">Download</a></li>
+        <li><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
+        <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        <li><a class="nav-link" href="https://forums.lutris.net">Forums</a></li>
+        <li><a class="nav-link" href="{% url 'donate' %}">Donate</a></li>
+      </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'game_list' %}" method="get">
+        <input type="search" class="form-control" id="global-search" placeholder="Search...">
+      </form>
+
+      {% if user.is_authenticated %}
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{user.avatar_url}}" title="{{user.username}}" class="rounded-circle" width="32" height="32">
+          </a>
+          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+          </ul>
+        </div>
+      {% else %}
+        <ul class="nav">
+          <li><a href="{% url 'login' %}?next={{ request.get_full_path }}">Log in</a></li>
+          <li><a href="{% url 'register' %}">Register</a></li>
+        </ul>
+      {% endif %}
     </div>
-    {% else %}
-      <div class="account-action">
-        <a href="{% url 'login' %}?next={{ request.get_full_path }}">Log in</a>
-        <a href="{% url 'register' %}">Register</a>
-      </div>
-    {% endif %}
-  </div>
-  </nav>
   </div>
 </header>
