@@ -1,146 +1,119 @@
 {% extends "base.html" %}
-{% load thumbnail crispy_forms_filters %}
+{% load thumbnail %}
 {% load static from staticfiles %}
-{% block title %}My profile | Lutris{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'lightbox2/css/lightbox.min.css' %}">
+{% endblock stylesheets %}
+
+{% block title %}My account | Lutris{% endblock %}
 
 
 {% block content %}
-<div class="card bg-darker mx-auto d-table">
-  <div class="card-header">
-    <div class="row mx-2">
-      <div class="avatar">
-        <img src="{{ user.avatar_url }}"/>
-      </div>
-      <div class="col text-lighter text-center">
-        <h3 class="text-lighter">{{ user }}</h3>
-        <span class="">Member since {{user.date_joined|date:"d M Y"}}</span>
-      </div>
+<div class="row">
+  <div class="col-md-12">
+  <div class="profile-header">
+    <div class="avatar">
+      <img src="{{ user.avatar_url }}"/>
     </div>
+    <p class="profile-user">{{ user }}</p>
+    <span class="profile-info">Member since {{user.date_joined|date:"d M Y"}}</span>
   </div>
-  <div class="card-body">
-    <h4 class="card-title">Profile details
-      <a class="mx-2 text-decoration-none" data-toggle="modal" data-target="#modal_profile_edit"
-      data-url="{% url 'profile_edit' %}">
-      <i class="fas fa-pencil-alt" title="Edit Profile"></i></a>
-    </h4>
-    <span class="card-text">Email: {{ user.email }}</span>
-    {% if not user.email_confirmed %}
-      {% if user.email %}
-        <a href="{% url "user_send_confirmation" %}"><i class="far fa-envelope fa-lg mx-2" title="Send confirmation link"></i></a>
-        <div class='alert alert-primary font-weight-bold mt-2'>Your email address has not been validated.
-          Some email providers such as Hotmail do not accept messages from
-          Lutris, if this is the case, please change your email address to
-          validate it.
-        </div>
-      {% else %}
-        <div class='alert alert-primary font-weight-bold mt-2'>
-          You don't have an email set, your account will be limited and you
-          won't be able to use the forums.
-        </div>
+  <div class="profile-content">
+    <section>
+      <h4>Profile info</h4>
+      <strong>Email:</strong>
+      <span>{{user.email}}</span>
+      {% if not user.email_confirmed %}
+        {% if user.email %}
+          <a href="{% url "user_send_confirmation" %}">Send validation link</a>
+          <br/>
+          <span class='warning-message'>Your email address has not been validated.
+            Some email providers such as Hotmail do not accept messages from
+            Lutris, if this is the case, please change your email address to
+            validate it.
+          </span>
+        {% else %}
+          <span class='warning-message'>
+            You don't have an email set, your account will be limited and you
+            won't be able to use the forums.
+          </span>
+        {% endif %}
       {% endif %}
-    {% endif %}
-    {% if user.website %}
-    <span class="card-text">Website: <a href="{{user.website}}">{{user.website}}</a></span>
-    {% endif %}
+      <br/>
+      {% if user.website %}
+      <strong>Website:</strong>
+      <a href="{{user.website}}">{{user.website}}</a><br/>
+      {% endif %}
+      <br/>
+      <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
 
-    <h4 class="card-title">Profile actions</h4>
-    <button type="button" class="btn btn-primary mr-2"
-            data-toggle="modal" data-target="#modal_password_change"
-            data-url="{% url 'password_change' %}"
-    >Change password</button>
-    <a href="{% url 'clear_auth_token' %}"
+      <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+      <p>
+        You can log out from every computer you have Lutris installed on by regenerating a new authentication token.
+        <a href="{% url 'clear_auth_token' %}"
            class="btn btn-danger"
            onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')"
            >Clear token</a>
-  <p class="card-text mt-1">
-      You can log out from every computer you have Lutris installed on by generating a new authentication token.
-    </p>
-    <span class="card-text">
-      You can automatically import the list of your Steam games and add them to your Lutris library.
-    </span>
-    <p class="alert alert-primary font-weight-bold">
-      Make sure to set <strong>both</strong> your Steam profile and the games
-      details set to public in your Steam account settings (available at
-      <a href="https://steamcommunity.com/my/edit/settings" target="_blank">My Privacy Settings</a>).
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#steamPublicProfile">See how</button>
-    </p>
-    <a href="{% url 'steam_login' %}">
-      <img src="{{ STATIC_URL }}images/sits_large_noborder.png"
-           title="Sign in with Steam" alt="Sign in with Steam"/>
-    </a>
-    {% if user.steamid %}
-    <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
-    <a href="{% url "steam_disconnect" %}" class="btn btn-danger"
-       onclick="return confirm('Are you sure you want to clear your Steam information?')">Disconnect your account</a>
-    {% endif %}
+      </p>
 
-    <h4 class="card-title mt-3">Contributions</h4>
-    <div class="card-text row row-cols-2">
+    </section>
+    <section>
+      <h4>Game library</h4>
+      <p>
+        <a href="{% url 'library_show' username=user.username %}" class="btn">Show library</a>
+      </p>
+      <p>
+        You can automatically import the list of your Steam games and add them to your Lutris library.
+      </p>
+      <p class="warning-message">
+        Make sure to set <strong>both</strong> your Steam profile and the games
+        details set to public in your Steam account settings (available at <a href="https://steamcommunity.com/my/edit/settings">My Privacy Settings</a>).
+        <a data-lightbox="steam-profile"
+          data-title="Check both checkboxes in your Steam profile"
+          href='{% static 'images/screenshots/steam-profile.png' %}'>See how</a>
+      </p>
+      <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+      {% if user.steamid %}
+      <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
+      <a href="{% url "steam_disconnect" %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your Steam information?')">Disconnect your account</a>
+      {% endif %}
+    </section>
 
-      <div class="col">
-        <h5 class="card-title">Pending submissions
-          <span class="badge badge-primary ml-2">{{ pending_submissions.count }}</span></h5>
-        {% if pending_submissions %}
-        <span class="card-text">The following contributions are awaiting approval from a moderator:</span>
-        <div class="d-flex flex-wrap">
+    <section>
+      <h4>Submitted contributions</h4>
+      {% if pending_submissions %}
+      <p>The following contributions you submitted are awaiting approval from a
+      moderator.</p>
+      <ul class="game-list">
         {% for submission in pending_submissions %}
         {% with submission.game as game %}
-           {% include 'games/_mini_game_preview.html' %}
+          {% include "includes/game_preview.html" %}
         {% endwith %}
         {% endfor %}
-        </div>
+      </ul>
       {% else %}
-        <span class="card-text">No submitted contributions awaiting approval.</span>
-        {% endif %}
-      </div>
+      <p>
+        You have no submitted contributions awaiting approval.
+      </p>
+      {% endif %}
+    </section>
 
-      <div class="col">
-        <h5 class="card-title">Approved submissions
-          <span class="badge badge-primary ml-2">{{ accepted_submissions.count }}</span></h5>
-        {% if accepted_submissions %}
-        <span class="card-text">These are the games you have previously submitted to Lutris:</span>
-        <div class="d-flex flex-wrap">
+    {% if accepted_submissions %}
+    <section>
+      <h4>Contributions</h4>
+      <p>These are the games you have previously submitted to Lutris</p>
+      <ul class="game-list">
         {% for submission in accepted_submissions %}
         {% with submission.game as game %}
-          {% include 'games/_mini_game_preview.html' %}
+          {% include "includes/game_preview.html" %}
         {% endwith %}
         {% endfor %}
-        </div>
-        {% else %}
-        <span class="card-text">No approved contributions.</span>
-        {% endif %}
-      </div>
-    </div>
+      </ul>
+    </section>
+    {% endif %}
+  </div>
   </div>
 </div>
-
-  {% include 'accounts/partials/modals/_modal_password_change.html' %}
-  {% include 'accounts/partials/modals/_modal_profile_edit.html' %}
-
-<div class="modal fade" tabindex="-1" role="dialog" id="steamPublicProfile" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <p>Check both checkboxes in your Steam profile.</p>
-        <img src='{% static 'images/screenshots/steam-profile.png' %}' alt=""/>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="editProfileModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Profile details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      </div>
-    </div>
-  </div>
-</div>
-
+<script src="{% static 'lightbox2/js/lightbox-plus-jquery.min.js' %}"></script
 {% endblock %}

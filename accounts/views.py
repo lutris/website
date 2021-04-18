@@ -38,7 +38,7 @@ LOGGER = logging.getLogger(__name__)
 
 class LutrisRegisterView(CreateView):
     form_class = forms.RegistrationForm
-    template_name = 'accounts/partials/forms/_form_crispy.html'
+    template_name = 'accounts/register.html'
     success_url = reverse_lazy('homepage')
 
     def form_valid(self, form):
@@ -58,7 +58,7 @@ class LutrisRegisterView(CreateView):
 
 
 class LutrisLoginView(LoginView):
-    template_name = 'accounts/partials/forms/_form_crispy.html'
+    template_name = 'accounts/login.html'
     authentication_form = forms.LoginForm
 
     def form_valid(self, form):
@@ -87,7 +87,7 @@ class LutrisLogoutView(LogoutView):
 
 
 class LutrisPasswordResetView(PasswordResetView):
-    template_name = 'accounts/partials/forms/_form_crispy.html'
+    template_name = 'accounts/password_reset.html'
     form_class = forms.PasswordResetForm
 
     def form_valid(self, form):
@@ -107,7 +107,7 @@ class LutrisPasswordResetView(PasswordResetView):
 
 
 class LutrisPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts/partials/forms/_form_crispy.html'
+    template_name = 'accounts/password_change.html'
 
     def form_valid(self, form):
         super().form_valid(form)

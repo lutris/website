@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Login - Lutris{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="form-view col-sm-6">
+    <h1>Sign in</h1>
+    {% crispy form %}
+    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    <p>
+        <input class="btn btn-sm" type="submit" value="Reset my password">
+      </p>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
+{% endblock %}
