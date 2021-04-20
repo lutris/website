@@ -5,14 +5,14 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
 
 
-$primary:       #F90;
-$secondary:     #A02EF2;
-$success:       #2DA750;
-$info:          #FD37A0;
-$warning:       #FDA750;
-$danger:        #FD3750;
-$light:         #DDD;
-$dark:          #222;
+$primary:   #F90;
+$secondary: #A02EF2;
+$success:   #2DA750;
+$info:      #FD37A0;
+$warning:   #FDA750;
+$danger:    #FD3750;
+$light:     #DDD;
+$dark:      #222;
 
 $body-bg: $dark;
 $body-color: $gray-200;
@@ -40,12 +40,12 @@ $theme-colors: map-merge(
   $theme-colors,
   (
     "primary": $primary,
+    "secondary": $secondary,
     "light": $light,
     "dark": $dark,
     "warning": $warning,
   )
 );
-
 
 $list-group-color: $light;
 $list-group-bg: $dark;
@@ -56,12 +56,17 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
 $padding: 7px;
 $banner-width: 184px;
 
-#footer a {
-  color: #EEE;
+// Remove outline from focused links
+a:focus, a:active,
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+select::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+  outline : 0;
 }
-#footer svg {
-  margin: 16px;
-}
+
 
 body {
   display: flex;
@@ -98,11 +103,9 @@ form {
 
 figure {
   padding: 0;
-
   img {
     width: 100%;
   }
-
   figcaption {
     background-color: rgba(30, 30, 30, 0.15);
     padding: 0;
@@ -123,24 +126,10 @@ figure.tiled {
   }
 }
 
-a:focus, a:active,
-button::-moz-focus-inner,
-input[type="reset"]::-moz-focus-inner,
-input[type="button"]::-moz-focus-inner,
-input[type="submit"]::-moz-focus-inner,
-select::-moz-focus-inner,
-input[type="file"] > input[type="button"]::-moz-focus-inner {
-  outline : 0;
-}
-
-.select2, .select2-dropdown {
-  color: #333;
-}
-
 header {
   border-bottom: 1px solid $primary;
   box-shadow: 0 0 5px #000;
-  margin-bottom: 0;
+  margin-bottom: 1em;
   .nav-link {
     text-transform: uppercase;
     font-weight: 600;
@@ -180,11 +169,26 @@ header {
     border-radius: 5px;
     padding: 2px 6px;
   }
+  select {
+    background-color: $dark;
+    border: 1px solid $light;
+    color: $light;
+  }
 }
 
 #global-search {
   min-width: 150px;
   max-width: 200px;
+}
+
+#footer {
+  margin-top: 3em;
+  a {
+    color: #EEE;
+  }
+  svg {
+    margin: 16px;
+  }
 }
 
 .feature-list {
@@ -369,13 +373,24 @@ header {
   }
 }
 
+
+.select2, .select2-dropdown {
+  color: $input-color;
+}
+
 input.select2-lookalike[type="text"] {
-    padding: 5px;
+    padding: 4px;
+    border: 1px solid #AAA;
     border-radius: 4px;
-    background-color: white;
-    outline: 0;
+    background-color: $white;
     &:focus {
-      border: solid 1px black;
+      background-color: $white;
+      border: 1px solid $black;
+      outline: 0;
+    }
+    input {
+      background-color: transparent;
+      border: none;
     }
 }
 
@@ -505,7 +520,7 @@ input.select2-lookalike[type="text"] {
 }
 .game-header-title {
   display: flex;
-  padding: 12px 0;
+  padding: 0;
   div {
     display: inline-block;
     padding-left: 12px;
@@ -954,9 +969,14 @@ input.select2-lookalike[type="text"] {
 }
 
 /*Library game filter, flags selection*/
-#id_flags {
-  list-style: none;
-  padding-left: 0;
+.filter-form {
+  ul {
+    list-style: none;
+  }
+  padding: 10px;
+  border-radius: 6px;
+  background-color: $light;
+  color: $dark;
 }
 
 .no-border {
@@ -1020,7 +1040,7 @@ ol.toc a{
 }
 .alertify-notifier .ajs-message.ajs-warning {
   color: $dark;
-  background: color("orange");
+  background: $warning;
 }
 
 .alertify-notifier .ajs-message.ajs-visible {

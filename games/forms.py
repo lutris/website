@@ -432,7 +432,7 @@ class LibraryFilterForm(forms.Form):
     )
     flags = forms.MultipleChoiceField(
         choices=models.Game.GAME_FLAGS,
-        widget=BitFieldCheckboxSelectMultiple,
+        widget=BitFieldCheckboxSelectMultiple(attrs={'class': "checkbox-list"}),
         required=False,
     )
 

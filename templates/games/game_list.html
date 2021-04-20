@@ -6,11 +6,6 @@
 {% block title %}Games | Lutris{% endblock %}
 
 
-{% block extra_head %}
-{{ filter_form.media.css }}
-{% endblock %}
-
-
 {% block content %}
 <div class="row">
   <div class="col-lg-9">
@@ -32,27 +27,9 @@
     {% endif %}
   </div>
   <div class="col-lg-3">
-    <div class="pb-4">
-        Show <select id="paginate_by" data-filter="{{ filter_string }}">
-          <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
-          <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
-          <option value="100" {% if paginate_by == '100' %} selected {% endif %}>100</option>
-        </select>
-        per page
-    </div>
-    <div class="pb-4">
-      Sort by
-      <select id="order_by" style="color:black;" data-filter="{{ filter_string }}">
-        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
-        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
-        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
-        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
-        <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity</option>
-        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Last updated</option>
-      </select>
-    </div>
 
-    <div class="card bg-dark">
+
+    <div class="filter-form">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
         <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
@@ -82,8 +59,26 @@
 </div>
 
 {% if page_obj.has_other_pages %}
-<div class="row bg-darker rounded mx-auto mb-3 py-2 px-3 d-flex justify-content-center">
+<div class="centered">
     {% include 'includes/library_paginator.html' %}
+    <div class="paginator-options small-text">
+      <span class="px-2">Results per page:</span>
+      <select id="paginate_by" data-filter="{{ filter_string }}">
+          <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
+          <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
+          <option value="100" {% if paginate_by == '100' %} selected {% endif %}>100</option>
+      </select>
+
+      <span class="px-2">Sort by:</span>
+      <select id="order_by" data-filter="{{ filter_string }}">
+        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
+        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
+        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
+        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
+        <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity</option>
+        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Last updated</option>
+      </select>
+    </div>
 </div>
 {% endif %}
 
