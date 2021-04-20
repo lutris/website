@@ -1,0 +1,100 @@
+<div class="d-flex flex-column p-3 text-white bg-dark sidebar" style="height: 100%;">
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="{% url 'profile' %}" class="nav-link text-white{% if profile_page == 'profile'%} active{% endif %}">
+        <i class="bi-person"></i>
+        Profile
+      </a>
+    </li>
+    <!--
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-cpu"></i>
+        My machines
+      </a>
+    </li>
+    -->
+    <li>
+      <a href="{% url 'library_show' username=user.username %}" class="nav-link text-white{% if profile_page == 'library'%} active{% endif %}">
+        <i class="bi-controller"></i>
+        Library
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-collection"></i>
+        Submissions
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-wrench"></i>
+        Installers
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-grid"></i>
+        Issues
+      </a>
+    </li>
+  </ul>
+  <hr>
+  <div class="dropdown">
+    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="rounded-circle me-2" width="32" height="32">
+      <strong>{{ user.username }}</strong>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">
+      <li><a class="dropdown-item" href="{% url 'profile_edit' %}">Edit profile</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+    </ul>
+  </div>
+</div>
+<!--
+<div class="d-flex flex-column p-3 text-white bg-dark" style="width: 280px;">
+    <ul class="nav nav-pills mb-auto">
+    <li class="nav-item">
+        <a href="#" class="nav-link active">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+        Home
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'library_show' username=user.username %}" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+        Show library
+        </a>
+    </li>
+    <li>
+        <a href="#" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+        Orders
+        </a>
+    </li>
+    <li>
+        <a href="#" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+        Products
+        </a>
+    </li>
+    <li>
+        <a href="#" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+        Customers
+        </a>
+    </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="rounded-circle me-2" width="32" height="32">
+        <strong>{{ user.username }}</strong>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">
+
+    </ul>
+  </div>
+</div>
+-->

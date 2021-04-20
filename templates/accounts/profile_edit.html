@@ -8,7 +8,7 @@
 {% block content %}
 <div class="form-view">
   <h1>Account details</h1>
-  {% crispy form %}
+  {% crispy form form.helper %}
 </div>
 <div class="form-view">
   <a href="{% url 'password_change' %}" class="btn btn-sm">Modify my password</a>

@@ -11,12 +11,13 @@
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
   <link type="text/css" href="{% static 'css/lutris.css' %}" rel="stylesheet" />
+  <link type="text/css" href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet" />
   <link type="application/opensearchdescription+xml" href="{% static 'xml/opensearch.xml' %}" rel="search" title="Lutris">
   <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy" crossorigin="anonymous"></script>
   {% block stylesheets %}{% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
   {% if messages %}
   <ul class="d-none" id="django_messages">
     {% for message in messages %}
@@ -26,7 +27,7 @@
   {% endif %}
 
   {% include "includes/_header.html" %}
-  <div id="content" class="container text-white">
+  <div id="content" class="container text-white d-flex">
     {% block content %}{% endblock %}
   </div>
   <div class="footer mt-auto">

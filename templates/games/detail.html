@@ -83,22 +83,21 @@
         {% endfor %}
         </ul>
         {% endif %}
-        <div class="actions-bar">
+
         {% if user.is_authenticated %}
+        <div class="actions-bar">
           <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
-        {% endif %}
         </div>
+        {% endif %}
       </div>
-      <div>
+      <div class="py-3">
         {{ game.description | linebreaks }}
       </div>
     </div>
 
     <div class="col-12 col-md-3">
       <div class="game-info">
-
         <ul>
-
           {% if game.genres.count %}
           <li>
             <span class="info-label">Genre: </span>
@@ -115,7 +114,6 @@
             {% endfor %}
           </li>
           {% endif %}
-
 
           {% if game.website %}
           <li class="ellipse-text">
@@ -191,8 +189,6 @@
              {{flag}}
             </p>
           {% endfor %}
-
-
         </div>
       </div>
     </div>

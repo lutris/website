@@ -1,13 +1,26 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
 
-$primary: #F90;
+
+$primary:       #F90;
+$secondary:     #A02EF2;
+$success:       #2DA750;
+$info:          #FD37A0;
+$warning:       #FDA750;
+$danger:        #FD3750;
+$light:         #DDD;
+$dark:          #222;
+
 $body-bg: $dark;
 $body-color: $gray-200;
 $link-color: #AAA;
 $link-hover-color: $primary;
+
+$nav-tabs-link-active-bg: $primary;
+$nav-pills-link-active-bg: $primary;
 
 $input-border-color: #555;
 $input-border-radius: 3;
@@ -27,9 +40,9 @@ $theme-colors: map-merge(
   $theme-colors,
   (
     "primary": $primary,
-    "light": #666,
-    "dark": #1a1a1a,
-    "warning": #FD3750
+    "light": $light,
+    "dark": $dark,
+    "warning": $warning,
   )
 );
 
@@ -40,6 +53,9 @@ $list-group-hover-bg: $dark;
 
 $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+$padding: 7px;
+$banner-width: 184px;
+
 #footer a {
   color: #EEE;
 }
@@ -47,16 +63,9 @@ $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, s
   margin: 16px;
 }
 
-
-$padding: 7px;
-$banner-width: 184px;
-
-html {
-  height:100vh;
-}
-
 body {
   display: flex;
+  flex-wrap: nowrap;
   flex-direction: column;
   min-height: 100vh;
 }
@@ -174,8 +183,13 @@ header {
 }
 
 #global-search {
-  @include media-breakpoint-up(lg) {
-    min-width: 250px;
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.feature-list {
+  i {
+    font-size: 1.8em;
   }
 }
 
@@ -271,6 +285,11 @@ header {
 .ace_editor {
   height: 500px;
   width: 100%;
+}
+
+.container {
+  flex-direction: column;
+  flex-grow: 4;
 }
 
 // Workaround for a cursor rendering bug in ACE editor:
@@ -691,6 +710,18 @@ input.select2-lookalike[type="text"] {
 
   .hide-unpublished {
     display: none;
+  }
+}
+
+.full-screen-row {
+  flex-grow: 4;
+  display: flex;
+}
+
+.sidebar {
+  font-weight: bold;
+  i {
+    padding-right: 4px;
   }
 }
 

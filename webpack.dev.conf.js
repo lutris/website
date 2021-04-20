@@ -17,6 +17,18 @@ module.exports = {
   mode: "development",
   module: {
     rules: [
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        include: path.resolve(__dirname, './node_modules/bootstrap-icons/font/fonts'),
+        use: {
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]',
+                outputPath: 'webfonts',
+                publicPath: '../webfonts',
+            },
+        }
+      },
       // expose jQuery to other scripts
       {
         test: require.resolve("jquery"),
@@ -24,7 +36,10 @@ module.exports = {
           {
             loader: "expose-loader",
             options: {
-              exposes: ["jQuery", "$"]
+              exposes: {
+                globalName: "$",
+                override: true,
+              }
             }
           }
         ],
@@ -59,10 +74,17 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "css/lutris.css",
     }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "node_modules/bootstrap-icons/font"),
+          to: "./css/"
+        },
+      ],
+    }),
     // provide jQuery and Popper.js dependencies
     new webpack.ProvidePlugin({
       $: "jquery",
-      jQuery: "jquery",
       jquery: "jquery",
       "window.jQuery": "jquery",
       "window.$": "jquery",

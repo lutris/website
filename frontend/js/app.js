@@ -13,7 +13,7 @@ import alertify from 'alertifyjs';
 import 'datatables.net-bs4';
 import 'datatables.net-responsive-bs4';
 import Cookies from 'js-cookie';
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 let csrftoken = Cookies.get('csrftoken');
 let notification_queue = JSON.parse(sessionStorage.getItem('notification_queue')) || [];

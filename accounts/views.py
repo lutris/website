@@ -1,4 +1,5 @@
 """Module for user account views"""
+# pylint: disable=too-many-ancestors
 import logging
 
 from django.conf import settings
@@ -6,17 +7,19 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView, PasswordChangeView, \
-    PasswordResetConfirmView
-from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import (
+    LogoutView, LoginView, PasswordResetView,
+    PasswordChangeView, PasswordResetConfirmView
+)
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import (Http404, HttpResponseBadRequest,
-                         HttpResponseRedirect, JsonResponse)
+from django.http import (
+    Http404, HttpResponseBadRequest,
+    HttpResponseRedirect, JsonResponse
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
 from openid.fetchers import HTTPFetchingError
@@ -37,32 +40,20 @@ LOGGER = logging.getLogger(__name__)
 
 
 class LutrisRegisterView(CreateView):
+    """Account registration view"""
     form_class = forms.RegistrationForm
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('homepage')
 
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = {
-            'status': 'success',
-            'message': 'Account registered, you can now login to Lutris.'
-        }
-        return JsonResponse(response)
-
-    def form_invalid(self, form):
-        response = {
-            'status': 'invalid',
-            'html': render_to_string(self.template_name, self.get_context_data(form=form))
-        }
-        return JsonResponse(response)
-
 
 class LutrisLoginView(LoginView):
+    """Sign in view"""
     template_name = 'accounts/login.html'
     authentication_form = forms.LoginForm
 
 
 class LutrisLogoutView(LogoutView):
+    """Sign out view"""
     next_page = 'homepage'
 
     def dispatch(self, request, *args, **kwargs):
@@ -71,45 +62,18 @@ class LutrisLogoutView(LogoutView):
 
 
 class LutrisPasswordResetView(PasswordResetView):
+    """View to reset a user's password"""
     template_name = 'accounts/password_reset.html'
     form_class = forms.LutrisPasswordResetForm
 
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = {
-            'status': 'success',
-            'message': 'Password reset email has been sent to specified address.'
-        }
-        return JsonResponse(response)
-
-    def form_invalid(self, form):
-        response = {
-            'status': 'invalid',
-            'html': render_to_string(self.template_name, self.get_context_data(form=form))
-        }
-        return JsonResponse(response)
-
 
 class LutrisPasswordChangeView(PasswordChangeView):
+    """View confirming the password reset is sent"""
     template_name = 'accounts/password_change.html'
-
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = {
-            'status': 'success',
-            'message': 'Your password has been updated.'
-        }
-        return JsonResponse(response)
-
-    def form_invalid(self, form):
-        response = {
-            'status': 'invalid',
-            'html': render_to_string(self.template_name, self.get_context_data(form=form))
-        }
-        return JsonResponse(response)
 
 
 class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
+    """View where the user confirms the password reset"""
     template_name = 'accounts/password_reset_confirm.html'
     success_url = reverse_lazy('homepage')
 
@@ -148,21 +112,26 @@ def profile(request):
     )
 
 
+
 def user_account(request, username):
     """Profile view"""
-    user = get_object_or_404(User, username=username)
     if request.user.username != username:
-        # Once public profiles are implemented, we'll return a view here,
-        # currently, only throw a 404.
         raise Http404
+    return render(request, 'accounts/profile.html', {
+        'user': request.user,
+        'profile_page': 'profile'
+    })
+
+@login_required
+def user_submissions(request):
+    """Lists a user game submissions"""
     pending_submissions = models.GameSubmission.objects.filter(
-        user=user, accepted_at__isnull=True
+        user=request.user, accepted_at__isnull=True
     )
     accepted_submissions = models.GameSubmission.objects.filter(
-        user=user, accepted_at__isnull=False
+        user=request.user, accepted_at__isnull=False
     )
-    return render(request, 'accounts/profile.html', {
-        'user': user,
+    return render(request, 'accounts/game_submissions.html', {
         'pending_submissions': pending_submissions,
         'accepted_submissions': accepted_submissions
     })
@@ -220,29 +189,13 @@ def user_email_confirm(request):
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'accounts/partials/forms/_form_crispy.html'
+    """Edit the user's profile info"""
+    template_name = 'accounts/profile_edit.html'
     form_class = forms.ProfileForm
     success_url = reverse_lazy('profile')
 
     def get_object(self, queryset=None):
         return self.request.user
-
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = {
-            'status': 'success',
-            'message': 'Your profile has been updated.',
-            'url': self.success_url
-        }
-        return JsonResponse(response)
-
-    def form_invalid(self, form):
-        super().form_invalid(form)
-        response = {
-            'status': 'invalid',
-            'html': render_to_string(self.template_name, self.get_context_data(form=form))
-        }
-        return JsonResponse(response)
 
 
 @login_required
@@ -344,6 +297,7 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
             raise Http404
         context['user'] = user
         context['is_library'] = True
+        context['profile_page'] = 'library'
         return context
 
 
@@ -363,14 +317,12 @@ def library_add(request, slug):
 @login_required
 def library_remove(request, slug):
     """Remove a game from a user's library"""
-    user = request.user
-    library = models.GameLibrary.objects.get(user=user)
+    library = models.GameLibrary.objects.get(user=request.user)
     game = get_object_or_404(models.Game, slug=slug)
     library.games.remove(game)
     redirect_url = request.META.get('HTTP_REFERER')
     if not redirect_url:
-        username = user.username
-        redirect_url = reverse('library_show', kwargs={'username': username})
+        redirect_url = reverse('library_show', kwargs={'username': request.user.username})
     return redirect(redirect_url)
 
 
@@ -391,8 +343,7 @@ def library_steam_sync(request):
 @login_required
 def discourse_sso(request):
     """View used to sign in a user to the Discourse forums"""
-    user = request.user
-    if not user.email_confirmed:
+    if not request.user.email_confirmed:
         return HttpResponseBadRequest('You must confirm your email to use the forums')
     payload = request.GET.get('sso')
     signature = request.GET.get('sig')

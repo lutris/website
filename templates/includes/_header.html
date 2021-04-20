@@ -9,36 +9,36 @@
         <span class="centered-vertical">Lutris</span>
       </a>
 
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+      <ul class="nav col-9 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a class="nav-link" href="{% url 'downloads' %}">Download</a></li>
         <li><a class="nav-link" href="{% url 'game_list' %}">Games</a></li>
         <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
         <li><a class="nav-link" href="https://forums.lutris.net">Forums</a></li>
         <li><a class="nav-link" href="{% url 'donate' %}">Donate</a></li>
       </ul>
-
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'game_list' %}" method="get">
-        <input type="search" class="form-control" id="global-search" placeholder="Search...">
-      </form>
-
-      {% if user.is_authenticated %}
-        <div class="dropdown text-end">
-          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{user.avatar_url}}" title="{{user.username}}" class="rounded-circle" width="32" height="32">
-          </a>
-          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-            <li><a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a></li>
-            <li><a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+      <div class="col-3 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex">
+        <form class="" action="{% url 'game_list' %}" method="get">
+          <input type="search" class="form-control" name="q" id="global-search" placeholder="Search...">
+        </form>
+        {% if user.is_authenticated %}
+          <div class="dropdown text-end px-3">
+            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{user.avatar_url}}" title="{{user.username}}" class="rounded-circle" width="32" height="32">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+            </ul>
+          </div>
+        {% else %}
+          <ul class="nav">
+            <li class="p-1"><a class="btn btn-sm btn-primary" href="{% url 'login' %}?next={{ request.get_full_path }}">Log in</a></li>
+            <li class="p-1"><a class="btn btn-sm btn-secondary" href="{% url 'register' %}">Register</a></li>
           </ul>
-        </div>
-      {% else %}
-        <ul class="nav">
-          <li><a href="{% url 'login' %}?next={{ request.get_full_path }}">Log in</a></li>
-          <li><a href="{% url 'register' %}">Register</a></li>
-        </ul>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
   </div>
 </header>

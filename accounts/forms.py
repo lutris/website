@@ -125,6 +125,15 @@ class LutrisPasswordResetForm(PasswordResetForm):
 
 class ProfileForm(forms.ModelForm):
     """Form to edit profile information"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'profile_edit'
+        self.helper.form_class = 'form-horizontal'
+        # self.helper.label_class = 'col-lg-4'
+        # self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Save changes'))
 
     class Meta:
         """ModelForm configuration"""

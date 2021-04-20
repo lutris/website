@@ -43,6 +43,7 @@
     "alertifyjs": "^1.13.1",
     "blueimp-gallery": "^3.3.0",
     "bootstrap": "^5.0.0-beta3",
+    "bootstrap-icons": "^1.4.1",
     "datatables.net": "^1.10.24",
     "datatables.net-bs4": "^1.10.24",
     "datatables.net-dt": "^1.10.24",

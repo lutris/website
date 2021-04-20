@@ -1,11 +1,15 @@
-{% extends "base.html" %}
+{% extends "accounts/profile_base.html" %}
+
+
 {% block title %}My Library | Lutris{% endblock %}
+
+
 {% block extra_head %}
 {{ filter_form.media.css }}
 {% endblock %}
-{% block content %}
 
-<!-- HEADER -->
+
+{% block profile_content %}
 <h1>My Library <span class="text-muted" style="font-size: 0.6em;">{{ paginator.count }} games</span>
   <span style="float: right;font-size: initial;margin-right: 1em;">
       Order by
@@ -61,11 +65,11 @@
     </div>
   </div>
 </div>
-
 {% if page_obj.has_other_pages %}
   {% include 'includes/library_paginator.html' %}
 {% endif %}
 {% endblock %}
+
 
 {% block scripts %}
   {{ block.super }}

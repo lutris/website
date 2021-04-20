@@ -1,0 +1,34 @@
+  {% block content %}
+    <section>
+      <h4>Submitted contributions</h4>
+      {% if pending_submissions %}
+      <p>The following contributions you submitted are awaiting approval from a
+      moderator.</p>
+      <ul class="game-list">
+        {% for submission in pending_submissions %}
+        {% with submission.game as game %}
+          {% include "includes/game_preview.html" %}
+        {% endwith %}
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>
+        You have no submitted contributions awaiting approval.
+      </p>
+      {% endif %}
+    </section>
+
+    {% if accepted_submissions %}
+    <section>
+      <h4>Contributions</h4>
+      <p>These are the games you have previously submitted to Lutris</p>
+      <ul class="game-list">
+        {% for submission in accepted_submissions %}
+        {% with submission.game as game %}
+          {% include "includes/game_preview.html" %}
+        {% endwith %}
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+{% endblock %}
