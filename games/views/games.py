@@ -191,7 +191,8 @@ class GameSubmissionsView(generics.ListAPIView):
 
     def get_queryset(self):
         return models.GameSubmission.objects.filter(
-            accepted_at__isnull=True
+            accepted_at__isnull=True,
+            game__change_for__isnull=True,
         ).prefetch_related('game', 'user', 'game__provider_games').order_by(
             '-created_at'
         )
