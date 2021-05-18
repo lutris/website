@@ -195,3 +195,18 @@ class GameSubmissionsView(generics.ListAPIView):
         ).prefetch_related('game', 'user', 'game__provider_games').order_by(
             '-created_at'
         )
+
+class GameSubmissionAcceptView(APIView):
+    """Accept a user submission"""
+
+    @staticmethod
+    def post(request, submission_id):
+        if not request.user.is_staff:
+            raise PermissionDenied
+
+        game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
+        game_submission.accept()
+        return Response({
+            "id": game_submission.id,
+            "accepted": True
+        })

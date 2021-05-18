@@ -562,27 +562,6 @@ class Game(models.Model):
                 auto_installers.append(installer)
         return auto_installers
 
-    def check_for_submission(self):
-        """What? This saves submissions on save? Why?
-        This is fully wrong. The name itself is a huge red flag since nothing
-        is checked and this method has side effects.
-        """
-        # Skip freshly created and unpublished objects
-        if not self.pk or not self.is_public:
-            return
-
-        # Skip objects that were already published
-        original = Game.objects.get(pk=self.pk)
-        if original.is_public:
-            return
-
-        try:
-            submission = GameSubmission.objects.get(game=self, accepted_at__isnull=True)
-        except GameSubmission.DoesNotExist:
-            pass
-        else:
-            submission.accept()
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -593,7 +572,6 @@ class Game(models.Model):
             if not self.slug:
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.set_logo_from_steam()
-            self.check_for_submission()
         super(Game, self).save(
             force_insert=force_insert,
             force_update=force_update,
@@ -1070,6 +1048,11 @@ class GameSubmission(models.Model):
 
     def accept(self):
         """Accept the submission and notify the author"""
+        if self.accepted_at:
+            LOGGER.warning("Submission already accepted")
+            return
+        self.game.is_public = True
+        self.game.save()
         self.accepted_at = datetime.datetime.now()
         self.save()
         messages.send_game_accepted(self.user, self.game)
