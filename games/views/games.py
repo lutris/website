@@ -184,3 +184,14 @@ class GameMergeView(APIView):
         other_game = get_object_or_404(models.Game, slug=other_slug)
         original_game.merge_with_game(other_game)
         return Response({})
+
+
+class GameSubmissionsView(generics.ListAPIView):
+    serializer_class = serializers.GameSubmissionSerializer
+
+    def get_queryset(self):
+        return models.GameSubmission.objects.filter(
+            accepted_at__isnull=True
+        ).prefetch_related('game', 'user', 'game__provider_games').order_by(
+            '-created_at'
+        )

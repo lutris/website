@@ -312,6 +312,11 @@ class Game(models.Model):
         # pylint: disable=E1133; self.flags *is* iterable
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
+    @property
+    def submission(self):
+        """Return the first (and only) submission for a game"""
+        return self.submissions.first()
+
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
         return {
@@ -1042,8 +1047,16 @@ class GameLibrary(models.Model):
 
 class GameSubmission(models.Model):
     """User submitted game"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
+    game = models.ForeignKey(
+        Game,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
