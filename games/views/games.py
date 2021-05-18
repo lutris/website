@@ -188,6 +188,7 @@ class GameMergeView(APIView):
 
 class GameSubmissionsView(generics.ListAPIView):
     serializer_class = serializers.GameSubmissionSerializer
+    permission_classes = (permissions.IsAdminUser, )
 
     def get_queryset(self):
         return models.GameSubmission.objects.filter(
