@@ -677,6 +677,11 @@ class InstallerManager(models.Manager):
             except ObjectDoesNotExist:
                 game = None
 
+            if not game:
+                try:
+                    game = Game.objects.get(aliases__slug=slug)
+                except ObjectDoesNotExist:
+                    game = None
             if game:
                 installers = self.get_queryset().filter(game=game, published=True)
 
