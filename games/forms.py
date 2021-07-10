@@ -9,6 +9,7 @@ from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit, ButtonHolder, Fieldset, Field
 from django import forms
 from django.conf import settings
+from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django_select2.forms import (
     ModelSelect2Widget,
@@ -299,6 +300,14 @@ class InstallerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(InstallerForm, self).__init__(*args, **kwargs)
         self.fields["notes"].label = "Technical notes"
+
+    def clean_description(self):
+        """Remove HTML tags from the description"""
+        return strip_tags(self.cleaned_data["description"])
+
+    def clean_notes(self):
+        """Remove HTML tags from the description"""
+        return strip_tags(self.cleaned_data["notes"])
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
