@@ -87,9 +87,16 @@ class RunnerUploadView(generics.CreateAPIView):
 
 class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
-    queryset = Runtime.objects.all()
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAdminOrReadOnly,)
+
+    def get_queryset(self):
+        """Match lutris games against service appids"""
+        queryset = Runtime.objects.all()
+        filter_enabled = self.request.GET.get('enabled')
+        if filter_enabled:
+            return queryset.filter(enabled=True)
+        return queryset
 
     def get(self, request):  # pylint: disable=W0221
         queryset = self.get_queryset()

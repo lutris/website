@@ -311,6 +311,11 @@ class Game(models.Model):
         # pylint: disable=E1133; self.flags *is* iterable
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
 
+    @property
+    def submission(self):
+        """Return the first (and only) submission for a game"""
+        return self.submissions.first()
+
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
         return {
@@ -556,27 +561,6 @@ class Game(models.Model):
                 auto_installers.append(installer)
         return auto_installers
 
-    def check_for_submission(self):
-        """What? This saves submissions on save? Why?
-        This is fully wrong. The name itself is a huge red flag since nothing
-        is checked and this method has side effects.
-        """
-        # Skip freshly created and unpublished objects
-        if not self.pk or not self.is_public:
-            return
-
-        # Skip objects that were already published
-        original = Game.objects.get(pk=self.pk)
-        if original.is_public:
-            return
-
-        try:
-            submission = GameSubmission.objects.get(game=self, accepted_at__isnull=True)
-        except GameSubmission.DoesNotExist:
-            pass
-        else:
-            submission.accept()
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -587,7 +571,6 @@ class Game(models.Model):
             if not self.slug:
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.set_logo_from_steam()
-            self.check_for_submission()
         super(Game, self).save(
             force_insert=force_insert,
             force_update=force_update,
@@ -658,6 +641,17 @@ class InstallerManager(models.Manager):
         """Return unpublished installers"""
         return self.get_queryset().filter(published=False)
 
+    def new(self):
+        """Return new installers that don't have any edits"""
+        return [
+            installer
+            for installer in self.get_queryset().filter(published=False)
+            if not Version.objects.filter(
+                object_id=installer.id, content_type__model="installer"
+            ).count()
+        ]
+
+
     def abandoned(self):
         """Return the installer with 'Change Me' version that haven't received any modifications"""
         return [
@@ -681,6 +675,11 @@ class InstallerManager(models.Manager):
             except ObjectDoesNotExist:
                 game = None
 
+            if not game:
+                try:
+                    game = Game.objects.get(aliases__slug=slug)
+                except ObjectDoesNotExist:
+                    game = None
             if game:
                 installers = self.get_queryset().filter(game=game, published=True)
 
@@ -1029,8 +1028,16 @@ class GameLibrary(models.Model):
 
 class GameSubmission(models.Model):
     """User submitted game"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
+    game = models.ForeignKey(
+        Game,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
@@ -1044,6 +1051,11 @@ class GameSubmission(models.Model):
 
     def accept(self):
         """Accept the submission and notify the author"""
+        if self.accepted_at:
+            LOGGER.warning("Submission already accepted")
+            return
+        self.game.is_public = True
+        self.game.save()
         self.accepted_at = datetime.datetime.now()
         self.save()
         messages.send_game_accepted(self.user, self.game)
@@ -1124,11 +1136,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def get_installer_data(self):
         """Return the data saved in the revision in an usable format"""
         installer_data = json.loads(self._version.serialized_data)[0]["fields"]
-        try:
-            installer_data["script"] = load_yaml(installer_data["content"])
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError) as ex:
-            LOGGER.exception(ex)
-            installer_data["script"] = ["This installer is f'd up."]
+        installer_data["script"] = load_yaml(installer_data["content"])
         installer_data["id"] = self.id
         # Return a defaultdict to prevent key errors for new fields that
         # weren't present in previous revisions
@@ -1164,7 +1172,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(original_revision=self._version.revision)
 
-    def accept(self, moderator, installer_data=None):
+    def accept(self, moderator=None, installer_data=None):
         """Accepts an installer submission
 
         Also clears any earlier draft created by the same user.
@@ -1181,12 +1189,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self._version.revert()
 
         installer = Installer.objects.get(pk=self.installer_id)
-
-        # Keep a snapshot of the current installer
-        InstallerHistory.create_from_installer(installer)
         installer.published = True
-        installer.published_by = moderator
         installer.draft = False
+
+        # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
+        # accepted automatically by a script and doesn't need a revision)
+        if moderator:
+            InstallerHistory.create_from_installer(installer)
+            installer.published_by = moderator
+
         if installer_data:
             # Only fields editable in the dashboard will be affected
             # FIXME also persist runner

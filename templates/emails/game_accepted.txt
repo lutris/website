@@ -9,7 +9,7 @@ The scripting details are explained on the installer submission page,
 you can have a look at other scripts to see how they are written.
 If you get confused or have any questions about the scripting process,
 please contact us on Discord: {{DISCORD_URL}}
-or on IRC: #lutris on Freenode.
+or on IRC: #lutris on Libera.chat.
 
 Have a great day!
 

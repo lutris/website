@@ -30,6 +30,8 @@ class InstallerListView(generics.ListAPIView):
             return models.Installer.objects.published()
         if installer_status == 'unpublished':
             return models.Installer.objects.unpublished()
+        if installer_status == 'new':
+            return models.Installer.objects.new()
         if installer_status == 'abandoned':
             return models.Installer.objects.abandoned()
         return models.Installer.objects.all()

@@ -18,7 +18,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.5.8.1"
+CLIENT_VERSION = "0.5.8.4"
 
 DEBUG = True
 THUMBNAIL_DEBUG = False
@@ -232,27 +232,25 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYBEAT_SCHEDULE = {
     'delete-unchanged-forks': {
         'task': 'games.tasks.delete_unchanged_forks',
-        'schedule': crontab(hour=17, minute=59)
+        'schedule': crontab(minute=1)
     },
     'clear-orphan-versions': {
         'task': 'games.tasks.clear_orphan_versions',
-        'schedule': crontab(hour=17, minute=29)
+        'schedule': crontab(minute=2)
     },
     'clear-orphan-revisions': {
         'task': 'games.tasks.clear_orphan_revisions',
-        'schedule': crontab(hour=17, minute=30)
+        'schedule': crontab(minute=3)
     },
     'clear-spammers': {
         'task': 'accounts.tasks.clear_spammers',
-        'schedule': crontab(hour=16, minute=20)
+        'schedule': crontab(minute=4)
+    },
+    'clean-installers': {
+        'task': 'games.tasks.auto_process_installers',
+        'schedule': crontab(minute=5)
     }
 }
-
-if DOMAIN_NAME == "lutris.net":
-    CELERYBEAT_SCHEDULE['send-daily-mod-mail'] = {
-        'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=18, minute=0),
-    }
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
