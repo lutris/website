@@ -12,7 +12,7 @@
       "last_login": "2012-05-17T18:30:19.044Z",
       "groups": [],
       "user_permissions": [],
-      "password": "sha1$de11c$08e4893709dfb28b92d99ade7fd4c335b591ed32",
+      "password": "pbkdf2_sha256$150000$EJ0NPSRYbvAN$BO3qxz35Th870kMTTDg+DlSM1DLQ/YI+uAqxW/22vl0=",
       "email": "admin@lutris.net",
       "date_joined": "2012-05-17T18:30:19.044Z"
     }
