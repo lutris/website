@@ -647,7 +647,10 @@ class InstallerManager(models.Manager):
         """Return new installers that don't have any edits"""
         return [
             installer
-            for installer in self.get_queryset().filter(published=False)
+            for installer in self.get_queryset().filter(
+                published=False,
+                draft=False
+            ).order_by("-updated_at")
             if not Version.objects.filter(
                 object_id=installer.id, content_type__model="installer"
             ).count()
