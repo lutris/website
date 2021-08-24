@@ -19,6 +19,15 @@ To prepare the database run in a separate terminal::
 
     make init_docker_db
 
+You can start the containers with::
+
+    make start_dev_docker
+
+Now you should be able to login with::
+
+    user: admin
+    password: admin
+
 You are now ready to develop. No need to rebuild the images for simple
 code changes, as the containers will pick them up from the host system.
 Operations requiring a rebuild:

@@ -61,8 +61,8 @@
           <br/>
           <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/Debian_10/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
           <code>wget -q https://download.opensuse.org/repositories/home:/strycore/Debian_10/Release.key -O- | sudo apt-key add -</code><br/>
-          <code>apt update</code><br/>
-          <code>apt install lutris</code>
+          <code>sudo apt update</code><br/>
+          <code>sudo apt install lutris</code>
         </p>
       </li>
       <li>
@@ -114,7 +114,7 @@
       </li>
       <li>
         <ul>
-          <li><img src="{{STATIC_URL}}images/icons/clearlinux.png" alt="Solus">Clear Linux</li>
+          <li><img src="{{STATIC_URL}}images/icons/clearlinux.png" alt="Clear Linux">Clear Linux</li>
         </ul>
         <p>
           Lutris is available as a bundle.<br/><br/>
@@ -146,17 +146,6 @@
       <li>
         <ul>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/slackware.png' alt='Slackware'>Slackware
-          </li>
-        </ul>
-        <p>
-        Lutris is available from the SlackBuilds repositories (may not be up to date):
-        <a href="https://slackbuilds.org/apps/lutris/">https://slackbuilds.org/apps/lutris/</a>
-        </p>
-      </li>
-      <li>
-        <ul>
-          <li>
             <img src='{{ STATIC_URL }}images/icons/centos.png' alt='CentOS'>CentOS Stream
           </li>
           <li>
@@ -164,7 +153,7 @@
           </li>
         </ul>
         <p>
-        For CentOS Stream and derivatives like RHEL 8 You can clone
+        For CentOS Stream and derivatives like RHEL 8 or Rocky Linux 8 You can clone
         <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8">
           this github repository</a> and then install the lutris rpm package:<br/><code>sudo dnf install lutris-*.el8.x86_64.rpm</code>
 	  <br/>Note: Enable EPEL, you can follow the <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8/blob/master/README.md">README </a>for more information.
