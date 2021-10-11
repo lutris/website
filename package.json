@@ -23,8 +23,8 @@
     "webpack-cli": "^4.6.0"
   },
   "scripts": {
-    "build": "webpack --mode=development --progress --hide-modules --config=webpack.dev.conf.js",
-    "watch": "webpack --mode=development --progress --hide-modules --watch --config=webpack.dev.conf.js"
+    "build": "webpack --mode=development --progress --config=webpack.dev.conf.js",
+    "watch": "webpack --mode=development --progress --watch --config=webpack.dev.conf.js"
   },
   "repository": {
     "type": "git",

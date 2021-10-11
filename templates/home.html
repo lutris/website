@@ -5,17 +5,29 @@
 {% load lutris %}
 
 
+{% block stylesheets %}
+<style>
+  .project-presentation {
+    font-size: 1.4em;
+  }
+  .project-header {
+    background: transparent url("static/images/sfa2-bg.jpg") no-repeat center center;
+    background-size: cover;
+  }
+  .feature-list {
+    background: transparent url("static/images/joy-bg.jpg") no-repeat center center;
+    background-size: cover;
+    padding-top: 3em;
+    padding-bottom: 2em;
+    padding-left: 3em;
+    padding-right: 3em;
+    border-top: 1px solid #F90;
+    border-bottom: 1px solid #F90;
+  }
+</style>
+{% endblock %}
+
+
 {% block content %}
-  <h1 class="text-center pb-3">Video game preservation platform</h1>
-  <div class="row">
-    <div class="col text-center">
-        <p>
-          Lutris helps you install and play video games from all eras and from most
-          gaming systems. By leveraging and combining existing emulators, engine
-          re-implementations and compatibility layers, it gives you a central interface
-          to launch all your games.
-        </p>
-    </div>
-  </div>
   {% include 'includes/features.html' %}
 {% endblock %}
