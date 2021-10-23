@@ -195,7 +195,7 @@ class Game(models.Model):
 
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
-    year = models.IntegerField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     publisher = models.ForeignKey(
