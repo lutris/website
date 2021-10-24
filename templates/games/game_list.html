@@ -53,11 +53,23 @@
 <div class="row">
   <div class="col-sm-9">
     {% if games %}
-    <ul class="game-list">
-      {% for game in games %}
-        {% include "includes/game_preview.html" %}
-      {% endfor %}
-    </ul>
+      <ul class="game-list">
+	{% for game in games %}
+	  {% include "includes/game_preview.html" %}
+	{% endfor %}
+      </ul>
+      <div class="filter-failure-message">
+        <p>Didn't find what you're looking for?</p>
+        {% if unpublished_filter %}
+          <p>
+            Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.
+          </p>
+        {% else %}
+          <p>
+            Try looking in unpublished games. 
+          </p>
+        {% endif %}
+      </div>
     {% else %}
       <div class="filter-failure-message">
         <p class="filter-failure-icon">
