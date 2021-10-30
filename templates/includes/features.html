@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 <div class="container project-presentation project-header">
   <h1 class="text-center py-5">Play all your games on Linux</h1>
   <div class="row py-5 px-5">
@@ -22,7 +23,33 @@
 </div>
 
 <div class="container project-presentation">
+  <div class="row py-5 px-5">
+    <h4 class="py-4">Direct access to your game libraries</h4>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/humble-bundle.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/steam.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/epic-games.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/gog.png' %}" height="64" />
+    </div>
+  </div>
 
+  <div class="row py-5 px-5">
+    <h4 class="py-4">Everything needed to run your games</h4>
+    <div class="col-md-12 centered">
+      <img src="{% static 'images/logos/wine.png' %}" height="64" />
+      <img src="{% static 'images/logos/mame.png' %}" height="64" />
+      <img src="{% static 'images/logos/dolphin.png' %}" height="64" />
+      <img src="{% static 'images/logos/retroarch.png' %}" height="64" />
+      <img src="{% static 'images/logos/scummvm.png' %}" height="64" />
+      <span>+&nbsp;many&nbsp;more...</span>
+    </div>
+  </div>
 </div>
 
 <div class="container project-presentation feature-list">
