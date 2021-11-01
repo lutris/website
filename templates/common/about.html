@@ -5,47 +5,99 @@
 
 
 {% block content %}
-  <h1 class="text-center pb-3"></h1>
-
+  <h2 class="text-center pb-3">Preparing your computer for Lutris</h2>
   <div class="row justify-content-md-center">
-    <div class="col-sm-6">
-        <img src="{% static 'images/screenshots/service-login.jpg' %}"
-             class="w-100 text-primary"
-             alt="TODO"/>
+    <div class="col-sm-8">
+      <p>
+        Before installing Lutris (or at least before running any games), make sure your computer is fully setup to run games.
+        This includes making sure your graphics drivers are installed and up to date, that Vulkan is installed and that the 32bit
+        libraries for OpenGL / Vulkan are present. If any of those components are missing Lutris will give a warning.
+        We also very highly recommend installing Wine from your package manager. Lutris will usually not make use of it directly
+        but the peer dependencies installed from the Wine package are necessary to run our Wine version properly.
+      </p>
     </div>
   </div>
 
+  <h2 class="text-center pb-3">Installing Lutris</h2>
   <div class="row justify-content-md-center">
     <div class="col-sm-8">
+      <p>
+        Head to the <a href="{% url 'downloads' %}">download</a> page and follow the instructions for your distribution.
+      </p>
+    </div>
+  </div>
+
+  <h2 class="text-center pb-3">Connect your accounts</h2>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Use the Sources section on the sidebar to login to games stores or
+        to your Lutris account. Once logged in, your game library will
+        appear in the appropriate section. The Steam service doesn't require
+        you to login but requires Steam to be installed on your system and for
+        your account to be public (at least for the duration of the sync).
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/service-login.jpg' %}"
+             class="w-100 text-primary"
+             alt="Login to Humble Bundle"/>
+    </div>
+    <div class="col-sm-8 pb-3">
+      <p>
+        Some services may be disabled when Lutris is first installed. You can enable them
+        in the preferences window.
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/services-settings.jpg' %}"
+             class="w-100 text-primary"
+             alt="Enabling services in preferences"/>
+    </div>
+  </div>
+
+  <h1 class="text-center pt-5 pb-3">Install runners</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Runners are the programs Lutris use to run games. We provide those programs so there is no
+        need to have them installed on your system (except Wine, as mentioned earlier).
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/runner-settings.jpg' %}"
+             class="w-100 text-primary"
+             alt="Installing runners"/>
+    </div>
+  </div>
+
+  <h1 class="text-center pt-5 pb-3">Install your game library</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        With everything now set up, you can start adding games to Lutris.
+        The game installer window will let you specify a location where
+        game files can be kept for future installations.
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
         <img src="{% static 'images/screenshots/gog-screen.jpg' %}"
              class="w-100 text-primary"
              alt="TODO"/>
     </div>
   </div>
 
+  <h1 class="text-center pt-5 pb-3">Install other game clients</h1>
   <div class="row justify-content-md-center">
-    <div class="col-sm-8">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Not every game store is fully integrated with Lutris but you can still access your games
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
         <img src="{% static 'images/screenshots/game-clients.jpg' %}"
              class="w-100 text-primary"
-             alt="TODO"/>
-    </div>
-  </div>
-
-  <h1 class="text-center pt-5 pb-3"></h1>
-  <div class="row justify-content-md-center">
-    <div class="col-sm-8">
-        <img src="{% static 'images/screenshots/runner-settings.jpg' %}"
-             class="w-100 text-primary"
-             alt="TODO"/>
-    </div>
-  </div>
-
-  <h1 class="text-center pt-5 pb-3"></h1>
-  <div class="row justify-content-md-center">
-    <div class="col-sm-8">
-        <img src="{% static 'images/screenshots/services-settings.jpg' %}"
-             class="w-100 text-primary"
-             alt="TODO"/>
+             alt="Bethesda launcher, Origin and Uplay run from Lutris"/>
     </div>
   </div>
 {% endblock %}
