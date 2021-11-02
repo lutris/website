@@ -11,7 +11,7 @@ if [[ "$3" == "--no-cache" ]]; then
     COMPOSE_OPTS="$COMPOSE_OPTS --no-cache"
 fi
 
-if [[ $DEPLOY_HOST ]]; then
+if [[ $DEPLOY_HOST && $DEPLOY_HOST != "localhost" ]]; then
     export DOCKER_HOST="ssh://$DEPLOY_HOST"
     echo "DOCKER_HOST set to $DOCKER_HOST"
 fi
