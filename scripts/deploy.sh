@@ -2,8 +2,8 @@
 
 set -e
 
-export DEPLOY_ENV=$1
-export DEPLOY_HOST=$2
+export DEPLOY_ENV=${1:-"staging"}
+export DEPLOY_HOST=${2:-"localhost"}
 
 COMPOSE_OPTS="--compress"
 if [[ "$3" == "--no-cache" ]]; then
