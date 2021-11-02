@@ -15,8 +15,9 @@
   </div>
   <div class="row py-5 px-4">
     <div class="col-md-12 text-end">
-      <a href="/downloads/" class="btn btn-lg btn-primary rounded">Download</a>
-      <a href="/donate" class="btn btn-lg btn-outline-primary rounded">Support us</a>
+      <a href="{% url 'downloads' %}" class="btn btn-lg btn-primary rounded">Download</a>
+      <a href="{% url 'about' %}" class="btn btn-lg btn-outline-primary rounded">Learn more</a>
+      <a href="{% url 'donate' %}" class="btn btn-lg btn-outline-primary rounded">Support us</a>
       <a href="https://github.com/lutris" class="btn btn-lg btn-outline-primary rounded">Source code</a>
     </div>
   </div>
