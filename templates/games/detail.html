@@ -22,7 +22,7 @@
 
 {% block content %}
   <div class="row">
-    <div class="game-header-title col-11">
+    <div class="game-header-title col-11 pb-3">
       {% thumbnail game.title_logo "184" as img %}
         <img src="{{ img.url }}" class="banner" />
       {% endthumbnail %}
@@ -177,9 +177,9 @@
           <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
             {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn font-weight-bold">Add to my library</a>
+            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-secondary">Add to my library</a>
             {% else %}
-            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn font-weight-bold">
+            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-secondary">
               <span>Remove from my library</span>
             </a>
             {% endif %}

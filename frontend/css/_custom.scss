@@ -6,7 +6,7 @@
 
 
 $primary:   #F90;
-$secondary: #A02EF2;
+$secondary: #FF8A52;
 $success:   #2DA750;
 $info:      #FD37A0;
 $warning:   #FDA750;
@@ -376,7 +376,7 @@ header {
 
 
 .select2, .select2-dropdown {
-  color: $input-color;
+  color: #222 !important;
 }
 
 input.select2-lookalike[type="text"] {
@@ -507,7 +507,6 @@ input.select2-lookalike[type="text"] {
     color: #888;
   }
   a {
-    color: #DDD;
     // md-button breaks this style
     text-decoration: none !important;
   }
@@ -939,7 +938,7 @@ input.select2-lookalike[type="text"] {
 }
 
 .external-link {
-  margin: 8px auto;
+  margin: 8px 0;
   display: flex;
   height: 36px;
   width: 174px;
@@ -953,6 +952,7 @@ input.select2-lookalike[type="text"] {
     display: inline-block;
     width: 32px;
     height: 32px;
+    margin-right: 6px;
     background-color: $dark;
     vertical-align: middle;
   }

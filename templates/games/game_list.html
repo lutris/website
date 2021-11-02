@@ -27,8 +27,6 @@
     {% endif %}
   </div>
   <div class="col-lg-3">
-
-
     <div class="filter-form">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
@@ -43,7 +41,7 @@
           Search in installers
         </label>
         <div>
-          <input type="button" value="Filter" class="btn btn-primary"
+          <input type="button" value="Search" class="btn btn-primary"
                   id="apply_library_filter">
         </div>
       </form>

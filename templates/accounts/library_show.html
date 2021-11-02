@@ -48,17 +48,17 @@
 {% endif %}
 
 <div class="row">
-  <div class="col-lg-10">
+  <div class="col-lg-9">
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
   </div>
-  <div class="col-lg-2">
-    <div class="">
+  <div class="col-lg-3">
+    <div class="filter-form">
       <form action="{% url 'library_show' username=user.username %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
         <div class="text-center">
-          <input type="button" value="Apply filter" class="btn btn-lg btn-primary"
+          <input type="button" value="Search" class="btn btn-primary"
                  id="apply_library_filter">
         </div>
       </form>
