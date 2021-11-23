@@ -6,7 +6,7 @@ MEDIA_URL = '//%s/media/' % DOMAIN_NAME
 FILES_ROOT = '/srv/files'
 FILES_URL = 'https://%s/files/' % DOMAIN_NAME
 
-ALLOWED_HOSTS = ('.lutris.net', '.lutr.is', '0.0.0.0')
+ALLOWED_HOSTS = ('.lutris.net', '.lutr.is', '0.0.0.0', 'localhost')
 
 DATABASES = {
     'default': {

@@ -15,7 +15,7 @@ export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
 # Run collecstatic when Django and all its required dependencies are ready.
-./manage.py collectstatic --clear --noinput \
+python3 manage.py collectstatic --clear --noinput \
     --ignore less/test/* --ignore select2/docs/*
 
 exec newrelic-admin run-program gunicorn ${DJANGO_WSGI_MODULE}:application \

@@ -42,6 +42,11 @@ You can stop the containers with::
 Natively
 --------
 
+Install required packages:
+
+    apt install python3.8-venv
+
+
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
 their website: https://virtualenvwrapper.readthedocs.org/en/latest/
