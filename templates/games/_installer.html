@@ -6,43 +6,47 @@
   <div>
     <div class="btn-group right">
       <a type="button" class="btn btn-sm btn-secondary" href="lutris:{{ installer.slug }}">Install</a>
-      <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-        <span class="visually-hidden">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-        {% if not installer.auto %}
+      {% if not installer.auto %}
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
+          id="dropdownMenuReference"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          data-bs-reference="parent">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
           {% if not installer.protected or user.is_staff %}
-
-            <a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.slug %}">
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.slug %}">
               <i class='fas fa-edit fa-fw mr-2'></i>Edit installer
-            </a>
+            </a></li>
 
-            <a class="dropdown-item bg-dark text-white" href="{% url 'fork_installer' slug=installer.slug %}">
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'fork_installer' slug=installer.slug %}">
               <i class='fas fa-code-branch fa-fw mr-2'></i>Fork installer
-            </a>
+            </a></li>
             {% if user.is_staff %}
-              <a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
+              <li><a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
                 <i class='fas fa-lock fa-fw mr-2'></i>Admin installer
-              </a>
+              </a></li>
             {% endif %}
             {% if not installer.published and user.is_staff %}
-              <a class="dropdown-item bg-dark text-white" href="{% url 'publish_installer' slug=installer.slug %}">
+              <li><a class="dropdown-item bg-dark text-white" href="{% url 'publish_installer' slug=installer.slug %}">
                 <i class='fas fa-thumbs-up fa-fw mr-2'></i>Publish installer
-              </a>
+              </a></li>
             {% endif %}
           {% endif %}
 
           {% if installer.id %}
-            <a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
               <i class='far fa-eye fa-fw mr-2'></i>View install script
-            </a>
+            </a></li>
           {% endif %}
-
-          <a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
+          <li><a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
             <i class='fas fa-file-download fa-fw mr-2'></i>Download script
-          </a>
-        {% endif %}
-      </ul>
+          </a></li>
+        </ul>
+      {% endif %}
     </div>
     <div class="centered-vertical">
       <span class='filter-link'>{{ installer.runner }}</span>
