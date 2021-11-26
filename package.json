@@ -19,11 +19,12 @@
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",
     "url-loader": "^4.1.1",
-    "webpack": "^5.33.2",
-    "webpack-cli": "^4.6.0"
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
   },
   "scripts": {
     "build": "webpack --mode=development --progress --config=webpack.dev.conf.js",
+    "build-prod": "webpack --mode=production --config=webpack.prod.conf.js",
     "watch": "webpack --mode=development --progress --watch --config=webpack.dev.conf.js"
   },
   "repository": {

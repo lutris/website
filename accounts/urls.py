@@ -6,12 +6,11 @@ from . import views
 urlpatterns = [
     path('login', views.LutrisLoginView.as_view(), name='login'),
     path('logout', views.LutrisLogoutView.as_view(), name='logout'),
-    path('password/change/', views.LutrisPasswordChangeView.as_view(), name='password_change'),
-    path('password/reset/', views.LutrisPasswordResetView.as_view(), name='password_reset'),
+    path('password/change', views.LutrisPasswordChangeView.as_view(), name='password_change'),
+    path('password/reset', views.LutrisPasswordResetView.as_view(), name='password_reset'),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',  # noqa
             views.LutrisPasswordResetConfirmView.as_view(),
             name='password_reset_confirm'),
-
     path('register', views.LutrisRegisterView.as_view(), name="register"),
     path('clear-auth-token/', views.clear_auth_token, name="clear_auth_token"),
     path('associate-steam/', views.associate_steam, name="associate_steam"),
