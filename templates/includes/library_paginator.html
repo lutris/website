@@ -1,24 +1,24 @@
   <div>
-    
+
     {% if page_obj.has_previous %}
       <a title="First Page" class=""
           href="?page=1&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-        <i class="fas fa-angle-double-left fa-lg"></i>
+        <i class="bi-chevron-double-left" style="font-size: 2rem;"></i>
       </a>
       <a title="Previous Page" class="mx-2"
           href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-        <i class="fas fa-angle-left fa-lg"></i>
+        <i class="bi-chevron-left" style="font-size: 2rem;"></i>
       </a>
     {% endif %}
     {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}
     {% if page_obj.has_next %}
       <a title="Next Page" class="mx-2"
           href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-        <i class="fas fa-angle-right fa-lg"></i>
+        <i class="bi-chevron-right" style="font-size: 2rem;"></i>
       </a>
       <a title="Last Page" class=""
           href="?page={{ paginator.num_pages }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-        <i class="fas fa-angle-double-right fa-lg"></i>
+        <i class="bi-chevron-double-right" style="font-size: 2rem;"></i>
       </a>
     {% endif %}
   </div>

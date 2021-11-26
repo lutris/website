@@ -15,7 +15,6 @@
       {% endfor %}
     {% else %}
       <div class="alert alert-info mx-auto d-table">
-        <i class="fas fa-question fa-lg mr-3"></i>
         No games found that match these criteria.
         {% if not unpublished and unpublished_match_count > 0 %}
             However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished

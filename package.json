@@ -38,7 +38,6 @@
     "url": "https://github.com/lutris/website/issues"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
     "@popperjs/core": "^2.10.2",
     "ace-builds": "^1.4.12",
     "alertifyjs": "^1.13.1",
