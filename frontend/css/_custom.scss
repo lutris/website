@@ -252,6 +252,11 @@ header {
 }
 
 .docs {
+  position: fixed;
+  top: 8em;
+  bottom: 8em;
+  width: 550px;
+  overflow: scroll;
   tt {
     white-space: nowrap;
     font-family: monospace;
@@ -761,15 +766,6 @@ input.select2-lookalike[type="text"] {
   a:hover {
     background-color: #2e2e2e;
   }
-}
-
-.fixed-panel {
-  position: fixed;
-  right: 0;
-  top: 80px;
-  bottom: 80px;
-  width: 40%;
-  overflow: auto;
 }
 
 .filter-list {
