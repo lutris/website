@@ -6,8 +6,6 @@ import 'django-select2';
 import 'ace-builds';
 import * as blueimp_gallery from 'blueimp-gallery/js/blueimp-gallery';
 import alertify from 'alertifyjs';
-import 'datatables.net-bs4';
-import 'datatables.net-responsive-bs4';
 import Cookies from 'js-cookie';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 

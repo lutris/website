@@ -25,6 +25,7 @@ urlpatterns = [
     path('select2/', include('django_select2.urls')),
     path('openid/', include('django_openid_auth.urls')),
     path('user/', include('accounts.urls')),
+
     path('api/accounts/token', obtain_auth_token, name='accounts_get_token'),
     path(
         'api/accounts/auth',
@@ -51,6 +52,7 @@ urlpatterns = [
     path('thegamesdb/', include('thegamesdb.urls')),
     path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
+    path('', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:
