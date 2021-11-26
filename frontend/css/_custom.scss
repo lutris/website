@@ -99,6 +99,9 @@ form {
   textarea {
     padding: 5px 10px;
   }
+  .form-actions {
+    padding: 1.5em 0;
+  }
 }
 
 figure {
@@ -112,6 +115,7 @@ figure {
     font-size: .95em;
     text-align: center;
   }
+
 }
 
 figure.tiled {

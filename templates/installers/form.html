@@ -30,23 +30,25 @@
       {% csrf_token %}
       {{ form.as_p }}
       <div id='editor'></div>
-      <input type="submit" class="btn" name="save" value="Save draft">
-      <input type="submit" class="btn btn-primary" name="submit" value="Submit to moderation"/>
-      {% if installer.draft %}
-      <input type="submit" class="btn btn-danger" name="delete" value="Delete this draft">
-      {% endif %}
-      {% if installer %}
-      <a
-        class='btn'
-        id="test-installer-button"
-        {% if revision_id %}
-        href="lutris:{{game.slug}}?revision={{revision_id}}"
-        {% else %}
-        href="lutris:{{installer.slug}}"
+      <div class="form-actions">
+        {% if installer %}
+        <a
+          class='btn btn-outline-secondary rounded'
+          id="test-installer-button"
+          {% if revision_id %}
+          href="lutris:{{game.slug}}?revision={{revision_id}}"
+          {% else %}
+          href="lutris:{{installer.slug}}"
+          {% endif %}
+        >Test this installer</a>
         {% endif %}
-      >Test this installer</a>
-      {% endif %}
-      <a class='btn' href="{{game.get_absolute_url}}">Cancel</a>
+        <input type="submit" class="btn btn-outline-secondary rounded" name="save" value="Save draft">
+        <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit to moderation"/>
+        {% if installer.draft %}
+        <input type="submit" class="btn btn-danger rounded" name="delete" value="Delete this draft">
+        {% endif %}
+        <a class='btn btn-outline-danger' href="{{game.get_absolute_url}}">Cancel</a>
+      </div>
     </form>
   </div>
   <div class="col-sm-4">
