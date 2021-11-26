@@ -54,7 +54,7 @@ class LutrisLoginView(LoginView):
 
 class LutrisLogoutView(LogoutView):
     """Sign out view"""
-    next_page = 'homepage'
+    next_page = '/'
 
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, 'You are now logged out of Lutris.')
