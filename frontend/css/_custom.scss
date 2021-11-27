@@ -337,14 +337,13 @@ header {
     &:last-child {
       border-bottom: none;
     }
+
     ul {
-      width: 200px;
+      width: 165px;
       padding-left: 0;
       border-right: none;
       display: block;
-
       @include media-breakpoint-up(sm) {
-        padding-left: 35px;
         display: table-cell;
         border-right: 1px solid #444;
       }
@@ -352,12 +351,12 @@ header {
 
     p {
       display: block;
-      padding: 7px 0 7px 34px;
+      padding: 7px 0 7px 7px;
       font-size: .9em;
       color: #AEAEAE;
 
       @include media-breakpoint-up(sm) {
-        padding: 7px 34px;
+        padding: 7px 7px;
         display: table-cell;
       }
     }
