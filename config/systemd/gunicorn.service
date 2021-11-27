@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=strider
+Group=strider
+WorkingDirectory=/srv/staging/website/
+ExecStart=/srv/staging/scripts/gunicorn_start.sh
+
+[Install]
+WantedBy=multi-user.target
