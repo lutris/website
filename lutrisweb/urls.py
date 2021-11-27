@@ -52,7 +52,6 @@ urlpatterns = [
     path('thegamesdb/', include('thegamesdb.urls')),
     path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
-    path('', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:
