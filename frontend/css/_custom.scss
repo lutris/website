@@ -589,9 +589,10 @@ input.select2-lookalike[type="text"] {
   }
 }
 .game-preview {
-  padding: 0;
-  margin-bottom: 1em;
+  padding: .8em;
+  margin-bottom: .5em;
   display: flex;
+  background-color: #333;
   .game-name {
     font-weight: bold;
     color: $primary;
@@ -616,10 +617,6 @@ input.select2-lookalike[type="text"] {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @include media-breakpoint-up(sm) {
-    margin-bottom: 5px;
-  }
 }
 
 
@@ -971,10 +968,9 @@ input.select2-lookalike[type="text"] {
   ul {
     list-style: none;
   }
-  padding: 10px;
-  border-radius: 6px;
-  background-color: $light;
-  color: $dark;
+  padding: .8em;
+  background-color: #333;
+  color: $light;
 }
 
 .no-border {
