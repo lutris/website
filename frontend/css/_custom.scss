@@ -48,8 +48,9 @@ $theme-colors: map-merge(
 );
 
 $list-group-color: $light;
-$list-group-bg: $dark;
+$list-group-bg: #333;
 $list-group-hover-bg: $dark;
+$list-group-border-width: 0;
 
 $font-family-base: 'Montserrat', 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -689,7 +690,7 @@ input.select2-lookalike[type="text"] {
 }
 
 .installer-list {
-  background-color: $dark;
+  background-color: #333;
 
   .installer-name {
     vertical-align: text-top;
@@ -709,6 +710,9 @@ input.select2-lookalike[type="text"] {
   ul {
     @extend .ul-reset;
     margin-bottom: 0;
+    li {
+      border-bottom: 2px solid #222;
+    }
   }
 
   .installer-details {
