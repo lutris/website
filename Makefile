@@ -34,21 +34,12 @@ fixtures:
 check-deps-update:
 	pip3 list --outdated
 
-deploy_staging:
-	scripts/deploy.sh staging anaheim
-
 deploy_prod:
 	scripts/deploy.sh prod anaheim
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml restart lutrisnginx
 
 migrate_prod:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
-
-migrate_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
-
-remote_shell_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb bash
 
 remote_shell_prod:
 	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb bash
@@ -80,18 +71,3 @@ syncdb:
 	docker cp lutris.tar lutrisdb:/backups
 	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/lutris.tar
 	rm lutris.tar
-
-build_dev_docker:
-	docker-compose build lutrisfrontend lutrisweb
-
-start_dev_docker:
-	docker-compose up -d lutrisdb lutriscache
-	# Wait a bit for the cache and database to be ready
-	sleep 2
-	docker-compose up -d lutrisfrontend lutrisweb
-
-stop_dev_docker:
-	docker-compose down
-
-init_docker_db:
-	docker-compose run lutrisweb make db
