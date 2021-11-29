@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout', views.LutrisLogoutView.as_view(), name='logout'),
     path('password/change', views.LutrisPasswordChangeView.as_view(), name='password_change'),
     path('password/reset', views.LutrisPasswordResetView.as_view(), name='password_reset'),
+    path('password/reset/done', views.LutrisPasswordResetDoneView.as_view(), name="password_reset_done"),
     re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',  # noqa
             views.LutrisPasswordResetConfirmView.as_view(),
             name='password_reset_confirm'),

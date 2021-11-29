@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
-    LogoutView, LoginView, PasswordResetView,
+    LogoutView, LoginView, PasswordResetDoneView, PasswordResetView,
     PasswordChangeView, PasswordResetConfirmView
 )
 from django.db import IntegrityError
@@ -65,6 +65,11 @@ class LutrisPasswordResetView(PasswordResetView):
     """View to reset a user's password"""
     template_name = 'accounts/password_reset.html'
     form_class = forms.LutrisPasswordResetForm
+
+
+class LutrisPasswordResetDoneView(PasswordResetDoneView):
+    """Tell the user an email has been sent with a password reset link"""
+    template_name = "accounts/password_reset_done.html"
 
 
 class LutrisPasswordChangeView(PasswordChangeView):
