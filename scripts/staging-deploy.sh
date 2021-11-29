@@ -5,11 +5,11 @@ set -e
 ROOT_DIR=/srv/staging
 DJANGODIR=$ROOT_DIR/website/
 
-source $ROOT_DIR/venv/bin/activate
-export $(cat .env.staging | xargs)
-
 cd $DJANGODIR
 git pull
+
+source $ROOT_DIR/venv/bin/activate
+export $(cat .env.staging | xargs)
 
 npm run build
 npm run build-prod
