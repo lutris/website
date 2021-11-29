@@ -17,6 +17,4 @@ npm run build-prod
 ./manage.py collectstatic --clear --noinput \
     --ignore less/test/* --ignore select2/docs/*
 
-sudo systemctl stop gunicorn_staging
-sleep 5
-sudo systemctl start gunicorn_staging
+sudo systemctl restart gunicorn_staging
