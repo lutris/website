@@ -6,7 +6,8 @@ After=network.target
 User=strider
 Group=strider
 WorkingDirectory=/srv/staging/website/
-ExecStart=/srv/staging/scripts/gunicorn_start.sh
+EnvironmentFile=/srv/staging/website/.env.staging
+ExecStart=/srv/staging/venv/bin/gunicorn lutrisweb.wsgi:application --name lutris --workers 9 --user=strider --group=strider --log-level=debug --bind=0.0.0.0:8081
 
 [Install]
 WantedBy=multi-user.target
