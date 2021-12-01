@@ -80,7 +80,7 @@ class LutrisPasswordChangeView(PasswordChangeView):
 class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
     """View where the user confirms the password reset"""
     template_name = 'accounts/password_reset_confirm.html'
-    success_url = "/"
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         messages.success(self.request, 'Your password has been updated.')
