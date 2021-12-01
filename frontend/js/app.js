@@ -122,24 +122,6 @@ function configure_modals() {
     configure_modal_form('#modal_profile_edit', '#form_profile_edit', true);
 }
 
-function configure_main_carousel(){
-  if ($("#blueimp-gallery-carousel").length) {
-    blueimp_gallery(document.getElementById('carousel_links').getElementsByTagName('a'), {
-      container: '#blueimp-gallery-carousel',
-      carousel: true,
-      toggleControlsOnSlideClick: false,
-      stretchImages: true,
-      onslide: function (index, slide) {
-        let text = this.list[index].getAttribute('data-description', ''),
-            url = this.list[index].getAttribute('data-link', '#'),
-            node = $(this.container.find('#carousel_game_link'));
-        node.attr('href', url);
-        node.text(text);
-      }
-    })
-  }
-}
-
 function configure_game_library(){
   let $paginate_by = $('#paginate_by');
 
@@ -233,7 +215,6 @@ $(window).on('load', function () {
     });
   configure_alertify();
   configure_modals();
-  configure_main_carousel();
   configure_game_library();
   configure_game_screenshots();
   show_notifications();

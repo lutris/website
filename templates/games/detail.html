@@ -64,7 +64,20 @@
   <div class="row">
     <div class="col-12 col-md-9">
       {% if screenshots %}
-        {% include 'games/partials/_screenshots.html' %}
+      <div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
+        <div class="slides"></div>
+        <a class="prev" aria-label="previous slide">
+           <i class="bi-arrow-left-circle-fill" style="font-size: 2rem;"></i>
+        </a>
+        <a class="next" aria-label="next slide">
+           <i class="bi-arrow-right-circle-fill" style="font-size: 2rem;"></i>
+        </a>
+        <div id="screenshots" class="d-none">
+          {% for screenshot in screenshots %}
+          <a href="{{ MEDIA_URL }}{{ screenshot.image }}" title="{{ screenshot.description }}"></a>
+          {% endfor %}
+        </div>
+      </div>
       {% endif %}
 
       <div class="installer-list">
