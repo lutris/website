@@ -11,8 +11,10 @@ git pull
 source $ROOT_DIR/venv/bin/activate
 export $(cat .env.staging | xargs)
 
-npm run build
-npm run build-prod
+if [[ "$1" == "--webpack" ]]; then
+    npm run build
+    npm run build-prod
+fi
 
 ./manage.py collectstatic --clear --noinput \
     --ignore less/test/* --ignore select2/docs/*
