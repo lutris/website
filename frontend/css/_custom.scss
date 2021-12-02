@@ -1050,6 +1050,10 @@ ol.toc a{
 }
 
 // Blueimp gallery
+.blueimp-gallery-carousel {
+  background-color: #000 !important;
+}
+
 .blueimp-gallery > .prev, .blueimp-gallery > .next {
   font-family: $font-family-base;
   background: None;
