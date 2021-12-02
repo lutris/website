@@ -200,6 +200,10 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, *args, **kwargs):  # pylint: disable=arguments-differ
+        context = super().get_context_data(*args, **kwargs)
+        context['profile_page'] = 'edit'
+        return context
 
 @login_required
 def profile_delete(request, username):
