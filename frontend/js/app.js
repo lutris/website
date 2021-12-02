@@ -121,57 +121,6 @@ function configure_modals() {
     configure_modal_form('#modal_profile_edit', '#form_profile_edit', true);
 }
 
-function configure_game_library(){
-  let $paginate_by = $('#paginate_by');
-
-  $("#order_by").on("change", function (){
-    let $order_by = $('#order_by');
-    let order_value = $order_by.val();
-    let paginate_by = $('#paginate_by').val();
-    let filter_value = $order_by.data('filter');
-    if (paginate_by !== undefined)
-        window.location.href = '?paginate_by=' + paginate_by + '&ordering=' + order_value + filter_value;
-    else
-        window.location.href = '?ordering=' + order_value + filter_value;
-  });
-
-  $("#paginate_by").on("change", function () {
-    let paginate_value = $paginate_by.val();
-    let filter_value = $paginate_by.data('filter');
-    let order_by = $('#order_by').val();
-    window.location.href = '?paginate_by=' + paginate_value + '&ordering=' + order_by + filter_value;
-  })
-
-  let $library_filter_function = function () {
-    let ordering = $("<input>").attr("type", "hidden").attr("name", "ordering").val($('#order_by').val());
-    let $library_filter_form = $('#library_filter_form');
-    $library_filter_form.append($(ordering));
-    if ($paginate_by.length > 0) {
-        let paginate_by = $("<input>").attr("type", "hidden").attr("name", "paginate_by").val($('#paginate_by').val());
-        $library_filter_form.append($(paginate_by));
-    }
-    $library_filter_form.trigger("submit");
-  };
-
-  $("#apply_library_filter").on("click", $library_filter_function);
-  $('#id_q').on("keypress", function (event){
-    if (event.key === 'Enter'){
-      $library_filter_function();
-    }
-  })
-}
-
-function configure_game_screenshots() {
-    if ($("#game_screenshots_carousel").length) {
-        blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
-          container: '#game_screenshots_carousel',
-          carousel: true,
-          toggleControlsOnSlideClick: false,
-          stretchImages: true,
-        });
-    }
-}
-
 function show_notification(status, message) {
     if (status && message) {
         switch (status) {
@@ -208,13 +157,11 @@ function show_notifications(){
 }
 
 $(window).on('load', function () {
-  $.ajaxSetup({
+    $.ajaxSetup({
       beforeSend: checkBeforeSend,
       error: onAjaxFail,
     });
-  configure_alertify();
-  configure_modals();
-  configure_game_library();
-  configure_game_screenshots();
-  show_notifications();
+    configure_alertify();
+    configure_modals();
+    show_notifications();
 })

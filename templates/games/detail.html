@@ -207,3 +207,16 @@
     </div>
   </div>
 {% endblock %}
+
+{% block scripts %}
+<script>
+$(window).on('load', function () {
+  blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
+    container: '#game_screenshots_carousel',
+    carousel: true,
+    toggleControlsOnSlideClick: false,
+    stretchImages: true,
+  });
+})
+</script>
+{% endblock %}
