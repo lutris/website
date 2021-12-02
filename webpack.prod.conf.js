@@ -6,7 +6,7 @@ module.exports = merge(common, {
   mode: 'production',
   output: {
     path: path.resolve(__dirname, "public"),
-    filename: "js/app.min.js",
+    filename: "js/[name].min.js",
     // path to build relative asset links
     publicPath: "../",
   },

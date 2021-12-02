@@ -11,6 +11,7 @@
   <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
   <link type="text/css" href="{% static 'css/lutris.css' %}" rel="stylesheet" />
+  <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet" />
   <link type="text/css" href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet" />
   <link type="application/opensearchdescription+xml" href="{% static 'xml/opensearch.xml' %}" rel="search" title="Lutris">
   {% block stylesheets %}{% endblock %}
@@ -32,7 +33,7 @@
   <div class="footer mt-auto">
   {% include "includes/_footer.html" %}
   </div>
-  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/lutris.min.js' %}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

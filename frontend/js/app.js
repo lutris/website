@@ -3,7 +3,6 @@ import 'bootstrap';
 import './admin-forms';
 import 'select2';
 import 'django-select2';
-import 'ace-builds';
 import * as blueimp_gallery from 'blueimp-gallery/js/blueimp-gallery';
 import alertify from 'alertifyjs';
 import Cookies from 'js-cookie';

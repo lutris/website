@@ -6,10 +6,14 @@ const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: ["./frontend/js/app.js", "./frontend/css/lutris.scss"],
+  entry: {
+    lutris: "./frontend/js/app.js",
+    editor: "./frontend/js/editor.js",
+    styles: "./frontend/css/lutris.scss"
+  },
   output: {
     path: path.resolve(__dirname, "public"),
-    filename: "js/app.js",
+    filename: "js/[name].js",
     // path to build relative asset links
     publicPath: "../",
   },
@@ -70,7 +74,7 @@ module.exports = {
   plugins: [
     // save compiled SCSS into separated CSS file
     new MiniCssExtractPlugin({
-      filename: "css/lutris.css",
+      filename: "css/[name].css",
     }),
     new CopyPlugin({
       patterns: [
@@ -86,7 +90,7 @@ module.exports = {
       jquery: "jquery",
       "window.jQuery": "jquery",
       "window.$": "jquery",
-      Popper: "@popperjs/core/lib"
+      Popper: "@popperjs/core"
     }),
   ]
 };

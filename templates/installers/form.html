@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block title %}
   {% if new %}
@@ -63,7 +63,7 @@
 
 
 {% block scripts %}
-  <script src="/static/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'js/editor.min.js' %}"></script>
   <script>
     $(function(){
       // ACE editor config
@@ -87,10 +87,8 @@
         window.location.replace(formUrl + "?revision=" + revisionId);
       })
       {% endif %}
-
     });
   </script>
   {{ block.super }}
   {{ form.media.js }}
-
 {% endblock %}
