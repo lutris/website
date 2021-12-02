@@ -24,9 +24,7 @@
 {% block content %}
   <div class="row">
     <div class="game-header-title col-11 pb-3">
-      {% thumbnail game.title_logo "184" as img %}
-        <img src="{{ img.url }}" class="banner" />
-      {% endthumbnail %}
+      <img src="game.banner_url" class="banner" />
       <div class="game-header-text">
         <h1>{{ game.name }}</h1>
         <span class="text-muted">
