@@ -28,7 +28,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">
               <li><a class="dropdown-item" href="{% url 'user_account' user.username %}">Profile</a></li>
-              <li><a class="dropdown-item" href="{% url 'library_show' username=user.username %}">My Library</a></li>
+              <li><a class="dropdown-item" href="{% url 'library_list' username=user.username %}">My Library</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
             </ul>

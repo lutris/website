@@ -1,0 +1,61 @@
+{% extends "accounts/profile_base.html" %}
+{% load thumbnail %}
+
+
+{% block title %}My Library | Lutris{% endblock %}
+
+
+{% block extra_head %}
+{{ filter_form.media.css }}
+{% endblock %}
+
+
+{% block profile_content %}
+<h1>My Library</h1>
+<div class="row">
+  <div class="col">
+    <div class="py-2">
+      <form method="get">
+        <span class="px-2">Filter: </span>
+        <input type="text" name="q" value="{{q}}" id="query-field">
+        <span class="px-2">Sort by:</span>
+        <select name="sort" onchange="updateSort(this)">
+          <option value="name" {% if sort == 'name' %} selected {% endif %}>Name &uarr;</option>
+          <option value="-name" {% if sort == '-name' %} selected {% endif %}>Name &darr;</option>
+          <option value="year" {% if sort == 'year' %} selected {% endif %}>Year &uarr;</option>
+          <option value="-year" {% if sort == '-year' %} selected {% endif %}>Year &darr;</option>
+        </select>
+    </div>
+
+    {% for game in games %}
+      <div class="game-preview">
+        <a href="{{ game.get_absolute_url }}" title="{{ game.name }}">
+          <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+        </a>
+        <div class="game-details">
+          <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
+          <span class="small-text">{% if game.year %}({{ game.year }}){% endif %}</span>
+          <br>
+          <a title="Remove from Library"
+            href="{% url 'remove_from_library' slug=game.slug %}"
+            class="btn btn-sm btn-secondary" style="font-size: 0.75em;">
+            <i class="bi-trash"></i> Remove
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+  {{ block.super }}
+  <script>
+    const URL = "{% url 'library_list' username=user.username %}"
+    function updateSort(elem) {
+      const queryField = document.getElementById("query-field")
+      window.location.replace(URL + "?sort=" + elem.value + "&q=" + queryField.value)
+    }
+  </script>
+{% endblock %}

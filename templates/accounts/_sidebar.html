@@ -8,7 +8,7 @@
     </li>
 
     <li>
-      <a href="{% url 'library_show' username=user.username %}" class="nav-link text-white{% if profile_page == 'library'%} active{% endif %}">
+      <a href="{% url 'library_list' username=user.username %}" class="nav-link text-white{% if profile_page == 'library'%} active{% endif %}">
         <i class="bi-controller"></i>
         Library
       </a>

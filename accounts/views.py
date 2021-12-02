@@ -11,14 +11,13 @@ from django.contrib.auth.views import (
     LogoutView, LoginView, PasswordResetDoneView, PasswordResetView,
     PasswordChangeView, PasswordResetConfirmView
 )
+from django.views.generic import ListView
 from django.db import IntegrityError
-from django.db.models import Q
 from django.http import (
     Http404, HttpResponseBadRequest,
-    HttpResponseRedirect, JsonResponse
+    HttpResponseRedirect
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
@@ -31,7 +30,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 from games import models
-from games.views.pages import GameList
 
 from . import forms, sso, tasks, serializers
 from .models import EmailConfirmationToken, User
@@ -262,12 +260,10 @@ def steam_disconnect(request):
     return redirect(reverse("profile"))
 
 
-class LibraryList(GameList):  # pylint: disable=too-many-ancestors
+class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     """Access the user's game library"""
-    template_name = 'accounts/library_show.html'
+    template_name = 'accounts/library_list.html'
     context_object_name = 'games'
-    paginate_by = 25
-    paginate_orphans = 10
     ordering = 'name'
 
     def get_user(self):
@@ -284,13 +280,11 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
         return user
 
     def get_queryset(self):
-        user = self.get_user()
-        queryset = models.GameLibrary.objects.get(user=user).games.filter(is_public=True)
-        if self.q_params['q']:
-            queryset = queryset.order_by('-rank', self.get_ordering())
-        else:
-            queryset = queryset.order_by(self.get_ordering())
-        return self.get_filtered_queryset(queryset)
+        """Return all games in library, optionally filter them"""
+        queryset = models.GameLibrary.objects.get(user=self.get_user()).games.all()
+        if self.request.GET.get('q'):
+            queryset = queryset.filter(name__icontains=self.request.GET["q"])
+        return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
@@ -301,8 +295,9 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
             # profiles are implemented
             raise Http404
         context['user'] = user
-        context['is_library'] = True
         context['profile_page'] = 'library'
+        context['q'] = self.request.GET.get('q', '')
+        context['sort'] = self.request.GET.get('sort', '')
         return context
 
 
@@ -327,7 +322,7 @@ def library_remove(request, slug):
     library.games.remove(game)
     redirect_url = request.META.get('HTTP_REFERER')
     if not redirect_url:
-        redirect_url = reverse('library_show', kwargs={'username': request.user.username})
+        redirect_url = reverse('library_list', kwargs={'username': request.user.username})
     return redirect(redirect_url)
 
 
@@ -341,7 +336,7 @@ def library_steam_sync(request):
         request,
         'Your Steam library is being synced with your Lutris account'
     )
-    return redirect(reverse("library_show",
+    return redirect(reverse("library_list",
                             kwargs={'username': user.username}))
 
 
