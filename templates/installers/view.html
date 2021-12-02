@@ -16,25 +16,44 @@
 
 {% block content %}
 <h1>Installer {{installer.slug}}</h1>
-<div class='row'>
-  <div class="col-lg-10 col-lg-offset-1">
+<div class='row justify-content-md-center'>
+  <div class="col-lg-10">
     <p>
       This script is for reference only and can't be directly used to install the game
-      in the Lutris client. To install the game, <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">download</a> the full script.
+      in the Lutris client. To install the game,
+      <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">download</a>
+      the full script.
     </p>
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="nav-item">
-        <a class="nav-link active" href="#installer-yaml" aria-controls="installer-yaml" role="tab" data-toggle="tab">YAML</a>
+        <button
+          class="nav-link active"
+          id="installer-yaml-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#installer-yaml"
+          type="button"
+          role="tab"
+          aria-controls="installer-yaml"
+          aria-selected="true">YAML</button>
       </li>
       <li role="presentation" class="nav-item">
-        <a class="nav-link" href="#installer-json" aria-controls="installer-json" role="tab" data-toggle="tab">JSON</a>
+        <button
+          class="nav-link"
+          id="installer-json-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#installer-json"
+          type="button"
+          role="tab"
+          aria-controls="installer-json"
+          aria-selected="false">JSON</button>
+      </li>
       </li>
     </ul>
-    <div class="tab-content card-body border bg-light">
-      <div role="tabpanel" class="tab-pane active" id="installer-yaml">
+    <div class="tab-content card-body border">
+      <div role="tabpanel" class="tab-pane active" id="installer-yaml" aria-labelledby="installer-yaml">
         <pre class="text-white">{{installer.as_cleaned_yaml}}</pre>
       </div>
-      <div role="tabpanel" class="tab-pane" id="installer-json">
+      <div role="tabpanel" class="tab-pane" id="installer-json" aria-labelledby="installer-json">
         <pre class="text-white">{{installer.as_cleaned_json}}</pre>
       </div>
     </div>
