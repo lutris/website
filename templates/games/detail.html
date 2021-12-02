@@ -15,6 +15,7 @@
 <meta name="title" content="{{ game.name }} - Lutris" />
 <meta name="description" content="{{ game.name }} - Lutris" />
 <meta property="og:description" content="{{ game.name }} - Lutris" />
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery.min.css' %}" />
 {% endblock extra_head %}
 
 
@@ -66,12 +67,8 @@
       {% if screenshots %}
       <div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
         <div class="slides"></div>
-        <a class="prev" aria-label="previous slide">
-           <i class="bi-arrow-left-circle-fill" style="font-size: 2rem;"></i>
-        </a>
-        <a class="next" aria-label="next slide">
-           <i class="bi-arrow-right-circle-fill" style="font-size: 2rem;"></i>
-        </a>
+        <a class="prev" aria-label="previous slide"></a>
+        <a class="next" aria-label="next slide"></a>
         <div id="screenshots" class="d-none">
           {% for screenshot in screenshots %}
           <a href="{{ MEDIA_URL }}{{ screenshot.image }}" title="{{ screenshot.description }}"></a>
@@ -209,9 +206,10 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/blueimp-gallery.min.js' %}"></script>
 <script>
 $(window).on('load', function () {
-  blueimp_gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
+  blueimp.Gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
     container: '#game_screenshots_carousel',
     carousel: true,
     toggleControlsOnSlideClick: false,

@@ -82,6 +82,19 @@ module.exports = {
           from: path.resolve(__dirname, "node_modules/bootstrap-icons/font"),
           to: "./css/"
         },
+        {
+          from: path.resolve(__dirname, "node_modules/blueimp-gallery/css"),
+          to: "./css/"
+        },
+        {
+          from: path.resolve(__dirname, "node_modules/blueimp-gallery/js"),
+          to: "./js/"
+        },
+        {
+          from: path.resolve(__dirname, "node_modules/blueimp-gallery/img"),
+          to: "./img/"
+        }
+
       ],
     }),
     // provide jQuery and Popper.js dependencies

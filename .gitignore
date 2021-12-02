@@ -18,6 +18,7 @@ public/js
 public/css
 public/ace
 public/fonts
+public/img
 node_modules
 npm-debug.log
 reports
