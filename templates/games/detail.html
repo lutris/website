@@ -23,9 +23,9 @@
 
 {% block content %}
   <div class="row">
-    <div class="game-header-title col-11 pb-3">
-      <img src="{{ game.banner_url }}" class="banner" />
-      <div class="game-header-text">
+    <div class="col-12 pb-3 d-flex align-items-center">
+      <div class=""><img src="{{ game.banner_url }}" class="banner p-2" /></div>
+      <div class="">
         <h1>{{ game.name }}</h1>
         <span class="text-muted">
           {% if game.year %}
@@ -42,21 +42,22 @@
           {% endif %}
         </span>
       </div>
-    </div>
-    <div class="col-1">
+      <div class="ms-auto">
+        <a class="btn btn-sm btn-secondary" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
         {% if user.is_staff %}
           {% if can_edit and pending_change_subm_count > 0 %}
-            <a class="admin-link" href="{% url 'admin-change-submissions' game.id %}">
+            <a class="btn btn-sm btn-secondary" href="{% url 'admin-change-submissions' game.id %}">
               {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
             </a>
           {% endif %}
           {% if can_publish and not game.is_public %}
-            <a class="admin-link" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
           {% endif %}
           {% if can_edit %}
-            <a class="admin-link" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
           {% endif %}
         {% endif %}
+      </div>
     </div>
   </div>
 

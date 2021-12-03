@@ -262,6 +262,10 @@ header {
   bottom: 8em;
   width: 550px;
   overflow: scroll;
+  background-color: #111;
+  border-radius: 6px;
+  border: 1px solid #555;
+  padding: 1em;
   tt {
     white-space: nowrap;
     font-family: monospace;
@@ -434,28 +438,6 @@ input.select2-lookalike[type="text"] {
   color: #EEE;
 }
 
-.page-header {
-  border: 0;
-  .title {
-    line-height: 33px;
-    display: flex;
-    .icon {
-      width: 32px;
-      height: 32px;
-    }
-    .buttons {
-      margin-left: 0.5em;
-    }
-    span {
-      flex-grow: 1;
-      color: #EDEDED;
-      font-weight: 300;
-      padding-left: 15px;
-      font-size: 2em;
-    }
-  }
-}
-
 .image-container {
   min-height: 350px;
   @include media-breakpoint-down(sm) {
@@ -524,17 +506,7 @@ input.select2-lookalike[type="text"] {
     &:hover:before { content: "Remove it"; }
   }
 }
-.game-header-title {
-  display: flex;
-  padding: 0;
-  div {
-    display: inline-block;
-    padding-left: 12px;
-  }
-  h1 {
-    margin-bottom: 0;
-  }
-}
+
 .game-list {
   list-style-type: none;
   li {
