@@ -189,13 +189,21 @@ class GameEditForm(forms.ModelForm):
         )
 
         widgets = {
-            "platforms": Select2MultipleWidget,
-            "genres": Select2MultipleWidget,
+            "name": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "year": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "website": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "platforms": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
+            "genres": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "developer": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
             "publisher": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
         }
 

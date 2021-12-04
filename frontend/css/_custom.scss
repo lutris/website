@@ -24,10 +24,10 @@ $nav-pills-link-active-bg: $primary;
 
 $input-border-color: #555;
 $input-border-radius: 3;
-$input-color: #EEE;
-$input-bg: #444;
-$input-focus-color: #DDD;
-$input-focus-bg: #333;
+$input-focus-color: #222;
+$input-focus-bg: #EEE;
+$input-color: #333;
+$input-bg: #DDD;
 
 $pagination-bg: $dark;
 $pagination-border: #444;
@@ -96,7 +96,6 @@ form {
       color: #bada55;
     }
   }
-
   textarea {
     padding: 5px 10px;
   }
@@ -395,6 +394,7 @@ input.select2-lookalike[type="text"] {
     border: 1px solid #AAA;
     border-radius: 4px;
     background-color: $white;
+    color: #222;
     &:focus {
       background-color: $white;
       border: 1px solid $black;
