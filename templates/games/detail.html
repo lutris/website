@@ -102,6 +102,9 @@
       <div class="py-3">
         {{ game.description | linebreaks }}
       </div>
+      <div id="issues">
+        <installer-issues slug="{{game.slug}}" user-id="{{user.id|default:""}}"></installer-issues>
+      </div>
     </div>
 
     <div class="col-12 col-md-3">
@@ -206,7 +209,29 @@
 
 {% block scripts %}
 <script src="{% static 'js/blueimp-gallery.min.js' %}"></script>
+<script src="https://unpkg.com/vue"></script>
+<script src="{% static 'installer-issues.umd.min.js' %}"></script>
 <script>
+  function submitInstallerIssue(event) {
+    event.preventDefault();
+    var installerSlug = event.target.getAttribute('data-slug');
+    var $issueModal = $('#installer-issue-modal');
+    $issueModal.attr('data-slug', installerSlug);
+    $issueModal.modal();
+  }
+
+  function toggleUnpublishedInstallers(event) {
+    event.preventDefault();
+    var linkText = event.target.innerHTML;
+    if (linkText.indexOf('Show') === 0) {
+      linkText = linkText.replace('Show', 'Hide');
+    } else {
+      linkText = linkText.replace('Hide', 'Show');
+    }
+    event.target.innerHTML = linkText;
+    var unpublishedInstallers = document.getElementById('unpublished-installers');
+    unpublishedInstallers.classList.toggle('hide-unpublished');
+  }
 $(window).on('load', function () {
   blueimp.Gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
     container: '#game_screenshots_carousel',
