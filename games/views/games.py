@@ -13,7 +13,7 @@ from games import models, serializers
 
 
 class GameListView(generics.GenericAPIView):
-    """CBV for games list"""
+    """Return a list of games"""
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', 'name')
 

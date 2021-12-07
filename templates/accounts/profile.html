@@ -1,130 +1,70 @@
-{% extends "base.html" %}
+{% extends "accounts/profile_base.html" %}
 {% load thumbnail %}
 {% load static from staticfiles %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'lightbox2/css/lightbox.min.css' %}">
+<script src="{% static 'lightbox2/js/lightbox-plus-jquery.min.js' %}"></script
 {% endblock stylesheets %}
 
 {% block title %}My account | Lutris{% endblock %}
 
 
-{% block content %}
-<div class="row">
-  <div class="col-md-12">
-  <div class="profile-header">
-    <div class="avatar">
-      <img src="{{ user.avatar_url }}"/>
-    </div>
-    <p class="profile-user">{{ user }}</p>
-    <span class="profile-info">Member since {{user.date_joined|date:"d M Y"}}</span>
-  </div>
-  <div class="profile-content">
-    <section>
-      <h4>Profile info</h4>
-      <strong>Email:</strong>
-      <span>{{user.email}}</span>
-      {% if not user.email_confirmed %}
-        {% if user.email %}
-          <a href="{% url "user_send_confirmation" %}">Send validation link</a>
-          <br/>
-          <span class='warning-message'>Your email address has not been validated.
-            Some email providers such as Hotmail do not accept messages from
-            Lutris, if this is the case, please change your email address to
-            validate it.
-          </span>
-        {% else %}
-          <span class='warning-message'>
-            You don't have an email set, your account will be limited and you
-            won't be able to use the forums.
-          </span>
-        {% endif %}
-      {% endif %}
+{% block profile_content %}
+
+<h1>{{user.username}}</h1>
+<section>
+  <strong>Member since:</strong>
+  <span>{{user.date_joined|date:"d M Y"}}</span><br/>
+  <strong>Email:</strong>
+  <span>{{user.email}}</span>
+  {% if not user.email_confirmed %}
+    {% if user.email %}
+      <a href="{% url "user_send_confirmation" %}">Send validation link</a>
       <br/>
-      {% if user.website %}
-      <strong>Website:</strong>
-      <a href="{{user.website}}">{{user.website}}</a><br/>
-      {% endif %}
-      <br/>
-      <a href="{% url 'profile_edit' user.username %}" class="btn">Edit Profile</a>
-
-      <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
-      <p>
-        You can log out from every computer you have Lutris installed on by regenerating a new authentication token.
-        <a href="{% url 'clear_auth_token' %}"
-           class="btn btn-danger"
-           onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')"
-           >Clear token</a>
-      </p>
-
-    </section>
-    <section>
-      <h4>Game library</h4>
-      <p>
-        <a href="{% url 'library_show' username=user.username %}" class="btn">Show library</a>
-      </p>
-      <p>
-        You can automatically import the list of your Steam games and add them to your Lutris library.
-      </p>
-      <p class="warning-message">
-        Make sure to set <strong>both</strong> your Steam profile and the games
-        details set to public in your Steam account settings (available at <a href="https://steamcommunity.com/my/edit/settings">My Privacy Settings</a>).
-        <a data-lightbox="steam-profile"
-          data-title="Check both checkboxes in your Steam profile"
-          href='{% static 'images/screenshots/steam-profile.png' %}'>See how</a>
-      </p>
-      <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
-      {% if user.steamid %}
-      <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
-      <a href="{% url "steam_disconnect" %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your Steam information?')">Disconnect your account</a>
-      {% endif %}
-    </section>
-
-    <section>
-      <h4>Submitted contributions</h4>
-      {% if pending_submissions %}
-      <p>The following contributions you submitted are awaiting approval from a
-      moderator.</p>
-      <ul class="game-list">
-        {% for submission in pending_submissions %}
-        {% with submission.game as game %}
-          {% include "includes/game_preview.html" %}
-        {% endwith %}
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>
-        You have no submitted contributions awaiting approval.
-      </p>
-      {% endif %}
-    </section>
-
-    {% if accepted_submissions %}
-    <section>
-      <h4>Contributions</h4>
-      <p>These are the games you have previously submitted to Lutris</p>
-      <ul class="game-list">
-        {% for submission in accepted_submissions %}
-        {% with submission.game as game %}
-          {% include "includes/game_preview.html" %}
-        {% endwith %}
-        {% endfor %}
-      </ul>
-    </section>
+      <span class='warning-message'>Your email address has not been validated.
+        Some email providers such as Hotmail do not accept messages from
+        Lutris, if this is the case, please change your email address to
+        validate it.
+      </span>
+    {% else %}
+      <span class='warning-message'>
+        You don't have an email set, your account will be limited and you
+        won't be able to use the forums.
+      </span>
     {% endif %}
-  </div>
-  </div>
-</div>
-<script src="{% static 'lightbox2/js/lightbox-plus-jquery.min.js' %}"></script
+  {% endif %}
+  <br/>
+  {% if user.website %}
+  <strong>Website:</strong>
+  <a href="{{user.website}}">{{user.website}}</a><br/>
+  {% endif %}
+  <br/>
+  <p>
+    You can log out from every computer you have Lutris installed on by regenerating a new authentication token.
+    <a href="{% url 'clear_auth_token' %}"
+        class="btn btn-danger"
+        onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')"
+        >Clear token</a>
+  </p>
+</section>
+<section>
+  <h4>Steam sync</h4>
+  <p>
+    You can automatically import the list of your Steam games and add them to your Lutris library.
+  </p>
+  <p class="warning-message">
+    Make sure to set <strong>both</strong> your Steam profile and the games
+    details set to public in your Steam account settings (available at <a href="https://steamcommunity.com/my/edit/settings">My Privacy Settings</a>).
+    <a data-lightbox="steam-profile"
+      data-title="Check both checkboxes in your Steam profile"
+      href='{% static 'images/screenshots/steam-profile.png' %}'>See how</a>
+  </p>
+  <a href="{% url 'steam_login' %}"><img src="{{ STATIC_URL }}images/sits_large_noborder.png" title="Sign in with Steam" alt="Sign in with Steam"/></a>
+  {% if user.steamid %}
+  <a href="https://steamcommunity.com/profiles/{{user.steamid}}" class="btn" target="_blank">Visit Steam profile</a>
+  <a href="{% url "steam_disconnect" %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your Steam information?')">Disconnect your account</a>
+  {% endif %}
+</section>
 {% endblock %}
 
-
-
-{% comment %}
-<a href="#" class="avatar-upload-link">
-  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-  Update avatar</a>
-<div class="avatar-upload-hint">
-  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-</div>
-{% endcomment %}

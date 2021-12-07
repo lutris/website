@@ -2,8 +2,8 @@
 
 set -e
 
-export DEPLOY_ENV=$1
-export DEPLOY_HOST=$2
+export DEPLOY_ENV=${1:-"staging"}
+export DEPLOY_HOST=${2:-"localhost"}
 
 COMPOSE_OPTS="--compress"
 if [[ "$3" == "--no-cache" ]]; then
@@ -11,7 +11,7 @@ if [[ "$3" == "--no-cache" ]]; then
     COMPOSE_OPTS="$COMPOSE_OPTS --no-cache"
 fi
 
-if [[ $DEPLOY_HOST ]]; then
+if [[ $DEPLOY_HOST && $DEPLOY_HOST != "localhost" ]]; then
     export DOCKER_HOST="ssh://$DEPLOY_HOST"
     echo "DOCKER_HOST set to $DOCKER_HOST"
 fi

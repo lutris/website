@@ -114,9 +114,7 @@ class GameList(ListView):
             if self.q_params['search-installers']:
                 queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
             else:
-                vector = SearchVector('name', weight='A') + \
-                         SearchVector('aliases__name', weight='A') + \
-                         SearchVector('description', weight='B')
+                vector = SearchVector('name', weight='A') + SearchVector('aliases__name', weight='A')
                 query = SearchQuery(self.q_params['q'])
                 queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if self.q_params['platforms']:

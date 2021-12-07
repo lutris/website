@@ -22,6 +22,7 @@ class PlatformManager(models.Manager):
 class Platform(models.Model):
     """Gaming platform"""
     name = models.CharField(max_length=127)
+    short_name = models.CharField(max_length=32, null=True, blank=True)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)
@@ -34,7 +35,7 @@ class Platform(models.Model):
         ordering = ('name', )
 
     def __str__(self):
-        return "%s" % self.name
+        return "%s" % (self.short_name or self.name)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):

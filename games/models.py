@@ -180,7 +180,6 @@ class Game(models.Model):
         ("free", "Free"),
         ("freetoplay", "Free-to-play"),
         ("pwyw", "Pay what you want"),
-        ("demo", "Has a demo"),
         ("protected", "Installer modification is restricted"),
     )
 
@@ -261,11 +260,11 @@ class Game(models.Model):
         """Humble Bundle ID, different from humblestoreid (store page ID for Humble Bundle)
         This should really get deprecated.
         """
-        gog_slugs = self.provider_games.filter(
+        _slugs = self.provider_games.filter(
             provider__name="humblebundle"
         ).values_list("slug", flat=True)
-        if gog_slugs:
-            return gog_slugs[0]
+        if _slugs:
+            return _slugs[0]
         return ""
 
     @property
@@ -617,7 +616,6 @@ class ScreenshotManager(models.Manager):
 
 class Screenshot(models.Model):
     """Screenshots for games"""
-
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)

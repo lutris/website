@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block title %}
   {% if new %}
@@ -17,8 +17,7 @@
 {% block content %}
 <h1>{% if new %}New{% else %}Edit{% endif %} installer for {{ game }}</h1>
 <div class="row">
-  <div class="col-sm-7">
-    <div class="well">
+  <div class="col-sm-8">
     {% if versions %}
       <p>Load a previous revision </p>
       <select class='django-select2' id='revision-select'>
@@ -31,43 +30,46 @@
       {% csrf_token %}
       {{ form.as_p }}
       <div id='editor'></div>
-      <input type="submit" class="btn" name="save" value="Save draft">
-      <input type="submit" class="btn btn-primary" name="submit" value="Submit to moderation"/>
-      {% if installer.draft %}
-      <input type="submit" class="btn btn-danger" name="delete" value="Delete this draft">
-      {% endif %}
-      {% if installer %}
-      <a
-        class='btn'
-        id="test-installer-button"
-        {% if revision_id %}
-        href="lutris:{{game.slug}}?revision={{revision_id}}"
-        {% else %}
-        href="lutris:{{installer.slug}}"
+      <div class="form-actions">
+        {% if installer %}
+        <a
+          class='btn btn-secondary rounded'
+          id="test-installer-button"
+          {% if revision_id %}
+          href="lutris:{{game.slug}}?revision={{revision_id}}"
+          {% else %}
+          href="lutris:{{installer.slug}}"
+          {% endif %}
+        >Test this installer</a>
         {% endif %}
-      >Test this installer</a>
-      {% endif %}
-      <a class='btn' href="{{game.get_absolute_url}}">Cancel</a>
+        <input type="submit" class="btn btn-secondary rounded" name="save" value="Save draft">
+        <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit to moderation"/>
+        {% if installer.draft %}
+        <input type="submit" class="btn btn-danger rounded" name="delete" value="Delete this draft">
+        {% endif %}
+        <a class='btn btn-danger' href="{{game.get_absolute_url}}">Cancel</a>
+      </div>
     </form>
+  </div>
+  <div class="col-sm-4">
+    <div class="docs">
+      <h1>Installer documentation</h1>
+      {% include "docs/installers.html" %}
     </div>
   </div>
+</div>
 
-</div>
-<div class="well docs fixed-panel">
-    <h1>Installer documentation</h1>
-    {% include "docs/installers.html" %}
-</div>
 {% endblock %}
 
 
 {% block scripts %}
-  <script src="/static/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'js/editor.min.js' %}"></script>
   <script>
     $(function(){
       // ACE editor config
       const textarea = $('textarea[name="content"]').hide();
       const editor = ace.edit("editor");
-      editor.setTheme("ace/theme/twilight");
+      editor.setTheme("ace/theme/monokai");
       editor.session.setMode("ace/mode/yaml");
       editor.session.setTabSize(4);
       editor.session.setUseSoftTabs(true);
@@ -85,10 +87,8 @@
         window.location.replace(formUrl + "?revision=" + revisionId);
       })
       {% endif %}
-
     });
   </script>
   {{ block.super }}
   {{ form.media.js }}
-
 {% endblock %}

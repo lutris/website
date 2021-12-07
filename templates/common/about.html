@@ -4,114 +4,103 @@
 {% block title %}About Lutris{% endblock %}
 
 
-{% block nopage %}
-
-<div class="container intro-text">
-  <div class="row">
-    <h1 class="centered">About Lutris</h1>
-    <div class='col-md-4'>
+{% block content %}
+  <h2 class="text-center pb-3">Preparing your computer for Lutris</h2>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8">
       <p>
-        Lutris is a gaming client for Linux. It gives you access to all your
-        video games with the exception of the current console generation.  You
-        can, in a single interface, run any game from your childhood memories
-        to the current multiplayer games.
-
-        Integrations with stores like GOG and Steam allow you to import your
-        existing game library and community maintained install scripts give you
-        a completely automated setup.
-      </p>
-    </div>
-    <div class="col-md-8">
-      <figure>
-        <img src="{% static 'images/screenshots/main-window.png' %}" alt="Lutris main window"/>
-      </figure>
-    </div>
-  </div>
-
-  <div class="row">
-    <h1 class="centered">How does it work?</h1>
-    <div class="col-md-4 col-sm-6 hidden-xs">
-      <figure>
-        <img src="{% static 'images/screenshots/install-dialog.png' %}"
-          alt="Installer selection window for The Witcher 2" />
-      </figure>
-    </div>
-    <div class="col-md-8 col-sm-6">
-      <p>
-        Lutris uses what we refer as <a href="{% url "runners_list" %}">runners</a>. Runners are programs that the
-        client can control and launch. Our most popular runners include
-        RetroArch, DosBox, FS-UAE, ScummVM, MESS, Dolphin and of course Wine TkG,
-        a build of Wine optimized to give you the best performance out of your
-        system.
-
-        It is also possible to launch Linux native games, we have a large
-        selection of free and Open Source games ready to install from the
-        client. Download the client and start playing in minutes!
+        Before installing Lutris (or at least before running any games), make sure your computer is fully setup to run games.
+        This includes making sure your graphics drivers are installed and up to date, that Vulkan is installed and that the 32bit
+        libraries for OpenGL / Vulkan are present. If any of those components are missing Lutris will give a warning.
+        We also very highly recommend installing Wine from your package manager. Lutris will usually not make use of it directly
+        but the peer dependencies installed from the Wine package are necessary to run our Wine version properly.
       </p>
     </div>
   </div>
 
-  <div class="row">
-    <h1 class="centered">A focus on video game preservation</h1>
-    <div class="col-md-6">
+  <h2 class="text-center pb-3">Installing Lutris</h2>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8">
       <p>
-        Video games are now part of our history and our culture. If we want to keep a
-        trace of the actual games and not just videos or articles about them, we need
-        have a way to play them in a way that would closely match how the game was
-        meant to be experienced. We also need to make sure that the games we have today
-        still work tomorrow. This is why the choice of Linux as a gaming environment is
-        so important. In a closed ecosystem, our legacy is at the mercy of software
-        vendors able to kill features required to run some games. While we cannot
-        support each and every recent AAA release, mostly due to DRM and anti-cheat
-        incompatibilities, Lutris does support a vast majority of every game ever
-        released in history, on a wide variety of hardware systems.
+        Head to the <a href="{% url 'downloads' %}">download</a> page and follow the instructions for your distribution.
       </p>
-    </div>
-    <div class="col-md-6">
-      <figure class="tiled">
-        <img src="{% static 'images/games/turrican.png' %}" alt="Turrican 2 on Amiga"/>
-        <img src="{% static 'images/games/dark-forces.jpg' %}" alt="Dark Forces on MS Dos" />
-        <img src="{% static 'images/games/the-sims-2.jpg' %}" alt="The Sims 2 on Windows" />
-        <img src="{% static 'images/games/thps2.png' %}" alt="Tony Hawks Pro Skater 2 on PlayStation" />
-      </figure>
     </div>
   </div>
 
-  <div class="row">
-    <h1 class="centered">Meet the founder</h1>
-    <div class="col-md-3">
-      <figure class="centered tiled">
-        <img src="{% static 'images/strider.png' %}" alt="Photo of Mathieu Comandon"/>
-      </figure>
+  <h2 class="text-center pb-3">Connect your accounts</h2>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Use the Sources section on the sidebar to login to games stores or
+        to your Lutris account. Once logged in, your game library will
+        appear in the appropriate section. The Steam service doesn't require
+        you to login but requires Steam to be installed on your system and for
+        your account to be public (at least for the duration of the sync).
+      </p>
     </div>
-    <div class="col-md-9">
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/service-login.jpg' %}"
+             class="w-100 text-primary"
+             alt="Login to Humble Bundle"/>
+    </div>
+    <div class="col-sm-8 pb-3">
       <p>
-        Mathieu Comandon (aka Strider, or Strycore when “this username is not
-        available”) has been experimenting with Linux since 1997 and became a
-        full time user in 2006, driven away from Windows by the Vista
-        announcements and a general desire to take control back over his
-        machines.
+        Some services may be disabled when Lutris is first installed. You can enable them
+        in the preferences window.
       </p>
-      <p>
-        Back in 2006, playing games on Linux wasn’t an easy or necessarily fun
-        task. Native ports were rare, we still had support from id Software
-        with ports of id Tech 4 games like Prey and Quake 4 but that was pretty
-        much it. Other options for gaming were playing open source games,
-        emulators or using wine, which was still struggling with DirectX 9
-        games at the time. Another product would later appear: Cedega, a
-        proprietary UI for a patched version of Wine (previously known as
-        WineX). This would let you play games such as Left 4 Dead and Call of
-        Duty 4 on Linux.
-      </p>
-      <p>
-        Seeing the potential of Linux as a gaming platform but being frustrated
-        by spending so much time setting up games, Mathieu started toying with
-        the idea of automating game setups. He spent a few days learning
-        Python and GTK to make a launcher for TES: Oblivion but then wanted to apply
-        the same principle to any game playable on Linux. In late 2009, after picking the
-        otter as the project’s mascot, Lutris was born…
-      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/services-settings.jpg' %}"
+             class="w-100 text-primary"
+             alt="Enabling services in preferences"/>
     </div>
   </div>
-</div>
+
+  <h1 class="text-center pt-5 pb-3">Install runners</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Runners are the programs Lutris use to run games. We provide those programs so there is no
+        need to have them installed on your system (except Wine, as mentioned earlier).<br>
+        Runners can be compatibility layers, emulators or game engine capable of running games from
+        various hardware and software platforms.
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/runner-settings.jpg' %}"
+             class="w-100 text-primary"
+             alt="Installing runners"/>
+    </div>
+  </div>
+
+  <h1 class="text-center pt-5 pb-3">Install your game library</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        With everything now set up, you can start adding games to Lutris.
+        The game installer window will let you specify a location where
+        game files can be kept for future installations.
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/gog-screen.jpg' %}"
+             class="w-100 text-primary"
+             alt="TODO"/>
+    </div>
+  </div>
+
+  <h1 class="text-center pt-5 pb-3">Install other game clients</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-8 pb-3">
+      <p>
+        Not every game store is fully integrated with Lutris but you can still access your games
+        from the client themselves.
+      </p>
+    </div>
+    <div class="col-sm-8 pb-3">
+        <img src="{% static 'images/screenshots/game-clients.jpg' %}"
+             class="w-100 text-primary"
+             alt="Bethesda launcher, Origin and Uplay run from Lutris"/>
+    </div>
+  </div>
 {% endblock %}

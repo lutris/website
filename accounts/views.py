@@ -1,19 +1,26 @@
 """Module for user account views"""
+# pylint: disable=too-many-ancestors
 import logging
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
-from django.db.models import Q
-from django.http import (Http404, HttpResponseBadRequest,
-                         HttpResponseRedirect)
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (
+    LogoutView, LoginView, PasswordResetDoneView, PasswordResetView,
+    PasswordChangeView, PasswordResetConfirmView
+)
 from django.views.generic import ListView
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.db import IntegrityError
+from django.http import (
+    Http404, HttpResponseBadRequest,
+    HttpResponseRedirect
+)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, UpdateView
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
@@ -23,8 +30,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 from games import models
-from games.forms import LibraryFilterForm
-from games.views.pages import GameList
 
 from . import forms, sso, tasks, serializers
 from .models import EmailConfirmationToken, User
@@ -32,23 +37,52 @@ from .models import EmailConfirmationToken, User
 LOGGER = logging.getLogger(__name__)
 
 
-def register(request):
-    """Register a new user account"""
-    form = forms.RegistrationForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        try:
-            form.save()
-        except IntegrityError:
-            # We do username validation, so we shouldn't get IntegrityErrors
-            # and yet, they still happen from time to time. As a last resort,
-            # try to cause panic and havoc.
-            messages.error(
-                request,
-                "OH NO!!!! WHAT HAPPENED!??!?! YOU BROKE EVERYTHING !!"
-                "THIS IS BAD BAD BAD.SERIOUSLY, WHAT HAVE YOU DONE ???"
-            )
-        return HttpResponseRedirect('/')
-    return render(request, 'accounts/registration_form.html', {'form': form})
+class LutrisRegisterView(CreateView):
+    """Account registration view"""
+    form_class = forms.RegistrationForm
+    template_name = 'accounts/register.html'
+    success_url = reverse_lazy('homepage')
+
+
+class LutrisLoginView(LoginView):
+    """Sign in view"""
+    template_name = 'accounts/login.html'
+    authentication_form = forms.LoginForm
+
+
+class LutrisLogoutView(LogoutView):
+    """Sign out view"""
+    next_page = '/'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, 'You are now logged out of Lutris.')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class LutrisPasswordResetView(PasswordResetView):
+    """View to reset a user's password"""
+    template_name = 'accounts/password_reset.html'
+    form_class = forms.LutrisPasswordResetForm
+
+
+class LutrisPasswordResetDoneView(PasswordResetDoneView):
+    """Tell the user an email has been sent with a password reset link"""
+    template_name = "accounts/password_reset_done.html"
+
+
+class LutrisPasswordChangeView(PasswordChangeView):
+    """View confirming the password reset is sent"""
+    template_name = 'accounts/password_change.html'
+
+
+class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
+    """View where the user confirms the password reset"""
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password has been updated.')
+        return super().form_valid(form)
 
 
 def clear_auth_token(request):
@@ -81,21 +115,26 @@ def profile(request):
     )
 
 
+
 def user_account(request, username):
     """Profile view"""
-    user = get_object_or_404(User, username=username)
     if request.user.username != username:
-        # Once public profiles are implemented, we'll return a view here,
-        # currently, only throw a 404.
         raise Http404
+    return render(request, 'accounts/profile.html', {
+        'user': request.user,
+        'profile_page': 'profile'
+    })
+
+@login_required
+def user_submissions(request):
+    """Lists a user game submissions"""
     pending_submissions = models.GameSubmission.objects.filter(
-        user=user, accepted_at__isnull=True
+        user=request.user, accepted_at__isnull=True
     )
     accepted_submissions = models.GameSubmission.objects.filter(
-        user=user, accepted_at__isnull=False
+        user=request.user, accepted_at__isnull=False
     )
-    return render(request, 'accounts/profile.html', {
-        'user': user,
+    return render(request, 'accounts/game_submissions.html', {
         'pending_submissions': pending_submissions,
         'accepted_submissions': accepted_submissions
     })
@@ -105,12 +144,20 @@ def user_account(request, username):
 def user_send_confirmation(request):
     """Send an email with a confirmation link"""
     user = request.user
-    if not user.email_confirmed:
-        token = EmailConfirmationToken(email=user.email)
-        token.create_token()
-        token.save()
-        token.send(request)
-    return render(request, 'accounts/confirmation_send.html', {'user': user})
+    if user.email_confirmed:
+        messages.info(request, "Your email has already been confirmed.")
+        return HttpResponseRedirect(
+            reverse('user_account', args=(user.username, ))
+        )
+    token = EmailConfirmationToken(email=user.email)
+    token.create_token()
+    token.save()
+    token.send(request)
+    messages.info(request, 'An email with a confirmation link has been sent to the specified '
+                           'address. Click the link to confirm your email address.')
+    return HttpResponseRedirect(
+        reverse('user_account', args=(user.username,))
+    )
 
 
 def user_require_confirmation(request):
@@ -144,23 +191,19 @@ def user_email_confirm(request):
                   {'confirmation_token': confirmation_token})
 
 
-@login_required
-def profile_edit(request, username):
-    """Change profile imformation"""
-    user = get_object_or_404(User, username=username)
-    if user != request.user:
-        raise Http404
-    form = forms.ProfileForm(request.POST or None, request.FILES or None,
-                             instance=user)
-    if form.is_valid():
-        form.save()
-        messages.success(
-            request,
-            'Your account info has been updated.'
-        )
-        return redirect(reverse('user_account', args=(username, )))
-    return render(request, 'accounts/profile_edit.html', {'form': form})
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """Edit the user's profile info"""
+    template_name = 'accounts/profile_edit.html'
+    form_class = forms.ProfileForm
+    success_url = reverse_lazy('profile')
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, *args, **kwargs):  # pylint: disable=arguments-differ
+        context = super().get_context_data(*args, **kwargs)
+        context['profile_page'] = 'edit'
+        return context
 
 @login_required
 def profile_delete(request, username):
@@ -221,12 +264,10 @@ def steam_disconnect(request):
     return redirect(reverse("profile"))
 
 
-class LibraryList(GameList):  # pylint: disable=too-many-ancestors
+class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     """Access the user's game library"""
-    template_name = 'accounts/library_show.html'
+    template_name = 'accounts/library_list.html'
     context_object_name = 'games'
-    paginate_by = 25
-    paginate_orphans = 10
     ordering = 'name'
 
     def get_user(self):
@@ -243,13 +284,11 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
         return user
 
     def get_queryset(self):
-        user = self.get_user()
-        queryset = models.GameLibrary.objects.get(user=user).games.filter(is_public=True)
-        if self.q_params['q']:
-            queryset = queryset.order_by('-rank', self.get_ordering())
-        else:
-            queryset = queryset.order_by(self.get_ordering())
-        return self.get_filtered_queryset(queryset)
+        """Return all games in library, optionally filter them"""
+        queryset = models.GameLibrary.objects.get(user=self.get_user()).games.all()
+        if self.request.GET.get('q'):
+            queryset = queryset.filter(name__icontains=self.request.GET["q"])
+        return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
@@ -260,7 +299,9 @@ class LibraryList(GameList):  # pylint: disable=too-many-ancestors
             # profiles are implemented
             raise Http404
         context['user'] = user
-        context['is_library'] = True
+        context['profile_page'] = 'library'
+        context['q'] = self.request.GET.get('q', '')
+        context['sort'] = self.request.GET.get('sort', '')
         return context
 
 
@@ -280,14 +321,12 @@ def library_add(request, slug):
 @login_required
 def library_remove(request, slug):
     """Remove a game from a user's library"""
-    user = request.user
-    library = models.GameLibrary.objects.get(user=user)
+    library = models.GameLibrary.objects.get(user=request.user)
     game = get_object_or_404(models.Game, slug=slug)
     library.games.remove(game)
     redirect_url = request.META.get('HTTP_REFERER')
     if not redirect_url:
-        username = user.username
-        redirect_url = reverse('library_show', kwargs={'username': username})
+        redirect_url = reverse('library_list', kwargs={'username': request.user.username})
     return redirect(redirect_url)
 
 
@@ -301,15 +340,14 @@ def library_steam_sync(request):
         request,
         'Your Steam library is being synced with your Lutris account'
     )
-    return redirect(reverse("library_show",
+    return redirect(reverse("library_list",
                             kwargs={'username': user.username}))
 
 
 @login_required
 def discourse_sso(request):
     """View used to sign in a user to the Discourse forums"""
-    user = request.user
-    if not user.email_confirmed:
+    if not request.user.email_confirmed:
         return HttpResponseBadRequest('You must confirm your email to use the forums')
     payload = request.GET.get('sso')
     signature = request.GET.get('sig')

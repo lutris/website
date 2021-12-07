@@ -16,13 +16,16 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-RUN npm install -g bower grunt-cli
-COPY *.json Gruntfile.js .bowerrc /web/
+COPY *.json *.js /web/
 COPY frontend/ /web/frontend/
+
 WORKDIR /web
 RUN npm install
-RUN npm run setup && npm run build
-RUN cd /web/frontend/vue/ && npm install && npm run build:issues
+RUN npm run build
+
+WORKDIR /web/frontend/vue/
+RUN npm install
+RUN npm run build:issues
 
 
 FROM strycore/lutriswebsite:latest
@@ -45,6 +48,5 @@ COPY ./config /config
 COPY --from=sphinxbuild /docs/installers.html /app/templates/docs/
 COPY --from=frontend /web/public/ /app/public/
 COPY --from=frontend /web/frontend/vue/dist/ /app/frontend/vue/dist/
-COPY --from=frontend /web/components/ /app/components/
 
 CMD ["scripts/gunicorn_start.sh"]

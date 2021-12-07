@@ -1,173 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
-{% load thumbnail %}
+
 {% load humanize %}
 {% load lutris %}
 
-{% block nopage %}
-<script src="{% static 'jssor/js/jssor.slider.min.js' %}"></script>
-<div id="jssor_1" style="position:relative;margin:0 auto;top:0px;left:0px;width:1280px;height:720px;overflow:hidden;visibility:hidden;">
-  <div data-u="slides" style="cursor:default;position:relative;top:0px;left:0px;width:1280px;height:720px;overflow:hidden;">
-    <div style="background: url('{% static 'images/carousel/overwatch.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/overwatch">
-        Play Overwatch on Battle.net
-      </a>
-    </div>
-    <div style="background: url('{% static 'images/carousel/the-witcher.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/the-witcher-3-wild-hunt">
-        Install The Witcher 3 from GOG or Steam
-      </a>
-    </div>
-    <div style="background: url('{% static 'images/carousel/warframe.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/warframe">
-        Play Warframe
-      </a>
-    </div>
-    <div style="background: url('{% static 'images/carousel/battlefield5.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/battlefield-v">
-        Play Battlefield V on Origin
-      </a>
-    </div>
-    <div style="background: url('{% static 'images/carousel/eso.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/the-elder-scrolls-online">
-        Play The Elders Scrolls: Online
-      </a>
-    </div>
-    <div style="background: url('{% static 'images/carousel/warcraft.jpg' %}') no-repeat center center fixed; background-size: cover; background-size: 100%;">
-      <a data-t="0" class="slide-legend" data-events="auto" data-display="block" href="/games/world-of-warcraft">
-        Play World of Warcraft
-      </a>
-    </div>
-  </div>
-  <div data-u="arrowleft" class="jssora093" style="width:50px;height:50px;top:0px;left:30px;" data-autocenter="2" data-scale="0.75" data-scale-left="0.75">
-    <svg viewBox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
-        <circle class="c" cx="8000" cy="8000" r="5920"></circle>
-        <polyline class="a" points="7777.8,6080 5857.8,8000 7777.8,9920 "></polyline>
-        <line class="a" x1="10142.2" y1="8000" x2="5857.8" y2="8000"></line>
-    </svg>
-  </div>
-  <div data-u="arrowright" class="jssora093" style="width:50px;height:50px;top:0px;right:30px;" data-autocenter="2" data-scale="0.75" data-scale-right="0.75">
-    <svg viewBox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
-        <circle class="c" cx="8000" cy="8000" r="5920"></circle>
-        <polyline class="a" points="8222.2,6080 10142.2,8000 8222.2,9920 "></polyline>
-        <line class="a" x1="5857.8" y1="8000" x2="10142.2" y2="8000"></line>
-    </svg>
-  </div>
-</div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12 intro-text centered">
-        <h1>Play all your games on Linux</h1>
-        <p>
-        Lutris is an Open Source gaming platform for Linux. It installs and
-        launches games so you can start playing without the hassle of setting
-        up your games. Get your games from GOG, Steam, Battle.net, Origin, Uplay
-        and many other sources running on any Linux powered gaming machine.
-        </p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-4">
-      <p class="intro-text">
-        Lutris uses community contributed installation scripts to provide an
-        optimal experience and setup. Once installed, games are launched with
-        programs called runners. Those runners include RetroArch, Dosbox,
-        customized Wine versions and many more!<br/>
-
-        <a href="/downloads" class="action-button">Download Lutris</a>
-      </p>
-    </div>
-    <div class="col-sm-4">
-      <p class="intro-text" >
-        We are a fully independent project and Lutris will always remain free of charge.
-        In order to keep the project alive, we need your support! Donations fund the
-        entirety of the development and hosting costs, please consider becoming one of
-        our supporters!<br/>
-        <a href="/donate" class="action-button">Support us</a>
-      </p>
-    </div>
-    <div class="col-sm-4">
-      <p class="intro-text">
-        We want to provide a powerful yet simple platform for everyone to enjoy all
-        their games, old and new. This is possible thanks to our amazing community.
-        Join us and help us make Linux a top-tier gaming platform!<br/><br/>
-        <a href="https://github.com/lutris" class="action-button">Contribute</a>
-      </p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <h3>New games</h3>
-      <div class='latest-games'>
-      {% for game in new_games %}
-        <div class='game-banner'>
-          <a href="{{ game.get_absolute_url }}" title="{{game.name}}">
-            {% thumbnail game.title_logo '184x69' crop="center" as img %}
-              <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
-            {% empty %}
-              <span class='game-cover'>no image</span>
-            {% endthumbnail %}
-            <span class='game-title'>{{game.name}}</span>
-          </a>
-        </div>
-      {% endfor %}
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <h3>Updates</h3>
-      <div class='latest-games'>
-      {% for game in updated_games %}
-        <div class='game-banner'>
-          <a href="{{ game.get_absolute_url }}" title="{{game.name}}">
-            {% thumbnail game.title_logo '184x69' crop="center" as img %}
-              <img class='game-cover' src='{{ img.url }}' alt='{{ game.name }}'/>
-            {% empty %}
-              <span class='game-cover'>no image</span>
-            {% endthumbnail %}
-            <span class='game-title'>{{game.name}}</span>
-          </a>
-        </div>
-      {% endfor %}
-      </div>
-    </div>
-  </div>
-</div>
-<br/><br/>
-
-<script>
-  var options = {
-    $AutoPlay: 1,
-    $Idle: 5000,
-    $ArrowNavigatorOptions: {
-        $Class: $JssorArrowNavigator$,
-        $ChanceToShow: 2,
-        $AutoCenter: 2,
-    }
-  };
-  var jssor_1_slider = new $JssorSlider$("jssor_1", options);
-  var MAX_WIDTH = 1280;
-
-  function ScaleSlider() {
-      var containerElement = jssor_1_slider.$Elmt.parentNode;
-      var containerWidth = containerElement.clientWidth;
-      if (containerWidth) {
-          var expectedWidth = Math.min(MAX_WIDTH || containerWidth, containerWidth);
-          jssor_1_slider.$ScaleWidth(expectedWidth);
-      }
-      else {
-          window.setTimeout(ScaleSlider, 30);
-      }
+{% block stylesheets %}
+<style>
+  .project-presentation {
+    font-size: 1.4em;
   }
+  .project-header {
+    background: transparent url("static/images/sfa2-bg.jpg") no-repeat center center;
+    background-size: cover;
+  }
+  .feature-list {
+    background: transparent url("static/images/joy-bg.jpg") no-repeat center center;
+    background-size: cover;
+    padding-top: 3em;
+    padding-bottom: 2em;
+    padding-left: 3em;
+    padding-right: 3em;
+    border-top: 1px solid #F90;
+    border-bottom: 1px solid #F90;
+  }
+</style>
+{% endblock %}
 
-  ScaleSlider();
 
-  $Jssor$.$AddEvent(window, "load", ScaleSlider);
-  $Jssor$.$AddEvent(window, "resize", ScaleSlider);
-  $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
-</script>
+{% block content %}
+  {% include 'includes/features.html' %}
 {% endblock %}

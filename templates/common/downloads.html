@@ -2,21 +2,18 @@
 {% block title %}Download Lutris{% endblock %}
 
 {% block content %}
-<h1>Downloads</h1>
-<div class="row">
-  <div class="col-lg-12">
-    <article>
-      <p>
+<h1 class="text-center pb-3">Downloads</h1>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <p>
         Lutris is compatible with any up-to-date Linux system. It relies on
         Python 3 and GTK libraries and will run on any desktop environment.
         Packages are provided for current Linux distributions. In some cases,
         Lutris will be available without adding additional software sources but
         if that's not the case, follow the instructions specific to your
         distribution below.
-      </p>
-    </article>
-    <article>
-      <p>
+    </p>
+    <p>
         <strong>Make sure to install Wine and drivers!</strong><br/>
         If you plan on playing games for Windows, to ensure a smooth
         experience, install a recent version of
@@ -25,14 +22,21 @@
         with every component in its <a href="https://github.com/lutris/lutris/wiki/Lutris-Runtime">
         runtime</a>. When playing games lutris will use
         a custom version of Wine optimized for games.<br>
-      </p>
-    </article>
+    </p>
     <ul class='download-list'>
       <li>
         <ul>
           <li>
             <img src='{{ STATIC_URL }}images/icons/pop_os.png' alt='Pop!_OS'>Pop!_OS
           </li>
+        </ul>
+        <p>
+          Lutris is now available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+
           <li>
             <img src='{{ STATIC_URL }}images/icons/ubuntu.png' alt='Ubuntu'>Ubuntu
           </li>
@@ -47,8 +51,7 @@
           <br/>
           <code>sudo add-apt-repository ppa:lutris-team/lutris</code><br/>
           <code>sudo apt update</code><br/>
-          <code>sudo apt install lutris</code><br/><br/>
-          Lutris is now available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+          <code>sudo apt install lutris</code>
         </p>
       </li>
       <li>

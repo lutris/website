@@ -189,13 +189,21 @@ class GameEditForm(forms.ModelForm):
         )
 
         widgets = {
-            "platforms": Select2MultipleWidget,
-            "genres": Select2MultipleWidget,
+            "name": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "year": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "website": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "platforms": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
+            "genres": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "developer": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
             "publisher": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
         }
 
@@ -303,11 +311,11 @@ class InstallerForm(forms.ModelForm):
 
     def clean_description(self):
         """Remove HTML tags from the description"""
-        return strip_tags(self.cleaned_data["description"])
+        return strip_tags(self.cleaned_data["description"]) or ""
 
     def clean_notes(self):
         """Remove HTML tags from the description"""
-        return strip_tags(self.cleaned_data["notes"])
+        return strip_tags(self.cleaned_data["notes"]) or ""
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
@@ -441,7 +449,7 @@ class LibraryFilterForm(forms.Form):
     )
     flags = forms.MultipleChoiceField(
         choices=models.Game.GAME_FLAGS,
-        widget=BitFieldCheckboxSelectMultiple,
+        widget=BitFieldCheckboxSelectMultiple(attrs={'class': "checkbox-list"}),
         required=False,
     )
 

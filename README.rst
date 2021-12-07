@@ -4,23 +4,23 @@ Getting the site up and running for development
 With docker-compose
 -------------------
 
-Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
+Install docker (https://docs.docker.com/engine/install/) and
+docker-compose (https://docs.docker.com/compose/install/) on your system.
 
 To build the required docker images use::
 
-    make build_dev_docker
-
-Start the required containers with::
-
-    make start_dev_docker
+    docker-compose build lutrisfrontend lutrisweb
 
 To prepare the database run in a separate terminal::
 
-    make init_docker_db
+    docker-compose run lutrisweb make db
 
-You can start the containers with::
+Start the required containers with::
 
-    make start_dev_docker
+    docker-compose up -d lutrisdb lutriscache
+    # Wait a bit for the cache and database to be ready
+    sleep 2
+    docker-compose up -d lutrisfrontend lutrisweb
 
 Now you should be able to login with::
 
@@ -36,10 +36,15 @@ Operations requiring a rebuild:
 
 You can stop the containers with::
 
-    make stop_dev_docker
+    docker-compose down
 
 Natively
 --------
+
+Install required packages:
+
+    apt install python3.8-venv
+
 
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
@@ -62,7 +67,9 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
+    sudo apt-get install build-essential git curl python3 python3-pip \
+        python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev \
+        libffi-dev libpq-dev libxml2-dev libjpeg-dev
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
 To build the frontend assets (javascript and css files), you'll
