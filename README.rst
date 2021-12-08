@@ -1,46 +1,6 @@
 Getting the site up and running for development
 ===============================================
 
-With docker-compose
--------------------
-
-Install docker (https://docs.docker.com/engine/install/) and
-docker-compose (https://docs.docker.com/compose/install/) on your system.
-
-To build the required docker images use::
-
-    docker-compose build lutrisfrontend lutrisweb
-
-To prepare the database run in a separate terminal::
-
-    docker-compose run lutrisweb make db
-
-Start the required containers with::
-
-    docker-compose up -d lutrisdb lutriscache
-    # Wait a bit for the cache and database to be ready
-    sleep 2
-    docker-compose up -d lutrisfrontend lutrisweb
-
-Now you should be able to login with::
-
-    user: admin
-    password: admin
-
-You are now ready to develop. No need to rebuild the images for simple
-code changes, as the containers will pick them up from the host system.
-Operations requiring a rebuild:
-
-- changing dependencies (apt, pip or npm)
-- changing content of public/images, public/lightbox2 or public/robots.txt
-
-You can stop the containers with::
-
-    docker-compose down
-
-Natively
---------
-
 Install required packages:
 
     apt install python3.8-venv

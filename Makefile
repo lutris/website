@@ -34,16 +34,6 @@ fixtures:
 check-deps-update:
 	pip3 list --outdated
 
-deploy_prod:
-	scripts/deploy.sh prod anaheim
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml restart lutrisnginx
-
-migrate_prod:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
-
-remote_shell_prod:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb bash
-
 client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
