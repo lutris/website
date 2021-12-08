@@ -2,16 +2,29 @@
 
 set -e
 
-ROOT_DIR=/srv/prod
+ENV=staging
+WEBPACK=""
+
+params=$(getopt -n $0 -o pw --long prod,webpack -- "$@")
+eval set -- $params
+while true ; do
+    case "$1" in
+        -p|--prod) ENV="prod"; shift ;;
+        -w|--webpack) WEBPACK="1"; shift ;;
+        *) shift; break ;;
+    esac
+done
+
+ROOT_DIR=/srv/$ENV
 DJANGODIR=$ROOT_DIR/website/
 
 cd $DJANGODIR
 git pull
 
 source $ROOT_DIR/venv/bin/activate
-export $(cat .env.prod | xargs)
+export $(cat .env.$ENV | xargs)
 
-if [[ "$1" == "--webpack" ]]; then
+if [[ "$WEBPACK" == "1" ]]; then
     npm run build
     npm run build-prod
     cd frontend/vue
@@ -19,7 +32,9 @@ if [[ "$1" == "--webpack" ]]; then
     cd ../..
 fi
 
+./manage.py migrate
+
 ./manage.py collectstatic --clear --noinput \
     --ignore less/test/* --ignore select2/docs/*
 
-sudo systemctl restart gunicorn_prod
+sudo systemctl restart gunicorn_$ENV
