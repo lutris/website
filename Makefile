@@ -62,12 +62,12 @@ localdb:
 	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
 
 localredis:
-	docker run --name lutriscache -p 6379:6379 -d --restart=unless-stopped redis:latest
+	docker run --name lutriscache -p 6378:6379 -d --restart=unless-stopped redis:latest
 
 syncdb:
 	# Syncs the production database to the local db
-	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.tar.gz lutris.tar.gz
-	gunzip lutris.tar.gz
-	docker cp lutris.tar lutrisdb:/backups
-	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/lutris.tar
-	rm lutris.tar
+	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.tar.gz latest.tar.gz
+	gunzip latest.tar.gz
+	docker cp latest.tar lutrisdb:/backups
+	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
+	rm latest.tar
