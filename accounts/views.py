@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LogoutView, LoginView, PasswordResetDoneView, PasswordResetView,
-    PasswordChangeView, PasswordResetConfirmView
+    PasswordChangeView, PasswordChangeDoneView, PasswordResetConfirmView
 )
 from django.views.generic import ListView
 from django.db import IntegrityError
@@ -73,6 +73,11 @@ class LutrisPasswordResetDoneView(PasswordResetDoneView):
 class LutrisPasswordChangeView(PasswordChangeView):
     """View confirming the password reset is sent"""
     template_name = 'accounts/password_change.html'
+
+
+class LutrisPasswordChangeDoneView(PasswordChangeDoneView):
+    """View confirming the password was changed"""
+    template_name = 'accounts/password_change_done.html'
 
 
 class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
