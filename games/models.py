@@ -56,7 +56,7 @@ class Company(models.Model):
         return reverse("games_by_company", kwargs={'company': self.pk})
 
     def __str__(self):
-        return u"%s" % self.name
+        return self.name
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -627,7 +627,7 @@ class Screenshot(models.Model):
 
     def __str__(self):
         desc = self.description if self.description else self.game.name
-        return u"%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
+        return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
 
 class InstallerManager(models.Manager):
@@ -1056,7 +1056,7 @@ class GameSubmission(models.Model):
         verbose_name = "User submitted game"
 
     def __str__(self):
-        return u"{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
+        return "{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
 
     def accept(self):
         """Accept the submission and notify the author"""
