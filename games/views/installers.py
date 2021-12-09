@@ -139,7 +139,7 @@ class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
             return models.Game.objects.none()
-        return game.installers.annotate(issue_cnt=Count("issues")).filter(issue_cnt__gt=0)
+        return game.installers.annotate(issue_cnt=Count("issues")).filter(issue_cnt__gt=0, published=True)
 
 
 class InstallerIssueCreateView(generics.CreateAPIView):
