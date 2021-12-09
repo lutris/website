@@ -7,6 +7,7 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.http import Http404
+from django.db.models import Count
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -138,7 +139,7 @@ class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
             return models.Game.objects.none()
-        return game.installers.all()
+        return game.installers.annotate(issue_cnt=Count("issues")).filter(issue_cnt__gt=0)
 
 
 class InstallerIssueCreateView(generics.CreateAPIView):
