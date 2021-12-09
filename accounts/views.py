@@ -274,6 +274,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     template_name = 'accounts/library_list.html'
     context_object_name = 'games'
     ordering = 'name'
+    profile_page = 'library'
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -304,10 +305,24 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
             # profiles are implemented
             raise Http404
         context['user'] = user
-        context['profile_page'] = 'library'
+        context['profile_page'] = self.profile_page
         context['q'] = self.request.GET.get('q', '')
         context['sort'] = self.request.GET.get('sort', '')
         return context
+
+
+class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
+    template_name = 'accounts/submission_list.html'
+    context_object_name = 'submissions'
+    ordering = '-created_at'
+    profile_page = 'submissions'
+
+    def get_queryset(self):
+        """Return all submitted games"""
+        queryset = models.GameSubmission.objects.filter(user=self.get_user())
+        if self.request.GET.get('q'):
+            queryset = queryset.filter(game__name__icontains=self.request.GET["q"])
+        return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
 
 @login_required

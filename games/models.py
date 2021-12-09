@@ -1032,7 +1032,7 @@ class GameLibrary(models.Model):
         verbose_name_plural = "game libraries"
 
     def __str__(self):
-        return u"%s's library" % self.user.username
+        return "%s's library" % self.user.username
 
 
 class GameSubmission(models.Model):
@@ -1054,6 +1054,10 @@ class GameSubmission(models.Model):
     class Meta:
         """Model configuration"""
         verbose_name = "User submitted game"
+
+    @property
+    def status(self):
+        return "accepted" if self.accepted_at else "pending"
 
     def __str__(self):
         return "{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)

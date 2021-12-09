@@ -18,6 +18,7 @@ urlpatterns = [
     path('associate-steam/', views.associate_steam, name="associate_steam"),
     path('steam-disconnect', views.steam_disconnect, name="steam_disconnect"),
     path('<username>/library/', views.LibraryList.as_view(), name="library_list"),
+    path('<username>/submissions/', views.SubmissionList.as_view(), name="submission_list"),
     path('library/add/<slug:slug>/', views.library_add, name="add_to_library"),
     path('library/remove/<slug:slug>/', views.library_remove, name="remove_from_library"),
     path('library/steam-sync/', views.library_steam_sync, name="library_steam_sync"),

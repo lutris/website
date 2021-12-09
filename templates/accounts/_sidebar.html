@@ -23,13 +23,14 @@
         Library
       </a>
     </li>
-    <!--
     <li>
-      <a href="#" class="nav-link text-white">
+      <a href="{% url 'submission_list' username=user.username %}" class="nav-link text-white{% if profile_page == 'submissions'%} active{% endif %}">
         <i class="bi-collection"></i>
         Submissions
       </a>
     </li>
+    <!--
+
     <li>
       <a href="#" class="nav-link text-white">
         <i class="bi-wrench"></i>
