@@ -11,5 +11,3 @@ ExecStart=/srv/prod/venv/bin/celery worker -A lutrisweb.celery.app -B -l debug
 
 [Install]
 WantedBy=multi-user.target
-
-

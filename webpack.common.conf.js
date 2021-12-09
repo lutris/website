@@ -38,10 +38,7 @@ module.exports = {
           {
             loader: "expose-loader",
             options: {
-              exposes: {
-                globalName: "$",
-                override: true,
-              }
+              exposes: ["$", "jQuery"]
             }
           }
         ],
