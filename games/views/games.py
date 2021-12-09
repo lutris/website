@@ -162,6 +162,7 @@ class GameStatsView(APIView):
         statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
         statistics["installers"] = models.Installer.objects.published().count()
         statistics["unpublished_installers"] = models.Installer.objects.unpublished().count()
+        statistics["drafts"] = models.Installer.objects.drafts().count()
         statistics["screenshots"] = models.Screenshot.objects.filter(published=True).count()
         statistics["unpublished_screenshots"] = models.Screenshot.objects.filter(
             published=False

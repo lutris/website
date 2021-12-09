@@ -639,7 +639,14 @@ class InstallerManager(models.Manager):
 
     def unpublished(self):
         """Return unpublished installers"""
-        return self.get_queryset().filter(published=False)
+        return self.get_queryset().filter(
+            published=False,
+            draft=False
+        )
+
+    def drafts(self):
+        """Return unpublished installers"""
+        return self.get_queryset().filter(published=False, draft=True)
 
     def new(self):
         """Return new installers that don't have any edits"""
@@ -653,7 +660,6 @@ class InstallerManager(models.Manager):
                 object_id=installer.id, content_type__model="installer"
             ).count()
         ]
-
 
     def abandoned(self):
         """Return the installer with 'Change Me' version that haven't received any modifications"""
