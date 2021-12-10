@@ -74,14 +74,6 @@ TOSEC_DAT_PATH = TOSEC_PATH
 GOG_LOGO_PATH = media_directory('gog-logos')
 GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 
-# TheGamesDB directories
-TGD_ROOT = media_directory('thegamesdb')
-TGD_CLEAR_LOGO_PATH = media_directory('thegamesdb/clearlogo')
-TGD_BANNER_PATH = media_directory('thegamesdb/banners')
-TGD_SCREENSHOT_PATH = media_directory('thegamesdb/screenshot')
-TGD_FANART_PATH = media_directory('thegamesdb/fanart')
-TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
-
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 MIDDLEWARE = [
@@ -369,7 +361,6 @@ LOGGING = {
         'accounts': DEFAULT_LOGGING_CONFIG,
         'common': DEFAULT_LOGGING_CONFIG,
         'games': DEFAULT_LOGGING_CONFIG,
-        'thegamesdb': DEFAULT_LOGGING_CONFIG
     }
 }
 

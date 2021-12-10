@@ -83,27 +83,6 @@
         closeOnSelect: false,
         placeholder: ''
       });
-      $('#id_search').select2();
-
-      $("#id_search").on('select2:select', function (event) {
-        var game_id = event.target.value;
-        if (!game_id) {
-          return;
-        }
-        $.ajax({
-          url: '/thegamesdb/' + game_id + '.json',
-          dataType: "json",
-          success: function (response) {
-            $('#id_name').val(response.name);
-            $('#id_year').val(response.year);
-            $('#id_description').html(response.description);
-            $('#id_platforms').val(response.platforms).trigger('change');
-            if(response.banner) {
-              // TODO load image in banner field
-            }
-          }
-        });
-      });
     });
   </script>
 {% endblock %}

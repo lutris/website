@@ -49,7 +49,6 @@ urlpatterns = [
         kwargs={'login_complete_view': 'associate_steam'},
         name='steam_login'
     ),
-    path('thegamesdb/', include('thegamesdb.urls')),
     path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
 ]
