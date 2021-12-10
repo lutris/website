@@ -71,8 +71,8 @@ FILES_URL = f'{ROOT_URL}/media/files/'
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = TOSEC_PATH
 
-GOG_LOGO_PATH = os.path.join(BASE_DIR, 'gog-logos')
-GOG_LUTRIS_LOGO_PATH = os.path.join(BASE_DIR, 'gog-lutris-logos')
+GOG_LOGO_PATH = media_directory('gog-logos')
+GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 
 # TheGamesDB directories
 TGD_ROOT = media_directory('thegamesdb')
@@ -376,8 +376,7 @@ LOGGING = {
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '%s:%s' % (os.getenv('REDIS_HOST', 'localhost'),
-                               os.getenv('REDIS_PORT', '6379')),
+        'LOCATION': f"{os.getenv('REDIS_HOST', 'localhost')}:{os.getenv('REDIS_PORT', '6379')}"
     },
 }
 
