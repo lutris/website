@@ -326,6 +326,24 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
         return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
 
+class InstallerList(LibraryList):  # pylint: disable=too-many-ancestors
+    """List all private installers"""
+    template_name = 'accounts/installer_list.html'
+    context_object_name = 'installers'
+    ordering = '-created_at'
+    profile_page = 'installers'
+
+    def get_queryset(self):
+        """Return all submitted games"""
+        queryset = models.Installer.objects.filter(
+            user=self.get_user(),
+            published=False
+        )
+        if self.request.GET.get('q'):
+            queryset = queryset.filter(game__name__icontains=self.request.GET["q"])
+        return queryset.order_by(self.request.GET.get('sort', self.ordering))
+
+
 @login_required
 def library_add(request, slug):
     """Add a game to the user's library"""
