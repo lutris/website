@@ -1,5 +1,5 @@
 """Views for lutris main app"""
-# pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors,raise-missing-from
 from __future__ import absolute_import
 
 import json
@@ -56,8 +56,10 @@ class GameList(ListView):
     def get(self, request, *args, **kwargs):
         self.q_params = {
             'q': request.GET.get('q', ''),
-            'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
-            'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
+            'platforms': request.GET.getlist('platforms',
+                                             [kwargs.get('platform')] if 'platform' in kwargs else []),
+            'genres': request.GET.getlist('genres',
+                                          [kwargs.get('genre')] if 'genre' in kwargs else []),
             'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
             'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
             'flags': request.GET.getlist('flags', []),
@@ -224,7 +226,7 @@ def game_detail(request, slug):
             raise Http404
         except models.Game.MultipleObjectsReturned:
             games = models.Game.objects.filter(aliases__slug=slug)
-            LOGGER.error("The slug '%s' was used multiple times" % slug)
+            LOGGER.error("The slug '%s' was used multiple times", slug)
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
 
     installers = game.installers.published()
@@ -386,7 +388,7 @@ def delete_installer(request, slug):
         installer_name = installer.slug
         installer.delete()
         messages.warning(
-            request, u"The installer {} has been deleted.".format(installer_name)
+            request, "The installer {} has been deleted.".format(installer_name)
         )
         return redirect(game.get_absolute_url())
     return render(request, "installers/delete.html", {"installer": installer})
@@ -455,7 +457,7 @@ class InstallerFeed(Feed):
     """RSS feed for Lutris installers"""
     title = "Lutris installers"
     link = "/games/"
-    description = u"Latest lutris installers"
+    description = "Latest lutris installers"
     feed_size = 20
 
     def items(self):

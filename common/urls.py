@@ -1,3 +1,4 @@
+"""Common URLs"""
 # pylint: disable=E1120, C0103
 from django.urls import re_path
 from django.views.generic import TemplateView

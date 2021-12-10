@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=no-member,too-few-public-methods,too-many-lines
+# pylint: disable=no-member,too-few-public-methods,too-many-lines,consider-using-f-string
 import os
 import shutil
 import datetime
@@ -56,7 +56,7 @@ class Company(models.Model):
         return reverse("games_by_company", kwargs={'company': self.pk})
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -106,7 +106,7 @@ class Genre(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -1057,6 +1057,7 @@ class GameSubmission(models.Model):
 
     @property
     def status(self):
+        """status string for the submission"""
         return "accepted" if self.accepted_at else "pending"
 
     def __str__(self):

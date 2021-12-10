@@ -1,5 +1,5 @@
 """Module for user account views"""
-# pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors,raise-missing-from
 import logging
 
 from django.conf import settings
@@ -172,8 +172,8 @@ def user_require_confirmation(request):
     if request.user.is_authenticated:
         messages.error(
             request,
-            u"The page you have requested requires that "
-            u"you have confirmed your email address."
+            "The page you have requested requires that "
+            "you have confirmed your email address."
         )
         return redirect(reverse("user_account", args=(request.user.username,)))
     login_url = settings.LOGIN_URL
@@ -312,6 +312,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
 
 
 class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
+    """List all user submissions"""
     template_name = 'accounts/submission_list.html'
     context_object_name = 'submissions'
     ordering = '-created_at'
