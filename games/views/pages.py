@@ -6,36 +6,34 @@ import json
 import logging
 
 import reversion
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            SearchVector)
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import check_installer_restrictions, user_confirmed_required
-from games import models
-from games.forms import (
-    ForkInstallerForm,
-    GameEditForm,
-    GameForm,
-    InstallerEditForm,
-    InstallerForm,
-    ScreenshotForm, LibraryFilterForm,
-)
-from games.models import Game, GameSubmission, Installer, InstallerIssue
-from games.webhooks import notify_issue_creation, notify_installer
+from accounts.decorators import (check_installer_restrictions,
+                                 user_confirmed_required)
 from emails.messages import send_email
+from games import models
+from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
+                         InstallerEditForm, InstallerForm, LibraryFilterForm,
+                         ScreenshotForm)
+from games.models import Game, GameSubmission, Installer, InstallerIssue
+from games.webhooks import notify_installer, notify_issue_creation
 
 LOGGER = logging.getLogger(__name__)
 
@@ -60,7 +58,8 @@ class GameList(ListView):
                                              [kwargs.get('platform')] if 'platform' in kwargs else []),
             'genres': request.GET.getlist('genres',
                                           [kwargs.get('genre')] if 'genre' in kwargs else []),
-            'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
+            'companies': request.GET.getlist('companies',
+                                             [kwargs.get('company')] if 'company' in kwargs else []),
             'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
             'flags': request.GET.getlist('flags', []),
             'unpublished-filter': request.GET.get('unpublished-filter', False),
@@ -395,19 +394,11 @@ def delete_installer(request, slug):
 
 
 @staff_member_required
-def publish_installer(request, slug):
+def publish_installer(request, slug):  # pylint: disable=unused-argument
     installer = get_object_or_404(Installer, slug=slug)
     installer.published = True
     installer.save()
     return redirect("game_detail", slug=installer.game.slug)
-
-
-def validate(game, request, form):
-    if request.method == "POST" and form.is_valid():
-        installer = form.save(commit=False)
-        installer.game_id = game.id
-        installer.user_id = request.user.id
-        installer.save()
 
 
 def installer_complete(request, slug):
@@ -415,7 +406,7 @@ def installer_complete(request, slug):
     return render(request, "installers/complete.html", {"game": game})
 
 
-def get_installers(request, slug):
+def get_installers(request, slug):  # pylint: disable=unused-argument
     """Deprecated function, use REST API"""
     try:
         installers_json = Installer.objects.get_json(slug)
@@ -598,6 +589,7 @@ def publish_game(request, game_id):
 
 @user_confirmed_required
 def screenshot_add(request, slug):
+    """Show a form to upload a new screenshot"""
     game = get_object_or_404(Game, slug=slug)
     form = ScreenshotForm(request.POST or None, request.FILES or None, game_id=game.id)
     if form.is_valid():

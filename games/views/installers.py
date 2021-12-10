@@ -234,5 +234,5 @@ class RevisionListView(generics.ListAPIView):
         order_by = "date_created" if self.request.GET.get('order') == "oldest" else "-date_created"
         query = Revision.objects.all()
         if revision_type in ('submission', 'draft'):
-            query = query.filter(comment__startswith="[%s]" % revision_type)
+            query = query.filter(comment__startswith=f"[{revision_type}]")
         return query.order_by(order_by)

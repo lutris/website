@@ -130,7 +130,7 @@ class GameForm(forms.ModelForm):
         if self.files.get(file_field):
             clean_field = cleaned_data.get(file_field)
             _, ext = os.path.splitext(clean_field.name)
-            relpath = "games/banners/%s%s" % (slug, ext)
+            relpath = f"games/banners/{slug}{ext}"
             clean_field.name = relpath
             current_abspath = os.path.join(settings.MEDIA_ROOT, relpath)
             if os.path.exists(current_abspath):
@@ -149,14 +149,14 @@ class GameForm(forms.ModelForm):
         else:
             if game.is_public:
                 msg = (
-                    "This game is <a href='/games/%s'>already in our database</a>."
-                ) % slug
+                    f"This game is <a href='/games/{slug}'>already in our database</a>."
+                )
             else:
                 msg = (
-                    "This game has <a href='/games/%s'>already been "
+                    f"This game has <a href='/games/{slug}'>already been "
                     "submitted</a>, you're welcome to nag us so we "
                     "publish it faster."
-                ) % slug
+                )
             raise forms.ValidationError(mark_safe(msg))
 
 
@@ -189,10 +189,18 @@ class GameEditForm(forms.ModelForm):
         )
 
         widgets = {
-            "name": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
-            "year": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
-            "website": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
-            "description": forms.Textarea(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "name": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "year": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "website": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "description": forms.Textarea(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
             "platforms": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "genres": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "developer": ModelSelect2Widget(
@@ -324,8 +332,7 @@ class InstallerForm(forms.ModelForm):
             yaml_data = load_yaml(yaml_data)
         except yaml.error.MarkedYAMLError as ex:
             raise forms.ValidationError(
-                "Invalid YAML, problem at line %s, %s"
-                % (ex.problem_mark.line, ex.problem)
+                f"Invalid YAML, problem at line {ex.problem_mark.line}, {ex.problem}"
             )
         return dump_yaml(yaml_data)
 

@@ -14,7 +14,7 @@ def media_directory(path):
         try:
             os.makedirs(abs_path)
         except OSError:
-            print("Failed to create %s" % abs_path)
+            print(f"Failed to create {abs_path}")
     return abs_path
 
 
@@ -66,14 +66,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 FILES_ROOT = media_directory('files')
-FILES_URL = 'http://%s/media/files/' % DOMAIN_NAME
+FILES_URL = f'{ROOT_URL}/media/files/'
 
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = TOSEC_PATH
 
 GOG_LOGO_PATH = os.path.join(BASE_DIR, 'gog-logos')
 GOG_LUTRIS_LOGO_PATH = os.path.join(BASE_DIR, 'gog-lutris-logos')
-
 
 # TheGamesDB directories
 TGD_ROOT = media_directory('thegamesdb')
@@ -255,7 +254,7 @@ CELERYBEAT_SCHEDULE = {
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
-BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
+BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
 # API Keys
 STEAM_API_KEY = os.environ.get('STEAM_API_KEY', 'NO_STEAM_API_KEY_SET')
 

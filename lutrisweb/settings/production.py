@@ -1,11 +1,12 @@
 """Production specific settings"""
+# pylint: disable=wildcard-import,unused-wildcard-import
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
 ROOT_URL = "https://lutris.net"
-MEDIA_URL = '//%s/media/' % DOMAIN_NAME
+MEDIA_URL = f'//{DOMAIN_NAME}/media/'
 FILES_ROOT = '/srv/files'
-FILES_URL = 'https://%s/files/' % DOMAIN_NAME
+FILES_URL = f'https://{DOMAIN_NAME}/files/'
 
 ALLOWED_HOSTS = ('.lutris.net', '.lutr.is', '0.0.0.0', 'localhost')
 
