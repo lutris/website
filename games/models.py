@@ -927,12 +927,13 @@ class Installer(BaseInstaller):
     @property
     def latest_version(self):
         """Return the latest version for this installer"""
-        try:
-            return Version.objects.filter(
-                content_type__model="installer", object_id=self.id
-            ).latest("revision__date_created")
-        except Version.DoesNotExist:
-            pass
+        versions = Version.objects.filter(
+            content_type__model="installer",
+            object_id=self.id
+        ).order_by("-revision__date_created")
+        for version in versions:
+            if not version.field_dict["draft"]:
+                return version
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
