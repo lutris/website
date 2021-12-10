@@ -26,6 +26,24 @@
     {% endif %}
   </div>
   <div class="col-lg-3">
+    <div class="paginator-options filter-form">
+      <span class="px-2">Results per page:</span>
+      <select id="paginate_by" onchange="updatePaginateBy(this)">
+          <option value="25" {% if paginate_by == 25 %} selected {% endif %}>25</option>
+          <option value="50" {% if paginate_by == 50 %} selected {% endif %}>50</option>
+          <option value="100" {% if paginate_by == 100 %} selected {% endif %}>100</option>
+      </select>
+      <br><br>
+      <span class="px-2">Sort by:</span>
+      <select id="order_by" onchange="updateSort(this)">
+        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name (A-Z)</option>
+        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name (Z-A)</option>
+        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Oldest first</option>
+        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Newest first</option>
+        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Recently updated</option>
+        <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Recently added</option>
+      </select>
+    </div>
     <div class="filter-form">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
@@ -57,24 +75,7 @@
 {% if page_obj.has_other_pages %}
 <div class="centered">
     {% include 'includes/library_paginator.html' %}
-    <div class="paginator-options small-text">
-      <span class="px-2">Results per page:</span>
-      <select id="paginate_by" data-filter="{{ filter_string }}">
-          <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
-          <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
-          <option value="100" {% if paginate_by == '100' %} selected {% endif %}>100</option>
-      </select>
 
-      <span class="px-2">Sort by:</span>
-      <select id="order_by" data-filter="{{ filter_string }}">
-        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
-        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
-        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
-        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
-        <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity</option>
-        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Last updated</option>
-      </select>
-    </div>
 </div>
 {% endif %}
 
@@ -83,4 +84,17 @@
 {% block scripts %}
   {{ block.super }}
   {{ filter_form.media.js }}
+  <script>
+    const URL = "{% url 'game_list' %}"
+    function updateSort(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("ordering", elem.value)
+      window.location.replace(URL + "?" + params.toString())
+    }
+    function updatePaginateBy(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("paginate_by", elem.value)
+      window.location.replace(URL + "?" + params.toString())
+    }
+  </script>
 {% endblock %}
