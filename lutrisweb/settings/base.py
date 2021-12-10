@@ -361,6 +361,11 @@ LOGGING = {
         'accounts': DEFAULT_LOGGING_CONFIG,
         'common': DEFAULT_LOGGING_CONFIG,
         'games': DEFAULT_LOGGING_CONFIG,
+        'platforms': DEFAULT_LOGGING_CONFIG,
+        'bundles': DEFAULT_LOGGING_CONFIG,
+        'runners': DEFAULT_LOGGING_CONFIG,
+        'tosec': DEFAULT_LOGGING_CONFIG,
+        'providers': DEFAULT_LOGGING_CONFIG,
     }
 }
 
