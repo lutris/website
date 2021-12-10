@@ -295,14 +295,14 @@ class Game(models.Model):
         if self.title_logo:
             # Hardcoded domain isn't ideal but we have to find another solution for storing
             # and referencing banners and icons anyway so this will do for the time being.
-            return "https://lutris.net" + reverse("get_banner", kwargs={"slug": self.slug})
+            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": self.slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return "https://lutris.net" + reverse("get_icon", kwargs={"slug": self.slug})
+            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": self.slug})
         return ""
 
     @property

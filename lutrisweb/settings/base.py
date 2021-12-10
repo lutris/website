@@ -41,6 +41,8 @@ USE_TZ = True
 # Allow customization of domain
 DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
 
+ROOT_URL = "http://localhost:8000"
+
 ALLOWED_HOSTS = (
     "0.0.0.0",
     "127.0.0.1",

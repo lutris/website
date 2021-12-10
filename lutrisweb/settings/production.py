@@ -2,6 +2,7 @@
 from lutrisweb.settings.base import *  # noqa
 
 DEBUG = False
+ROOT_URL = "https://lutris.net"
 MEDIA_URL = '//%s/media/' % DOMAIN_NAME
 FILES_ROOT = '/srv/files'
 FILES_URL = 'https://%s/files/' % DOMAIN_NAME
