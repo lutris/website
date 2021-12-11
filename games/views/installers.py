@@ -219,7 +219,7 @@ class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
 class SmallResultsSetPagination(PageNumberPagination):
     """Pagination used for heavier serializers that don't need a lot of data returned at once."""
     page_size = 25
-    page_size_query_param = 'page'
+    page_query_param = 'page'
     max_page_size = 100
 
 
