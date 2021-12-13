@@ -27,6 +27,7 @@ class InstallerListView(generics.ListAPIView):
 
     def get_queryset(self):
         installer_status = self.request.GET.get('status')
+        order_by = "created_at" if self.request.GET.get('order') == "oldest" else "-created_at"
         if installer_status == 'published':
             return models.Installer.objects.published()
         if installer_status == 'unpublished':
@@ -35,7 +36,7 @@ class InstallerListView(generics.ListAPIView):
             return models.Installer.objects.new()
         if installer_status == 'abandoned':
             return models.Installer.objects.abandoned()
-        return models.Installer.objects.all()
+        return models.Installer.objects.order_by(order_by)
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
