@@ -1142,11 +1142,57 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def __str__(self):
         return self.comment
 
+    @classmethod
+    def iterate_versions(cls, version_type="submission"):
+        """List all versions of a given type"""
+        return Version.objects.filter(
+            content_type__model="installer",
+            revision__comment__startswith=f"[{version_type}]"
+        )
+
+    @classmethod
+    def remove_dupe_submissions(cls):
+        """Ensure installers only have 1 submission"""
+        revisions = [cls(version) for version in cls.iterate_versions()]
+        dupe_submissions = []
+        for revision in revisions:
+            try:
+                installer = Installer.objects.get(id=revision.installer_id)
+            except Installer.DoesNotExist:
+                LOGGER.info("No installer with ID %s", revision.installer_id)
+                revision.delete()
+                continue
+
+            num_sub = 0
+            for rev in installer.revisions:
+                if rev.comment.startswith("[submission]"):
+                    num_sub += 1
+            if num_sub > 1:
+                if installer not in dupe_submissions:
+                    dupe_submissions.append(installer)
+        for dupe in dupe_submissions:
+            print("Duplicate sub for ", dupe)
+        print(f"{len(dupe_submissions)} installers to clean")
+        for installer in dupe_submissions:
+            revisions = sorted(
+                [r for r in installer.revisions if r.comment.startswith("[submission]")],
+                key=lambda x: x.revision.date_created,
+                reverse=True
+            )
+            for rev in revisions[1:]:
+                rev.set_to_draft()
+
     def set_to_draft(self):
         """Change the submission back to draft"""
         self.comment = self.comment.replace("[submission]", "[draft]")
         self._version.revision.comment = self.comment
         self._version.revision.save()
+
+    @property
+    def revision(self):
+        """Accessor for the revision"""
+        if self._version.revision:
+            return self._version.revision
 
     @property
     def revision_id(self):
