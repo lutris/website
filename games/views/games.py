@@ -188,6 +188,7 @@ class GameMergeView(APIView):
 
 
 class GameSubmissionsView(generics.ListAPIView):
+    """List all game submissions"""
     serializer_class = serializers.GameSubmissionSerializer
     permission_classes = (permissions.IsAdminUser, )
 
@@ -204,6 +205,7 @@ class GameSubmissionAcceptView(APIView):
 
     @staticmethod
     def post(request, submission_id):
+        """Process the submission"""
         if not request.user.is_staff:
             raise PermissionDenied
 

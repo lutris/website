@@ -1,8 +1,7 @@
 """DRF serializers for Game models"""
 # pylint: disable=too-few-public-methods
-from accounts.serializers import UserSerializer
 import logging
-from os import set_inheritable
+
 from rest_framework import serializers
 from reversion.models import Version, Revision
 
@@ -142,6 +141,7 @@ class GameSubmissionSerializer(serializers.ModelSerializer):
     game = GameSerializer()
     user = UserSerializer()
     class Meta:
+        """Model and field definitions"""
         model = models.GameSubmission
         fields = ('id', 'user', 'game', 'created_at', 'accepted_at', 'reason',)
 

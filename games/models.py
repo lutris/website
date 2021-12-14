@@ -884,7 +884,7 @@ class Installer(BaseInstaller):
         blank=True,
         null=True,
     )
-    draft = models.BooleanField(default=False)
+    draft = models.BooleanField(default=True)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
     protected = models.BooleanField(default=False)
 
@@ -1141,6 +1141,12 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
 
     def __str__(self):
         return self.comment
+
+    def set_to_draft(self):
+        """Change the submission back to draft"""
+        self.comment = self.comment.replace("[submission]", "[draft]")
+        self._version.revision.comment = self.comment
+        self._version.revision.save()
 
     @property
     def revision_id(self):
