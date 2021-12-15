@@ -170,7 +170,7 @@ AUTH_USER_MODEL = 'accounts.User'
 AUTH_PROFILE_MODULE = "accounts.Profile"
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/user/login/"
+LOGIN_URL = "/user/login"
 AUTHENTICATION_BACKENDS = (
     'axes.backends.AxesBackend',
     'django_openid_auth.auth.OpenIDBackend',
