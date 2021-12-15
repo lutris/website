@@ -4,8 +4,8 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('login', views.LutrisLoginView.as_view(), name='login'),
-    path('logout', views.LutrisLogoutView.as_view(), name='logout'),
+    re_path('^login/?$', views.LutrisLoginView.as_view(), name='login'),
+    re_path('^logout/?$', views.LutrisLogoutView.as_view(), name='logout'),
     path('password/change', views.LutrisPasswordChangeView.as_view(), name='password_change'),
     path('password/change/done', views.LutrisPasswordChangeDoneView.as_view(), name='password_change_done'),
     path('password/reset', views.LutrisPasswordResetView.as_view(), name='password_reset'),

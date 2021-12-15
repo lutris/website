@@ -35,7 +35,6 @@ def clear_orphan_revisions():
 @task
 def auto_process_installers():
     """Auto deletes or accepts some submissions"""
-
     revisions = Revision.objects.all()
     for revision in revisions:
         version = revision.version_set.first()
