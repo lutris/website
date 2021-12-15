@@ -42,8 +42,8 @@ def auto_process_installers():
             continue
         try:
             submission = models.InstallerRevision(version)
-        except Exception:  # pylint: disable=broad-except
-            LOGGER.error("Deleting corrupt submission %s", version)
+        except Exception as ex:  # pylint: disable=broad-except
+            LOGGER.error("Deleting corrupt submission %s: %s", version, ex)
             submission.delete()
             continue
         original = version.object

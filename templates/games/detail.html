@@ -98,6 +98,11 @@
           <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
         </div>
         {% endif %}
+        {% if user.is_staff %}
+        <div class="actions-bar">
+          <a href="https://dashboard.lutris.net/#/games/{{game.slug}}">Show in dashboard</a>
+        </div>
+        {% endif %}
       </div>
       <div class="py-3">
         {{ game.description | linebreaks }}
