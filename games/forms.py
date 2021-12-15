@@ -319,11 +319,15 @@ class InstallerForm(forms.ModelForm):
 
     def clean_description(self):
         """Remove HTML tags from the description"""
-        return strip_tags(self.cleaned_data["description"]) or ""
+        if self.cleaned_data["description"]:
+            return strip_tags(self.cleaned_data["description"])
+        return ""
 
     def clean_notes(self):
         """Remove HTML tags from the description"""
-        return strip_tags(self.cleaned_data["notes"]) or ""
+        if self.cleaned_data["notes"]:
+            return strip_tags(self.cleaned_data["notes"])
+        return ""
 
     def clean_content(self):
         """Verify that the content field is valid yaml"""
