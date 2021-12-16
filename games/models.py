@@ -1219,14 +1219,14 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
             # Revision is for a deleted installer
             original_revision.delete()
             return
-        if not original_revision:
-            LOGGER.info("Missing original revision, skipping the rest.")
-            return
         if not author:
+            if not original_revision:
+                LOGGER.warning("Missing original revision, skipping the rest.")
+                return
             author = original_revision.user
             date = original_revision.date_created
         if not author or not date:
-            LOGGER.warning("Missing revision information for %s", installer)
+            LOGGER.error("Missing revision information for %s", installer)
             return
 
         # Clean earlier drafts from the same submitter
