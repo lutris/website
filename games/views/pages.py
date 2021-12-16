@@ -237,7 +237,6 @@ def game_detail(request, slug):
         unpublished_installers = game.installers.unpublished().filter(user=user)
     else:
         unpublished_installers = []
-
     pending_change_subm_count = 0
 
 

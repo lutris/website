@@ -639,10 +639,7 @@ class InstallerManager(models.Manager):
 
     def unpublished(self):
         """Return unpublished installers"""
-        return self.get_queryset().filter(
-            published=False,
-            draft=False
-        )
+        return self.get_queryset().filter(published=False)
 
     def drafts(self):
         """Return unpublished installers"""
