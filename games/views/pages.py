@@ -228,12 +228,16 @@ def game_detail(request, slug):
             games = models.Game.objects.filter(aliases__slug=slug)
             LOGGER.error("The slug '%s' was used multiple times", slug)
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
-
+    user = request.user
     installers = game.installers.published()
+
     unpublished_installers = game.installers.unpublished()
+    if not user.is_staff():
+        unpublished_installers = unpublished_installers.filter(user=user)
+
     pending_change_subm_count = 0
 
-    user = request.user
+
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)

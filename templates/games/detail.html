@@ -85,6 +85,14 @@
         </ul>
         {% endif %}
 
+        {% if unpublished_installers %}
+        <ul class="list-group">
+          {% for installer in unpublished_installers %}
+            {% include "games/_installer.html" %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+
         {% if auto_installers %}
         <ul class="list-group">
         {% for installer in auto_installers %}
