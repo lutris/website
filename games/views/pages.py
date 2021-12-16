@@ -232,7 +232,7 @@ def game_detail(request, slug):
     installers = game.installers.published()
 
     unpublished_installers = game.installers.unpublished()
-    if not user.is_staff():
+    if not user.is_staff:
         unpublished_installers = unpublished_installers.filter(user=user)
 
     pending_change_subm_count = 0
