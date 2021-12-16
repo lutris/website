@@ -215,6 +215,7 @@ def game_for_installer(_request, slug):
 
 def game_detail(request, slug):
     """View rendering the details for a game"""
+
     try:
         game = models.Game.objects.get(slug=slug)
     except models.Game.DoesNotExist:
