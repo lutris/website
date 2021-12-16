@@ -30,11 +30,10 @@ if [[ "$WEBPACK" == "1" ]]; then
     cd frontend/vue
     npm run build:issues
     cd ../..
+    ./manage.py collectstatic --clear --noinput \
+        --ignore less/test/* --ignore select2/docs/*
 fi
 
 ./manage.py migrate
-
-./manage.py collectstatic --clear --noinput \
-    --ignore less/test/* --ignore select2/docs/*
 
 sudo systemctl restart gunicorn_$ENV
