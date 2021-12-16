@@ -4,8 +4,6 @@ from os.path import dirname, abspath
 
 from celery.schedules import crontab
 
-from common.context_processors import dashboard_url
-
 
 def media_directory(path):
     """Return absolute path to subdirectory of MEDIA_ROOT.
