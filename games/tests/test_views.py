@@ -134,6 +134,14 @@ class TestInstallerIssues(TestCase):
         self.installer = factories.InstallerFactory(game=self.game)
 
     def test_get_issues(self):
+        self.client.login(username=self.user.username, password="password")
+        response = self.client.post(
+            reverse('game-submit-issue'),
+            {
+                'installer': self.installer.slug,
+                'content': 'Game does not launch'
+            }
+        )
         response = self.client.get(
             reverse('api_installer_issue', kwargs={'slug': self.game.slug})
         )
