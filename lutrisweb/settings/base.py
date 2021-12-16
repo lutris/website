@@ -4,6 +4,8 @@ from os.path import dirname, abspath
 
 from celery.schedules import crontab
 
+from common.context_processors import dashboard_url
+
 
 def media_directory(path):
     """Return absolute path to subdirectory of MEDIA_ROOT.
@@ -42,7 +44,7 @@ USE_TZ = True
 DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
 
 ROOT_URL = "http://localhost:8000"
-
+DASHBOARD_URL = "http://localhost:9527"
 ALLOWED_HOSTS = (
     "0.0.0.0",
     "127.0.0.1",
@@ -118,6 +120,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
                 "common.context_processors.discord_url",
+                "common.context_processors.dashboard_url",
             ],
             'debug': DEBUG
         }

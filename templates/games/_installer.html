@@ -54,7 +54,7 @@
         {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
         {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
           {% if user.is_staff %}
-            <a href="https://dashboard.lutris.net/#/installers/submissions/{{installer.latest_version.revision.id}}"
+            <a href="{{ DASHBOARD_URL }}/#/installers/submissions/{{installer.latest_version.revision.id}}"
               class="btn btn-sm btn-danger">Review installer</a>
           {% endif %}
         {% endif %}

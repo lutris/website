@@ -39,7 +39,7 @@
           {% if game.publisher %}
             published by
             <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
-          {% endif %}
+        {% endif %}
         </span>
       </div>
       <div class="ms-auto">
@@ -100,7 +100,7 @@
         {% endif %}
         {% if user.is_staff %}
         <div class="actions-bar">
-          <a href="https://dashboard.lutris.net/#/games/{{game.slug}}">Show in dashboard</a>
+          <a href="{{ DASHBOARD_URL }}/#/games/{{game.slug}}">Show in dashboard</a>
         </div>
         {% endif %}
       </div>
