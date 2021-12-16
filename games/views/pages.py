@@ -231,9 +231,12 @@ def game_detail(request, slug):
     user = request.user
     installers = game.installers.published()
 
-    unpublished_installers = game.installers.unpublished()
-    # if not user.is_staff:
-    # # unpublished_installers = unpublished_installers.filter(user=user)
+    if user.is_staff:
+        unpublished_installers = game.installers.unpublished()
+    elif user.is_authenticated:
+        unpublished_installers = game.installers.unpublished().filter(user=user)
+    else:
+        unpublished_installers = []
 
     pending_change_subm_count = 0
 
