@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=no-member,too-few-public-methods
+# pylint: disable=no-member,too-few-public-methods,too-many-lines,consider-using-f-string
 import os
 import shutil
 import datetime
@@ -56,7 +56,7 @@ class Company(models.Model):
         return reverse("games_by_company", kwargs={'company': self.pk})
 
     def __str__(self):
-        return u"%s" % self.name
+        return str(self.name)
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -106,7 +106,7 @@ class Genre(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -180,7 +180,6 @@ class Game(models.Model):
         ("free", "Free"),
         ("freetoplay", "Free-to-play"),
         ("pwyw", "Pay what you want"),
-        ("demo", "Has a demo"),
         ("protected", "Installer modification is restricted"),
     )
 
@@ -195,7 +194,7 @@ class Game(models.Model):
 
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
-    year = models.IntegerField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     publisher = models.ForeignKey(
@@ -258,12 +257,14 @@ class Game(models.Model):
 
     @property
     def humbleid(self):
-        """Humble Bundle ID, different from humblestoreid which is the store
-        page ID for Humble Bundle
+        """Humble Bundle ID, different from humblestoreid (store page ID for Humble Bundle)
+        This should really get deprecated.
         """
-        gog_slugs = self.provider_games.filter(provider__name="HUMBLE").values_list("slug", flat=True)
-        if gog_slugs:
-            return gog_slugs[0]
+        _slugs = self.provider_games.filter(
+            provider__name="humblebundle"
+        ).values_list("slug", flat=True)
+        if _slugs:
+            return _slugs[0]
         return ""
 
     @property
@@ -292,14 +293,16 @@ class Game(models.Model):
     def banner_url(self):
         """Return URL for the game banner"""
         if self.title_logo:
-            return reverse("get_banner", kwargs={"slug": self.slug})
+            # Hardcoded domain isn't ideal but we have to find another solution for storing
+            # and referencing banners and icons anyway so this will do for the time being.
+            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": self.slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return reverse("get_icon", kwargs={"slug": self.slug})
+            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": self.slug})
         return ""
 
     @property
@@ -307,6 +310,11 @@ class Game(models.Model):
         """Return labels of active flags, suitable for display"""
         # pylint: disable=E1133; self.flags *is* iterable
         return [self.flags.get_label(flag[0]) for flag in self.flags if flag[1]]
+
+    @property
+    def submission(self):
+        """Return the first (and only) submission for a game"""
+        return self.submissions.first()
 
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
@@ -553,27 +561,6 @@ class Game(models.Model):
                 auto_installers.append(installer)
         return auto_installers
 
-    def check_for_submission(self):
-        """What? This saves submissions on save? Why?
-        This is fully wrong. The name itself is a huge red flag since nothing
-        is checked and this method has side effects.
-        """
-        # Skip freshly created and unpublished objects
-        if not self.pk or not self.is_public:
-            return
-
-        # Skip objects that were already published
-        original = Game.objects.get(pk=self.pk)
-        if original.is_public:
-            return
-
-        try:
-            submission = GameSubmission.objects.get(game=self, accepted_at__isnull=True)
-        except GameSubmission.DoesNotExist:
-            pass
-        else:
-            submission.accept()
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -584,7 +571,6 @@ class Game(models.Model):
             if not self.slug:
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.set_logo_from_steam()
-            self.check_for_submission()
         super(Game, self).save(
             force_insert=force_insert,
             force_update=force_update,
@@ -594,7 +580,10 @@ class Game(models.Model):
         # Not ideal to have this here since this can generate disk IO activity
         # Not a problem though, we want to discourage mass updates for games
         # since that would DDOS the site.
-        self.precache_media()
+        try:
+            self.precache_media()
+        except Exception as ex:  # pylint: disable=broad-except
+            LOGGER.error("Failed to precache media for %s: %s", self, ex)
 
 
 class GameMetadata(models.Model):
@@ -627,7 +616,6 @@ class ScreenshotManager(models.Manager):
 
 class Screenshot(models.Model):
     """Screenshots for games"""
-
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -639,7 +627,7 @@ class Screenshot(models.Model):
 
     def __str__(self):
         desc = self.description if self.description else self.game.name
-        return u"%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
+        return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
 
 class InstallerManager(models.Manager):
@@ -652,6 +640,23 @@ class InstallerManager(models.Manager):
     def unpublished(self):
         """Return unpublished installers"""
         return self.get_queryset().filter(published=False)
+
+    def drafts(self):
+        """Return unpublished installers"""
+        return self.get_queryset().filter(published=False, draft=True)
+
+    def new(self):
+        """Return new installers that don't have any edits"""
+        return [
+            installer
+            for installer in self.get_queryset().filter(
+                published=False,
+                draft=False
+            ).order_by("-updated_at")
+            if not Version.objects.filter(
+                object_id=installer.id, content_type__model="installer"
+            ).count()
+        ]
 
     def abandoned(self):
         """Return the installer with 'Change Me' version that haven't received any modifications"""
@@ -676,6 +681,11 @@ class InstallerManager(models.Manager):
             except ObjectDoesNotExist:
                 game = None
 
+            if not game:
+                try:
+                    game = Game.objects.get(aliases__slug=slug)
+                except ObjectDoesNotExist:
+                    game = None
             if game:
                 installers = self.get_queryset().filter(game=game, published=True)
 
@@ -871,7 +881,7 @@ class Installer(BaseInstaller):
         blank=True,
         null=True,
     )
-    draft = models.BooleanField(default=False)
+    draft = models.BooleanField(default=True)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
     protected = models.BooleanField(default=False)
 
@@ -914,12 +924,13 @@ class Installer(BaseInstaller):
     @property
     def latest_version(self):
         """Return the latest version for this installer"""
-        try:
-            return Version.objects.filter(
-                content_type__model="installer", object_id=self.id
-            ).latest("revision__date_created")
-        except Version.DoesNotExist:
-            pass
+        versions = Version.objects.filter(
+            content_type__model="installer",
+            object_id=self.id
+        ).order_by("-revision__date_created")
+        for version in versions:
+            if not version.field_dict["draft"]:
+                return version
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -970,14 +981,12 @@ class InstallerHistory(BaseInstaller):
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
-
     submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
     class Meta:
         """This is an abstract model"""
-
         abstract = True
 
     def __str__(self):
@@ -1019,13 +1028,21 @@ class GameLibrary(models.Model):
         verbose_name_plural = "game libraries"
 
     def __str__(self):
-        return u"%s's library" % self.user.username
+        return "%s's library" % self.user.username
 
 
 class GameSubmission(models.Model):
     """User submitted game"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
+    game = models.ForeignKey(
+        Game,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
@@ -1034,11 +1051,21 @@ class GameSubmission(models.Model):
         """Model configuration"""
         verbose_name = "User submitted game"
 
+    @property
+    def status(self):
+        """status string for the submission"""
+        return "accepted" if self.accepted_at else "pending"
+
     def __str__(self):
-        return u"{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
+        return "{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
 
     def accept(self):
         """Accept the submission and notify the author"""
+        if self.accepted_at:
+            LOGGER.warning("Submission already accepted")
+            return
+        self.game.is_public = True
+        self.game.save()
         self.accepted_at = datetime.datetime.now()
         self.save()
         messages.send_game_accepted(self.user, self.game)
@@ -1098,7 +1125,10 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self.content = installer_data["content"]
 
         self.user = self.user
-        self.runner = Runner.objects.get(pk=installer_data["runner"])
+        try:
+            self.runner = Runner.objects.get(pk=installer_data["runner"])
+        except Runner.DoesNotExist:
+            self.runner = None
         self.slug = installer_data["slug"]
         self.version = installer_data["version"]
         self.description = installer_data["description"]
@@ -1110,6 +1140,58 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def __str__(self):
         return self.comment
 
+    @classmethod
+    def iterate_versions(cls, version_type="submission"):
+        """List all versions of a given type"""
+        return Version.objects.filter(
+            content_type__model="installer",
+            revision__comment__startswith=f"[{version_type}]"
+        )
+
+    @classmethod
+    def remove_dupe_submissions(cls):
+        """Ensure installers only have 1 submission"""
+        revisions = [cls(version) for version in cls.iterate_versions()]
+        dupe_submissions = []
+        for revision in revisions:
+            try:
+                installer = Installer.objects.get(id=revision.installer_id)
+            except Installer.DoesNotExist:
+                LOGGER.info("No installer with ID %s", revision.installer_id)
+                revision.delete()
+                continue
+
+            num_sub = 0
+            for rev in installer.revisions:
+                if rev.comment.startswith("[submission]"):
+                    num_sub += 1
+            if num_sub > 1:
+                if installer not in dupe_submissions:
+                    dupe_submissions.append(installer)
+        for dupe in dupe_submissions:
+            print("Duplicate sub for ", dupe)
+        print(f"{len(dupe_submissions)} installers to clean")
+        for installer in dupe_submissions:
+            revisions = sorted(
+                [r for r in installer.revisions if r.comment.startswith("[submission]")],
+                key=lambda x: x.revision.date_created,
+                reverse=True
+            )
+            for rev in revisions[1:]:
+                rev.set_to_draft()
+
+    def set_to_draft(self):
+        """Change the submission back to draft"""
+        self.comment = self.comment.replace("[submission]", "[draft]")
+        self._version.revision.comment = self.comment
+        self._version.revision.save()
+
+    @property
+    def revision(self):
+        """Accessor for the revision"""
+        if self._version.revision:
+            return self._version.revision
+
     @property
     def revision_id(self):
         """Accessor for the revision id if there is one"""
@@ -1119,11 +1201,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def get_installer_data(self):
         """Return the data saved in the revision in an usable format"""
         installer_data = json.loads(self._version.serialized_data)[0]["fields"]
-        try:
-            installer_data["script"] = load_yaml(installer_data["content"])
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError) as ex:
-            LOGGER.exception(ex)
-            installer_data["script"] = ["This installer is f'd up."]
+        installer_data["script"] = load_yaml(installer_data["content"])
         installer_data["id"] = self.id
         # Return a defaultdict to prevent key errors for new fields that
         # weren't present in previous revisions
@@ -1140,14 +1218,17 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
             original_revision.delete()
             return
         if not author:
+            if not original_revision:
+                LOGGER.warning("Missing original revision, skipping the rest.")
+                return
             author = original_revision.user
             date = original_revision.date_created
 
         # Clean earlier drafts from the same submitter
         for revision in installer.revisions:
-            if any([
-                    revision.user != author,
-                    revision.created_at > date
+            if author and date and any([
+                revision.user != author,
+                revision.created_at > date
             ]):
                 continue
             revision._version.revision.delete()  # pylint: disable=protected-access
@@ -1156,7 +1237,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(original_revision=self._version.revision)
 
-    def accept(self, moderator, installer_data=None):
+    def accept(self, moderator=None, installer_data=None):
         """Accepts an installer submission
 
         Also clears any earlier draft created by the same user.
@@ -1173,12 +1254,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self._version.revert()
 
         installer = Installer.objects.get(pk=self.installer_id)
-
-        # Keep a snapshot of the current installer
-        InstallerHistory.create_from_installer(installer)
         installer.published = True
-        installer.published_by = moderator
         installer.draft = False
+
+        # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
+        # accepted automatically by a script and doesn't need a revision)
+        if moderator:
+            InstallerHistory.create_from_installer(installer)
+            installer.published_by = moderator
+
         if installer_data:
             # Only fields editable in the dashboard will be affected
             # FIXME also persist runner

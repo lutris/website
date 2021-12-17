@@ -2,8 +2,10 @@
 # pylint: disable=W0232, R0903
 import logging
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Div
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
@@ -52,10 +54,15 @@ class RegistrationForm(forms.ModelForm):
         fields = ("username", "email")
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(
-            ["username", "email", "password1", "password2"], "register", "Register"
-        )
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'form_register'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'register'
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Register'))
 
     def clean_username(self):
         """Check that no similar username exist in a case insensitive way"""
@@ -91,23 +98,47 @@ class LoginForm(AuthenticationForm):
     """Subclass of AuthenticationForm with Bootstrap integration"""
 
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(
-            ["username", "password"], "signin", "Sign in"
-        )
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'form_login'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'login'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Sign in'))
 
+
+class LutrisPasswordResetForm(PasswordResetForm):
+    """Subclass of PasswordResetForm with Bootstrap integration"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'form_password_reset'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'password_reset'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Reset password'))
 
 class ProfileForm(forms.ModelForm):
     """Form to edit profile information"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'profile_edit'
+        self.helper.form_class = 'form-horizontal'
+        # self.helper.label_class = 'col-lg-4'
+        # self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Save changes'))
 
     class Meta:
         """ModelForm configuration"""
         model = User
         fields = ("website", "avatar", "email")
-
-    def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
-        self.helper = get_bootstrap_helper(list(self.Meta.fields), "save", "Save")
 
     def save(self, commit=True):
         if "email" in self.changed_data:

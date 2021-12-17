@@ -17,13 +17,11 @@ class Command(BaseCommand):
         else:
             basepath = os.path.join(settings.TOSEC_DAT_PATH, 'TOSEC')
             if not os.path.exists(basepath):
-                self.stderr.write("No TOSEC database found in %s" % basepath)
+                self.stderr.write(f"No TOSEC database found in {basepath}")
                 return
             filenames = [os.path.join(basepath, f)
                          for f in os.listdir(basepath)]
         total_files = len(filenames)
         for index, filename in enumerate(filenames, start=1):
-            self.stdout.write("Importing {} [{} of {}]".format(filename,
-                                                               index,
-                                                               total_files))
+            self.stdout.write(f"Importing {filename} [{index} of {total_files}]")
             import_tosec_database(filename)

@@ -1,29 +1,23 @@
-<div class="row">
-    <div class="col text-center">
-      <nav aria-label="Library navigation" style="margin-bottom: 1em;">
-        {% if page_obj.has_previous %}
-          <a title="First Page" href="?page=1&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-            <i class="fas fa-angle-double-left fa-lg"></i>
-          </a>
-          <a title="Previous Page" href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-            <i class="fas fa-angle-left fa-lg"></i>
-          </a>
-        {% endif %}
-        Page
-        <input type="text" id="id_current_page" value="{{ page_obj.number }}"
-               onkeyup="changeLibraryPage(event);"
-               data-max-page={{ paginator.num_pages }}
-               data-url="&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}"
-               style="max-width: 35px;border: grey 1px solid;background: transparent;color: white;">
-        of {{ paginator.num_pages }}
-        {% if page_obj.has_next %}
-          <a title="Next Page" href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-            <i class="fas fa-angle-right fa-lg"></i>
-          </a>
-          <a title="Last Page" href="?page={{ paginator.num_pages }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
-            <i class="fas fa-angle-double-right fa-lg"></i>
-          </a>
-        {% endif %}
-      </nav>
-    </div>
-</div>
+  <div>
+    {% if page_obj.has_previous %}
+      <a title="First Page" class=""
+          href="?page=1&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+        <i class="bi-chevron-double-left"></i>
+      </a>
+      <a title="Previous Page" class="mx-2"
+          href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+        <i class="bi-chevron-left"></i>
+      </a>
+    {% endif %}
+    {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}
+    {% if page_obj.has_next %}
+      <a title="Next Page" class="mx-2"
+          href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+        <i class="bi-chevron-right"></i>
+      </a>
+      <a title="Last Page" class=""
+          href="?page={{ paginator.num_pages }}&paginate_by={{ paginate_by }}&ordering={{ order_by }}{{ filter_string }}">
+        <i class="bi-chevron-double-right"></i>
+      </a>
+    {% endif %}
+  </div>

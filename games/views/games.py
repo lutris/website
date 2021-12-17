@@ -13,7 +13,7 @@ from games import models, serializers
 
 
 class GameListView(generics.GenericAPIView):
-    """CBV for games list"""
+    """Return a list of games"""
     filter_backends = (filters.SearchFilter, )
     search_fields = ('slug', 'name')
 
@@ -162,6 +162,7 @@ class GameStatsView(APIView):
         statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
         statistics["installers"] = models.Installer.objects.published().count()
         statistics["unpublished_installers"] = models.Installer.objects.unpublished().count()
+        statistics["drafts"] = models.Installer.objects.drafts().count()
         statistics["screenshots"] = models.Screenshot.objects.filter(published=True).count()
         statistics["unpublished_screenshots"] = models.Screenshot.objects.filter(
             published=False
@@ -184,3 +185,33 @@ class GameMergeView(APIView):
         other_game = get_object_or_404(models.Game, slug=other_slug)
         original_game.merge_with_game(other_game)
         return Response({})
+
+
+class GameSubmissionsView(generics.ListAPIView):
+    """List all game submissions"""
+    serializer_class = serializers.GameSubmissionSerializer
+    permission_classes = (permissions.IsAdminUser, )
+
+    def get_queryset(self):
+        return models.GameSubmission.objects.filter(
+            accepted_at__isnull=True,
+            game__change_for__isnull=True,
+        ).prefetch_related('game', 'user', 'game__provider_games').order_by(
+            '-created_at'
+        )
+
+class GameSubmissionAcceptView(APIView):
+    """Accept a user submission"""
+
+    @staticmethod
+    def post(request, submission_id):
+        """Process the submission"""
+        if not request.user.is_staff:
+            raise PermissionDenied
+
+        game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
+        game_submission.accept()
+        return Response({
+            "id": game_submission.id,
+            "accepted": True
+        })

@@ -1,5 +1,5 @@
 """Installer related API views"""
-# pylint: disable=too-many-ancestors,too-few-public-methods
+# pylint: disable=too-many-ancestors,too-few-public-methods,raise-missing-from
 from __future__ import absolute_import
 
 import logging
@@ -7,6 +7,7 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.http import Http404
+from django.db.models import Count
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -26,13 +27,16 @@ class InstallerListView(generics.ListAPIView):
 
     def get_queryset(self):
         installer_status = self.request.GET.get('status')
+        order_by = "created_at" if self.request.GET.get('order') == "oldest" else "-created_at"
         if installer_status == 'published':
             return models.Installer.objects.published()
         if installer_status == 'unpublished':
             return models.Installer.objects.unpublished()
+        if installer_status == 'new':
+            return models.Installer.objects.new()
         if installer_status == 'abandoned':
             return models.Installer.objects.abandoned()
-        return models.Installer.objects.all()
+        return models.Installer.objects.order_by(order_by)
 
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -136,7 +140,9 @@ class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
             return models.Game.objects.none()
-        return game.installers.all()
+        return game.installers.annotate(
+            issue_cnt=Count("issues")
+        ).filter(issue_cnt__gt=0, published=True)
 
 
 class InstallerIssueCreateView(generics.CreateAPIView):
@@ -214,7 +220,7 @@ class InstallerIssueReplyView(generics.RetrieveUpdateDestroyAPIView):
 class SmallResultsSetPagination(PageNumberPagination):
     """Pagination used for heavier serializers that don't need a lot of data returned at once."""
     page_size = 25
-    page_size_query_param = 'page'
+    page_query_param = 'page'
     max_page_size = 100
 
 
@@ -226,6 +232,8 @@ class RevisionListView(generics.ListAPIView):
 
     def get_queryset(self):
         revision_type = self.request.GET.get('type')
+        order_by = "date_created" if self.request.GET.get('order') == "oldest" else "-date_created"
+        query = Revision.objects.all()
         if revision_type in ('submission', 'draft'):
-            return Revision.objects.filter(comment__startswith="[%s]" % revision_type)
-        return Revision.objects.all()
+            query = query.filter(comment__startswith=f"[{revision_type}]")
+        return query.order_by(order_by)

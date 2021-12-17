@@ -1,0 +1,58 @@
+<div class="d-flex flex-column p-3 text-white sidebar" style="height: 100%;">
+  <span class="d-flex align-items-center text-white text-decoration-none">
+    <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="rounded-circle me-2" width="32" height="32">
+    <strong>{{ user.username }}</strong>
+  </span>
+  <hr>
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="{% url 'profile' %}"
+         class="nav-link text-white{% if profile_page == 'profile'%} active{% endif %}">
+        <i class="bi-person"></i>
+        Account
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'profile_edit' %}"
+         class="nav-link text-white{% if profile_page == 'edit'%} active{% endif %}">
+        <i class="bi-pencil"></i>
+        Settings
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'library_list' username=user.username %}"
+         class="nav-link text-white{% if profile_page == 'library'%} active{% endif %}">
+        <i class="bi-controller"></i>
+        Library
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'submission_list' username=user.username %}"
+        class="nav-link text-white{% if profile_page == 'submissions'%} active{% endif %}">
+        <i class="bi-collection"></i>
+        Submissions
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'installer_list' username=user.username %}"
+         class="nav-link text-white{% if profile_page == 'installers'%} active{% endif %}">
+        <i class="bi-wrench"></i>
+        Installers
+      </a>
+    </li>
+    <!--
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-grid"></i>
+        Issues
+      </a>
+    </li>
+    <li>
+      <a href="#" class="nav-link text-white">
+        <i class="bi-cpu"></i>
+        My machines
+      </a>
+    </li>
+    -->
+  </ul>
+</div>

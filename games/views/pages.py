@@ -1,41 +1,39 @@
 """Views for lutris main app"""
-# pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors,raise-missing-from
 from __future__ import absolute_import
 
 import json
 import logging
 
 import reversion
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from reversion.models import Version
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            SearchVector)
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import check_installer_restrictions, user_confirmed_required
-from games import models
-from games.forms import (
-    ForkInstallerForm,
-    GameEditForm,
-    GameForm,
-    InstallerEditForm,
-    InstallerForm,
-    ScreenshotForm, LibraryFilterForm,
-)
-from games.models import Game, GameSubmission, Installer, InstallerIssue
-from games.webhooks import notify_issue_creation, notify_installer
+from accounts.decorators import (check_installer_restrictions,
+                                 user_confirmed_required)
 from emails.messages import send_email
+from games import models
+from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
+                         InstallerEditForm, InstallerForm, LibraryFilterForm,
+                         ScreenshotForm)
+from games.models import Game, GameSubmission, Installer, InstallerIssue
+from games.webhooks import notify_installer, notify_issue_creation
 
 LOGGER = logging.getLogger(__name__)
 
@@ -56,9 +54,12 @@ class GameList(ListView):
     def get(self, request, *args, **kwargs):
         self.q_params = {
             'q': request.GET.get('q', ''),
-            'platforms': request.GET.getlist('platforms', [kwargs.get('platform')] if 'platform' in kwargs else []),
-            'genres': request.GET.getlist('genres', [kwargs.get('genre')] if 'genre' in kwargs else []),
-            'companies': request.GET.getlist('companies', [kwargs.get('company')] if 'company' in kwargs else []),
+            'platforms': request.GET.getlist('platforms',
+                                             [kwargs.get('platform')] if 'platform' in kwargs else []),
+            'genres': request.GET.getlist('genres',
+                                          [kwargs.get('genre')] if 'genre' in kwargs else []),
+            'companies': request.GET.getlist('companies',
+                                             [kwargs.get('company')] if 'company' in kwargs else []),
             'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
             'flags': request.GET.getlist('flags', []),
             'unpublished-filter': request.GET.get('unpublished-filter', False),
@@ -114,9 +115,7 @@ class GameList(ListView):
             if self.q_params['search-installers']:
                 queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
             else:
-                vector = SearchVector('name', weight='A') + \
-                         SearchVector('aliases__name', weight='A') + \
-                         SearchVector('description', weight='B')
+                vector = SearchVector('name', weight='A') + SearchVector('aliases__name', weight='A')
                 query = SearchQuery(self.q_params['q'])
                 queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
         if self.q_params['platforms']:
@@ -216,6 +215,7 @@ def game_for_installer(_request, slug):
 
 def game_detail(request, slug):
     """View rendering the details for a game"""
+
     try:
         game = models.Game.objects.get(slug=slug)
     except models.Game.DoesNotExist:
@@ -226,14 +226,19 @@ def game_detail(request, slug):
             raise Http404
         except models.Game.MultipleObjectsReturned:
             games = models.Game.objects.filter(aliases__slug=slug)
-            LOGGER.error("The slug '%s' was used multiple times" % slug)
+            LOGGER.error("The slug '%s' was used multiple times", slug)
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
-
+    user = request.user
     installers = game.installers.published()
-    unpublished_installers = game.installers.unpublished()
+
+    if user.is_staff:
+        unpublished_installers = game.installers.unpublished()
+    elif user.is_authenticated:
+        unpublished_installers = game.installers.unpublished().filter(user=user)
+    else:
+        unpublished_installers = []
     pending_change_subm_count = 0
 
-    user = request.user
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
@@ -388,26 +393,18 @@ def delete_installer(request, slug):
         installer_name = installer.slug
         installer.delete()
         messages.warning(
-            request, u"The installer {} has been deleted.".format(installer_name)
+            request, "The installer {} has been deleted.".format(installer_name)
         )
         return redirect(game.get_absolute_url())
     return render(request, "installers/delete.html", {"installer": installer})
 
 
 @staff_member_required
-def publish_installer(request, slug):
+def publish_installer(request, slug):  # pylint: disable=unused-argument
     installer = get_object_or_404(Installer, slug=slug)
     installer.published = True
     installer.save()
     return redirect("game_detail", slug=installer.game.slug)
-
-
-def validate(game, request, form):
-    if request.method == "POST" and form.is_valid():
-        installer = form.save(commit=False)
-        installer.game_id = game.id
-        installer.user_id = request.user.id
-        installer.save()
 
 
 def installer_complete(request, slug):
@@ -415,7 +412,7 @@ def installer_complete(request, slug):
     return render(request, "installers/complete.html", {"game": game})
 
 
-def get_installers(request, slug):
+def get_installers(request, slug):  # pylint: disable=unused-argument
     """Deprecated function, use REST API"""
     try:
         installers_json = Installer.objects.get_json(slug)
@@ -457,7 +454,7 @@ class InstallerFeed(Feed):
     """RSS feed for Lutris installers"""
     title = "Lutris installers"
     link = "/games/"
-    description = u"Latest lutris installers"
+    description = "Latest lutris installers"
     feed_size = 20
 
     def items(self):
@@ -598,6 +595,7 @@ def publish_game(request, game_id):
 
 @user_confirmed_required
 def screenshot_add(request, slug):
+    """Show a form to upload a new screenshot"""
     game = get_object_or_404(Game, slug=slug)
     form = ScreenshotForm(request.POST or None, request.FILES or None, game_id=game.id)
     if form.is_valid():

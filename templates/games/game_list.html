@@ -1,121 +1,99 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load append_to_get %}
-{% block title %}Games - Lutris{% endblock %}
-{% block extra_head %}
-{{ filter_form.media.css }}
-{% endblock %}
+
+
+{% block title %}Games | Lutris{% endblock %}
+
+
 {% block content %}
-
-<!-- HEADER -->
-<div class="header-wrap">
-  <h1>Games <small>{{ paginator.count }} entries
-    {% if unpublished_match_count > 0 %}<b>({{unpublished_match_count}} unpublished)</b> {% endif %}</small>
-    <span style="float: right;font-size: initial;margin-right: 1em;">
-        Order by
-        <select id="order_by" style="color:black;"
-                data-filter="{{ filter_string }}"
-                onchange="changeLibraryOrderBy();">
-          <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name &uarr;</option>
-          <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name &darr;</option>
-          <option value="year" {% if order_by == 'year' %} selected {% endif %}>Year &uarr;</option>
-          <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Year &darr;</option>
-          <option value="popularity" {% if order_by == 'popularity' %} selected {% endif %}>Popularity &uarr;</option>
-          <option value="-popularity" {% if order_by == '-popularity' %} selected {% endif %}>Popularity &darr;</option>
-          <option value="created" {% if order_by == 'created' %} selected {% endif %}>Created &uarr;</option>
-          <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Created &darr;</option>
-          <option value="updated" {% if order_by == 'updated' %} selected {% endif %}>Updated &uarr;</option>
-          <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Updated &darr;</option>
-        </select>
-    </span>
-  </h1>
-  {% if is_paginated %}
-  <div class="row">
-    <div class="col-md-12">
-      <span style="line-height: 33px;">Games {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}</span>
-      <span style="float: right;">
-          Show
-          <select id="paginate_by" style="color:black;"
-                  data-filter="{{ filter_string }}"
-                  onchange="changeLibraryPaginateCount();">
-            <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
-            <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
-            <option value="100" {% if paginate_by == '100' %} selected {% endif %}>100</option>
-          </select>
-          per page
-      </span>
-    </div>
-  </div>
-  {% include 'includes/library_paginator.html' %}
-{% endif %}
-</div>
-
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-lg-9">
     {% if games %}
-    <ul class="game-list">
       {% for game in games %}
         {% include "includes/game_preview.html" %}
       {% endfor %}
-    </ul>
     {% else %}
-      <div class="filter-failure-message">
-        <p class="filter-failure-icon">
-          <span class="glyphicon glyphicon-alert"></span>
-        </p>
-        <p>No games found that match these criteria.</p>
+      <div class="alert alert-info mx-auto d-table">
+        No games found that match these criteria.
         {% if not unpublished and unpublished_match_count > 0 %}
-          <p>
             However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished
-            {% if unpublished_match_count == 1 %}
-              game</a> does.
-            {% else %}
-              games</a> do.
-            {% endif %}
-          </p>
+            game{{ unpublished_match_count|pluralize:"s" }}</a> d{{ unpublished_match_count|pluralize:"oes,o" }}.
         {% else %}
-          <p>
-            Feel free to <a href="{% url 'game-submit' %}">add the game</a> to our database.
-          </p>
+            Feel free to <a href="{% url 'game-submit' %}" class="btn btn-sm btn-primary">add the game</a> to our database.
         {% endif %}
       </div>
     {% endif %}
   </div>
-  <div class="col-sm-3">
-    <div class="action-container">
-      <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">Submit a new game</a>
+  <div class="col-lg-3">
+    <div class="paginator-options filter-form">
+      <span class="px-2">Results per page:</span>
+      <select id="paginate_by" onchange="updatePaginateBy(this)">
+          <option value="25" {% if paginate_by == 25 %} selected {% endif %}>25</option>
+          <option value="50" {% if paginate_by == 50 %} selected {% endif %}>50</option>
+          <option value="100" {% if paginate_by == 100 %} selected {% endif %}>100</option>
+      </select>
+      <br><br>
+      <span class="px-2">Sort by:</span>
+      <select id="order_by" onchange="updateSort(this)">
+        <option value="name" {% if order_by == 'name' %} selected {% endif %}>Name (A-Z)</option>
+        <option value="-name" {% if order_by == '-name' %} selected {% endif %}>Name (Z-A)</option>
+        <option value="year" {% if order_by == 'year' %} selected {% endif %}>Oldest first</option>
+        <option value="-year" {% if order_by == '-year' %} selected {% endif %}>Newest first</option>
+        <option value="-updated" {% if order_by == '-updated' %} selected {% endif %}>Recently updated</option>
+        <option value="-created" {% if order_by == '-created' %} selected {% endif %}>Recently added</option>
+      </select>
     </div>
-    <div class="panel panel-default no-border">
-      <div class="panel-body" style="background-color:#444;">
-        <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
-          {{ filter_form.as_p }}
-          <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
-            <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
-                {% if unpublished_filter %}checked{% endif %} />
-            Show unpublished
-          </label>
-          <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
-            <input type="checkbox" id="search-installers" name="search-installers"
-                {% if search_installers %}checked{% endif %} />
-            Search in installers
-          </label>
-          <input type="button" value="Apply filter" class="btn btn-default no-border"
-                 onclick="applyLibraryFilter();">
-          <input type="button" value="Clear filter" class="btn btn-default no-border"
-                 style="margin-left: 10px;"
-                 onclick="clearLibraryFilter();">
-        </form>
-      </div>
+    <div class="filter-form">
+      <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
+        {{ filter_form.as_p }}
+        <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
+          <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
+              {% if unpublished_filter %}checked{% endif %} />
+          Show unpublished
+        </label>
+        <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
+          <input type="checkbox" id="search-installers" name="search-installers"
+              {% if search_installers %}checked{% endif %} />
+          Search in installers
+        </label>
+        <div>
+          <input type="submit" value="Search" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+
+   <div>
+      <p class="py-4">
+        If we don't have the game in our database, you can
+        <a href="{% url 'game-submit' %}" class="action-button margin-auto hidden-xs">submit a new game</a>.
+      </p>
     </div>
   </div>
 </div>
 
 {% if page_obj.has_other_pages %}
-  {% include 'includes/library_paginator.html' %}
+<div class="centered">
+    {% include 'includes/library_paginator.html' %}
+</div>
 {% endif %}
+
 {% endblock %}
 
 {% block scripts %}
   {{ block.super }}
   {{ filter_form.media.js }}
+  <script>
+    const URL = "{% url 'game_list' %}"
+    function updateSort(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("ordering", elem.value)
+      window.location.replace(URL + "?" + params.toString())
+    }
+    function updatePaginateBy(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("paginate_by", elem.value)
+      window.location.replace(URL + "?" + params.toString())
+    }
+  </script>
 {% endblock %}

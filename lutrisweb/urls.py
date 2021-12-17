@@ -1,3 +1,4 @@
+"""Main URLconf"""
 # pylint: disable=C0103
 import logging
 from importlib import import_module
@@ -24,6 +25,7 @@ urlpatterns = [
     path('select2/', include('django_select2.urls')),
     path('openid/', include('django_openid_auth.urls')),
     path('user/', include('accounts.urls')),
+
     path('api/accounts/token', obtain_auth_token, name='accounts_get_token'),
     path(
         'api/accounts/auth',
@@ -31,7 +33,8 @@ urlpatterns = [
     ),
     path('api/tosec', include('tosec.urls')),
     path('api/runners', include('runners.runner_urls')),
-    path('api/runtime', include('runners.runtime_urls')),
+    path('api/runtime', include('runners.runtime_urls_legacy')),
+    path('api/runtimes', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
     path('api/installers', include('games.urls.installers')),
     re_path('api/users/me/?', UserDetailView.as_view(), name='api_user_detail'),
@@ -46,7 +49,6 @@ urlpatterns = [
         kwargs={'login_complete_view': 'associate_steam'},
         name='steam_login'
     ),
-    path('thegamesdb/', include('thegamesdb.urls')),
     path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),
 ]
@@ -68,5 +70,5 @@ for app in settings.INSTALLED_APPS:
     signals_module = '%s.signals' % app
     try:
         signal_modules[app] = import_module(signals_module)
-    except ImportError as e:
+    except ImportError:
         pass

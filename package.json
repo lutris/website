@@ -1,30 +1,31 @@
 {
   "name": "Lutris",
   "description": "Lutris.net website",
-  "version": "0.3.7",
+  "version": "0.5.8",
   "author": "Mathieu Comandon",
   "homepage": "https://lutris.net",
   "license": "GPL-3.0",
-  "main": "Gruntfile.js",
   "devDependencies": {
-    "bower": "^1.8.8",
-    "grunt": "^1.0.4",
-    "grunt-browser-sync": "^2.2.0",
-    "grunt-cli": "1.2.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^2.2.1",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify": "~3.3.0",
-    "grunt-contrib-watch": "^1.1.0",
+    "autoprefixer": "^10.2.5",
+    "copy-webpack-plugin": "^8.1.1",
+    "css-loader": "^5.2.2",
+    "expose-loader": "^2.0.0",
+    "file-loader": "^6.2.0",
     "hoek": "5.0.3",
-    "request": "^2.87.0"
+    "mini-css-extract-plugin": "^1.5.0",
+    "postcss-loader": "^5.2.0",
+    "request": "^2.87.0",
+    "sass": "^1.32.10",
+    "sass-loader": "^11.0.1",
+    "style-loader": "^2.0.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
   },
   "scripts": {
-    "setup": "bower install --allow-root",
-    "build": "grunt",
-    "build:issues": "vue-cli-service build --target wc --name installer-issues ./src/components/InstallerIssues.js",
-    "watch": "grunt watch"
+    "build": "webpack --progress --config=webpack.dev.conf.js",
+    "build-prod": "webpack --config=webpack.prod.conf.js",
+    "watch": "webpack --progress --watch --config=webpack.dev.conf.js"
   },
   "repository": {
     "type": "git",
@@ -37,8 +38,15 @@
     "url": "https://github.com/lutris/website/issues"
   },
   "dependencies": {
-    "ace-builds": "^1.4.11",
-    "jquery": "^3.4.1",
-    "select2": "^4.0.7"
+    "@popperjs/core": "^2.10.2",
+    "ace-builds": "^1.4.12",
+    "alertifyjs": "^1.13.1",
+    "blueimp-gallery": "^3.4.0",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.1",
+    "django-select2": "^7.7.1",
+    "jquery": "^3.6.0",
+    "js-cookie": "^2.2.1",
+    "select2": "^4.0.13"
   }
 }

@@ -54,12 +54,6 @@ class Runner(models.Model):
 
 
 class RunnerVersion(models.Model):
-    class Meta:
-        ordering = ("version", "architecture")
-
-    def __str__(self):
-        return u"{} {} ({})".format(self.runner.name, self.version, self.architecture)
-
     runner = models.ForeignKey(
         Runner, related_name="runner_versions", on_delete=models.CASCADE
     )
@@ -69,6 +63,12 @@ class RunnerVersion(models.Model):
     )
     url = models.URLField(blank=True)
     default = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ("version", "architecture")
+
+    def __str__(self):
+        return u"{} {} ({})".format(self.runner.name, self.version, self.architecture)
 
     @property
     def full_version(self):
@@ -81,10 +81,25 @@ class Runtime(models.Model):
     name = models.CharField(max_length=32)
     created_at = models.DateTimeField(auto_now=True)
     architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
-    url = models.URLField()
+    url = models.URLField(blank=True)
+    enabled = models.BooleanField(default=True)
 
     class Meta:
         ordering = ("-created_at",)
 
     def __str__(self):
         return u"{} runtime (uploaded on {})".format(self.name, self.created_at)
+
+
+class RuntimeComponent(models.Model):
+    """Individual file from a runtime"""
+    runtime = models.ForeignKey(Runtime, related_name="components", on_delete=models.CASCADE)
+    filename = models.CharField(max_length=512)
+    url = models.URLField()
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("filename", )
+
+    def __str__(self):
+        return self.filename

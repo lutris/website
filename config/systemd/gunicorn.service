@@ -1,0 +1,13 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=strider
+Group=strider
+WorkingDirectory=/srv/staging/website/
+EnvironmentFile=/srv/staging/website/.env.staging
+ExecStart=/srv/staging/venv/bin/gunicorn lutrisweb.wsgi:application --name lutris --workers 9 --user=strider --group=strider --log-level=debug --bind=0.0.0.0:8081
+
+[Install]
+WantedBy=multi-user.target

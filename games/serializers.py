@@ -1,12 +1,14 @@
 """DRF serializers for Game models"""
 # pylint: disable=too-few-public-methods
 import logging
+
 from rest_framework import serializers
 from reversion.models import Version, Revision
 
 from games import models
 from platforms.models import Platform
 from providers.serializers import ProviderGameSerializer
+from accounts.serializers import UserSerializer
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +28,7 @@ class GenreSerializer(serializers.ModelSerializer):
         """Model and field definitions"""
         model = models.Genre
         fields = ('name',)
+
 
 
 class GameAliasSerializer(serializers.ModelSerializer):
@@ -132,6 +135,15 @@ class GameSerializer(serializers.ModelSerializer):
             'description', 'banner_url', 'icon_url', 'is_public',
             'updated', 'provider_games', 'steamid', 'gogid', 'gogslug', 'humblestoreid', 'id'
         )
+
+class GameSubmissionSerializer(serializers.ModelSerializer):
+    """Serializer for game submissions"""
+    game = GameSerializer()
+    user = UserSerializer()
+    class Meta:
+        """Model and field definitions"""
+        model = models.GameSubmission
+        fields = ('id', 'user', 'game', 'created_at', 'accepted_at', 'reason',)
 
 
 class GameDetailSerializer(GameSerializer):
