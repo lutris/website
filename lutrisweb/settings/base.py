@@ -1,3 +1,4 @@
+"""Base settings"""
 import os
 from os.path import dirname, abspath
 
@@ -13,11 +14,11 @@ def media_directory(path):
         try:
             os.makedirs(abs_path)
         except OSError:
-            print("Failed to create %s" % abs_path)
+            print(f"Failed to create {abs_path}")
     return abs_path
 
 
-CLIENT_VERSION = "0.5.7.1"
+CLIENT_VERSION = "0.5.9.1"
 
 DEBUG = True
 THUMBNAIL_DEBUG = False
@@ -40,6 +41,8 @@ USE_TZ = True
 # Allow customization of domain
 DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
 
+ROOT_URL = "http://localhost:8000"
+DASHBOARD_URL = "http://localhost:9527"
 ALLOWED_HOSTS = (
     "0.0.0.0",
     "127.0.0.1",
@@ -51,8 +54,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "public"),
-    os.path.join(BASE_DIR, "frontend/vue/dist"),
-    os.path.join(BASE_DIR, "components"),
+    os.path.join(BASE_DIR, "frontend/vue/dist")
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -64,22 +66,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 FILES_ROOT = media_directory('files')
-FILES_URL = 'http://%s/media/files/' % DOMAIN_NAME
+FILES_URL = f'{ROOT_URL}/media/files/'
 
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = TOSEC_PATH
 
-GOG_LOGO_PATH = os.path.join(BASE_DIR, 'gog-logos')
-GOG_LUTRIS_LOGO_PATH = os.path.join(BASE_DIR, 'gog-lutris-logos')
-
-
-# TheGamesDB directories
-TGD_ROOT = media_directory('thegamesdb')
-TGD_CLEAR_LOGO_PATH = media_directory('thegamesdb/clearlogo')
-TGD_BANNER_PATH = media_directory('thegamesdb/banners')
-TGD_SCREENSHOT_PATH = media_directory('thegamesdb/screenshot')
-TGD_FANART_PATH = media_directory('thegamesdb/fanart')
-TGD_LUTRIS_BANNER_PATH = media_directory('thegamesdb/lutris-banners')
+GOG_LOGO_PATH = media_directory('gog-logos')
+GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
@@ -125,6 +118,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
                 "common.context_processors.discord_url",
+                "common.context_processors.dashboard_url",
             ],
             'debug': DEBUG
         }
@@ -177,7 +171,7 @@ AUTH_USER_MODEL = 'accounts.User'
 AUTH_PROFILE_MODULE = "accounts.Profile"
 ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/user/login/"
+LOGIN_URL = "/user/login"
 AUTHENTICATION_BACKENDS = (
     'axes.backends.AxesBackend',
     'django_openid_auth.auth.OpenIDBackend',
@@ -203,15 +197,15 @@ SPACES_ACCESS_KEY_SECRET = os.environ.get("SPACES_ACCESS_KEY_SECRET")
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
 
-# Select2
-SELECT2_JS = '/static/select2/dist/js/select2.min.js'
-SELECT2_CSS = '/static/select2/dist/css/select2.min.css'
+# Select2 - bundled using webpack
+SELECT2_JS = ''
+SELECT2_CSS = ''
 
 # Email
 
@@ -231,34 +225,38 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYBEAT_SCHEDULE = {
     'delete-unchanged-forks': {
         'task': 'games.tasks.delete_unchanged_forks',
-        'schedule': crontab(hour=17, minute=59)
+        'schedule': crontab(minute=1)
     },
     'clear-orphan-versions': {
         'task': 'games.tasks.clear_orphan_versions',
-        'schedule': crontab(hour=17, minute=29)
+        'schedule': crontab(minute=2)
     },
     'clear-orphan-revisions': {
         'task': 'games.tasks.clear_orphan_revisions',
-        'schedule': crontab(hour=17, minute=30)
+        'schedule': crontab(minute=3)
     },
     'clear-spammers': {
         'task': 'accounts.tasks.clear_spammers',
-        'schedule': crontab(hour=16, minute=20)
+        'schedule': crontab(minute=4)
+    },
+    'clean-installers': {
+        'task': 'games.tasks.auto_process_installers',
+        'schedule': crontab(minute=5)
     }
 }
 
-if DOMAIN_NAME == "lutris.net":
-    CELERYBEAT_SCHEDULE['send-daily-mod-mail'] = {
-        'task': 'accounts.tasks.daily_mod_mail',
-        'schedule': crontab(hour=18, minute=0),
-    }
-
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
-BROKER_URL = "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT)
+BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
 # API Keys
 STEAM_API_KEY = os.environ.get('STEAM_API_KEY', 'NO_STEAM_API_KEY_SET')
 
+if DEBUG:
+    ANON_RATE = '99/second'
+    USER_RATE = '99/second'
+else:
+    ANON_RATE = '4/second'
+    USER_RATE = '6/second'
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
@@ -266,8 +264,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '60/min',
-        'user': '60/min'
+        'anon': ANON_RATE,
+        'user': USER_RATE
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -364,15 +362,18 @@ LOGGING = {
         'accounts': DEFAULT_LOGGING_CONFIG,
         'common': DEFAULT_LOGGING_CONFIG,
         'games': DEFAULT_LOGGING_CONFIG,
-        'thegamesdb': DEFAULT_LOGGING_CONFIG
+        'platforms': DEFAULT_LOGGING_CONFIG,
+        'bundles': DEFAULT_LOGGING_CONFIG,
+        'runners': DEFAULT_LOGGING_CONFIG,
+        'tosec': DEFAULT_LOGGING_CONFIG,
+        'providers': DEFAULT_LOGGING_CONFIG,
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '%s:%s' % (os.getenv('REDIS_HOST', 'localhost'),
-                               os.getenv('REDIS_PORT', '6379')),
+        'LOCATION': f"{os.getenv('REDIS_HOST', 'localhost')}:{os.getenv('REDIS_PORT', '6379')}"
     },
 }
 

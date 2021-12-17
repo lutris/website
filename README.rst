@@ -1,36 +1,10 @@
 Getting the site up and running for development
 ===============================================
 
-With docker-compose
--------------------
+Install required packages:
 
-Install docker (https://docs.docker.com/engine/install/) and docker-compose (https://docs.docker.com/compose/install/) for your system.
+    apt install python3.8-venv
 
-To build the required docker images use::
-
-    make build_dev_docker
-
-Start the required containers with::
-
-    make start_dev_docker
-
-To prepare the database run in a separate terminal::
-
-    make init_docker_db
-
-You are now ready to develop. No need to rebuild the images for simple
-code changes, as the containers will pick them up from the host system.
-Operations requiring a rebuild:
-
-- changing dependencies (apt, pip or npm)
-- changing content of public/images, public/lightbox2 or public/robots.txt
-
-You can stop the containers with::
-
-    make stop_dev_docker
-
-Natively
---------
 
 If you haven't done it already, install and configure virtualenvwrapper.
 If you are unfamiliar with virtualenvwrapper, see their documentation on
@@ -53,7 +27,9 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
-    sudo apt-get install build-essential git curl python3 python3-pip python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev libffi-dev libpq-dev libxml2-dev libjpeg-dev
+    sudo apt-get install build-essential git curl python3 python3-pip \
+        python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev \
+        libffi-dev libpq-dev libxml2-dev libjpeg-dev
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
 To build the frontend assets (javascript and css files), you'll
@@ -110,6 +86,18 @@ suite without any failures::
 Run the development server with::
 
     make run
+
+Redis configuration
+===================
+
+The lutris websites uses Redis as a cache. Install with::
+
+    docker run -d \
+        --name lutriscache \
+        --restart unless-stopped \
+        -p 6379:6379 \
+        redis:latest
+
 
 Postgresql configuration
 ========================

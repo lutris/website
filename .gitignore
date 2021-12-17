@@ -14,12 +14,11 @@ local_settings.py
 nosetests.xml
 coverage.xml
 .coverage
-fabric.yaml
-/components
 public/js
 public/css
 public/ace
 public/fonts
+public/img
 node_modules
 npm-debug.log
 reports
@@ -31,3 +30,6 @@ celerybeat-schedule
 gog-cache
 gog-logos
 gog-lutris-logos
+
+# Remove once Bower has been completely deprecated.
+components

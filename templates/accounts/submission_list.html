@@ -1,0 +1,32 @@
+{% extends "accounts/profile_base.html" %}
+{% load thumbnail %}
+
+
+{% block title %}My Library | Lutris{% endblock %}
+
+
+{% block extra_head %}
+{{ filter_form.media.css }}
+{% endblock %}
+
+{% block profile_content %}
+<h1>Submitted contributions</h1>
+<section>
+    {% for submission in submissions %}
+    {% with submission.game as game %}
+    <div class="game-preview">
+      <a href="{{ game.get_absolute_url }}" title="{{ game.name }}">
+        <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+      </a>
+      <div class="game-details">
+        <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
+        <span class="small-text">{% if game.year %}({{ game.year }}){% endif %}</span>
+        <br>
+        <span>Status: </span><strong>{{submission.status}}</strong><br>
+        <span>Submitted on: </span><strong>{{submission.created_at}}</strong>
+      </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+</section>
+{% endblock %}

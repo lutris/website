@@ -2,21 +2,18 @@
 {% block title %}Download Lutris{% endblock %}
 
 {% block content %}
-<h1>Downloads</h1>
-<div class="row">
-  <div class="col-lg-12">
-    <article>
-      <p>
+<h1 class="text-center pb-3">Downloads</h1>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <p>
         Lutris is compatible with any up-to-date Linux system. It relies on
         Python 3 and GTK libraries and will run on any desktop environment.
         Packages are provided for current Linux distributions. In some cases,
         Lutris will be available without adding additional software sources but
         if that's not the case, follow the instructions specific to your
         distribution below.
-      </p>
-    </article>
-    <article>
-      <p>
+    </p>
+    <p>
         <strong>Make sure to install Wine and drivers!</strong><br/>
         If you plan on playing games for Windows, to ensure a smooth
         experience, install a recent version of
@@ -25,22 +22,26 @@
         with every component in its <a href="https://github.com/lutris/docs/blob/master/LutrisRuntime.md">
         runtime</a>. When playing games lutris will use
         a custom version of Wine optimized for games.<br>
-      </p>
-    </article>
+    </p>
     <ul class='download-list'>
       <li>
         <ul>
           <li>
             <img src='{{ STATIC_URL }}images/icons/pop_os.png' alt='Pop!_OS'>Pop!_OS
           </li>
+        </ul>
+        <p>
+          Lutris is now available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+
           <li>
             <img src='{{ STATIC_URL }}images/icons/ubuntu.png' alt='Ubuntu'>Ubuntu
           </li>
           <li>
             <img src='{{ STATIC_URL }}images/icons/elementary_os.png' alt='Elementary OS'>Elementary
-          </li>
-          <li>
-            <img src='{{ STATIC_URL }}images/icons/linux_mint.png' alt='Linux Mint'>Linux Mint
           </li>
         </ul>
         <p>
@@ -50,8 +51,7 @@
           <br/>
           <code>sudo add-apt-repository ppa:lutris-team/lutris</code><br/>
           <code>sudo apt update</code><br/>
-          <code>sudo apt install lutris</code><br/><br/>
-          Lutris is now available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+          <code>sudo apt install lutris</code>
         </p>
       </li>
       <li>
@@ -66,10 +66,10 @@
           <br/>
           You can add a repository using terminal to receive automatic updates:<br/>
           <br/>
-          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/Debian_10/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
-          <code>wget -q https://download.opensuse.org/repositories/home:/strycore/Debian_10/Release.key -O- | sudo apt-key add -</code><br/>
-          <code>apt update</code><br/>
-          <code>apt install lutris</code>
+          <code>echo "deb http://download.opensuse.org/repositories/home:/strycore/Debian_11/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list</code><br/>
+          <code>wget -q https://download.opensuse.org/repositories/home:/strycore/Debian_11/Release.key -O- | sudo apt-key add -</code><br/>
+          <code>sudo apt update</code><br/>
+          <code>sudo apt install lutris</code>
         </p>
       </li>
       <li>
@@ -121,7 +121,7 @@
       </li>
       <li>
         <ul>
-          <li><img src="{{STATIC_URL}}images/icons/clearlinux.png" alt="Solus">Clear Linux</li>
+          <li><img src="{{STATIC_URL}}images/icons/clearlinux.png" alt="Clear Linux">Clear Linux</li>
         </ul>
         <p>
           Lutris is available as a bundle.<br/><br/>
@@ -153,26 +153,17 @@
       <li>
         <ul>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/slackware.png' alt='Slackware'>Slackware
+            <img src='{{ STATIC_URL }}images/icons/centos.png' alt='CentOS'>CentOS Stream
           </li>
-        </ul>
-        <p>
-        Lutris is available from the SlackBuilds repositories (may not be up to date):
-        <a href="https://slackbuilds.org/apps/lutris/">https://slackbuilds.org/apps/lutris/</a>
-        </p>
-      </li>
-      <li>
-        <ul>
           <li>
-            <img src='{{ STATIC_URL }}images/icons/centos.png' alt='CentOS'>CentOS
+            <img src='{{ STATIC_URL }}images/icons/redhat.png' alt='RHEL'>RHEL 8
           </li>
         </ul>
         <p>
-        For CentOS 8 and RHEL 8 You can clone
+        For CentOS Stream and derivatives like RHEL 8 or Rocky Linux 8 You can clone
         <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8">
-          this github repository</a> to install Lutris.
-        Please contribute to <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8">@jatin-cbs' repo on Github</a> to improve
-        Lutris support on CentOS.
+          this github repository</a> and then install the lutris rpm package:<br/><code>sudo dnf install lutris-*.el8.x86_64.rpm</code>
+	  <br/>Note: Enable EPEL, you can follow the <a href="https://github.com/jatin-cbs/Lutris-RHEL-CentOS-8/blob/master/README.md">README </a>for more information.
         </p>
       </li>
       <li>
@@ -211,7 +202,7 @@
         Please report all problems on the
         <a href="https://github.com/lutris/lutris/issues">bugtracker</a>
           or on
-        <a href="irc://irc.freenode.org:6667/lutris">IRC (#lutris on Freenode)</a>
+        <a href="ircs://irc.libera.chat:6697/lutris">IRC (#lutris on Libera.chat)</a>
         </p>
       </li>
     </ul>

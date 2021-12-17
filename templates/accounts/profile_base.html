@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row full-screen-row">
+  <div class="col-3">
+    {% include "accounts/_sidebar.html" %}
+  </div>
+  <div class="col-9">
+    {% block profile_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
+

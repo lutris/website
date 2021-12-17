@@ -9,6 +9,7 @@ from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit, ButtonHolder, Fieldset, Field
 from django import forms
 from django.conf import settings
+from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django_select2.forms import (
     ModelSelect2Widget,
@@ -129,7 +130,7 @@ class GameForm(forms.ModelForm):
         if self.files.get(file_field):
             clean_field = cleaned_data.get(file_field)
             _, ext = os.path.splitext(clean_field.name)
-            relpath = "games/banners/%s%s" % (slug, ext)
+            relpath = f"games/banners/{slug}{ext}"
             clean_field.name = relpath
             current_abspath = os.path.join(settings.MEDIA_ROOT, relpath)
             if os.path.exists(current_abspath):
@@ -148,14 +149,14 @@ class GameForm(forms.ModelForm):
         else:
             if game.is_public:
                 msg = (
-                    "This game is <a href='/games/%s'>already in our database</a>."
-                ) % slug
+                    f"This game is <a href='/games/{slug}'>already in our database</a>."
+                )
             else:
                 msg = (
-                    "This game has <a href='/games/%s'>already been "
+                    f"This game has <a href='/games/{slug}'>already been "
                     "submitted</a>, you're welcome to nag us so we "
                     "publish it faster."
-                ) % slug
+                )
             raise forms.ValidationError(mark_safe(msg))
 
 
@@ -188,13 +189,29 @@ class GameEditForm(forms.ModelForm):
         )
 
         widgets = {
-            "platforms": Select2MultipleWidget,
-            "genres": Select2MultipleWidget,
+            "name": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "year": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "website": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "description": forms.Textarea(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
+            "platforms": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
+            "genres": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "developer": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
             "publisher": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"style": "width: 100%;"}
             ),
         }
 
@@ -300,6 +317,18 @@ class InstallerForm(forms.ModelForm):
         super(InstallerForm, self).__init__(*args, **kwargs)
         self.fields["notes"].label = "Technical notes"
 
+    def clean_description(self):
+        """Remove HTML tags from the description"""
+        if self.cleaned_data["description"]:
+            return strip_tags(self.cleaned_data["description"])
+        return ""
+
+    def clean_notes(self):
+        """Remove HTML tags from the description"""
+        if self.cleaned_data["notes"]:
+            return strip_tags(self.cleaned_data["notes"])
+        return ""
+
     def clean_content(self):
         """Verify that the content field is valid yaml"""
         yaml_data = self.cleaned_data["content"]
@@ -307,8 +336,7 @@ class InstallerForm(forms.ModelForm):
             yaml_data = load_yaml(yaml_data)
         except yaml.error.MarkedYAMLError as ex:
             raise forms.ValidationError(
-                "Invalid YAML, problem at line %s, %s"
-                % (ex.problem_mark.line, ex.problem)
+                f"Invalid YAML, problem at line {ex.problem_mark.line}, {ex.problem}"
             )
         return dump_yaml(yaml_data)
 
@@ -432,7 +460,7 @@ class LibraryFilterForm(forms.Form):
     )
     flags = forms.MultipleChoiceField(
         choices=models.Game.GAME_FLAGS,
-        widget=BitFieldCheckboxSelectMultiple,
+        widget=BitFieldCheckboxSelectMultiple(attrs={'class': "checkbox-list"}),
         required=False,
     )
 

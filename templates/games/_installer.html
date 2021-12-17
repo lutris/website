@@ -1,101 +1,71 @@
-{% load rating %}
 {% load lutris %}
 {% load humanize %}
-<li class="installer-details{% if not installer.published %} installer-unpublished{% endif %}">
+{% load static %}
+
+<li class="list-group-item bg-darker{% if installer.draft %} draft-border{% elif not installer.published %} submission-border{% endif %}">
+  <div>
     <div class="btn-group right">
-      <a href='lutris:{{ installer.slug }}' class="btn"><i class="icon-download-alt"></i> Install</a>
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        {% if not installer.auto %}
-
+      <a type="button" class="btn btn-sm btn-secondary" href="lutris:{{ installer.slug }}">Install</a>
+      {% if not installer.auto %}
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
+          id="dropdownMenuReference"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          data-bs-reference="parent">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
           {% if not installer.protected or user.is_staff %}
-            <li>
-              {% url 'edit_installer' slug=installer.slug as edit_url %}
-              <a href="{{ edit_url }}">
-                <i class='glyphicon  glyphicon-edit'></i>
-                Edit installer </a>
-            </li>
-            <li>
-              {% url 'fork_installer' slug=installer.slug as fork_url %}
-              <a href="{{ fork_url }}">
-                <i class='glyphicon  glyphicon-leaf'></i>
-                Fork installer
-              </a>
-            </li>
-          {% endif %}
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.slug %}">
+              Edit installer
+            </a></li>
 
-          {% if user.is_staff %}
-            <li>
-              {% url 'admin:games_installer_change' installer.id as admin_url %}
-              <a href="{{ admin_url }}">
-                <i class='glyphicon  glyphicon-lock'></i>
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'fork_installer' slug=installer.slug %}">
+              Fork installer
+            </a></li>
+            {% if user.is_staff %}
+              <li><a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
                 Admin installer
-              </a>
-            </li>
-          {% endif %}
-
-          {% if not installer.published and user.is_staff %}
-            <li>
-              {% url 'publish_installer' slug=installer.slug as publish_installer %}
-              <a href="{{ publish_installer }}">
-                <i class='glyphicon  glyphicon-ok'></i>
+              </a></li>
+            {% endif %}
+            {% if not installer.published and user.is_staff %}
+              <li><a class="dropdown-item bg-dark text-white" href="{% url 'publish_installer' slug=installer.slug %}">
                 Publish installer
-              </a>
-            </li>
+              </a></li>
+            {% endif %}
           {% endif %}
-
-          <li>
-            {% url 'view_installer' id=installer.id as view_url %}
-            <a href="{{ view_url }}">
-              <i class='glyphicon  glyphicon-eye-open'></i> View install script</a>
-          </li>
-
-        {% endif %}
-        <li>
-          <a href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
-            <i class='glyphicon  glyphicon-download-alt'></i> Download install script
-          </a>
-        </li>
-        {% if user.is_authenticated %}
-        <li>
-          <a href="#" onclick="submitInstallerIssue(event)" data-slug="{{installer.slug}}">
-            <i class='glyphicon  glyphicon-flag'></i>
-            Report issue
-          </a>
-        </li>
-        {% endif %}
-      </ul>
-    </div>
-  <div class="centered-vertical">
-    <span class='filter-link'>{{ installer.runner }}</span>
-    <span class='installer-name'>{{ installer.version|capfirst }} version</span>
-    <span class="discreet-text">
-      {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
-      {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
-        {% if user.is_staff %}
-        <br/>
-        <a href="https://dashboard.lutris.net/#/installers/submissions/{{installer.latest_version.revision.id}}" class="btn btn-xs btn-danger">
-        Review installer
-        </a>
-        {% endif %}
+          {% if installer.id %}
+            <li><a class="dropdown-item bg-dark text-white" href="{% url 'view_installer' id=installer.id %}">
+              View install script
+            </a></li>
+          {% endif %}
+          <li><a class="dropdown-item bg-dark text-white" href="{% url 'api_game_installer_list' slug=installer.slug %}?format=json">
+            Download script
+          </a></li>
+        </ul>
       {% endif %}
-    </span>
+    </div>
+    <div class="centered-vertical">
+      <span class='filter-link'>{{ installer.runner }}</span>
+      <span class='installer-name'>{{ installer.version|capfirst }} version</span>
+      <small class="text-muted">
+        {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
+        {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
+          {% if user.is_staff %}
+            <a href="{{ DASHBOARD_URL }}/#/installers/submissions/{{installer.latest_version.revision.id}}"
+              class="btn btn-sm btn-danger">Review installer</a>
+          {% endif %}
+        {% endif %}
+      </small>
+    </div>
   </div>
-  {% if installer.rating %}{% rating %}{% endif %}
-  {% if installer.draft %}
-  <p class="discreet-text">
-    <strong>This installer is a draft. It hasn't been reviewed and might not be finished.</strong>
-  </p>
-  {% endif %}
+
   {% if installer.description %}
-  <p class="discreet-text"><strong>{{ installer.description|clean_html|safe }}</strong></p>
+  <div class="small-text">{{ installer.description|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
   {% if installer.notes %}
-  <div class="discreet-text">
-    {{ installer.notes|clean_html|safe|linebreaks }}
-  </div>
+  <div class="small-text">{{ installer.notes|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
 </li>

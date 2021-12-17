@@ -1,3 +1,4 @@
+"""Celery worker configuration"""
 # pylint: disable=C0103
 from __future__ import absolute_import
 

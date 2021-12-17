@@ -15,7 +15,7 @@ from platforms.models import Platform
 from common.util import slugify
 
 
-GOG_CACHE_PATH = 'gog-cache'
+GOG_CACHE_PATH = 'gog_cache'
 
 LOGGER = logging.getLogger(__name__)
 
@@ -32,18 +32,18 @@ def clean_gog_slug(gog_game):
     cleaned_slug = gog_slug.replace('_', '-')
     if gog_slug.endswith('_a') and gog_title.startswith('a '):
         cleaned_slug = 'a-' + cleaned_slug[:-2]
-    if gog_slug.endswith('_the') and gog_title.endswith('the'):
+    if gog_slug.endswith('_the') and gog_title.startswith('the '):
         cleaned_slug = 'the-' + cleaned_slug[:-4]
     return cleaned_slug
 
 
 def fetch_gog_games_page(page):
     """Saves one page of GOG games to disk"""
-    print("Saving page %s" % page)
-    url = "https://embed.gog.com/games/ajax/filtered?mediaType=game&page={}".format(page)
+    print(f"Saving page {page}")
+    url = f"https://embed.gog.com/games/ajax/filtered?mediaType=game&page={page}"
     response = requests.get(url)
     response_data = response.json()
-    with open(os.path.join(GOG_CACHE_PATH, '{}.json'.format(page)), 'w') as json_file:
+    with open(os.path.join(GOG_CACHE_PATH, f'{page}.json'), 'w', encoding="utf-8") as json_file:
         json.dump(response_data, json_file, indent=2)
     return response_data
 
@@ -58,7 +58,7 @@ def cache_gog_games():
 
 
 def iter_gog_games():
-    """Iterate through all GOG games from their API"""
+    """Iterate through all GOG games from a local cache"""
     excluded_suffixes = (
         "_soundtrack",
         "_soundtrack_remastered",
@@ -71,7 +71,7 @@ def iter_gog_games():
     )
     num_pages = len([f for f in os.listdir(GOG_CACHE_PATH) if re.match(r'(\d+)\.json', f)])
     for page in range(1, num_pages + 1):
-        with open(os.path.join(GOG_CACHE_PATH, "{}.json".format(page))) as json_file:
+        with open(os.path.join(GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8") as json_file:
             api_results = json.load(json_file)
             for product in api_results['products']:
                 if not product["slug"].endswith(excluded_suffixes):

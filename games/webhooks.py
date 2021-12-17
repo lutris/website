@@ -59,7 +59,7 @@ def notify_issue(issue, user, title, description):
             ),
             "color": 13965399,
             "thumbnail": {
-                "url": "https://lutris.net{}".format(issue.installer.game.banner_url)
+                "url": issue.installer.game.banner_url
             },
             "author": {
                 "name": user.username,
@@ -71,7 +71,6 @@ def notify_issue(issue, user, title, description):
         }]
     }
     return send_webhook_payload(hook_url, payload)
-
 
 
 def notify_installer(installer):
@@ -91,7 +90,7 @@ def notify_installer(installer):
             ),
             "color": 13965399,
             "thumbnail": {
-                "url": "https://lutris.net{}".format(installer.game.banner_url)
+                "url": installer.game.banner_url
             },
             "author": {
                 "name": installer.user.username,

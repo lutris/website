@@ -34,25 +34,6 @@ fixtures:
 check-deps-update:
 	pip3 list --outdated
 
-deploy_staging:
-	scripts/deploy.sh staging anaheim
-
-deploy_prod:
-	scripts/deploy.sh prod anaheim
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml restart lutrisnginx
-
-migrate_prod:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
-
-migrate_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb ./manage.py migrate
-
-remote_shell_staging:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_staging POSTGRES_HOST_PORT=5433 HTTP_PORT=81 DEPLOY_ENV=staging docker-compose -f docker-compose.prod.yml run lutrisweb bash
-
-remote_shell_prod:
-	DOCKER_HOST="ssh://strider@anaheim" COMPOSE_PROJECT_NAME=lutrisweb_prod POSTGRES_HOST_PORT=5435 HTTP_PORT=82 DEPLOY_ENV=prod docker-compose -f docker-compose.prod.yml run lutrisweb bash
-
 client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
@@ -68,31 +49,15 @@ worker:
 localdb:
 	# Create a local Postgres database for development
 	docker volume create lutrisdb_backups
-	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
+	docker run --name lutrisdb -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=lutris -e POSTGRES_USER=lutris -p 5432:5432 -d -v lutrisdb_backups:/backups --restart=unless-stopped postgres:12
+
+localredis:
+	docker run --name lutriscache -p 6378:6379 -d --restart=unless-stopped redis:latest
 
 syncdb:
 	# Syncs the production database to the local db
-	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.tar.gz lutris.tar.gz
-	gunzip lutris.tar.gz
-	docker cp lutris.tar lutrisdb:/backups
-	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/lutris.tar
-	rm lutris.tar
-
-build_dev_docker:
-	docker-compose build lutrisfrontend lutrisweb
-
-start_dev_docker:
-	docker-compose up -d lutrisdb lutriscache
-	# Wait a bit for the cache and database to be ready
-	sleep 5
-	docker-compose up -d lutrisfrontend lutrisweb
-
-stop_dev_docker:
-	docker-compose down
-
-init_docker_db:
-	docker-compose run lutrisweb make db
-
-docker_email_logs:
-	# Outputs all the email logs found in the lutrisweb container
-	docker exec lutrisweb /bin/sh -c 'cat /tmp/lutris-emails/*.log'
+	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.tar.gz latest.tar.gz
+	gunzip latest.tar.gz
+	docker cp latest.tar lutrisdb:/backups
+	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
+	rm latest.tar

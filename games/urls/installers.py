@@ -55,7 +55,9 @@ urlpatterns = [
     re_path(r'/(?P<slug>[\w\-]+)/?',
             views.GameInstallerListView.as_view(),
             name='api_game_installer_list'),
+
     path('',
          views.InstallerListView.as_view(),
          name='api_installer_list'),
+
 ]

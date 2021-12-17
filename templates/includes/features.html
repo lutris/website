@@ -1,0 +1,91 @@
+{% load static from staticfiles %}
+<div class="container project-presentation project-header">
+  <h1 class="text-center py-5">Play all your games on Linux</h1>
+  <div class="row py-5 px-5">
+    <div class="col">
+        <p>
+          Lutris is a video game preservation platform aiming to keep your
+          video game collection up and running for the years to come.
+          <br>
+          Over the years, video games have gone through many different hardware
+          and software platforms. By offering the best software available to
+          run your games, Lutris makes it easy to run all your games, old and new.
+        </p>
+    </div>
+  </div>
+  <div class="row py-5 px-4">
+    <div class="col-md-12 text-end">
+      <a href="{% url 'downloads' %}" class="btn btn-lg btn-primary rounded">Download</a>
+      <a href="{% url 'about' %}" class="btn btn-lg btn-outline-primary rounded">Learn more</a>
+      <a href="{% url 'donate' %}" class="btn btn-lg btn-outline-primary rounded">Support us</a>
+      <a href="https://github.com/lutris" class="btn btn-lg btn-outline-primary rounded">Source code</a>
+    </div>
+  </div>
+</div>
+
+<div class="container project-presentation">
+  <div class="row py-5 px-5">
+    <h4 class="py-4">Direct access to your game libraries</h4>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/humble-bundle.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/steam.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/epic-games.png' %}" height="64" />
+    </div>
+    <div class="col-md-3 centered">
+      <img src="{% static 'images/logos/gog.png' %}" height="64" />
+    </div>
+  </div>
+
+  <div class="row py-5 px-5">
+    <h4 class="py-4">Everything needed to run your games</h4>
+    <div class="col-md-12 centered">
+      <img src="{% static 'images/logos/wine.png' %}" height="64" />
+      <img src="{% static 'images/logos/mame.png' %}" height="64" />
+      <img src="{% static 'images/logos/dolphin.png' %}" height="64" />
+      <img src="{% static 'images/logos/retroarch.png' %}" height="64" />
+      <img src="{% static 'images/logos/scummvm.png' %}" height="64" />
+      <span>+&nbsp;many&nbsp;more...</span>
+    </div>
+  </div>
+</div>
+
+<div class="container project-presentation feature-list">
+  <div class="row g-5">
+    <div class="col-md-6 d-flex align-items-start">
+      <div>
+        <p>
+          We provide emulators, compatibility layers and game engine re-implementations
+          needed to run games in the most optimal way, often offering an enhanced
+          experience compared to the original platform.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-start">
+      <div>
+        <p>
+          Get direct access to your Steam, Epic Games Store, GOG and Humble Bundle game
+          libraries from the Lutris client to seamlessly launch games from a single location.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-start">
+      <div>
+        <p>
+          Built only using open source technology, Lutris leverages the power of Linux
+          and Vulkan to give you a stable platform to host your games.</p>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-start">
+      <div>
+        <p>
+          Use Lutris as the foundation to build your own open source game console.
+          Using PC hardware, build a gaming focused machine containing a lifetime of games.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
