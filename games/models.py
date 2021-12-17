@@ -981,14 +981,12 @@ class InstallerHistory(BaseInstaller):
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
-
     submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
     class Meta:
         """This is an abstract model"""
-
         abstract = True
 
     def __str__(self):
@@ -1127,7 +1125,10 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self.content = installer_data["content"]
 
         self.user = self.user
-        self.runner = Runner.objects.get(pk=installer_data["runner"])
+        try:
+            self.runner = Runner.objects.get(pk=installer_data["runner"])
+        except Runner.DoesNotExist:
+            self.runner = None
         self.slug = installer_data["slug"]
         self.version = installer_data["version"]
         self.description = installer_data["description"]

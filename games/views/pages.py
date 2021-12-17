@@ -239,7 +239,6 @@ def game_detail(request, slug):
         unpublished_installers = []
     pending_change_subm_count = 0
 
-
     if user.is_authenticated:
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
