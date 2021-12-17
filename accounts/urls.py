@@ -10,7 +10,7 @@ urlpatterns = [
     path('password/change/done', views.LutrisPasswordChangeDoneView.as_view(), name='password_change_done'),
     path('password/reset', views.LutrisPasswordResetView.as_view(), name='password_reset'),
     path('password/reset/done', views.LutrisPasswordResetDoneView.as_view(), name="password_reset_done"),
-    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',  # noqa
+    re_path(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$',  # noqa
             views.LutrisPasswordResetConfirmView.as_view(),
             name='password_reset_confirm'),
     path('register', views.LutrisRegisterView.as_view(), name="register"),
