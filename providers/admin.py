@@ -7,13 +7,13 @@ class ProviderAdmin(admin.ModelAdmin):
     """Admin config for Provider"""
     list_display = ("name", "website")
 
-
-class ProviderGameAdmin(admin.ModelAdmin):
-    """Admin config for ProviderGame"""
+class ProviderItemAdmin(admin.ModelAdmin):
+    """Generic admin config for Provider models"""
     list_display = ("name", "provider")
     search_fields = ("name", )
     list_filter = ("provider", )
 
-
 admin.site.register(models.Provider, ProviderAdmin)
-admin.site.register(models.ProviderGame, ProviderGameAdmin)
+admin.site.register(models.ProviderGame, ProviderItemAdmin)
+admin.site.register(models.ProviderGenre, ProviderItemAdmin)
+admin.site.register(models.ProviderPlatform, ProviderItemAdmin)
