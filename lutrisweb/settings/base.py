@@ -192,6 +192,9 @@ DISCORD_INSTALLER_WEBHOOK_TOKEN = os.environ.get('DISCORD_INSTALLER_WEBHOOK_TOKE
 SPACES_ACCESS_KEY_ID = os.environ.get("SPACES_ACCESS_KEY_ID")
 SPACES_ACCESS_KEY_SECRET = os.environ.get("SPACES_ACCESS_KEY_SECRET")
 
+TWITCH_CLIENT_ID = os.environ.get("TWITCH_CLIENT_ID")
+TWITCH_CLIENT_SECRET = os.environ.get("TWITCH_CLIENT_SECRET")
+
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
