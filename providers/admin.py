@@ -13,7 +13,14 @@ class ProviderItemAdmin(admin.ModelAdmin):
     search_fields = ("name", )
     list_filter = ("provider", )
 
+
+class ProviderCoverAdmin(admin.ModelAdmin):
+    """Admin config for Provider covers"""
+    list_display = ("image_id", "game", "provider")
+    list_filter = ("provider", )
+
 admin.site.register(models.Provider, ProviderAdmin)
 admin.site.register(models.ProviderGame, ProviderItemAdmin)
 admin.site.register(models.ProviderGenre, ProviderItemAdmin)
 admin.site.register(models.ProviderPlatform, ProviderItemAdmin)
+admin.site.register(models.ProviderCover, ProviderCoverAdmin)

@@ -1,8 +1,13 @@
 """Models for game providers"""
 # pylint: disable=too-few-public-methods
+import logging
+
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+from providers.gog import LOGGER
+
+LOGGER = logging.getLogger(__name__)
 
 class Provider(models.Model):
     """An entity that provides games like a Store (GOG, Humble Bundle) or a
@@ -15,7 +20,25 @@ class Provider(models.Model):
         return str(self.name)
 
 
-class ProviderGame(models.Model):
+class ProviderResource(models.Model):
+    """Base model with functionality to import from IGDB API"""
+    class Meta:
+        """Set as abstract model"""
+        abstract = True
+
+    @classmethod
+    def create_from_igdb_api(cls, provider, api_payload):
+        """Create an instance from an IGDB payload"""
+        resource, _created = cls.objects.get_or_create(
+            provider=provider,
+            slug=api_payload["slug"]
+        )
+        resource.name = api_payload["name"]
+        resource.metadata = api_payload
+        resource.save()
+        LOGGER.info("Created %s", resource["name"])
+
+class ProviderGame(ProviderResource):
     """Games from providers, along with any provider specific data."""
     name = models.CharField(max_length=255, blank=True)
     slug = models.CharField(max_length=255)
@@ -39,7 +62,7 @@ class ProviderGame(models.Model):
         return ("name__icontains", "slug__icontains")
 
 
-class ProviderGenre(models.Model):
+class ProviderGenre(ProviderResource):
     """Genres given by providers"""
     name = models.CharField(max_length=128)
     slug = models.SlugField()
@@ -50,7 +73,7 @@ class ProviderGenre(models.Model):
     )
     metadata = JSONField(null=True)
 
-class ProviderPlatform(models.Model):
+class ProviderPlatform(ProviderResource):
     """Platforms given by providers"""
     name = models.CharField(max_length=128)
     slug = models.SlugField()
@@ -60,3 +83,27 @@ class ProviderPlatform(models.Model):
         on_delete=models.PROTECT
     )
     metadata = JSONField(null=True)
+
+
+class ProviderCover(ProviderResource):
+    """Platforms given by providers"""
+    game = models.IntegerField(null=True)
+    image_id = models.SlugField()
+    provider = models.ForeignKey(
+        Provider,
+        related_name="covers",
+        on_delete=models.PROTECT
+    )
+    metadata = JSONField(null=True)
+
+    @classmethod
+    def create_from_igdb_api(cls, provider, api_payload):
+        """Create an instance from an IGDB payload"""
+        resource, _created = cls.objects.get_or_create(
+            provider=provider,
+            image_id=api_payload["image_id"]
+        )
+        resource.game = api_payload["game"]
+        resource.metadata = api_payload
+        resource.save()
+        LOGGER.info("Created cover %s", api_payload["image_id"])

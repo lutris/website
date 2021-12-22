@@ -1,5 +1,4 @@
 """Provider tasks"""
-import time
 import logging
 
 from django.conf import settings
@@ -7,7 +6,7 @@ from django.conf import settings
 from celery import task
 from providers.igdb import IGDBClient
 from providers.gog import cache_gog_games
-from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform
+from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
 
 LOGGER = logging.getLogger(__name__)
 
@@ -17,73 +16,43 @@ def refresh_cache():
     cache_gog_games()
 
 
+def _igdb_loader(resource_name, model):
+    """Generic function to load a collection from IGDB to database"""
+    client = IGDBClient(settings.TWITCH_CLIENT_ID, settings.TWITCH_CLIENT_SECRET)
+    client.get_authentication_token()
+    if resource_name not in ("games", "covers"):
+        client.page_size = 10  # Most endpoints don't seem to support large page sizes
+    resources = True
+    page = 1
+    provider, _created = Provider.objects.get_or_create(name="igdb")
+    while resources:
+        LOGGER.info("Getting page %s of IGDB API", page)
+        response = client.get_resources(f"{resource_name}/", page=page)
+        resources = response.json()
+        for api_payload in resources:
+            model.create_from_igdb_api(provider, api_payload)
+        page += 1
+
+
 @task
 def load_igdb_games():
     """Load all games from IGDB"""
-    client = IGDBClient(settings.TWITCH_CLIENT_ID, settings.TWITCH_CLIENT_SECRET)
-    client.get_authentication_token()
-    games = True
-    page = 1
-    provider, _created = Provider.objects.get_or_create(name="igdb")
-    while games:
-        LOGGER.info("Getting page %s of IGDB API", page)
-        response = client.get_games(page=page)
-        games = response.json()
-        for game in games:
-            provider_game, _created = ProviderGame.objects.get_or_create(
-                provider=provider,
-                slug=game["id"]
-            )
-            provider_game.name = game["name"]
-            provider_game.metadata = game
-            provider_game.save()
-            LOGGER.info("Created %s", game["name"])
-        page += 1
+    _igdb_loader("games", ProviderGame)
 
 
 @task
 def load_igdb_genres():
-    client = IGDBClient(settings.TWITCH_CLIENT_ID, settings.TWITCH_CLIENT_SECRET)
-    client.get_authentication_token()
-    client.page_size = 10
-    genres = True
-    page = 1
-    provider, _created = Provider.objects.get_or_create(name="igdb")
-    while genres:
-        LOGGER.info("Getting page %s of IGDB API", page)
-        response = client.get_genres(page=page)
-        genres = response.json()
-        for genre in genres:
-            provider_genre, _created = ProviderGenre.objects.get_or_create(
-                provider=provider,
-                slug=genre["id"]
-            )
-            provider_genre.name = genre["name"]
-            provider_genre.metadata = genre
-            provider_genre.save()
-            LOGGER.info("Genre created %s", genre["name"])
-        page += 1
+    """Load all genres from IGDB"""
+    _igdb_loader("genres", ProviderGenre)
 
 
 @task
 def load_igdb_platforms():
-    client = IGDBClient(settings.TWITCH_CLIENT_ID, settings.TWITCH_CLIENT_SECRET)
-    client.get_authentication_token()
-    client.page_size = 10
-    platforms = True
-    page = 1
-    provider, _created = Provider.objects.get_or_create(name="igdb")
-    while platforms:
-        LOGGER.info("Getting platforms page %s of IGDB API", page)
-        response = client.get_platforms(page=page)
-        platforms = response.json()
-        for platform in platforms:
-            provider_platform, _created = ProviderPlatform.objects.get_or_create(
-                provider=provider,
-                slug=platform["id"]
-            )
-            provider_platform.name = platform["name"]
-            provider_platform.metadata = platform
-            provider_platform.save()
-            LOGGER.info("Platform created %s", platform["name"])
-        page += 1
+    """Load all platforms from IGDB"""
+    _igdb_loader("platforms", ProviderPlatform)
+
+
+@task
+def load_igdb_covers():
+    """Load all covers from IGDB"""
+    _igdb_loader("covers", ProviderCover)

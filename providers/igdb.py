@@ -25,7 +25,8 @@ class IGDBClient:
         self.access_token = response.json()["access_token"]
         return self.access_token
 
-    def _get_from_api(self, url, page):
+    def get_resources(self, url, page):
+        """Generic method to access all API endpoints"""
         return requests.post(
             self.base_url + url,
             data=(
@@ -38,15 +39,3 @@ class IGDBClient:
                 "Authorization": f"Bearer {self.access_token}"
             }
         )
-
-    def get_games(self, page=1):
-        """Iterate through all games"""
-        return self._get_from_api("games/", page=page)
-
-    def get_genres(self, page=1):
-        """Iterate through all genres"""
-        return self._get_from_api("genres/", page=page)
-
-    def get_platforms(self, page=1):
-        """Iterate through all platforms"""
-        return self._get_from_api("platforms/", page=page)
