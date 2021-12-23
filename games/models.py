@@ -193,7 +193,7 @@ class Game(models.Model):
     BANNER_PATH = os.path.join(settings.MEDIA_ROOT, "game-banners/184")
 
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, null=True, blank=True)
     year = models.PositiveSmallIntegerField(null=True, blank=True)
     platforms = models.ManyToManyField(Platform, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)

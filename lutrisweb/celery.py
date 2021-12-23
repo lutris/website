@@ -17,13 +17,9 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
 @celery.signals.after_setup_logger.connect
-def on_after_setup_logger(**kwargs):
+def on_after_setup_logger(**_kwargs):
+    """Make sure the loggers propagate"""
     logger = logging.getLogger('celery')
     logger.propagate = True
     logger = logging.getLogger('celery.app.trace')
     logger.propagate = True
-
-
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
