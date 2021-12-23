@@ -1,11 +1,11 @@
 """Celery tasks for account related jobs"""
-import logging
+from celery.utils.log import get_task_logger
 from celery import task
 from reversion.models import Version, Revision
 from django.contrib.contenttypes.models import ContentType
 from games import models
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = get_task_logger(__name__)
 
 
 @task
