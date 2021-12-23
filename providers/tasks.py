@@ -1,9 +1,11 @@
 """Provider tasks"""
 import logging
+from datetime import datetime
 
 from django.conf import settings
 
 from celery import task
+from games.models import Game
 from providers.igdb import IGDBClient
 from providers.gog import cache_gog_games
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
@@ -56,3 +58,29 @@ def load_igdb_platforms():
 def load_igdb_covers():
     """Load all covers from IGDB"""
     _igdb_loader("covers", ProviderCover)
+
+
+@task
+def match_igdb_games():
+    """Create or update Lutris games from IGDB games"""
+    igdb_games = ProviderGame.objects.filter(provider__name="igdb")
+    for igdb_game in igdb_games:
+        igdb_slug = igdb_game.metadata["slug"]
+
+        try:
+            lutris_game = Game.objects.get(slug=igdb_slug)
+            LOGGER.info("Updating Lutris game %s", igdb_game.name)
+        except Game.DoesNotExist:
+            LOGGER.info("Creating Lutris game %s", igdb_game.name)
+            lutris_game = Game.objects.create(
+                name=igdb_game.name,
+                slug=igdb_slug,
+            )
+        if not lutris_game.year and igdb_game.metadata.get("first_release_date"):
+            lutris_game.year = datetime.fromtimestamp(igdb_game.metadata["first_release_date"]).year
+
+        if not lutris_game.description and igdb_game.metadata.get("summary"):
+            lutris_game.description = igdb_game.metadata.get("summary")
+        lutris_game.provider_games.add(igdb_game)
+        lutris_game.is_public = True
+        lutris_game.save()
