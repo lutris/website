@@ -214,6 +214,7 @@ class Game(models.Model):
     website = models.CharField(max_length=200, blank=True)
     icon = models.ImageField(upload_to="uploads/icons", blank=True)
     title_logo = models.ImageField(upload_to="uploads/banners", blank=True)
+    coverart = models.ImageField(upload_to="igdb", blank=True)
     description = models.TextField(blank=True)
     is_public = models.BooleanField("Published", default=False)
     created = models.DateTimeField(auto_now_add=True)

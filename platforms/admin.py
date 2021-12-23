@@ -1,9 +1,11 @@
+"""Admin settings for platorms app"""
 from django.contrib import admin
 from . import models
 from . import forms
 
 
 class PlatformAdmin(admin.ModelAdmin):
+    """Admin configuration for platforms"""
     prepopulated_fields = {"slug": ("name",)}
     form = forms.PlatformForm
     ordering = ('name', )

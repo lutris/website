@@ -1,7 +1,10 @@
 """Provider tasks"""
+import os
 from datetime import datetime
 
+import requests
 from django.conf import settings
+from django.core.files.base import ContentFile
 
 from celery import task
 from celery.utils.log import get_task_logger
@@ -112,3 +115,37 @@ def sync_igdb_platforms():
             )
         lutris_platform.igdb_id = igdb_platform.metadata["id"]
         lutris_platform.save()
+
+
+def get_igdb_cover(hash, size="cover_big"):
+    """Download a cover from IGDB and return its contents"""
+    url = f"https://images.igdb.com/igdb/image/upload/t_{size}/{hash}.jpg"
+    response = requests.get(url)
+    return response.content
+
+
+@task
+def sync_igdb_coverart():
+    """Downloads IGDB coverart and associates it with Lutris games"""
+    cover_format = "cover_big"
+    for igdb_cover in ProviderCover.objects.filter(provider__name="igdb"):
+        relpath = f"{cover_format}/{igdb_cover.image_id}.jpg"
+        igdb_path = os.path.join(settings.MEDIA_ROOT, "igdb", relpath)
+        if os.path.exists(igdb_path):
+            continue
+        try:
+            igdb_game = ProviderGame.objects.get(provider__name="igdb", slug=igdb_cover.game)
+        except ProviderGame.DoesNotExist:
+            LOGGER.warning("No IGDB game with ID %s", igdb_cover.game)
+            continue
+        try:
+            lutris_game = Game.objects.get(provider_games=igdb_game)
+        except Game.DoesNotExist:
+            LOGGER.warning("No Lutris game with ID %s", igdb_cover.game)
+            continue
+        lutris_game.coverart = ContentFile(
+            get_igdb_cover(igdb_cover.image_id),
+            relpath
+        )
+        lutris_game.save()
+        LOGGER.info("Saved cover for %s", lutris_game)
