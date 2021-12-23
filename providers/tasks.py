@@ -65,6 +65,9 @@ def load_igdb_covers():
 def match_igdb_games():
     """Create or update Lutris games from IGDB games"""
     igdb_games = ProviderGame.objects.filter(provider__name="igdb")
+    platforms = {
+        p.igdb_id: p for p in Platform.objects.filter(igdb_id__isnull=False)
+    }
     for igdb_game in igdb_games:
         igdb_slug = igdb_game.metadata["slug"]
         if not igdb_slug:
@@ -84,6 +87,12 @@ def match_igdb_games():
 
         if not lutris_game.description and igdb_game.metadata.get("summary"):
             lutris_game.description = igdb_game.metadata.get("summary")
+        for platform_id in igdb_game.metadata.get("platforms", []):
+            try:
+                lutris_game.platforms.add(platforms[platform_id])
+            except KeyError:
+                LOGGER.warning("No platform with ID %s", platform_id)
+                continue
         lutris_game.provider_games.add(igdb_game)
         lutris_game.is_public = True
         lutris_game.save()
