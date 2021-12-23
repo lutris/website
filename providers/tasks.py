@@ -6,6 +6,7 @@ from django.conf import settings
 from celery import task
 from celery.utils.log import get_task_logger
 from games.models import Game
+from platforms.models import Platform
 from providers.igdb import IGDBClient
 from providers.gog import cache_gog_games
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
@@ -66,7 +67,9 @@ def match_igdb_games():
     igdb_games = ProviderGame.objects.filter(provider__name="igdb")
     for igdb_game in igdb_games:
         igdb_slug = igdb_game.metadata["slug"]
-
+        if not igdb_slug:
+            LOGGER.error("Missing slug for %s", igdb_game.metadata)
+            continue
         try:
             lutris_game = Game.objects.get(slug=igdb_slug)
             LOGGER.info("Updating Lutris game %s", igdb_game.name)
@@ -84,3 +87,19 @@ def match_igdb_games():
         lutris_game.provider_games.add(igdb_game)
         lutris_game.is_public = True
         lutris_game.save()
+
+
+@task
+def sync_igdb_platforms():
+    """Syncs IGDB platforms to Lutris"""
+    for igdb_platform in ProviderPlatform.objects.filter(provider__name="igdb"):
+        igdb_slug = igdb_platform.metadata["slug"]
+        try:
+            lutris_platform = Platform.objects.get(slug=igdb_slug)
+        except Platform.DoesNotExist:
+            lutris_platform = Platform.objects.create(
+                name=igdb_platform.name,
+                slug=igdb_slug
+            )
+        lutris_platform.igdb_id = igdb_platform.metadata["id"]
+        lutris_platform.save()

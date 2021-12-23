@@ -8,7 +8,7 @@ class PlatformAdmin(admin.ModelAdmin):
     form = forms.PlatformForm
     ordering = ('name', )
     search_fields = ('name', )
-    list_display = ('__str__', 'slug', 'has_auto_installer', 'tgdb_name')
+    list_display = ('__str__', 'slug', 'has_auto_installer', 'igdb_id')
 
 
 admin.site.register(models.Platform, PlatformAdmin)
