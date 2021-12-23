@@ -346,6 +346,11 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO',
         },
+        'celery': {
+            'handlers': LOGGING_HANDLERS,
+            'propagate': True,
+            'level': 'INFO',
+        },
         'scripts': {
             'handlers': LOGGING_HANDLERS,
             'propagate': True,
