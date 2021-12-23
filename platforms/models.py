@@ -27,7 +27,8 @@ class Platform(models.Model):
     icon = models.ImageField(upload_to='platforms/icons', blank=True)
     default_installer = JSONField(null=True)
     tgdb_name = models.CharField(max_length=255, blank=True)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     objects = PlatformManager()
 
     # pylint: disable=W0232, R0903
