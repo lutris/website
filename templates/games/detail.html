@@ -122,6 +122,9 @@
 
     <div class="col-12 col-md-3">
       <div class="game-info">
+        {% if game.coverart %}
+        <img src="{{game.coverart.url}}"/>
+        {% endif %}
         <ul>
           {% if game.genres.count %}
           <li>
