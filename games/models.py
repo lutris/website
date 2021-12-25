@@ -455,6 +455,8 @@ class Game(models.Model):
         if not self.description:
             self.description = other_game.description
 
+        self.save()
+
         # Delete game
         delete_results = other_game.delete()
         LOGGER.info("Merged and deleted game: %s", delete_results)
