@@ -423,15 +423,15 @@ class Game(models.Model):
             self.year = other_game.year
 
         # Merge icon if none exist
-        if not self.icon:
+        if not self.icon.name:
             self.icon = other_game.icon
 
         # Merge banner if there is none
-        if not self.title_logo:
+        if not self.title_logo.name:
             self.title_logo = other_game.title_logo
 
         # Merge cover if there is none
-        if not self.coverart:
+        if not self.coverart.name:
             self.coverart = other_game.coverart
 
         # Merge weblinks
