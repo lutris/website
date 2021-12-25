@@ -430,6 +430,10 @@ class Game(models.Model):
         if not self.title_logo:
             self.title_logo = other_game.title_logo
 
+        # Merge cover if there is none
+        if not self.coverart:
+            self.coverart = other_game.coverart
+
         # Merge weblinks
         for link in other_game.links.all():
             link.game = self
