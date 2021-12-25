@@ -489,12 +489,16 @@ class Game(models.Model):
         dest_file = os.path.join(self.ICON_PATH, "%s.png" % self.slug)
         if os.path.exists(dest_file):
             return
-        thumbnail = get_thumbnail(
-            self.icon,
-            settings.ICON_SIZE,
-            crop="center",
-            format="PNG"
-        )
+        try:
+            thumbnail = get_thumbnail(
+                self.icon,
+                settings.ICON_SIZE,
+                crop="center",
+                format="PNG"
+            )
+        except AttributeError:
+            LOGGER.error("Impossible to generate icon thumbnail for %s", self)
+            return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
     def precache_banner(self):
@@ -509,7 +513,7 @@ class Game(models.Model):
                 crop="center"
             )
         except AttributeError:
-            LOGGER.error("Impossible to generate thumbnail for %s", self)
+            LOGGER.error("Impossible to generate banner thumbnail for %s", self)
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
