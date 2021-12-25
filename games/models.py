@@ -502,11 +502,15 @@ class Game(models.Model):
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
             return
-        thumbnail = get_thumbnail(
-            self.title_logo,
-            settings.BANNER_SIZE,
-            crop="center"
-        )
+        try:
+            thumbnail = get_thumbnail(
+                self.title_logo,
+                settings.BANNER_SIZE,
+                crop="center"
+            )
+        except AttributeError:
+            LOGGER.error("Impossible to generate thumbnail for %s", self)
+            return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
     def set_logo_from_steam(self):
