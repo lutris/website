@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 
 from celery import task
 from celery.utils.log import get_task_logger
+from common.util import slugify
 from games.models import Game
 from platforms.models import Platform
 from providers.igdb import IGDBClient
@@ -117,9 +118,9 @@ def sync_igdb_platforms():
         lutris_platform.save()
 
 
-def get_igdb_cover(hash, size="cover_big"):
+def get_igdb_cover(image_id, size="cover_big"):
     """Download a cover from IGDB and return its contents"""
-    url = f"https://images.igdb.com/igdb/image/upload/t_{size}/{hash}.jpg"
+    url = f"https://images.igdb.com/igdb/image/upload/t_{size}/{image_id}.jpg"
     response = requests.get(url)
     return response.content
 
@@ -149,3 +150,26 @@ def sync_igdb_coverart():
         )
         lutris_game.save()
         LOGGER.info("Saved cover for %s", lutris_game)
+
+
+@task
+def deduplicate_igdb_games():
+    """IGDB uses a different slugify method,
+    using dashes on apostrophes where we don't"""
+    # Select all title with an apostrophe that don't have an IGDB game already
+    games = Game.objects.filter(
+        change_for__isnull=True,
+        name__contains="'"
+    ).exclude(provider_games__provider__name="igdb")
+    for game in games:
+        # Generate a new slug
+        igdb_slug = slugify(game.name.replace("'", "-"))
+        # print(game)
+        # print(igdb_slug)
+        # Check the presence of an IGDB game
+        try:
+            igdb_game = Game.objects.get(provider_games__provider__name="igdb", slug=igdb_slug)
+        except Game.DoesNotExist:
+            # No IGDB game found, just keep going
+            continue
+        game.merge_with_game(igdb_game)
