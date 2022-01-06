@@ -11,5 +11,6 @@ from providers.tasks.igdb import (
 )
 from providers.tasks.gog import (
     cache_gog_games,
-    load_gog_games
+    load_gog_games,
+    match_gog_games
 )

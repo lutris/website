@@ -12,8 +12,34 @@ LOGGER = logging.getLogger(__name__)
 
 
 def clean_name(name):
-    """Remove some special characters from game titles to allow for easier comparison"""
-    return name.replace("™", "").replace("®", "").strip()
+    """Removed unwanted info from GOG game names"""
+    extras = (
+        "demo",
+        "gold pack",
+        "complete pack",
+        "the final cut",
+        "enhanced edition",
+        "free preview",
+        "complete edition",
+        "alpha version",
+        "pc edition",
+        "ultimate edition",
+        "commander pack",
+        "gold edition",
+        "drm free edition",
+        "directx 11 version",
+        "remake",
+        "original game soundtrack",
+        "soundtrack",
+        "cd version",
+        "deluxe edition",
+        "galaxy edition",
+        "complete",
+    )
+    for extra in extras:
+        if name.strip(")").lower().endswith(extra):
+            name = name[:-len(extra)].strip(" -:®™(").replace("™", "")
+    return name
 
 
 def clean_gog_slug(gog_game):

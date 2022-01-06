@@ -3,12 +3,13 @@ from datetime import datetime, timedelta
 
 from celery import task
 from celery.utils.log import get_task_logger
+from django.db.models import Q
 from django.db import IntegrityError
 from django.utils import timezone
 
 from games.models import Game, Genre
 from platforms.models import Platform
-from common.util import slugify
+from common.util import get_auto_increment_slug, slugify
 from providers.gog import iter_gog_games, clean_gog_slug, clean_name, cache_gog_games
 from providers.models import ProviderGame, Provider
 
@@ -155,3 +156,41 @@ def load_gog_games():
         gog_game.save()
         if created:
             LOGGER.info("Created new provider game %s", game["title"])
+
+
+@task
+def match_gog_games():
+    """Match GOG games with Lutris games"""
+    for provider_game in ProviderGame.objects.filter(provider__name="gog"):
+        if "type" not in provider_game.metadata:
+            print(provider_game.metadata)
+            provider_game.delete()
+            continue
+        if provider_game.games.count() or provider_game.metadata["type"] != 1:
+            # Game has been matched already or is not a game
+            continue
+        # Check if a Lutris game exists
+        game_name = clean_name(provider_game.name)
+        existing_games = Game.objects.filter(
+            Q(name=game_name)
+            | Q(slug=slugify(game_name))
+            | Q(aliases__name=game_name)
+        ).exclude(change_for__isnull=False).order_by('id').distinct('id')
+        for lutris_game in existing_games:
+            LOGGER.info("GOG game %s matched with %s", provider_game, lutris_game)
+            lutris_game.provider_games.add(provider_game)
+        if existing_games.count():
+            continue
+        LOGGER.info("Creating %s", game_name)
+        if provider_game.metadata.get("releaseDate"):
+            year = datetime.fromtimestamp(provider_game.metadata["releaseDate"]).year
+        else:
+            year = None
+        lutris_game = Game.objects.create(
+            name=game_name,
+            slug=get_auto_increment_slug(Game, None, game_name),
+            year=year,
+            is_public=True,
+            gogid=provider_game.slug
+        )
+        lutris_game.provider_games.add(provider_game)
