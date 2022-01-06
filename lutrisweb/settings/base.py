@@ -71,6 +71,7 @@ FILES_URL = f'{ROOT_URL}/media/files/'
 TOSEC_PATH = media_directory('tosec')
 TOSEC_DAT_PATH = TOSEC_PATH
 
+GOG_CACHE_PATH = media_directory('gog-cache')
 GOG_LOGO_PATH = media_directory('gog-logos')
 GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 

@@ -12,15 +12,9 @@ from common.util import slugify
 from games.models import Game
 from platforms.models import Platform
 from providers.igdb import IGDBClient
-from providers.gog import cache_gog_games
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
 
 LOGGER = get_task_logger(__name__)
-
-@task
-def refresh_cache():
-    """Reload the local GOG cache"""
-    cache_gog_games()
 
 
 def _igdb_loader(resource_name, model):

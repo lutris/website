@@ -6,7 +6,8 @@ import re
 import time
 import requests
 
-GOG_CACHE_PATH = "gog_cache"
+from django.conf import settings
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -33,7 +34,7 @@ def fetch_gog_games_page(page):
     response = requests.get(url)
     response_data = response.json()
     with open(
-        os.path.join(GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
+        os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
     ) as json_file:
         json.dump(response_data, json_file, indent=2)
     return response_data
@@ -41,6 +42,8 @@ def fetch_gog_games_page(page):
 
 def cache_gog_games():
     """Cache all GOG games to disk"""
+    if not os.path.isdir(settings.GOG_CACHE_PATH):
+        os.makedirs(settings.GOG_CACHE_PATH)
     response = fetch_gog_games_page(1)
     pages = response["totalPages"]
     for page in range(2, pages + 1):
@@ -61,11 +64,11 @@ def iter_gog_games():
         "_season_pass",
     )
     num_pages = len(
-        [f for f in os.listdir(GOG_CACHE_PATH) if re.match(r"(\d+)\.json", f)]
+        [f for f in os.listdir(settings.GOG_CACHE_PATH) if re.match(r"(\d+)\.json", f)]
     )
     for page in range(1, num_pages + 1):
         with open(
-            os.path.join(GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
+            os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
         ) as json_file:
             api_results = json.load(json_file)
             for product in api_results["products"]:
