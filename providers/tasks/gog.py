@@ -10,6 +10,7 @@ from games.models import Game, Genre
 from platforms.models import Platform
 from common.util import slugify
 from providers.gog import iter_gog_games, clean_gog_slug, clean_name, cache_gog_games
+from providers.models import ProviderGame, Provider
 
 
 LOGGER = get_task_logger(__name__)
@@ -20,9 +21,6 @@ def iter_lutris_games_by_gog_slug():
     for gog_game in iter_gog_games():
         for game in Game.objects.filter(gogslug=gog_game["slug"]):
             yield (game, gog_game)
-
-
-
 
 
 def iter_orphan_gog_games():
@@ -143,3 +141,17 @@ def sync_all_gog_games():
         LOGGER.info("Created game %s", game)
         i += 1
     LOGGER.info("%d games created", i)
+
+
+@task
+def load_gog_games():
+    """Load GOG games from the local cache to provider games"""
+    provider = Provider.objects.get(name="gog")
+    for game in iter_gog_games():
+        gog_game, created = ProviderGame.objects.get_or_create(provider=provider, slug=game["id"])
+        gog_game.name = game["title"]
+        gog_game.provider = provider
+        gog_game.metadata = game
+        gog_game.save()
+        if created:
+            LOGGER.info("Created new provider game %s", game["title"])

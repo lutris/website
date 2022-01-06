@@ -9,4 +9,7 @@ from providers.tasks.igdb import (
     sync_igdb_platforms,
     deduplicate_igdb_games
 )
-from providers.tasks.gog import cache_gog_games
+from providers.tasks.gog import (
+    cache_gog_games,
+    load_gog_games
+)
