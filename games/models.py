@@ -611,7 +611,7 @@ class GameMetadata(models.Model):
 class GameAlias(models.Model):
     """Alternate names and spellings a game might be known as"""
     game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=255)
     name = models.CharField(max_length=255)
 
 
