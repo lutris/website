@@ -23,6 +23,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
+from django_openid_auth.models import UserOpenID
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
 from rest_framework import generics
@@ -247,14 +248,11 @@ def associate_steam(request):
     try:
         openid_backend.associate_openid(request.user, openid_response)
     except IdentityAlreadyClaimed:
-        messages.warning(
-            request,
-            "This Steam account is already claimed by another Lutris "
-            "account.\nPlease contact an administrator if you want "
-            "to reattribute your Steam account to this current account."
+        other_open_id = UserOpenID.objects.get(
+            claimed_id__exact=openid_response.identity_url
         )
-        return redirect(account_url)
-
+        other_open_id.delete()
+        openid_backend.associate_openid(request.user, openid_response)
     request.user.set_steamid()
     request.user.save()
     return redirect(reverse("library_steam_sync"))
