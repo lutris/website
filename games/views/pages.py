@@ -314,6 +314,7 @@ def edit_installer(request, slug):
         revision_id = None
 
     draft_data = None
+    selected_version = None
     versions = Version.objects.get_for_object(installer)
 
     # Reset reason when the installer is edited.
@@ -323,20 +324,25 @@ def edit_installer(request, slug):
         if revision_id:
             # Display the revision given in the GET parameters
             if version.revision.id == revision_id:
-                draft_data = version.field_dict
+                selected_version = version
                 break
         else:
             # Display the latest revision created by the current logged in user
             if (
                     version.revision.user == request.user or request.user.is_staff
             ) and version.revision.date_created > installer.updated_at:
-                draft_data = version.field_dict
+                selected_version = version
                 revision_id = version.revision.id
                 break
-    if draft_data:
-        draft_data["reason"] = ""
-        if "runner_id" in draft_data:
-            draft_data["runner"] = draft_data["runner_id"]
+
+    if selected_version:
+        draft_data = version.field_dict
+        if draft_data:
+            if "runner_id" in draft_data:
+                draft_data["runner"] = draft_data["runner_id"]
+            # Reset reason only if user is building on someone else's draft
+            if version.revision.user != request.user:
+                draft_data["reason"] = ""
 
     form = InstallerEditForm(
         request.POST or None, instance=installer, initial=draft_data
