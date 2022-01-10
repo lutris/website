@@ -108,10 +108,12 @@ following command::
     docker run -d \
         --name lutrisdb \
         --restart unless-stopped \
+        --shm-size 4gb \
         -e POSTGRES_PASSWORD=admin \
         -e POSGRES_DB=lutris \
         -e POSTGRES_USER=lutris \
         -p 5432:5432 \
+        -v lutrisdb_backups:/backups
         postgres:12
 
 Quickstart::
