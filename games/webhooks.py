@@ -26,18 +26,16 @@ def send_webhook_payload(hook_url, payload):
 
 def notify_issue_reply(issue, user, description):
     """Notify of an issue reply"""
-    title = "Reply to issue by {} for {}".format(
-        issue.submitted_by,
-        issue.installer.version
+    title = (
+        f"[reply] by {issue.submitted_by} for {issue.installer.version} on {issue.installer.game}"
     )
     notify_issue(issue, user, title, description)
 
 
 def notify_issue_creation(issue, user, description):
     """Notify of an issue creation"""
-    title = "Issue submitted by {} for {}".format(
-        issue.submitted_by,
-        issue.installer.version
+    title = (
+        f"[new] by {issue.submitted_by} for {issue.installer.version} on {issue.installer.game}"
     )
     notify_issue(issue, user, title, description)
 
@@ -46,26 +44,22 @@ def notify_issue(issue, user, title, description):
     """Sends an issue notification to Discord throught a Webhook"""
     if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
         return
-    hook_url = "https://discordapp.com/api/webhooks/{}/{}".format(
-        settings.DISCORD_ISSUE_WEBHOOK_ID,
-        settings.DISCORD_ISSUE_WEBHOOK_TOKEN
+    hook_url = (
+        f"https://discordapp.com/api/webhooks/"
+        f"{settings.DISCORD_ISSUE_WEBHOOK_ID}/{settings.DISCORD_ISSUE_WEBHOOK_TOKEN}"
     )
     payload = {
         "embeds": [{
             "title": title,
             "description": description,
-            "url": "https://lutris.net/games/{}".format(
-                issue.installer.game.slug
-            ),
+            "url": f"https://lutris.net/games/{issue.installer.game.slug}",
             "color": 13965399,
             "thumbnail": {
                 "url": issue.installer.game.banner_url
             },
             "author": {
                 "name": user.username,
-                "url": "https://lutris.net/admin/accounts/user/{}/change/".format(
-                    user.id
-                )
+                "url": f"https://lutris.net/admin/accounts/user/{user.id}/change"
             },
             "fields": []
         }]
@@ -77,26 +71,22 @@ def notify_installer(installer):
     """Sends a notification to Discord through a Webhook"""
     if not settings.DISCORD_INSTALLER_WEBHOOK_TOKEN:
         return
-    hook_url = "https://discordapp.com/api/webhooks/{}/{}".format(
-        settings.DISCORD_INSTALLER_WEBHOOK_ID,
-        settings.DISCORD_INSTALLER_WEBHOOK_TOKEN
+    hook_url = (
+        "https://discordapp.com/api/webhooks/"
+        f"{settings.DISCORD_INSTALLER_WEBHOOK_ID}/{settings.DISCORD_INSTALLER_WEBHOOK_TOKEN}"
     )
     payload = {
         "embeds": [{
-            "title": "Installer created: %s" % installer,
-            "description": "Installer %s for %s" % (installer.version, installer.runner),
-            "url": "https://lutris.net/games/{}".format(
-                installer.game.slug
-            ),
+            "title": f"Installer created: {installer}" % installer,
+            "description": f"Installer {installer.version} for {installer.runner}",
+            "url": f"https://lutris.net/games/{installer.game.slug}",
             "color": 13965399,
             "thumbnail": {
                 "url": installer.game.banner_url
             },
             "author": {
                 "name": installer.user.username,
-                "url": "https://lutris.net/admin/accounts/user/{}/change/".format(
-                    installer.user.id
-                )
+                "url": f"https://lutris.net/admin/accounts/user/{installer.user.id}/change"
             },
             "fields": []
         }]
