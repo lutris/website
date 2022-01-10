@@ -9,11 +9,12 @@ SUCCESS = (True, "")
 
 
 def get_installer_script(installer):
+    """Return the installer script as a Python structure"""
     script = load_yaml(installer.content)
     if not script:
         return {}
     if not isinstance(script, dict):
-        raise TypeError("Malformed script")
+        raise TypeError(f"Wrong type for installer script {installer} (type {type(script)})")
     return script
 
 
@@ -32,11 +33,12 @@ def validate_installer(installer):
         files_have_correct_attributes,
         tasks_have_names,
         no_home_in_files,
+        all_files_are_used,
     ]
     for rule in rules:
         try:
             success, message = rule(installer)
-        except Exception as ex:
+        except Exception as ex:  # pylint: disable=broad-except
             success = False
             message = "Unknown error!"
             LOGGER.exception(ex)
@@ -52,7 +54,7 @@ def script_is_not_the_default_one(installer):
     if script == DEFAULT_INSTALLER:
         return (
             False,
-            "Really? You haven't even modified the default installer"
+            "Do not submit the default installer."
         )
     return SUCCESS
 
@@ -64,7 +66,7 @@ def doesnt_contain_useless_fields(installer):
         'installer_slug', 'name', 'notes', 'runner', 'slug', 'steamid', 'year'
     ):
         if field in script:
-            return (False, "Don't put a '{}' field in the script.".format(field))
+            return (False, f"Don't put a '{field}' field in the script.")
     return SUCCESS
 
 
@@ -215,5 +217,21 @@ def no_home_in_files(installer):
             return (
                 False,
                 "Don't reference files from your own home folder."
+            )
+    return SUCCESS
+
+
+def all_files_are_used(installer):
+    """Checks that all files referenced in the files section are used in content"""
+    script = get_installer_script(installer)
+    if "files" not in script:
+        return SUCCESS
+    installer_text = str(script.get("installer"))
+    for file_info in script["files"]:
+        file_id = next(iter(file_info.keys()))
+        if file_id not in installer_text:
+            return (
+                False,
+                f"File {file_id} is referenced but not used anywhere"
             )
     return SUCCESS
