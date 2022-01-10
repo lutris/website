@@ -338,6 +338,8 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError(
                 f"Invalid YAML, problem at line {ex.problem_mark.line}, {ex.problem}"
             )
+        if "script" in yaml_data:
+            yaml_data = yaml_data["script"]
         return dump_yaml(yaml_data)
 
     def clean_version(self):
