@@ -1,7 +1,7 @@
 """Installer related utilities"""
 import logging
 from common.util import load_yaml
-from runners.models import Runner
+from runners.models import Runner, RunnerVersion
 from games.models import DEFAULT_INSTALLER
 
 LOGGER = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ def validate_installer(installer):
         tasks_have_names,
         no_home_in_files,
         all_files_are_used,
+        uses_a_valid_wine_version,
     ]
     for rule in rules:
         try:
@@ -234,4 +235,23 @@ def all_files_are_used(installer):
                 False,
                 f"File {file_id} is referenced but not used anywhere"
             )
+    return SUCCESS
+
+
+def uses_a_valid_wine_version(installer):
+    """Checks if a referenced wine version is available from the API"""
+
+    script = get_installer_script(installer)
+    script_version = script.get("wine", {}).get("version")
+    if not script_version:
+        return SUCCESS
+    versions = [
+        f"{v.version}-{v.architecture}"
+        for v in RunnerVersion.objects.filter(runner__slug="wine")
+    ]
+    if script_version not in versions:
+        return (
+            False,
+            f"Wine version {script_version} is not available from Lutris"
+        )
     return SUCCESS
