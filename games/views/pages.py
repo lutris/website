@@ -230,6 +230,7 @@ def game_detail(request, slug):
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
     user = request.user
     installers = game.installers.published()
+    provider_links = game.get_provider_links()
 
     if user.is_staff:
         unpublished_installers = game.installers.unpublished()
@@ -264,6 +265,7 @@ def game_detail(request, slug):
             "auto_installers": game.get_default_installers(),
             "unpublished_installers": unpublished_installers,
             "screenshots": screenshots,
+            "provider_links": provider_links
         },
     )
 

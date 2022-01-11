@@ -317,6 +317,28 @@ class Game(models.Model):
         """Return the first (and only) submission for a game"""
         return self.submissions.first()
 
+    def get_provider_links(self):
+        """Return a dict of links created from provider games data"""
+        provider_games = {p.provider.name: p for p in self.provider_games.all()}
+        links = {}
+        if "igdb" in provider_games:
+            url = provider_games["igdb"].metadata.get("url")
+            if url:
+                links["igdb"] = url
+        if "steam" in provider_games:
+            links["steam"] = "https://store.steampowered.com/app/" + provider_games["steam"].slug
+            links["protondb"] = "https://www.protondb.com/app/" + provider_games["steam"].slug
+            links["steamdb"] = "https://steamdb.info/app/" + provider_games["steam"].slug
+            links["isthereanydeal"] = "https://isthereanydeal.com/steam/app/" + provider_games["steam"].slug
+        if "mame" in provider_games:
+            links["gamesdatabase"] = "https://www.gamesdatabase.org/mame-rom/" + provider_games["mame"].slug
+            links["arcadedatabase"] = "http://adb.arcadeitalia.net/dettaglio_mame.php?game_name=" + provider_games["mame"].slug
+        if "gog" in provider_games:
+            url = provider_games["gog"].metadata.get("url")
+            if url:
+                links["gog"] = "https://www.gog.com" + url
+        return links
+
     def get_change_model(self):
         """Returns a dictionary which can be used as initial value in forms"""
         return {

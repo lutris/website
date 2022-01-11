@@ -153,14 +153,12 @@
 
         <div>
           <p>
-            {% if game.steamid %}
-              <a href="http://store.steampowered.com/app/{{ game.steamid }}"
-                 title="Steam"
-                 class='external-link'>
-                <img src="{{ STATIC_URL }}images/icons/steam.png" alt="Steam" />
-                <span>Steam</span>
-              </a>
-            {% endif %}
+            {% for link, url in provider_links.items %}
+            <a href="{{url}}" target="_blank" class='external-link'>
+              <img src="{{ STATIC_URL }}images/icons/{{link}}.png" />
+              <span>{{link}}</span>
+            </a>
+            {% endfor %}
             {% if game.humblestoreid %}
               <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" class='external-link'>
                 <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
@@ -173,34 +171,13 @@
                 <span>GOG</span>
               </a>
             {% endif %}
-            {% if game.links.count %}
-              {% for link in game.links.all %}
-              <a href="{{link.url}}" class='external-link'>
-                <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
-                <span>{{link.get_website_display}}</span>
-              </a>
-              {% endfor %}
-              {% if game.steamid %}
-              <a href="https://isthereanydeal.com/steam/app/{{ game.steamid }}"
-                title="IsThereAnyDeal"
-                class='external-link'>
-                <img src="{{ STATIC_URL }}images/icons/isthereanydeal.png" alt="IsThereAnyDeal" />
-                <span>IsThereAnyDeal</span>
-              </a>
-              <a href="https://www.protondb.com/app/{{ game.steamid }}"
-                title="ProtonDB"
-                class='external-link'>
-                <img src="{{ STATIC_URL }}images/icons/protondb.png" alt="ProtonDB" />
-                <span>ProtonDB</span>
-              </a>
-              <a href="https://steamdb.info/app/{{ game.steamid }}"
-                title="SteamDB"
-                class='external-link'>
-                <img src="{{ STATIC_URL }}images/icons/steamdb.png" alt="SteamDB" />
-                <span>SteamDB</span>
-              </a>
-              {% endif %}
-            {% endif %}
+
+            {% for link in game.links.all %}
+            <a href="{{link.url}}" class='external-link'>
+              <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
+              <span>{{link.get_website_display}}</span>
+            </a>
+            {% endfor %}
           </p>
           <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
           <p>
