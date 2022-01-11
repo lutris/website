@@ -160,20 +160,20 @@
             </a>
             {% endfor %}
             {% if game.humblestoreid %}
-              <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" class='external-link'>
+              <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store"  target="_blank" class='external-link'>
                 <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
                 <span>Humble Store</span>
               </a>
             {% endif %}
             {% if game.gogslug %}
-              <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG.com" class='external-link'>
+              <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG.com" target="_blank" class='external-link'>
                 <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
                 <span>GOG</span>
               </a>
             {% endif %}
 
             {% for link in game.links.all %}
-            <a href="{{link.url}}" class='external-link'>
+            <a href="{{link.url}}" class='external-link' target="_blank">
               <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
               <span>{{link.get_website_display}}</span>
             </a>
