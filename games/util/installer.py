@@ -225,7 +225,7 @@ def no_home_in_files(installer):
 def all_files_are_used(installer):
     """Checks that all files referenced in the files section are used in content"""
     script = get_installer_script(installer)
-    if "files" not in script:
+    if not script.get("files"):
         return SUCCESS
     installer_text = str(script.get("installer"))
     for file_info in script["files"]:
