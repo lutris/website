@@ -77,7 +77,7 @@ def notify_installer(installer):
     )
     payload = {
         "embeds": [{
-            "title": f"Installer created: {installer}" % installer,
+            "title": f"Installer created: {installer}",
             "description": f"Installer {installer.version} for {installer.runner}",
             "url": f"https://lutris.net/games/{installer.game.slug}",
             "color": 13965399,
