@@ -367,9 +367,7 @@ def edit_installer(request, slug):
     if draft_data:
         messages.info(
             request,
-            "You are viewing a draft of the installer which does not "
-            "reflect the currently available installer. Changes will be "
-            "published once it goes through moderation.",
+            "You are viewing a draft of the installer.",
         )
     return render(
         request,
