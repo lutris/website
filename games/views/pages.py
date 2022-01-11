@@ -316,7 +316,11 @@ def edit_installer(request, slug):
         revision_id = None
 
     draft_data = None
-    versions = Version.objects.get_for_object(installer)
+    versions = (
+        Version.objects
+        .get_for_object(installer)
+        .filter(revision__user=request.user)
+    )
 
     # Reset reason when the installer is edited.
     installer.reason = ""
