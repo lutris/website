@@ -287,7 +287,7 @@ class InstallerForm(forms.ModelForm):
         fields = ("runner", "version", "description", "notes", "content", "draft")
         widgets = {
             "runner": Select2Widget,
-            "description": forms.Textarea(attrs={"class": "installer-textarea"}),
+            "description": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
             "content": forms.Textarea(
                 attrs={"class": "code-editor", "spellcheck": "false"}
