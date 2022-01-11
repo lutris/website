@@ -10,17 +10,39 @@
     {% for installer in installers %}
     {% with installer.game as game %}
     <div class="game-preview">
-      <a href="{{ game.get_absolute_url }}" title="{{ game.name }}">
+      <a href="{% url 'edit_installer' slug=installer.slug %}" title="{{ game.name }}">
         <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
       </a>
       <div class="game-details">
-        <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
+        <a href="{% url 'edit_installer' slug=installer.slug %}" class="game-name">{{ game.name }}</a>
         <span class="small-text">{% if game.year %}({{ game.year }}){% endif %}</span>
         <br>
         <span>Created: </span><strong>{{installer.created_at}}</strong>
       </div>
     </div>
     {% endwith %}
+    {% empty %}
+    No installers
     {% endfor %}
+</section>
+<h1>Drafts</h1>
+<section>
+  {% for installer in drafts %}
+  {% with installer.game as game %}
+  <div class="game-preview">
+    <a href="{% url 'edit_installer' slug=installer.slug %}" title="{{ game.name }}">
+      <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+    </a>
+    <div class="game-details">
+      <a href="{% url 'edit_installer' slug=installer.slug %}" class="game-name">{{ game.name }}</a>
+      <span class="small-text">{% if game.year %}({{ game.year }}){% endif %}</span>
+      <br>
+      <span>Created: </span><strong>{{installer.created_at}}</strong>
+    </div>
+  </div>
+  {% endwith %}
+  {% empty %}
+  No installers
+  {% endfor %}
 </section>
 {% endblock %}

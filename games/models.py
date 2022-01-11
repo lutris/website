@@ -326,13 +326,15 @@ class Game(models.Model):
             if url:
                 links["igdb"] = url
         if "steam" in provider_games:
-            links["steam"] = "https://store.steampowered.com/app/" + provider_games["steam"].slug
-            links["protondb"] = "https://www.protondb.com/app/" + provider_games["steam"].slug
-            links["steamdb"] = "https://steamdb.info/app/" + provider_games["steam"].slug
-            links["isthereanydeal"] = "https://isthereanydeal.com/steam/app/" + provider_games["steam"].slug
+            appid = provider_games["steam"].slug
+            links["steam"] = f"https://store.steampowered.com/app/{appid}"
+            links["protondb"] = f"https://www.protondb.com/app/{appid}"
+            links["steamdb"] = f"https://steamdb.info/app/{appid}"
+            links["isthereanydeal"] = f"https://isthereanydeal.com/steam/app/{appid}"
         if "mame" in provider_games:
-            links["gamesdatabase"] = "https://www.gamesdatabase.org/mame-rom/" + provider_games["mame"].slug
-            links["arcadedatabase"] = "http://adb.arcadeitalia.net/dettaglio_mame.php?game_name=" + provider_games["mame"].slug
+            romname = provider_games["mame"].slug
+            links["gamesdatabase"] = f"https://www.gamesdatabase.org/mame-rom/{romname}"
+            links["arcadedatabase"] = f"http://adb.arcadeitalia.net/dettaglio_mame.php?game_name={romname}"
         if "gog" in provider_games:
             url = provider_games["gog"].metadata.get("url")
             if url:

@@ -29,6 +29,7 @@ from django_openid_auth.views import login_complete, parse_openid_response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from reversion.models import Version
 
 from games import models
 
@@ -324,23 +325,22 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
         return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
 
-class InstallerList(LibraryList):  # pylint: disable=too-many-ancestors
+def installer_list(request, username):
     """List all private installers"""
-    template_name = 'accounts/installer_list.html'
-    context_object_name = 'installers'
-    ordering = '-created_at'
-    profile_page = 'installers'
-
-    def get_queryset(self):
-        """Return all submitted games"""
-        queryset = models.Installer.objects.filter(
-            user=self.get_user(),
-            published=False
-        )
-        if self.request.GET.get('q'):
-            queryset = queryset.filter(game__name__icontains=self.request.GET["q"])
-        return queryset.order_by(self.request.GET.get('sort', self.ordering))
-
+    installers = models.Installer.objects.filter(
+        user=request.user,
+        published=False
+    )
+    if request.GET.get('q'):
+        installers = installers.filter(game__name__icontains=request.GET["q"])
+    installers = installers.order_by(request.GET.get('sort', "-created_at"))
+    drafts = {v.object for v in Version.objects.filter(revision__user=request.user)}
+    return render(request, 'accounts/installer_list.html', {
+        'user': request.user,
+        'profile_page': 'installers',
+        'drafts': drafts,
+        'installers': installers
+    })
 
 @login_required
 def library_add(request, slug):
