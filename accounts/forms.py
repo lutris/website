@@ -1,24 +1,16 @@
 """Account management handling forms"""
-# pylint: disable=W0232, R0903
 import logging
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Div
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
-from common.forms import get_bootstrap_helper
 
 LOGGER = logging.getLogger(__name__)
 
 
 class RegistrationForm(forms.ModelForm):
-    """
-    A form that creates a user, with no privileges, from the given username and
-    password.
-    """
+    """Form to create a new user from a given username and password."""
 
     error_messages = {
         "duplicate_username": "A user with that username already exists.",
@@ -49,20 +41,8 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         """Model and field definitions"""
-
         model = User
         fields = ("username", "email")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'form_register'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'register'
-        self.helper.form_class = "form-horizontal"
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Register'))
 
     def clean_username(self):
         """Check that no similar username exist in a case insensitive way"""
@@ -86,54 +66,15 @@ class RegistrationForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
+        user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
         Token.objects.create(user=user)
         return user
 
-
-class LoginForm(AuthenticationForm):
-    """Subclass of AuthenticationForm with Bootstrap integration"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'form_login'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'login'
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Sign in'))
-
-
-class LutrisPasswordResetForm(PasswordResetForm):
-    """Subclass of PasswordResetForm with Bootstrap integration"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'form_password_reset'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'password_reset'
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Reset password'))
-
 class ProfileForm(forms.ModelForm):
     """Form to edit profile information"""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'profile_edit'
-        self.helper.form_class = 'form-horizontal'
-        # self.helper.label_class = 'col-lg-4'
-        # self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Save changes'))
 
     class Meta:
         """ModelForm configuration"""
@@ -143,7 +84,7 @@ class ProfileForm(forms.ModelForm):
     def save(self, commit=True):
         if "email" in self.changed_data:
             self.instance.email_confirmed = False
-        return super(ProfileForm, self).save(commit=commit)
+        return super().save(commit=commit)
 
 
 class ProfileDeleteForm(forms.Form):

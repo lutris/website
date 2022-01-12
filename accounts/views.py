@@ -21,6 +21,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from openid.fetchers import HTTPFetchingError
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.models import UserOpenID
@@ -49,7 +50,7 @@ class LutrisRegisterView(CreateView):
 class LutrisLoginView(LoginView):
     """Sign in view"""
     template_name = 'accounts/login.html'
-    authentication_form = forms.LoginForm
+    authentication_form = AuthenticationForm
 
 
 class LutrisLogoutView(LogoutView):
@@ -64,7 +65,7 @@ class LutrisLogoutView(LogoutView):
 class LutrisPasswordResetView(PasswordResetView):
     """View to reset a user's password"""
     template_name = 'accounts/password_reset.html'
-    form_class = forms.LutrisPasswordResetForm
+    form_class = PasswordResetForm
 
 
 class LutrisPasswordResetDoneView(PasswordResetDoneView):

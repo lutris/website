@@ -41,10 +41,16 @@ class TestScriptValidator(TestCase):
         is_valid, _errors = validate_installer(self.installer)
         self.assertFalse(is_valid)
 
-        self.installer.content = json.dumps({'files': [
-            {'file1': {'url': 'http://foo', 'filename': 'foo'}},
-            {'file2': 'http://bar'}
-        ]})
+        self.installer.content = json.dumps({
+            'files': [
+                {'file1': {'url': 'http://foo', 'filename': 'foo'}},
+                {'file2': 'http://bar'}
+            ],
+            'installer': [
+                {'merge': {'src': 'file1', 'dst': '$GAMEDIR'}},
+                {'merge': {'src': 'file2', 'dst': '$GAMEDIR'}}
+            ]
+        })
         is_valid, _errors = validate_installer(self.installer)
         self.assertTrue(is_valid)
 

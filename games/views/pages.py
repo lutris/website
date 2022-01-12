@@ -513,34 +513,33 @@ def game_list(request):
     return render(request, "games/game_list.html", {"games": games})
 
 
+def notify_new_game(game, user):
+    """Notify managers a game has been submitted"""
+    admin_url = "https://lutris.net" + reverse("admin:games_game_change", args=(game.id,))
+    context = {
+        "game_name": game.name,
+        "username": user.username,
+        "admin_link": admin_url,
+    }
+    subject = f"New game submitted: {game.name}"
+    send_email(
+        "new_game",
+        context,
+        subject,
+        settings.MANAGERS[0][1]
+    )
+
+
 @user_confirmed_required
 def submit_game(request):
+    """Display a form to create a new game"""
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()
         submission = GameSubmission(user=request.user, game=game)
         submission.save()
-
-        # Notify managers a game has been submitted
-        admin_url = "https://lutris.net" + reverse(
-            "admin:games_game_change", args=(game.id,)
-        )
-        context = {
-            "game_name": game.name,
-            "username": request.user.username,
-            "admin_link": admin_url,
-        }
-        subject = "New game submitted: {}".format(game.name)
-        send_email("new_game", context, subject, settings.MANAGERS[0][1])
-
-        redirect_url = request.build_absolute_uri(reverse("game-submitted"))
-
-        # Enforce https
-        if not settings.DEBUG:
-            redirect_url = redirect_url.replace("http:", "https:")
-
-        LOGGER.info("Game submitted, redirecting to %s", redirect_url)
-        return redirect(redirect_url)
+        notify_new_game(game, request.user)
+        return redirect(reverse("game-submitted"))
     return render(request, "games/submit.html", {"form": form})
 
 

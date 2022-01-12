@@ -348,11 +348,9 @@ class Game(models.Model):
             "year": self.year,
             "platforms": [x.id for x in list(self.platforms.all())],
             "genres": [x.id for x in list(self.genres.all())],
-
             # The Select2 dropdowns want ids instead of complete models
             "publisher": self.publisher.id if self.publisher else None,
             "developer": self.developer.id if self.developer else None,
-
             "website": self.website,
             "description": self.description,
             "title_logo": self.title_logo,
@@ -360,26 +358,20 @@ class Game(models.Model):
 
     def get_changes(self):
         """Returns a dictionary of the changes"""
-
         changes = []
-
         # From the considered fields, only those who differ will be returned
         for entry in self.TRACKED_FIELDS:
             old_value = getattr(self.change_for, entry)
             new_value = getattr(self, entry)
-
-            # M2M relations to string
-            if entry in ["platforms", "genres"]:
+            if entry in ["platforms", "genres"]:  # convert M2M relations to string
                 old_value = ", ".join(
                     "[{0}]".format(str(x)) for x in list(old_value.all())
                 )
                 new_value = ", ".join(
                     "[{0}]".format(str(x)) for x in list(new_value.all())
                 )
-
             if old_value != new_value:
                 changes.append((entry, old_value, new_value))
-
         return changes
 
     def apply_changes(self, change_set):
@@ -480,10 +472,7 @@ class Game(models.Model):
             self.description = other_game.description
 
         self.save()
-
-        # Delete game
-        delete_results = other_game.delete()
-        LOGGER.info("Merged and deleted game: %s", delete_results)
+        other_game.delete()
 
     def has_installer(self):
         """Return whether this game has an installer"""

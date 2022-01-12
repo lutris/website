@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
 
 {% block title %}Register - Lutris{% endblock %}
@@ -10,7 +9,12 @@
   <div class="col-sm-3"></div>
   <div class="col-sm-6 form-view">
     <h1>Register account</h4>
-    {% crispy form form.helper %}
+    <form id='form_register' method="post" class="form-horizontal form">
+      {{ form.as_p }}
+      <div>
+        <input type="submit" value="Register" class="btn btn-primary">
+      </div>
+    </form>
   </div>
   <div class="col-sm-3"></div>
 </div>

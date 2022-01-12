@@ -1,5 +1,4 @@
 {% extends "accounts/profile_base.html" %}
-{% load crispy_forms_tags %}
 
 
 {% block title %}Edit profile - Lutris{% endblock %}
@@ -8,7 +7,13 @@
 {% block profile_content %}
 <div class="form-view">
   <h1>Account details</h1>
-  {% crispy form form.helper %}
+  <form action="{% url 'profile_edit' %}" enctype="multipart/form-data" method="post" class="form form-horizontal" id="form_profile_edit">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+      <input type="submit" value="Save changes" class="btn btn-primary">
+    </div>
+  </form>
 </div>
 <hr>
 <h2>Account management</h2>

@@ -5,8 +5,6 @@ from datetime import date
 
 import yaml
 
-from crispy_forms.helper import FormHelper, Layout
-from crispy_forms.layout import Submit, ButtonHolder, Fieldset, Field
 from django import forms
 from django.conf import settings
 from django.utils.html import strip_tags
@@ -32,7 +30,7 @@ class AutoSlugForm(forms.ModelForm):
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
-        super(AutoSlugForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["slug"].required = False
 
     def get_slug(self, name, slug=None):
@@ -45,85 +43,45 @@ class AutoSlugForm(forms.ModelForm):
         return self.cleaned_data
 
 
-class BaseGameForm(AutoSlugForm):
-    class Meta:
-        model = models.Game
-        fields = "__all__"
-
-    def __init__(self, *args, **kwargs):
-        super(BaseGameForm, self).__init__(*args, **kwargs)
-        self.fields["gogid"].required = False
-
-
 class GameForm(forms.ModelForm):
     class Meta:
         model = models.Game
         fields = (
             "name",
             "year",
+            "platforms",
+            "genres",
             "developer",
             "publisher",
             "website",
-            "platforms",
-            "genres",
             "description",
             "title_logo",
         )
         widgets = {
-            "platforms": Select2MultipleWidget,
-            "genres": Select2MultipleWidget,
+            "name": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "year": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "platforms": Select2MultipleWidget(attrs={"class": "form-control select2"}),
+            "genres": Select2MultipleWidget(attrs={"class": "form-control"}),
             "developer": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company, search_fields=["name__icontains"],
+                attrs={"class": "form-control"}
             ),
             "publisher": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"]
+                model=models.Company, search_fields=["name__icontains"],
+                attrs={"class": "form-control"}
             ),
+            "website": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"class": "select2-lookalike"}),
         }
 
     def __init__(self, *args, **kwargs):
-        super(GameForm, self).__init__(*args, **kwargs)
-        self.fields["name"].label = "Title"
-        self.fields["year"].label = "Release year"
-        self.fields["website"].help_text = (
-            "The official website (full address). If it doesn't exist, leave blank."
-        )
-        self.fields["genres"].help_text = ""
-        self.fields["description"].help_text = (
-            "Copy the official description of the game if you can find "
-            "it. Don't write your own. For old games, check Mobygame's Ad "
-            "Blurbs, look for the English back cover text."
-        )
-
+        super().__init__(*args, **kwargs)
         self.fields["title_logo"] = CroppieField(
             options={
                 "viewport": {"width": 875, "height": 345},
                 "boundary": {"width": 875, "height": 345},
                 "showZoomer": True,
             }
-        )
-        self.fields["title_logo"].label = "Upload an image"
-        self.fields["title_logo"].help_text = (
-            "The banner should include the game's title. "
-            "Please make sure that your banner doesn't rely on "
-            "transparency as those won't be reflected in the final image"
-        )
-
-        self.helper = FormHelper()
-        self.helper.include_media = False
-        self.helper.layout = Layout(
-            Fieldset(
-                None,
-                "name",
-                "year",
-                "developer",
-                "publisher",
-                "website",
-                "platforms",
-                "genres",
-                "description",
-                Field("title_logo", template="includes/upload_button.html"),
-            ),
-            ButtonHolder(Submit("submit", "Submit")),
         )
 
     def rename_uploaded_file(self, file_field, cleaned_data, slug):
@@ -173,7 +131,6 @@ class GameEditForm(forms.ModelForm):
 
     class Meta:
         """Form configuration"""
-
         model = models.Game
         fields = (
             "name",
@@ -216,9 +173,7 @@ class GameEditForm(forms.ModelForm):
         }
 
     def __init__(self, payload, *args, **kwargs):
-        super(GameEditForm, self).__init__(payload, *args, **kwargs)
-        self.fields["name"].label = "Title"
-        self.fields["year"].label = "Release year"
+        super().__init__(payload, *args, **kwargs)
         self.fields["title_logo"] = CroppieField(
             options={
                 "viewport": {"width": 875, "height": 345},
@@ -230,34 +185,13 @@ class GameEditForm(forms.ModelForm):
         self.fields["title_logo"].label = "Upload an image"
         self.fields["title_logo"].required = False
 
-        self.helper = FormHelper()
-        self.helper.include_media = False
-        self.helper.layout = Layout(
-            Fieldset(
-                None,
-                "name",
-                "year",
-                "developer",
-                "publisher",
-                "website",
-                "platforms",
-                "genres",
-                "description",
-                Field("title_logo", template="includes/upload_button.html"),
-                "reason",
-            ),
-            ButtonHolder(Submit("submit", "Submit")),
-        )
 
     def clean(self):
         """Overwrite clean to fail validation if unchanged form was submitted"""
-
-        cleaned_data = super(GameEditForm, self).clean()
-
+        cleaned_data = super().clean()
         # Raise error if nothing actually changed
         if not self.has_changed():
             raise forms.ValidationError("You have not changed anything")
-
         return cleaned_data
 
 
@@ -268,9 +202,7 @@ class ScreenshotForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.game = models.Game.objects.get(pk=kwargs.pop("game_id"))
-        super(ScreenshotForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", "Submit"))
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
         self.instance.game = self.game
@@ -287,7 +219,10 @@ class InstallerForm(forms.ModelForm):
         fields = ("runner", "version", "description", "notes", "content", "draft")
         widgets = {
             "runner": Select2Widget,
-            "description": forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
+            "description": forms.TextInput(attrs={
+                "style": "width: 100%;",
+                "class": "select2-lookalike"
+            }),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
             "content": forms.Textarea(
                 attrs={"class": "code-editor", "spellcheck": "false"}
@@ -314,7 +249,7 @@ class InstallerForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(InstallerForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["notes"].label = "Technical notes"
 
     def clean_description(self):

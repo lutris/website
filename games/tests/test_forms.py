@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 from io import BytesIO
 from django.test import TestCase
 from django.core.files.base import ContentFile

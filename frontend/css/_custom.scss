@@ -103,6 +103,19 @@ form {
     padding: 1.5em 0;
   }
 }
+.form {
+  label {
+    display: block;
+    font-size: 1.1em;
+    padding: .2em 0;
+  }
+  input {
+    width: 100%;
+    display: block;
+    border: 1px solid #333;
+    padding: 4px;
+  }
+}
 
 figure {
   padding: 0;
@@ -278,8 +291,7 @@ header {
 }
 
 .helptext {
-  border: 1px solid #DEDEDE;
-  font-size: 0.8em;
+  font-size: 0.9em;
   display: block;
   padding: .5em;
   margin-top: .5em;
@@ -389,12 +401,13 @@ header {
   color: #222 !important;
 }
 
-input.select2-lookalike[type="text"] {
+.select2-lookalike {
     padding: 4px;
     border: 1px solid #AAA;
     border-radius: 4px;
     background-color: $white;
     color: #222;
+    width: 100%;
     &:focus {
       background-color: $white;
       border: 1px solid $black;

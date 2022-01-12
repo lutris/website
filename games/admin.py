@@ -171,9 +171,19 @@ class GameAliasAdmin(admin.TabularInline):
     model = models.GameAlias
 
 
+class GameAdminForm(forms.AutoSlugForm):
+    class Meta:
+        model = models.Game
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["gogid"].required = False
+
+
 class GameAdmin(admin.ModelAdmin):
     ordering = ("-created", )
-    form = forms.BaseGameForm
+    form = GameAdminForm
     list_display = ('__str__', 'is_public', 'year', 'steamid', 'gogslug',
                     'humblestoreid', 'created', 'updated', 'custom_actions')
     list_filter = (GameFilter, 'is_public', 'publisher', 'developer', 'genres')

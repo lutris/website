@@ -1,38 +1,49 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
-{% load crispy_forms_tags %}
+
+
 {% block title %}
-{% if not game %} Submit a game {% else %} Suggest changes {% endif %}- Lutris
+{% if not game %}Submit a new game{% else %}Suggest changes{% endif %} - Lutris
 {% endblock %}
+
+
 {% block extra_head %}
 {{ form.media.css }}
 <style>
-[type="file"] {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  white-space: nowrap;
-  width: 1px;
-}
+  [type="file"] {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    white-space: nowrap;
+    width: 1px;
+  }
 
-.file-upload-button label {
-  cursor: pointer;
-  display: inline-block;
-  font-size: 1rem;
-  font-weight: 700;
-  height: 2rem;
-  line-height: 2rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
+  .file-upload-button label {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 700;
+    height: 2rem;
+    line-height: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 
-.file-upload-button label:hover {
+  .file-upload-button label:hover {
     background-color: #f15d22;
-}
+  }
 </style>
+<script type="text/javascript">
+  var croppieFieldName = "title_logo";
+  var croppieOptions = {
+    "viewport": { "width": 875, "height": 345 },
+    "boundary": { "width": 875, "height": 345 },
+    "showZoomer": true
+  };
+</script>
 {% endblock %}
 
 {% block content %}
@@ -41,29 +52,84 @@
     <div class="form-view">
       <h1>
         {% if not game %}
-          Submit a game
+        Submit a game
         {% else %}
-          Suggest changes to '{{ game.name }}'
+        Suggest changes to '{{ game.name }}'
         {% endif %}
       </h1>
-      <p>
-        This page <strong>should not</strong> be used for issues pertaining to
-        installers or other similar problems.<br /> Visit our <a href="https://forums.lutris.net">forums</a>
-        or our <a href="https://discord.gg/Pnt5CuY">Discord</a> server for assistance.<br /><br />
-        Please be as accurate as possible with the information you provide.
-        Wikipedia or <a href="https://www.mobygames.com/search/quick">Mobygames</a>
-        are generally reliable sources. If you know more accurate ones, let us
-        know! Thanks for your efforts!<br /><br />
-      </p>
-      {% if not game %}
-      <p>
-        <img src="{% static "images/nosteam.png" %}" alt="Don't submit Steam games" style="float: left; margin-right: 12px;"/>
-        <strong>Do not submit Steam games.</strong> We probably already have the game in our database
-        (check for unpublished games in the advanced search options). If the game really isn't available,
-        sync your Steam library from your Lutris account, this will add missing games to our database.
-      </p>
-      {% endif %}
-      {% crispy form %}
+      <form method="post" enctype="multipart/form-data">
+          <div id="div_id_name" class="form-group"> <label for="id_name" class=" requiredField">
+              Title<span class="asteriskField">*</span> </label>
+              {{form.name}}
+          </div>
+          <div id="div_id_year" class="form-group">
+            <label for="id_year">Release year</label>
+            <div>
+              {{form.year}}
+            </div>
+          </div>
+          <div id="div_id_developer" class="form-group">
+            <label for="id_developer">Developer</label>
+            <div>
+              {{form.developer}}
+            </div>
+          </div>
+          <div id="div_id_publisher" class="form-group">
+            <label for="id_publisher">Publisher</label>
+            <div>
+              {{form.publisher}}
+            </div>
+          </div>
+          <div id="div_id_website" class="form-group">
+            <label for="id_website">Website</label>
+            <div>
+              {{form.website}}
+              <small id="hint_id_website" class="form-text text-muted">
+                The official website (full address). If it doesn't exist, leave blank.
+              </small>
+            </div>
+          </div>
+          <div id="div_id_platforms" class="form-group">
+            <label for="id_platforms">Platforms</label>
+            <div>
+              {{form.platforms}}
+            </div>
+          </div>
+          <div id="div_id_genres" class="form-group">
+            <label for="id_genres">Genres</label>
+            <div>
+              {{form.genres}}
+            </div>
+          </div>
+          <div id="div_id_description" class="form-group">
+            <label for="id_description">Description</label>
+            <div>
+              {{form.description}}
+            </div>
+            <small id="hint_id_description" class="form-text text-muted">
+              Copy the official description of the game if you can find it.
+              Don't write your own. For old games, check Mobygame's Ad Blurbs, look for the English back cover text.
+            </small>
+          </div>
+          <div id="div_id_title_logo" class="form-group">
+            <div class="controls file-upload-button "> <input type="file" name="title_logo_0" required=""
+                id="id_title_logo_0">
+              <input type="hidden" name="title_logo_1" required="" id="id_title_logo_1">
+              <label for="id_title_logo_0" class="upload-button">
+                Upload an image
+              </label>
+              <div id="cropper" class="croppie-container"></div>
+              <small id="hint_id_title_logo" class="form-text text-muted">
+                The banner should include the game's title.
+                Please make sure that your banner doesn't rely on transparency
+                as those won't be reflected in the final image
+              </small>
+            </div>
+          </div>
+          <div>
+            <input type="submit" name="submit" value="Submit" class="btn btn-primary" id="submit-id-submit">
+          </div>
+      </form>
     </div>
   </div>
 </div>
@@ -71,18 +137,19 @@
 
 
 {% block scripts %}
-  {{ block.super }}
-  {{ form.media.js }}
-  <script>
-    $(function () {
-      $('#id_platforms').select2({
-        closeOnSelect: false,
-        placeholder: ''
-      });
-      $('#id_genres').select2({
-        closeOnSelect: false,
-        placeholder: ''
-      });
+{{ block.super }}
+{{ form.media.js }}
+
+<script>
+  $(function () {
+    $('#id_platforms').select2({
+      closeOnSelect: false,
+      placeholder: ''
     });
-  </script>
+    $('#id_genres').select2({
+      closeOnSelect: false,
+      placeholder: ''
+    });
+  });
+</script>
 {% endblock %}

@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
-
 
 {% block title %}Sign in - Lutris{% endblock %}
 
@@ -10,8 +8,14 @@
   <div class="col-sm-3"></div>
   <div class="form-view col-sm-6">
     <h1>Sign in</h1>
-    {% crispy form form.helper %}
-      <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    <form action="{% url 'login' %}" method="post" class="form form-horizontal" id="form_login">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div>
+        <input type="submit" value="Sign in" class="btn btn-primary">
+      </div>
+    </form>
+    <a href="{% url 'password_reset' %}">Forgot your password?</a>
   </div>
   <div class="col-sm-3"></div>
 </div>

@@ -144,7 +144,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_swagger',
     'croppie',
-    'crispy_forms',
     'django_select2',
     'markupfield',
     'django_openid_auth',
@@ -199,10 +198,6 @@ TWITCH_CLIENT_SECRET = os.environ.get("TWITCH_CLIENT_SECRET")
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
-# Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_FAIL_SILENTLY = not DEBUG
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"

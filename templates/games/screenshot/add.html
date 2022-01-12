@@ -1,11 +1,16 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 {% block title %}Upload a screenshot - Lutris{% endblock %}
 
 {% block content %}
 <div class="form-view">
   <h2>Upload a screenshot</h2>
   <p>Although regular screenshots are accepted we prefer you submit your own in-game screenshots.</p>
-  {% crispy form %}
+  <form method="post" enctype="multipart/form-data">
+    {{ form.as_p }}
+    <div>
+      <input type="submit" value="Send">
+    </div>
+  </form>
+
 </div>
 {% endblock %}
