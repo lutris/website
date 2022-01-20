@@ -1,0 +1,15 @@
+Hello {{username}}!
+
+Thank you for your submission for the installer {{ installer }}.
+Unfortunately, some changes are required to let us publish it.
+
+Message from the moderator:
+
+{{ review }}
+
+
+The installer is available at {{ installer.edit_url }}
+
+
+Have a great day!
+The Lutris team

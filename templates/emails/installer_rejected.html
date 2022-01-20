@@ -1,0 +1,26 @@
+{% extends "emails/base.html" %}
+
+
+{% block content %}
+<p>Hello {{username}}!</p>
+
+<p>
+Thank you for your submission for the installer {{installer}}.
+Unfortunately, some changes are required to let us publish it.
+
+Message from the moderator:
+</p>
+
+<pre>
+  {{ review }}
+</pre>
+
+<p>
+  The installer is available at <a href="{{ installer.edit_url }}">{{ installer.edit_url }}</a><br />
+</p>
+
+<p>
+Have a great day! <br />
+<strong>The Lutris team</strong>
+</p>
+{% endblock content %}

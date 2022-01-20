@@ -29,6 +29,7 @@ from games.util import steam, gog
 from platforms.models import Platform
 from runners.models import Runner
 from providers.models import ProviderGame
+from emails.messages import send_email
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_INSTALLER = {
@@ -36,6 +37,21 @@ DEFAULT_INSTALLER = {
     "installer": [{"move": {"src": "file_id", "dst": "$GAMEDIR"}}],
 }
 
+
+def notify_rejected_installer(installer, review, user):
+    """Notify a user their installer was rejected"""
+    context = {
+        "username": user.username,
+        "installer": installer,
+        "review": review
+    }
+    subject = f"Your installer for {installer} wasn't published"
+    send_email(
+        "installer_rejected",
+        context,
+        subject,
+        user.email
+    )
 
 class Company(models.Model):
     """Gaming company"""
@@ -942,6 +958,11 @@ class Installer(BaseInstaller):
         self.content = dump_yaml(installer_data)
 
     @property
+    def edit_url(self):
+        """Return absolute URL to the edit installer form"""
+        return settings.ROOT_URL + reverse("edit_installer", kwargs={"slug": self.slug})
+
+    @property
     def revisions(self):
         """Return the revisions for this installer"""
         return [
@@ -1276,6 +1297,8 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self._version.save()
         self.set_to_draft()
         # Send an email...
+        installer = Installer.objects.get(pk=self.installer_id)
+        notify_rejected_installer(installer, installer_data["review"], self._version.revision.user)
 
     def accept(self, moderator=None, installer_data=None):
         """Accepts an installer submission

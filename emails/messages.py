@@ -13,7 +13,7 @@ def send_game_accepted(user, game):
         'name': game.name,
         'game_url': game.get_absolute_url()
     }
-    subject = u"Your game submission for '{}' has been accepted!".format(game.name)
+    subject = f"Your game submission for '{game.name}' has been accepted!"
     return send_email('game_accepted', context, subject, user.email)
 
 
@@ -38,15 +38,15 @@ def send_email(template, context, subject, recipients, sender=None):
     sender = sender or settings.DEFAULT_FROM_EMAIL
     if isinstance(recipients, string_types):
         recipients = [recipients]
-    subject = u"{} {}".format(settings.EMAIL_SUBJECT_PREFIX, subject)
-    text_part = render_to_string('emails/{}.txt'.format(template), context)
+    subject = f"{settings.EMAIL_SUBJECT_PREFIX} {subject}"
+    text_part = render_to_string(f'emails/{template}.txt', context)
     msg = EmailMultiAlternatives(
         subject=subject,
         body=text_part,
         to=recipients,
         from_email=sender
     )
-    html_body = render_to_string('emails/{}.html'.format(template), context)
+    html_body = render_to_string(f'emails/{template}.html', context)
     # Premailer does not handle https links, the site can't access itself
     # with HTTPS inside its container.
     # Under no circumstances this should be switched to https.

@@ -114,7 +114,6 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_202_ACCEPTED)
         elif action == 'reject':
             instance.reject(request.data)
-            print(request.data)
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_404_NOT_FOUND)
 

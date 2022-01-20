@@ -352,6 +352,7 @@ def edit_installer(request, slug):
         # Force the creation of a revision instead of creating a new installer
         with reversion.create_revision():
             installer = form.save(commit=False)
+            installer.review = ""
             reversion.set_user(request.user)
             reversion.set_comment(
                 "[{}] {} by {} on {}".format(
