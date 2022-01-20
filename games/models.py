@@ -503,7 +503,7 @@ class Game(models.Model):
         """Render the icon and place it in the icons folder"""
         dest_file = os.path.join(self.ICON_PATH, "%s.png" % self.slug)
         if os.path.exists(dest_file):
-            return
+            os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
                 self.icon,
@@ -520,7 +520,7 @@ class Game(models.Model):
         """Render the icon and place it in the banners folder"""
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
-            return
+            os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
                 self.title_logo,
