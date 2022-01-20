@@ -1291,14 +1291,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def reject(self, installer_data):
         """Reject the submission, setting it back to draft."""
         version_data = json.loads(self._version.serialized_data)
-        version_data[0]["fields"]["review"] = installer_data["review"]
+        review = installer_data["review"]
+        version_data[0]["fields"]["review"] = review
         version_data[0]["fields"]["draft"] = True
         self._version.serialized_data = json.dumps(version_data)
         self._version.save()
         self.set_to_draft()
-        # Send an email...
-        installer = Installer.objects.get(pk=self.installer_id)
-        notify_rejected_installer(installer, installer_data["review"], self._version.revision.user)
+        if review:
+            installer = Installer.objects.get(pk=self.installer_id)
+            notify_rejected_installer(installer, review, self._version.revision.user)
 
     def accept(self, moderator=None, installer_data=None):
         """Accepts an installer submission
