@@ -1,12 +1,15 @@
 """Forms for the main app"""
 # pylint: disable=missing-docstring,too-few-public-methods
 import os
+import io
 from datetime import date
 
 import yaml
-
+import json
+from PIL import Image
 from django import forms
 from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django_select2.forms import (
@@ -14,8 +17,8 @@ from django_select2.forms import (
     Select2MultipleWidget,
     Select2Widget, ModelSelect2MultipleWidget,
 )
+
 from bitfield.forms import BitFieldCheckboxSelectMultiple
-from croppie.fields import CroppieField
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from games import models
@@ -44,6 +47,8 @@ class AutoSlugForm(forms.ModelForm):
 
 
 class GameForm(forms.ModelForm):
+
+    crop_data = forms.CharField(required=False, widget=forms.HiddenInput())
     class Meta:
         model = models.Game
         fields = (
@@ -71,56 +76,60 @@ class GameForm(forms.ModelForm):
                 attrs={"class": "form-control"}
             ),
             "website": forms.TextInput(attrs={"class": "select2-lookalike"}),
-            "description": forms.Textarea(attrs={"class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"class": "select2-lookalike"})
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["title_logo"] = CroppieField(
-            options={
-                "viewport": {"width": 875, "height": 345},
-                "boundary": {"width": 875, "height": 345},
-                "showZoomer": True,
-            }
-        )
-
-    def rename_uploaded_file(self, file_field, cleaned_data, slug):
-        if self.files.get(file_field):
-            clean_field = cleaned_data.get(file_field)
-            _, ext = os.path.splitext(clean_field.name)
-            relpath = f"games/banners/{slug}{ext}"
-            clean_field.name = relpath
-            current_abspath = os.path.join(settings.MEDIA_ROOT, relpath)
-            if os.path.exists(current_abspath):
-                os.remove(current_abspath)
-            return clean_field
-        return None
 
     def clean_name(self):
         name = self.cleaned_data["name"]
-        slug = slugify(name)[:50]
-
+        slug = slugify(name)
         try:
             game = models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
             return name
+        if game.is_public:
+            msg = (
+                f"This game is <a href='/games/{slug}'>already in our database</a>."
+            )
         else:
-            if game.is_public:
-                msg = (
-                    f"This game is <a href='/games/{slug}'>already in our database</a>."
-                )
-            else:
-                msg = (
-                    f"This game has <a href='/games/{slug}'>already been "
-                    "submitted</a>, you're welcome to nag us so we "
-                    "publish it faster."
-                )
-            raise forms.ValidationError(mark_safe(msg))
+            msg = (
+                f"This game has <a href='/games/{slug}'>already been "
+                "submitted</a>, you're welcome to nag us so we "
+                "publish it faster."
+            )
+        raise forms.ValidationError(mark_safe(msg))
 
+    def process_banner(self, image_data, ratio):
+        """Convert image to banner format"""
+        image = Image.open(image_data)
+        image = image.convert("RGB")
+        image = image.crop(ratio)
+        image = image.resize((184, 69), Image.ANTIALIAS)
+        image_io = io.BytesIO()
+        image.save(image_io, 'JPEG')
+        return InMemoryUploadedFile(
+            image_io,
+            'title_logo',
+            image_data.name,
+            image_data.content_type,
+            None, None,
+        )
 
-class GameEditForm(forms.ModelForm):
+    def clean(self):
+        """Process banner, which depends on the crop data availability"""
+        title_logo = self.cleaned_data.get("title_logo")
+        crop_data = self.cleaned_data["crop_data"]
+        if crop_data:
+            crop_data = json.loads(crop_data)
+            crop_points = [int(p) for p in crop_data["points"]]
+            try:
+                self.cleaned_data["title_logo"] = self.process_banner(title_logo, crop_points)
+            except AttributeError:
+                raise forms.ValidationError("This is not a valid image format")
+        return self.cleaned_data
+
+class GameEditForm(GameForm):
     """Form to suggest changes for games"""
-
+    crop_data = forms.CharField(required=False, widget=forms.HiddenInput())
     reason = forms.CharField(
         required=False,
         help_text=(
@@ -146,18 +155,10 @@ class GameEditForm(forms.ModelForm):
         )
 
         widgets = {
-            "name": forms.TextInput(
-                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
-            ),
-            "year": forms.TextInput(
-                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
-            ),
-            "website": forms.TextInput(
-                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
-            ),
-            "description": forms.Textarea(
-                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
-            ),
+            "name": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "year": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "website": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"class": "select2-lookalike"}),
             "platforms": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "genres": Select2MultipleWidget(attrs={"style": "width: 100%;"}),
             "developer": ModelSelect2Widget(
@@ -169,30 +170,23 @@ class GameEditForm(forms.ModelForm):
                 model=models.Company,
                 search_fields=["name__icontains"],
                 attrs={"style": "width: 100%;"}
-            ),
+            )
         }
 
     def __init__(self, payload, *args, **kwargs):
         super().__init__(payload, *args, **kwargs)
-        self.fields["title_logo"] = CroppieField(
-            options={
-                "viewport": {"width": 875, "height": 345},
-                "boundary": {"width": 875, "height": 345},
-                "showZoomer": True,
-                "url": payload["title_logo"].url if payload.get("title_logo") else "",
-            }
-        )
-        self.fields["title_logo"].label = "Upload an image"
         self.fields["title_logo"].required = False
+        self.fields["reason"].widget = forms.TextInput(attrs={"class": "select2-lookalike"})
 
+    def clean_name(self):
+        return self.cleaned_data["name"]
 
     def clean(self):
         """Overwrite clean to fail validation if unchanged form was submitted"""
-        cleaned_data = super().clean()
         # Raise error if nothing actually changed
         if not self.has_changed():
             raise forms.ValidationError("You have not changed anything")
-        return cleaned_data
+        return super().clean()
 
 
 class ScreenshotForm(forms.ModelForm):

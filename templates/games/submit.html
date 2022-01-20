@@ -8,42 +8,8 @@
 
 
 {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
 {{ form.media.css }}
-<style>
-  [type="file"] {
-    border: 0;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute !important;
-    white-space: nowrap;
-    width: 1px;
-  }
-
-  .file-upload-button label {
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1rem;
-    font-weight: 700;
-    height: 2rem;
-    line-height: 2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .file-upload-button label:hover {
-    background-color: #f15d22;
-  }
-</style>
-<script type="text/javascript">
-  var croppieFieldName = "title_logo";
-  var croppieOptions = {
-    "viewport": { "width": 875, "height": 345 },
-    "boundary": { "width": 875, "height": 345 },
-    "showZoomer": true
-  };
-</script>
 {% endblock %}
 
 {% block content %}
@@ -58,72 +24,82 @@
         {% endif %}
       </h1>
       <form method="post" enctype="multipart/form-data">
-          <div id="div_id_name" class="form-group"> <label for="id_name" class=" requiredField">
-              Title<span class="asteriskField">*</span> </label>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% if game %}
+          <div id="div_id_reason" class="form-group">
+            {{ form.reason.errors }}
+            {{ form.reason.label_tag }}
+            {{form.reason}}
+          </div>
+        {% endif %}
+          <div id="div_id_name" class="form-group">
+            {{ form.name.errors }}
+            {{ form.name.label_tag }}
+            <div>
               {{form.name}}
+            </div>
           </div>
           <div id="div_id_year" class="form-group">
-            <label for="id_year">Release year</label>
+            {{form.year.errors}}
+            <label for="{{form.year.id_for_label }}">Release year</label>
             <div>
               {{form.year}}
             </div>
           </div>
           <div id="div_id_developer" class="form-group">
-            <label for="id_developer">Developer</label>
-            <div>
-              {{form.developer}}
-            </div>
+            {{ form.developer.errors }}
+            {{ form.developer.label_tag }}
+            {{ form.developer }}
           </div>
           <div id="div_id_publisher" class="form-group">
-            <label for="id_publisher">Publisher</label>
-            <div>
-              {{form.publisher}}
-            </div>
+            {{ form.publisher.errors }}
+            {{ form.publisher.label_tag }}
+            {{ form.publisher }}
           </div>
           <div id="div_id_website" class="form-group">
-            <label for="id_website">Website</label>
-            <div>
-              {{form.website}}
-              <small id="hint_id_website" class="form-text text-muted">
-                The official website (full address). If it doesn't exist, leave blank.
-              </small>
-            </div>
+            {{ form.website.errors }}
+            {{ form.website.label_tag }}
+            {{ form.website }}
+            <small id="hint_id_website" class="form-text text-muted">
+              The official website (full address). If it doesn't exist, leave blank.
+            </small>
           </div>
           <div id="div_id_platforms" class="form-group">
-            <label for="id_platforms">Platforms</label>
-            <div>
-              {{form.platforms}}
-            </div>
+            {{ form.platforms.errors }}
+            {{ form.platforms.label_tag }}
+            {{ form.platforms }}
           </div>
           <div id="div_id_genres" class="form-group">
-            <label for="id_genres">Genres</label>
-            <div>
-              {{form.genres}}
-            </div>
+            {{ form.genres.errors }}
+            {{ form.genres.label_tag }}
+            {{ form.genres }}
           </div>
           <div id="div_id_description" class="form-group">
-            <label for="id_description">Description</label>
-            <div>
-              {{form.description}}
-            </div>
+            {{ form.description.errors }}
+            {{ form.description.label_tag }}
+            {{ form.description }}
             <small id="hint_id_description" class="form-text text-muted">
               Copy the official description of the game if you can find it.
               Don't write your own. For old games, check Mobygame's Ad Blurbs, look for the English back cover text.
             </small>
           </div>
           <div id="div_id_title_logo" class="form-group">
-            <div class="controls file-upload-button "> <input type="file" name="title_logo_0" required=""
-                id="id_title_logo_0">
-              <input type="hidden" name="title_logo_1" required="" id="id_title_logo_1">
-              <label for="id_title_logo_0" class="upload-button">
-                Upload an image
+            <div class="controls file-upload-button ">
+              {{ form.title_logo.errors }}
+              <label for="id_title_logo" class="upload-button">
+                Game title (184x69 image format):
               </label>
-              <div id="cropper" class="croppie-container"></div>
-              <small id="hint_id_title_logo" class="form-text text-muted">
-                The banner should include the game's title.
-                Please make sure that your banner doesn't rely on transparency
-                as those won't be reflected in the final image
-              </small>
+              {{ form.crop_data }}
+              {{ form.title_logo }}
+              <div id="cropper" style="display: none"></div>
+              <p>
+                <small id="hint_id_title_logo" class="form-text text-muted">
+                  The banner should include the game's title.
+                  Please make sure that your banner doesn't rely on transparency
+                  as those won't be reflected in the final image
+                </small>
+              </p>
             </div>
           </div>
           <div>
@@ -137,10 +113,41 @@
 
 
 {% block scripts %}
+<script src="{% static 'js/croppie.min.js' %}"></script>
 {{ block.super }}
 {{ form.media.js }}
 
 <script>
+  let $uploadCrop = $('#cropper').croppie({
+    enableExif: true,
+    mouseWheelZoom: false,
+    viewport: {
+        width: 736,
+        height: 276
+    },
+    boundary: {
+        width: 736,
+        height: 276
+    }
+  })
+
+  $('#cropper').on('update.croppie', function(ev, cropData) {
+    $("#id_crop_data").val(JSON.stringify(cropData))
+  })
+
+  $('#id_title_logo').on('change', function () {
+    $('#cropper').show()
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $uploadCrop.croppie('bind', {
+        url: e.target.result
+      }).then(function(){
+
+       });
+    }
+    reader.readAsDataURL(this.files[0]);
+  });
+
   $(function () {
     $('#id_platforms').select2({
       closeOnSelect: false,

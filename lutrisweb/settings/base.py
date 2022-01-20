@@ -143,7 +143,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'rest_framework_swagger',
-    'croppie',
     'django_select2',
     'markupfield',
     'django_openid_auth',

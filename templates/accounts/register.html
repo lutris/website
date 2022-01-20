@@ -10,6 +10,7 @@
   <div class="col-sm-6 form-view">
     <h1>Register account</h4>
     <form id='form_register' method="post" class="form-horizontal form">
+      {% csrf_token %}
       {{ form.as_p }}
       <div>
         <input type="submit" value="Register" class="btn btn-primary">

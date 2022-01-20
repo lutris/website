@@ -226,7 +226,11 @@
     unpublishedInstallers.classList.toggle('hide-unpublished');
   }
 $(window).on('load', function () {
-  blueimp.Gallery(document.getElementById('screenshots').getElementsByTagName('a'), {
+  const screenshotsDiv = document.getElementById('screenshots')
+  if (!screenshotsDiv) {
+    return
+  }
+  blueimp.Gallery(screenshotsDiv.getElementsByTagName('a'), {
     container: '#game_screenshots_carousel',
     carousel: true,
     toggleControlsOnSlideClick: false,

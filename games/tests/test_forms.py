@@ -72,11 +72,8 @@ class TestGameForm(TestCase):
         }, {
             'title_logo': SimpleUploadedFile('front.png', image.getvalue())
         })
-        # XXX there's a problem with django-croppie preventing testing this form properly
-        # The title_photo is made optional until this is fixed
-        form.fields['title_logo'].required = False
         form.is_valid()
-        # self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid())
         self.assertFalse(form.errors)
 
     def test_catches_duplicate_slugs(self):

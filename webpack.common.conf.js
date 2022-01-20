@@ -90,8 +90,15 @@ module.exports = {
         {
           from: path.resolve(__dirname, "node_modules/blueimp-gallery/img"),
           to: "./img/"
-        }
-
+        },
+        {
+          from: path.resolve(__dirname, "node_modules/croppie/*.js"),
+          to: "./js/[name][ext]"
+        },
+        {
+          from: path.resolve(__dirname, "node_modules/croppie/*.css"),
+          to: "./css/[name][ext]"
+        },
       ],
     }),
     // provide jQuery and Popper.js dependencies
