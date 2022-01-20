@@ -1271,6 +1271,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         """Reject the submission, setting it back to draft."""
         version_data = json.loads(self._version.serialized_data)
         version_data[0]["fields"]["review"] = installer_data["review"]
+        version_data[0]["fields"]["draft"] = True
         self._version.serialized_data = json.dumps(version_data)
         self._version.save()
         self.set_to_draft()
