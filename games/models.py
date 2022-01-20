@@ -520,6 +520,7 @@ class Game(models.Model):
         """Render the icon and place it in the banners folder"""
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
+            LOGGER.info("Removing existing file %s", dest_file)
             os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
@@ -916,6 +917,7 @@ class Installer(BaseInstaller):
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
     reason = models.CharField(max_length=512, blank=True, null=True)
+    review = models.CharField(max_length=512, blank=True, null=True)
 
     # Collection manager
     objects = InstallerManager()
