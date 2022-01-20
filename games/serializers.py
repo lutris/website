@@ -95,6 +95,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
     script = serializers.JSONField()
     content = serializers.CharField()
     reason = serializers.CharField()
+    review = serializers.CharField()
     comment = serializers.CharField()
     installer_id = serializers.IntegerField()
     revision_id = serializers.IntegerField()

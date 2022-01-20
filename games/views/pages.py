@@ -340,6 +340,7 @@ def edit_installer(request, slug):
                 revision_id = version.revision.id
                 break
     if draft_data:
+        installer.review = draft_data["review"]
         draft_data["reason"] = ""
         if "runner_id" in draft_data:
             draft_data["runner"] = draft_data["runner_id"]
@@ -367,12 +368,6 @@ def edit_installer(request, slug):
             return redirect("edit_installer", slug=installer.slug)
         messages.info(request, "Submission sent to moderation")
         return redirect("installer_complete", slug=installer.game.slug)
-
-    if draft_data:
-        messages.info(
-            request,
-            "You are viewing a draft of the installer.",
-        )
     return render(
         request,
         "installers/form.html",
@@ -382,7 +377,7 @@ def edit_installer(request, slug):
             "new": False,
             "installer": installer,
             "versions": versions,
-            "revision_id": revision_id,
+            "revision_id": revision_id
         }
     )
 

@@ -26,6 +26,13 @@
         {% endfor %}
       </select>
     {% endif %}
+    {% if installer.review %}
+      <p class="warning-message">
+        Your submission was previously rejected.<br>
+        <br>
+        Moderator notes: {{installer.review}}
+      </p>
+    {% endif %}
     <form action="" method="post">
       {% csrf_token %}
       {{ form.as_p }}

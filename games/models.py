@@ -1090,9 +1090,9 @@ class GameSubmission(models.Model):
         return "{0} submitted {1} on {2}".format(self.user, self.game, self.created_at)
 
     def accept(self):
-        """Accept the submission and notify the author"""
+        """Accept the game submission and notify the author"""
         if self.accepted_at:
-            LOGGER.warning("Submission already accepted")
+            LOGGER.warning("Game submission already accepted")
             return
         self.game.is_public = True
         self.game.save()
@@ -1164,6 +1164,7 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self.description = installer_data["description"]
         self.notes = installer_data["notes"]
         self.reason = installer_data["reason"]
+        self.review = installer_data["review"]
 
         self.installer_id = self._version.object_id
 
@@ -1198,9 +1199,6 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
             if num_sub > 1:
                 if installer not in dupe_submissions:
                     dupe_submissions.append(installer)
-        for dupe in dupe_submissions:
-            print("Duplicate sub for ", dupe)
-        print(f"{len(dupe_submissions)} installers to clean")
         for installer in dupe_submissions:
             revisions = sorted(
                 [r for r in installer.revisions if r.comment.startswith("[submission]")],
@@ -1215,6 +1213,8 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
         self.comment = self.comment.replace("[submission]", "[draft]")
         self._version.revision.comment = self.comment
         self._version.revision.save()
+        # Not currently modifying the internal state of the submission, which is ok
+        # since we use the revision comment to filter drafts from submissions.
 
     @property
     def revision(self):
@@ -1266,6 +1266,15 @@ class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-att
     def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
         """Delete the revision and the previous ones from the same author"""
         self._clear_old_revisions(original_revision=self._version.revision)
+
+    def reject(self, installer_data):
+        """Reject the submission, setting it back to draft."""
+        version_data = json.loads(self._version.serialized_data)
+        version_data[0]["fields"]["review"] = installer_data["review"]
+        self._version.serialized_data = json.dumps(version_data)
+        self._version.save()
+        self.set_to_draft()
+        # Send an email...
 
     def accept(self, moderator=None, installer_data=None):
         """Accepts an installer submission
