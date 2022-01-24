@@ -242,7 +242,8 @@ def uses_a_valid_wine_version(installer):
     """Checks if a referenced wine version is available from the API"""
 
     script = get_installer_script(installer)
-    script_version = script.get("wine", {}).get("version")
+    wine_config = script.get("wine") or {}
+    script_version = wine_config.get("version")
     if not script_version:
         return SUCCESS
     versions = [
