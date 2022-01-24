@@ -8,6 +8,7 @@
 <h1>Installers</h1>
 <section>
     {% for installer in installers %}
+    {% if installer.slug %}
     {% with installer.game as game %}
     <div class="game-preview">
       <a href="{% url 'edit_installer' slug=installer.slug %}" title="{{ game.name }}">
@@ -21,6 +22,7 @@
       </div>
     </div>
     {% endwith %}
+    {% endif %}
     {% empty %}
     No installers
     {% endfor %}
@@ -28,6 +30,7 @@
 <h1>Drafts</h1>
 <section>
   {% for installer in drafts %}
+  {% if installer.slug %}
   {% with installer.game as game %}
   <div class="game-preview">
     <a href="{% url 'edit_installer' slug=installer.slug %}" title="{{ game.name }}">
@@ -41,6 +44,7 @@
     </div>
   </div>
   {% endwith %}
+  {% endif %}
   {% empty %}
   No installers
   {% endfor %}
