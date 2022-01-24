@@ -19,7 +19,7 @@ from sorl.thumbnail import get_thumbnail
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
-from django.db import models
+from django.db import models, IntegrityError
 from django.db.models import Count, Q
 from django.urls import reverse
 
@@ -440,7 +440,11 @@ class Game(models.Model):
 
         # Move user libraries
         for library in other_game.libraries.all():
-            library.games.add(self)
+            try:
+                library.games.add(self)
+            except IntegrityError:
+                pass
+                # User already has the game
 
         # Move provider games
         for provider_game in other_game.provider_games.all():
