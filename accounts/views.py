@@ -298,7 +298,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
-        context = super(LibraryList, self).get_context_data(object_list=object_list, **kwargs)
+        context = super().get_context_data(object_list=object_list, **kwargs)
         user = self.get_user()
         if self.request.user != user:
             # Libraries are currently private. This will change once public
@@ -326,8 +326,11 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
         return queryset.order_by(self.request.GET.get('sort', self.ordering))
 
 
+@login_required
 def installer_list(request, username):
     """List all private installers"""
+    if username != request.user.username:
+        raise Http404
     installers = models.Installer.objects.filter(
         user=request.user,
         published=False
