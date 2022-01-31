@@ -30,7 +30,7 @@ class GameListView(generics.GenericAPIView):
             return [models.Game.objects.get_random(self.request.GET['random'])]
 
         if 'with-installers' in self.request.GET:
-            base_query = models.Game.objects.with_installers()
+            base_query = models.Game.objects.with_installer()
         else:
             base_query = models.Game.objects.published()
 
