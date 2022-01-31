@@ -127,14 +127,15 @@ class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
 
     provider_games = ProviderGameSerializer(many=True)
+    platforms = PlatformSerializer(many=True)
+    aliases = GameAliasSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
-            'name', 'slug', 'year',
-            'description', 'banner_url', 'icon_url', 'coverart', 'is_public',
-            'updated', 'provider_games', 'steamid', 'gogid', 'gogslug', 'humblestoreid', 'id'
+            'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
+            'platforms', 'provider_games', 'aliases', 'id'
         )
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
