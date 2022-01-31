@@ -29,7 +29,10 @@ class GameListView(generics.GenericAPIView):
         if 'random' in self.request.GET:
             return [models.Game.objects.get_random(self.request.GET['random'])]
 
-        base_query = models.Game.objects.filter(change_for__isnull=True)
+        if 'with-installers' in self.request.GET:
+            base_query = models.Game.objects.with_installers()
+        else:
+            base_query = models.Game.objects.published()
 
         # A list of slugs is sent from the client, we match them against Lutris
         # games.
