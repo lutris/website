@@ -94,12 +94,55 @@ def cleanup_installers():
 
     description_removals = [
         "This script will facilitate you install of this game on Linux OS:",
-        "This script will install",
+        "This script will assist you to install this game on Linux OS:",
+        "This script will facilitate install of this app on Linux OS:",
+        "This script facilitates you install of this game on Linux OS:",
+        "This script will facilitate install install of this game on Linux OS:",
+        "This script will assit you to install this gae on Linux OS:",
+        "This script will assist you to install this game on Linux OS:",
+        "This script will assit you to install this game on Linux OS:",
+        "This script will facilitate you to install of this game:",
+        "This script will facilitate install of this game on Linux OS:",
+        "This script will facilitate you to install of this game on Linux OS:",
+        "This script will facilitate you install on this game on Linux OS:",
+        "This Lutris script installer will facilitate install of this game on Linux OS:",
+        "This script will install ",
+        "This script will assist you to install ",
+        "This script will facilitate you install ",
+        " provided by GOG",
+        " provided by Steam.",
+        " using Lutris Wine runner",
+        " using ScummVM Lutris runner",
+        " using ScummVM runner.",
+        "This script will facilitate you install of ",
+        "This script facilitates the installation of the ",
         "During install please let all options by default.",
+        "During install, please let all options by default.",
+        "During installation please let all options stay default.",
+        "Big thanks to the people who helped us play this game in the best conditions on Linux.",
+        "Big thanks to the people who helped us play this game in the best conditions on Linux platform.",
+        "Big thanks to people who gave their time to permit us using this application in the best conditions on Linux platform.",
         "Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux platform.",
-        "Thanks to the people who helped us play this game in the best conditions on Linux platform.",
+        "Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux.",
+        "Big thanks to people who gave their time to permit us playing this game in the best conditions.",
+        "Big thanks to people who gave their time to permit using this application in the best conditions on Linux."
+        "Big thanks to the people who contributed to play this game in the best conditions on Linux.",
+        "Big thanks to people who helped us play this game in the best conditions on Linux.",
+        "A big thank you to the people who help to play this game in the best conditions on Linux.",
+        "Many thanks to the people who helped us to play this game in the best conditions on Linux platform.",
+        "Many thanks to the people who helped us to play this game in the best conditions on Linux.",
+        "Many thanks to the people who helped us to play this game in the best conditions.",
+
+        "Thanks to the people who contributed to play this game in the best conditions on Linux platform.",
         "Thanks to the people who contribute to play this game in the best conditions on Linux platform.",
-        "Thanks to the people who helped us play this game in the best conditions."
+        "Thanks to the people who helped us playing this game in the best conditions on Linux platform.",
+        "Thanks to the people who helped us play this game in the best conditions on Linux platform.",
+        "Thanks to the people who contributed to play this game in the best conditions on Linux.",
+        "Thanks to the people who helped us playing this game in the best conditions on Linux.",
+        "Thanks to the people who helped us play this game in the best conditions on Linux.",
+        "Thanks to the people who contributed to play this game in the best conditions.",
+        "Thanks to the people who helped us play this game in the best conditions.",
+        "Uses the files from the Windows installer from GOG."
     ]
 
 
@@ -118,8 +161,10 @@ def cleanup_installers():
 
 
     for installer in models.Installer.objects.filter(
-        Q(description__contains="facilitate") |
-        Q(description__contains="best conditions") |
+        Q(description__icontains="this script") |
+        Q(description__icontains="facilitate") |
+        Q(description__icontains="best conditions") |
+        Q(description__icontains="uses the files") |
         Q(notes__icontains="x360") |
         Q(notes__icontains="legluondunet") |
         Q(notes__icontains="issue")

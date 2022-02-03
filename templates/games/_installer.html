@@ -62,10 +62,10 @@
     </div>
   </div>
 
-  {% if installer.description %}
+  {% if installer.description.strip %}
   <div><strong>{{ installer.description|clean_html|safe|linebreaksbr }}</strong></div>
   {% endif %}
-  {% if installer.notes %}
+  {% if installer.notes.strip %}
   <div class="small-text">{{ installer.notes|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
 </li>
