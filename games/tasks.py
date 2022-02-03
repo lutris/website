@@ -106,6 +106,8 @@ def cleanup_installers():
 
         installer.notes = installer.notes.replace("- x360 gamepad compatible", "")
         installer.notes = installer.notes.replace("- Please report issue concerning this script on my Github page:", "")
+        installer.notes = installer.notes.replace("- Please report issue concerning this script on my github page:", "")
+
         installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts/", "")
         installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts", "")
         installer.notes = installer.notes.strip()
