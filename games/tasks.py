@@ -101,6 +101,8 @@ def cleanup_installers():
         installer.description = installer.description.replace("During install please let all options by default.", "")
         installer.description = installer.description.replace("Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux platform.", "")
         installer.description = installer.description.replace("Thanks to the people who helped us play this game in the best conditions on Linux platform.", "")
+        installer.description = installer.description.replace("Thanks to the people who contribute to play this game in the best conditions on Linux platform.", "")
+
 
         installer.notes = installer.notes.replace("- x360 gamepad compatible", "")
         installer.notes = installer.notes.replace("- Please report issue concerning this script on my Github page:", "")
