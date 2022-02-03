@@ -94,9 +94,13 @@ def cleanup_installers():
     for installer in models.Installer.objects.filter(
         Q(description__contains="facilitate") |
         Q(description__contains="best conditions") |
-        Q(notes__contains="legluondunet")
+        Q(notes__icontains="x360") |
+        Q(notes__icontains="legluondunet") |
+        Q(notes__icontains="issue")
     ):
         print(installer)
+        if not installer.description:
+            installer.description = ""
         installer.description = installer.description.replace("This script will facilitate you install of this game on Linux OS:", "")
         installer.description = installer.description.replace("During install please let all options by default.", "")
         installer.description = installer.description.replace("Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux platform.", "")
@@ -105,10 +109,15 @@ def cleanup_installers():
 
 
         installer.notes = installer.notes.replace("- x360 gamepad compatible", "")
+        installer.notes = installer.notes.replace("- x360 controller compatible", "")
+        installer.notes = installer.notes.replace("- x360 compatible", "")
+        installer.notes = installer.notes.replace("- Known issues:", "")
+        installer.notes = installer.notes.replace("- Known issue:", "")
+        installer.notes = installer.notes.replace("- Knowns issues:", "")
         installer.notes = installer.notes.replace("- Please report issue concerning this script on my Github page:", "")
         installer.notes = installer.notes.replace("- Please report issue concerning this script on my github page:", "")
-
         installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts/", "")
         installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts", "")
         installer.notes = installer.notes.strip()
+
         installer.save()
