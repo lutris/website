@@ -91,6 +91,32 @@ def auto_process_installers():
 
 @task
 def cleanup_installers():
+
+    description_removals = [
+        "This script will facilitate you install of this game on Linux OS:",
+        "This script will install",
+        "During install please let all options by default.",
+        "Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux platform.",
+        "Thanks to the people who helped us play this game in the best conditions on Linux platform.",
+        "Thanks to the people who contribute to play this game in the best conditions on Linux platform.",
+        "Thanks to the people who helped us play this game in the best conditions."
+    ]
+
+
+    notes_removal = [
+        "- x360 gamepad compatible",
+        "- x360 controller compatible",
+        "- x360 compatible",
+        "- Known issues:",
+        "- Known issue:",
+        "- Knowns issues:",
+        "- Please report issue concerning this script on my Github page:",
+        "- Please report issue concerning this script on my github page:",
+        "https://github.com/legluondunet/MyLittleLutrisScripts/",
+        "https://github.com/legluondunet/MyLittleLutrisScripts",
+    ]
+
+
     for installer in models.Installer.objects.filter(
         Q(description__contains="facilitate") |
         Q(description__contains="best conditions") |
@@ -101,23 +127,14 @@ def cleanup_installers():
         print(installer)
         if not installer.description:
             installer.description = ""
-        installer.description = installer.description.replace("This script will facilitate you install of this game on Linux OS:", "")
-        installer.description = installer.description.replace("During install please let all options by default.", "")
-        installer.description = installer.description.replace("Big thanks to people who gave their time to permit us playing this game in the best conditions on Linux platform.", "")
-        installer.description = installer.description.replace("Thanks to the people who helped us play this game in the best conditions on Linux platform.", "")
-        installer.description = installer.description.replace("Thanks to the people who contribute to play this game in the best conditions on Linux platform.", "")
+        for removal in description_removals:
+            installer.description = installer.description.replace(removal, "")
+        installer.description = installer.description.strip()
 
-
-        installer.notes = installer.notes.replace("- x360 gamepad compatible", "")
-        installer.notes = installer.notes.replace("- x360 controller compatible", "")
-        installer.notes = installer.notes.replace("- x360 compatible", "")
-        installer.notes = installer.notes.replace("- Known issues:", "")
-        installer.notes = installer.notes.replace("- Known issue:", "")
-        installer.notes = installer.notes.replace("- Knowns issues:", "")
-        installer.notes = installer.notes.replace("- Please report issue concerning this script on my Github page:", "")
-        installer.notes = installer.notes.replace("- Please report issue concerning this script on my github page:", "")
-        installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts/", "")
-        installer.notes = installer.notes.replace("https://github.com/legluondunet/MyLittleLutrisScripts", "")
+        if not installer.notes:
+            installer.notes = ""
+        for removal in notes_removal:
+            installer.notes = installer.notes.replace(removal, "")
         installer.notes = installer.notes.strip()
 
         installer.save()
