@@ -47,6 +47,7 @@ class ProviderGame(ProviderResource):
         related_name="games",
         on_delete=models.PROTECT,
     )
+    updated_at = models.DateTimeField(auto_now=True)
     metadata = JSONField(null=True)
 
     class Meta:
