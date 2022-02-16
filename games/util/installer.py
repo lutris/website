@@ -243,6 +243,8 @@ def uses_a_valid_wine_version(installer):
 
     script = get_installer_script(installer)
     wine_config = script.get("wine") or {}
+    if not isinstance(wine_config, dict):
+        return (False, "Wine configuration should be a mapping (dict)")
     script_version = wine_config.get("version")
     if not script_version:
         return SUCCESS

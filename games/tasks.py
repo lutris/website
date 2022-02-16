@@ -91,7 +91,7 @@ def auto_process_installers():
 
 @task
 def cleanup_installers():
-
+    """Shorten installer description by removing some data"""
     description_removals = [
         "This script will facilitate you install of this game on Linux OS:",
         "This script will assist you to install this game on Linux OS:",
