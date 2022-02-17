@@ -5,7 +5,6 @@ import logging
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
-from providers.gog import LOGGER
 
 LOGGER = logging.getLogger(__name__)
 
