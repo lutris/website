@@ -240,6 +240,14 @@ CELERYBEAT_SCHEDULE = {
     'clean-installers': {
         'task': 'games.tasks.auto_process_installers',
         'schedule': crontab(minute=5)
+    },
+    'load-gog-games': {
+        'task': 'providers.tasks.load_gog_games',
+        'schedule': crontab(day_of_week=1, hour=1, minute=1)
+    },
+    'match-gog-games': {
+        'task': 'providers.tasks.match_gog_games',
+        'schedule': crontab(day_of_week=1, hour=1, minute=10)
     }
 }
 

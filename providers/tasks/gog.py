@@ -119,10 +119,6 @@ def create_game(gog_game):
     game.save()
     return game
 
-@task
-def run_cache_gog_games():
-    """Locally cache all GOG games as a background task"""
-    cache_gog_games()
 
 def sync_all_gog_games():
     """Read cached GOG files and matches the games against Lutris games"""
@@ -147,6 +143,7 @@ def sync_all_gog_games():
 @task
 def load_gog_games():
     """Load GOG games from the local cache to provider games"""
+    cache_gog_games()
     provider = Provider.objects.get(name="gog")
     update_started_at = timezone.now()
     for game in iter_gog_games():
@@ -183,7 +180,6 @@ def match_gog_games():
         if provider_game.metadata["type"] != 1:
             # Game has been matched already or is not a game
             stats["not_game"] += 1
-            LOGGER.info("Skipping %s (not a game)", provider_game)
             continue
         # Check if a Lutris game exists
         game_name = clean_name(provider_game.name)
