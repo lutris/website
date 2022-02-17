@@ -354,7 +354,7 @@ class Game(models.Model):
         if "gog" in provider_games:
             url = provider_games["gog"].metadata.get("url")
             if url:
-                links["gog"] = "https://www.gog.com" + url
+                links["gog"] = url
         return links
 
     def get_change_model(self):
