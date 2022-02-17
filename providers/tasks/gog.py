@@ -148,6 +148,7 @@ def sync_all_gog_games():
 def load_gog_games():
     """Load GOG games from the local cache to provider games"""
     provider = Provider.objects.get(name="gog")
+    update_started_at = timezone.now()
     for game in iter_gog_games():
         gog_game, created = ProviderGame.objects.get_or_create(provider=provider, slug=game["id"])
         gog_game.name = game["title"]
@@ -156,18 +157,33 @@ def load_gog_games():
         gog_game.save()
         if created:
             LOGGER.info("Created new provider game %s", game["title"])
+    old_provider_games = ProviderGame.objects.filter(
+        provider=provider,
+        updated_at__lt=update_started_at
+    )
+    LOGGER.info("Deleting %d old games", old_provider_games.count())
+    for game in old_provider_games:
+        game.delete()
+
 
 
 @task
 def match_gog_games():
     """Match GOG games with Lutris games"""
+    stats = {
+        "created": 0,
+        "present": 0,
+        "not_game": 0,
+        "matched": 0,
+    }
     for provider_game in ProviderGame.objects.filter(provider__name="gog"):
-        if "type" not in provider_game.metadata:
-            print(provider_game.metadata)
-            provider_game.delete()
+        if provider_game.games.count():
+            stats["present"] += 1
             continue
-        if provider_game.games.count() or provider_game.metadata["type"] != 1:
+        if provider_game.metadata["type"] != 1:
             # Game has been matched already or is not a game
+            stats["not_game"] += 1
+            LOGGER.info("Skipping %s (not a game)", provider_game)
             continue
         # Check if a Lutris game exists
         game_name = clean_name(provider_game.name)
@@ -180,6 +196,7 @@ def match_gog_games():
             LOGGER.info("GOG game %s matched with %s", provider_game, lutris_game)
             lutris_game.provider_games.add(provider_game)
         if existing_games.count():
+            stats["matched"] += 1
             continue
         LOGGER.info("Creating %s", game_name)
         if provider_game.metadata.get("releaseDate"):
@@ -193,4 +210,7 @@ def match_gog_games():
             is_public=True,
             gogid=provider_game.slug
         )
+        stats["created"] += 1
         lutris_game.provider_games.add(provider_game)
+    LOGGER.info(stats)
+    return stats

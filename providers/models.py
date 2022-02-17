@@ -38,6 +38,7 @@ class ProviderResource(models.Model):
         resource.save()
         LOGGER.info("Created %s", resource["name"])
 
+
 class ProviderGame(ProviderResource):
     """Games from providers, along with any provider specific data."""
     name = models.CharField(max_length=255, blank=True)
@@ -61,7 +62,6 @@ class ProviderGame(ProviderResource):
     def autocomplete_search_fields():
         """Autocomplete fields used in the Django admin"""
         return ("name__icontains", "slug__icontains")
-
 
 class ProviderGenre(ProviderResource):
     """Genres given by providers"""
