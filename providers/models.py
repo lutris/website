@@ -71,6 +71,7 @@ class ProviderGenre(ProviderResource):
         related_name="genres",
         on_delete=models.PROTECT
     )
+    updated_at = models.DateTimeField(auto_now=True)
     metadata = JSONField(null=True)
 
 class ProviderPlatform(ProviderResource):
@@ -82,6 +83,7 @@ class ProviderPlatform(ProviderResource):
         related_name="platforms",
         on_delete=models.PROTECT
     )
+    updated_at = models.DateTimeField(auto_now=True)
     metadata = JSONField(null=True)
 
 
@@ -94,6 +96,7 @@ class ProviderCover(ProviderResource):
         related_name="covers",
         on_delete=models.PROTECT
     )
+    updated_at = models.DateTimeField(auto_now=True)
     metadata = JSONField(null=True)
 
     @classmethod

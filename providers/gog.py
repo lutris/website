@@ -386,6 +386,7 @@ def match_from_gog_api():
 def match_from_gogdb(create_missing=False):
     """Match GOG games from GOGDB to Lutris games"""
     stats = {
+        "skipped": 0,
         "present": 0,
         "created": 0,
         "matched": 0,
@@ -396,7 +397,7 @@ def match_from_gogdb(create_missing=False):
         stats["total"] += 1
         product_type = game.metadata.get("product_type")
         if product_type != "Game":
-            LOGGER.debug("Skipping content type %s for %s", product_type, game)
+            stats["skipped"] += 1
             continue
         if game.games.count():
             stats["present"] += 1
@@ -419,4 +420,31 @@ def match_from_gogdb(create_missing=False):
         else:
             stats["unmatched"] += 1
             LOGGER.warning("No match found for %s", game.metadata)
+    return stats
+
+
+def scan_non_games():
+    """Checks that every GOG entry in lutris is a game"""
+    stats = {
+        "total": 0,
+        "games": 0,
+        "non_game_matches": 0,
+        "non_game_absent": 0,
+    }
+    for game in models.ProviderGame.objects.filter(provider__name="gog"):
+        stats["total"] += 1
+        product_type = game.metadata.get("product_type")
+        if product_type == "Game":
+            stats["games"] += 1
+            continue
+        if game.games.count():
+            for lutris_game in game.games.all():
+                LOGGER.warning(
+                    "%s is associated with GOG Product %s of type %s",
+                    lutris_game, game, product_type
+                )
+                lutris_game.provider_games.remove(game)
+            stats["non_game_matches"] += 1
+        else:
+            stats["non_game_absent"] += 1
     return stats

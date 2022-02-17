@@ -25,4 +25,4 @@ def load_gog_games():
 @task
 def match_gog_games():
     """Match GOG games with Lutris games"""
-    return match_from_gogdb()
+    return match_from_gogdb(create_missing=True)
