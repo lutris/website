@@ -448,7 +448,12 @@ class Game(models.Model):
 
         # Move provider games
         for provider_game in other_game.provider_games.all():
-            self.provider_games.add(provider_game)
+            try:
+                self.provider_games.add(provider_game)
+            except IntegrityError:
+                # This provider game already exist on this game
+                pass
+
 
         # Merge Steam ID if none is present
         if not self.steamid:
