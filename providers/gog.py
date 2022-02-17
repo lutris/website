@@ -150,20 +150,41 @@ def load_games_from_gog_api():
 
 def load_games_from_gogdb(file_path):
     """Generate ProviderGames for GOG from a GOGDB dump"""
-    provider, _created = models.Provider.objects.get_or_create(name="gog")
+    LOGGER.info("Loading GOG games from %s", file_path)
+    provider = models.Provider.objects.get(name="gog")
+    update_started_at = timezone.now()
     with open(file_path, encoding="utf-8") as list_file:
         game_list = json.load(list_file)
+    stats = {
+        "skipped": 0,
+        "created": 0,
+        "updated": 0,
+        "deleted": 0,
+    }
     for game in game_list:
         if "product_id" not in game:
+            stats["skipped"] += 1
             continue
-        provider_game, _created = models.ProviderGame.objects.get_or_create(
+        provider_game, created = models.ProviderGame.objects.get_or_create(
             slug=game["product_id"],
             provider=provider
         )
         provider_game.name = game["name"]
         provider_game.metadata = game
         provider_game.save()
-
+        if created:
+            stats["created"] += 1
+        else:
+            stats["updated"] += 1
+    old_provider_games = models.ProviderGame.objects.filter(
+        provider=provider,
+        updated_at__lt=update_started_at
+    )
+    stats["deleted"] = old_provider_games.count()
+    LOGGER.info("Deleting %d old games", old_provider_games.count())
+    for game in old_provider_games:
+        game.delete()
+    return stats
 
 def match_with_lutris(game):
     """Matching Lutris games with a GOG game"""
