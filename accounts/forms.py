@@ -2,6 +2,8 @@
 import logging
 
 from django import forms
+from django.db import IntegrityError
+
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
@@ -69,7 +71,11 @@ class RegistrationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
-            user.save()
+            try:
+                user.save()
+            except IntegrityError:
+                LOGGER.error("Returning user %s without saving.", user)
+                return user
         Token.objects.create(user=user)
         return user
 
