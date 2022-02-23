@@ -229,6 +229,11 @@ def all_files_are_used(installer):
         return SUCCESS
     installer_text = str(script.get("installer"))
     for file_info in script["files"]:
+        if not isinstance(file_info, dict):
+            return (
+                False,
+                "Files should be a mapping: 'file_id: url'"
+            )
         file_id = next(iter(file_info.keys()))
         if file_id not in installer_text:
             return (
