@@ -906,14 +906,11 @@ class Installer(BaseInstaller):
     """Game installer model"""
 
     RATINGS = {
-        "5": "Platinum: installs and runs flawlessly",
-        "4": "Gold: works flawlessly with some minor tweaking",
-        "3": (
-            'Silver: works excellently for "normal" use but some '
-            "features may be broken"
-        ),
-        "2": "Bronze: works: but has some issues: even for normal use",
-        "1": "Garbage: game is not playable",
+        "5": "Platinum (this rating is meaningless)",
+        "4": "Gold (this rating is meaningless)",
+        "3": "Silver (this rating is meaningless)",
+        "2": "Bronze (this rating is meaningless)",
+        "1": "Garbage (this rating is meaningless)",
     }
 
     game = models.ForeignKey(Game, related_name="installers", on_delete=models.CASCADE)
@@ -924,6 +921,7 @@ class Installer(BaseInstaller):
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
     notes = models.TextField(blank=True)
+    credits = models.TextField(blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -934,6 +932,13 @@ class Installer(BaseInstaller):
         related_name="moderator",
         blank=True,
         null=True,
+    )
+    maintainer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="maintainer",
+        blank=True,
+        null=True
     )
     draft = models.BooleanField(default=True)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
@@ -949,7 +954,7 @@ class Installer(BaseInstaller):
 
     class Meta:
         """Model configuration"""
-        ordering = ("-rating", "version")
+        ordering = ("version", )
 
     def __str__(self):
         return self.slug
