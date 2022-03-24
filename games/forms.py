@@ -210,7 +210,7 @@ class InstallerForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.Installer
-        fields = ("runner", "version", "description", "notes", "content", "draft")
+        fields = ("runner", "version", "description", "notes", "credits", "content", "draft")
         widgets = {
             "runner": Select2Widget,
             "description": forms.TextInput(attrs={
@@ -218,6 +218,7 @@ class InstallerForm(forms.ModelForm):
                 "class": "select2-lookalike"
             }),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
+            "credits": forms.Textarea(attrs={"class": "installer-textarea"}),
             "content": forms.Textarea(
                 attrs={"class": "code-editor", "spellcheck": "false"}
             ),
@@ -240,6 +241,9 @@ class InstallerForm(forms.ModelForm):
                 "Describe any known issues or manual tasks required "
                 "to run the game properly."
             ),
+            "credits": (
+                "You can optionally provide credits for the installers or the software used in it."
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -317,6 +321,7 @@ class InstallerEditForm(InstallerForm):
             "version",
             "description",
             "notes",
+            "credits",
             "reason",
             "content",
             "draft",
