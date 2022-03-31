@@ -82,9 +82,9 @@ class InstallerAdmin(VersionAdmin):
     readonly_fields = ('game_link', 'created_at', 'updated_at', 'published_by')
     search_fields = ('slug', 'user__username', 'content')
 
-    raw_id_fields = ('game', 'user')
+    raw_id_fields = ('game', 'user', 'maintainer')
     autocomplete_lookup_fields = {
-        'fk': ['game', 'user'],
+        'fk': ['game', 'user', 'maintainer'],
     }
 
     inlines = [
