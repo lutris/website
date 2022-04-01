@@ -1,14 +1,12 @@
 """Forms for the main app"""
 # pylint: disable=missing-docstring,too-few-public-methods
-import os
 import io
 from datetime import date
+import json
 
 import yaml
-import json
 from PIL import Image
 from django import forms
-from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
