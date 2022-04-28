@@ -41,7 +41,7 @@ You can then build the frontend assets::
 
     npm install
     npm run setup
-    run run build
+    npm run build
 
 To watch for file changes and recompile assets on the fly, you can run in a
 separate terminal::
