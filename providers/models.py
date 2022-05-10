@@ -29,7 +29,7 @@ class ProviderResource(models.Model):
     @classmethod
     def create_from_igdb_api(cls, provider, api_payload):
         """Create an instance from an IGDB payload"""
-        resource, _created = cls.objects.get_or_create(
+        resource, created = cls.objects.get_or_create(
             provider=provider,
             slug=api_payload["slug"]
         )
@@ -37,7 +37,7 @@ class ProviderResource(models.Model):
         resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
-        LOGGER.info("Created %s", resource.name)
+        LOGGER.info("%s %s", "Created" if created else "Updated", resource.name)
 
 
 class ProviderGame(ProviderResource):
@@ -104,7 +104,7 @@ class ProviderCover(ProviderResource):
     @classmethod
     def create_from_igdb_api(cls, provider, api_payload):
         """Create an instance from an IGDB payload"""
-        resource, _created = cls.objects.get_or_create(
+        resource, created = cls.objects.get_or_create(
             provider=provider,
             image_id=api_payload["image_id"]
         )
@@ -112,4 +112,4 @@ class ProviderCover(ProviderResource):
         resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
-        LOGGER.info("Created cover %s", api_payload["image_id"])
+        LOGGER.info("%s cover %s", "Created" if created else "Updated", api_payload["image_id"])
