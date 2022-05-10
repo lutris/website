@@ -1,6 +1,22 @@
 """Support for IDGB"""
 import requests
 
+GAME_CATEGORIES = {
+    0: "main_game",
+    1: "dlc_addon",
+    2: "expansion",
+    3: "bundle",
+    4: "standalone_expansion",
+    5: "mod",
+    6: "episode",
+    7: "season",
+    8: "remake",
+    9: "remaster",
+    10: "expanded_game",
+    11: "port",
+    12: "fork"
+}
+
 
 class IGDBClient:
     """API client for the IGDB API"""

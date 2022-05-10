@@ -1,5 +1,6 @@
 """Provider tasks"""
 import os
+import json
 from datetime import datetime
 
 import requests
@@ -11,7 +12,7 @@ from celery.utils.log import get_task_logger
 from common.util import slugify
 from games.models import Game
 from platforms.models import Platform
-from providers.igdb import IGDBClient
+from providers.igdb import IGDBClient, GAME_CATEGORIES
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
 
 LOGGER = get_task_logger(__name__)
@@ -29,7 +30,11 @@ def _igdb_loader(resource_name, model):
     while resources:
         LOGGER.info("Getting page %s of IGDB API", page)
         response = client.get_resources(f"{resource_name}/", page=page)
-        resources = response.json()
+        try:
+            resources = response.json()
+        except json.JSONDecodeError:
+            LOGGER.error("Failed to read JSON response: %s", response.text)
+            continue
         for api_payload in resources:
             model.create_from_igdb_api(provider, api_payload)
         page += 1
@@ -62,12 +67,19 @@ def load_igdb_covers():
 @task
 def match_igdb_games():
     """Create or update Lutris games from IGDB games"""
-    igdb_games = ProviderGame.objects.filter(provider__name="igdb")
     platforms = {
         p.igdb_id: p for p in Platform.objects.filter(igdb_id__isnull=False)
     }
-    for igdb_game in igdb_games:
+    for igdb_game in ProviderGame.objects.filter(provider__name="igdb"):
         igdb_slug = igdb_game.metadata["slug"]
+        # Only match main games
+        if igdb_game.metadata["category"] != 0:
+            LOGGER.info(
+                "Skipping %s, category: %s",
+                igdb_slug,
+                GAME_CATEGORIES[igdb_game.metadata["category"]]
+            )
+            continue
         if not igdb_slug:
             LOGGER.error("Missing slug for %s", igdb_game.metadata)
             continue
