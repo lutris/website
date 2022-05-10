@@ -31,7 +31,7 @@ jsonfield==3.0.0
 psycopg2==2.8.5
 factory_boy==2.12.0
 sorl-thumbnail==12.6.3
-lxml==4.5.0
+lxml==4.8.0
 Pillow==7.1.1
 premailer==3.6.1
 romkan==0.2.1
