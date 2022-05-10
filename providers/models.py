@@ -1,10 +1,11 @@
 """Models for game providers"""
 # pylint: disable=too-few-public-methods
+import datetime
 import logging
 
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-
+from django.utils.timezone import make_aware
 
 LOGGER = logging.getLogger(__name__)
 
@@ -33,9 +34,10 @@ class ProviderResource(models.Model):
             slug=api_payload["slug"]
         )
         resource.name = api_payload["name"]
+        resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
-        LOGGER.info("Created %s", resource["name"])
+        LOGGER.info("Created %s", resource.name)
 
 
 class ProviderGame(ProviderResource):
@@ -47,7 +49,7 @@ class ProviderGame(ProviderResource):
         related_name="games",
         on_delete=models.PROTECT,
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True)
     metadata = JSONField(null=True)
 
     class Meta:
@@ -71,7 +73,7 @@ class ProviderGenre(ProviderResource):
         related_name="genres",
         on_delete=models.PROTECT
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True)
     metadata = JSONField(null=True)
 
 class ProviderPlatform(ProviderResource):
@@ -83,7 +85,7 @@ class ProviderPlatform(ProviderResource):
         related_name="platforms",
         on_delete=models.PROTECT
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True)
     metadata = JSONField(null=True)
 
 
@@ -96,7 +98,7 @@ class ProviderCover(ProviderResource):
         related_name="covers",
         on_delete=models.PROTECT
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True)
     metadata = JSONField(null=True)
 
     @classmethod
@@ -107,6 +109,7 @@ class ProviderCover(ProviderResource):
             image_id=api_payload["image_id"]
         )
         resource.game = api_payload["game"]
+        resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
         LOGGER.info("Created cover %s", api_payload["image_id"])

@@ -14,6 +14,8 @@ class IGDBClient:
 
     def get_authentication_token(self):
         """Request a new token from Twitch"""
+        if not self.client_id:
+            raise RuntimeError("No client ID set for Twitch")
         response = requests.post(
             "https://id.twitch.tv/oauth2/token",
             data={
@@ -30,7 +32,7 @@ class IGDBClient:
         return requests.post(
             self.base_url + url,
             data=(
-                f"fields: *; sort updated_at asc;"
+                f"fields: *; sort updated_at desc;"
                 f" limit {self.page_size};"
                 f" offset {self.page_size * page - 1};"
             ),
