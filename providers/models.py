@@ -109,7 +109,6 @@ class ProviderCover(ProviderResource):
             image_id=api_payload["image_id"]
         )
         resource.game = api_payload["game"]
-        resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
         LOGGER.info("%s cover %s", "Created" if created else "Updated", api_payload["image_id"])
