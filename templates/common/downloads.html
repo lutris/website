@@ -22,6 +22,7 @@
         with every component in its <a href="https://github.com/lutris/docs/blob/master/LutrisRuntime.md">
         runtime</a>. When playing games lutris will use
         a custom version of Wine optimized for games.<br>
+        This is not needed if running Lutris from Flatpak.
     </p>
     <ul class='download-list'>
       <li>
@@ -31,7 +32,45 @@
           </li>
         </ul>
         <p>
-          Lutris is now available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+          Lutris is available on Pop!_OS through <a href="appstream://net.lutris.Lutris">Pop!_Shop</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/steamos.png' alt='SteamOS'>SteamOS
+          </li>
+        </ul>
+        <p>
+          <strong>To install Lutris on the Steam Deck:</strong><br>
+          - Open the Power menu and select Switch to Desktop<br>
+          - Open Konsole and run the following command: <br>
+          <code>flatpak install flathub org.gnome.Platform.Compat.i386 org.freedesktop.Platform.GL32.default org.freedesktop.Platform.GL.default</code><br>
+          - Open Discover and search for Lutris then install it<br><br>
+          <strong>To play games from the Steam Deck UI:</strong><br>
+          Select "Create Steam shortcut" during the game installation or right-click on an existing game and choose "Create Steam shortcut".<br><br>
+          <strong>To play games using the controller:</strong><br>
+          - Open Steam settings and in the Controller section open Desktop Configuration<br>
+          - Change the controller configuration to Disabled<br>
+          - Keep the Steam key pressed to control your mouse<br>
+          - The controller will now be accessible in desktop mode
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
+            <img src='{{ STATIC_URL }}images/icons/flatpak.png' alt='Flatpak'>Flatpak
+          </li>
+        </ul>
+        <p>
+          Lutris is available in Flathub Beta.<br>
+          Add the Flathub Beta repository if not already enabled:<br>
+          <code>flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo</code><br/>
+          <code>flatpak update --appstream</code><br>
+          Install required dependencies from Flathub (non Beta):<br>
+          <code>flatpak install flathub org.gnome.Platform.Compat.i386 org.freedesktop.Platform.GL32.default org.freedesktop.Platform.GL.default</code><br>
+          Install Lutris:<br>
+          <code>flatpak install flathub-beta net.lutris.Lutris</code>
         </p>
       </li>
       <li>
