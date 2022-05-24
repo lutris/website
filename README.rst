@@ -33,7 +33,7 @@ dependencies::
         libffi-dev libpq-dev libxml2-dev libjpeg-dev
     
     # Red Hat / Fedora dependencies
-    sudo dnf install libpq-devel
+    sudo dnf install libpq-devel python3-devel 
 
     # Python dependencies
     pip3 install -r config/requirements/devel.pip --exists-action=w
