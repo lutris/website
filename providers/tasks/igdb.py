@@ -132,8 +132,11 @@ def get_igdb_cover(image_id, size="cover_big"):
 
 
 @task
-def sync_igdb_coverart():
-    """Downloads IGDB coverart and associates it with Lutris games"""
+def sync_igdb_coverart(force_update=False):
+    """Downloads IGDB coverart and associates it with Lutris games
+
+    force_update redownloads coverarts for every game even if one is already present.
+    """
     cover_format = "cover_big"
     for igdb_cover in ProviderCover.objects.filter(provider__name="igdb"):
         relpath = f"{cover_format}/{igdb_cover.image_id}.jpg"
@@ -149,6 +152,8 @@ def sync_igdb_coverart():
             lutris_game = Game.objects.get(provider_games=igdb_game)
         except Game.DoesNotExist:
             LOGGER.warning("No Lutris game with ID %s", igdb_cover.game)
+            continue
+        if lutris_game.coverart and not force_update:
             continue
         lutris_game.coverart = ContentFile(
             get_igdb_cover(igdb_cover.image_id),
