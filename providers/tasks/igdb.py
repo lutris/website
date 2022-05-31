@@ -164,7 +164,7 @@ def sync_igdb_coverart(force_update=False):
 
 
 @task
-def deduplicate_igdb_games():
+def deduplicate_lutris_games():
     """IGDB uses a different slugify method,
     using dashes on apostrophes where we don't"""
     # Select all title with an apostrophe that don't have an IGDB game already
@@ -175,8 +175,7 @@ def deduplicate_igdb_games():
     for game in games:
         # Generate a new slug
         igdb_slug = slugify(game.name.replace("'", "-"))
-        # print(game)
-        # print(igdb_slug)
+
         # Check the presence of an IGDB game
         try:
             igdb_game = Game.objects.get(provider_games__provider__name="igdb", slug=igdb_slug)
@@ -184,3 +183,27 @@ def deduplicate_igdb_games():
             # No IGDB game found, just keep going
             continue
         game.merge_with_game(igdb_game)
+
+
+def deduplicate_igdb_games():
+    for game in ProviderGame.objects.filter(provider__name="igdb"):
+        game_id = game.metadata["id"]
+        if game.slug == game.metadata["id"]:
+            continue
+        try:
+            game_by_id = ProviderGame.objects.get(provider__name="igdb", slug=game_id)
+        except ProviderGame.DoesNotExist:
+            continue
+        game_by_id.metadata = game.metadata
+        print("Deleting %s" % game)
+        game.delete()
+        game_by_id.internal_id = game_id
+        game_by_id.save()
+        print("Saving %s" % game)
+
+
+def fix_igdb_games():
+    for game in ProviderGame.objects.filter(provider__name="igdb"):
+        game.slug = game.metadata["slug"]
+        game.internal_id = game.metadata["id"]
+        game.save()
