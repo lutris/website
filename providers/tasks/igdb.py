@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.utils.timezone import make_aware
 
 from celery import task
 from celery.utils.log import get_task_logger
@@ -186,24 +187,39 @@ def deduplicate_lutris_games():
 
 
 def deduplicate_igdb_games():
-    for game in ProviderGame.objects.filter(provider__name="igdb"):
-        game_id = game.metadata["id"]
-        if game.slug == game.metadata["id"]:
+    """One time migration to put data from slug based entries
+    onto ID based ones
+    Slug based entries are then deleted.
+    Once the process is finished, run fix_igdb_games.
+    """
+    for game_by_id in ProviderGame.objects.filter(provider__name="igdb"):
+        game_id = game_by_id.metadata["id"]
+        game_slug = game_by_id.metadata["slug"]
+        if game_by_id.slug == game_slug:
+            # Skip slug based entries
             continue
         try:
-            game_by_id = ProviderGame.objects.get(provider__name="igdb", slug=game_id)
+            game_by_slug = ProviderGame.objects.get(provider__name="igdb", slug=game_slug)
         except ProviderGame.DoesNotExist:
+            # No older entry to attach the data to, skip.
             continue
-        game_by_id.metadata = game.metadata
-        print("Deleting %s" % game)
-        game.delete()
-        game_by_id.internal_id = game_id
-        game_by_id.save()
-        print("Saving %s" % game)
+        game_by_slug.metadata = game_by_id.metadata
+        for game in game_by_id.games.all():
+            game_by_slug.games.add(game)
+        game_by_id.delete()
+        game_by_slug.slug = game_slug
+        game_by_slug.internal_id = game_id
+        game_by_slug.save()
 
 
 def fix_igdb_games():
+    """One time migration process to populate the internal ID field"""
     for game in ProviderGame.objects.filter(provider__name="igdb"):
         game.slug = game.metadata["slug"]
         game.internal_id = game.metadata["id"]
+        game.updated_at = make_aware(datetime.datetime.fromtimestamp(game.metadata["updated_at"]))
         game.save()
+
+
+def remove_dlcs_from_games():
+    """One time migration that removes Lutris games that have been created from IGDB games"""
