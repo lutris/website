@@ -217,7 +217,7 @@ def fix_igdb_games():
     for game in ProviderGame.objects.filter(provider__name="igdb"):
         game.slug = game.metadata["slug"]
         game.internal_id = game.metadata["id"]
-        game.updated_at = make_aware(datetime.datetime.fromtimestamp(game.metadata["updated_at"]))
+        game.updated_at = make_aware(datetime.fromtimestamp(game.metadata["updated_at"]))
         game.save()
 
 
