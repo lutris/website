@@ -248,6 +248,10 @@ CELERYBEAT_SCHEDULE = {
     'match-gog-games': {
         'task': 'providers.tasks.match_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=10)
+    },
+    'load-steam-games': {
+        'task': 'providers.tasks.load_steam_games',
+        'schedule': crontab(day_of_week=1, hour=2, minute=1)
     }
 }
 

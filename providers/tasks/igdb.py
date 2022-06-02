@@ -163,10 +163,9 @@ def sync_igdb_coverart(force_update=False):
         try:
             igdb_game = ProviderGame.objects.get(provider__name="igdb", internal_id=igdb_cover.game)
         except ProviderGame.DoesNotExist:
-            LOGGER.warning("No IGDB game with ID %s", igdb_cover.game)
             continue
         except ProviderGame.MultipleObjectsReturned:
-            LOGGER.error("Multiple games for %s", igdb_cover.game)
+            LOGGER.warning("Multiple games for %s", igdb_cover.game)
             igdb_game = ProviderGame.objects.filter(provider__name="igdb", internal_id=igdb_cover.game).first()
         try:
             lutris_game = Game.objects.get(provider_games=igdb_game)
