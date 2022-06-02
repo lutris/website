@@ -2,6 +2,7 @@
 import os
 import json
 from datetime import datetime
+from collections import defaultdict
 
 import requests
 from django.conf import settings
@@ -17,6 +18,23 @@ from providers.igdb import IGDBClient, GAME_CATEGORIES
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
 
 LOGGER = get_task_logger(__name__)
+
+
+IGDB_CAT = {
+    "main_game": 0,
+    "dlc_addon": 1,
+    "expansion": 2,
+    "bundle": 3,
+    "standalone_expansion": 4,
+    "mod": 5,
+    "episode": 6,
+    "season": 7,
+    "remake": 8,
+    "remaster": 9,
+    "expanded_game": 10,
+    "port": 11,
+    "fork": 12
+}
 
 
 def _igdb_loader(resource_name, model):
@@ -223,3 +241,36 @@ def fix_igdb_games():
 
 def remove_dlcs_from_games():
     """One time migration that removes Lutris games that have been created from IGDB games"""
+
+    stats = defaultdict(int)
+    for game in ProviderGame.objects.filter(provider__name="igdb"):
+        stats["total"] += 1
+        # Skip main games
+        if game.metadata["category"] == IGDB_CAT["main_game"]:
+            stats["skipped"] += 1
+            continue
+        # Filter by DLC and bundles only for now.
+        if game.metadata["category"] not in (IGDB_CAT["dlc_addon"], IGDB_CAT["bundle"]):
+            stats["not_dlc"] += 1
+            continue
+
+        # No Lutris game is associated
+        if not game.games.all():
+            stats["unlinked"] += 1
+            continue
+
+        lutris_game = game.games.first()
+
+        # Keep games with installers
+        if lutris_game.installers.all():
+            stats["with_installer"] += 1
+            continue
+
+        # Keep games that have been added to user libraries
+        if lutris_game.user_count > 0:
+            stats["user_owned"] += 1
+            continue
+
+        lutris_game.delete()
+        stats["removed"] += 1
+    return stats
