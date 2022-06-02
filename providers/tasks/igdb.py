@@ -161,7 +161,7 @@ def sync_igdb_coverart(force_update=False):
         if os.path.exists(igdb_path):
             continue
         try:
-            igdb_game = ProviderGame.objects.get(provider__name="igdb", slug=igdb_cover.game)
+            igdb_game = ProviderGame.objects.get(provider__name="igdb", internal_id=igdb_cover.game)
         except ProviderGame.DoesNotExist:
             LOGGER.warning("No IGDB game with ID %s", igdb_cover.game)
             continue
