@@ -250,7 +250,7 @@ def remove_dlcs_from_games():
             stats["skipped"] += 1
             continue
         # Filter by DLC and bundles only for now.
-        if game.metadata["category"] not in (IGDB_CAT["dlc_addon"], IGDB_CAT["bundle"]):
+        if game.metadata["category"] not in (IGDB_CAT["dlc_addon"], IGDB_CAT["bundle"], IGDB_CAT["expansion"]):
             stats["not_dlc"] += 1
             continue
 
