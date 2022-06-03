@@ -545,7 +545,6 @@ class Game(models.Model):
         """Render the icon and place it in the banners folder"""
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
-            LOGGER.info("Removing existing file %s", dest_file)
             os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(

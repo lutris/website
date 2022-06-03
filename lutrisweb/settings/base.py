@@ -252,7 +252,11 @@ CELERYBEAT_SCHEDULE = {
     'load-steam-games': {
         'task': 'providers.tasks.load_steam_games',
         'schedule': crontab(day_of_week=1, hour=2, minute=1)
-    }
+    },
+    'match-steam-games': {
+        'task': 'providers.tasks.match_steam_games',
+        'schedule': crontab(day_of_week=1, hour=3, minute=1)
+    },
 }
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
