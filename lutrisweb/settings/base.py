@@ -206,8 +206,6 @@ SELECT2_JS = ''
 SELECT2_CSS = ''
 
 # Email
-
-
 SEND_EMAILS = True
 if os.environ.get('DJANGO_TESTS') == "1":
     SEND_EMAILS = False
@@ -219,7 +217,6 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 # Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
-
 CELERYBEAT_SCHEDULE = {
     'delete-unchanged-forks': {
         'task': 'games.tasks.delete_unchanged_forks',
