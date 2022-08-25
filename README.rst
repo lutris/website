@@ -24,12 +24,24 @@ The only required environment varible is the DJANGO_SETTINGS_MODULE one::
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
 
+Alternatively, if you want to store additional secrets like API keys, you can place
+them in an environment file. You can then export values contained in this file by adding
+to the postactivate script::
+
+    export $(cat $HOME/Projects/website/.env.local | xargs)
+
 Once your virtualenv is created, you can install the system and python
 dependencies::
 
+    # Ubuntu / Debian dependencies
     sudo apt-get install build-essential git curl python3 python3-pip \
         python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev \
         libffi-dev libpq-dev libxml2-dev libjpeg-dev
+
+    # Red Hat / Fedora dependencies
+    sudo dnf install libpq-devel python3-devel
+
+    # Python dependencies
     pip3 install -r config/requirements/devel.pip --exists-action=w
 
 To build the frontend assets (javascript and css files), you'll

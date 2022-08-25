@@ -545,7 +545,6 @@ class Game(models.Model):
         """Render the icon and place it in the banners folder"""
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
-            LOGGER.info("Removing existing file %s", dest_file)
             os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
@@ -958,6 +957,12 @@ class Installer(BaseInstaller):
 
     def __str__(self):
         return self.slug
+
+    def is_playable(self):
+        rating = self.ratings.filter(verified=True).first()
+        if rating:
+            return rating.playable
+
 
     def set_default_installer(self):
         """Creates the default content for installer when they are first created.
@@ -1381,3 +1386,20 @@ class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attribu
     @property
     def raw_script(self):
         return self.script
+
+
+class Rating(models.Model):
+    """Model to store installer ratings"""
+    installer = models.ForeignKey(Installer, on_delete=models.CASCADE, related_name="ratings")
+    playable = models.BooleanField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s: %s" % ("PLAYABLE" if self.playable else "NON PLAYABLE", self.installer.slug)
+
+
+class Quirk(models.Model):
+    """Model to store quirks and caveats for ratings"""
+    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name="quirks")
+    value = models.CharField(max_length=256)

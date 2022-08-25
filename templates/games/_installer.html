@@ -48,8 +48,16 @@
       {% endif %}
     </div>
     <div class="centered-vertical">
+
       <span class='filter-link'>{{ installer.runner }}</span>
+
       <span class='installer-name'>{{ installer.version|capfirst }} version</span>
+      <span class="small-text">
+        Rating: {% if installer.is_playable == True %}
+          ✅ <strong>PLAYABLE</strong>{% elif installer.is_playable == False %}
+          ❌ <strong>NOT PLAYABLE</strong>{% else %}
+          ❔ <strong>UNKNOWN</strong>{% endif %}
+      </span>
       <small class="text-muted">
         {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}
         {% if installer.latest_version %}, last edit made {{ installer.latest_version.revision.date_created | naturaltime }}
@@ -65,7 +73,10 @@
   {% if installer.description.strip %}
   <div><strong>{{ installer.description|clean_html|safe|linebreaksbr }}</strong></div>
   {% endif %}
+
+
   {% if installer.notes.strip %}
   <div class="small-text">{{ installer.notes|clean_html|safe|linebreaksbr }}</div>
   {% endif %}
+
 </li>

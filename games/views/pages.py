@@ -10,8 +10,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import (SearchQuery, SearchRank,
-                                            SearchVector)
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
@@ -103,7 +101,7 @@ class GameList(ListView):
         ordering = self.get_ordering()
         if ordering:
             if self.q_params['q'] and not self.q_params['search-installers']:
-                queryset = queryset.order_by('-rank', ordering)
+                queryset = queryset.order_by(ordering)
             else:
                 queryset = queryset.order_by(ordering)
         return self.get_filtered_queryset(queryset)
@@ -115,9 +113,8 @@ class GameList(ListView):
             if self.q_params['search-installers']:
                 queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
             else:
-                vector = SearchVector('name', weight='A') + SearchVector('aliases__name', weight='A')
-                query = SearchQuery(self.q_params['q'])
-                queryset = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.3)
+                search_query = self.q_params["q"]
+                queryset = queryset.filter(Q(name__icontains=search_query) | Q(aliases__name__icontains=search_query))
         if self.q_params['platforms']:
             queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
         if self.q_params['genres']:
@@ -208,9 +205,7 @@ def game_for_installer(_request, slug):
         installers = models.Installer.objects.fuzzy_get(slug)
     except Installer.DoesNotExist:
         raise Http404
-    installer = installers[0]
-    game_slug = installer.game.slug
-    return redirect(reverse("game_detail", kwargs={"slug": game_slug}))
+    return redirect(reverse("game_detail", kwargs={"slug": installers[0].game.slug}))
 
 
 def game_detail(request, slug):

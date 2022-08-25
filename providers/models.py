@@ -34,6 +34,7 @@ class ProviderResource(models.Model):
             slug=api_payload["slug"]
         )
         resource.name = api_payload["name"]
+        resource.internal_id = api_payload["id"]
         resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
@@ -44,6 +45,7 @@ class ProviderGame(ProviderResource):
     """Games from providers, along with any provider specific data."""
     name = models.CharField(max_length=255, blank=True)
     slug = models.CharField(max_length=255)
+    internal_id = models.CharField(max_length=255, null=True)
     provider = models.ForeignKey(
         Provider,
         related_name="games",
@@ -68,6 +70,7 @@ class ProviderGenre(ProviderResource):
     """Genres given by providers"""
     name = models.CharField(max_length=128)
     slug = models.SlugField()
+    internal_id = models.CharField(max_length=255, null=True)
     provider = models.ForeignKey(
         Provider,
         related_name="genres",
@@ -80,6 +83,7 @@ class ProviderPlatform(ProviderResource):
     """Platforms given by providers"""
     name = models.CharField(max_length=128)
     slug = models.SlugField()
+    internal_id = models.CharField(max_length=255, null=True)
     provider = models.ForeignKey(
         Provider,
         related_name="platforms",

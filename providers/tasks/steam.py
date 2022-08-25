@@ -5,6 +5,7 @@ from celery import task
 from celery.utils.log import get_task_logger
 
 from providers import models
+from games.models import Game
 
 
 LOGGER = get_task_logger(__name__)
@@ -29,6 +30,7 @@ def load_steam_games():
             provider=provider
         )
         provider_game.name = game["name"]
+        provider_game.internal_id = game["appid"]
         provider_game.save()
         if created:
             stats["created"] += 1
@@ -37,3 +39,14 @@ def load_steam_games():
             stats["updated"] += 1
     LOGGER.info("Created: %s, Updated: %s", stats["created"], stats["updated"])
     return stats
+
+
+@task
+def match_steam_games():
+    for game in models.ProviderGame.objects.filter(provider__name="steam"):
+        existing_games = Game.objects.filter(steamid=game.slug)
+        for lutris_game in existing_games:
+            lutris_game.provider_games.add(game)
+            if not lutris_game.is_public:
+                lutris_game.is_public = True
+                lutris_game.save()
