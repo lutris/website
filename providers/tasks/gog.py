@@ -21,7 +21,6 @@ def load_gog_games():
     return load_games_from_gogdb(file_path)
 
 
-
 @task
 def match_gog_games():
     """Match GOG games with Lutris games"""

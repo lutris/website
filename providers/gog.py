@@ -77,7 +77,7 @@ def fetch_gog_games_page(page):
     response = requests.get(url)
     response_data = response.json()
     with open(
-        os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
+            os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
     ) as json_file:
         json.dump(response_data, json_file, indent=2)
     return response_data
@@ -116,7 +116,7 @@ def iter_gog_games():
     )
     for page in range(1, num_pages + 1):
         with open(
-            os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
+                os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
         ) as json_file:
             api_results = json.load(json_file)
             for product in api_results["products"]:

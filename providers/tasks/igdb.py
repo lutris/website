@@ -170,8 +170,6 @@ def deduplicate_igdb_games():
     for game in games:
         # Generate a new slug
         igdb_slug = slugify(game.name.replace("'", "-"))
-        # print(game)
-        # print(igdb_slug)
         # Check the presence of an IGDB game
         try:
             igdb_game = Game.objects.get(provider_games__provider__name="igdb", slug=igdb_slug)
