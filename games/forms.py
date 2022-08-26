@@ -232,8 +232,10 @@ class InstallerForm(forms.ModelForm):
                 "the most sense."
             ),
             "description": (
-                "Additional details about the installer. "
-                "Do NOT put a description for the game, it will be deleted"
+                "Optional information about the installer."
+                "This is not meant for the game description "
+                "or to summarize your changes."
+                "If unsure, please leave this field empty."
             ),
             "notes": (
                 "Describe any known issues or manual tasks required "
