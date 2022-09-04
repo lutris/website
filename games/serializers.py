@@ -52,6 +52,8 @@ class InstallerSerializer(serializers.ModelSerializer):
     humbleid = serializers.ReadOnlyField(source='game.humbleid')
     humblestoreid = serializers.ReadOnlyField(source='game.humbleid')
     humblestoreid_real = serializers.ReadOnlyField(source='game.humblestoreid')
+    # Adding Discord ID for Rich Presence Client
+    discord_id = serializers.ReadOnlyField(source='game.discord_id', allow_null=True)
 
     user = serializers.StringRelatedField()
 
@@ -60,10 +62,13 @@ class InstallerSerializer(serializers.ModelSerializer):
     class Meta:
         """Model and field definitions"""
         model = models.Installer
-        fields = ('id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
-                  'version', 'description', 'notes', 'credits', 'created_at', 'updated_at', 'draft',
-                  'published', 'published_by', 'rating', 'is_playable', 'steamid', 'gogid', 'gogslug',
-                  'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content')
+        fields = (
+            'id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
+            'version', 'description', 'notes', 'credits', 'created_at', 'updated_at', 'draft',
+            'published', 'published_by', 'rating', 'is_playable', 'steamid', 'gogid', 'gogslug',
+            'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
+            'discord_id',
+        )
 
 
 class InstallerRevisionSerializer(serializers.Serializer):
@@ -135,7 +140,8 @@ class GameSerializer(serializers.ModelSerializer):
         model = models.Game
         fields = (
             'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
-            'platforms', 'provider_games', 'aliases', 'id'
+            'platforms', 'provider_games', 'aliases', 'id',
+            'discord_id',
         )
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
@@ -165,7 +171,8 @@ class GameDetailSerializer(GameSerializer):
             'platforms', 'genres', 'aliases',
             'description', 'banner_url', 'icon_url', 'coverart', 'is_public',
             'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
-            'user_count', 'installers'
+            'user_count', 'installers',
+            'discord_id',
         )
 
 
