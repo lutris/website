@@ -1,0 +1,7194 @@
+[
+  {
+    "game": "speedrunners",
+    "discord_id": "259392830932254721"
+  },
+  {
+    "game": "move-or-die",
+    "discord_id": "343232907390746625"
+  },
+  {
+    "game": "holodrive",
+    "discord_id": "346729383693778944"
+  },
+  {
+    "game": "grip",
+    "discord_id": "348146938681622538"
+  },
+  {
+    "game": "hellion",
+    "discord_id": "349114016968474626"
+  },
+  {
+    "game": "divinity-original-sin-2",
+    "discord_id": "349134787773988865"
+  },
+  {
+    "game": "foxhole",
+    "discord_id": "349947310375043074"
+  },
+  {
+    "game": "unturned",
+    "discord_id": "351821143981817856"
+  },
+  {
+    "game": "battlerite",
+    "discord_id": "352378924317147156"
+  },
+  {
+    "game": "league-of-legends",
+    "discord_id": "356869127241072640"
+  },
+  {
+    "game": "playerunknown's-battlegrounds",
+    "discord_id": "356873622985506820"
+  },
+  {
+    "game": "counter-strike:-global-offensive",
+    "discord_id": "356875057940791296"
+  },
+  {
+    "game": "overwatch",
+    "discord_id": "356875221078245376"
+  },
+  {
+    "game": "minecraft",
+    "discord_id": "356875570916753438"
+  },
+  {
+    "game": "world-of-warcraft",
+    "discord_id": "356875762940379136"
+  },
+  {
+    "game": "hearthstone",
+    "discord_id": "356875890958925834"
+  },
+  {
+    "game": "dota-2",
+    "discord_id": "356875988589740042"
+  },
+  {
+    "game": "grand-theft-auto-v",
+    "discord_id": "356876176465199104"
+  },
+  {
+    "game": "tom-clancy's-rainbow-six-siege",
+    "discord_id": "356876590342340608"
+  },
+  {
+    "game": "rocket-league",
+    "discord_id": "356877880938070016"
+  },
+  {
+    "game": "heroes-of-the-storm",
+    "discord_id": "356878860190613504"
+  },
+  {
+    "game": "garry's-mod",
+    "discord_id": "356879032584896512"
+  },
+  {
+    "game": "h1z1:-king-of-the-kill",
+    "discord_id": "356881342321000448"
+  },
+  {
+    "game": "ark:-survival-evolved",
+    "discord_id": "356887282982191114"
+  },
+  {
+    "game": "paladins",
+    "discord_id": "356887815394557952"
+  },
+  {
+    "game": "path-of-exile",
+    "discord_id": "356888453796986880"
+  },
+  {
+    "game": "team-fortress-2",
+    "discord_id": "356888577310851072"
+  },
+  {
+    "game": "rust",
+    "discord_id": "356888738724446208"
+  },
+  {
+    "game": "world-of-tanks",
+    "discord_id": "356888961353908224"
+  },
+  {
+    "game": "final-fantasy-xiv",
+    "discord_id": "356889262362329098"
+  },
+  {
+    "game": "geometry-dash",
+    "discord_id": "356942674672091136"
+  },
+  {
+    "game": "dolphin",
+    "discord_id": "356943187589201930"
+  },
+  {
+    "game": "terraria",
+    "discord_id": "356943499456937984"
+  },
+  {
+    "game": "brawlhalla",
+    "discord_id": "356944273133928458"
+  },
+  {
+    "game": "the-walking-dead",
+    "discord_id": "356953358952562688"
+  },
+  {
+    "game": "sonic-mania",
+    "discord_id": "356953520278339584"
+  },
+  {
+    "game": "golf-with-your-friends",
+    "discord_id": "356954034701205504"
+  },
+  {
+    "game": "cities:-skylines",
+    "discord_id": "356954111901433856"
+  },
+  {
+    "game": "arma-3",
+    "discord_id": "356954176338788352"
+  },
+  {
+    "game": "left-4-dead-2",
+    "discord_id": "356954277803065354"
+  },
+  {
+    "game": "project-64",
+    "discord_id": "357606193918771210"
+  },
+  {
+    "game": "runescape",
+    "discord_id": "357606832899883008"
+  },
+  {
+    "game": "dead-by-daylight",
+    "discord_id": "357607133254254632"
+  },
+  {
+    "game": "war-thunder",
+    "discord_id": "357607478105604096"
+  },
+  {
+    "game": "world-of-warships",
+    "discord_id": "357607617046249482"
+  },
+  {
+    "game": "duelyst",
+    "discord_id": "357706468843061258"
+  },
+  {
+    "game": "battlefield-1",
+    "discord_id": "358417041981571082"
+  },
+  {
+    "game": "the-binding-of-isaac:-rebirth",
+    "discord_id": "358420454764969994"
+  },
+  {
+    "game": "black-desert-online",
+    "discord_id": "358420844491440148"
+  },
+  {
+    "game": "black-squad",
+    "discord_id": "358421399670358026"
+  },
+  {
+    "game": "hiveswap:-act-1",
+    "discord_id": "358421573071536128"
+  },
+  {
+    "game": "hearts-of-iron-iv",
+    "discord_id": "358421669603311616"
+  },
+  {
+    "game": "monaco",
+    "discord_id": "358421725139959808"
+  },
+  {
+    "game": "blade-&-soul",
+    "discord_id": "358421781398421514"
+  },
+  {
+    "game": "sid-meier's-civilization-v",
+    "discord_id": "358421904601776138"
+  },
+  {
+    "game": "smite",
+    "discord_id": "358422012990849024"
+  },
+  {
+    "game": "factorio",
+    "discord_id": "358422126602223616"
+  },
+  {
+    "game": "diablo-iii",
+    "discord_id": "358425751197974528"
+  },
+  {
+    "game": "starcraft-ii",
+    "discord_id": "358425800766128128"
+  },
+  {
+    "game": "the-elder-scrolls-v:-skyrim",
+    "discord_id": "359507724196773888"
+  },
+  {
+    "game": "tom-clancy's-the-division",
+    "discord_id": "359507798930751488"
+  },
+  {
+    "game": "don't-starve-together",
+    "discord_id": "359508004078616586"
+  },
+  {
+    "game": "shellshock-live",
+    "discord_id": "359508342571401216"
+  },
+  {
+    "game": "space-engineers",
+    "discord_id": "359508404034600990"
+  },
+  {
+    "game": "euro-truck-simulator-2",
+    "discord_id": "359508713658253318"
+  },
+  {
+    "game": "portal-2",
+    "discord_id": "359508941782122496"
+  },
+  {
+    "game": "the-sims-4",
+    "discord_id": "359509007423242240"
+  },
+  {
+    "game": "call-of-duty:-black-ops-iii",
+    "discord_id": "359509332490059776"
+  },
+  {
+    "game": "stardew-valley",
+    "discord_id": "359509387670192128"
+  },
+  {
+    "game": "dark-souls-iii",
+    "discord_id": "359509500199436288"
+  },
+  {
+    "game": "counter-strike:-source",
+    "discord_id": "359509666876751872"
+  },
+  {
+    "game": "fallout-4",
+    "discord_id": "359509759642042378"
+  },
+  {
+    "game": "fallout:-new-vegas",
+    "discord_id": "359509858728542208"
+  },
+  {
+    "game": "maplestory",
+    "discord_id": "359510095811444736"
+  },
+  {
+    "game": "the-witcher-3:-wild-hunt",
+    "discord_id": "359510249486417920"
+  },
+  {
+    "game": "half-life-2",
+    "discord_id": "359510373361254400"
+  },
+  {
+    "game": "battlefield-4",
+    "discord_id": "359510680459673610"
+  },
+  {
+    "game": "xcom-2",
+    "discord_id": "359510740878491658"
+  },
+  {
+    "game": "guild-wars-2",
+    "discord_id": "359511228445491200"
+  },
+  {
+    "game": "the-elder-scrolls-v:-skyrim-special-edition",
+    "discord_id": "359801269008859136"
+  },
+  {
+    "game": "tooth-and-tail",
+    "discord_id": "360541292578471937"
+  },
+  {
+    "game": "outlast",
+    "discord_id": "363408634568376320"
+  },
+  {
+    "game": "depth",
+    "discord_id": "363408709495291934"
+  },
+  {
+    "game": "tabletop-simulator",
+    "discord_id": "363408834095742976"
+  },
+  {
+    "game": "stellaris",
+    "discord_id": "363408909962182683"
+  },
+  {
+    "game": "trove",
+    "discord_id": "363409000399634432"
+  },
+  {
+    "game": "gang-beasts",
+    "discord_id": "363409129643180032"
+  },
+  {
+    "game": "the-forest",
+    "discord_id": "363409179668512788"
+  },
+  {
+    "game": "insurgency",
+    "discord_id": "363409205740175360"
+  },
+  {
+    "game": "europa-universalis-iv",
+    "discord_id": "363409417632481280"
+  },
+  {
+    "game": "town-of-salem",
+    "discord_id": "363409453699170304"
+  },
+  {
+    "game": "robocraft",
+    "discord_id": "363409532480913408"
+  },
+  {
+    "game": "golf-it!",
+    "discord_id": "363409575321403402"
+  },
+  {
+    "game": "heroes-&-generals",
+    "discord_id": "363409597312008212"
+  },
+  {
+    "game": "shadowverse",
+    "discord_id": "363409615620407316"
+  },
+  {
+    "game": "7-days-to-die",
+    "discord_id": "363409643973771264"
+  },
+  {
+    "game": "killing-floor-2",
+    "discord_id": "363409749175173120"
+  },
+  {
+    "game": "starcraft",
+    "discord_id": "363409793119158272"
+  },
+  {
+    "game": "undertale",
+    "discord_id": "363409849859571722"
+  },
+  {
+    "game": "duck-game",
+    "discord_id": "363410951518552064"
+  },
+  {
+    "game": "dirty-bomb",
+    "discord_id": "363411048713420800"
+  },
+  {
+    "game": "business-tour---online-multiplayer-board-game",
+    "discord_id": "363411278527594516"
+  },
+  {
+    "game": "fallout-shelter",
+    "discord_id": "363411364552638464"
+  },
+  {
+    "game": "slime-rancher",
+    "discord_id": "363411395854991400"
+  },
+  {
+    "game": "last-man-standing",
+    "discord_id": "363411421553360896"
+  },
+  {
+    "game": "titanfall-2",
+    "discord_id": "363411468441354240"
+  },
+  {
+    "game": "star-wars-battlefront",
+    "discord_id": "363412167934083072"
+  },
+  {
+    "game": "mount-&-blade:-warband",
+    "discord_id": "363412302998929418"
+  },
+  {
+    "game": "star-wars:-the-old-republic",
+    "discord_id": "363412489599188992"
+  },
+  {
+    "game": "planetside-2",
+    "discord_id": "363412528308682752"
+  },
+  {
+    "game": "clicker-heroes",
+    "discord_id": "363412660680785940"
+  },
+  {
+    "game": "psychonauts",
+    "discord_id": "363412675650125825"
+  },
+  {
+    "game": "american-truck-simulator",
+    "discord_id": "363412692083671040"
+  },
+  {
+    "game": "call-of-duty:-world-at-war",
+    "discord_id": "363412728888557568"
+  },
+  {
+    "game": "crossout",
+    "discord_id": "363412799117852672"
+  },
+  {
+    "game": "dofus",
+    "discord_id": "363412841862266880"
+  },
+  {
+    "game": "comedy-night",
+    "discord_id": "363413176605212682"
+  },
+  {
+    "game": "enter-the-gungeon",
+    "discord_id": "363413202090065920"
+  },
+  {
+    "game": "elite-dangerous",
+    "discord_id": "363413225578037248"
+  },
+  {
+    "game": "wizard101",
+    "discord_id": "363413310474813450"
+  },
+  {
+    "game": "adventure-capitalist",
+    "discord_id": "363413365667921930"
+  },
+  {
+    "game": "age-of-empires-ii:-hd-edition",
+    "discord_id": "363413389021675530"
+  },
+  {
+    "game": "eve-online",
+    "discord_id": "363413402300710912"
+  },
+  {
+    "game": "heat-signature",
+    "discord_id": "363413452976553984"
+  },
+  {
+    "game": "rimworld",
+    "discord_id": "363413465584500737"
+  },
+  {
+    "game": "warthunder",
+    "discord_id": "363413661567680522"
+  },
+  {
+    "game": "rivals-of-aether",
+    "discord_id": "363413717267906560"
+  },
+  {
+    "game": "beamng.drive",
+    "discord_id": "363413743335374859"
+  },
+  {
+    "game": "subnautica",
+    "discord_id": "363413811518242816"
+  },
+  {
+    "game": "sid-meier's-civilization-vi",
+    "discord_id": "363413834301571072"
+  },
+  {
+    "game": "the-elder-scrolls-online",
+    "discord_id": "363413894602948608"
+  },
+  {
+    "game": "doom",
+    "discord_id": "363413961967927306"
+  },
+  {
+    "game": "ftl:-faster-than-light",
+    "discord_id": "363414030188150801"
+  },
+  {
+    "game": "realm-of-the-mad-god",
+    "discord_id": "363414084542005258"
+  },
+  {
+    "game": "just-cause-3",
+    "discord_id": "363414140502671360"
+  },
+  {
+    "game": "portal",
+    "discord_id": "363414173457186826"
+  },
+  {
+    "game": "dead-cells",
+    "discord_id": "363414360422612992"
+  },
+  {
+    "game": "fifa-17",
+    "discord_id": "363414398129274890"
+  },
+  {
+    "game": "dragon-ball-xenoverse-2",
+    "discord_id": "363414443129831444"
+  },
+  {
+    "game": "friday-the-13th:-the-game",
+    "discord_id": "363414482615271434"
+  },
+  {
+    "game": "prison-architect",
+    "discord_id": "363414635812093962"
+  },
+  {
+    "game": "tekken-7",
+    "discord_id": "363414667797725184"
+  },
+  {
+    "game": "the-escapists-2",
+    "discord_id": "363414712186306560"
+  },
+  {
+    "game": "crusader-kings-ii",
+    "discord_id": "363414742661988352"
+  },
+  {
+    "game": "microtransaction-simulator",
+    "discord_id": "363414852410015744"
+  },
+  {
+    "game": "warface",
+    "discord_id": "363414901030649856"
+  },
+  {
+    "game": "middle-earth:-shadow-of-mordor",
+    "discord_id": "363424997080956928"
+  },
+  {
+    "game": "metal-gear-solid-v:-the-phantom-pain",
+    "discord_id": "363425113879609344"
+  },
+  {
+    "game": "idle-champions-of-the-forgotten-realms",
+    "discord_id": "363425133274333214"
+  },
+  {
+    "game": "huniepop",
+    "discord_id": "363425169051615262"
+  },
+  {
+    "game": "ultimate-chicken-horse",
+    "discord_id": "363425213905371146"
+  },
+  {
+    "game": "nier:automata",
+    "discord_id": "363425276300099584"
+  },
+  {
+    "game": "dark-souls-ii:-scholar-of-the-first-sin",
+    "discord_id": "363426741269692416"
+  },
+  {
+    "game": "total-war:-warhammer-ii",
+    "discord_id": "363426802640617482"
+  },
+  {
+    "game": "skullgirls",
+    "discord_id": "363426862363574272"
+  },
+  {
+    "game": "farming-simulator-17",
+    "discord_id": "363426921612181504"
+  },
+  {
+    "game": "100%-orange-juice",
+    "discord_id": "363427044333191169"
+  },
+  {
+    "game": "crypt-of-the-necrodancer",
+    "discord_id": "363427101346627584"
+  },
+  {
+    "game": "call-of-duty:-black-ops-ii",
+    "discord_id": "363427270024626176"
+  },
+  {
+    "game": "sonic-adventure-2",
+    "discord_id": "363427419249442816"
+  },
+  {
+    "game": "bloons-td-battles",
+    "discord_id": "363427491995713536"
+  },
+  {
+    "game": "dishonored",
+    "discord_id": "363427574707257354"
+  },
+  {
+    "game": "sven-co-op",
+    "discord_id": "363427674309263360"
+  },
+  {
+    "game": "tower-unite",
+    "discord_id": "363427800088313856"
+  },
+  {
+    "game": "dying-light",
+    "discord_id": "363427839137153024"
+  },
+  {
+    "game": "chivalry:-medieval-warfare",
+    "discord_id": "363427969324023808"
+  },
+  {
+    "game": "squad",
+    "discord_id": "363428011980357632"
+  },
+  {
+    "game": "astroneer",
+    "discord_id": "363428060604792832"
+  },
+  {
+    "game": "creativerse",
+    "discord_id": "363428103919239168"
+  },
+  {
+    "game": "oddworld:-abe's-oddysee",
+    "discord_id": "363428220617621504"
+  },
+  {
+    "game": "tom-clancy's-ghost-recon-wildlands",
+    "discord_id": "363428336749379604"
+  },
+  {
+    "game": "warhammer:-end-times---vermintide",
+    "discord_id": "363429268577058816"
+  },
+  {
+    "game": "battleblock-theater",
+    "discord_id": "363429294778744832"
+  },
+  {
+    "game": "killing-floor",
+    "discord_id": "363429388156403712"
+  },
+  {
+    "game": "kerbal-space-program",
+    "discord_id": "363429406376722442"
+  },
+  {
+    "game": "rise-of-the-tomb-raider",
+    "discord_id": "363429423728427008"
+  },
+  {
+    "game": "castle-crashers",
+    "discord_id": "363429462076817408"
+  },
+  {
+    "game": "infestation:-the-new-z",
+    "discord_id": "363429491034554368"
+  },
+  {
+    "game": "mirage:-arcane-warfare",
+    "discord_id": "363429532377677824"
+  },
+  {
+    "game": "fistful-of-frags",
+    "discord_id": "363429654540845056"
+  },
+  {
+    "game": "star-wars-battlefront-ii",
+    "discord_id": "363429717698936852"
+  },
+  {
+    "game": "cuphead",
+    "discord_id": "363430002181668864"
+  },
+  {
+    "game": "naruto-shippuden:-ultimate-ninja-storm-4",
+    "discord_id": "363430045970071552"
+  },
+  {
+    "game": "tera",
+    "discord_id": "363430088521547786"
+  },
+  {
+    "game": "saints-row-iv",
+    "discord_id": "363430103306338304"
+  },
+  {
+    "game": "absolver",
+    "discord_id": "363430239134547978"
+  },
+  {
+    "game": "total-war:-warhammer",
+    "discord_id": "363430260810973194"
+  },
+  {
+    "game": "scrap-mechanic",
+    "discord_id": "363430304746176512"
+  },
+  {
+    "game": "oxygen-not-included",
+    "discord_id": "363430471322828800"
+  },
+  {
+    "game": "half-life",
+    "discord_id": "363430548028522496"
+  },
+  {
+    "game": "nuclear-throne",
+    "discord_id": "363430560942653440"
+  },
+  {
+    "game": "no-more-room-in-hell",
+    "discord_id": "363430673694064640"
+  },
+  {
+    "game": "the-sims-3",
+    "discord_id": "363430739456425994"
+  },
+  {
+    "game": "divinity:-original-sin-enhanced-edition",
+    "discord_id": "363430797257998356"
+  },
+  {
+    "game": "ravenfield",
+    "discord_id": "363430881811234816"
+  },
+  {
+    "game": "life-is-strange",
+    "discord_id": "363430904867192832"
+  },
+  {
+    "game": "hollow-knight",
+    "discord_id": "363431029484027904"
+  },
+  {
+    "game": "saints-row:-the-third",
+    "discord_id": "363431107527704576"
+  },
+  {
+    "game": "planet-coaster",
+    "discord_id": "363431197960962049"
+  },
+  {
+    "game": "dishonored-2",
+    "discord_id": "363431216000532480"
+  },
+  {
+    "game": "clustertruck",
+    "discord_id": "363431307629559808"
+  },
+  {
+    "game": "crush-crush",
+    "discord_id": "363431341599096842"
+  },
+  {
+    "game": "battlefield-3",
+    "discord_id": "363431403469144064"
+  },
+  {
+    "game": "world-war-ii-online",
+    "discord_id": "363431447119527956"
+  },
+  {
+    "game": "company-of-heroes-2",
+    "discord_id": "363431541336047616"
+  },
+  {
+    "game": "realm-grinder",
+    "discord_id": "363431556301193216"
+  },
+  {
+    "game": "project-cars",
+    "discord_id": "363431703504748544"
+  },
+  {
+    "game": "half-life:-c.a.g.e.d.",
+    "discord_id": "363431787214536704"
+  },
+  {
+    "game": "guitar-hero-iii:-legends-of-rock",
+    "discord_id": "363431817312731136"
+  },
+  {
+    "game": "roblox",
+    "discord_id": "363445589247131668"
+  },
+  {
+    "game": "grand-theft-auto-san-andreas",
+    "discord_id": "363447565905166336"
+  },
+  {
+    "game": "payday-2",
+    "discord_id": "364785249202208768"
+  },
+  {
+    "game": "ballistic-overkill",
+    "discord_id": "365200071941292033"
+  },
+  {
+    "game": "call-of-duty\u00ae:-wwii",
+    "discord_id": "365569601993572352"
+  },
+  {
+    "game": "osu!",
+    "discord_id": "367827983903490050"
+  },
+  {
+    "game": "destiny-2",
+    "discord_id": "372438022647578634"
+  },
+  {
+    "game": "hob",
+    "discord_id": "372440317493903380"
+  },
+  {
+    "game": "fallout",
+    "discord_id": "372825995084038144"
+  },
+  {
+    "game": "middle-earth:-shadow-of-war",
+    "discord_id": "372826898465685519"
+  },
+  {
+    "game": "descenders",
+    "discord_id": "375540160571637760"
+  },
+  {
+    "game": "wolfenstein:-the-new-order",
+    "discord_id": "376171871873400832"
+  },
+  {
+    "game": "day-of-infamy",
+    "discord_id": "376180187806695462"
+  },
+  {
+    "game": "deceit",
+    "discord_id": "376180386801123358"
+  },
+  {
+    "game": "darkest-dungeon",
+    "discord_id": "376180518749995028"
+  },
+  {
+    "game": "bendy-and-the-ink-machine",
+    "discord_id": "376180724291731472"
+  },
+  {
+    "game": "a-hat-in-time",
+    "discord_id": "376180889010307072"
+  },
+  {
+    "game": "besiege",
+    "discord_id": "376181155868966912"
+  },
+  {
+    "game": "life-is-strange:-before-the-storm",
+    "discord_id": "376181248596508672"
+  },
+  {
+    "game": "guns-up!",
+    "discord_id": "376181312890863616"
+  },
+  {
+    "game": "at-sundown:-sitd",
+    "discord_id": "379732021385232385"
+  },
+  {
+    "game": "warframe-dev",
+    "discord_id": "383379166323539969"
+  },
+  {
+    "game": "h1z1",
+    "discord_id": "385537545276096522"
+  },
+  {
+    "game": "yu-gi-oh!-duel-links",
+    "discord_id": "385537699366305792"
+  },
+  {
+    "game": "fifa-18",
+    "discord_id": "385537854320934922"
+  },
+  {
+    "game": "sanctum-2",
+    "discord_id": "385537957806866432"
+  },
+  {
+    "game": "human:-fall-flat",
+    "discord_id": "385538103831429120"
+  },
+  {
+    "game": "watch-dogs",
+    "discord_id": "385538279090683924"
+  },
+  {
+    "game": "assassin's-creed-origins",
+    "discord_id": "385538388419280896"
+  },
+  {
+    "game": "cs2d",
+    "discord_id": "385538625221165056"
+  },
+  {
+    "game": "wolfenstein-ii:-the-new-colossus",
+    "discord_id": "385538682184269834"
+  },
+  {
+    "game": "dayz",
+    "discord_id": "385538724592746496"
+  },
+  {
+    "game": "brutal-legend",
+    "discord_id": "385538840162467860"
+  },
+  {
+    "game": "zombidle",
+    "discord_id": "387375748262002710"
+  },
+  {
+    "game": "shadowrun:-hong-kong",
+    "discord_id": "387376045269057564"
+  },
+  {
+    "game": "rising-storm-2:-vietnam",
+    "discord_id": "387402304158040074"
+  },
+  {
+    "game": "the-bureau:-xcom-declassified",
+    "discord_id": "387402716965634066"
+  },
+  {
+    "game": "elsword",
+    "discord_id": "387402920238383122"
+  },
+  {
+    "game": "total-war:-rome-2",
+    "discord_id": "387403734080159763"
+  },
+  {
+    "game": "freddy-fazbear's-pizzeria-simulator",
+    "discord_id": "389964632527339534"
+  },
+  {
+    "game": "getting-over-it-with-bennett-foddy",
+    "discord_id": "389968138688659466"
+  },
+  {
+    "game": "guns-of-icarus-online",
+    "discord_id": "390293569832878098"
+  },
+  {
+    "game": "guns-of-icarus-alliance",
+    "discord_id": "390293932199772160"
+  },
+  {
+    "game": "zombidle:-remonstered",
+    "discord_id": "393178973129015328"
+  },
+  {
+    "game": "guns-n'-boxes",
+    "discord_id": "393511930838515742"
+  },
+  {
+    "game": "vrchat",
+    "discord_id": "398632010442211348"
+  },
+  {
+    "game": "red-crucible:-firestorm",
+    "discord_id": "403373728290963478"
+  },
+  {
+    "game": "assassin's-creed-iv-black-flag",
+    "discord_id": "406637677199360030"
+  },
+  {
+    "game": "escape-from-tarkov",
+    "discord_id": "406637848297472017"
+  },
+  {
+    "game": "scp:-secret-laboratory",
+    "discord_id": "406637935417622558"
+  },
+  {
+    "game": "they-are-billions",
+    "discord_id": "406638043894775819"
+  },
+  {
+    "game": "the-long-dark",
+    "discord_id": "406638150857785344"
+  },
+  {
+    "game": "pok\u00e9mon-trading-card-game-online",
+    "discord_id": "406638244835622912"
+  },
+  {
+    "game": "kingdom:-classic",
+    "discord_id": "406638362196312074"
+  },
+  {
+    "game": "don't-starve",
+    "discord_id": "406643893007024149"
+  },
+  {
+    "game": "gwent",
+    "discord_id": "406643974183452681"
+  },
+  {
+    "game": "long-live-santa!",
+    "discord_id": "406644036963663890"
+  },
+  {
+    "game": "slay-the-spire",
+    "discord_id": "406644123832156160"
+  },
+  {
+    "game": "kingdoms-and-castles",
+    "discord_id": "406645058599780368"
+  },
+  {
+    "game": "northgard",
+    "discord_id": "406645134445248530"
+  },
+  {
+    "game": "broforce",
+    "discord_id": "406645260987662366"
+  },
+  {
+    "game": "crossfire-br",
+    "discord_id": "406645350506561547"
+  },
+  {
+    "game": "neverwinter",
+    "discord_id": "406645401437863936"
+  },
+  {
+    "game": "tibia",
+    "discord_id": "406645450863804416"
+  },
+  {
+    "game": "papers,-please",
+    "discord_id": "406645580375392256"
+  },
+  {
+    "game": "closers",
+    "discord_id": "406645631864537088"
+  },
+  {
+    "game": "spore",
+    "discord_id": "406645798680657920"
+  },
+  {
+    "game": "plague-inc:-evolved",
+    "discord_id": "406645878980476928"
+  },
+  {
+    "game": "borderlands:-the-pre-sequel",
+    "discord_id": "406645950782636041"
+  },
+  {
+    "game": "hotline-miami",
+    "discord_id": "406646037571436544"
+  },
+  {
+    "game": "homefront",
+    "discord_id": "406646102297804826"
+  },
+  {
+    "game": "thehunter\u2122:-call-of-the-wild",
+    "discord_id": "406646161563189258"
+  },
+  {
+    "game": "tomb-raider",
+    "discord_id": "406646264093212682"
+  },
+  {
+    "game": "the-binding-of-isaac",
+    "discord_id": "406646308309434378"
+  },
+  {
+    "game": "we-were-here",
+    "discord_id": "406646387875250186"
+  },
+  {
+    "game": "this-war-of-mine",
+    "discord_id": "406646471098892298"
+  },
+  {
+    "game": "hotline-miami-2:-wrong-number",
+    "discord_id": "406646550731816960"
+  },
+  {
+    "game": "wulverblade",
+    "discord_id": "410909667334684672"
+  },
+  {
+    "game": "hand-simulator",
+    "discord_id": "418232964783144980"
+  },
+  {
+    "game": "kingdom-come:-deliverance",
+    "discord_id": "419267878014025728"
+  },
+  {
+    "game": "dragon-ball-fighterz",
+    "discord_id": "419268865667629056"
+  },
+  {
+    "game": "battalion-1944",
+    "discord_id": "419271532087607296"
+  },
+  {
+    "game": "world-of-tanks-blitz",
+    "discord_id": "419272031960432651"
+  },
+  {
+    "game": "\ub358\uc804\uc564\ud30c\uc774\ud130",
+    "discord_id": "421150671836938240"
+  },
+  {
+    "game": "dark-souls\u2122:-prepare-to-die-edition",
+    "discord_id": "421150676710588416"
+  },
+  {
+    "game": "total-war-arena",
+    "discord_id": "421150683329462272"
+  },
+  {
+    "game": "doki-doki-literature-club",
+    "discord_id": "421150694683312138"
+  },
+  {
+    "game": "borderlands-2",
+    "discord_id": "421150698168909834"
+  },
+  {
+    "game": "forsaken-remastered",
+    "discord_id": "421798336694059018"
+  },
+  {
+    "game": "soulworker",
+    "discord_id": "421858437039783936"
+  },
+  {
+    "game": "hunt:-showdown",
+    "discord_id": "422169383972896768"
+  },
+  {
+    "game": "warframe",
+    "discord_id": "422772752647323649"
+  },
+  {
+    "game": "warcraft-iii",
+    "discord_id": "424719708785344525"
+  },
+  {
+    "game": "bastion",
+    "discord_id": "425404251292958736"
+  },
+  {
+    "game": "assassin's-creed-chronicles-china",
+    "discord_id": "425433703041335346"
+  },
+  {
+    "game": "assassin's-creed",
+    "discord_id": "425434240784662551"
+  },
+  {
+    "game": "assassin's-creed-ii",
+    "discord_id": "425434695908458519"
+  },
+  {
+    "game": "assassin's-creed-iii",
+    "discord_id": "425434783695503360"
+  },
+  {
+    "game": "assassin's-creed-rogue",
+    "discord_id": "425434983080001556"
+  },
+  {
+    "game": "assassin's-creed-unity",
+    "discord_id": "425435152634609664"
+  },
+  {
+    "game": "assassin's-creed-brotherhood",
+    "discord_id": "425435232788021258"
+  },
+  {
+    "game": "assassin's-creed-revelations",
+    "discord_id": "425436928041680931"
+  },
+  {
+    "game": "batman:-arkham-knight",
+    "discord_id": "425437076188561408"
+  },
+  {
+    "game": "batman:-arkham-origins",
+    "discord_id": "425437243822571550"
+  },
+  {
+    "game": "batman:-arkham-vr",
+    "discord_id": "425437344758366216"
+  },
+  {
+    "game": "beyond-good-and-evil",
+    "discord_id": "425437404854222858"
+  },
+  {
+    "game": "f.e.a.r.",
+    "discord_id": "425437484735004682"
+  },
+  {
+    "game": "f.e.a.r.-2:-project-origin",
+    "discord_id": "425437598836719616"
+  },
+  {
+    "game": "f.e.a.r.-3",
+    "discord_id": "425437856169721856"
+  },
+  {
+    "game": "far-cry",
+    "discord_id": "425437906363219968"
+  },
+  {
+    "game": "far-cry-2",
+    "discord_id": "425437961669181477"
+  },
+  {
+    "game": "far-cry-4",
+    "discord_id": "425438134709518336"
+  },
+  {
+    "game": "far-cry-primal",
+    "discord_id": "425438207631556608"
+  },
+  {
+    "game": "for-honor",
+    "discord_id": "425438403819995145"
+  },
+  {
+    "game": "injustice:-gods-among-us-ultimate-edition",
+    "discord_id": "425438526491066388"
+  },
+  {
+    "game": "just-dance-2017",
+    "discord_id": "425438596883939328"
+  },
+  {
+    "game": "lego\u00ae-the-hobbit\u2122",
+    "discord_id": "425439134551900190"
+  },
+  {
+    "game": "lego\u00ae-worlds",
+    "discord_id": "425439198733008896"
+  },
+  {
+    "game": "mad-max",
+    "discord_id": "425439256001904650"
+  },
+  {
+    "game": "mortal-kombat-komplete-edition",
+    "discord_id": "425439413972238366"
+  },
+  {
+    "game": "mortal-kombat-x",
+    "discord_id": "425439470075117573"
+  },
+  {
+    "game": "rayman-legends",
+    "discord_id": "425439545983500288"
+  },
+  {
+    "game": "rayman-origins",
+    "discord_id": "425439593882714133"
+  },
+  {
+    "game": "rocksmith-2014",
+    "discord_id": "425439633917214720"
+  },
+  {
+    "game": "scribblenauts-unlimited",
+    "discord_id": "425439683938353162"
+  },
+  {
+    "game": "steep",
+    "discord_id": "425439790746566666"
+  },
+  {
+    "game": "the-crew",
+    "discord_id": "425439876939382804"
+  },
+  {
+    "game": "the-lego\u00ae-movie---videogame",
+    "discord_id": "425439950553481216"
+  },
+  {
+    "game": "tom-clancy's-ghost-recon-future-soldier",
+    "discord_id": "425440004983226378"
+  },
+  {
+    "game": "tom-clancy's-splinter-cell",
+    "discord_id": "425440094263050250"
+  },
+  {
+    "game": "tom-clancy's-splinter-cell-blacklist",
+    "discord_id": "425440144829448192"
+  },
+  {
+    "game": "trackmania-turbo",
+    "discord_id": "425440195966664704"
+  },
+  {
+    "game": "trials-fusion",
+    "discord_id": "425440259539599390"
+  },
+  {
+    "game": "watch_dogs",
+    "discord_id": "425440319509626881"
+  },
+  {
+    "game": "watch_dogs-2",
+    "discord_id": "425440363688493066"
+  },
+  {
+    "game": "darksiders-warmastered-edition",
+    "discord_id": "425440430772060160"
+  },
+  {
+    "game": "elex",
+    "discord_id": "425440477882351626"
+  },
+  {
+    "game": "fade-to-silence",
+    "discord_id": "425440525286637577"
+  },
+  {
+    "game": "impossible-creatures",
+    "discord_id": "425440563337232394"
+  },
+  {
+    "game": "ori-and-the-blind-forest:-definitive-edition",
+    "discord_id": "425440642173239296"
+  },
+  {
+    "game": "red-faction",
+    "discord_id": "425440700335915028"
+  },
+  {
+    "game": "spellforce-2---anniversary-edition",
+    "discord_id": "425440739166650368"
+  },
+  {
+    "game": "the-guild-3",
+    "discord_id": "425440832238387200"
+  },
+  {
+    "game": "firewatch",
+    "discord_id": "425440941793345536"
+  },
+  {
+    "game": "the-witness",
+    "discord_id": "425441014292152320"
+  },
+  {
+    "game": "the-talos-principle",
+    "discord_id": "425441094482919464"
+  },
+  {
+    "game": "the-surge",
+    "discord_id": "425441321512075264"
+  },
+  {
+    "game": "rebel-galaxy",
+    "discord_id": "425441408242155530"
+  },
+  {
+    "game": "fractured-space",
+    "discord_id": "425441448410873866"
+  },
+  {
+    "game": "planetary-annihilation:-titans",
+    "discord_id": "425441516354273280"
+  },
+  {
+    "game": "hyper-light-drifter",
+    "discord_id": "425441571656433664"
+  },
+  {
+    "game": "stonehearth",
+    "discord_id": "425441650878316564"
+  },
+  {
+    "game": "obduction",
+    "discord_id": "425441688152965142"
+  },
+  {
+    "game": "shovel-knight",
+    "discord_id": "425441726736629760"
+  },
+  {
+    "game": "battle-chasers:-nightwar",
+    "discord_id": "425441774450901002"
+  },
+  {
+    "game": "wolcen:-lords-of-mayhem",
+    "discord_id": "425441823754813455"
+  },
+  {
+    "game": "planet-nomads",
+    "discord_id": "425441961877700618"
+  },
+  {
+    "game": "agents-of-mayhem",
+    "discord_id": "425442005766766592"
+  },
+  {
+    "game": "dead-island-definitive-edition",
+    "discord_id": "425442043616034816"
+  },
+  {
+    "game": "dead-island-riptide-definitive-edition",
+    "discord_id": "425442091666243594"
+  },
+  {
+    "game": "dirt-4",
+    "discord_id": "425442140731080704"
+  },
+  {
+    "game": "f1-2016",
+    "discord_id": "425442173559767040"
+  },
+  {
+    "game": "f1-2017",
+    "discord_id": "425442216639725578"
+  },
+  {
+    "game": "homefront:-the-revolution",
+    "discord_id": "425442258020597760"
+  },
+  {
+    "game": "metro-2033-redux",
+    "discord_id": "425442324495990784"
+  },
+  {
+    "game": "metro:-last-light-redux",
+    "discord_id": "425442388270645248"
+  },
+  {
+    "game": "micro-machines-world-series",
+    "discord_id": "425442430922391552"
+  },
+  {
+    "game": "mighty-no.-9",
+    "discord_id": "425442465244250132"
+  },
+  {
+    "game": "risen",
+    "discord_id": "425442503198769152"
+  },
+  {
+    "game": "ryse:-son-of-rome",
+    "discord_id": "425442538288185344"
+  },
+  {
+    "game": "saints-row-2",
+    "discord_id": "425442587508211712"
+  },
+  {
+    "game": "bridge-constructor",
+    "discord_id": "425442642680348692"
+  },
+  {
+    "game": "bridge-constructor-portal",
+    "discord_id": "425442712095948800"
+  },
+  {
+    "game": "dead-age",
+    "discord_id": "425442752562462720"
+  },
+  {
+    "game": "seum:-speedrunners-from-hell",
+    "discord_id": "425442824134328320"
+  },
+  {
+    "game": "bioshock-2",
+    "discord_id": "425442925967573002"
+  },
+  {
+    "game": "bioshock\u2122-2-remastered",
+    "discord_id": "425442965255880704"
+  },
+  {
+    "game": "bioshock-infinite",
+    "discord_id": "425442995681230858"
+  },
+  {
+    "game": "bioshock\u2122-remastered",
+    "discord_id": "425443045417156618"
+  },
+  {
+    "game": "borderlands",
+    "discord_id": "425443081916252160"
+  },
+  {
+    "game": "mafia",
+    "discord_id": "425443205195104277"
+  },
+  {
+    "game": "mafia-ii",
+    "discord_id": "425443244285886494"
+  },
+  {
+    "game": "mafia-iii",
+    "discord_id": "425443292831023113"
+  },
+  {
+    "game": "sid-meier's-civilization:-beyond-earth",
+    "discord_id": "425443404277743616"
+  },
+  {
+    "game": "wwe-2k18",
+    "discord_id": "425443442181537792"
+  },
+  {
+    "game": "deponia",
+    "discord_id": "425443478525444106"
+  },
+  {
+    "game": "shadow-tactics:-blades-of-the-shogun",
+    "discord_id": "425443548079456285"
+  },
+  {
+    "game": "silence",
+    "discord_id": "425443601154048020"
+  },
+  {
+    "game": "kingdom:-new-lands",
+    "discord_id": "425443637892218890"
+  },
+  {
+    "game": "gonner",
+    "discord_id": "425443673698861066"
+  },
+  {
+    "game": "guild-of-dungeoneering",
+    "discord_id": "425443709958488064"
+  },
+  {
+    "game": "antihero",
+    "discord_id": "425443745866186752"
+  },
+  {
+    "game": "let-them-come",
+    "discord_id": "425443777621131264"
+  },
+  {
+    "game": "lego\u00ae-star-wars\u2122:-the-force-awakens",
+    "discord_id": "425443938271363095"
+  },
+  {
+    "game": "lego\u00ae-marvel's-avengers",
+    "discord_id": "425449323346657290"
+  },
+  {
+    "game": "lego\u00ae-jurassic-world",
+    "discord_id": "425450411391057950"
+  },
+  {
+    "game": "from-dust",
+    "discord_id": "425450802316967956"
+  },
+  {
+    "game": "rocksmith",
+    "discord_id": "425450896877420565"
+  },
+  {
+    "game": "tom-clancy's-ghost-recon",
+    "discord_id": "425451104117981184"
+  },
+  {
+    "game": "arcania",
+    "discord_id": "425451163807383552"
+  },
+  {
+    "game": "mx-vs.-atv-unleashed",
+    "discord_id": "425451199756632084"
+  },
+  {
+    "game": "the-dwarves",
+    "discord_id": "425451237387796490"
+  },
+  {
+    "game": "sunless-skies",
+    "discord_id": "425451303985217536"
+  },
+  {
+    "game": "deadlight:-director's-cut",
+    "discord_id": "425451345865211904"
+  },
+  {
+    "game": "sacred-3",
+    "discord_id": "425451387724234752"
+  },
+  {
+    "game": "trainz:-a-new-era",
+    "discord_id": "425451439318630424"
+  },
+  {
+    "game": "the-inner-world",
+    "discord_id": "425451474122833930"
+  },
+  {
+    "game": "assassin's-creed-freedom-cry",
+    "discord_id": "425453860392402964"
+  },
+  {
+    "game": "assassin's-creed-syndicate",
+    "discord_id": "425453938582487068"
+  },
+  {
+    "game": "bloody-good-time",
+    "discord_id": "425453978114064424"
+  },
+  {
+    "game": "far-cry-3-blood-dragon",
+    "discord_id": "425454019205529600"
+  },
+  {
+    "game": "i-am-alive",
+    "discord_id": "425454053795823626"
+  },
+  {
+    "game": "prince-of-persia",
+    "discord_id": "425454114999369728"
+  },
+  {
+    "game": "black-mirror",
+    "discord_id": "425454162705252372"
+  },
+  {
+    "game": "darksiders-ii:-deathinitive-edition",
+    "discord_id": "425454199371726858"
+  },
+  {
+    "game": "delta-force:-land-warrior",
+    "discord_id": "425454276719017994"
+  },
+  {
+    "game": "full-spectrum-warrior",
+    "discord_id": "425454306737520650"
+  },
+  {
+    "game": "full-spectrum-warrior:-ten-hammers",
+    "discord_id": "425454342888488960"
+  },
+  {
+    "game": "men-of-valor",
+    "discord_id": "425454383820570664"
+  },
+  {
+    "game": "nexus:-the-jupiter-incident",
+    "discord_id": "425454420289912832"
+  },
+  {
+    "game": "sine-mora-ex",
+    "discord_id": "425454457434931200"
+  },
+  {
+    "game": "sphinx-and-the-cursed-mummy",
+    "discord_id": "425454500883595264"
+  },
+  {
+    "game": "the-book-of-unwritten-tales-2",
+    "discord_id": "425454534907658240"
+  },
+  {
+    "game": "the-guild-gold-edition",
+    "discord_id": "425454572778291210"
+  },
+  {
+    "game": "homesick",
+    "discord_id": "425454613827813376"
+  },
+  {
+    "game": "shroud-of-the-avatar",
+    "discord_id": "425454648623628288"
+  },
+  {
+    "game": "descent:-underground",
+    "discord_id": "425454679854678036"
+  },
+  {
+    "game": "escape-dead-island",
+    "discord_id": "425454719817875456"
+  },
+  {
+    "game": "bridge-constructor-medieval",
+    "discord_id": "425454757130272768"
+  },
+  {
+    "game": "bridge-constructor-playground",
+    "discord_id": "425454789405704202"
+  },
+  {
+    "game": "bridge-constructor-stunts",
+    "discord_id": "425454826042818590"
+  },
+  {
+    "game": "deadly-30",
+    "discord_id": "425454866014404618"
+  },
+  {
+    "game": "dub-dash",
+    "discord_id": "425454898759598080"
+  },
+  {
+    "game": "looterkings",
+    "discord_id": "425454939452604436"
+  },
+  {
+    "game": "pixel-heroes:-byte-&-magic",
+    "discord_id": "425454980489543680"
+  },
+  {
+    "game": "rockfest",
+    "discord_id": "425455011221471232"
+  },
+  {
+    "game": "slime-san",
+    "discord_id": "425455040082345984"
+  },
+  {
+    "game": "a-new-beginning---final-cut",
+    "discord_id": "425455073661812766"
+  },
+  {
+    "game": "aer-memories-of-old",
+    "discord_id": "425455104632815636"
+  },
+  {
+    "game": "anna's-quest",
+    "discord_id": "425455138459746304"
+  },
+  {
+    "game": "blackguards",
+    "discord_id": "425455172714496015"
+  },
+  {
+    "game": "blackguards-2",
+    "discord_id": "425455204218175498"
+  },
+  {
+    "game": "crazy-machines-3",
+    "discord_id": "425455241597681664"
+  },
+  {
+    "game": "edna-&-harvey:-harvey's-new-eyes",
+    "discord_id": "425455277337214976"
+  },
+  {
+    "game": "edna-&-harvey:-the-breakout",
+    "discord_id": "425455323646787584"
+  },
+  {
+    "game": "journey-of-a-roach",
+    "discord_id": "425455356181872640"
+  },
+  {
+    "game": "ken-follett's-the-pillars-of-the-earth",
+    "discord_id": "425455393401995264"
+  },
+  {
+    "game": "memoria",
+    "discord_id": "425455438050623498"
+  },
+  {
+    "game": "munin",
+    "discord_id": "425455471172911104"
+  },
+  {
+    "game": "shooting-stars!",
+    "discord_id": "425455505331191808"
+  },
+  {
+    "game": "the-dark-eye:-chains-of-satinav",
+    "discord_id": "425455537803755530"
+  },
+  {
+    "game": "the-long-journey-home",
+    "discord_id": "425455571869761536"
+  },
+  {
+    "game": "the-night-of-the-rabbit",
+    "discord_id": "425455612508241920"
+  },
+  {
+    "game": "the-whispered-world-special-edition",
+    "discord_id": "425455671052599296"
+  },
+  {
+    "game": "kathy-rain",
+    "discord_id": "425455715205906432"
+  },
+  {
+    "game": "uurnog-uurnlimited",
+    "discord_id": "425455750031081472"
+  },
+  {
+    "game": "dandara",
+    "discord_id": "425455780360355850"
+  },
+  {
+    "game": "armikrog",
+    "discord_id": "425455814497665034"
+  },
+  {
+    "game": "toren",
+    "discord_id": "425455851243831296"
+  },
+  {
+    "game": "call-of-juarez---gunslinger",
+    "discord_id": "425456506431995914"
+  },
+  {
+    "game": "trials-of-the-blood-dragon",
+    "discord_id": "425456603765145656"
+  },
+  {
+    "game": "delta-force:-task-force-dagger",
+    "discord_id": "425456638154113044"
+  },
+  {
+    "game": "lock's-quest",
+    "discord_id": "425456670362042368"
+  },
+  {
+    "game": "rad-rodgers",
+    "discord_id": "425456700640985108"
+  },
+  {
+    "game": "tachyon:-the-fringe",
+    "discord_id": "425456735050924032"
+  },
+  {
+    "game": "the-book-of-unwritten-tales:-the-critter-chronicles",
+    "discord_id": "425456762569621514"
+  },
+  {
+    "game": "inside",
+    "discord_id": "425456795683913750"
+  },
+  {
+    "game": "the-universim",
+    "discord_id": "425456822258892810"
+  },
+  {
+    "game": "lost-horizon",
+    "discord_id": "425456853070118922"
+  },
+  {
+    "game": "grotesque-tactics:-evil-heroes",
+    "discord_id": "425456981332197386"
+  },
+  {
+    "game": "in-between",
+    "discord_id": "425457045098070026"
+  },
+  {
+    "game": "meridian:-new-world",
+    "discord_id": "425457072818094080"
+  },
+  {
+    "game": "safety-first!",
+    "discord_id": "425457108167950346"
+  },
+  {
+    "game": "townsmen",
+    "discord_id": "425457401769099297"
+  },
+  {
+    "game": "viking-rage",
+    "discord_id": "425457433565986838"
+  },
+  {
+    "game": "windscape",
+    "discord_id": "425457461731000320"
+  },
+  {
+    "game": "assassin's-creed-liberation-hd",
+    "discord_id": "425457838731690003"
+  },
+  {
+    "game": "justice-league-vr:-the-complete-experience",
+    "discord_id": "425457887339348005"
+  },
+  {
+    "game": "south-park-the-stick-of-truth",
+    "discord_id": "425457961574596608"
+  },
+  {
+    "game": "battle-worlds:-kronos",
+    "discord_id": "425458030537211904"
+  },
+  {
+    "game": "overclocked:-a-history-of-violence",
+    "discord_id": "425458153262546944"
+  },
+  {
+    "game": "superpower-2",
+    "discord_id": "425458179539730462"
+  },
+  {
+    "game": "this-is-the-police",
+    "discord_id": "425458210175188992"
+  },
+  {
+    "game": "superhot",
+    "discord_id": "425458238595661854"
+  },
+  {
+    "game": "lost-horizon-2",
+    "discord_id": "425458269360750592"
+  },
+  {
+    "game": "metro-redux",
+    "discord_id": "425458328278401044"
+  },
+  {
+    "game": "secret-files-3",
+    "discord_id": "425458354756911104"
+  },
+  {
+    "game": "clouds-&-sheep-2",
+    "discord_id": "425458381835206656"
+  },
+  {
+    "game": "future-wars",
+    "discord_id": "425458408037285888"
+  },
+  {
+    "game": "game-royale-2---the-secret-of-jannis-island",
+    "discord_id": "425458432569638912"
+  },
+  {
+    "game": "greed:-black-border",
+    "discord_id": "425458464714653696"
+  },
+  {
+    "game": "holy-avatar-vs.-maidens-of-the-dead",
+    "discord_id": "425458490878984192"
+  },
+  {
+    "game": "meridian:-squad-22",
+    "discord_id": "425458524865298432"
+  },
+  {
+    "game": "race.a.bit",
+    "discord_id": "425458558620925982"
+  },
+  {
+    "game": "shiny-the-firefly",
+    "discord_id": "425458574731509760"
+  },
+  {
+    "game": "skilltree-saga",
+    "discord_id": "425458587985379328"
+  },
+  {
+    "game": "soulcraft",
+    "discord_id": "425458618108739614"
+  },
+  {
+    "game": "stellar-impact",
+    "discord_id": "425458648006000640"
+  },
+  {
+    "game": "subsiege",
+    "discord_id": "425458682566934538"
+  },
+  {
+    "game": "super-treasure-arena",
+    "discord_id": "425458718537154560"
+  },
+  {
+    "game": "trapped-dead:-lockdown",
+    "discord_id": "425458758504939540"
+  },
+  {
+    "game": "tristoy",
+    "discord_id": "425458781451845632"
+  },
+  {
+    "game": "trulon:-the-shadow-engine",
+    "discord_id": "425458804868513802"
+  },
+  {
+    "game": "twin-sector",
+    "discord_id": "425458819636920320"
+  },
+  {
+    "game": "gotham-city-impostors-free-to-play",
+    "discord_id": "425459839494389780"
+  },
+  {
+    "game": "heroes-of-might-and-magic-iii-hd",
+    "discord_id": "425459913200762889"
+  },
+  {
+    "game": "might-and-magic---heroes-v",
+    "discord_id": "425460002761998347"
+  },
+  {
+    "game": "lego\u00ae-batman-2-dc-super-heroes\u2122",
+    "discord_id": "425460322619490304"
+  },
+  {
+    "game": "lego-batman",
+    "discord_id": "425460379624144925"
+  },
+  {
+    "game": "lego-harry-potter:-years-1-4",
+    "discord_id": "425460457558769674"
+  },
+  {
+    "game": "scribblenauts-unmasked:-a-dc-comics-adventure",
+    "discord_id": "425460538110246912"
+  },
+  {
+    "game": "silent-hunter-3",
+    "discord_id": "425460595718881280"
+  },
+  {
+    "game": "south-park-fractured-but-whole",
+    "discord_id": "425460666930036736"
+  },
+  {
+    "game": "lord-of-the-rings:-war-in-the-north",
+    "discord_id": "425460776195719168"
+  },
+  {
+    "game": "tom-clancy's-rainbow-six-3",
+    "discord_id": "425460908345524224"
+  },
+  {
+    "game": "tom-clancy's-rainbow-six-vegas",
+    "discord_id": "425460989602037770"
+  },
+  {
+    "game": "tom-clancy's-rainbow-six-vegas-ii",
+    "discord_id": "425470018130673664"
+  },
+  {
+    "game": "tom-clancy's-splinter-cell-chaos-theory",
+    "discord_id": "425470107368554504"
+  },
+  {
+    "game": "the-guild-2-renaissance",
+    "discord_id": "425470196439056391"
+  },
+  {
+    "game": "soma",
+    "discord_id": "425470408322449418"
+  },
+  {
+    "game": "hellblade",
+    "discord_id": "425470569698557962"
+  },
+  {
+    "game": "dirt-rally",
+    "discord_id": "425471119068364819"
+  },
+  {
+    "game": "killer-is-dead---nightmare-edition",
+    "discord_id": "425471324073230336"
+  },
+  {
+    "game": "saints-row:-gat-out-of-hell",
+    "discord_id": "425471448782733331"
+  },
+  {
+    "game": "the-banner-saga",
+    "discord_id": "425471698284970020"
+  },
+  {
+    "game": "trackmania-united-forever",
+    "discord_id": "425709280725958689"
+  },
+  {
+    "game": "trials-evolution",
+    "discord_id": "425709676965920788"
+  },
+  {
+    "game": "neighbours-from-hell-compilation",
+    "discord_id": "425709808705077272"
+  },
+  {
+    "game": "the-guild-ii",
+    "discord_id": "425710142252777508"
+  },
+  {
+    "game": "the-flame-in-the-flood",
+    "discord_id": "425713116903505930"
+  },
+  {
+    "game": "dreamfall-chapters:-the-longest-journey",
+    "discord_id": "425713647222784010"
+  },
+  {
+    "game": "risen-3---titan-lords",
+    "discord_id": "425714129152770048"
+  },
+  {
+    "game": "sacred-2-gold",
+    "discord_id": "425714299877589002"
+  },
+  {
+    "game": "deponia:-the-complete-journey",
+    "discord_id": "425714472997355560"
+  },
+  {
+    "game": "chaos-on-deponia",
+    "discord_id": "425714655726665788"
+  },
+  {
+    "game": "the-banner-saga-2",
+    "discord_id": "425722711180967946"
+  },
+  {
+    "game": "tormentor\u274cpunisher",
+    "discord_id": "425723123187449856"
+  },
+  {
+    "game": "assassin\u2019s-creed\u00ae-chronicles:-india",
+    "discord_id": "425725558626844702"
+  },
+  {
+    "game": "batman:-arkham-asylum-goty-edition",
+    "discord_id": "425727574539370529"
+  },
+  {
+    "game": "brothers-in-arms:-road-to-hill-30",
+    "discord_id": "425727812490493972"
+  },
+  {
+    "game": "call-of-juarez:-bound-in-blood",
+    "discord_id": "425728267123949578"
+  },
+  {
+    "game": "child-of-light",
+    "discord_id": "425728327505018921"
+  },
+  {
+    "game": "prince-of-persia:-the-sands-of-time",
+    "discord_id": "425728421788909568"
+  },
+  {
+    "game": "prince-of-persia:-warrior-within",
+    "discord_id": "425728459600429056"
+  },
+  {
+    "game": "silent-hunter-5:-battle-of-the-atlantic",
+    "discord_id": "425728548586913812"
+  },
+  {
+    "game": "silent-hunter:-wolves-of-the-pacific",
+    "discord_id": "425728586192912384"
+  },
+  {
+    "game": "the-lord-of-the-rings:-war-in-the-north",
+    "discord_id": "425728616450490368"
+  },
+  {
+    "game": "delta-force:-black-hawk-down",
+    "discord_id": "425731190570483757"
+  },
+  {
+    "game": "painkiller:-black-edition",
+    "discord_id": "425731299936960512"
+  },
+  {
+    "game": "spellforce:-platinum-edition",
+    "discord_id": "425731382820470824"
+  },
+  {
+    "game": "the-guild-ii---pirates-of-the-european-seas",
+    "discord_id": "425731435929010195"
+  },
+  {
+    "game": "codename-cure",
+    "discord_id": "425748063416483870"
+  },
+  {
+    "game": "dungeon-defenders-ii",
+    "discord_id": "425748090889175050"
+  },
+  {
+    "game": "cry-of-fear",
+    "discord_id": "425748259408183306"
+  },
+  {
+    "game": "blackwake",
+    "discord_id": "425748296854667264"
+  },
+  {
+    "game": "age-of-empires\u00ae-iii:-complete-collection",
+    "discord_id": "425748312143167498"
+  },
+  {
+    "game": "far-cry\u00ae-3",
+    "discord_id": "425748544134053888"
+  },
+  {
+    "game": "transformice",
+    "discord_id": "425748744810659841"
+  },
+  {
+    "game": "football-manager-2018",
+    "discord_id": "425748782978826254"
+  },
+  {
+    "game": "total-war:-attila",
+    "discord_id": "425748853132754945"
+  },
+  {
+    "game": "final-fantasy-xv-windows-edition",
+    "discord_id": "425748942676819968"
+  },
+  {
+    "game": "evolve-stage-2",
+    "discord_id": "425748985517703188"
+  },
+  {
+    "game": "total-war:-shogun-2",
+    "discord_id": "425749196403114024"
+  },
+  {
+    "game": "into-the-breach",
+    "discord_id": "425749372332933120"
+  },
+  {
+    "game": "alien-swarm:-reactive-drop",
+    "discord_id": "425749425168580608"
+  },
+  {
+    "game": "trackmania-nations-forever",
+    "discord_id": "425749438573707264"
+  },
+  {
+    "game": "left-4-dead",
+    "discord_id": "425749516583698432"
+  },
+  {
+    "game": "amnesia:-the-dark-descent",
+    "discord_id": "425749626671595520"
+  },
+  {
+    "game": "game-dev-tycoon",
+    "discord_id": "425749842451496961"
+  },
+  {
+    "game": "banished",
+    "discord_id": "425750064963780628"
+  },
+  {
+    "game": "of-guards-and-thieves",
+    "discord_id": "425750237534224394"
+  },
+  {
+    "game": "who's-your-daddy",
+    "discord_id": "425751000477990922"
+  },
+  {
+    "game": "final-fantasy-xv-windows-edition-playable-demo",
+    "discord_id": "425751261095264276"
+  },
+  {
+    "game": "call-of-duty:-modern-warfare-2",
+    "discord_id": "425777093628919828"
+  },
+  {
+    "game": "torchlight-ii",
+    "discord_id": "425777164361793547"
+  },
+  {
+    "game": "super-meat-boy",
+    "discord_id": "425777385103949834"
+  },
+  {
+    "game": "men-of-war:-assault-squad-2",
+    "discord_id": "425777482860331018"
+  },
+  {
+    "game": "darwin-project",
+    "discord_id": "425777491068715018"
+  },
+  {
+    "game": "hyper-universe",
+    "discord_id": "425777540263837706"
+  },
+  {
+    "game": "grim-dawn",
+    "discord_id": "425777682135908352"
+  },
+  {
+    "game": "rising-storm/red-orchestra-2-multiplayer",
+    "discord_id": "425777721159974922"
+  },
+  {
+    "game": "fishing-planet",
+    "discord_id": "425777941499215872"
+  },
+  {
+    "game": "assetto-corsa",
+    "discord_id": "425778010222886912"
+  },
+  {
+    "game": "aim-hero",
+    "discord_id": "425778246941016064"
+  },
+  {
+    "game": "source-filmmaker",
+    "discord_id": "425778288661757952"
+  },
+  {
+    "game": "poly-bridge",
+    "discord_id": "425778516320059392"
+  },
+  {
+    "game": "dirt-3-complete-edition",
+    "discord_id": "425778620187803658"
+  },
+  {
+    "game": "goat-simulator",
+    "discord_id": "425778678723510302"
+  },
+  {
+    "game": "risk-of-rain",
+    "discord_id": "425779272842608670"
+  },
+  {
+    "game": "bombtag",
+    "discord_id": "425779854332657694"
+  },
+  {
+    "game": "miscreated",
+    "discord_id": "425779909835751424"
+  },
+  {
+    "game": "thehunter-classic",
+    "discord_id": "425781960317861888"
+  },
+  {
+    "game": "cortex-command",
+    "discord_id": "425787524737269770"
+  },
+  {
+    "game": "metal-gear-survive-beta",
+    "discord_id": "425800674568044575"
+  },
+  {
+    "game": "block-n-load",
+    "discord_id": "426524547177512960"
+  },
+  {
+    "game": "lethal-league",
+    "discord_id": "426524717919240202"
+  },
+  {
+    "game": "sniper-elite-4",
+    "discord_id": "426524936060928011"
+  },
+  {
+    "game": "endless-space-2",
+    "discord_id": "426524963583950868"
+  },
+  {
+    "game": "dead-maze",
+    "discord_id": "426524991379603458"
+  },
+  {
+    "game": "world-of-warcraft-public-test",
+    "discord_id": "426525131276550144"
+  },
+  {
+    "game": "sniper-elite-3",
+    "discord_id": "426525148892495882"
+  },
+  {
+    "game": "magicka",
+    "discord_id": "426525158627606568"
+  },
+  {
+    "game": "street-fighter-v",
+    "discord_id": "426525250549973022"
+  },
+  {
+    "game": "dead-space\u2122",
+    "discord_id": "426525408666583050"
+  },
+  {
+    "game": "superflight",
+    "discord_id": "426525741702709258"
+  },
+  {
+    "game": "the-witcher-2:-assassins-of-kings-enhanced-edition",
+    "discord_id": "426525754092814346"
+  },
+  {
+    "game": "spintires",
+    "discord_id": "426525833281404928"
+  },
+  {
+    "game": "blood-and-bacon",
+    "discord_id": "426526253294551046"
+  },
+  {
+    "game": "car-mechanic-simulator-2018",
+    "discord_id": "426526355564265479"
+  },
+  {
+    "game": "dragon's-dogma:-dark-arisen",
+    "discord_id": "426526490042302464"
+  },
+  {
+    "game": "project-zomboid",
+    "discord_id": "426526722322726912"
+  },
+  {
+    "game": "hero-siege",
+    "discord_id": "426526773694431233"
+  },
+  {
+    "game": "postal-2",
+    "discord_id": "426527481122521098"
+  },
+  {
+    "game": "snow",
+    "discord_id": "426527534268809226"
+  },
+  {
+    "game": "real-pool-3d---poolians",
+    "discord_id": "426528563919978496"
+  },
+  {
+    "game": "bloons-td5",
+    "discord_id": "426528712348139520"
+  },
+  {
+    "game": "deus-ex:-mankind-divided\u2122",
+    "discord_id": "426529450910547968"
+  },
+  {
+    "game": "keep-talking-and-nobody-explodes",
+    "discord_id": "426531471520563211"
+  },
+  {
+    "game": "age-of-mythology:-extended-edition",
+    "discord_id": "427033332065370132"
+  },
+  {
+    "game": "f1-2015",
+    "discord_id": "427304691903365120"
+  },
+  {
+    "game": "overcooked",
+    "discord_id": "428052640740540416"
+  },
+  {
+    "game": "the-witcher:-enhanced-edition",
+    "discord_id": "428052689641930752"
+  },
+  {
+    "game": "pickcrafter",
+    "discord_id": "428052738140798976"
+  },
+  {
+    "game": "need-for-speed\u2122-most-wanted",
+    "discord_id": "428052828242706433"
+  },
+  {
+    "game": "just-survive",
+    "discord_id": "428053249120010241"
+  },
+  {
+    "game": "one-finger-death-punch",
+    "discord_id": "428053322000367616"
+  },
+  {
+    "game": "the-elder-scrolls:-legends",
+    "discord_id": "428053383178354688"
+  },
+  {
+    "game": "pit-people",
+    "discord_id": "428053560304074752"
+  },
+  {
+    "game": "magic-duels",
+    "discord_id": "428053651932577792"
+  },
+  {
+    "game": "star-wars\u2122-knights-of-the-old-republic\u2122-ii:-the-sith-lords\u2122",
+    "discord_id": "428053722300416010"
+  },
+  {
+    "game": "tree-of-savior-(english-ver.)",
+    "discord_id": "428053768630960128"
+  },
+  {
+    "game": "toribash",
+    "discord_id": "428054001502650368"
+  },
+  {
+    "game": "star-wars\u2122-jedi-knight:-jedi-academy\u2122",
+    "discord_id": "428054061502300160"
+  },
+  {
+    "game": "deep-rock-galactic",
+    "discord_id": "428054228511227914"
+  },
+  {
+    "game": "stranded-deep",
+    "discord_id": "428054462892867614"
+  },
+  {
+    "game": "hunt:-showdown-(test-server)",
+    "discord_id": "428054629146951691"
+  },
+  {
+    "game": "eco",
+    "discord_id": "428055174905331712"
+  },
+  {
+    "game": "hide-and-shriek",
+    "discord_id": "428055329004191744"
+  },
+  {
+    "game": "apb-reloaded",
+    "discord_id": "428055627030331402"
+  },
+  {
+    "game": "call-of-duty:-black-ops",
+    "discord_id": "428055652162732032"
+  },
+  {
+    "game": "prey",
+    "discord_id": "428055981650608128"
+  },
+  {
+    "game": "metro-conflict:-the-origin",
+    "discord_id": "428056164698423296"
+  },
+  {
+    "game": "spelunky",
+    "discord_id": "428056413806395392"
+  },
+  {
+    "game": "medieval-ii:-total-war",
+    "discord_id": "428057046701572106"
+  },
+  {
+    "game": "magicka-2",
+    "discord_id": "428057934983987200"
+  },
+  {
+    "game": "uno",
+    "discord_id": "428058887334264832"
+  },
+  {
+    "game": "nioh:-complete-edition",
+    "discord_id": "428059098882506752"
+  },
+  {
+    "game": "warhammer-40,000:-dawn-of-war-iii",
+    "discord_id": "428060042248454144"
+  },
+  {
+    "game": "fortnite",
+    "discord_id": "432980957394370572"
+  },
+  {
+    "game": "unleash",
+    "discord_id": "437391104804126720"
+  },
+  {
+    "game": "estranged:-act-ii",
+    "discord_id": "443136903814971445"
+  },
+  {
+    "game": "archeage",
+    "discord_id": "443155983670312969"
+  },
+  {
+    "game": "wakfu",
+    "discord_id": "443155990414622730"
+  },
+  {
+    "game": "microsoft-flight-simulator-x:-steam-edition",
+    "discord_id": "443156007544160276"
+  },
+  {
+    "game": "darwin-project",
+    "discord_id": "443156037130780692"
+  },
+  {
+    "game": "mitos.is:-the-game",
+    "discord_id": "443156048992403456"
+  },
+  {
+    "game": "genital-jousting",
+    "discord_id": "443156066562473993"
+  },
+  {
+    "game": "universe-sandbox-\u00b2",
+    "discord_id": "443156067434889236"
+  },
+  {
+    "game": "aura-kingdom",
+    "discord_id": "443156075399872522"
+  },
+  {
+    "game": "far-cry-5",
+    "discord_id": "443156340454457344"
+  },
+  {
+    "game": "the-darkness-ii",
+    "discord_id": "443156342115663882"
+  },
+  {
+    "game": "star-wars\u2122-empire-at-war:-gold-pack",
+    "discord_id": "443156343227023370"
+  },
+  {
+    "game": "blockade-3d",
+    "discord_id": "443156392874868767"
+  },
+  {
+    "game": "mindnight",
+    "discord_id": "443156444351561738"
+  },
+  {
+    "game": "zombie-panic!-source",
+    "discord_id": "443156570847838218"
+  },
+  {
+    "game": "just-cause\u2122-3:-multiplayer-mod",
+    "discord_id": "443156876931235840"
+  },
+  {
+    "game": "simcity\u2122",
+    "discord_id": "443157047157194772"
+  },
+  {
+    "game": "frostpunk",
+    "discord_id": "443157248710148117"
+  },
+  {
+    "game": "hurtworld",
+    "discord_id": "443157375260688395"
+  },
+  {
+    "game": "modern-combat-versus",
+    "discord_id": "443157946357252116"
+  },
+  {
+    "game": "quantum-break",
+    "discord_id": "443158005798928384"
+  },
+  {
+    "game": "the-jackbox-party-pack-3",
+    "discord_id": "443158085247303690"
+  },
+  {
+    "game": "tropico-5",
+    "discord_id": "443158178083897375"
+  },
+  {
+    "game": "radical-heights",
+    "discord_id": "443158281624617000"
+  },
+  {
+    "game": "my-summer-car",
+    "discord_id": "443158342026788884"
+  },
+  {
+    "game": "spec-ops:-the-line",
+    "discord_id": "443158504719646739"
+  },
+  {
+    "game": "friday-the-13th:-killer-puzzle",
+    "discord_id": "443158817983692820"
+  },
+  {
+    "game": "verdun",
+    "discord_id": "443159293538205697"
+  },
+  {
+    "game": "world-of-guns:-gun-disassembly",
+    "discord_id": "443159499512086539"
+  },
+  {
+    "game": "no-man's-sky",
+    "discord_id": "443159611479031808"
+  },
+  {
+    "game": "ylands",
+    "discord_id": "443159628185075722"
+  },
+  {
+    "game": "resident-evil-7-biohazard-/-biohazard-7-resident-evil",
+    "discord_id": "443160369192632330"
+  },
+  {
+    "game": "battletech",
+    "discord_id": "443160562088673285"
+  },
+  {
+    "game": "super-hexagon",
+    "discord_id": "443161212969156608"
+  },
+  {
+    "game": "pixark",
+    "discord_id": "443165450424156160"
+  },
+  {
+    "game": "spiral-knights",
+    "discord_id": "443168429990477844"
+  },
+  {
+    "game": "satellite-reign",
+    "discord_id": "443198577687134218"
+  },
+  {
+    "game": "pillars-of-eternity",
+    "discord_id": "443198850119892992"
+  },
+  {
+    "game": "conan-exiles",
+    "discord_id": "443524051999260672"
+  },
+  {
+    "game": "trackmania\u00b2-stadium",
+    "discord_id": "444200321179451412"
+  },
+  {
+    "game": "need-for-speed\u2122",
+    "discord_id": "444540143890726940"
+  },
+  {
+    "game": "day-of-defeat:-source",
+    "discord_id": "444720426934075393"
+  },
+  {
+    "game": "dungeon-of-the-endless",
+    "discord_id": "444853958977126400"
+  },
+  {
+    "game": "endless-legend",
+    "discord_id": "445329750819602433"
+  },
+  {
+    "game": "deep-space-waifu",
+    "discord_id": "445783564257067008"
+  },
+  {
+    "game": "surviving-mars",
+    "discord_id": "445996079352250368"
+  },
+  {
+    "game": "dragon-age\u2122:-inquisition",
+    "discord_id": "446061700496621578"
+  },
+  {
+    "game": "mass-effect\u2122:-andromeda",
+    "discord_id": "446061836807307301"
+  },
+  {
+    "game": "crossfire",
+    "discord_id": "446061929283321856"
+  },
+  {
+    "game": "toontown-rewritten",
+    "discord_id": "446062074842447909"
+  },
+  {
+    "game": "survarium",
+    "discord_id": "446062275925770270"
+  },
+  {
+    "game": "plants-vs-zombies-gw2",
+    "discord_id": "446063035057045534"
+  },
+  {
+    "game": "project64",
+    "discord_id": "446063198198693898"
+  },
+  {
+    "game": "armored-warfare",
+    "discord_id": "446063355594145823"
+  },
+  {
+    "game": "the-expendabros",
+    "discord_id": "446069736250277888"
+  },
+  {
+    "game": "mount-your-friends",
+    "discord_id": "446105070057029663"
+  },
+  {
+    "game": "project-cars-2",
+    "discord_id": "446380370733039616"
+  },
+  {
+    "game": "shakes-and-fidget",
+    "discord_id": "447038538383622145"
+  },
+  {
+    "game": "sas:-zombie-assault-4",
+    "discord_id": "447184346252836864"
+  },
+  {
+    "game": "awesomenauts",
+    "discord_id": "447488337519968257"
+  },
+  {
+    "game": "yume-nikki",
+    "discord_id": "447509870510473216"
+  },
+  {
+    "game": "holdfast:-nations-at-war",
+    "discord_id": "447728433037049876"
+  },
+  {
+    "game": "learn-to-fly-3",
+    "discord_id": "447743861549432833"
+  },
+  {
+    "game": "stories:-the-path-of-destinies",
+    "discord_id": "448044587580260363"
+  },
+  {
+    "game": "layers-of-fear",
+    "discord_id": "448120144775086080"
+  },
+  {
+    "game": "star-trek-online",
+    "discord_id": "448384255131779073"
+  },
+  {
+    "game": "minion-masters",
+    "discord_id": "448417850466762753"
+  },
+  {
+    "game": "warhammer-40,000:-dawn-of-war---soulstorm",
+    "discord_id": "448448339386695690"
+  },
+  {
+    "game": "ultimate-epic-battle-simulator",
+    "discord_id": "448537306345898014"
+  },
+  {
+    "game": "terratech",
+    "discord_id": "448560544778289152"
+  },
+  {
+    "game": "airmech-strike",
+    "discord_id": "448622851386376202"
+  },
+  {
+    "game": "spintires:-mudrunner",
+    "discord_id": "448910307969204236"
+  },
+  {
+    "game": "alien-swarm",
+    "discord_id": "449531408730423296"
+  },
+  {
+    "game": "hacknet",
+    "discord_id": "449639683740270612"
+  },
+  {
+    "game": "quake-champions",
+    "discord_id": "449682899596214283"
+  },
+  {
+    "game": "iron-snout",
+    "discord_id": "449684687011708928"
+  },
+  {
+    "game": "dark-souls\u2122:-remastered",
+    "discord_id": "449738622619353088"
+  },
+  {
+    "game": "raft",
+    "discord_id": "449806905901056012"
+  },
+  {
+    "game": "dungreed",
+    "discord_id": "449885746799575040"
+  },
+  {
+    "game": "grand-theft-auto-iv",
+    "discord_id": "450005834672373760"
+  },
+  {
+    "game": "synergy",
+    "discord_id": "450021409700446208"
+  },
+  {
+    "game": "wizard-of-legend",
+    "discord_id": "450024058348634112"
+  },
+  {
+    "game": "kritika-online",
+    "discord_id": "450129940051001354"
+  },
+  {
+    "game": "mirror's-edge",
+    "discord_id": "450145899063017492"
+  },
+  {
+    "game": "car-mechanic-simulator-2015",
+    "discord_id": "450273108859813888"
+  },
+  {
+    "game": "double-action:-boogaloo",
+    "discord_id": "450292948911915008"
+  },
+  {
+    "game": "star-wars\u2122:-knights-of-the-old-republic\u2122",
+    "discord_id": "450293931301666826"
+  },
+  {
+    "game": "the-stanley-parable",
+    "discord_id": "450401603669721089"
+  },
+  {
+    "game": "tyranny",
+    "discord_id": "450668558465368074"
+  },
+  {
+    "game": "empyrion---galactic-survival",
+    "discord_id": "450804667748843520"
+  },
+  {
+    "game": "bless-online",
+    "discord_id": "451132630390538270"
+  },
+  {
+    "game": "60-seconds!",
+    "discord_id": "451336909831012383"
+  },
+  {
+    "game": "the-escapists",
+    "discord_id": "451429730416197669"
+  },
+  {
+    "game": "dauntless",
+    "discord_id": "451468933057347603"
+  },
+  {
+    "game": "dragon-age:-origins---ultimate-edition",
+    "discord_id": "451538960305618952"
+  },
+  {
+    "game": "total-war-saga:-thrones-of-britannia",
+    "discord_id": "451539017381576704"
+  },
+  {
+    "game": "okami-hd-/-\u5927\u795e-\u7d76\u666f\u7248",
+    "discord_id": "451539083966283776"
+  },
+  {
+    "game": "adventure-communist",
+    "discord_id": "451539129973604352"
+  },
+  {
+    "game": "governor-of-poker-3",
+    "discord_id": "451539151678865409"
+  },
+  {
+    "game": "worms-revolution",
+    "discord_id": "451539172763762688"
+  },
+  {
+    "game": "l.a.-noire",
+    "discord_id": "451539180682739732"
+  },
+  {
+    "game": "the-elder-scrolls-iii:-morrowind",
+    "discord_id": "451539197044719616"
+  },
+  {
+    "game": "armello",
+    "discord_id": "451539293173841949"
+  },
+  {
+    "game": "nba-2k18",
+    "discord_id": "451539322965852185"
+  },
+  {
+    "game": "mechwarrior-online",
+    "discord_id": "451539349142634496"
+  },
+  {
+    "game": "resident-evil-5-/-biohazard-5",
+    "discord_id": "451539402896703490"
+  },
+  {
+    "game": "house-flipper",
+    "discord_id": "451539472610492426"
+  },
+  {
+    "game": "sleeping-dogs:-definitive-edition",
+    "discord_id": "451539490574434315"
+  },
+  {
+    "game": "final-fantasy-vii",
+    "discord_id": "451539606207463424"
+  },
+  {
+    "game": "heroes-of-hammerwatch",
+    "discord_id": "451539639811964928"
+  },
+  {
+    "game": "youtubers-life",
+    "discord_id": "451539649656127488"
+  },
+  {
+    "game": "resident-evil-4-/-biohazard-4",
+    "discord_id": "451539772037398560"
+  },
+  {
+    "game": "state-of-decay:-year-one",
+    "discord_id": "451539805860528128"
+  },
+  {
+    "game": "argo",
+    "discord_id": "451539926417408000"
+  },
+  {
+    "game": "esea",
+    "discord_id": "451539971283877888"
+  },
+  {
+    "game": "zombie-army-trilogy",
+    "discord_id": "451539976908439552"
+  },
+  {
+    "game": "call-of-duty:-modern-warfare-3",
+    "discord_id": "451539986144296969"
+  },
+  {
+    "game": "horizon-source",
+    "discord_id": "451540115437912064"
+  },
+  {
+    "game": "yet-another-zombie-defense",
+    "discord_id": "451540166037995532"
+  },
+  {
+    "game": "cpucores-::-maximize-your-fps",
+    "discord_id": "451540177131798541"
+  },
+  {
+    "game": "wargame:-red-dragon",
+    "discord_id": "451540284006858772"
+  },
+  {
+    "game": "resident-evil-6-/-biohazard-6",
+    "discord_id": "451540292458512394"
+  },
+  {
+    "game": "castleminer-z",
+    "discord_id": "451540363941904385"
+  },
+  {
+    "game": "the-lord-of-the-rings-online\u2122",
+    "discord_id": "451540469470593024"
+  },
+  {
+    "game": "for-the-king",
+    "discord_id": "451540626270584833"
+  },
+  {
+    "game": "just-cause-2",
+    "discord_id": "451540656494477312"
+  },
+  {
+    "game": "gigantic",
+    "discord_id": "451540746592321536"
+  },
+  {
+    "game": "dawn-of-war-ii---retribution",
+    "discord_id": "451540774530711572"
+  },
+  {
+    "game": "paint-the-town-red",
+    "discord_id": "451540782785101834"
+  },
+  {
+    "game": "black-mesa",
+    "discord_id": "451540911172747284"
+  },
+  {
+    "game": "vindictus",
+    "discord_id": "451541058497675294"
+  },
+  {
+    "game": "batman:-arkham-city-goty",
+    "discord_id": "451541064545861632"
+  },
+  {
+    "game": "night-in-the-woods",
+    "discord_id": "451541089912881162"
+  },
+  {
+    "game": "door-kickers",
+    "discord_id": "451541104643538944"
+  },
+  {
+    "game": "warmode",
+    "discord_id": "451541174877159430"
+  },
+  {
+    "game": "sniper-ghost-warrior-2",
+    "discord_id": "451541277935140874"
+  },
+  {
+    "game": "battlefield:-bad-company-2",
+    "discord_id": "451541573742755850"
+  },
+  {
+    "game": "limbo",
+    "discord_id": "451541581778911262"
+  },
+  {
+    "game": "helldivers\u2122",
+    "discord_id": "451541695771967508"
+  },
+  {
+    "game": "teeworlds",
+    "discord_id": "451541853418815498"
+  },
+  {
+    "game": "moonbase-alpha",
+    "discord_id": "451541936872882186"
+  },
+  {
+    "game": "mcosu",
+    "discord_id": "451541958268157952"
+  },
+  {
+    "game": "loading-screen-simulator",
+    "discord_id": "451542208257064961"
+  },
+  {
+    "game": "star-wars\u2122-republic-commando",
+    "discord_id": "451542291635503124"
+  },
+  {
+    "game": "the-lab",
+    "discord_id": "451542394857455638"
+  },
+  {
+    "game": "citra",
+    "discord_id": "451542523219935272"
+  },
+  {
+    "game": "sword-art-online:-fatal-bullet",
+    "discord_id": "451542793513598996"
+  },
+  {
+    "game": "bit-heroes",
+    "discord_id": "451542845703061524"
+  },
+  {
+    "game": "orcs-must-die!-2",
+    "discord_id": "451543160057888778"
+  },
+  {
+    "game": "dc-universe-online",
+    "discord_id": "451543277385023488"
+  },
+  {
+    "game": "guilty-gear-xrd--revelator-",
+    "discord_id": "451543838847139850"
+  },
+  {
+    "game": "battle-royale-trainer",
+    "discord_id": "451543838989746186"
+  },
+  {
+    "game": "rise-of-nations:-extended-edition",
+    "discord_id": "451543839665160232"
+  },
+  {
+    "game": "the-jackbox-party-pack-2",
+    "discord_id": "451543877111775247"
+  },
+  {
+    "game": "aion",
+    "discord_id": "451543892358201393"
+  },
+  {
+    "game": "alien:-isolation",
+    "discord_id": "451543893050261504"
+  },
+  {
+    "game": "sins-of-a-solar-empire:-rebellion",
+    "discord_id": "451543958611427328"
+  },
+  {
+    "game": "dragon-ball-xenoverse",
+    "discord_id": "451543960167514112"
+  },
+  {
+    "game": "supreme-commander:-forged-alliance",
+    "discord_id": "451543961207701534"
+  },
+  {
+    "game": "spellsworn",
+    "discord_id": "451544008737423360"
+  },
+  {
+    "game": "mass-effect\u2122-3",
+    "discord_id": "451544148617592832"
+  },
+  {
+    "game": "superhot-vr",
+    "discord_id": "451544150756556810"
+  },
+  {
+    "game": "black-desert-online-sa",
+    "discord_id": "451544197632229376"
+  },
+  {
+    "game": "grand-theft-auto:-vice-city",
+    "discord_id": "451544294432702474"
+  },
+  {
+    "game": "digimon-masters-online",
+    "discord_id": "451544305509859328"
+  },
+  {
+    "game": "mirror's-edge\u2122-catalyst",
+    "discord_id": "451544331287789568"
+  },
+  {
+    "game": "anno-2070",
+    "discord_id": "451544339416481828"
+  },
+  {
+    "game": "life-is-feudal:-mmo",
+    "discord_id": "451544345699549194"
+  },
+  {
+    "game": "faeria",
+    "discord_id": "451544379908423680"
+  },
+  {
+    "game": "everlasting-summer",
+    "discord_id": "451544422711033856"
+  },
+  {
+    "game": "dark-and-light",
+    "discord_id": "451544430025900062"
+  },
+  {
+    "game": "steel-division:-normandy-44",
+    "discord_id": "451544463941304350"
+  },
+  {
+    "game": "amnesia:-a-machine-for-pigs",
+    "discord_id": "451544639674253322"
+  },
+  {
+    "game": "rwby:-grimm-eclipse",
+    "discord_id": "451544645852332032"
+  },
+  {
+    "game": "dmc-devil-may-cry",
+    "discord_id": "451544650009018368"
+  },
+  {
+    "game": "supreme-commander-2",
+    "discord_id": "451544676458037258"
+  },
+  {
+    "game": "deus-ex:-human-revolution---director's-cut",
+    "discord_id": "451544688713793536"
+  },
+  {
+    "game": "freestyle-2:-street-basketball",
+    "discord_id": "451544694267183104"
+  },
+  {
+    "game": "furi",
+    "discord_id": "451544694598533120"
+  },
+  {
+    "game": "ultra-street-fighter-iv",
+    "discord_id": "451544694917169162"
+  },
+  {
+    "game": "rift",
+    "discord_id": "451544729763446784"
+  },
+  {
+    "game": "oneshot",
+    "discord_id": "451544770876145664"
+  },
+  {
+    "game": "high-octane-drift",
+    "discord_id": "451544776895103006"
+  },
+  {
+    "game": "ruiner",
+    "discord_id": "451544819555237888"
+  },
+  {
+    "game": "phantasy-star-online-2",
+    "discord_id": "451544889331679242"
+  },
+  {
+    "game": "sword-with-sauce:-alpha",
+    "discord_id": "451544945984012288"
+  },
+  {
+    "game": "mass-effect\u2122",
+    "discord_id": "451544965542182942"
+  },
+  {
+    "game": "turmoil",
+    "discord_id": "451545009938759710"
+  },
+  {
+    "game": "worms-armageddon",
+    "discord_id": "451545039139766272"
+  },
+  {
+    "game": "pillars-of-eternity-ii:-deadfire",
+    "discord_id": "451545069326041099"
+  },
+  {
+    "game": "pc-building-simulator",
+    "discord_id": "451545070739652608"
+  },
+  {
+    "game": "streets-of-rogue",
+    "discord_id": "451545147361067008"
+  },
+  {
+    "game": "hitman:-absolution",
+    "discord_id": "451545240264769547"
+  },
+  {
+    "game": "football-manager-2017",
+    "discord_id": "451545279154487306"
+  },
+  {
+    "game": "atlas-reactor",
+    "discord_id": "451545283784998934"
+  },
+  {
+    "game": "max-payne-3",
+    "discord_id": "451545305201246208"
+  },
+  {
+    "game": "s.t.a.l.k.e.r.:-shadow-of-chernobyl",
+    "discord_id": "451545336218124289"
+  },
+  {
+    "game": "rec-room",
+    "discord_id": "451545342987468800"
+  },
+  {
+    "game": "my-time-at-portia",
+    "discord_id": "451545373740367881"
+  },
+  {
+    "game": "lost-castle",
+    "discord_id": "451545409253408768"
+  },
+  {
+    "game": "soda-dungeon",
+    "discord_id": "451545721036996619"
+  },
+  {
+    "game": "fallout-3",
+    "discord_id": "451545729253638144"
+  },
+  {
+    "game": "running-with-rifles",
+    "discord_id": "451545786946289664"
+  },
+  {
+    "game": "emily-is-away",
+    "discord_id": "451545806806319104"
+  },
+  {
+    "game": "tactical-monsters-rumble-arena",
+    "discord_id": "451545859830710272"
+  },
+  {
+    "game": "payday:-the-heist",
+    "discord_id": "451546040382914567"
+  },
+  {
+    "game": "brick-rigs",
+    "discord_id": "451546081243824131"
+  },
+  {
+    "game": "star-conflict",
+    "discord_id": "451546138999390208"
+  },
+  {
+    "game": "adventurequest-3d",
+    "discord_id": "451546156024201217"
+  },
+  {
+    "game": "bayonetta",
+    "discord_id": "451546169685049344"
+  },
+  {
+    "game": "boring-man---online-tactical-stickman-combat",
+    "discord_id": "451546227696205844"
+  },
+  {
+    "game": "mass-effect\u2122-2",
+    "discord_id": "451546229252554752"
+  },
+  {
+    "game": "shadow-warrior-2",
+    "discord_id": "451546331639709706"
+  },
+  {
+    "game": "dark-souls\u2122-ii",
+    "discord_id": "451546403764830218"
+  },
+  {
+    "game": "empire:-total-war",
+    "discord_id": "451546468763959326"
+  },
+  {
+    "game": "burnout-paradise:-the-ultimate-box",
+    "discord_id": "451546473801187348"
+  },
+  {
+    "game": "supraball",
+    "discord_id": "451546491866316800"
+  },
+  {
+    "game": "desolate",
+    "discord_id": "451546514775474195"
+  },
+  {
+    "game": "arma-2:-operation-arrowhead",
+    "discord_id": "451546514943377438"
+  },
+  {
+    "game": "mu-legend",
+    "discord_id": "451546558706614292"
+  },
+  {
+    "game": "aragami",
+    "discord_id": "451546619855503380"
+  },
+  {
+    "game": "house-party",
+    "discord_id": "451546699177918464"
+  },
+  {
+    "game": "relic-hunters-zero",
+    "discord_id": "451546725606359050"
+  },
+  {
+    "game": "everquest",
+    "discord_id": "451546783668109322"
+  },
+  {
+    "game": "wildstar",
+    "discord_id": "451546896167731220"
+  },
+  {
+    "game": "spooky's-jump-scare-mansion",
+    "discord_id": "451546955513069594"
+  },
+  {
+    "game": "s.t.a.l.k.e.r.:-call-of-pripyat",
+    "discord_id": "451547035104051200"
+  },
+  {
+    "game": "forts",
+    "discord_id": "451547094121971712"
+  },
+  {
+    "game": "heroes-of-newerth",
+    "discord_id": "451547098916192284"
+  },
+  {
+    "game": "osiris:-new-dawn",
+    "discord_id": "451547204340023296"
+  },
+  {
+    "game": "shadow-warrior",
+    "discord_id": "451547262418419712"
+  },
+  {
+    "game": "america's-army:-proving-grounds",
+    "discord_id": "451547323596537866"
+  },
+  {
+    "game": "aion-free-to-play",
+    "discord_id": "451547384975982602"
+  },
+  {
+    "game": "stronghold-crusader-2",
+    "discord_id": "451547401594077184"
+  },
+  {
+    "game": "owlboy",
+    "discord_id": "451547470967865345"
+  },
+  {
+    "game": "reigns",
+    "discord_id": "451547889982898176"
+  },
+  {
+    "game": "zula-online",
+    "discord_id": "451547924531249152"
+  },
+  {
+    "game": "tales-of-berseria",
+    "discord_id": "451548231223214080"
+  },
+  {
+    "game": "shooty-skies",
+    "discord_id": "451548290740387850"
+  },
+  {
+    "game": "huniecam-studio",
+    "discord_id": "451548751010725888"
+  },
+  {
+    "game": "bomber-crew",
+    "discord_id": "451548752046587915"
+  },
+  {
+    "game": "line-of-sight",
+    "discord_id": "451548957361831946"
+  },
+  {
+    "game": "s.k.i.l.l.---special-force-2",
+    "discord_id": "451549001511075860"
+  },
+  {
+    "game": "mini-metro",
+    "discord_id": "451549165361823769"
+  },
+  {
+    "game": "orion:-prelude",
+    "discord_id": "451549177885753345"
+  },
+  {
+    "game": "tricky-towers",
+    "discord_id": "451549293946470400"
+  },
+  {
+    "game": "surgeon-simulator",
+    "discord_id": "451549334320971776"
+  },
+  {
+    "game": "the-jackbox-party-pack-4",
+    "discord_id": "451549336996806676"
+  },
+  {
+    "game": "contagion",
+    "discord_id": "451549440734658560"
+  },
+  {
+    "game": "simpleplanes",
+    "discord_id": "451549534993252362"
+  },
+  {
+    "game": "rpg-maker-mv",
+    "discord_id": "451549964422873088"
+  },
+  {
+    "game": "fez",
+    "discord_id": "451550717673472030"
+  },
+  {
+    "game": "five-nights-at-freddy's",
+    "discord_id": "451550771193053194"
+  },
+  {
+    "game": "injustice\u2122-2",
+    "discord_id": "451551201604141056"
+  },
+  {
+    "game": "eternal-card-game",
+    "discord_id": "451551225968853012"
+  },
+  {
+    "game": "carx-drift-racing-online",
+    "discord_id": "451551359393595412"
+  },
+  {
+    "game": "the-evil-within-2",
+    "discord_id": "451551873581711360"
+  },
+  {
+    "game": "death-road-to-canada",
+    "discord_id": "451551950937260032"
+  },
+  {
+    "game": "totally-accurate-battle-zombielator",
+    "discord_id": "451551980108906496"
+  },
+  {
+    "game": "mount-&-blade:-with-fire-and-sword",
+    "discord_id": "451552014883880980"
+  },
+  {
+    "game": "secret-world-legends",
+    "discord_id": "451552107825201152"
+  },
+  {
+    "game": "victoria-ii",
+    "discord_id": "451552374423552000"
+  },
+  {
+    "game": "call-to-arms",
+    "discord_id": "451552458083270676"
+  },
+  {
+    "game": "mirror",
+    "discord_id": "451552550446170113"
+  },
+  {
+    "game": "lego\u00ae-star-wars\u2122:-the-complete-saga",
+    "discord_id": "451552771045457920"
+  },
+  {
+    "game": "just-fishing",
+    "discord_id": "451553376803487744"
+  },
+  {
+    "game": "domina",
+    "discord_id": "451553701404999700"
+  },
+  {
+    "game": "quake-live",
+    "discord_id": "451553710275821568"
+  },
+  {
+    "game": "orcs-must-die!",
+    "discord_id": "451554260262322176"
+  },
+  {
+    "game": "loadout",
+    "discord_id": "451555691836997643"
+  },
+  {
+    "game": "farming-simulator-15",
+    "discord_id": "451556128992657418"
+  },
+  {
+    "game": "rome:-total-war",
+    "discord_id": "451557091279372298"
+  },
+  {
+    "game": "fallout-4-vr",
+    "discord_id": "451557388504530945"
+  },
+  {
+    "game": "magicite",
+    "discord_id": "451559209893363712"
+  },
+  {
+    "game": "bully:-scholarship-edition",
+    "discord_id": "451560105008431124"
+  },
+  {
+    "game": "nidhogg",
+    "discord_id": "451561653570502656"
+  },
+  {
+    "game": "black-survival",
+    "discord_id": "451561708461359124"
+  },
+  {
+    "game": "fortify",
+    "discord_id": "451563408794320906"
+  },
+  {
+    "game": "avorion",
+    "discord_id": "451563448015519744"
+  },
+  {
+    "game": "serious-sam-3:-bfe",
+    "discord_id": "451564621422395392"
+  },
+  {
+    "game": "gold-rush:-the-game",
+    "discord_id": "451564928868941824"
+  },
+  {
+    "game": "the-red-solstice",
+    "discord_id": "451565617162747904"
+  },
+  {
+    "game": "ni-no-kuni\u2122-ii:-revenant-kingdom",
+    "discord_id": "451572281584648202"
+  },
+  {
+    "game": "rock-of-ages-2",
+    "discord_id": "451584845898842112"
+  },
+  {
+    "game": "skyforge",
+    "discord_id": "451598719498846218"
+  },
+  {
+    "game": "meteor-60-seconds!",
+    "discord_id": "451604801248034836"
+  },
+  {
+    "game": "yu-gi-oh!-legacy-of-the-duelist",
+    "discord_id": "451686854597672970"
+  },
+  {
+    "game": "beat-saber",
+    "discord_id": "451991967149195264"
+  },
+  {
+    "game": "spellforce-3",
+    "discord_id": "452001740431163402"
+  },
+  {
+    "game": "titan-quest-anniversary-edition",
+    "discord_id": "452029545843785730"
+  },
+  {
+    "game": "sega-mega-drive-&-genesis-classics",
+    "discord_id": "452099265230274571"
+  },
+  {
+    "game": "pubg:-test-server",
+    "discord_id": "452140668265955339"
+  },
+  {
+    "game": "overgrowth",
+    "discord_id": "452205639347994656"
+  },
+  {
+    "game": "dream-daddy:-a-dad-dating-simulator",
+    "discord_id": "452206598283198504"
+  },
+  {
+    "game": "kingdoms-of-amalur:-reckoning\u2122",
+    "discord_id": "452276290385346589"
+  },
+  {
+    "game": "star-citizen",
+    "discord_id": "452295596917784577"
+  },
+  {
+    "game": "need-for-speed:-hot-pursuit",
+    "discord_id": "452295877978095646"
+  },
+  {
+    "game": "battlefield\u2122-hardline",
+    "discord_id": "452296074762256393"
+  },
+  {
+    "game": "world-of-warplanes",
+    "discord_id": "452296290940878848"
+  },
+  {
+    "game": "train-simulator",
+    "discord_id": "452313101539475456"
+  },
+  {
+    "game": "tiger-knight",
+    "discord_id": "452944801952694282"
+  },
+  {
+    "game": "ball-3d:-soccer-online",
+    "discord_id": "453374517864169477"
+  },
+  {
+    "game": "passpartout:-the-starving-artist",
+    "discord_id": "453677781511831572"
+  },
+  {
+    "game": "monster-prom",
+    "discord_id": "453680460304875531"
+  },
+  {
+    "game": "totally-accurate-battlegrounds",
+    "discord_id": "453818237508124692"
+  },
+  {
+    "game": "vampyr",
+    "discord_id": "454123972343365652"
+  },
+  {
+    "game": "outlast-2",
+    "discord_id": "454411001492668417"
+  },
+  {
+    "game": "portal-knights",
+    "discord_id": "454600052904820736"
+  },
+  {
+    "game": "fortified",
+    "discord_id": "454713992322220032"
+  },
+  {
+    "game": "toxikk",
+    "discord_id": "454731115027103759"
+  },
+  {
+    "game": "battle-carnival",
+    "discord_id": "454759028187463700"
+  },
+  {
+    "game": "iracing",
+    "discord_id": "454810317705314334"
+  },
+  {
+    "game": "crossfire",
+    "discord_id": "454810769620598794"
+  },
+  {
+    "game": "farcry-4",
+    "discord_id": "454811906230845440"
+  },
+  {
+    "game": "celeste",
+    "discord_id": "454814894596816907"
+  },
+  {
+    "game": "audiosurf",
+    "discord_id": "455442346558095370"
+  },
+  {
+    "game": "baldur's-gate:-enhanced-edition",
+    "discord_id": "455494486089269258"
+  },
+  {
+    "game": "sid-meier's-civilization-iii:-complete",
+    "discord_id": "455584343792943104"
+  },
+  {
+    "game": "warhammer-40,000:-inquisitor---martyr",
+    "discord_id": "455692385268269056"
+  },
+  {
+    "game": "monmusu",
+    "discord_id": "455713051794997249"
+  },
+  {
+    "game": "little-nightmares",
+    "discord_id": "455788266860445696"
+  },
+  {
+    "game": "rollercoaster-tycoon:-deluxe",
+    "discord_id": "455864514185920523"
+  },
+  {
+    "game": "halo-wars:-definitive-edition",
+    "discord_id": "456022848214138884"
+  },
+  {
+    "game": "jurassic-world-evolution",
+    "discord_id": "456144990930862086"
+  },
+  {
+    "game": "defiance",
+    "discord_id": "456294192616964096"
+  },
+  {
+    "game": "thief",
+    "discord_id": "456834047730122752"
+  },
+  {
+    "game": "from-the-depths",
+    "discord_id": "456965807780397076"
+  },
+  {
+    "game": "a-story-about-my-uncle",
+    "discord_id": "457095132119040020"
+  },
+  {
+    "game": "moonlighter",
+    "discord_id": "457269337137348613"
+  },
+  {
+    "game": "pirate101",
+    "discord_id": "457283942475759662"
+  },
+  {
+    "game": "dreadnought",
+    "discord_id": "457284340330659864"
+  },
+  {
+    "game": "napoleon:-total-war",
+    "discord_id": "457284624977100800"
+  },
+  {
+    "game": "alliance-of-valiant-arms",
+    "discord_id": "457284796658352128"
+  },
+  {
+    "game": "arpiel-online",
+    "discord_id": "457299794772230154"
+  },
+  {
+    "game": "maniaplanet",
+    "discord_id": "457300140470960128"
+  },
+  {
+    "game": "\ub9c8\ube44\ub178\uae30-\uc601\uc6c5\uc804",
+    "discord_id": "457300488199733265"
+  },
+  {
+    "game": "lineage-ii",
+    "discord_id": "457300834393391104"
+  },
+  {
+    "game": "maplestory-2",
+    "discord_id": "457301027453009947"
+  },
+  {
+    "game": "ppsspp",
+    "discord_id": "457301373592141836"
+  },
+  {
+    "game": "command-&-conquer\u2122:-generals-and-zero-hour",
+    "discord_id": "457301510515195924"
+  },
+  {
+    "game": "nox-app-player",
+    "discord_id": "457301824110723113"
+  },
+  {
+    "game": "tribes:-ascend",
+    "discord_id": "457549567538495489"
+  },
+  {
+    "game": "medieval-engineers",
+    "discord_id": "457619737535447060"
+  },
+  {
+    "game": "cuisine-royale",
+    "discord_id": "457888043668340737"
+  },
+  {
+    "game": "witch-it",
+    "discord_id": "458081878394667009"
+  },
+  {
+    "game": "grid-2",
+    "discord_id": "458309189974884363"
+  },
+  {
+    "game": "mark-of-the-ninja",
+    "discord_id": "458503484153528322"
+  },
+  {
+    "game": "nomad",
+    "discord_id": "458780333601587200"
+  },
+  {
+    "game": "gorn",
+    "discord_id": "459465853600268289"
+  },
+  {
+    "game": "unreal-gold",
+    "discord_id": "459581070438825994"
+  },
+  {
+    "game": "shadowrun-returns",
+    "discord_id": "459713656339562503"
+  },
+  {
+    "game": "space-hulk:-deathwing---enhanced-edition",
+    "discord_id": "459764260935958538"
+  },
+  {
+    "game": "colony-survival",
+    "discord_id": "459774120226455562"
+  },
+  {
+    "game": "murder-miners",
+    "discord_id": "459807786151182346"
+  },
+  {
+    "game": "god-eater-2-rage-burst",
+    "discord_id": "459968630935781376"
+  },
+  {
+    "game": "aimtastic",
+    "discord_id": "460092747580309504"
+  },
+  {
+    "game": "tom-clancy's-the-division-trial",
+    "discord_id": "460199128522293258"
+  },
+  {
+    "game": "call-of-duty:-infinite-warfare",
+    "discord_id": "460217112250810368"
+  },
+  {
+    "game": "transistor",
+    "discord_id": "460299285049901056"
+  },
+  {
+    "game": "lego\u00ae-marvel-super-heroes",
+    "discord_id": "460450424940396544"
+  },
+  {
+    "game": "salt-and-sanctuary",
+    "discord_id": "460472377566822400"
+  },
+  {
+    "game": "transport-fever",
+    "discord_id": "460542812124086272"
+  },
+  {
+    "game": "earth-defense-force-4.1--the-shadow-of-new-despair",
+    "discord_id": "460598317173309452"
+  },
+  {
+    "game": "the-crew-2",
+    "discord_id": "460639482547273749"
+  },
+  {
+    "game": "titan-souls",
+    "discord_id": "460691329752629248"
+  },
+  {
+    "game": "metal-gear-rising:-revengeance",
+    "discord_id": "460788999880179722"
+  },
+  {
+    "game": "next-day:-survival",
+    "discord_id": "460831278799912960"
+  },
+  {
+    "game": "robot-roller-derby-disco-dodgeball",
+    "discord_id": "460909130140614656"
+  },
+  {
+    "game": "king-of-the-hat",
+    "discord_id": "460940655984771072"
+  },
+  {
+    "game": "life-is-feudal:-your-own",
+    "discord_id": "460951106357297172"
+  },
+  {
+    "game": "blood-bowl-2",
+    "discord_id": "460987469756629005"
+  },
+  {
+    "game": "poker-night-2",
+    "discord_id": "461039002796032000"
+  },
+  {
+    "game": "five-nights-at-freddy's-2",
+    "discord_id": "461050695198572554"
+  },
+  {
+    "game": "the-awesome-adventures-of-captain-spirit",
+    "discord_id": "461256067003973633"
+  },
+  {
+    "game": "freeman:-guerrilla-warfare",
+    "discord_id": "461302775284891648"
+  },
+  {
+    "game": "hammerwatch",
+    "discord_id": "461404096751206420"
+  },
+  {
+    "game": "rollercoaster-tycoon-3:-platinum!",
+    "discord_id": "461439083894407178"
+  },
+  {
+    "game": "jalopy",
+    "discord_id": "461561181598121984"
+  },
+  {
+    "game": "ultimate-custom-night",
+    "discord_id": "461673633798946816"
+  },
+  {
+    "game": "fable-anniversary",
+    "discord_id": "461711977727918080"
+  },
+  {
+    "game": "pavlov-vr",
+    "discord_id": "461758710088466432"
+  },
+  {
+    "game": "styx:-shards-of-darkness",
+    "discord_id": "462296460512198656"
+  },
+  {
+    "game": "audiosurf-2",
+    "discord_id": "462407650941075456"
+  },
+  {
+    "game": "slap-city",
+    "discord_id": "462788623675162634"
+  },
+  {
+    "game": "natural-selection-2",
+    "discord_id": "462817604202004480"
+  },
+  {
+    "game": "to-the-moon",
+    "discord_id": "462829880615370762"
+  },
+  {
+    "game": "devil-may-cry\u00ae-4-special-edition",
+    "discord_id": "463227448167890944"
+  },
+  {
+    "game": "the-evil-within",
+    "discord_id": "463274972958425098"
+  },
+  {
+    "game": "lords-of-the-fallen",
+    "discord_id": "463425384893906944"
+  },
+  {
+    "game": "five-nights-at-freddy's:-sister-location",
+    "discord_id": "463603236880908297"
+  },
+  {
+    "game": "fin-dev",
+    "discord_id": "463761561685721088"
+  },
+  {
+    "game": "the-jackbox-party-pack",
+    "discord_id": "463963734507782144"
+  },
+  {
+    "game": "nekopara-vol.-1",
+    "discord_id": "464273275904589834"
+  },
+  {
+    "game": "grand-theft-auto-iii",
+    "discord_id": "464434670646460427"
+  },
+  {
+    "game": "worlds-adrift",
+    "discord_id": "464507152111763457"
+  },
+  {
+    "game": "we-were-here-too",
+    "discord_id": "464823241098395674"
+  },
+  {
+    "game": "farm-together",
+    "discord_id": "464830344558805002"
+  },
+  {
+    "game": "vampire:-the-masquerade---bloodlines",
+    "discord_id": "464956888656773150"
+  },
+  {
+    "game": "stoneshard:-prologue",
+    "discord_id": "465087252574371850"
+  },
+  {
+    "game": "cook,-serve,-delicious!-2!!",
+    "discord_id": "465247704155553792"
+  },
+  {
+    "game": "warhammer-40,000:-dawn-of-war---dark-crusade",
+    "discord_id": "465536900560584714"
+  },
+  {
+    "game": "final-fantasy-x/x-2-hd-remaster",
+    "discord_id": "465985864095367178"
+  },
+  {
+    "game": "longshot-[dev]",
+    "discord_id": "466240509682384896"
+  },
+  {
+    "game": "heavy-metal-machines",
+    "discord_id": "466296927944835082"
+  },
+  {
+    "game": "sos",
+    "discord_id": "466334957183303710"
+  },
+  {
+    "game": "wreckfest",
+    "discord_id": "466457842401148948"
+  },
+  {
+    "game": "card-hunter",
+    "discord_id": "466640524670009354"
+  },
+  {
+    "game": "gear-up",
+    "discord_id": "466685661806592000"
+  },
+  {
+    "game": "amorous",
+    "discord_id": "466691613138354196"
+  },
+  {
+    "game": "pixel-worlds",
+    "discord_id": "466733503720062996"
+  },
+  {
+    "game": "starbound",
+    "discord_id": "467102538278109224"
+  },
+  {
+    "game": "montaro",
+    "discord_id": "467286012104671232"
+  },
+  {
+    "game": "paladins---public-test",
+    "discord_id": "467563108299309066"
+  },
+  {
+    "game": "lawbreakers",
+    "discord_id": "467724362674470912"
+  },
+  {
+    "game": "hot-dogs,-horseshoes-&-hand-grenades",
+    "discord_id": "467788345565511690"
+  },
+  {
+    "game": "rollercoaster-tycoon-2:-triple-thrill-pack",
+    "discord_id": "467979045179752448"
+  },
+  {
+    "game": "crash-bandicoot\u2122-n.-sane-trilogy",
+    "discord_id": "468099355962900480"
+  },
+  {
+    "game": "islands-of-nyne:-battle-royale",
+    "discord_id": "468254179987685406"
+  },
+  {
+    "game": "rules-of-survival",
+    "discord_id": "468577647392456714"
+  },
+  {
+    "game": "age-of-wonders-iii",
+    "discord_id": "468606521433915404"
+  },
+  {
+    "game": "sinner",
+    "discord_id": "468611186330566677"
+  },
+  {
+    "game": "s.t.a.l.k.e.r.:-clear-sky",
+    "discord_id": "469153997027016714"
+  },
+  {
+    "game": "russian-fishing-4",
+    "discord_id": "469213224215248896"
+  },
+  {
+    "game": "omensight",
+    "discord_id": "469278650936721428"
+  },
+  {
+    "game": "sundered",
+    "discord_id": "469280323109257228"
+  },
+  {
+    "game": "project-highrise",
+    "discord_id": "469288321814757402"
+  },
+  {
+    "game": "crookz---the-big-heist",
+    "discord_id": "469288750019641365"
+  },
+  {
+    "game": "system-shock:-enhanced-edition",
+    "discord_id": "469292352893222942"
+  },
+  {
+    "game": "the-metronomicon:-slay-the-dance-floor",
+    "discord_id": "469292858701119508"
+  },
+  {
+    "game": "dungeons-2",
+    "discord_id": "469293209214910504"
+  },
+  {
+    "game": "tropico-4",
+    "discord_id": "469293612207833089"
+  },
+  {
+    "game": "red-faction-guerrilla-re-mars-tered",
+    "discord_id": "469429746007015426"
+  },
+  {
+    "game": "hellbound:-survival-mode",
+    "discord_id": "469564278853206025"
+  },
+  {
+    "game": "mad-machines",
+    "discord_id": "469807750084296716"
+  },
+  {
+    "game": "metal-gear-solid-v:-ground-zeroes",
+    "discord_id": "469944923928657939"
+  },
+  {
+    "game": "bloody-trapland",
+    "discord_id": "469959314183028736"
+  },
+  {
+    "game": "worm.is:-the-game",
+    "discord_id": "469989584277602304"
+  },
+  {
+    "game": "cossacks-3",
+    "discord_id": "470220034237530112"
+  },
+  {
+    "game": "guild-wars",
+    "discord_id": "470282452674412564"
+  },
+  {
+    "game": "the-sims-2:-ultimate-collection",
+    "discord_id": "470283475660963850"
+  },
+  {
+    "game": "dragon-age:-origins",
+    "discord_id": "470283661414105131"
+  },
+  {
+    "game": "project-rhombus",
+    "discord_id": "470399665154686986"
+  },
+  {
+    "game": "climb",
+    "discord_id": "470810047547572244"
+  },
+  {
+    "game": "command-and-conquer:-red-alert-3",
+    "discord_id": "470958640031989761"
+  },
+  {
+    "game": "clone-drone-in-the-danger-zone",
+    "discord_id": "471192232985231370"
+  },
+  {
+    "game": "this-is-the-police-2",
+    "discord_id": "471357631697780774"
+  },
+  {
+    "game": "darksiders-iii",
+    "discord_id": "471358881348452352"
+  },
+  {
+    "game": "dead-rising-3",
+    "discord_id": "471760010016194570"
+  },
+  {
+    "game": "dino-d-day",
+    "discord_id": "472197780836974604"
+  },
+  {
+    "game": "banner-saga-3",
+    "discord_id": "472228397020479488"
+  },
+  {
+    "game": "war-robots",
+    "discord_id": "472823716062167050"
+  },
+  {
+    "game": "mobius-final-fantasy",
+    "discord_id": "472837297063067658"
+  },
+  {
+    "game": "democracy-3",
+    "discord_id": "473064732807528458"
+  },
+  {
+    "game": "poker-night-at-the-inventory",
+    "discord_id": "473440891110162440"
+  },
+  {
+    "game": "momodora:-reverie-under-the-moonlight",
+    "discord_id": "473594880673972224"
+  },
+  {
+    "game": "arizona-sunshine",
+    "discord_id": "473969782085910558"
+  },
+  {
+    "game": "de-blob",
+    "discord_id": "474014437863587870"
+  },
+  {
+    "game": "de-blob-2",
+    "discord_id": "474015113964290048"
+  },
+  {
+    "game": "kenshi",
+    "discord_id": "474081029490081792"
+  },
+  {
+    "game": "140",
+    "discord_id": "474298936228708372"
+  },
+  {
+    "game": "raceroom-racing-experience",
+    "discord_id": "474431535291039754"
+  },
+  {
+    "game": "stronghold-crusader-hd",
+    "discord_id": "474975575409295380"
+  },
+  {
+    "game": "sniper-ghost-warrior-3",
+    "discord_id": "475006595814785024"
+  },
+  {
+    "game": "motorsport-manager",
+    "discord_id": "475034058066493441"
+  },
+  {
+    "game": "beholder",
+    "discord_id": "475039384358617098"
+  },
+  {
+    "game": "blazblue-cross-tag-battle",
+    "discord_id": "475495343182577675"
+  },
+  {
+    "game": "warhammer-40,000:-dawn-of-war---game-of-the-year-edition",
+    "discord_id": "475821838782693387"
+  },
+  {
+    "game": "feed-and-grow:-fish",
+    "discord_id": "475913332478443530"
+  },
+  {
+    "game": "punch-club",
+    "discord_id": "476271278836285440"
+  },
+  {
+    "game": "half-dead",
+    "discord_id": "476349443474718730"
+  },
+  {
+    "game": "worms-w.m.d",
+    "discord_id": "476482983675559946"
+  },
+  {
+    "game": "pyre",
+    "discord_id": "476907979069849620"
+  },
+  {
+    "game": "monster-hunter:-world",
+    "discord_id": "477152881196269569"
+  },
+  {
+    "game": "viridi",
+    "discord_id": "477520549833211915"
+  },
+  {
+    "game": "offworld-trading-company",
+    "discord_id": "477657966095630346"
+  },
+  {
+    "game": "west-of-loathing",
+    "discord_id": "478014121065840650"
+  },
+  {
+    "game": "the-ultimate-doom",
+    "discord_id": "478613204323270666"
+  },
+  {
+    "game": "last-year:-the-nightmare",
+    "discord_id": "478637764565401630"
+  },
+  {
+    "game": "rampage-knights",
+    "discord_id": "478646014841061416"
+  },
+  {
+    "game": "yakuza-0",
+    "discord_id": "478764846951825418"
+  },
+  {
+    "game": "rend",
+    "discord_id": "478866361544605698"
+  },
+  {
+    "game": "overcooked!-2",
+    "discord_id": "479169486583496704"
+  },
+  {
+    "game": "fallout-2",
+    "discord_id": "479334869462417409"
+  },
+  {
+    "game": "deathgarden",
+    "discord_id": "479694330441891840"
+  },
+  {
+    "game": "rage",
+    "discord_id": "479735703140433940"
+  },
+  {
+    "game": "orwell",
+    "discord_id": "479821376975405066"
+  },
+  {
+    "game": "time-clickers",
+    "discord_id": "479894252726517760"
+  },
+  {
+    "game": "prominence-poker",
+    "discord_id": "480167738334248980"
+  },
+  {
+    "game": "wrecked",
+    "discord_id": "480316289307639808"
+  },
+  {
+    "game": "paintball-war",
+    "discord_id": "480363777574043658"
+  },
+  {
+    "game": "post-scriptum",
+    "discord_id": "480560735521341440"
+  },
+  {
+    "game": "crawl",
+    "discord_id": "480573996509954078"
+  },
+  {
+    "game": "danganronpa:-trigger-happy-havoc",
+    "discord_id": "480963716934795264"
+  },
+  {
+    "game": "911-operator",
+    "discord_id": "481103865559908372"
+  },
+  {
+    "game": "how-to-survive-2",
+    "discord_id": "481505570747318292"
+  },
+  {
+    "game": "dead-rising-2",
+    "discord_id": "481570202988052490"
+  },
+  {
+    "game": "graveyard-keeper",
+    "discord_id": "481816401183506432"
+  },
+  {
+    "game": "shower-with-your-dad-simulator-2015:-do-you-still-shower-with-your-dad",
+    "discord_id": "481999402630774794"
+  },
+  {
+    "game": "valkyria-chronicles\u2122",
+    "discord_id": "482176854938353674"
+  },
+  {
+    "game": "hot-lava",
+    "discord_id": "482730443037212673"
+  },
+  {
+    "game": "simcity-4-deluxe",
+    "discord_id": "482776230895288320"
+  },
+  {
+    "game": "broke-protocol:-online-city-rpg",
+    "discord_id": "483247042689368084"
+  },
+  {
+    "game": "we-need-to-go-deeper",
+    "discord_id": "483361121269710858"
+  },
+  {
+    "game": "roguelands",
+    "discord_id": "483421234391154698"
+  },
+  {
+    "game": "uno-demo",
+    "discord_id": "484310169145180160"
+  },
+  {
+    "game": "scum",
+    "discord_id": "484425151631589378"
+  },
+  {
+    "game": "the-witcher-enhanced-edition-director's-cut",
+    "discord_id": "484451241825533962"
+  },
+  {
+    "game": "star-wars-rebellion",
+    "discord_id": "484475041711521830"
+  },
+  {
+    "game": "call-of-war",
+    "discord_id": "484486787952148485"
+  },
+  {
+    "game": "battle-for-wesnoth",
+    "discord_id": "484526083686006810"
+  },
+  {
+    "game": "lisa",
+    "discord_id": "484572816977428490"
+  },
+  {
+    "game": "warhammer-40,000:-space-marine",
+    "discord_id": "484789228761514004"
+  },
+  {
+    "game": "insurgency:-sandstorm",
+    "discord_id": "484892481452769290"
+  },
+  {
+    "game": "onward",
+    "discord_id": "484938446268268564"
+  },
+  {
+    "game": "two-point-hospital",
+    "discord_id": "485224436187004928"
+  },
+  {
+    "game": "talisman:-digital-edition",
+    "discord_id": "485857105278926848"
+  },
+  {
+    "game": "gunpoint",
+    "discord_id": "486705198576828416"
+  },
+  {
+    "game": "call-of-duty-4:-modern-warfare",
+    "discord_id": "486763816944795658"
+  },
+  {
+    "game": "dead-frontier-2",
+    "discord_id": "487074862565818378"
+  },
+  {
+    "game": "stronghold-crusader-extreme-hd",
+    "discord_id": "487328146438356992"
+  },
+  {
+    "game": "throne-of-lies",
+    "discord_id": "487330866830376960"
+  },
+  {
+    "game": "bad-north",
+    "discord_id": "487564993236172802"
+  },
+  {
+    "game": "hunger-dungeon",
+    "discord_id": "487652330989158410"
+  },
+  {
+    "game": "the-dig",
+    "discord_id": "487683851519393822"
+  },
+  {
+    "game": "deus-ex:-game-of-the-year-edition",
+    "discord_id": "488014835389300736"
+  },
+  {
+    "game": "galactic-civilizations-ii:-ultimate-edition",
+    "discord_id": "488380884337295360"
+  },
+  {
+    "game": "stick-fight:-the-game",
+    "discord_id": "488693576314650634"
+  },
+  {
+    "game": "sid-meier's-civilization\u00ae-iv-complete",
+    "discord_id": "488844250251788339"
+  },
+  {
+    "game": "xcom-enemy-unknown",
+    "discord_id": "488856269382483979"
+  },
+  {
+    "game": "dungeon-defenders",
+    "discord_id": "488858705836900355"
+  },
+  {
+    "game": "redistributables",
+    "discord_id": "488861107872727068"
+  },
+  {
+    "game": "nba-2k17",
+    "discord_id": "489276682566369290"
+  },
+  {
+    "game": "hyperdimension-neptunia-re;birth1",
+    "discord_id": "489332841910632458"
+  },
+  {
+    "game": "szone-online",
+    "discord_id": "489441787778301992"
+  },
+  {
+    "game": "resident-evil-revelations-2-/-biohazard-revelations-2",
+    "discord_id": "489648352892289054"
+  },
+  {
+    "game": "trine-enchanted-edition",
+    "discord_id": "489705172453425173"
+  },
+  {
+    "game": "trine-3:-the-artifacts-of-power",
+    "discord_id": "489715273683697674"
+  },
+  {
+    "game": "trine-2:-complete-story",
+    "discord_id": "489715841789853697"
+  },
+  {
+    "game": "job-simulator",
+    "discord_id": "489832887936483338"
+  },
+  {
+    "game": "fifa-16",
+    "discord_id": "489854965787918376"
+  },
+  {
+    "game": "construction-simulator-2015",
+    "discord_id": "489879126925115392"
+  },
+  {
+    "game": "seasons-after-fall",
+    "discord_id": "489916817146511371"
+  },
+  {
+    "game": "wasteland-2:-director's-cut",
+    "discord_id": "489917055282315274"
+  },
+  {
+    "game": "shadows:-heretic-kingdoms",
+    "discord_id": "489917480274362368"
+  },
+  {
+    "game": "system-shock-2",
+    "discord_id": "489917602412494878"
+  },
+  {
+    "game": "shadow-of-the-tomb-raider",
+    "discord_id": "490260586899177491"
+  },
+  {
+    "game": "onraid",
+    "discord_id": "490611188988772367"
+  },
+  {
+    "game": "call-of-duty-black-ops-4",
+    "discord_id": "490913233667096576"
+  },
+  {
+    "game": "simply-chess",
+    "discord_id": "491048607072387072"
+  },
+  {
+    "game": "chaos-reborn",
+    "discord_id": "491200852149796865"
+  },
+  {
+    "game": "broken-age",
+    "discord_id": "491424584168505354"
+  },
+  {
+    "game": "dangerous-waters",
+    "discord_id": "491425013468102657"
+  },
+  {
+    "game": "disciples-ii:-gallean's-return",
+    "discord_id": "491425405681664037"
+  },
+  {
+    "game": "disciples-sacred-lands-gold",
+    "discord_id": "491425800059486208"
+  },
+  {
+    "game": "flatout-2",
+    "discord_id": "491426078137647104"
+  },
+  {
+    "game": "flatout:-ultimate-carnage",
+    "discord_id": "491426256789831690"
+  },
+  {
+    "game": "fleet-command",
+    "discord_id": "491426408384561160"
+  },
+  {
+    "game": "space-empires-iv-deluxe",
+    "discord_id": "491426627394338846"
+  },
+  {
+    "game": "sub-command",
+    "discord_id": "491426844604760120"
+  },
+  {
+    "game": "masters-of-anima",
+    "discord_id": "491427069734027273"
+  },
+  {
+    "game": "pony-island",
+    "discord_id": "491427187442974749"
+  },
+  {
+    "game": "vvvvvv",
+    "discord_id": "491427544134975498"
+  },
+  {
+    "game": "guacamelee!-super-turbo-championship-edition",
+    "discord_id": "491427940135993364"
+  },
+  {
+    "game": "the-end-is-nigh",
+    "discord_id": "491739802870349883"
+  },
+  {
+    "game": "towerfall-ascension",
+    "discord_id": "491740193116782595"
+  },
+  {
+    "game": "dragon-quest\u00ae-xi:-echoes-of-an-elusive-age\u2122",
+    "discord_id": "491806530576842762"
+  },
+  {
+    "game": "regular-human-basketball",
+    "discord_id": "491853507507388427"
+  },
+  {
+    "game": "f1-2018",
+    "discord_id": "491909189086740480"
+  },
+  {
+    "game": "never-split-the-party",
+    "discord_id": "492054902772727808"
+  },
+  {
+    "game": "the-wolf-among-us",
+    "discord_id": "492110850342125591"
+  },
+  {
+    "game": "brothers---a-tale-of-two-sons",
+    "discord_id": "492112259770875921"
+  },
+  {
+    "game": "abzu",
+    "discord_id": "492113873508368403"
+  },
+  {
+    "game": "last-day-of-june",
+    "discord_id": "492114663211925536"
+  },
+  {
+    "game": "cities-in-motion",
+    "discord_id": "492115461824184320"
+  },
+  {
+    "game": "darkest-hour:-a-hearts-of-iron-game",
+    "discord_id": "492116330909138974"
+  },
+  {
+    "game": "europa-universalis-iii",
+    "discord_id": "492117546728816640"
+  },
+  {
+    "game": "hearts-of-iron-iii",
+    "discord_id": "492118503508279316"
+  },
+  {
+    "game": "majesty-gold-hd",
+    "discord_id": "492120134937346049"
+  },
+  {
+    "game": "shadowrun:-dragonfall---director's-cut",
+    "discord_id": "492120767111233566"
+  },
+  {
+    "game": "torchlight",
+    "discord_id": "492121941155643402"
+  },
+  {
+    "game": "star-wars\u2122-republic-commando\u2122",
+    "discord_id": "492129256772599837"
+  },
+  {
+    "game": "oddworld:-stranger's-wrath",
+    "discord_id": "492129658536591400"
+  },
+  {
+    "game": "vegas:-make-it-big",
+    "discord_id": "492130126012743710"
+  },
+  {
+    "game": "star-wars\u2122-galactic-battlegrounds-saga",
+    "discord_id": "492131222135373834"
+  },
+  {
+    "game": "the-walking-dead:-the-final-season",
+    "discord_id": "492133608493023232"
+  },
+  {
+    "game": "star-wars\u2122-jedi-knight:-dark-forces-ii",
+    "discord_id": "492134139647098881"
+  },
+  {
+    "game": "yooka-laylee",
+    "discord_id": "492134695711014912"
+  },
+  {
+    "game": "the-secret-of-monkey-island:-special-edition",
+    "discord_id": "492134756914429975"
+  },
+  {
+    "game": "star-wars\u2122-jedi-knight-ii:-jedi-outcast\u2122",
+    "discord_id": "492135944179286068"
+  },
+  {
+    "game": "star-wars:-knights-of-the-old-republic",
+    "discord_id": "492136872714305566"
+  },
+  {
+    "game": "star-wars:-dark-forces",
+    "discord_id": "492137508633706517"
+  },
+  {
+    "game": "ascension:-deckbuilding-game",
+    "discord_id": "492140628717731846"
+  },
+  {
+    "game": "ashes-of-the-singularity:-escalation",
+    "discord_id": "492141568816447488"
+  },
+  {
+    "game": "ticket-to-ride",
+    "discord_id": "492142885077123082"
+  },
+  {
+    "game": "killer-queen-black",
+    "discord_id": "492144146040094722"
+  },
+  {
+    "game": "oddworld:-new-'n'-tasty",
+    "discord_id": "492146632511586313"
+  },
+  {
+    "game": "out-of-the-park-baseball-18",
+    "discord_id": "492147626872012800"
+  },
+  {
+    "game": "tropico-3",
+    "discord_id": "492154985627385886"
+  },
+  {
+    "game": "hearts-of-iron-ii",
+    "discord_id": "492158597673910281"
+  },
+  {
+    "game": "europa-universalis-ii",
+    "discord_id": "492159419837186053"
+  },
+  {
+    "game": "ring-of-elysium",
+    "discord_id": "492159553966702592"
+  },
+  {
+    "game": "victoria-i",
+    "discord_id": "492161312730775553"
+  },
+  {
+    "game": "indiana-jones-and-the-fate-of-atlantis",
+    "discord_id": "492162663976140810"
+  },
+  {
+    "game": "monkey-island-2:-special-edition",
+    "discord_id": "492164341840347156"
+  },
+  {
+    "game": "euro-truck-simulator",
+    "discord_id": "492695172967301120"
+  },
+  {
+    "game": "galactic-civilizations-iii",
+    "discord_id": "492772865175715850"
+  },
+  {
+    "game": "the-culling",
+    "discord_id": "493430961313415188"
+  },
+  {
+    "game": "rpg-maker-vx-ace",
+    "discord_id": "493490198580035604"
+  },
+  {
+    "game": "the-wild-eight",
+    "discord_id": "493827668991803402"
+  },
+  {
+    "game": "warframe-test",
+    "discord_id": "494178385807933445"
+  },
+  {
+    "game": "planetbase",
+    "discord_id": "494228479898812416"
+  },
+  {
+    "game": "aliens-vs.-predator",
+    "discord_id": "494240845378355220"
+  },
+  {
+    "game": "blazblue-centralfiction",
+    "discord_id": "494341815940415488"
+  },
+  {
+    "game": "blacklight:-retribution",
+    "discord_id": "495079795252527104"
+  },
+  {
+    "game": "20xx",
+    "discord_id": "495310509382565890"
+  },
+  {
+    "game": "warhammer-40,000:-dawn-of-war-ii---retribution",
+    "discord_id": "495651148242616330"
+  },
+  {
+    "game": "legion-td-2",
+    "discord_id": "495691276159549460"
+  },
+  {
+    "game": "coloring-pixels",
+    "discord_id": "495871643432910848"
+  },
+  {
+    "game": "art-of-war:-red-tides",
+    "discord_id": "495889089703444481"
+  },
+  {
+    "game": "battlerite-royale",
+    "discord_id": "495912170190667776"
+  },
+  {
+    "game": "rogue-legacy",
+    "discord_id": "495979053371752481"
+  },
+  {
+    "game": "mist-survival",
+    "discord_id": "496035345981243395"
+  },
+  {
+    "game": "a-kiss-for-the-petals---remembering-how-we-met",
+    "discord_id": "496521775161671734"
+  },
+  {
+    "game": "a-sky-full-of-stars",
+    "discord_id": "496523213778583553"
+  },
+  {
+    "game": "a-study-in-steampunk:-choice-by-gaslight",
+    "discord_id": "496524367962832918"
+  },
+  {
+    "game": "action-henk",
+    "discord_id": "496524555360403476"
+  },
+  {
+    "game": "aeon-rivals",
+    "discord_id": "496524827050508316"
+  },
+  {
+    "game": "age-of-conan",
+    "discord_id": "496525141467987991"
+  },
+  {
+    "game": "ai-war:-fleet-command",
+    "discord_id": "496525786468319232"
+  },
+  {
+    "game": "alan-wake's-american-nightmare",
+    "discord_id": "496526142673649724"
+  },
+  {
+    "game": "albion-online",
+    "discord_id": "496526645671231488"
+  },
+  {
+    "game": "alien-breed-2:-assault",
+    "discord_id": "496527138141503538"
+  },
+  {
+    "game": "altitude",
+    "discord_id": "496529186064826368"
+  },
+  {
+    "game": "anarchy-online",
+    "discord_id": "496529322039836681"
+  },
+  {
+    "game": "anno-1404",
+    "discord_id": "496530041895911429"
+  },
+  {
+    "game": "anno-2205",
+    "discord_id": "496530253905264659"
+  },
+  {
+    "game": "antichamber",
+    "discord_id": "496532716099993623"
+  },
+  {
+    "game": "ascent---the-space-game",
+    "discord_id": "496533328833544227"
+  },
+  {
+    "game": "assault-android-cactus",
+    "discord_id": "496533560228970514"
+  },
+  {
+    "game": "astebreed",
+    "discord_id": "496533728932134922"
+  },
+  {
+    "game": "axiom-verge",
+    "discord_id": "496534151642742804"
+  },
+  {
+    "game": "bad-rats",
+    "discord_id": "496534375740080128"
+  },
+  {
+    "game": "bare-metal",
+    "discord_id": "496534611250118656"
+  },
+  {
+    "game": "battle-squares",
+    "discord_id": "496534796424708124"
+  },
+  {
+    "game": "battlefield-2",
+    "discord_id": "496534962200248373"
+  },
+  {
+    "game": "battlefield-2142",
+    "discord_id": "496535501465976835"
+  },
+  {
+    "game": "beat-hazard",
+    "discord_id": "496535788427935764"
+  },
+  {
+    "game": "bejeweled-3",
+    "discord_id": "496536236769542154"
+  },
+  {
+    "game": "bejeweled-blitz",
+    "discord_id": "496537107708248064"
+  },
+  {
+    "game": "blade-symphony",
+    "discord_id": "496537275656831001"
+  },
+  {
+    "game": "blake-stone:-planet-strike",
+    "discord_id": "496538565451317259"
+  },
+  {
+    "game": "block-sport",
+    "discord_id": "496538914673262596"
+  },
+  {
+    "game": "blockland",
+    "discord_id": "496539095888035861"
+  },
+  {
+    "game": "bloodline-champions",
+    "discord_id": "496539230026334208"
+  },
+  {
+    "game": "boid",
+    "discord_id": "496539411308216320"
+  },
+  {
+    "game": "braid",
+    "discord_id": "496540068442537984"
+  },
+  {
+    "game": "bulletstorm",
+    "discord_id": "496540681913892864"
+  },
+  {
+    "game": "c9",
+    "discord_id": "496543199209193488"
+  },
+  {
+    "game": "cabal-online",
+    "discord_id": "496544716997918750"
+  },
+  {
+    "game": "call-of-duty-2",
+    "discord_id": "496546499346432010"
+  },
+  {
+    "game": "call-of-juarez",
+    "discord_id": "496547399599390730"
+  },
+  {
+    "game": "cargo-commander",
+    "discord_id": "496547754680647690"
+  },
+  {
+    "game": "chronicon",
+    "discord_id": "496548575061213184"
+  },
+  {
+    "game": "clannad",
+    "discord_id": "496550410685906954"
+  },
+  {
+    "game": "clannad-side-stories",
+    "discord_id": "496550790572277770"
+  },
+  {
+    "game": "clive-barker's-undying",
+    "discord_id": "496552265977692181"
+  },
+  {
+    "game": "clonk-rage",
+    "discord_id": "496552591111618565"
+  },
+  {
+    "game": "cloudbuilt",
+    "discord_id": "496552729141837824"
+  },
+  {
+    "game": "combat-arms",
+    "discord_id": "496553014220554270"
+  },
+  {
+    "game": "command-and-conquer-3:-kane's-wrath",
+    "discord_id": "496557233979654154"
+  },
+  {
+    "game": "company-of-heroes",
+    "discord_id": "496557687560077322"
+  },
+  {
+    "game": "cook,-serve,-delicious!",
+    "discord_id": "496558661041127444"
+  },
+  {
+    "game": "creation-kit",
+    "discord_id": "496560355615703060"
+  },
+  {
+    "game": "creeper-world-3:-arc-eternal",
+    "discord_id": "496560583521468426"
+  },
+  {
+    "game": "crimsonland",
+    "discord_id": "496561007888433152"
+  },
+  {
+    "game": "crowfall",
+    "discord_id": "496561718668034078"
+  },
+  {
+    "game": "cryptark",
+    "discord_id": "496562135447502882"
+  },
+  {
+    "game": "crysis",
+    "discord_id": "496562734889041930"
+  },
+  {
+    "game": "crysis-2",
+    "discord_id": "496564403345424431"
+  },
+  {
+    "game": "crysis-3",
+    "discord_id": "496565168528949249"
+  },
+  {
+    "game": "cyphers",
+    "discord_id": "496565866721443840"
+  },
+  {
+    "game": "darkstar-one",
+    "discord_id": "496566320213655552"
+  },
+  {
+    "game": "dcs-world",
+    "discord_id": "496568071713062928"
+  },
+  {
+    "game": "dead-space-2",
+    "discord_id": "496568659276201984"
+  },
+  {
+    "game": "deadcore",
+    "discord_id": "496569001405841439"
+  },
+  {
+    "game": "deathsmiles",
+    "discord_id": "496569185237860359"
+  },
+  {
+    "game": "debugger-3.16:-hack'n'run",
+    "discord_id": "496569333665759232"
+  },
+  {
+    "game": "defense-grid-2",
+    "discord_id": "496569474670133258"
+  },
+  {
+    "game": "depression-quest",
+    "discord_id": "496569655679385603"
+  },
+  {
+    "game": "devil-daggers",
+    "discord_id": "496571420579463168"
+  },
+  {
+    "game": "devilian",
+    "discord_id": "496571728089317437"
+  },
+  {
+    "game": "diablo",
+    "discord_id": "496571953147150354"
+  },
+  {
+    "game": "diablo-ii",
+    "discord_id": "496572658255790080"
+  },
+  {
+    "game": "diadra-empty",
+    "discord_id": "496573404002910227"
+  },
+  {
+    "game": "dirt-3",
+    "discord_id": "496574120436432915"
+  },
+  {
+    "game": "distance",
+    "discord_id": "496575580070871040"
+  },
+  {
+    "game": "dominions-4",
+    "discord_id": "496575805413916683"
+  },
+  {
+    "game": "doom-3",
+    "discord_id": "496575943431946250"
+  },
+  {
+    "game": "double-dragon-neon",
+    "discord_id": "496576235934187539"
+  },
+  {
+    "game": "downwell",
+    "discord_id": "496576457082929152"
+  },
+  {
+    "game": "dragon-age-ii",
+    "discord_id": "496576882540806154"
+  },
+  {
+    "game": "dragon-fin-soup",
+    "discord_id": "496577154683895827"
+  },
+  {
+    "game": "dragon-nest",
+    "discord_id": "496577285466357760"
+  },
+  {
+    "game": "dragon's-dogma-online",
+    "discord_id": "496578773647622187"
+  },
+  {
+    "game": "dropzone",
+    "discord_id": "496578915263971358"
+  },
+  {
+    "game": "duke-nukem-forever",
+    "discord_id": "496579092418658363"
+  },
+  {
+    "game": "dungeon-fighter-online",
+    "discord_id": "496579303631486976"
+  },
+  {
+    "game": "dungeonland",
+    "discord_id": "496579621693816832"
+  },
+  {
+    "game": "dungeons-&-dragons-online\u00ae",
+    "discord_id": "496579889063919616"
+  },
+  {
+    "game": "dust:-an-elysian-tail",
+    "discord_id": "496580906916511764"
+  },
+  {
+    "game": "dustforce",
+    "discord_id": "496581169639587850"
+  },
+  {
+    "game": "entropia-universe",
+    "discord_id": "496581460438941716"
+  },
+  {
+    "game": "everquest-ii",
+    "discord_id": "496582384863412249"
+  },
+  {
+    "game": "evoland-2",
+    "discord_id": "496583339986387004"
+  },
+  {
+    "game": "evolve",
+    "discord_id": "496739105481293869"
+  },
+  {
+    "game": "fairy-fencer-f",
+    "discord_id": "496739512446091284"
+  },
+  {
+    "game": "fifa-15",
+    "discord_id": "496740139633213490"
+  },
+  {
+    "game": "final-fantasy-iii",
+    "discord_id": "496740365072728064"
+  },
+  {
+    "game": "final-fantasy-v",
+    "discord_id": "496740745085059112"
+  },
+  {
+    "game": "final-fantasy-vi",
+    "discord_id": "496742764344639488"
+  },
+  {
+    "game": "final-fantasy-viii",
+    "discord_id": "496757203596869652"
+  },
+  {
+    "game": "final-fantasy-xiii",
+    "discord_id": "496757542479724554"
+  },
+  {
+    "game": "final-fantasy-xiii-2",
+    "discord_id": "496757852069822504"
+  },
+  {
+    "game": "firefall",
+    "discord_id": "496758262797172736"
+  },
+  {
+    "game": "flamebreak",
+    "discord_id": "496758379583242291"
+  },
+  {
+    "game": "flyff",
+    "discord_id": "496758691064709120"
+  },
+  {
+    "game": "football-manager-2014",
+    "discord_id": "496758937039929370"
+  },
+  {
+    "game": "football-manager-2016",
+    "discord_id": "496760317875978256"
+  },
+  {
+    "game": "forza-horizon-3",
+    "discord_id": "496760939052269583"
+  },
+  {
+    "game": "forza-motorsport-7",
+    "discord_id": "496761344603979796"
+  },
+  {
+    "game": "fran-bow",
+    "discord_id": "496761451738955804"
+  },
+  {
+    "game": "free-to-play",
+    "discord_id": "496761815548559360"
+  },
+  {
+    "game": "freedom-planet",
+    "discord_id": "496761999708127232"
+  },
+  {
+    "game": "frontier",
+    "discord_id": "496762504291155998"
+  },
+  {
+    "game": "furcadia",
+    "discord_id": "496763066889797674"
+  },
+  {
+    "game": "gears-of-war-4",
+    "discord_id": "496763396558159892"
+  },
+  {
+    "game": "granado-espada",
+    "discord_id": "496771607386259456"
+  },
+  {
+    "game": "grav",
+    "discord_id": "496771913280913424"
+  },
+  {
+    "game": "grey-goo",
+    "discord_id": "496772084379418637"
+  },
+  {
+    "game": "scram",
+    "discord_id": "496772185864667146"
+  },
+  {
+    "game": "groove-coaster",
+    "discord_id": "496772271088730112"
+  },
+  {
+    "game": "grow-home",
+    "discord_id": "496772402219319316"
+  },
+  {
+    "game": "guardians-of-ember",
+    "discord_id": "496772734744002580"
+  },
+  {
+    "game": "guilty-gear-xx-accent-core-plus-r",
+    "discord_id": "496773998517026816"
+  },
+  {
+    "game": "guitar-hero-world-tour",
+    "discord_id": "496774309042192384"
+  },
+  {
+    "game": "halo-custom-edition",
+    "discord_id": "496775885249314885"
+  },
+  {
+    "game": "halo:-combat-evolved",
+    "discord_id": "496776262136758277"
+  },
+  {
+    "game": "hand-of-fate",
+    "discord_id": "496776430110113843"
+  },
+  {
+    "game": "hard-west",
+    "discord_id": "496776675351330846"
+  },
+  {
+    "game": "hate-plus",
+    "discord_id": "496776818855116811"
+  },
+  {
+    "game": "hatoful-boyfriend",
+    "discord_id": "496777244090302490"
+  },
+  {
+    "game": "hawken",
+    "discord_id": "496778224433627156"
+  },
+  {
+    "game": "hex:-shards-of-fate",
+    "discord_id": "496778870104653824"
+  },
+  {
+    "game": "hitman:-blood-money",
+    "discord_id": "496779049524265010"
+  },
+  {
+    "game": "hoshizora-no-memoria--wish-upon-a-shooting-star-",
+    "discord_id": "496779855950774272"
+  },
+  {
+    "game": "ibb-&-obb",
+    "discord_id": "496838264506941473"
+  },
+  {
+    "game": "in-death",
+    "discord_id": "496838571735384122"
+  },
+  {
+    "game": "intruder",
+    "discord_id": "496838818813706270"
+  },
+  {
+    "game": "jade-empire:-special-edition",
+    "discord_id": "496839367621476352"
+  },
+  {
+    "game": "jurassic-park:-the-game",
+    "discord_id": "496839741812113408"
+  },
+  {
+    "game": "kindred-spirits-on-the-roof",
+    "discord_id": "496845813461418005"
+  },
+  {
+    "game": "king-arthur's-gold",
+    "discord_id": "496845988154048541"
+  },
+  {
+    "game": "krosmaster-arena",
+    "discord_id": "496846515382517770"
+  },
+  {
+    "game": "landmark",
+    "discord_id": "496846777023070218"
+  },
+  {
+    "game": "lara-croft-and-the-guardian-of-light",
+    "discord_id": "496846884787191834"
+  },
+  {
+    "game": "legend-of-dungeon",
+    "discord_id": "496847055793422336"
+  },
+  {
+    "game": "lightning-returns:-final-fantasy-xiii",
+    "discord_id": "496847425680572455"
+  },
+  {
+    "game": "limit-ragnarok-online",
+    "discord_id": "496847615456051220"
+  },
+  {
+    "game": "lineage",
+    "discord_id": "496848201773482004"
+  },
+  {
+    "game": "chris-sawyer's-locomotion",
+    "discord_id": "496848465301733376"
+  },
+  {
+    "game": "long-live-the-queen",
+    "discord_id": "496848705027178496"
+  },
+  {
+    "game": "lovely-planet",
+    "discord_id": "496851684396630035"
+  },
+  {
+    "game": "lovers-in-a-dangerous-spacetime",
+    "discord_id": "496851934339268622"
+  },
+  {
+    "game": "lumini",
+    "discord_id": "496852060256337920"
+  },
+  {
+    "game": "lyne",
+    "discord_id": "496852270080851977"
+  },
+  {
+    "game": "magic-realm:-online",
+    "discord_id": "496852479615565834"
+  },
+  {
+    "game": "marvel-heroes-2015",
+    "discord_id": "496852775406141450"
+  },
+  {
+    "game": "marvel-heroes-2016",
+    "discord_id": "496853043103662080"
+  },
+  {
+    "game": "massive",
+    "discord_id": "496853196346621982"
+  },
+  {
+    "game": "master-reboot",
+    "discord_id": "496853347505012746"
+  },
+  {
+    "game": "nekojishi",
+    "discord_id": "497121061339529226"
+  },
+  {
+    "game": "how-to-survive",
+    "discord_id": "497169068466634792"
+  },
+  {
+    "game": "pathfinder:-kingmaker",
+    "discord_id": "497389403832844298"
+  },
+  {
+    "game": "nekopara-vol.-0",
+    "discord_id": "497660949260664832"
+  },
+  {
+    "game": "necropolis",
+    "discord_id": "497830439298400256"
+  },
+  {
+    "game": "assassin's-creed-odyssey",
+    "discord_id": "497898978466070528"
+  },
+  {
+    "game": "craft-the-world",
+    "discord_id": "498216676744101891"
+  },
+  {
+    "game": "midair",
+    "discord_id": "498457066738810890"
+  },
+  {
+    "game": "crosscode",
+    "discord_id": "498640615744077864"
+  },
+  {
+    "game": "jotun",
+    "discord_id": "498640773999362050"
+  },
+  {
+    "game": "monster-slayers",
+    "discord_id": "498641288250392600"
+  },
+  {
+    "game": "we-happy-few",
+    "discord_id": "498728807881113620"
+  },
+  {
+    "game": "lost-saga-north-america",
+    "discord_id": "498938615934615552"
+  },
+  {
+    "game": "men-of-war:-assault-squad",
+    "discord_id": "498941421814939648"
+  },
+  {
+    "game": "might-&-magic-heroes-vi",
+    "discord_id": "498942150042451978"
+  },
+  {
+    "game": "might-&-magic-heroes-vii",
+    "discord_id": "498942455903944704"
+  },
+  {
+    "game": "mothergunship",
+    "discord_id": "498942846032805908"
+  },
+  {
+    "game": "mountain",
+    "discord_id": "498943265475657728"
+  },
+  {
+    "game": "mudlet",
+    "discord_id": "498943730817171476"
+  },
+  {
+    "game": "mugen-souls",
+    "discord_id": "498943830582755368"
+  },
+  {
+    "game": "naruto-shippuden:-ultimate-ninja-storm-3-full-burst",
+    "discord_id": "498948228146921472"
+  },
+  {
+    "game": "naruto-shippuden:-ultimate-ninja-storm-revolution",
+    "discord_id": "498971059291291648"
+  },
+  {
+    "game": "need-for-speed:-carbon",
+    "discord_id": "498971474841960450"
+  },
+  {
+    "game": "neo-scavenger",
+    "discord_id": "498971609764200478"
+  },
+  {
+    "game": "neocron-evolution",
+    "discord_id": "498971892968062976"
+  },
+  {
+    "game": "next-car-game:-wreckfest",
+    "discord_id": "498971974945603587"
+  },
+  {
+    "game": "nicole-(otome-version)",
+    "discord_id": "498972346078461982"
+  },
+  {
+    "game": "nosgoth",
+    "discord_id": "498972985403899960"
+  },
+  {
+    "game": "one-piece-pirate-warriors-3",
+    "discord_id": "498973375595675688"
+  },
+  {
+    "game": "oni",
+    "discord_id": "498979842277113857"
+  },
+  {
+    "game": "peggle-deluxe",
+    "discord_id": "498980232938651648"
+  },
+  {
+    "game": "peggle-extreme",
+    "discord_id": "498980339470041123"
+  },
+  {
+    "game": "pinball-arcade",
+    "discord_id": "498980583096057905"
+  },
+  {
+    "game": "pixel-dungeon",
+    "discord_id": "498981118410752020"
+  },
+  {
+    "game": "pixeljunk-shooter-ultimate",
+    "discord_id": "498981476050927653"
+  },
+  {
+    "game": "pixeljunk\u2122-shooter-ultimate",
+    "discord_id": "498981634339635253"
+  },
+  {
+    "game": "mechwarrior:-living-legends",
+    "discord_id": "498984088418516992"
+  },
+  {
+    "game": "plants-vs.-zombies:-game-of-the-year",
+    "discord_id": "498985095378632704"
+  },
+  {
+    "game": "poi",
+    "discord_id": "498985543586021376"
+  },
+  {
+    "game": "pokemmo",
+    "discord_id": "498985820221603840"
+  },
+  {
+    "game": "pokerstars",
+    "discord_id": "498986175512576058"
+  },
+  {
+    "game": "prepar3d",
+    "discord_id": "498986525757800468"
+  },
+  {
+    "game": "primal-carnage",
+    "discord_id": "498986661104058378"
+  },
+  {
+    "game": "prime-world",
+    "discord_id": "498986815227822080"
+  },
+  {
+    "game": "projectrik",
+    "discord_id": "498987268048945162"
+  },
+  {
+    "game": "proteus",
+    "discord_id": "498987388891299859"
+  },
+  {
+    "game": "pyrite-heart",
+    "discord_id": "498987613416456220"
+  },
+  {
+    "game": "quake-ii",
+    "discord_id": "498987709629464586"
+  },
+  {
+    "game": "quiplash",
+    "discord_id": "498988229798920242"
+  },
+  {
+    "game": "race-the-sun",
+    "discord_id": "498988774169116711"
+  },
+  {
+    "game": "ragnarok-online",
+    "discord_id": "498990766643740692"
+  },
+  {
+    "game": "rappelz",
+    "discord_id": "498991137214955531"
+  },
+  {
+    "game": "rayman-2---the-great-escape",
+    "discord_id": "498991556724916225"
+  },
+  {
+    "game": "re-volt",
+    "discord_id": "498994022048727050"
+  },
+  {
+    "game": "reassembly",
+    "discord_id": "498997425965367313"
+  },
+  {
+    "game": "recore",
+    "discord_id": "498999413172207653"
+  },
+  {
+    "game": "resident-evil-revelations-/-biohazard-revelations",
+    "discord_id": "499004687719202816"
+  },
+  {
+    "game": "hidden-folks",
+    "discord_id": "499303420512174080"
+  },
+  {
+    "game": "tales-of-escape",
+    "discord_id": "499330427455012874"
+  },
+  {
+    "game": "blockpost",
+    "discord_id": "499743985045078036"
+  },
+  {
+    "game": "moon-hunters",
+    "discord_id": "500645675642388480"
+  },
+  {
+    "game": "serious-sam-2",
+    "discord_id": "500769428753874947"
+  },
+  {
+    "game": "resident-evil-/-biohazard-hd-remaster",
+    "discord_id": "500804924007907348"
+  },
+  {
+    "game": "the-walking-dead:-season-two",
+    "discord_id": "500830174590271509"
+  },
+  {
+    "game": "pla_toon",
+    "discord_id": "501063306065346580"
+  },
+  {
+    "game": "darkwood",
+    "discord_id": "501209864333164546"
+  },
+  {
+    "game": "nba-2k19",
+    "discord_id": "501373821886922752"
+  },
+  {
+    "game": "i-am-bread",
+    "discord_id": "501542797430489098"
+  },
+  {
+    "game": "creativedestruction",
+    "discord_id": "501792352898121743"
+  },
+  {
+    "game": "bigscreen-beta",
+    "discord_id": "501925376747110440"
+  },
+  {
+    "game": "fuse",
+    "discord_id": "502281428168343573"
+  },
+  {
+    "game": "sonic-generations",
+    "discord_id": "502406586895958026"
+  },
+  {
+    "game": "zeus'-battlegrounds",
+    "discord_id": "502879677782818820"
+  },
+  {
+    "game": "the-misfits",
+    "discord_id": "502910350413266954"
+  },
+  {
+    "game": "world-war-3",
+    "discord_id": "503228350761009162"
+  },
+  {
+    "game": "soulcalibur-vi",
+    "discord_id": "503340646946308096"
+  },
+  {
+    "game": "oh...sir!-the-insult-simulator",
+    "discord_id": "503362822957432832"
+  },
+  {
+    "game": "danganronpa-2:-goodbye-despair",
+    "discord_id": "503578473227354112"
+  },
+  {
+    "game": "overkill's-the-walking-dead---beta",
+    "discord_id": "503632655137374219"
+  },
+  {
+    "game": "call-of-cthulhu",
+    "discord_id": "503982482664849408"
+  },
+  {
+    "game": "asheron's-call",
+    "discord_id": "504021888805240914"
+  },
+  {
+    "game": "reflex-arena",
+    "discord_id": "504024478100095016"
+  },
+  {
+    "game": "retro-city-rampage\u2122-dx",
+    "discord_id": "504026620068233235"
+  },
+  {
+    "game": "reus",
+    "discord_id": "504027911213285423"
+  },
+  {
+    "game": "revelation-online",
+    "discord_id": "504028382317772859"
+  },
+  {
+    "game": "rfactor",
+    "discord_id": "504028685322551296"
+  },
+  {
+    "game": "rfactor-2",
+    "discord_id": "504029217650901040"
+  },
+  {
+    "game": "rogue-system",
+    "discord_id": "504029616151986198"
+  },
+  {
+    "game": "sakura-angels",
+    "discord_id": "504029936697344048"
+  },
+  {
+    "game": "sakura-clicker",
+    "discord_id": "504030053017845805"
+  },
+  {
+    "game": "sakura-spirit",
+    "discord_id": "504030205481058304"
+  },
+  {
+    "game": "screencheat",
+    "discord_id": "504030375606091776"
+  },
+  {
+    "game": "scrivener",
+    "discord_id": "504030662911590425"
+  },
+  {
+    "game": "secret-ponchos",
+    "discord_id": "504030792184496148"
+  },
+  {
+    "game": "secrets-of-grindea",
+    "discord_id": "504030959654535198"
+  },
+  {
+    "game": "shadowgrounds",
+    "discord_id": "504031323443167273"
+  },
+  {
+    "game": "shadowgrounds:-survivor",
+    "discord_id": "504031813619154974"
+  },
+  {
+    "game": "shadowrun",
+    "discord_id": "504032333532364840"
+  },
+  {
+    "game": "shantae-and-the-pirate's-curse",
+    "discord_id": "504032449173389372"
+  },
+  {
+    "game": "shattered-skies",
+    "discord_id": "504033280149159986"
+  },
+  {
+    "game": "sid-meier's-railroads!",
+    "discord_id": "504033484919144452"
+  },
+  {
+    "game": "sinarun",
+    "discord_id": "504033675940200448"
+  },
+  {
+    "game": "slime-ccg",
+    "discord_id": "504037755018412033"
+  },
+  {
+    "game": "snes9x",
+    "discord_id": "504041310605410315"
+  },
+  {
+    "game": "songbringer",
+    "discord_id": "504042287345434624"
+  },
+  {
+    "game": "sonic-adventure-dx",
+    "discord_id": "504042667714543626"
+  },
+  {
+    "game": "sonic-lost-world",
+    "discord_id": "504044826954694780"
+  },
+  {
+    "game": "soul-axiom",
+    "discord_id": "504046230028943380"
+  },
+  {
+    "game": "space-pirates-and-zombies",
+    "discord_id": "504046366302142494"
+  },
+  {
+    "game": "spacechem",
+    "discord_id": "504046850584739850"
+  },
+  {
+    "game": "spider-man-3",
+    "discord_id": "504047615139119143"
+  },
+  {
+    "game": "sprint-vector",
+    "discord_id": "504050983400374292"
+  },
+  {
+    "game": "startup-company",
+    "discord_id": "504052120543166505"
+  },
+  {
+    "game": "steel-ocean",
+    "discord_id": "504052334960050176"
+  },
+  {
+    "game": "steins;gate",
+    "discord_id": "504052730042646579"
+  },
+  {
+    "game": "steredenn",
+    "discord_id": "504053684494401540"
+  },
+  {
+    "game": "strafe",
+    "discord_id": "504054126280310794"
+  },
+  {
+    "game": "strife",
+    "discord_id": "504055085177765907"
+  },
+  {
+    "game": "strife:-veteran-edition",
+    "discord_id": "504055223543922708"
+  },
+  {
+    "game": "styx:-master-of-shadows",
+    "discord_id": "504055375880912946"
+  },
+  {
+    "game": "suguri",
+    "discord_id": "504055570483904522"
+  },
+  {
+    "game": "super-monday-night-combat",
+    "discord_id": "504055809962147840"
+  },
+  {
+    "game": "superbrothers:-sword-&-sworcery-ep",
+    "discord_id": "504056145854464000"
+  },
+  {
+    "game": "surv1v3",
+    "discord_id": "504056431176056852"
+  },
+  {
+    "game": "swat-4",
+    "discord_id": "504056709015404544"
+  },
+  {
+    "game": "sword-coast-legends",
+    "discord_id": "504056938439507968"
+  },
+  {
+    "game": "sword-of-asumi",
+    "discord_id": "504057095109214247"
+  },
+  {
+    "game": "synthetik",
+    "discord_id": "504057233756389376"
+  },
+  {
+    "game": "take-on-mars",
+    "discord_id": "504057417194143754"
+  },
+  {
+    "game": "tales-from-the-borderlands",
+    "discord_id": "504057675286315028"
+  },
+  {
+    "game": "tales-of-maj'eyal",
+    "discord_id": "504065891043115008"
+  },
+  {
+    "game": "tales-of-monkey-island",
+    "discord_id": "504067053481754634"
+  },
+  {
+    "game": "tales-of-zestiria",
+    "discord_id": "504070466948956160"
+  },
+  {
+    "game": "tales-runner",
+    "discord_id": "504071115799265280"
+  },
+  {
+    "game": "task-force",
+    "discord_id": "504071248888987676"
+  },
+  {
+    "game": "tetris\u00ae-ultimate",
+    "discord_id": "504071743963529226"
+  },
+  {
+    "game": "tetris",
+    "discord_id": "504071879993196544"
+  },
+  {
+    "game": "the-beginner's-guide",
+    "discord_id": "504073562785579018"
+  },
+  {
+    "game": "the-elder-scrolls-iv:-oblivion",
+    "discord_id": "504074409628401690"
+  },
+  {
+    "game": "the-forgettable-dungeon",
+    "discord_id": "504075021677887541"
+  },
+  {
+    "game": "the-king-of-fighters-2002-unlimited-match",
+    "discord_id": "504075299877683230"
+  },
+  {
+    "game": "the-marvellous-miss-take",
+    "discord_id": "504076592218112047"
+  },
+  {
+    "game": "the-park",
+    "discord_id": "504076991759384596"
+  },
+  {
+    "game": "the-sacred-tears-true",
+    "discord_id": "504077161246883850"
+  },
+  {
+    "game": "the-secret-world",
+    "discord_id": "504077629175889923"
+  },
+  {
+    "game": "the-settlers-7:-paths-to-a-kingdom",
+    "discord_id": "504078051358015516"
+  },
+  {
+    "game": "the-settlers:-rise-of-an-empire",
+    "discord_id": "504078174875942939"
+  },
+  {
+    "game": "the-vanishing-of-ethan-carter",
+    "discord_id": "504078553445302330"
+  },
+  {
+    "game": "the-vanishing-of-ethan-carter-redux",
+    "discord_id": "504078762292543506"
+  },
+  {
+    "game": "there-was-a-caveman",
+    "discord_id": "504079332512235573"
+  },
+  {
+    "game": "thomas-was-alone",
+    "discord_id": "504079439726903336"
+  },
+  {
+    "game": "tis-100",
+    "discord_id": "504079649702412295"
+  },
+  {
+    "game": "tomb-raider-ii",
+    "discord_id": "504079864681332739"
+  },
+  {
+    "game": "tomb-raider-iii:-adventures-of-lara-croft",
+    "discord_id": "504080259151298560"
+  },
+  {
+    "game": "tomb-raider:-anniversary",
+    "discord_id": "504080427569643550"
+  },
+  {
+    "game": "tomb-raider:-chronicles",
+    "discord_id": "504080609598111771"
+  },
+  {
+    "game": "tomb-raider:-legend",
+    "discord_id": "504080831396970511"
+  },
+  {
+    "game": "tomb-raider:-the-last-revelation",
+    "discord_id": "504081066848681984"
+  },
+  {
+    "game": "tomb-raider:-underworld",
+    "discord_id": "504081253314723874"
+  },
+  {
+    "game": "tony-hawk's-underground",
+    "discord_id": "504081569405730826"
+  },
+  {
+    "game": "tony-hawk's-underground-2",
+    "discord_id": "504081807340470291"
+  },
+  {
+    "game": "trackday-manager",
+    "discord_id": "504082602848813087"
+  },
+  {
+    "game": "transforbest",
+    "discord_id": "504082814350655518"
+  },
+  {
+    "game": "triple-town",
+    "discord_id": "504083025211162677"
+  },
+  {
+    "game": "unravel",
+    "discord_id": "504084141319520299"
+  },
+  {
+    "game": "unreal-tournament",
+    "discord_id": "504084447797313537"
+  },
+  {
+    "game": "unreal-tournament-3",
+    "discord_id": "504084581989744679"
+  },
+  {
+    "game": "uplink",
+    "discord_id": "504085139983433774"
+  },
+  {
+    "game": "war-for-the-overworld",
+    "discord_id": "504085687155425286"
+  },
+  {
+    "game": "warsow",
+    "discord_id": "504086535079985181"
+  },
+  {
+    "game": "waveland",
+    "discord_id": "504086615132733450"
+  },
+  {
+    "game": "wings-of-vi",
+    "discord_id": "504086961498226688"
+  },
+  {
+    "game": "wolfenstein:-the-old-blood",
+    "discord_id": "504087375618506772"
+  },
+  {
+    "game": "wonder-wickets",
+    "discord_id": "504087681635188766"
+  },
+  {
+    "game": "x-plane-11",
+    "discord_id": "504087790032650290"
+  },
+  {
+    "game": "xenonauts",
+    "discord_id": "504088140139462686"
+  },
+  {
+    "game": "zandronum",
+    "discord_id": "504088311594483722"
+  },
+  {
+    "game": "zombi",
+    "discord_id": "504088792223842314"
+  },
+  {
+    "game": "zombies-monsters-robots",
+    "discord_id": "504089133900103714"
+  },
+  {
+    "game": "9dragons",
+    "discord_id": "504399459426369587"
+  },
+  {
+    "game": "age-of-wushu",
+    "discord_id": "504422264599609344"
+  },
+  {
+    "game": "alan-wake",
+    "discord_id": "504423339104796672"
+  },
+  {
+    "game": "argentum-online",
+    "discord_id": "504424067877699614"
+  },
+  {
+    "game": "azure-striker-gunvolt",
+    "discord_id": "504426985305538600"
+  },
+  {
+    "game": "battlebit-remastered",
+    "discord_id": "504428997212504074"
+  },
+  {
+    "game": "microsoft-allegiance",
+    "discord_id": "504444177413701632"
+  },
+  {
+    "game": "super-house-of-dead-ninjas",
+    "discord_id": "504468643384524800"
+  },
+  {
+    "game": "aseprite",
+    "discord_id": "504605035162763294"
+  },
+  {
+    "game": "full-metal-furies",
+    "discord_id": "504743823281487882"
+  },
+  {
+    "game": "\u84bc\u306e\u5f7c\u65b9\u306e\u30d5\u30a9\u30fc\u30ea\u30ba\u30e0",
+    "discord_id": "504764773167136768"
+  },
+  {
+    "game": "avalon-lords:-dawn-rises",
+    "discord_id": "504765148481716224"
+  },
+  {
+    "game": "blackshot:-mercenary-warfare-fps",
+    "discord_id": "504767731825115176"
+  },
+  {
+    "game": "blazblue:-continuum-shift-extend",
+    "discord_id": "504768003469082655"
+  },
+  {
+    "game": "blobby-volley-2",
+    "discord_id": "504768329651585035"
+  },
+  {
+    "game": "boundless",
+    "discord_id": "504768467724140544"
+  },
+  {
+    "game": "cabal-2",
+    "discord_id": "504769131615223838"
+  },
+  {
+    "game": "cataclysm:-dark-days-ahead",
+    "discord_id": "504785474901114920"
+  },
+  {
+    "game": "chaos-code--new-sign-of-catastrophe-",
+    "discord_id": "504788636525395998"
+  },
+  {
+    "game": "chronicle:-runescape-legends",
+    "discord_id": "504790398984781834"
+  },
+  {
+    "game": "combat-mission-black-sea",
+    "discord_id": "504801397825470464"
+  },
+  {
+    "game": "combat-mission-shock-force",
+    "discord_id": "504801527219617808"
+  },
+  {
+    "game": "command-&-conquer\u2122-red-alert-2-and-yuri\u2019s-revenge",
+    "discord_id": "504801959954612274"
+  },
+  {
+    "game": "command:-modern-air-/-naval-operations-woty",
+    "discord_id": "504802253413154846"
+  },
+  {
+    "game": "cosmic-dust-&-rust",
+    "discord_id": "504802641763762176"
+  },
+  {
+    "game": "cosmicbreak",
+    "discord_id": "504802978784346122"
+  },
+  {
+    "game": "cosmicbreak2",
+    "discord_id": "504803174880903188"
+  },
+  {
+    "game": "cosmicleague_us",
+    "discord_id": "504803374613528600"
+  },
+  {
+    "game": "creeper-world-2",
+    "discord_id": "504803589898633216"
+  },
+  {
+    "game": "carrier-command:-gaea-mission",
+    "discord_id": "504824168861270033"
+  },
+  {
+    "game": "demul-version-0.5.6.3",
+    "discord_id": "505116958086266920"
+  },
+  {
+    "game": "homeworld:-deserts-of-kharak",
+    "discord_id": "505117107097174062"
+  },
+  {
+    "game": "disgaea-pc",
+    "discord_id": "505123261546496000"
+  },
+  {
+    "game": "disney-infinity-3.0:-gold-edition",
+    "discord_id": "505123562756112405"
+  },
+  {
+    "game": "disney-infinity-2.0:-gold-edition",
+    "discord_id": "505123882232053810"
+  },
+  {
+    "game": "\u30c9\u30e9\u30b4\u30f3\u30af\u30a8\u30b9\u30c8\uff58\u3000\u3044\u306b\u3057\u3048\u306e\u7adc\u306e\u4f1d\u627f\u3000\u30aa\u30f3\u30e9\u30a4\u30f3",
+    "discord_id": "505125120960888877"
+  },
+  {
+    "game": "e.y.e:-divine-cybermancy",
+    "discord_id": "505129908562034716"
+  },
+  {
+    "game": "nquake",
+    "discord_id": "505131009583480844"
+  },
+  {
+    "game": "fable---the-lost-chapters",
+    "discord_id": "505133560391401472"
+  },
+  {
+    "game": "touhou-makuka-sai-~-fantastic-danmaku-festival",
+    "discord_id": "505133803258249253"
+  },
+  {
+    "game": "fceux-2.2.3",
+    "discord_id": "505134014034870283"
+  },
+  {
+    "game": "final-fantasy-xi",
+    "discord_id": "505134378138075144"
+  },
+  {
+    "game": "gahkthun-of-the-golden-lightning-steam-edition",
+    "discord_id": "505134723543203851"
+  },
+  {
+    "game": "garfield-kart",
+    "discord_id": "505134938354352128"
+  },
+  {
+    "game": "skydrift",
+    "discord_id": "505135507907543070"
+  },
+  {
+    "game": "grandia-ii-anniversary-edition",
+    "discord_id": "505135738719961143"
+  },
+  {
+    "game": "grid-autosport",
+    "discord_id": "505135989694398512"
+  },
+  {
+    "game": "the-fruit-of-grisaia",
+    "discord_id": "505136406109356032"
+  },
+  {
+    "game": "grisaia-phantom-trigger-vol.2",
+    "discord_id": "505136671138906132"
+  },
+  {
+    "game": "microsoft-halo-trial",
+    "discord_id": "505137576256995328"
+  },
+  {
+    "game": "heavy-weapon-deluxe",
+    "discord_id": "505137992642592815"
+  },
+  {
+    "game": "hyperdimension-neptunia-re;birth2-sisters-generation",
+    "discord_id": "505138235937259549"
+  },
+  {
+    "game": "hyperdimension-neptunia-re;birth3-v-generation",
+    "discord_id": "505138532700913671"
+  },
+  {
+    "game": "illarion",
+    "discord_id": "505138979264528414"
+  },
+  {
+    "game": "openitg",
+    "discord_id": "505139561995829278"
+  },
+  {
+    "game": "invisible,-inc.",
+    "discord_id": "505139793940709376"
+  },
+  {
+    "game": "ivac",
+    "discord_id": "505139956017266688"
+  },
+  {
+    "game": "just-cause",
+    "discord_id": "505140295931920404"
+  },
+  {
+    "game": "\u795e\u63a1\u308a\u30a2\u30eb\u30b1\u30df\u30fc\u30de\u30a4\u30b9\u30bf\u30fc",
+    "discord_id": "505140655501213696"
+  },
+  {
+    "game": "kara-no-shojo-2",
+    "discord_id": "505140834644000812"
+  },
+  {
+    "game": "knights-of-pen-and-paper-2",
+    "discord_id": "505141441388085298"
+  },
+  {
+    "game": "mtgarena",
+    "discord_id": "505142532297064468"
+  },
+  {
+    "game": "\u30de\u30b8\u30ab\u30eb\u30d0\u30c8\u30eb\u30a2\u30ea\u30fc\u30canext\u30fb\u5e7b\u60f3\u90f7\u7a7a\u9583\u59eb",
+    "discord_id": "505142782654939150"
+  },
+  {
+    "game": "native-instruments-maschine-2",
+    "discord_id": "505143168287899676"
+  },
+  {
+    "game": "melty-blood-actress-again-current-code",
+    "discord_id": "505143546244890691"
+  },
+  {
+    "game": "metal-gear-solid-2-substance",
+    "discord_id": "505146559835406352"
+  },
+  {
+    "game": "modlands-0.512a-version-0.512a",
+    "discord_id": "505147819255136297"
+  },
+  {
+    "game": "neo-aquarium---the-king-of-crustaceans--",
+    "discord_id": "505150034698960952"
+  },
+  {
+    "game": "offspring-fling!",
+    "discord_id": "505150420377665566"
+  },
+  {
+    "game": "olliolli2:-welcome-to-olliwood",
+    "discord_id": "505150905696649216"
+  },
+  {
+    "game": "organ-trail:-director's-cut",
+    "discord_id": "505151146722197504"
+  },
+  {
+    "game": "pangya-(ntreevsoft)",
+    "discord_id": "505151476427915283"
+  },
+  {
+    "game": "perpetuum",
+    "discord_id": "505151662151958530"
+  },
+  {
+    "game": "phantasy-star-online-blue-burst",
+    "discord_id": "505152925115482112"
+  },
+  {
+    "game": "phantom-breaker:-battle-grounds",
+    "discord_id": "505153286840516649"
+  },
+  {
+    "game": "project-hedra-v0.30",
+    "discord_id": "505153723941781523"
+  },
+  {
+    "game": "icons:-combat-arena",
+    "discord_id": "505187200011337738"
+  },
+  {
+    "game": "let-it-die",
+    "discord_id": "505256510453186560"
+  },
+  {
+    "game": "dirt-2",
+    "discord_id": "505486620468838447"
+  },
+  {
+    "game": "mabinogi",
+    "discord_id": "505489300545208340"
+  },
+  {
+    "game": "metal-gear-solid",
+    "discord_id": "505489991175110676"
+  },
+  {
+    "game": "mapleroyals",
+    "discord_id": "505490321174560783"
+  },
+  {
+    "game": "houdini-indie",
+    "discord_id": "505490535629324318"
+  },
+  {
+    "game": "infantry",
+    "discord_id": "505490756782391338"
+  },
+  {
+    "game": "helbreath-apocalypse",
+    "discord_id": "505490939008122940"
+  },
+  {
+    "game": "flash-flash-revolution",
+    "discord_id": "505491268755914772"
+  },
+  {
+    "game": "dwarf-fortress",
+    "discord_id": "505491707253620739"
+  },
+  {
+    "game": "quake-iii",
+    "discord_id": "505493023031951411"
+  },
+  {
+    "game": "king-of-fighters-xiii",
+    "discord_id": "505493399688839170"
+  },
+  {
+    "game": "nitronic-rush",
+    "discord_id": "505494175702188032"
+  },
+  {
+    "game": "pcsx2",
+    "discord_id": "505494914872770583"
+  },
+  {
+    "game": "phase-shift",
+    "discord_id": "505495076974231588"
+  },
+  {
+    "game": "planescape:-torment",
+    "discord_id": "505495215856025620"
+  },
+  {
+    "game": "q.u.b.e:-director's-cut",
+    "discord_id": "505496236548292648"
+  },
+  {
+    "game": "rebound-arena",
+    "discord_id": "505496835721396254"
+  },
+  {
+    "game": "regen",
+    "discord_id": "505496955095482387"
+  },
+  {
+    "game": "retroarch",
+    "discord_id": "505497615748694018"
+  },
+  {
+    "game": "return-to-castle-wolfenstein",
+    "discord_id": "505497930292133908"
+  },
+  {
+    "game": "darkfall-rise-of-agon",
+    "discord_id": "505498499043819520"
+  },
+  {
+    "game": "rosenkreuzstilette",
+    "discord_id": "505498725297422351"
+  },
+  {
+    "game": "s4-league",
+    "discord_id": "505498926443528202"
+  },
+  {
+    "game": "sc2vn---the-esports-visual-novel",
+    "discord_id": "505499045079416833"
+  },
+  {
+    "game": "shadow-complex-remastered",
+    "discord_id": "505500036214292545"
+  },
+  {
+    "game": "sonic-&-all-stars-racing-transformed",
+    "discord_id": "505500365404373004"
+  },
+  {
+    "game": "epsxe",
+    "discord_id": "505500770683322399"
+  },
+  {
+    "game": "soulworker",
+    "discord_id": "505501322947199006"
+  },
+  {
+    "game": "spyparty",
+    "discord_id": "505502210117861387"
+  },
+  {
+    "game": "super-smash-flash-exe-version-1.0",
+    "discord_id": "505502693113200640"
+  },
+  {
+    "game": "super-smash-flash-2-beta",
+    "discord_id": "505502904640208902"
+  },
+  {
+    "game": "the-floor-is-lava",
+    "discord_id": "505503697799872532"
+  },
+  {
+    "game": "the-last-remnant",
+    "discord_id": "505503999403884544"
+  },
+  {
+    "game": "the-simpsons-hit-&-run(tm)",
+    "discord_id": "505504523012276234"
+  },
+  {
+    "game": "thrillville:-off-the-rails",
+    "discord_id": "505504809437364244"
+  },
+  {
+    "game": "titanfall\u2122",
+    "discord_id": "505505165705609246"
+  },
+  {
+    "game": "tmnt-2---battle-nexus",
+    "discord_id": "505505520417767425"
+  },
+  {
+    "game": "tomb-raider-(vi):-the-angel-of-darkness",
+    "discord_id": "505505686705405962"
+  },
+  {
+    "game": "tomoyo-after-~it's-a-wonderful-life~-english-edition",
+    "discord_id": "505505972899414046"
+  },
+  {
+    "game": "touhou-10:-mountain-of-faith",
+    "discord_id": "505506583304732695"
+  },
+  {
+    "game": "touhou-10.5:-scarlet-weather-rhapsody",
+    "discord_id": "505506928596877352"
+  },
+  {
+    "game": "touhou-11:-subterranean-animism",
+    "discord_id": "505507257224658987"
+  },
+  {
+    "game": "touhou-12:-undefined-fantastic-object",
+    "discord_id": "505512749149716480"
+  },
+  {
+    "game": "touhou-12.3:-hisoutensoku",
+    "discord_id": "505513116302573578"
+  },
+  {
+    "game": "touhou-12.5:-double-spoiler",
+    "discord_id": "505513477645926430"
+  },
+  {
+    "game": "touhou-12.8:-great-fairy-wars",
+    "discord_id": "505513776607395868"
+  },
+  {
+    "game": "touhou-13:-ten-desires",
+    "discord_id": "505514028341395495"
+  },
+  {
+    "game": "touhou-13.5-hopeless-mascarade",
+    "discord_id": "505514368520290305"
+  },
+  {
+    "game": "touhou-14:-double-dealing-character",
+    "discord_id": "505514719885393960"
+  },
+  {
+    "game": "touhou-14.3:-impossible-spell-card",
+    "discord_id": "505515309726433328"
+  },
+  {
+    "game": "touhou-14.5:-urban-legend-in-limbo",
+    "discord_id": "505515610667614232"
+  },
+  {
+    "game": "touhou-15:-legacy-of-lunatic-kingdom",
+    "discord_id": "505515966289936393"
+  },
+  {
+    "game": "touhou-15.5:-antinomy-of-common-flowers",
+    "discord_id": "505516276115046415"
+  },
+  {
+    "game": "touhou-7:-perfect-cherry-blossom",
+    "discord_id": "505516832590004244"
+  },
+  {
+    "game": "touhou-7.5:-immaterial-and-missing-power",
+    "discord_id": "505517064601993254"
+  },
+  {
+    "game": "touhou-8:-imperishable-night",
+    "discord_id": "505517586327535646"
+  },
+  {
+    "game": "touhou-9:-phantasmagoria-of-flower-view",
+    "discord_id": "505517882873085952"
+  },
+  {
+    "game": "touhou-9.5:-shoot-the-bullet",
+    "discord_id": "505518102545432605"
+  },
+  {
+    "game": "touhou-puppet-dance-performance",
+    "discord_id": "505518371333472276"
+  },
+  {
+    "game": "touhou-sky-arena",
+    "discord_id": "505518699395022867"
+  },
+  {
+    "game": "the-legend-of-heroes:-trails-in-the-sky",
+    "discord_id": "505519194146603009"
+  },
+  {
+    "game": "the-legend-of-heroes:-trails-in-the-sky-sc",
+    "discord_id": "505519505091592222"
+  },
+  {
+    "game": "va-11-hall-a",
+    "discord_id": "505520072870199335"
+  },
+  {
+    "game": "visualboyadvance",
+    "discord_id": "505520145997889546"
+  },
+  {
+    "game": "warzone-2100",
+    "discord_id": "505520727521361941"
+  },
+  {
+    "game": "xonotic",
+    "discord_id": "505520839303757848"
+  },
+  {
+    "game": "ygopro",
+    "discord_id": "505520955649556490"
+  },
+  {
+    "game": "zsnesw",
+    "discord_id": "505521162042736657"
+  },
+  {
+    "game": "zwift",
+    "discord_id": "505523904517898240"
+  },
+  {
+    "game": "allods-online",
+    "discord_id": "505531160990973952"
+  },
+  {
+    "game": "murderous-pursuits",
+    "discord_id": "505801835613913098"
+  },
+  {
+    "game": "sword-art-online:-hollow-realization-deluxe-edition",
+    "discord_id": "506057315485483008"
+  },
+  {
+    "game": "metal-gear-survive",
+    "discord_id": "506873722745913355"
+  },
+  {
+    "game": "aim-lab",
+    "discord_id": "506950362461110273"
+  },
+  {
+    "game": "galactic-civilizations-iii",
+    "discord_id": "507674068498120714"
+  },
+  {
+    "game": "parkasaurus",
+    "discord_id": "508008071411400724"
+  },
+  {
+    "game": "visage",
+    "discord_id": "508057374875975682"
+  },
+  {
+    "game": "kynseed",
+    "discord_id": "510199020782747732"
+  },
+  {
+    "game": "thronebreaker",
+    "discord_id": "511619499053678668"
+  },
+  {
+    "game": "paladins-strike",
+    "discord_id": "512498684211232768"
+  },
+  {
+    "game": "fallout-76",
+    "discord_id": "512501896896970762"
+  },
+  {
+    "game": "battlefield\u2122-v",
+    "discord_id": "512699108809637890"
+  },
+  {
+    "game": "battle-chef-brigade",
+    "discord_id": "512789120234422301"
+  },
+  {
+    "game": "kingsway",
+    "discord_id": "512789343157485602"
+  },
+  {
+    "game": "zenzizenzic",
+    "discord_id": "512789427462995988"
+  },
+  {
+    "game": "realm-royale",
+    "discord_id": "518088627234930688"
+  },
+  {
+    "game": "zombsroyale.io",
+    "discord_id": "519338998791929866"
+  },
+  {
+    "game": "turok",
+    "discord_id": "519644267212177418"
+  },
+  {
+    "game": "turok-2:-seeds-of-evil",
+    "discord_id": "519644368735567873"
+  },
+  {
+    "game": "ashen",
+    "discord_id": "520453007578628124"
+  },
+  {
+    "game": "hades",
+    "discord_id": "520462578061803588"
+  },
+  {
+    "game": "nitro",
+    "discord_id": "521842831262875670"
+  },
+  {
+    "game": "atlas",
+    "discord_id": "526489929631531009"
+  },
+  {
+    "game": "metro-exodus",
+    "discord_id": "530454325214969866"
+  },
+  {
+    "game": "sea-of-thieves",
+    "discord_id": "535371564850479134"
+  },
+  {
+    "game": "lego-harry-potter:-years-5-7",
+    "discord_id": "535384357536399404"
+  },
+  {
+    "game": "subnautica:-below-zero",
+    "discord_id": "535869836748783616"
+  },
+  {
+    "game": "apex-legends",
+    "discord_id": "542075586886107149"
+  },
+  {
+    "game": "farming-simulator-19",
+    "discord_id": "542474758835535872"
+  },
+  {
+    "game": "warhammer:-vermintide-2",
+    "discord_id": "542475118396309528"
+  },
+  {
+    "game": "anthem\u2122",
+    "discord_id": "546175179542364160"
+  },
+  {
+    "game": "spellbreak",
+    "discord_id": "549512435585908756"
+  }
+]

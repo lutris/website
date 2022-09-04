@@ -250,6 +250,13 @@ class Game(models.Model):
         "self", null=True, blank=True, on_delete=models.CASCADE
     )
 
+    # Adding Discord App ID for Rich Presence Client
+    discord_id = models.CharField(
+        max_length=18,
+        default="",
+        blank=True,
+    )
+
     objects = GameManager()
 
     class Meta:
