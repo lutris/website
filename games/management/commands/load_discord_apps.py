@@ -45,7 +45,7 @@ class Command(BaseCommand):
         game = qs.get()
         # Skip known ids
         if game.discord_id == discord_id:
-            self.stdout.write(self.style.INFO(f"Skipping Known ID for {game}"))
+            self.stdout.write(f"Skipping Known ID for {game}")
             return
         # Update and save
         game.discord_id = discord_id
