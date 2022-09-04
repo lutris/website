@@ -61,3 +61,7 @@ syncdb:
 	docker cp latest.tar lutrisdb:/backups
 	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
 	rm latest.tar
+
+discord:
+	# Load Discord App IDS to database
+	./manage.py load_discord_apps discord-app-ids.json
