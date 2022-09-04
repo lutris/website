@@ -135,7 +135,8 @@ class GameSerializer(serializers.ModelSerializer):
         model = models.Game
         fields = (
             'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
-            'platforms', 'provider_games', 'aliases', 'id'
+            'platforms', 'provider_games', 'aliases', 'id',
+            'discord_id',
         )
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
