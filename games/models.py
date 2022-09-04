@@ -254,6 +254,7 @@ class Game(models.Model):
     discord_id = models.CharField(
         max_length=18,
         default="",
+        null=True,
         blank=True,
     )
 
