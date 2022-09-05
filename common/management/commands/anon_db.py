@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django_openid_auth.models import UserOpenID
 from rest_framework.authtoken.models import Token
+from axes.models import AccessAttempt, AccessLog
 from reversion.models import Revision
 from games.models import (
     Installer,
@@ -36,6 +37,12 @@ class Command(BaseCommand):
 
         res = LogEntry.objects.all().delete()
         print("Deleted %s log entries" % res[0])
+
+        res = AccessLog.objects.all().delete()
+        print("Deleted %s access log entries" % res[0])
+
+        res = AccessAttempt.objects.all().delete()
+        print("Deleted %s access attempt entries" % res[0])
 
     def handle(self, *args, **kwargs):
         if not settings.DEBUG:
