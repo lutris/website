@@ -125,5 +125,8 @@ class EmailConfirmationToken(models.Model):
                 email_confirmed=False,
                 email=self.email
             ).first()
+        if not user:
+            LOGGER.error("Couldn't find user with email %s", self.email)
+            return
         user.email_confirmed = True
         user.save()
