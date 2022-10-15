@@ -80,6 +80,22 @@
           A deb package is available from the release page on Github:
           <a href="https://github.com/lutris/lutris/releases">https://github.com/lutris/lutris/releases</a>
         </p>
+        <p>
+          <strong>Debian and Ubuntu based distros</strong>
+          <p>For users of Debian and Ubuntu based distributions, you can also
+          install and update the <code>.deb</code> package from the
+          GitHub release page using <a
+          href="https://github.com/wimpysworld/deb-get">deb-get</a>.</p>
+          <p>First install <code>deb-get</code> using these commands in a
+          terminal:</p>
+          <pre><code>sudo apt install curl
+          curl -sL https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get | sudo -E bash -s install deb-get</code></pre>
+          <p>Then install Lutris using the following command in terminal:</p>
+          <pre><code>deb-get install lutris</code></pre>
+          <p>Once Lutris is installed it can be kept up-to-date using:</p>
+          <pre><code>deb-get update
+          deb-get upgrade</code></pre>
+
       </li>
       <li>
         <ul>
