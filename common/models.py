@@ -69,3 +69,14 @@ class Upload(models.Model):
         else:
             self.move_to_local_hosting()
         self.delete()
+
+
+class KeyValueStore(models.Model):
+    """Generic key value store"""
+    key = models.CharField(max_length=64)
+    value = models.CharField(max_length=1024, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.key

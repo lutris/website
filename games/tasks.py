@@ -5,32 +5,48 @@ from reversion.models import Version, Revision
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from games import models
+from common.models import KeyValueStore
 
 LOGGER = get_task_logger(__name__)
+
+def save_action_log(key, value):
+    """Save the results of a task as a KeyValueStore object"""
+    log_object,_created = KeyValueStore.objects.create(key=key)
+    log_object.value = str(value)
+    log_object.save()
 
 
 @task
 def delete_unchanged_forks():
     """Periodically delete forked installers that haven't received any changes"""
+    installers_deleted = 0
     for installer in models.Installer.objects.abandoned():
         installer.delete()
+        installers_deleted += 1
+    save_action_log("delete_unchanged_forks", installers_deleted)
 
 
 @task
 def clear_orphan_versions():
     """Deletes versions that are no longer associated with an installer"""
     content_type = ContentType.objects.get_for_model(models.Installer)
+    versions_deleted = 0
     for version in Version.objects.filter(content_type=content_type):
         if version.object:
             continue
         LOGGER.warning("Deleting orphan version %s", version)
         version.delete()
+        versions_deleted += 1
+    save_action_log("clear_orphan_versions", versions_deleted)
 
 
 @task
 def clear_orphan_revisions():
     """Clear revisions that are no longer attached to any object"""
-    Revision.objects.filter(version__isnull=True).delete()
+    result = Revision.objects.filter(version__isnull=True).delete()
+    save_action_log("clear_orphan_revisions", result)
+
+
 
 
 @task
