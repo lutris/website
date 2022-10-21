@@ -9,7 +9,7 @@ from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
 from accounts.models import User
 from accounts import spam_control
-from common.util import slugify
+from common.util import slugify, save_action_log
 
 LOGGER = logging.getLogger()
 
@@ -62,5 +62,7 @@ def daily_mod_mail():
 @task
 def clear_spammers():
     """Delete spam accounts"""
-    spam_control.clear_users(spam_control.get_no_games_with_website())
-    spam_control.clear_users(spam_control.get_spam_avatar_users())
+    spam_website_deleted = spam_control.clear_users(spam_control.get_no_games_with_website())
+    save_action_log("spam_website_deleted", spam_website_deleted)
+    spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
+    save_action_log("spam_avatar_deleted", spam_avatar_deleted)

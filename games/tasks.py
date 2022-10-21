@@ -5,15 +5,10 @@ from reversion.models import Version, Revision
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from games import models
-from common.models import KeyValueStore
+from common.util import save_action_log
 
 LOGGER = get_task_logger(__name__)
 
-def save_action_log(key, value):
-    """Save the results of a task as a KeyValueStore object"""
-    log_object = KeyValueStore.objects.create(key=key)
-    log_object.value = str(value)
-    log_object.save()
 
 
 @task

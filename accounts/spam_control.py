@@ -32,6 +32,5 @@ def clear_users(users):
     """Delete a list of users"""
     cleared_users = len(users)
     for user in users:
-        print("Deleting %s (website: %s)" % (user, user.website))
         user.delete()
-    print("Cleared %d users" % cleared_users)
+    return cleared_users

@@ -7,6 +7,9 @@ from transliterate import translit
 from PIL import Image
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
+
+from common.models import KeyValueStore
+
 SLUG_MAX_LENGTH = 50
 
 
@@ -161,3 +164,10 @@ def crop_banner(img_path, dest_path, banner_size=(184, 69)):
     image = image.crop(box)
     image.mode = "RGB"
     image.save(dest_path, "JPEG")
+
+
+def save_action_log(key, value):
+    """Save the results of a task as a KeyValueStore object"""
+    log_object = KeyValueStore.objects.create(key=key)
+    log_object.value = str(value)
+    log_object.save()
