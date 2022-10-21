@@ -17,6 +17,7 @@ def load_gog_games():
     file_path = os.path.join(settings.GOG_CACHE_PATH, "gogdb.json")
     if not os.path.exists(file_path):
         LOGGER.error("No file present at %s", file_path)
+        save_action_log("load_gog_games", "NO FILE")
         return None
     stats = load_games_from_gogdb(file_path)
     save_action_log("load_gog_games", stats)
