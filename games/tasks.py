@@ -5,7 +5,7 @@ from reversion.models import Version, Revision
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from games import models
-from common.util import save_action_log
+from common.models import save_action_log
 
 LOGGER = get_task_logger(__name__)
 

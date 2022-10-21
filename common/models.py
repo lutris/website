@@ -80,3 +80,10 @@ class KeyValueStore(models.Model):
 
     def __str__(self):
         return self.key
+
+
+def save_action_log(key, value):
+    """Save the results of a task as a KeyValueStore object"""
+    log_object = KeyValueStore.objects.create(key=key)
+    log_object.value = str(value)
+    log_object.save()

@@ -9,7 +9,8 @@ from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
 from accounts.models import User
 from accounts import spam_control
-from common.util import slugify, save_action_log
+from common.util import slugify
+from common.models import save_action_log
 
 LOGGER = logging.getLogger()
 
