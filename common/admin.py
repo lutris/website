@@ -12,6 +12,12 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
 
 
+class KeyValueStoreAdmin(admin.ModelAdmin):
+    """Admin configuration for News"""
+    list_display = ('key', 'value', 'created_at', 'updated_at')
+    search_fields = ('key', 'value')
+
+
 def validate_upload(_modeladmin, _request, queryset):
     """Admin action to validate uploads in a queryset"""
     for upload in queryset.all():
@@ -30,3 +36,4 @@ class UploadAdmin(admin.ModelAdmin):
 
 admin.site.register(models.News, NewsAdmin)
 admin.site.register(models.Upload, UploadAdmin)
+admin.site.register(models.KeyValueStore, KeyValueStoreAdmin)
