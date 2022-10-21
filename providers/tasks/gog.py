@@ -5,7 +5,7 @@ from celery.utils.log import get_task_logger
 from django.conf import settings
 
 from providers.gog import load_games_from_gogdb, match_from_gogdb
-
+from common.models import save_action_log
 
 
 LOGGER = get_task_logger(__name__)
@@ -18,10 +18,14 @@ def load_gog_games():
     if not os.path.exists(file_path):
         LOGGER.error("No file present at %s", file_path)
         return None
-    return load_games_from_gogdb(file_path)
+    stats = load_games_from_gogdb(file_path)
+    save_action_log("load_gog_games", stats)
+    return stats
 
 
 @task
 def match_gog_games():
     """Match GOG games with Lutris games"""
-    return match_from_gogdb(create_missing=True)
+    stats = match_from_gogdb(create_missing=True)
+    save_action_log("match_gog_games", stats)
+    return stats
