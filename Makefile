@@ -6,6 +6,9 @@ watch:
 run:
 	./manage.py runserver 0.0.0.0:8000
 
+deps:
+	pip install -r config/requirements/devel.pip --exists-action=w
+
 db:
 	./manage.py migrate
 	./manage.py loaddata accounts/fixtures/superadmin.json
