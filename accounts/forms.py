@@ -73,8 +73,8 @@ class RegistrationForm(forms.ModelForm):
         if commit:
             try:
                 user.save()
-            except IntegrityError:
-                LOGGER.error("Returning user %s without saving.", user)
+            except IntegrityError as ex:
+                LOGGER.error("Integrity error while saving %s: %s", user, ex)
                 return user
         Token.objects.create(user=user)
         return user
