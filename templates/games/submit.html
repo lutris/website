@@ -23,6 +23,12 @@
         Suggest changes to '{{ game.name }}'
         {% endif %}
       </h1>
+      {% if not game %}
+      <p class="warning">
+        Please check the spelling of the game you're adding. Do not use an abbreviated version of a name.
+        Submissions that we judge have been sent in bad faith can get your Lutris account deleted.
+      </p>
+      {% endif %}
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}

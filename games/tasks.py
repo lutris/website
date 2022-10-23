@@ -39,9 +39,7 @@ def clear_orphan_versions():
 def clear_orphan_revisions():
     """Clear revisions that are no longer attached to any object"""
     result = Revision.objects.filter(version__isnull=True).delete()
-    save_action_log("clear_orphan_revisions", result)
-
-
+    save_action_log("clear_orphan_revisions", result[0])
 
 
 @task
