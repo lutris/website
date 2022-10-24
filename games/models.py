@@ -1411,3 +1411,9 @@ class Quirk(models.Model):
     """Model to store quirks and caveats for ratings"""
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name="quirks")
     value = models.CharField(max_length=256)
+
+
+class ShaderCache(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="shaders")
+    updated_at = models.DateTimeField(auto_now=True)
+    url = models.CharField(max_length=256)

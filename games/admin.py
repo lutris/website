@@ -171,6 +171,13 @@ class GameAliasAdmin(admin.TabularInline):
     model = models.GameAlias
 
 
+class ShaderCacheAdmin(admin.TabularInline):
+    model = models.ShaderCache
+    readonly_fields = (
+        "updated_at",
+    )
+
+
 class GameAdminForm(forms.AutoSlugForm):
     class Meta:
         model = models.Game
@@ -203,7 +210,8 @@ class GameAdmin(admin.ModelAdmin):
     inlines = [
         GameMetadataInline,
         GameLinkAdmin,
-        GameAliasAdmin
+        GameAliasAdmin,
+        ShaderCacheAdmin
     ]
     actions = ['reject_user_suggested_changes']
 
