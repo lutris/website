@@ -39,6 +39,12 @@ class GameAliasSerializer(serializers.ModelSerializer):
         fields = ('slug', 'name')
 
 
+class ShaderCacheSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.ShaderCache
+        fields = ('url', 'updated_at')
+
 class InstallerSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
@@ -134,14 +140,14 @@ class GameSerializer(serializers.ModelSerializer):
     provider_games = ProviderGameSerializer(many=True)
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
+    shaders = ShaderCacheSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
-            'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
-            'platforms', 'provider_games', 'aliases', 'id',
-            'discord_id',
+            'id', 'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
+            'platforms', 'provider_games', 'aliases', 'shaders', 'discord_id',
         )
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
@@ -162,6 +168,7 @@ class GameDetailSerializer(GameSerializer):
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
     installers = InstallerWithRevisionsSerializer(many=True)
+    shaders = ShaderCacheSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
@@ -171,7 +178,7 @@ class GameDetailSerializer(GameSerializer):
             'platforms', 'genres', 'aliases',
             'description', 'banner_url', 'icon_url', 'coverart', 'is_public',
             'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
-            'user_count', 'installers',
+            'user_count', 'installers', 'shaders',
             'discord_id',
         )
 
