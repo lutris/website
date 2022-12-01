@@ -5,7 +5,7 @@ from reversion.models import Version, Revision
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from games import models
-from common.models import save_action_log
+from common.models import KeyValueStore, save_action_log
 
 LOGGER = get_task_logger(__name__)
 
@@ -40,6 +40,11 @@ def clear_orphan_revisions():
     """Clear revisions that are no longer attached to any object"""
     result = Revision.objects.filter(version__isnull=True).delete()
     save_action_log("clear_orphan_revisions", result[0])
+
+
+@task
+def clean_action_log():
+    KeyValueStore.objects.filter(value=0).delete()
 
 
 @task
