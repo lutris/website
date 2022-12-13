@@ -254,6 +254,18 @@ CELERYBEAT_SCHEDULE = {
         'task': 'providers.tasks.match_steam_games',
         'schedule': crontab(day_of_week=1, hour=3, minute=1)
     },
+    'load-igdb-genres': {
+        'task': 'providers.tasks.load_igdb_genres',
+        'schedule': crontab(day_of_week=2, hour=3,minute=1)
+    },
+    'load-igdb-platforms': {
+        'task': 'providers.tasks.load_igdb_platforms',
+        'schedule': crontab(day_of_week=2, hour=3, minute=5)
+    },
+    'load-igdb-games': {
+        'task': 'providers.tasks.load_igdb_games',
+        'schedule': crontab(day_of_week=2, hour=3,minute=8)
+    },
 }
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")

@@ -16,6 +16,7 @@ from games.models import Game
 from platforms.models import Platform
 from providers.igdb import IGDBClient, GAME_CATEGORIES
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
+from common.models import save_action_log
 
 LOGGER = get_task_logger(__name__)
 
@@ -62,7 +63,13 @@ def _igdb_loader(resource_name, model):
 @task
 def load_igdb_games():
     """Load all games from IGDB"""
+    start = datetime.now()
+    save_action_log("igdb_load_games_started_at", str(start))
     _igdb_loader("games", ProviderGame)
+    end = datetime.now()
+    save_action_log("igdb_load_games_ended_at", str(end))
+    duration = end - start
+    save_action_log("igdb_load_games_duration", duration.seconds)
 
 
 @task
