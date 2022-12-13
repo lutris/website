@@ -992,12 +992,17 @@ class Installer(BaseInstaller):
     @property
     def revisions(self):
         """Return the revisions for this installer"""
-        return [
-            InstallerRevision(version)
-            for version in Version.objects.filter(
-                content_type__model="installer", object_id=self.id
-            )
-        ]
+        revs = []
+        for version in Version.objects.filter(
+            content_type__model="installer", object_id=self.id
+        ):
+            try:
+                rev = InstallerRevision(version)
+            except Game.DoesNotExist:
+                continue
+            else:
+                revs.append(rev)
+        return revs
 
     @property
     def latest_version(self):
