@@ -130,7 +130,7 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
         """Model and field definitions"""
         model = models.Installer
         fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
-                  'notes', 'created_at', 'updated_at', 'published', 'rating',
+                  'notes', 'created_at', 'updated_at', 'published', 'is_playable',
                   'script', 'content', 'revisions')
 
 
