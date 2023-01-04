@@ -270,6 +270,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'providers.tasks.load_igdb_games',
         'schedule': crontab(day_of_week=2, hour=3, minute=8)
     },
+    'match-igdb-games': {
+        'task': 'providers.tasks.match_igdb_games',
+        'schedule': crontab(day_of_week=2, hour=4, minute=1)
+    },
 }
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")

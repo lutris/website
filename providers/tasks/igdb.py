@@ -12,11 +12,13 @@ from django.utils.timezone import make_aware
 from celery import task
 from celery.utils.log import get_task_logger
 from common.util import slugify
+from common.models import save_action_log
+
 from games.models import Game
 from platforms.models import Platform
-from providers.igdb import IGDBClient, GAME_CATEGORIES
+from providers.igdb import IGDBClient
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
-from common.models import save_action_log
+
 
 LOGGER = get_task_logger(__name__)
 
@@ -98,15 +100,17 @@ def match_igdb_games():
     }
     for igdb_game in ProviderGame.objects.filter(provider__name="igdb"):
         igdb_slug = igdb_game.metadata["slug"]
+        if not igdb_slug:
+            LOGGER.error("Missing slug for %s", igdb_game.metadata)
+            continue
         # Only match main games
         if igdb_game.metadata["category"] != 0:
             continue
         if igdb_game.games.count():
             # Game is already matched
             continue
-        if not igdb_slug:
-            LOGGER.error("Missing slug for %s", igdb_game.metadata)
-            continue
+
+        # Match by slug
         try:
             lutris_game = Game.objects.get(slug=igdb_slug)
             LOGGER.info("Updating Lutris game %s", igdb_game.name)
@@ -116,18 +120,25 @@ def match_igdb_games():
                 name=igdb_game.name,
                 slug=igdb_slug,
             )
+        # Link IGDB game
+        lutris_game.provider_games.add(igdb_game)
+
+        # Set year
         if not lutris_game.year and igdb_game.metadata.get("first_release_date"):
             lutris_game.year = datetime.fromtimestamp(igdb_game.metadata["first_release_date"]).year
 
+        # Set description
         if not lutris_game.description and igdb_game.metadata.get("summary"):
             lutris_game.description = igdb_game.metadata.get("summary")
+
+        # Set platform
         for platform_id in igdb_game.metadata.get("platforms", []):
             try:
                 lutris_game.platforms.add(platforms[platform_id])
             except KeyError:
-                LOGGER.warning("No platform with ID %s", platform_id)
+                LOGGER.warning("No IGDB platform with ID %s", platform_id)
                 continue
-        lutris_game.provider_games.add(igdb_game)
+
         lutris_game.is_public = True
         lutris_game.save()
 
