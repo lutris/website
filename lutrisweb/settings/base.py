@@ -238,6 +238,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'games.tasks.auto_process_installers',
         'schedule': crontab(minute=5)
     },
+    'clean_action_log': {
+        'task': 'games.tasks.clean_action_log',
+        'schedule': crontab(minute=6)
+    },
     'load-gog-games': {
         'task': 'providers.tasks.load_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=1)
@@ -264,7 +268,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'load-igdb-games': {
         'task': 'providers.tasks.load_igdb_games',
-        'schedule': crontab(day_of_week=2, hour=3,minute=8)
+        'schedule': crontab(day_of_week=2, hour=3, minute=8)
     },
 }
 

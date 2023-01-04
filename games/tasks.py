@@ -44,7 +44,15 @@ def clear_orphan_revisions():
 
 @task
 def clean_action_log():
-    KeyValueStore.objects.filter(value=0).delete()
+    """Remove zero value entries from log"""
+    KeyValueStore.objects.filter(
+        Q(key="clear_orphan_versions")
+        | Q(key="clear_orphan_revisions")
+        | Q(key="delete_unchanged_forks")
+        | Q(key="spam_avatar_deleted")
+        | Q(key="spam_website_deleted"),
+        value=0
+    ).delete()
 
 
 @task
