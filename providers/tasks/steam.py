@@ -44,13 +44,24 @@ def load_steam_games():
 
 @task
 def match_steam_games():
-    matched_games = 0
-    for game in models.ProviderGame.objects.filter(provider__name="steam"):
-        existing_games = Game.objects.filter(steamid=game.slug)
+    """Match Steam provider games with those imported from user libraries"""
+    stats = {
+        "matched": 0,
+        "same_name_exists": 0,
+        "ambiguous_name": 0,
+    }
+    for steam_game in models.ProviderGame.objects.filter(provider__name="steam"):
+        existing_games = Game.objects.filter(steamid=steam_game.slug)
         for lutris_game in existing_games:
-            lutris_game.provider_games.add(game)
+            lutris_game.provider_games.add(steam_game)
             if not lutris_game.is_public:
                 lutris_game.is_public = True
-                matched_games += 1
+                stats["matched"] += 1
                 lutris_game.save()
-    save_action_log("match_steam_games", matched_games)
+        similar_name_count = Game.objects.filter(name=steam_game.name).count()
+        if similar_name_count == 1:
+            stats["same_name_exists"] += 1
+        if similar_name_count > 1:
+            stats["ambiguous_name"] += 1
+    save_action_log("match_steam_games", stats)
+    return stats

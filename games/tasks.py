@@ -1,11 +1,13 @@
 """Celery tasks for account related jobs"""
-from celery.utils.log import get_task_logger
+from collections import defaultdict
 from celery import task
-from reversion.models import Version, Revision
-from django.db.models import Q
+from celery.utils.log import get_task_logger
 from django.contrib.contenttypes.models import ContentType
-from games import models
+from django.db.models import Q
+from reversion.models import Revision, Version
+
 from common.models import KeyValueStore, save_action_log
+from games import models
 
 LOGGER = get_task_logger(__name__)
 
@@ -109,3 +111,21 @@ def auto_process_installers():
             LOGGER.info("Deleting garbage fork %s", submission)
             submission.delete()
             continue
+
+
+def process_new_steam_installers():
+    """Auto publish Steam installers"""
+    stats = defaultdict(int)
+    for installer in models.Installer.objects.new():
+        if installer.runner.slug != "steam":
+            stats["non-steam"] += 1
+            continue
+        stats["steam"] += 1
+        script = installer.raw_script
+        if script == {'game': {'appid': installer.game.steamid}}:
+            installer.published = True
+            installer.save()
+            stats["published"] += 1
+        print(script)
+        print(installer.game.provider_games.filter(provider__name="steam"))
+    return stats
