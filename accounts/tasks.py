@@ -22,14 +22,15 @@ def sync_steam_library(user_id):
     steamid = user.steamid
     library = games.models.GameLibrary.objects.get(user=user)
     steam_games = games.util.steam.steam_sync(steamid)
+    game_count = 0
     if not steam_games:
         LOGGER.info("Steam user %s has no steam games", user.username)
         return
     for game in steam_games:
-        LOGGER.info("Adding %s to %s's library", game['name'], user.username)
         if not game['img_icon_url']:
             LOGGER.info("Game %s has no icon", game['name'])
             continue
+        game_count += 1
         try:
             steam_game = games.models.Game.objects.get(steamid=game['appid'])
         except games.models.Game.MultipleObjectsReturned:
@@ -52,6 +53,7 @@ def sync_steam_library(user_id):
         except IntegrityError:
             # Game somehow already added.
             pass
+    LOGGER.info("Added %s Steam games to %s's library", game_count, user.username)
 
 
 @task
