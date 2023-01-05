@@ -29,7 +29,7 @@ class ProviderResource(models.Model):
     @classmethod
     def create_from_igdb_api(cls, provider, api_payload):
         """Create an instance from an IGDB payload"""
-        resource, created = cls.objects.get_or_create(
+        resource, _created = cls.objects.get_or_create(
             provider=provider,
             slug=api_payload["slug"]
         )
@@ -38,7 +38,6 @@ class ProviderResource(models.Model):
         resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
-        LOGGER.info("%s %s", "Created" if created else "Updated", resource.name)
 
 
 class ProviderGame(ProviderResource):
@@ -115,7 +114,6 @@ class ProviderCover(ProviderResource):
         try:
             resource.game = api_payload["game"]
         except KeyError:
-            LOGGER.error("Missing game in API payload: %s", api_payload)
             return
         resource.metadata = api_payload
         resource.save()

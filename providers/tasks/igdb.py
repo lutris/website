@@ -197,7 +197,6 @@ def sync_igdb_coverart(force_update=False):
             relpath
         )
         lutris_game.save()
-        LOGGER.info("Saved cover for %s", lutris_game)
 
 
 @task
