@@ -173,30 +173,45 @@ def sync_igdb_coverart(force_update=False):
     force_update redownloads coverarts for every game even if one is already present.
     """
     cover_format = "cover_big"
+    stats = {
+        "existing_file": 0,
+        "existing_lutris_coverart": 0,
+        "missing_igdb_game": 0,
+        "multiple_igdb_games": 0,
+        "missing_lutris_game": 0,
+        "coverart_saved": 0,
+    }
     for igdb_cover in ProviderCover.objects.filter(provider__name="igdb"):
         relpath = f"{cover_format}/{igdb_cover.image_id}.jpg"
         igdb_path = os.path.join(settings.MEDIA_ROOT, "igdb", relpath)
-        if os.path.exists(igdb_path):
+        if os.path.exists(igdb_path) and not force_update:
+            stats["existing_file"] += 1
             continue
         try:
             igdb_game = ProviderGame.objects.get(provider__name="igdb", internal_id=igdb_cover.game)
         except ProviderGame.DoesNotExist:
+            stats["missing_igdb_game"] += 1
             continue
         except ProviderGame.MultipleObjectsReturned:
+            stats["multiple_igdb_games"] += 1
             LOGGER.warning("Multiple games for %s", igdb_cover.game)
             igdb_game = ProviderGame.objects.filter(provider__name="igdb", internal_id=igdb_cover.game).first()
         try:
             lutris_game = Game.objects.get(provider_games=igdb_game)
         except Game.DoesNotExist:
             LOGGER.warning("No Lutris game with ID %s", igdb_cover.game)
+            stats["missing_lutris_game"] += 1
             continue
         if lutris_game.coverart and not force_update:
+            stats["existing_lutris_coverart"] += 1
             continue
         lutris_game.coverart = ContentFile(
             get_igdb_cover(igdb_cover.image_id),
             relpath
         )
         lutris_game.save()
+        stats["coverart_saved"] += 1
+    return stats
 
 
 @task
