@@ -47,12 +47,15 @@ def list_change_submissions_view(request, game_id=None):
             change_suggestion.delete()
             obsolete_changes += 1
             continue
-        else:
-            change_suggestion.diff = diff
-            change_suggestions.append(change_suggestion)
+        change_suggestion.diff = diff
+        change_suggestions.append(change_suggestion)
 
         # Populate meta information
-        meta = models.GameSubmission.objects.get(game=change_suggestion)
+        try:
+            meta = models.GameSubmission.objects.get(game=change_suggestion)
+        except models.GameSubmission.DoesNotExist:
+            continue
+
         change_suggestion.author = meta.user
         change_suggestion.reason = meta.reason
 
