@@ -270,13 +270,17 @@ CELERYBEAT_SCHEDULE = {
         'task': 'providers.tasks.load_igdb_games',
         'schedule': crontab(day_of_week=2, hour=3, minute=8)
     },
+    'match-igdb-games': {
+        'task': 'providers.tasks.match_igdb_games',
+        'schedule': crontab(day_of_week=2, hour=4, minute=1)
+    },
     'load-igdb-covers': {
         'task': 'providers.tasks.load_igdb_covers',
         'schedule': crontab(day_of_week=2, hour=4, minute=30)
     },
-    'match-igdb-games': {
-        'task': 'providers.tasks.match_igdb_games',
-        'schedule': crontab(day_of_week=2, hour=4, minute=1)
+    'sync-igdb-coverart': {
+        'task': 'providers.tasks.sync_igdb_coverart',
+        'schedule': crontab(day_of_week=2, hour=5, minute=30)
     },
 }
 
