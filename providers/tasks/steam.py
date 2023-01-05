@@ -54,9 +54,9 @@ def match_steam_games():
         existing_games = Game.objects.filter(steamid=steam_game.slug)
         for lutris_game in existing_games:
             lutris_game.provider_games.add(steam_game)
+            stats["matched"] += 1
             if not lutris_game.is_public:
                 lutris_game.is_public = True
-                stats["matched"] += 1
                 lutris_game.save()
         similar_name_count = Game.objects.filter(name=steam_game.name).count()
         if similar_name_count == 1:

@@ -1,5 +1,5 @@
 """Installer related API views"""
-# pylint: disable=too-many-ancestors,too-few-public-methods,raise-missing-from
+# pylint: disable=too-many-ancestors,too-few-public-methods
 from __future__ import absolute_import
 
 import logging

@@ -544,8 +544,8 @@ class Game(models.Model):
                 crop="center",
                 format="PNG"
             )
-        except AttributeError:
-            LOGGER.error("Impossible to generate icon thumbnail for %s", self)
+        except AttributeError as ex:
+            LOGGER.error("Icon failed for %s: %s", self, ex)
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
@@ -560,8 +560,8 @@ class Game(models.Model):
                 settings.BANNER_SIZE,
                 crop="center"
             )
-        except AttributeError:
-            LOGGER.error("Impossible to generate banner thumbnail for %s", self)
+        except AttributeError as ex:
+            LOGGER.error("Banner failed for %s: %s", self, ex)
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
