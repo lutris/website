@@ -209,14 +209,20 @@ class GameSubmissionsView(generics.ListAPIView):
     """List all game submissions"""
     serializer_class = serializers.GameSubmissionSerializer
     permission_classes = (permissions.IsAdminUser, )
+    get_new_submissions = True
 
     def get_queryset(self):
         return models.GameSubmission.objects.filter(
             accepted_at__isnull=True,
-            game__change_for__isnull=True,
+            game__change_for__isnull=self.get_new_submissions,
         ).prefetch_related('game', 'user', 'game__provider_games').order_by(
             '-created_at'
         )
+
+class GameChangesView(GameSubmissionsView):
+    """List all game changes"""
+    get_new_submissions = False
+
 
 class GameSubmissionAcceptView(APIView):
     """Accept a user submission"""

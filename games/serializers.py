@@ -134,6 +134,15 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
                   'script', 'content', 'revisions')
 
 
+class GameChangeSerializer(serializers.ModelSerializer):
+    """Another Serializer for Games since DRF doesn't support recursive relationships"""
+    class Meta:
+        """Model and field definitions"""
+        model = models.Game
+        fields = (
+            'id', 'slug'
+        )
+
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
 
@@ -141,13 +150,14 @@ class GameSerializer(serializers.ModelSerializer):
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
     shaders = ShaderCacheSerializer(many=True)
+    change_for = GameChangeSerializer()
 
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
             'id', 'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
-            'platforms', 'provider_games', 'aliases', 'shaders', 'discord_id',
+            'platforms', 'provider_games', 'aliases', 'shaders', 'discord_id', 'change_for'
         )
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
