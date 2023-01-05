@@ -169,11 +169,11 @@ class GameStatsView(APIView):
         ).count()
         statistics["pending_game_submissions"] = models.GameSubmission.objects.filter(
             accepted_at__isnull=True,
-            game__change_for__isnull=False,
-        ).count()
-        statistics["pending_game_change"] = models.GameSubmission.objects.filter(
-            accepted_at__isnull=True,
             game__change_for__isnull=True,
+        ).count()
+        statistics["pending_game_changes"] = models.GameSubmission.objects.filter(
+            accepted_at__isnull=True,
+            game__change_for__isnull=False,
         ).count()
         statistics["installers"] = models.Installer.objects.all().count()
         statistics["published_installers"] = models.Installer.objects.published().count()
