@@ -158,12 +158,19 @@ class GameStatsView(APIView):
     def get(_request, _format=None):
         """Return game statistics"""
         statistics = {}
-        statistics["game_submissions"] = models.GameSubmission.objects.filter(
-            accepted_at__isnull=True
-        ).count()
+
         statistics["games"] = models.Game.objects.all().count()
         statistics["published_games"] = models.Game.objects.filter(is_public=True).count()
         statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
+
+        statistics["game_submissions"] = models.GameSubmission.objects.all().count()
+        statistics["accepted_game_submissions"] = models.GameSubmission.objects.filter(
+            accepted_at__isnull=False
+        ).count()
+        statistics["pending_game_submissions"] = models.GameSubmission.objects.filter(
+            accepted_at__isnull=True
+        ).count()
+
         statistics["installers"] = models.Installer.objects.all().count()
         statistics["published_installers"] = models.Installer.objects.published().count()
         statistics["unpublished_installers"] = models.Installer.objects.unpublished().count()
