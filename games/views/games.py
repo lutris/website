@@ -162,7 +162,7 @@ class GameStatsView(APIView):
         statistics["games"] = models.Game.objects.all().count()
         statistics["published_games"] = models.Game.objects.filter(is_public=True).count()
         statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
-        statistics["game_changes"] = models.Game.objects.filter(change_for__isnull=True).count()
+        statistics["game_changes"] = models.Game.objects.filter(change_for__isnull=False).count()
 
         statistics["game_submissions"] = models.GameSubmission.objects.all().count()
         statistics["accepted_game_submissions"] = models.GameSubmission.objects.filter(
