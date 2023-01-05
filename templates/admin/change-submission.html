@@ -25,7 +25,15 @@
     </tr>
     <tr>
       <th>From</th>
-      <td><a href="{% url 'admin:accounts_user_change' change.author.id %}">{{ change.author }}</a></td>
+
+      <td>
+        {% if change.author %}
+          <a href="{% url 'admin:accounts_user_change' change.author.id %}">{{ change.author }}</a>
+        {% else %}
+          missing author
+        {% endif %}
+      </td>
+
     </tr>
     <tr>
       <th>Reason</th>
