@@ -179,6 +179,7 @@ def sync_igdb_coverart(force_update=False):
         "missing_igdb_game": 0,
         "multiple_igdb_games": 0,
         "missing_lutris_game": 0,
+        "multiple_lutris_games": 0,
         "coverart_saved": 0,
     }
     for igdb_cover in ProviderCover.objects.filter(provider__name="igdb"):
@@ -202,6 +203,9 @@ def sync_igdb_coverart(force_update=False):
             LOGGER.warning("No Lutris game with ID %s", igdb_cover.game)
             stats["missing_lutris_game"] += 1
             continue
+        except Game.MultipleObjectsReturned:
+            stats["multiple_lutris_games"] += 1
+            lutris_game = Game.objects.filter(provider_games=igdb_game).last()
         if lutris_game.coverart and not force_update:
             stats["existing_lutris_coverart"] += 1
             continue

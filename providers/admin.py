@@ -10,7 +10,7 @@ class ProviderAdmin(admin.ModelAdmin):
 class ProviderItemAdmin(admin.ModelAdmin):
     """Generic admin config for Provider models"""
     list_display = ("name", "internal_id", "slug", "provider", "updated_at")
-    search_fields = ("name", )
+    search_fields = ("internal_id", "name", )
     list_filter = ("provider", )
 
 
