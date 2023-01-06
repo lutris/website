@@ -239,3 +239,11 @@ class GameSubmissionAcceptView(APIView):
             "id": game_submission.id,
             "accepted": True
         })
+
+class ScreenshotView(generics.ListAPIView):
+    """List all game submissions"""
+    serializer_class = serializers.ScreenshotSerializer
+    permission_classes = (permissions.IsAdminUser, )
+
+    def get_queryset(self):
+        return models.Screenshot.objects.unpublished()

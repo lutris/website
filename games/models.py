@@ -674,6 +674,10 @@ class ScreenshotManager(models.Manager):
             return query.filter(Q(published=True) | Q(uploaded_by=user))
         return query.filter(published=True)
 
+    def unpublished(self):
+        """Return unpublished screenshots"""
+        return self.get_queryset().prefetch_related('game', 'uploaded_by').order_by("uploaded_at").filter(published=False)
+
 
 class Screenshot(models.Model):
     """Screenshots for games"""
@@ -1419,6 +1423,7 @@ class Quirk(models.Model):
 
 
 class ShaderCache(models.Model):
+    """Model to reference shader cache locations"""
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="shaders")
     updated_at = models.DateTimeField(auto_now=True)
     url = models.CharField(max_length=256)

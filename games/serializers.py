@@ -134,13 +134,14 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
                   'script', 'content', 'revisions')
 
 
-class GameChangeSerializer(serializers.ModelSerializer):
-    """Another Serializer for Games since DRF doesn't support recursive relationships"""
+class MicroGameSerializer(serializers.ModelSerializer):
+    """Another Serializer for Games since DRF doesn't support recursive relationships.
+    Also can be used for very small reference to games"""
     class Meta:
         """Model and field definitions"""
         model = models.Game
         fields = (
-            'id', 'slug'
+            'id', 'slug', 'name'
         )
 
 class GameSerializer(serializers.ModelSerializer):
@@ -150,7 +151,7 @@ class GameSerializer(serializers.ModelSerializer):
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
     shaders = ShaderCacheSerializer(many=True)
-    change_for = GameChangeSerializer()
+    change_for = MicroGameSerializer()
 
     class Meta:
         """Model and field definitions"""
@@ -345,4 +346,22 @@ class RevisionSerializer(serializers.ModelSerializer):
             'user_id',
             'comment',
             'version_set'
+        )
+
+
+class ScreenshotSerializer(serializers.ModelSerializer):
+    """Serializer for Screenshots"""
+    game = MicroGameSerializer()
+    uploaded_by = UserSerializer()
+    class Meta:
+        """Model and field definitions"""
+        model = models.Screenshot
+        fields = (
+            'id',
+            'game',
+            'image',
+            'uploaded_at',
+            'uploaded_by',
+            'description',
+            'published'
         )
