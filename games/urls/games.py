@@ -11,6 +11,7 @@ urlpatterns = [
           views.ServiceGameListView.as_view(),
           name='api_service_game_list'),
      path('/screenshots', views.ScreenshotView.as_view(), name='api_screenshots_list'),
+     path('/screenshots/<int:screenshot_id>', views.ScreenshotReviewView.as_view(), name="api_screenshot_review"),
      path('/stats', views.GameStatsView.as_view(), name='api_game_stats'),
      path('/submissions', views.GameSubmissionsView.as_view(), name='api_game_submissions'),
      path('/submissions/<int:submission_id>', views.GameSubmissionAcceptView.as_view(), name='api_game_submission_accept'),

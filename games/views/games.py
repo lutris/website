@@ -247,3 +247,25 @@ class ScreenshotView(generics.ListAPIView):
 
     def get_queryset(self):
         return models.Screenshot.objects.unpublished()
+
+class ScreenshotReviewView(APIView):
+    """Accept of refuse a screenshot"""
+
+    @staticmethod
+    def post(request, screenshot_id):
+        if not request.user.is_staff:
+            raise PermissionDenied
+
+        screenshot = get_object_or_404(models.Screenshot, pk=screenshot_id)
+        if request.data["accepted"] == "accept":
+            screenshot.published = True
+            screenshot.save()
+            accepted = True
+        elif request.data["accepted"] == "refuse":
+            screenshot.image.delete()
+            screenshot.delete()
+            accepted = False
+        return Response({
+            "id": screenshot.id,
+            "accepted": accepted
+        })
