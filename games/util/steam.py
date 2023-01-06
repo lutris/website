@@ -56,26 +56,18 @@ def steam_sync(steamid):
 
 def create_game(game):
     """ Create game object from Steam API call """
-    appid = game['appid']
-    from games.models import Game
-    slug = slugify(game['name'])[:50]
-    LOGGER.info("Adding %s to library", game['name'])
-    steam_game = Game(
+    steam_game = models.Game(
         name=game['name'],
-        steamid=appid,
-        slug=slug,
+        steamid=game['appid'],
+        slug=slugify(game['name'])[:50],
+        is_public=True
     )
-
     if game.get('img_logo_url'):
         steam_game.set_logo_from_steam_api(game['img_logo_url'])
 
     if game.get('img_icon_url'):
         steam_game.set_icon_from_steam_api(game['img_icon_url'])
-    try:
-        steam_game.save()
-    except Exception as ex:
-        LOGGER.error("Error while saving game %s: %s", game, ex)
-        raise
+    steam_game.save()
     return steam_game
 
 
