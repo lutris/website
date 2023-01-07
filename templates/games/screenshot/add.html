@@ -4,13 +4,20 @@
 {% block content %}
 <div class="form-view">
   <h2>Upload a screenshot</h2>
-  <p>Although regular screenshots are accepted we prefer you submit your own in-game screenshots.</p>
+  <h3>Recommendations:</h3>
+  <ul>
+    <li>Do not crop screenshots</li>
+    <li>Do not alter screenshots with logos or watermarks</li>
+    <li>Do not take screenshots in windowed mode</li>
+    <li>Do not take screenshots with MangoHUD active</li>
+    <li>This is not a bug reporting tool, don't send screenshots of error messages.</li>
+  </ul>
   <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     {{ form.as_p }}
     <div>
       <input type="submit" value="Send">
     </div>
   </form>
-
 </div>
 {% endblock %}

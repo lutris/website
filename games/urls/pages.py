@@ -77,7 +77,7 @@ urlpatterns = [
          views.installer_submissions,
          name='installer_submissions'),
 
-    re_path(r'/([\w\-]+)/screenshot/add/',
+    re_path(r'/(?P<slug>[\w\-]+)/screenshot/add/',
             views.screenshot_add,
             name='screenshot_add'),
     path('/screenshot/<int:screenshot_id>/publish/',

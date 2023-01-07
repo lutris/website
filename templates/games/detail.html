@@ -105,6 +105,9 @@
         <div class="actions-bar">
           <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
         </div>
+        <div class="actions-bar">
+          <a href="{% url "screenshot_add" slug=game.slug %}">Add screenshot</a>
+        </div>
         {% endif %}
         {% if user.is_staff %}
         <div class="actions-bar">
