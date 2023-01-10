@@ -359,10 +359,6 @@ class Game(models.Model):
             romname = provider_games["mame"].slug
             links["gamesdatabase"] = f"https://www.gamesdatabase.org/mame-rom/{romname}"
             links["arcadedatabase"] = f"http://adb.arcadeitalia.net/dettaglio_mame.php?game_name={romname}"
-        if "gog" in provider_games:
-            url = provider_games["gog"].metadata.get("url")
-            if url:
-                links["gog"] = url
         return links
 
     def get_change_model(self):
