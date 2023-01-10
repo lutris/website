@@ -1,10 +1,8 @@
 """ Compare GOG games to the Lutris library """
-import os
 from celery import task
 from celery.utils.log import get_task_logger
-from django.conf import settings
 
-from providers.gog import cache_gog_games, match_from_gogdb, load_games_from_gog_api
+from providers.gog import cache_gog_games, match_from_gog_api, load_games_from_gog_api
 from common.models import save_action_log
 
 
@@ -23,6 +21,6 @@ def load_gog_games():
 @task
 def match_gog_games():
     """Match GOG games with Lutris games"""
-    stats = match_from_gogdb(create_missing=True)
+    stats = match_from_gog_api()
     save_action_log("match_gog_games", stats)
     return stats
