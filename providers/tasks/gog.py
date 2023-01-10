@@ -4,7 +4,7 @@ from celery import task
 from celery.utils.log import get_task_logger
 from django.conf import settings
 
-from providers.gog import load_games_from_gogdb, match_from_gogdb
+from providers.gog import cache_gog_games, match_from_gogdb, load_games_from_gog_api
 from common.models import save_action_log
 
 
@@ -13,13 +13,9 @@ LOGGER = get_task_logger(__name__)
 
 @task
 def load_gog_games():
-    """Task to load GOG games from a GOGDB dump"""
-    file_path = os.path.join(settings.GOG_CACHE_PATH, "gogdb.json")
-    if not os.path.exists(file_path):
-        LOGGER.error("No file present at %s", file_path)
-        save_action_log("load_gog_games", "NO FILE")
-        return None
-    stats = load_games_from_gogdb(file_path)
+    """Task to load GOG games from the API"""
+    cache_gog_games()
+    stats = load_games_from_gog_api()
     save_action_log("load_gog_games", stats)
     return stats
 
