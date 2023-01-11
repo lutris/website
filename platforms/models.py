@@ -1,23 +1,8 @@
+"""Platform models"""
 # pylint: disable=R0903
-from django.apps import apps
 from django.db import models
-from django.db.models import Count
 from jsonfield import JSONField
 from common.util import slugify
-
-
-class PlatformManager(models.Manager):
-    def with_games(self):
-        game_model = apps.get_model(app_label='games', model_name='Game')
-        platform_list = (
-            game_model.objects.with_installer()
-            .values_list('platforms')
-            .annotate(p_count=Count('platforms'))
-            .filter(p_count__gt=0)
-        )
-        platform_ids = [platform[0] for platform in platform_list]
-        return self.get_queryset().filter(id__in=platform_ids)
-
 
 class Platform(models.Model):
     """Gaming platform"""
@@ -30,7 +15,6 @@ class Platform(models.Model):
     igdb_id = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects = PlatformManager()
 
     # pylint: disable=W0232, R0903
     class Meta:

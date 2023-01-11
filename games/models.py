@@ -1,5 +1,5 @@
 """Models for main lutris app"""
-# pylint: disable=no-member,too-few-public-methods,too-many-lines,consider-using-f-string
+# pylint: disable=no-member,too-few-public-methods,too-many-lines
 import os
 import shutil
 import datetime
@@ -25,11 +25,12 @@ from django.urls import reverse
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from emails import messages
+from emails.messages import send_email
 from games.util import steam, gog
 from platforms.models import Platform
 from runners.models import Runner
 from providers.models import ProviderGame
-from emails.messages import send_email
+
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_INSTALLER = {
@@ -94,28 +95,11 @@ class Company(models.Model):
         return ("name__icontains", "slug__icontains")
 
 
-class GenreManager(models.Manager):
-    """Model manager for Genre"""
-
-    def with_games(self):
-        """Query genres that have games assigned to them"""
-        genre_list = (
-            Game.objects.with_installer()
-            .values_list("genres")
-            .annotate(g_count=Count("genres"))
-            .filter(g_count__gt=0)
-        )
-        genre_ids = [genre[0] for genre in genre_list]
-        return self.get_queryset().filter(id__in=genre_ids)
-
-
 class Genre(models.Model):
     """Gaming genre"""
 
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
-
-    objects = GenreManager()
 
     class Meta:
         """Model configuration"""
