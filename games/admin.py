@@ -159,10 +159,6 @@ class GenreAdmin(admin.ModelAdmin):
     ordering = ('name', )
 
 
-class GameMetadataInline(admin.TabularInline):
-    model = models.GameMetadata
-
-
 class GameLinkAdmin(admin.TabularInline):
     model = models.GameLink
 
@@ -208,7 +204,6 @@ class GameAdmin(admin.ModelAdmin):
         BitField: {'widget': BitFieldCheckboxSelectMultiple}
     }
     inlines = [
-        GameMetadataInline,
         GameLinkAdmin,
         GameAliasAdmin,
         ShaderCacheAdmin

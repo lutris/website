@@ -643,13 +643,6 @@ class Game(models.Model):
             LOGGER.error("Failed to precache media for %s: %s", self, ex)
 
 
-class GameMetadata(models.Model):
-    """Additional key-value metadata attached to a game"""
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    key = models.CharField(max_length=16)
-    value = models.CharField(max_length=255)
-
-
 class GameAlias(models.Model):
     """Alternate names and spellings a game might be known as"""
     game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
