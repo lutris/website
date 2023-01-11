@@ -21,10 +21,6 @@
             <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.slug %}">
               Edit installer
             </a></li>
-
-            <li><a class="dropdown-item bg-dark text-white" href="{% url 'fork_installer' slug=installer.slug %}">
-              Fork installer
-            </a></li>
             {% if user.is_staff %}
               <li><a class="dropdown-item bg-dark text-white" href="{% url 'admin:games_installer_change' installer.id %}">
                 Admin installer
