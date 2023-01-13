@@ -49,9 +49,9 @@
 
       <span class='installer-name'>{{ installer.version|capfirst }} version</span>
       <span class="small-text">
-        Rating: {% if installer.is_playable == True %}
-          ✅ <strong>PLAYABLE</strong>{% elif installer.is_playable == False %}
-          ❌ <strong>NOT PLAYABLE</strong>{% endif %}
+        {% if installer.is_playable == True %}
+        Rating: ✅ <strong>PLAYABLE</strong>{% elif installer.is_playable == False %}
+        Rating: ❌ <strong>NOT PLAYABLE</strong>{% endif %}
       </span>
       <small class="text-muted">
         {% if installer.updated_at %}last published {{ installer.updated_at | naturaltime }}{% endif %}

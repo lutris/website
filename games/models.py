@@ -948,7 +948,6 @@ class Installer(BaseInstaller):
         if rating:
             return rating.playable
 
-
     def set_default_installer(self):
         """Creates the default content for installer when they are first created.
 
