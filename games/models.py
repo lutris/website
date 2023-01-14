@@ -603,7 +603,7 @@ class Game(models.Model):
         return auto_installers
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None, skip_precaching=False
     ):
         # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
@@ -612,19 +612,15 @@ class Game(models.Model):
             if not self.slug:
                 raise ValueError("Can't generate a slug for name %s" % self.name)
             self.set_logo_from_steam()
-        super(Game, self).save(
+        super().save(
             force_insert=force_insert,
             force_update=force_update,
             using=using,
             update_fields=update_fields,
         )
-        # Not ideal to have this here since this can generate disk IO activity
-        # Not a problem though, we want to discourage mass updates for games
-        # since that would DDOS the site.
-        try:
+        if not skip_precaching:
             self.precache_media()
-        except Exception as ex:  # pylint: disable=broad-except
-            LOGGER.error("Failed to precache media for %s: %s", self, ex)
+
 
 
 class GameAlias(models.Model):
@@ -944,6 +940,7 @@ class Installer(BaseInstaller):
         return self.slug
 
     def is_playable(self):
+
         rating = self.ratings.filter(verified=True).first()
         if rating:
             return rating.playable

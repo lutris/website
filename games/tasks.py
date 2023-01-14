@@ -129,3 +129,19 @@ def process_new_steam_installers():
         print(script)
         print(installer.game.provider_games.filter(provider__name="steam"))
     return stats
+
+
+@task
+def populate_popularity():
+    """Update the popularity field for all"""
+    i = 0
+    total_games = models.Game.objects.all().count()
+    for game in models.Game.objects.all():
+        i += 1
+        if i % 10000 == 0:
+            LOGGER.info("updated %s/%s games", i, total_games)
+        library_count = game.libraries.all().count()
+        # Only update games in libraries to speed up the process
+        if library_count:
+            game.popularity = library_count
+            game.save(skip_precaching=True)
