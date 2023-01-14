@@ -3,6 +3,7 @@ from collections import defaultdict
 from celery import task
 from celery.utils.log import get_task_logger
 from django.contrib.contenttypes.models import ContentType
+from django.db import IntegrityError
 from django.db.models import Q
 from reversion.models import Revision, Version
 
@@ -145,3 +146,72 @@ def populate_popularity():
         if library_count:
             game.popularity = library_count
             game.save(skip_precaching=True)
+
+
+def migrate_revision(version):
+    """Create a draft from a version"""
+    try:
+        installer = models.InstallerRevision(version)
+    except models.ObjectDoesNotExist:
+        return
+    return migrate_installer(installer)
+
+
+def migrate_installer(installer):
+    """Create a draft from an installer"""
+    try:
+        installer_draft = models.InstallerDraft.objects.get(
+            game=installer.game,
+            user=installer.user
+        )
+    except models.InstallerDraft.DoesNotExist:
+        installer_draft = models.InstallerDraft(
+            game=installer.game,
+            user=installer.user
+        )
+    installer_draft.base_installer = models.Installer.objects.get(pk=installer.id)
+    installer_draft.created_at = installer.created_at
+    installer_draft.runner = installer.runner
+    installer_draft.content = installer.content
+    installer_draft.version = installer.version
+    installer_draft.description = installer.description
+    installer_draft.notes = installer.notes
+    installer_draft.reason = installer.reason
+    installer_draft.review = installer.review
+    installer_draft.save()
+
+
+def migrate_revisions_to_drafts():
+    """Migrate drafts from django-reversion to InstallerDraft"""
+    current_object = None
+    current_user = None
+    object_stack = []
+    i = 0
+    versions = Version.objects.filter(
+        content_type__model="installer"
+    ).order_by("object_id", "revision__user__username", "-revision__date_created")
+    for version in versions:
+        i += 1
+        if (
+                object_stack
+                and (
+                    version.object_id != current_object
+                    or version.revision.user != current_user
+                )
+        ):
+            migrate_revision(object_stack[0])
+            object_stack = []
+        current_object = version.object_id
+        current_user = version.revision.user
+        object_stack.append(version)
+    migrate_revision(object_stack[0])
+    print(i)
+
+
+def migrate_new_installers():
+    """Migrate all draft installers with no revisions"""
+    i = 0
+    for installer in models.Installer.objects.new():
+        i += 1
+        migrate_installer(installer)
+    print("Migrated %s installers" % i)

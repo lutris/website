@@ -98,6 +98,17 @@ class InstallerAdmin(VersionAdmin):
         ))
     game_link.short_description = "Game (link)"
 
+class InstallerDraftAdmin(admin.ModelAdmin):
+    list_display = ('version', 'runner', 'game', 'user', 'created_at', 'draft')
+    list_filter = ('runner', 'version')
+    ordering = ('-created_at', )
+    readonly_fields = ('created_at', )
+    search_fields = ('version', 'user__username', 'content')
+
+    raw_id_fields = ('game', 'user', )
+    autocomplete_lookup_fields = {
+        'fk': ['game', 'user'],
+    }
 
 class IssueReplyInline(admin.StackedInline):
     """Admin config for issue replies"""
@@ -296,6 +307,7 @@ admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.Installer, InstallerAdmin)
+admin.site.register(models.InstallerDraft, InstallerDraftAdmin)
 admin.site.register(models.InstallerIssue, InstallerIssueAdmin)
 admin.site.register(models.GameLibrary, GameLibraryAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)

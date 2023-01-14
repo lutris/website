@@ -260,7 +260,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'load-igdb-genres': {
         'task': 'providers.tasks.load_igdb_genres',
-        'schedule': crontab(day_of_week=2, hour=3,minute=1)
+        'schedule': crontab(day_of_week=2, hour=3, minute=1)
     },
     'load-igdb-platforms': {
         'task': 'providers.tasks.load_igdb_platforms',

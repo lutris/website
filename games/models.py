@@ -940,10 +940,11 @@ class Installer(BaseInstaller):
         return self.slug
 
     def is_playable(self):
-
+        """Return value of rating if the installer has a verified one"""
         rating = self.ratings.filter(verified=True).first()
         if rating:
             return rating.playable
+        return None
 
     def set_default_installer(self):
         """Creates the default content for installer when they are first created.
@@ -1034,6 +1035,34 @@ class InstallerHistory(BaseInstaller):
     def __str__(self):
         return "Snapshot of installer %s at %s" % (self.installer, self.created_at)
 
+class InstallerDraft(BaseInstaller):
+    """Model for user drafts"""
+    game = models.ForeignKey(
+        Game,
+        related_name="draft_installers",
+        on_delete=models.CASCADE
+    )
+    base_installer = models.ForeignKey(
+        Installer,
+        related_name="drafts",
+        on_delete=models.CASCADE,
+        null=True
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
+    version = models.CharField(max_length=32)
+    description = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.TextField(blank=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(null=True)
+    draft = models.BooleanField(default=True)
+    # Relevant for edit submissions only: Reason why the proposed change
+    # is necessecary or useful
+    reason = models.CharField(max_length=512, blank=True, null=True)
+    review = models.CharField(max_length=512, blank=True, null=True)
+
+    def __str__(self):
+        return self.version
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
