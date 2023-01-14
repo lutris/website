@@ -90,7 +90,7 @@ class InstallerRevisionListView(generics.ListAPIView, mixins.DestroyModelMixin):
 class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve a detailed view of an installer revision"""
     permission_classes = [IsAdminOrReadOnly]
-    serializer_class = serializers.InstallerRevisionSerializer
+    serializer_class = serializers.InstallerDraftSerializer
 
     def retrieve(self, request, *args, **kwargs):
         try:
@@ -119,17 +119,9 @@ class InstallerRevisionDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         try:
-            revision = Revision.objects.get(pk=self.request.parser_context['kwargs']['pk'])
-        except Revision.DoesNotExist:
-            LOGGER.warning("No Revision with ID %s", self.request.parser_context['kwargs']['pk'])
+            return models.InstallerDraft.objects.get(pk=self.request.parser_context['kwargs']['pk'])
+        except models.InstallerDraft.DoesNotExist:
             raise Http404
-        try:
-            version = revision.version_set.all()[0]
-        except IndexError:
-            LOGGER.warning("Revision ID %s has no versions",
-                           self.request.parser_context['kwargs']['pk'])
-            raise Http404
-        return models.InstallerRevision(version)
 
 
 class InstallerIssueList(generics.ListAPIView, generics.CreateAPIView):

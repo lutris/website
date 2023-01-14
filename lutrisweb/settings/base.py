@@ -218,18 +218,6 @@ EMAIL_SUBJECT_PREFIX = "[Lutris] "
 # Celery
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYBEAT_SCHEDULE = {
-    'delete-unchanged-forks': {
-        'task': 'games.tasks.delete_unchanged_forks',
-        'schedule': crontab(minute=1)
-    },
-    'clear-orphan-versions': {
-        'task': 'games.tasks.clear_orphan_versions',
-        'schedule': crontab(minute=2)
-    },
-    'clear-orphan-revisions': {
-        'task': 'games.tasks.clear_orphan_revisions',
-        'schedule': crontab(minute=3)
-    },
     'clear-spammers': {
         'task': 'accounts.tasks.clear_spammers',
         'schedule': crontab(minute=4)

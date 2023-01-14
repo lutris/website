@@ -224,21 +224,17 @@ def game_detail(request, slug):
     installers = game.installers.published()
     provider_links = game.get_provider_links()
 
-    if user.is_staff:
-        unpublished_installers = game.installers.unpublished()
-    elif user.is_authenticated:
-        unpublished_installers = game.installers.unpublished().filter(user=user)
-    else:
-        unpublished_installers = []
     pending_change_subm_count = 0
 
     if user.is_authenticated:
+        unpublished_installers = game.draft_installers.filter(user=user)
         in_library = game in user.gamelibrary.games.all()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
 
         if user.is_staff and user.has_perm("games.change_game"):
             pending_change_subm_count = len(Game.objects.filter(change_for=game))
     else:
+        unpublished_installers = []
         in_library = False
         screenshots = game.screenshot_set.published()
 
@@ -305,24 +301,28 @@ def edit_draft(request, draft_id):
 def edit_installer(request, slug):
     """Edit a draft of an installer"""
     installer = get_object_or_404(Installer, slug=slug)
-    draft, _created = InstallerDraft.objects.get_or_create(user=request.user, base_installer=installer)
+    draft, _created = InstallerDraft.objects.get_or_create(
+        user=request.user,
+        game=installer.game,
+        base_installer=installer
+    )
     return edit_draft(request, draft.id)
 
 
 @user_confirmed_required
-def delete_installer(request, slug):
-    installer = get_object_or_404(Installer, slug=slug)
-    if installer.user != request.user or not installer.draft:
+def delete_draft(request, draft_id):
+    draft = get_object_or_404(InstallerDraft, id=draft_id)
+    if draft.user != request.user or not draft.draft:
         raise Http404
     if request.method == "POST" and "delete" in request.POST:
-        game = installer.game
-        installer_name = installer.slug
-        installer.delete()
+        game = draft.game
+        installer_name = draft.version
+        draft.delete()
         messages.warning(
-            request, "The installer {} has been deleted.".format(installer_name)
+            request, "The draft {} has been deleted.".format(installer_name)
         )
         return redirect(game.get_absolute_url())
-    return render(request, "installers/delete.html", {"installer": installer})
+    return render(request, "installers/delete.html", {"installer": draft})
 
 
 def installer_complete(request, slug):

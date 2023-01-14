@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load static %}
 
-<li class="list-group-item bg-darker{% if installer.draft %} draft-border{% elif not installer.published %} submission-border{% endif %}">
+<li class="list-group-item bg-darker{% if installer.draft %} draft-border{% endif %}">
   <div>
     <div class="btn-group right">
       <a type="button" class="btn btn-sm btn-secondary" href="lutris:{{ installer.slug }}">Install</a>

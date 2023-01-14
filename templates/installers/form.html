@@ -30,8 +30,8 @@
           href="lutris:{{game.slug}}?revision={{installer.id}}">Test this installer</a>
         <input type="submit" class="btn btn-secondary rounded" name="save" value="Save draft">
         <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit to moderation"/>
-        <input type="submit" class="btn btn-danger rounded" name="delete" value="Delete this draft">
-        <a class='btn btn-danger' href="{{game.get_absolute_url}}">Cancel</a>
+        <a class="btn btn-danger rounded" href="{% url 'delete_draft' draft_id=installer.id %}">Delete this draft</a>
+        <a class='btn btn-danger rounded' href="{{game.get_absolute_url}}">Cancel</a>
       </div>
     </form>
   </div>

@@ -120,6 +120,37 @@ class InstallerRevisionSerializer(serializers.Serializer):
         LOGGER.error("Not supposed to do that")
 
 
+class InstallerDraftSerializer(serializers.ModelSerializer):
+    """Serializer for Installers"""
+    script = serializers.ReadOnlyField(source='raw_script')
+    game_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    game_slug = serializers.ReadOnlyField(source='game.slug')
+    name = serializers.ReadOnlyField(source='game.name')
+    year = serializers.ReadOnlyField(source='game.year')
+    steamid = serializers.ReadOnlyField(source='game.steamid')
+    gogid = serializers.ReadOnlyField(source='game.gogid')
+    gogslug = serializers.ReadOnlyField(source='game.gogslug')
+    humbleid = serializers.ReadOnlyField(source='game.humbleid')
+    humblestoreid = serializers.ReadOnlyField(source='game.humbleid')
+    humblestoreid_real = serializers.ReadOnlyField(source='game.humblestoreid')
+    # Adding Discord ID for Rich Presence Client
+    discord_id = serializers.ReadOnlyField(source='game.discord_id', allow_null=True)
+
+    user = serializers.StringRelatedField()
+
+    runner = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerDraft
+        fields = (
+            'id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
+            'version', 'description', 'notes', 'credits', 'created_at', 'draft',
+            'steamid', 'gogid', 'gogslug',
+            'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
+            'discord_id',
+        )
+
 class InstallerWithRevisionsSerializer(InstallerSerializer):
     """Serializer for Installers with their associated revisions
     Used by GameRevisionSerializer

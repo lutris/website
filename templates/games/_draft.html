@@ -1,0 +1,43 @@
+{% load lutris %}
+{% load humanize %}
+{% load static %}
+
+<li class="list-group-item bg-darker draft-border">
+  <div>
+    <div class="btn-group right">
+        <a type="button" class="btn btn-sm btn-secondary" href="lutris:{{ installer.game.slug }}?revision={{installer.id}}">Install</a>
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
+          id="dropdownMenuReference"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          data-bs-reference="parent">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+          <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.base_installer.slug %}">
+            Edit installer
+          </a></li>
+        </ul>
+    </div>
+    <div class="centered-vertical">
+      <span class='filter-link'>{{ installer.runner }}</span>
+      <span class='installer-name'>{{ installer.version|capfirst }} version</span>
+      <small class="text-muted">
+        {% if user.is_staff %}
+        <a href="{{ DASHBOARD_URL }}/#/installers/submissions/{{installer.id}}"
+            class="btn btn-sm btn-danger">Review installer</a>
+        {% endif %}
+      </small>
+    </div>
+  </div>
+
+  {% if installer.description.strip %}
+  <div><strong>{{ installer.description|clean_html|safe|linebreaksbr }}</strong></div>
+  {% endif %}
+
+  {% if installer.notes.strip %}
+  <div class="small-text">{{ installer.notes|clean_html|safe|linebreaksbr }}</div>
+  {% endif %}
+</li>
