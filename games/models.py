@@ -179,8 +179,7 @@ class Game(models.Model):
         ("open_engine", "Open engine only"),
         ("free", "Free"),
         ("freetoplay", "Free-to-play"),
-        ("pwyw", "Pay what you want"),
-        ("protected", "Installer modification is restricted"),
+        ("pwyw", "Pay what you want")
     )
 
     # These model fields are editable by the user
@@ -922,7 +921,6 @@ class Installer(BaseInstaller):
     )
     draft = models.BooleanField(default=True)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
-    protected = models.BooleanField(default=False)
 
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
@@ -1049,10 +1047,11 @@ class InstallerDraft(BaseInstaller):
         null=True
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
+    runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE, null=True)
     version = models.CharField(max_length=32)
     description = models.CharField(max_length=512, blank=True, null=True)
     notes = models.TextField(blank=True)
+    credits = models.TextField(blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(null=True)
     draft = models.BooleanField(default=True)

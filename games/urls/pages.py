@@ -58,7 +58,7 @@ urlpatterns = [
     re_path(r'/(?P<slug>[\w\-]+)/installer/edit/?$',
             views.edit_installer,
             name='edit_installer'),
-    path('/<int:draft_id>/installer/edit/?$',
+    path('/<int:draft_id>/draft/edit',
             views.edit_draft,
             name='edit_draft'),
     path('/<slug:slug>/installer/delete',

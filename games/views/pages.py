@@ -5,7 +5,6 @@ from __future__ import absolute_import
 import json
 import logging
 
-import reversion
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,15 +15,13 @@ from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
-from accounts.decorators import (check_installer_restrictions,
-                                 user_confirmed_required)
+from accounts.decorators import user_confirmed_required
 from emails.messages import send_email
 from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
@@ -266,7 +263,6 @@ def game_detail(request, slug):
 
 
 @user_confirmed_required
-@check_installer_restrictions
 def new_installer(request, slug):
     """Create a new draft installer for a game"""
     game = get_object_or_404(Game, slug=slug)
@@ -276,7 +272,6 @@ def new_installer(request, slug):
 
 
 @user_confirmed_required
-@check_installer_restrictions
 @never_cache
 def edit_draft(request, draft_id):
     """Display an edit form for install scripts"""
@@ -289,24 +284,23 @@ def edit_draft(request, draft_id):
         # Force the creation of a revision instead of creating a new installer
         installer = form.save(commit=False)
         installer.review = ""
-        messages.info(request, "Draft saved")
-        return redirect("edit_draft", draft_id=installer.id)
-        # messages.info(request, "Submission sent to moderation")
-        # return redirect("installer_complete", slug=installer.game.slug)
+        if "save" in request.POST:
+            messages.info(request, "Draft saved")
+            return redirect("edit_draft", draft_id=installer.id)
+        messages.info(request, "Submission sent to moderation")
+        return redirect("installer_complete", slug=installer.game.slug)
     return render(
         request,
         "installers/form.html",
         {
             "form": form,
             "game": installer.game,
-            "new": False,
             "installer": installer,
         }
     )
 
 
 @user_confirmed_required
-@check_installer_restrictions
 @never_cache
 def edit_installer(request, slug):
     """Edit a draft of an installer"""
