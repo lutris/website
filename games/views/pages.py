@@ -30,7 +30,7 @@ from games import models
 from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
                          InstallerEditForm, InstallerForm, LibraryFilterForm,
                          ScreenshotForm)
-from games.models import Game, GameSubmission, Installer, InstallerIssue
+from games.models import Game, GameSubmission, Installer, InstallerIssue, InstallerDraft
 from games.webhooks import notify_installer, notify_issue_creation
 
 LOGGER = logging.getLogger(__name__)
@@ -268,102 +268,31 @@ def game_detail(request, slug):
 @user_confirmed_required
 @check_installer_restrictions
 def new_installer(request, slug):
-    game = get_object_or_404(models.Game, slug=slug)
-    installer = Installer(game=game)
-    installer.set_default_installer()
-    form = InstallerForm(request.POST or None, instance=installer)
-    if request.method == "POST" and form.is_valid():
-        installer = form.save(commit=False)
-        installer.game_id = game.id
-        installer.user = request.user
-        installer.save()
-        notify_installer(installer)
-        return redirect("installer_complete", slug=game.slug)
-    return render(
-        request, "installers/form.html", {"form": form, "game": game, "new": True}
-    )
+    """Create a new draft installer for a game"""
+    game = get_object_or_404(Game, slug=slug)
+    draft = InstallerDraft.objects.create(user=request.user, game=game)
+    return edit_draft(request, draft.id)
+
 
 
 @user_confirmed_required
 @check_installer_restrictions
 @never_cache
-def edit_installer(request, slug):
-    """Display an edit form for install scripts
-
-    Args:
-        request: Django request object
-        slug (str): installer slug
-
-    Returns:
-        Django response
-    """
-
-    installer = get_object_or_404(Installer, slug=slug)
-
-    # Handle installer deletion in a separate view
-    if "delete" in request.POST:
-        return redirect(reverse("delete_installer", kwargs={"slug": installer.slug}))
-    # Extract optional revision ID from parameters
-    revision_id = request.GET.get("revision")
-    try:
-        revision_id = int(revision_id)
-    except (ValueError, TypeError):
-        revision_id = None
-
-    draft_data = None
-    versions = (
-        Version.objects
-        .get_for_object(installer)
-        .filter(revision__user=request.user)
-    )
-
+def edit_draft(request, draft_id):
+    """Display an edit form for install scripts"""
+    installer = get_object_or_404(InstallerDraft, id=draft_id)
     # Reset reason when the installer is edited.
     installer.reason = ""
 
-    for version in versions:
-        if revision_id:
-            # Display the revision given in the GET parameters
-            if version.id == revision_id:
-                draft_data = version.field_dict
-                break
-        else:
-            # Display the latest revision created by the current logged in user
-            if (
-                    version.revision.user == request.user
-            ) and version.revision.date_created > installer.updated_at:
-                draft_data = version.field_dict
-                revision_id = version.revision.id
-                break
-    if draft_data:
-        installer.review = draft_data["review"]
-        draft_data["reason"] = ""
-        if "runner_id" in draft_data:
-            draft_data["runner"] = draft_data["runner_id"]
-
-    form = InstallerEditForm(
-        request.POST or None, instance=installer, initial=draft_data
-    )
+    form = InstallerEditForm(request.POST or None, instance=installer)
     if request.method == "POST" and form.is_valid():
         # Force the creation of a revision instead of creating a new installer
-        with reversion.create_revision():
-            installer = form.save(commit=False)
-            installer.review = ""
-            reversion.set_user(request.user)
-            reversion.set_comment(
-                "[{}] {} by {} on {}".format(
-                    "draft" if installer.draft else "submission",
-                    slug,
-                    request.user.username,
-                    timezone.now(),
-                )
-            )
-            reversion.add_to_revision(installer)
-
-        if "save" in request.POST:
-            messages.info(request, "Draft saved")
-            return redirect("edit_installer", slug=installer.slug)
-        messages.info(request, "Submission sent to moderation")
-        return redirect("installer_complete", slug=installer.game.slug)
+        installer = form.save(commit=False)
+        installer.review = ""
+        messages.info(request, "Draft saved")
+        return redirect("edit_draft", draft_id=installer.id)
+        # messages.info(request, "Submission sent to moderation")
+        # return redirect("installer_complete", slug=installer.game.slug)
     return render(
         request,
         "installers/form.html",
@@ -372,10 +301,18 @@ def edit_installer(request, slug):
             "game": installer.game,
             "new": False,
             "installer": installer,
-            "versions": versions,
-            "revision_id": revision_id
         }
     )
+
+
+@user_confirmed_required
+@check_installer_restrictions
+@never_cache
+def edit_installer(request, slug):
+    """Edit a draft of an installer"""
+    installer = get_object_or_404(Installer, slug=slug)
+    draft, _created = InstallerDraft.objects.get_or_create(user=request.user, base_installer=installer)
+    return edit_draft(request, draft.id)
 
 
 @user_confirmed_required
@@ -392,14 +329,6 @@ def delete_installer(request, slug):
         )
         return redirect(game.get_absolute_url())
     return render(request, "installers/delete.html", {"installer": installer})
-
-
-@staff_member_required
-def publish_installer(request, slug):  # pylint: disable=unused-argument
-    installer = get_object_or_404(Installer, slug=slug)
-    installer.published = True
-    installer.save()
-    return redirect("game_detail", slug=installer.game.slug)
 
 
 def installer_complete(request, slug):
@@ -423,26 +352,6 @@ def view_installer(request, id):
     except Installer.DoesNotExist:
         raise Http404
     return render(request, "installers/view.html", {"installer": installer})
-
-
-@user_confirmed_required
-def fork_installer(request, slug):
-    try:
-        installer = Installer.objects.get(slug=slug)
-    except Installer.DoesNotExist:
-        raise Http404
-    form = ForkInstallerForm(request.POST or None, instance=installer)
-    if request.POST and form.is_valid():
-        installer.pk = None
-        installer.game = form.cleaned_data["game"]
-        installer.version = "Change Me"
-        installer.published = False
-        installer.rating = ""
-        installer.user = request.user
-        installer.save()
-        return redirect(reverse("edit_installer", kwargs={"slug": installer.slug}))
-    context = {"form": form, "installer": installer}
-    return render(request, "installers/fork.html", context)
 
 
 class InstallerFeed(Feed):

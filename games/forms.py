@@ -207,7 +207,7 @@ class InstallerForm(forms.ModelForm):
     class Meta:
         """Form configuration"""
 
-        model = models.Installer
+        model = models.InstallerDraft
         fields = ("runner", "version", "description", "notes", "credits", "content", "draft")
         widgets = {
             "runner": Select2Widget,
@@ -279,8 +279,6 @@ class InstallerForm(forms.ModelForm):
         version = self.cleaned_data["version"]
         if not version:
             raise forms.ValidationError("This field is mandatory")
-        if version.lower() == "change me":
-            raise forms.ValidationError('When we say "change me", we mean it.')
         if version.lower().endswith("version"):
             raise forms.ValidationError(
                 "Don't put 'version' at the end of the 'version' field"

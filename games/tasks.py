@@ -211,7 +211,9 @@ def migrate_revisions_to_drafts():
 def migrate_new_installers():
     """Migrate all draft installers with no revisions"""
     i = 0
-    for installer in models.Installer.objects.new():
+    for installer in models.Installer.objects.filter(published=False):
+        if installer.revisions:
+            continue
         i += 1
         migrate_installer(installer)
     print("Migrated %s installers" % i)

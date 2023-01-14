@@ -2,12 +2,7 @@
 {% load static %}
 
 {% block title %}
-  {% if new %}
-    Create new installer for {{ game }}
-  {% else %}
-    Edit installer for {{ game }}
-  {% endif %}
-  | Lutris
+  Edit installer for {{ game }} | Lutris
 {% endblock %}
 
 {% block extra_head %}
@@ -15,17 +10,9 @@
 {% endblock %}
 
 {% block content %}
-<h1>{% if new %}New{% else %}Edit{% endif %} installer for {{ game }}</h1>
+<h1>Edit installer for {{ game }}</h1>
 <div class="row">
   <div class="col-sm-8">
-    {% if versions %}
-      <p>Load a previous revision </p>
-      <select class='django-select2' id='revision-select'>
-        {% for version in versions %}
-        <option value="{{version.id}}" {% if version.id == revision_id %}selected{% endif %}>{{version.revision.comment}}</option>
-        {% endfor %}
-      </select>
-    {% endif %}
     {% if installer.review %}
       <p class="warning-message">
         Your submission was previously rejected.<br>
@@ -38,22 +25,12 @@
       {{ form.as_p }}
       <div id='editor'></div>
       <div class="form-actions">
-        {% if installer %}
-        <a
-          class='btn btn-secondary rounded'
+        <a class='btn btn-secondary rounded'
           id="test-installer-button"
-          {% if revision_id %}
-          href="lutris:{{game.slug}}?revision={{revision_id}}"
-          {% else %}
-          href="lutris:{{installer.slug}}"
-          {% endif %}
-        >Test this installer</a>
-        {% endif %}
+          href="lutris:{{game.slug}}?revision={{installer.id}}">Test this installer</a>
         <input type="submit" class="btn btn-secondary rounded" name="save" value="Save draft">
         <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit to moderation"/>
-        {% if installer.draft %}
         <input type="submit" class="btn btn-danger rounded" name="delete" value="Delete this draft">
-        {% endif %}
         <a class='btn btn-danger' href="{{game.get_absolute_url}}">Cancel</a>
       </div>
     </form>
@@ -86,14 +63,6 @@
       editor.getSession().on('change', function(){
         textarea.val(editor.getSession().getValue());
       });
-
-      {% if versions %}
-      $('#revision-select').on('change', function(event) {
-        const formUrl = "{% url 'edit_installer' slug=installer.slug  %}";
-        const revisionId = event.target.value;
-        window.location.replace(formUrl + "?revision=" + revisionId);
-      })
-      {% endif %}
     });
   </script>
   {{ block.super }}

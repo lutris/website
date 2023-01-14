@@ -331,18 +331,16 @@ def installer_list(request, username):
     """List all private installers"""
     if username != request.user.username:
         raise Http404
-    installers = models.Installer.objects.filter(
-        user=request.user,
-        published=False
+
+    installers = models.InstallerDraft.objects.filter(
+        user=request.user
     )
     if request.GET.get('q'):
         installers = installers.filter(game__name__icontains=request.GET["q"])
     installers = installers.order_by(request.GET.get('sort', "-created_at"))
-    drafts = {v.object for v in Version.objects.filter(revision__user=request.user)}
     return render(request, 'accounts/installer_list.html', {
         'user': request.user,
         'profile_page': 'installers',
-        'drafts': drafts,
         'installers': installers
     })
 
