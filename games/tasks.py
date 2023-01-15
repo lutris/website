@@ -100,7 +100,10 @@ def migrate_installer(installer):
             game=installer.game,
             user=installer.user
         )
-    installer_draft.base_installer = models.Installer.objects.get(pk=installer.id)
+    try:
+        installer_draft.base_installer = models.Installer.objects.get(pk=installer.id)
+    except models.Installer.DoesNotExist:
+        installer_draft.base_installer = None
     installer_draft.created_at = installer.created_at
     installer_draft.runner = installer.runner
     installer_draft.content = installer.content
