@@ -25,12 +25,16 @@
       {{ form.as_p }}
       <div id='editor'></div>
       <div class="form-actions">
+        {% if installer.id %}
         <a class='btn btn-secondary rounded'
           id="test-installer-button"
-          href="lutris:{{game.slug}}?revision={{installer.id}}">Test this installer</a>
+          href="lutris:{{game.slug}}?revision={{installer.id}}">Test installer</a>
+        {% endif %}
         <input type="submit" class="btn btn-secondary rounded" name="save" value="Save draft">
-        <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit to moderation"/>
-        <a class="btn btn-danger rounded" href="{% url 'delete_draft' draft_id=installer.id %}">Delete this draft</a>
+        <input type="submit" class="btn btn-primary rounded" name="submit" value="Submit for publication"/>
+        {% if installer.id %}
+        <a class="btn btn-danger rounded" href="{% url 'delete_draft' draft_id=installer.id %}">Delete draft</a>
+        {% endif %}
         <a class='btn btn-danger rounded' href="{{game.get_absolute_url}}">Cancel</a>
       </div>
     </form>

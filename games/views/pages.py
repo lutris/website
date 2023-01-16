@@ -262,36 +262,42 @@ def game_detail(request, slug):
 def new_installer(request, slug):
     """Create a new draft installer for a game"""
     game = get_object_or_404(Game, slug=slug)
-    draft = InstallerDraft.objects.create(user=request.user, game=game, created_at=timezone.now())
-    return edit_draft(request, draft.id)
+    return edit_draft(request, None, game)
 
 
 
 @user_confirmed_required
 @never_cache
-def edit_draft(request, draft_id):
+def edit_draft(request, draft_id, game=None):
     """Display an edit form for install scripts"""
-    installer = get_object_or_404(InstallerDraft, id=draft_id)
+    if draft_id:
+        draft = get_object_or_404(InstallerDraft, id=draft_id)
+    else:
+        draft = InstallerDraft(
+            user=request.user,
+            game=game,
+            created_at=timezone.now()
+        )
     # Reset reason when the installer is edited.
-    installer.reason = ""
+    draft.reason = ""
 
-    form = InstallerEditForm(request.POST or None, instance=installer)
+    form = InstallerEditForm(request.POST or None, instance=draft)
     if request.method == "POST" and form.is_valid():
-        installer = form.save()
-        # installer.review = ""
+        draft = form.save()
+        # draft.review = ""
         if "save" in request.POST:
             messages.info(request, "Draft saved")
-            return redirect("edit_draft", draft_id=installer.id)
-        notify_installer(installer)
+            return redirect("edit_draft", draft_id=draft.id)
+        notify_installer(draft)
         messages.info(request, "Submission sent to moderation")
-        return redirect("installer_complete", slug=installer.game.slug)
+        return redirect("installer_complete", slug=draft.game.slug)
     return render(
         request,
         "installers/form.html",
         {
             "form": form,
-            "game": installer.game,
-            "installer": installer,
+            "game": draft.game,
+            "installer": draft,
         }
     )
 
