@@ -318,6 +318,7 @@ def edit_installer(request, slug):
         credits=installer.credits,
         content=installer.content,
         description=installer.description,
+        created_at=timezone.now()
     )
     return edit_draft(request, draft.id)
 
