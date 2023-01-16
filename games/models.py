@@ -1056,7 +1056,6 @@ class InstallerDraft(BaseInstaller):
 
     def reject(self, installer_data):
         """Reject the submission, setting it back to draft."""
-        print(installer_data)
         self.review = installer_data["review"]
         self.draft = True
         self.save()
@@ -1072,6 +1071,7 @@ class InstallerDraft(BaseInstaller):
             installer = self.base_installer
         else:
             installer = Installer()
+            installer.user = self.user
         installer.published = True
         installer.draft = False
         # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
