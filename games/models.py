@@ -1077,6 +1077,7 @@ class InstallerDraft(BaseInstaller):
         else:
             installer = Installer()
             installer.user = self.user
+            installer.game = self.game
         installer.runner = self.runner
         installer.description = self.description
         installer.content = self.content
