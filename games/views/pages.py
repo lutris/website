@@ -308,18 +308,20 @@ def edit_draft(request, draft_id, game=None):
 def edit_installer(request, slug):
     """Edit a draft of an installer"""
     installer = get_object_or_404(Installer, slug=slug)
-    draft, _created = InstallerDraft.objects.get_or_create(
+    draft, created = InstallerDraft.objects.get_or_create(
         user=request.user,
         game=installer.game,
-        base_installer=installer,
-        runner=installer.runner,
-        version=installer.version,
-        notes=installer.notes,
-        credits=installer.credits,
-        content=installer.content,
-        description=installer.description,
-        created_at=timezone.now()
+        base_installer=installer
     )
+    if created:
+        draft.runner = installer.runner
+        draft.version = installer.version
+        draft.notes = installer.notes
+        draft.credits = installer.credits
+        draft.content = installer.content
+        draft.description = installer.description
+        draft.created_at = timezone.now()
+        draft.save()
     return edit_draft(request, draft.id)
 
 
