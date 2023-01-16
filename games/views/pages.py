@@ -278,13 +278,7 @@ def edit_draft(request, draft_id, game=None):
             game=game,
             created_at=timezone.now()
         )
-    if draft.base_installer:
-        draft.runner = draft.base_installer.runner
-        draft.version = draft.base_installer.version
-        draft.notes = draft.base_installer.notes
-        draft.credits = draft.base_installer.credits
-        draft.content = draft.base_installer.content
-        draft.description = draft.base_installer.description
+
     # Reset reason when the installer is edited.
     draft.reason = ""
 
@@ -317,7 +311,13 @@ def edit_installer(request, slug):
     draft, _created = InstallerDraft.objects.get_or_create(
         user=request.user,
         game=installer.game,
-        base_installer=installer
+        base_installer=installer,
+        runner=installer.runner,
+        version=installer.version,
+        notes=installer.notes,
+        credits=installer.credits,
+        content=installer.content,
+        description=installer.description,
     )
     return edit_draft(request, draft.id)
 
