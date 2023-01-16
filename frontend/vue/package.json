@@ -15,7 +15,7 @@
     "unit": "jest --config test/unit/jest.conf.js --coverage"
   },
   "dependencies": {
-    "@vue/cli-service": "^3.9.0",
+    "@vue/cli-service": "^5.0.8",
     "anchorme": "^1.1.2",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
@@ -78,7 +78,7 @@
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.3",
     "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-analyzer": "^4.7.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.0"
   },
