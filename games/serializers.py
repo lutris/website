@@ -38,9 +38,17 @@ class GameAliasSerializer(serializers.ModelSerializer):
         model = models.GameAlias
         fields = ('slug', 'name')
 
+class MicroGameSerializer(serializers.ModelSerializer):
+    """Another Serializer for Games since DRF doesn't support recursive relationships.
+    Also can be used for very small reference to games"""
+    class Meta:
+        """Model and field definitions"""
+        model = models.Game
+        fields = (
+            'id', 'slug', 'name'
+        )
 
 class ShaderCacheSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.ShaderCache
         fields = ('url', 'updated_at')
@@ -123,7 +131,7 @@ class InstallerRevisionSerializer(serializers.Serializer):
 class InstallerDraftSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
-    game_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    game = MicroGameSerializer()
     game_slug = serializers.ReadOnlyField(source='game.slug')
     name = serializers.ReadOnlyField(source='game.name')
     year = serializers.ReadOnlyField(source='game.year')
@@ -144,7 +152,7 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
         """Model and field definitions"""
         model = models.InstallerDraft
         fields = (
-            'id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
+            'id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
             'version', 'description', 'notes', 'credits', 'created_at', 'draft',
             'steamid', 'gogid', 'gogslug',
             'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
@@ -165,15 +173,7 @@ class InstallerWithRevisionsSerializer(InstallerSerializer):
                   'script', 'content', 'revisions')
 
 
-class MicroGameSerializer(serializers.ModelSerializer):
-    """Another Serializer for Games since DRF doesn't support recursive relationships.
-    Also can be used for very small reference to games"""
-    class Meta:
-        """Model and field definitions"""
-        model = models.Game
-        fields = (
-            'id', 'slug', 'name'
-        )
+
 
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""

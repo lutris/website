@@ -278,6 +278,13 @@ def edit_draft(request, draft_id, game=None):
             game=game,
             created_at=timezone.now()
         )
+    if draft.base_installer:
+        draft.runner = draft.base_installer.runner
+        draft.version = draft.base_installer.version
+        draft.notes = draft.base_installer.notes
+        draft.credits = draft.base_installer.credits
+        draft.content = draft.base_installer.content
+        draft.description = draft.base_installer.description
     # Reset reason when the installer is edited.
     draft.reason = ""
 
