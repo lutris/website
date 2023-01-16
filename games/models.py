@@ -905,7 +905,7 @@ class Installer(BaseInstaller):
         blank=True,
         null=True
     )
-    draft = models.BooleanField(default=True)
+    draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
 
     # Relevant for edit submissions only: Reason why the proposed change
@@ -1069,17 +1069,22 @@ class InstallerDraft(BaseInstaller):
         """
         if self.base_installer:
             installer = self.base_installer
+            # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
+            # accepted automatically by a script and doesn't need a revision)
+            if moderator:
+                InstallerHistory.create_from_installer(installer)
+                installer.published_by = moderator
         else:
             installer = Installer()
             installer.user = self.user
+        installer.runner = self.runner
+        installer.description = self.description
+        installer.content = self.content
+        installer.credits = self.credits
+        installer.version = self.version
+        installer.notes = self.notes
         installer.published = True
         installer.draft = False
-        # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
-        # accepted automatically by a script and doesn't need a revision)
-        if moderator:
-            InstallerHistory.create_from_installer(installer)
-            installer.published_by = moderator
-
         if installer_data:
             # Only fields editable in the dashboard will be affected
             # FIXME also persist runner
