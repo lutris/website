@@ -5,9 +5,9 @@ from django.contrib.admin.models import LogEntry
 from django_openid_auth.models import UserOpenID
 from rest_framework.authtoken.models import Token
 from axes.models import AccessAttempt, AccessLog
-from reversion.models import Revision
 from games.models import (
     Installer,
+    InstallerDraft,
     InstallerIssue,
     InstallerIssueReply,
     InstallerHistory,
@@ -79,8 +79,8 @@ class Command(BaseCommand):
         res = News.objects.all().update(user=user)
         print("Updated %s news" % res)
 
-        res = Revision.objects.all().update(user=user)
-        print("Updated %s revisions" % res)
+        res = InstallerDraft.objects.all().update(user=user)
+        print("Updated %s drafts" % res)
 
         res = User.objects.exclude(pk=user.id).delete()
         print("Deleted %s users" % res[0])

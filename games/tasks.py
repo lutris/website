@@ -3,7 +3,6 @@ from collections import defaultdict
 from celery import task
 from celery.utils.log import get_task_logger
 from django.db.models import Q
-from reversion.models import Version
 
 from common.models import KeyValueStore
 from games import models

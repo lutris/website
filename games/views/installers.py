@@ -56,13 +56,6 @@ class GameInstallerListView(generics.ListAPIView):
         return models.Installer.objects.fuzzy_filter(slug)
 
 
-class GameRevisionListView(generics.RetrieveAPIView):
-    """Returns the list of revisions """
-    permission_classes = [IsAdminUser]
-    serializer_class = serializers.GameRevisionSerializer
-    queryset = models.Game.objects.filter(change_for__isnull=True)
-    lookup_field = 'slug'
-
 class SmallResultsSetPagination(PageNumberPagination):
     """Pagination used for heavier serializers that don't need a lot of data returned at once."""
     page_size = 25

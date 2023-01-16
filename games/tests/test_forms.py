@@ -28,7 +28,7 @@ class TestInstallerForm(TestCase):
     def setUp(self):
         self.game = factories.GameFactory(name='Doom')
         self.runner = factories.RunnerFactory(name='Linux')
-        self.installer = factories.InstallerFactory(game=self.game)
+        self.installer = factories.InstallerDraftFactory(game=self.game)
 
     def test_can_submit_installer(self):
         form_data = {
@@ -39,8 +39,7 @@ class TestInstallerForm(TestCase):
         form = forms.InstallerForm(form_data, instance=self.installer)
         self.assertFalse(form.errors)
         self.assertTrue(form.is_valid())
-        installer = form.save()
-        self.assertEqual(installer.slug, 'doom-demo')
+        form.save()
 
     def test_form_requires_runner(self):
         form_data = {

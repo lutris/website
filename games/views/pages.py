@@ -7,7 +7,6 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
@@ -19,7 +18,6 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from reversion.models import Version
 from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required
@@ -557,24 +555,3 @@ def submit_issue(request):
 
     return JsonResponse(response)
 
-
-@staff_member_required
-def installer_submissions(request):
-    submissions = Version.objects.filter(revision__comment__startswith="[submission]")
-    drafts = Version.objects.filter(revision__comment__startswith="[draft]")
-    installers = Installer.objects.filter(published=False)
-    unpublished_games = (
-        Game.objects.filter(change_for__isnull=True)
-        .filter(installers__isnull=False, is_public=False)
-        .distinct()
-    )
-    return render(
-        request,
-        "installers/submissions.html",
-        {
-            "submissions": submissions,
-            "drafts": drafts[:20],
-            "installers": installers[:20],
-            "unpublished_games": unpublished_games,
-        },
-    )

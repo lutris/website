@@ -6,7 +6,6 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from reversion.admin import VersionAdmin
 
 from . import forms, models
 
@@ -73,7 +72,7 @@ class InstallerHistoryAdmin(admin.StackedInline):
     )
 
 
-class InstallerAdmin(VersionAdmin):
+class InstallerAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'runner', 'version', 'game_link', 'user',
                     'created_at', 'updated_at', 'published', 'draft')
     list_filter = ('published', 'runner', 'version')

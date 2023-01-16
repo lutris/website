@@ -6,17 +6,11 @@ from django.db import migrations
 from django.core.management import call_command
 
 
-def create_revisions(apps, schema_editor):
-    call_command('createinitialrevisions')
-
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('games', '0015_installer_draft'),
-        ('reversion', '0001_squashed_0004_auto_20160611_1202'),
     ]
 
-    operations = [
-        migrations.RunPython(create_revisions)
-    ]
+    operations = []

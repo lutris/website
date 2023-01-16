@@ -7,11 +7,7 @@ from games.views import deprecated
 
 
 urlpatterns = [
-    # Revision access by game slug
-    path('/game/<slug:slug>/revisions',
-         views.GameRevisionListView.as_view(),
-         name='api_game_revisions_list'),
-
+    # URLs used in the client to install drafts
     path('/game/<slug:slug>/revisions/<int:pk>',
          views.InstallerDraftDetailView.as_view(),
          name="api_game_installer_revision_detail"),

@@ -3,7 +3,6 @@
 import logging
 
 from rest_framework import serializers
-from reversion.models import Version, Revision
 
 from games import models
 from platforms.models import Platform
@@ -85,49 +84,6 @@ class InstallerSerializer(serializers.ModelSerializer):
         )
 
 
-class InstallerRevisionSerializer(serializers.Serializer):
-    """Serializer for Installer revisions
-    This is not a ModelSerializer and is not directly mapped to revisions.
-    Use RevisionSerializer for that.
-    """
-    id = serializers.IntegerField()
-    game_id = serializers.PrimaryKeyRelatedField(read_only=True)
-    game_slug = serializers.ReadOnlyField(source='game.slug')
-    name = serializers.ReadOnlyField(source='game.name')
-    year = serializers.ReadOnlyField(source='game.year')
-    user = serializers.StringRelatedField()
-    runner = serializers.SlugRelatedField(slug_field='slug', read_only=True)
-    slug = serializers.CharField()
-    version = serializers.CharField()
-    description = serializers.CharField()
-    notes = serializers.CharField()
-    created_at = serializers.DateTimeField()
-    draft = serializers.BooleanField()
-    published = serializers.BooleanField()
-    rating = serializers.CharField()
-
-    steamid = serializers.ReadOnlyField(source='game.steamid')
-    gogid = serializers.ReadOnlyField(source='game.gogid')
-    gogslug = serializers.ReadOnlyField(source='game.gogslug')
-    humblestoreid = serializers.ReadOnlyField(source='game.humblestoreid')
-
-    script = serializers.JSONField()
-    content = serializers.CharField()
-    reason = serializers.CharField()
-    review = serializers.CharField()
-    comment = serializers.CharField()
-    installer_id = serializers.IntegerField()
-    revision_id = serializers.IntegerField()
-
-    def update(self, instance, validated_data):
-        """That should probably be a valid call at some point"""
-        LOGGER.error("Not supposed to do that")
-
-    def create(self, validated_data):
-        """That should probably be a valid call at some point"""
-        LOGGER.error("Not supposed to do that")
-
-
 class InstallerDraftSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
     script = serializers.ReadOnlyField(source='raw_script')
@@ -159,22 +115,6 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
             'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
             'discord_id', 'base_installer', 'review', 'reason'
         )
-
-class InstallerWithRevisionsSerializer(InstallerSerializer):
-    """Serializer for Installers with their associated revisions
-    Used by GameRevisionSerializer
-    """
-    revisions = InstallerRevisionSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.Installer
-        fields = ('id', 'game', 'user', 'runner', 'slug', 'version', 'description', 'draft',
-                  'notes', 'created_at', 'updated_at', 'published', 'is_playable',
-                  'script', 'content', 'revisions')
-
-
-
 
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
@@ -210,7 +150,7 @@ class GameDetailSerializer(GameSerializer):
     genres = GenreSerializer(many=True)
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
-    installers = InstallerWithRevisionsSerializer(many=True)
+    installers = InstallerSerializer(many=True)
     shaders = ShaderCacheSerializer(many=True)
 
     class Meta:
@@ -247,24 +187,6 @@ class GameInstallersSerializer(GameSerializer):
             'id', 'name', 'slug', 'year', 'platforms', 'genres',
             'banner_url', 'icon_url', 'is_public', 'updated',
             'steamid', 'gogid', 'gogslug', 'humblestoreid', 'installers'
-        )
-
-
-class GameRevisionSerializer(GameSerializer):
-    """API view used to fetch all installers and their related revisions for a given
-    game.
-    This is used in the moderator dashboard to load all revisions for a game in a
-    single query.
-    """
-    installers = InstallerWithRevisionsSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = models.Game
-        fields = (
-            'name', 'slug', 'year', 'platforms', 'genres',
-            'banner_url', 'icon_url', 'is_public', 'updated', 'steamid',
-            'gogid', 'gogslug', 'humblestoreid', 'installers'
         )
 
 
@@ -343,42 +265,6 @@ class GameRelatedField(serializers.RelatedField):
     def to_internal_value(self, _value):
         """Raise an exception when trying to change back to internal values"""
         raise Exception("This field is read-only")
-
-
-class VersionSerializer(serializers.ModelSerializer):
-    """Serializer for revision versions
-    Used in the RevisionSerializer
-    """
-    object = GameRelatedField(read_only=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = Version
-        fields = (
-            'id',
-            'revision_id',
-            'object',
-            'object_id',
-            'format',
-            'serialized_data',
-        )
-
-
-class RevisionSerializer(serializers.ModelSerializer):
-    """Serializer for installer revision raw objects
-    Used in the revision list view for the mod dashboard.
-    """
-    version_set = VersionSerializer(many=True)
-
-    class Meta:
-        """Model and field definitions"""
-        model = Revision
-        fields = (
-            'id',
-            'user_id',
-            'comment',
-            'version_set'
-        )
 
 
 class ScreenshotSerializer(serializers.ModelSerializer):

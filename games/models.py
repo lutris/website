@@ -7,13 +7,10 @@ import json
 import logging
 import random
 import re
-from collections import defaultdict
 from itertools import chain
 
 import six
 import yaml
-import reversion
-from reversion.models import Version, Revision
 from bitfield import BitField
 from sorl.thumbnail import get_thumbnail
 from django.conf import settings
@@ -664,29 +661,6 @@ class InstallerManager(models.Manager):
         """Return unpublished installers"""
         return self.get_queryset().filter(published=False, draft=True)
 
-    def new(self):
-        """Return new installers that don't have any edits"""
-        return [
-            installer
-            for installer in self.get_queryset().filter(
-                published=False,
-                draft=False
-            ).order_by("-updated_at")
-            if not Version.objects.filter(
-                object_id=installer.id, content_type__model="installer"
-            ).count()
-        ]
-
-    def abandoned(self):
-        """Return the installer with 'Change Me' version that haven't received any modifications"""
-        return [
-            installer
-            for installer in self.get_queryset().filter(version="Change Me")
-            if not Version.objects.filter(
-                object_id=installer.id, content_type__model="installer"
-            ).count()
-        ]
-
     def _fuzzy_search(self, slug, return_models=False):
         try:
             # Try returning installers by installer slug
@@ -866,7 +840,6 @@ class BaseInstaller(models.Model):
         return get_auto_increment_slug(self.__class__, self, slug)
 
 
-@reversion.register()
 class Installer(BaseInstaller):
     """Game installer model"""
 
@@ -947,32 +920,6 @@ class Installer(BaseInstaller):
         """Return absolute URL to the edit installer form"""
         return settings.ROOT_URL + reverse("edit_installer", kwargs={"slug": self.slug})
 
-    @property
-    def revisions(self):
-        """Return the revisions for this installer"""
-        revs = []
-        for version in Version.objects.filter(
-            content_type__model="installer", object_id=self.id
-        ):
-            try:
-                rev = InstallerRevision(version)
-            except Game.DoesNotExist:
-                continue
-            else:
-                revs.append(rev)
-        return revs
-
-    @property
-    def latest_version(self):
-        """Return the latest version for this installer"""
-        versions = Version.objects.filter(
-            content_type__model="installer",
-            object_id=self.id
-        ).order_by("-revision__date_created")
-        for version in versions:
-            if not version.field_dict["draft"]:
-                return version
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -987,12 +934,7 @@ class Installer(BaseInstaller):
 
 class InstallerHistory(BaseInstaller):
     """Past versions of installers
-
-    Yes, that's what django-reversion is supposed to be for but we used it in a backwards way,
-    to store submissions instead of past revisions.
-
-    This is a simplified version of the model anyway since we don't have to keep track  of the
-    published aspect of it.
+    This is a simplified version of the model
     """
     installer = models.ForeignKey(Installer, related_name="past_versions", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -1213,198 +1155,6 @@ class GameLink(models.Model):
 
         verbose_name = "External link"
         ordering = ["website"]
-
-
-class InstallerRevision(BaseInstaller):  # pylint: disable=too-many-instance-attributes
-    """Revision for an installer"""
-    def __init__(self, version):
-        super(InstallerRevision, self).__init__()
-        self._version = version
-        self.id = version.pk  # pylint: disable=C0103
-        installer_data = self.get_installer_data()
-        self.game = Game.objects.get(pk=installer_data["game"])
-
-        self.name = self.game.name
-
-        try:
-            self.comment = self._version.revision.comment
-            self.user = self._version.revision.user
-            self.created_at = self._version.revision.date_created
-        except Revision.DoesNotExist:
-            LOGGER.warning("No revision found for %s", self._version)
-            self.comment = ""
-            self.user = None
-            self.created_at = None
-        self.draft = installer_data["draft"]
-        self.published = installer_data["published"]
-        self.rating = installer_data["rating"]
-
-        self.script = installer_data["script"]
-        self.content = installer_data["content"]
-
-        self.user = self.user
-        try:
-            self.runner = Runner.objects.get(pk=installer_data["runner"])
-        except Runner.DoesNotExist:
-            self.runner = None
-        self.slug = installer_data["slug"]
-        self.version = installer_data["version"]
-        self.description = installer_data["description"]
-        self.notes = installer_data["notes"]
-        self.reason = installer_data["reason"]
-        self.review = installer_data["review"]
-
-        self.installer_id = self._version.object_id
-
-    def __str__(self):
-        return self.comment
-
-    @classmethod
-    def iterate_versions(cls, version_type="submission"):
-        """List all versions of a given type"""
-        return Version.objects.filter(
-            content_type__model="installer",
-            revision__comment__startswith=f"[{version_type}]"
-        )
-
-    @classmethod
-    def remove_dupe_submissions(cls):
-        """Ensure installers only have 1 submission"""
-        revisions = [cls(version) for version in cls.iterate_versions()]
-        dupe_submissions = []
-        for revision in revisions:
-            try:
-                installer = Installer.objects.get(id=revision.installer_id)
-            except Installer.DoesNotExist:
-                LOGGER.info("No installer with ID %s", revision.installer_id)
-                revision.delete()
-                continue
-
-            num_sub = 0
-            for rev in installer.revisions:
-                if rev.comment.startswith("[submission]"):
-                    num_sub += 1
-            if num_sub > 1:
-                if installer not in dupe_submissions:
-                    dupe_submissions.append(installer)
-        for installer in dupe_submissions:
-            revisions = sorted(
-                [r for r in installer.revisions if r.comment.startswith("[submission]")],
-                key=lambda x: x.revision.date_created,
-                reverse=True
-            )
-            for rev in revisions[1:]:
-                rev.set_to_draft()
-
-    def set_to_draft(self):
-        """Change the submission back to draft"""
-        self.comment = self.comment.replace("[submission]", "[draft]")
-        self._version.revision.comment = self.comment
-        self._version.revision.save()
-        # Not currently modifying the internal state of the submission, which is ok
-        # since we use the revision comment to filter drafts from submissions.
-
-    @property
-    def revision(self):
-        """Accessor for the revision"""
-        if self._version.revision:
-            return self._version.revision
-
-    @property
-    def revision_id(self):
-        """Accessor for the revision id if there is one"""
-        if self._version.revision:
-            return self._version.revision.id
-
-    def get_installer_data(self):
-        """Return the data saved in the revision in an usable format"""
-        installer_data = json.loads(self._version.serialized_data)[0]["fields"]
-        installer_data["script"] = load_yaml(installer_data["content"])
-        installer_data["id"] = self.id
-        # Return a defaultdict to prevent key errors for new fields that
-        # weren't present in previous revisions
-        default_installer_data = defaultdict(str)
-        default_installer_data.update(installer_data)
-        return default_installer_data
-
-    def _clear_old_revisions(self, original_revision=None, author=None, date=None):
-        """Delete revisions older than a given date and from a given author"""
-        try:
-            installer = Installer.objects.get(pk=self.installer_id)
-        except Installer.DoesNotExist:
-            # Revision is for a deleted installer
-            original_revision.delete()
-            return
-        if not author:
-            if not original_revision:
-                LOGGER.warning("Missing original revision, skipping the rest.")
-                return
-            author = original_revision.user
-            date = original_revision.date_created
-
-        # Clean earlier drafts from the same submitter
-        for revision in installer.revisions:
-            if author and date and any([
-                revision.user != author,
-                revision.created_at > date
-            ]):
-                continue
-            revision._version.revision.delete()  # pylint: disable=protected-access
-
-    def delete(self, using=None, keep_parents=False):  # pylint: disable=unused-argument
-        """Delete the revision and the previous ones from the same author"""
-        self._clear_old_revisions(original_revision=self._version.revision)
-
-    def reject(self, installer_data):
-        """Reject the submission, setting it back to draft."""
-        version_data = json.loads(self._version.serialized_data)
-        review = installer_data["review"]
-        version_data[0]["fields"]["review"] = review
-        version_data[0]["fields"]["draft"] = True
-        self._version.serialized_data = json.dumps(version_data)
-        self._version.save()
-        self.set_to_draft()
-        if review:
-            installer = Installer.objects.get(pk=self.installer_id)
-            notify_rejected_installer(installer, review, self._version.revision.user)
-
-    def accept(self, moderator=None, installer_data=None):
-        """Accepts an installer submission
-
-        Also clears any earlier draft created by the same user.
-        The data submitted by the user can be overridden by a moderator in the
-        installer_data dict.
-        """
-
-        submission_author = self._version.revision.user
-        submission_date = self._version.revision.date_created
-        # Since the reversion package is used in a backwards way,
-        # the installer is "reverted" to its future state (versions are
-        # supposed to store past states of objects but they are used for
-        # storing potential future versions in our case).
-        self._version.revert()
-
-        installer = Installer.objects.get(pk=self.installer_id)
-        installer.published = True
-        installer.draft = False
-
-        # Keep a snapshot of the current installer (if a moderator is involved, otherwise is this
-        # accepted automatically by a script and doesn't need a revision)
-        if moderator:
-            InstallerHistory.create_from_installer(installer)
-            installer.published_by = moderator
-
-        if installer_data:
-            # Only fields editable in the dashboard will be affected
-            # FIXME also persist runner
-            installer.version = installer_data["version"]
-            installer.notes = installer_data["notes"]
-            installer.description = installer_data["description"]
-            installer.content = installer_data["content"]
-        installer.save()
-
-        self._clear_old_revisions(author=submission_author, date=submission_date)
-
 
 class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attributes
     """Auto-generated installer"""

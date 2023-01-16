@@ -70,9 +70,6 @@ urlpatterns = [
     path('/installer/feed/',
          views.InstallerFeed(),
          name='installer_feed'),
-    path('/installer/submissions',
-         views.installer_submissions,
-         name='installer_submissions'),
 
     re_path(r'/(?P<slug>[\w\-]+)/screenshot/add/',
             views.screenshot_add,

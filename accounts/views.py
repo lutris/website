@@ -30,7 +30,6 @@ from django_openid_auth.views import login_complete, parse_openid_response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from reversion.models import Version
 
 from games import models
 

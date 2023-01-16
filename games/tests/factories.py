@@ -131,6 +131,13 @@ class InstallerFactory(factory.DjangoModelFactory):
     published = True
     user = factory.SubFactory(UserNoLibraryFactory)
 
+class InstallerDraftFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.InstallerDraft
+    runner = factory.SubFactory(RunnerFactory)
+    version = 'test'
+    draft = True
+    user = factory.SubFactory(UserNoLibraryFactory)
 
 class CompanyFactory(factory.DjangoModelFactory):
     class Meta:
