@@ -16,7 +16,7 @@
           <span class="visually-hidden">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-          <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_installer' slug=installer.base_installer.slug %}">
+          <li><a class="dropdown-item bg-dark text-white" href="{% url 'edit_draft' draft_id=installer.id %}">
             Edit installer
           </a></li>
         </ul>

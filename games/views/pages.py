@@ -15,6 +15,7 @@ from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
@@ -24,9 +25,8 @@ from sorl.thumbnail import get_thumbnail
 from accounts.decorators import user_confirmed_required
 from emails.messages import send_email
 from games import models
-from games.forms import (ForkInstallerForm, GameEditForm, GameForm,
-                         InstallerEditForm, InstallerForm, LibraryFilterForm,
-                         ScreenshotForm)
+from games.forms import (GameEditForm, GameForm, InstallerEditForm,
+                         LibraryFilterForm, ScreenshotForm)
 from games.models import Game, GameSubmission, Installer, InstallerIssue, InstallerDraft
 from games.webhooks import notify_installer, notify_issue_creation
 
@@ -262,7 +262,7 @@ def game_detail(request, slug):
 def new_installer(request, slug):
     """Create a new draft installer for a game"""
     game = get_object_or_404(Game, slug=slug)
-    draft = InstallerDraft.objects.create(user=request.user, game=game)
+    draft = InstallerDraft.objects.create(user=request.user, game=game, created_at=timezone.now())
     return edit_draft(request, draft.id)
 
 
@@ -277,12 +277,12 @@ def edit_draft(request, draft_id):
 
     form = InstallerEditForm(request.POST or None, instance=installer)
     if request.method == "POST" and form.is_valid():
-        # Force the creation of a revision instead of creating a new installer
-        installer = form.save(commit=False)
-        installer.review = ""
+        installer = form.save()
+        # installer.review = ""
         if "save" in request.POST:
             messages.info(request, "Draft saved")
             return redirect("edit_draft", draft_id=installer.id)
+        notify_installer(installer)
         messages.info(request, "Submission sent to moderation")
         return redirect("installer_complete", slug=installer.game.slug)
     return render(
