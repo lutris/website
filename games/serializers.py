@@ -147,6 +147,7 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
 
     runner = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+    base_installer = InstallerSerializer()
 
     class Meta:
         """Model and field definitions"""
@@ -156,7 +157,7 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
             'version', 'description', 'notes', 'credits', 'created_at', 'draft',
             'steamid', 'gogid', 'gogslug',
             'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
-            'discord_id',
+            'discord_id', 'base_installer', 'review', 'reason'
         )
 
 class InstallerWithRevisionsSerializer(InstallerSerializer):

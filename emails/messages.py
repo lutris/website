@@ -53,3 +53,19 @@ def send_email(template, context, subject, recipients, sender=None):
     html_part = transform(html_body, base_url='http://lutris.net')
     msg.attach_alternative(html_part, "text/html")
     return msg.send(False)
+
+
+def notify_rejected_installer(installer, review, user):
+    """Notify a user their installer was rejected"""
+    context = {
+        "username": user.username,
+        "installer": installer,
+        "review": review
+    }
+    subject = f"Your installer for {installer} wasn't published"
+    send_email(
+        "installer_rejected",
+        context,
+        subject,
+        user.email
+    )
