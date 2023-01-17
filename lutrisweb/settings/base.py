@@ -221,10 +221,6 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.clear_spammers',
         'schedule': crontab(minute=4)
     },
-    'clean-installers': {
-        'task': 'games.tasks.auto_process_installers',
-        'schedule': crontab(minute=5)
-    },
     'clean_action_log': {
         'task': 'games.tasks.clean_action_log',
         'schedule': crontab(minute=6)

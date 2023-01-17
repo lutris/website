@@ -10,38 +10,14 @@ from games import models
 LOGGER = get_task_logger(__name__)
 
 
-
-@task
-def delete_unchanged_forks():
-    """Periodically delete forked installers that haven't received any changes"""
-
-
-@task
-def clear_orphan_versions():
-    """Deletes versions that are no longer associated with an installer"""
-
-
-@task
-def clear_orphan_revisions():
-    """Clear revisions that are no longer attached to any object"""
-
-
 @task
 def clean_action_log():
     """Remove zero value entries from log"""
     KeyValueStore.objects.filter(
-        Q(key="clear_orphan_versions")
-        | Q(key="clear_orphan_revisions")
-        | Q(key="delete_unchanged_forks")
-        | Q(key="spam_avatar_deleted")
+        Q(key="spam_avatar_deleted")
         | Q(key="spam_website_deleted"),
         value=0
     ).delete()
-
-
-@task
-def auto_process_installers():
-    """Auto deletes or accepts some submissions"""
 
 
 def process_new_steam_installers():
