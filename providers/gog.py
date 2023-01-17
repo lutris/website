@@ -213,6 +213,7 @@ def load_games_from_gog_api():
 
 
 def populate_gogid_and_gogslug():
+    """Fills the gogid and gogslug fields in games, respecting GOG packages"""
     packages = get_game_packages()
     duplicates = []
     for gog_game in models.ProviderGame.objects.filter(provider__name="gog"):

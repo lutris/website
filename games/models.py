@@ -475,7 +475,10 @@ class Game(models.Model):
 
     def has_auto_installers(self):
         """Return whether this game has auto-generated installers"""
-        return self.platforms.filter(default_installer__isnull=False).exists()
+        platform_has_autoinstaller = self.platforms.filter(default_installer__isnull=False).exists()
+        if platform_has_autoinstaller:
+            return True
+
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
