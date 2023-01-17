@@ -129,6 +129,7 @@ class GameManager(models.Manager):
             .filter(
                 Q(installers__published=True)
                 | Q(platforms__default_installer__startswith="{")
+                | Q(provider_games__provider__name__in=("gog", "steam", "humble"))
             )
             .order_by("name")
             .annotate(installer_count=Count("installers", distinct=True))
@@ -478,7 +479,11 @@ class Game(models.Model):
         platform_has_autoinstaller = self.platforms.filter(default_installer__isnull=False).exists()
         if platform_has_autoinstaller:
             return True
-
+        return self.provider_games.filter(
+            Q(provider__name="gog")
+            | Q(provider__name="steam")
+            | Q(provider__name="humblebundle")
+        ).exists()
 
     def get_absolute_url(self):
         """Return the absolute url for a game"""
@@ -572,7 +577,10 @@ class Game(models.Model):
     def get_default_installers(self):
         """Return all auto-installers for this game's platforms"""
         auto_installers = []
-
+        provider_with_autoinstallers = ["gog", "steam", "humblebundle"]
+        provider_names = {
+            "gog": "GOG", "steam": "Steam", "humblebundle": "Humble Bundle"
+        }
         for platform in self.platforms.all():
             if platform.default_installer:
                 installer = platform.default_installer
@@ -585,6 +593,21 @@ class Game(models.Model):
                 installer["published"] = True
                 installer["auto"] = True
                 auto_installers.append(installer)
+        for provider_game in self.provider_games.filter(provider__name__in=provider_with_autoinstallers):
+            installer = {
+                "name": self.name,
+                "game_slug": self.slug,
+                "runner": "auto",
+                "version": provider_names[provider_game.provider.name] + "(Auto)",
+                "slug": "%s:%s" % (provider_game.provider.name, provider_game.internal_id),
+                "description": (
+                    "Make sure you have connected your %s account in Lutris and that you own this game."
+                     % provider_names[provider_game.provider.name]
+                ),
+                "published": True,
+                "auto": True
+            }
+            auto_installers.append(installer)
         return auto_installers
 
     def save(
