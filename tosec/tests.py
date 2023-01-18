@@ -1,7 +1,9 @@
 # pylint: disable=missing-docstring,invalid-name
 import os
 from django.test import TestCase
-from .parser import TosecParser, TosecNamingConvention, smart_split
+from tosec.parsers.legacy import TosecOldParser as TosecParser
+from tosec.parsers.naming import TosecNamingConvention
+from tosec.utils import smart_split
 
 
 class TestTosecParser(TestCase):
