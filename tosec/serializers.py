@@ -13,6 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class RomSerializer(serializers.ModelSerializer):
     class Meta:
         model = TosecRom
+        fields = '__all__'
 
 
 class GameSerializer(serializers.ModelSerializer):

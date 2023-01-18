@@ -14,7 +14,13 @@ class CategoryListView(generics.ListAPIView):
 
 class GameListView(generics.ListAPIView):
     serializer_class = GameSerializer
-    queryset = TosecGame.objects.all()
     filter_backends = (filters.SearchFilter, )
     search_fields = ('name', )
     paginate_by = 100
+
+    def get_queryset(self):
+        md5sum = self.request.GET.get('md5')
+        base_query = TosecGame.objects.all()
+        if md5sum:
+            base_query = base_query.filter(roms__md5__iexact=md5sum)
+        return base_query
