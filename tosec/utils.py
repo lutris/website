@@ -47,7 +47,7 @@ def import_tosec_database(filename):
         description=tosec_parser.headers['description'],
         category=tosec_parser.headers.get('category', ''),
         version=tosec_parser.headers['version'],
-        author=tosec_parser.headers['author'],
+        author=tosec_parser.headers['author'] or "",
     )
     category.save()
 
