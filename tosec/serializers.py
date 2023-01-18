@@ -1,18 +1,18 @@
 """Serializers for TOSEC"""
 from rest_framework import serializers
-from .models import Category, Game, Rom
+from .models import TosecCategory, TosecGame, TosecRom
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = TosecCategory
         fields = ('name', 'description', 'category',
                   'version', 'author', 'section')
 
 
 class RomSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Rom
+        model = TosecRom
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -20,5 +20,5 @@ class GameSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
 
     class Meta:
-        model = Game
+        model = TosecGame
         fields = ('name', 'description', 'category', 'roms')

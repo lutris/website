@@ -298,7 +298,7 @@ REST_FRAMEWORK = {
 }
 
 # Shell Plus
-SHELL_PLUS_DONT_LOAD = ['tosec']
+SHELL_PLUS_DONT_LOAD = []
 
 SILENCED_SYSTEM_CHECKS = [
     'urls.W002',

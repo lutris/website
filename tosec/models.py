@@ -2,7 +2,7 @@
 from django.db import models
 
 
-class Category(models.Model):
+class TosecCategory(models.Model):
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
     category = models.CharField(max_length=256)
@@ -18,8 +18,8 @@ class Category(models.Model):
         ordering = ('name', )
 
 
-class Game(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+class TosecGame(models.Model):
+    category = models.ForeignKey(TosecCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
@@ -30,8 +30,8 @@ class Game(models.Model):
         ordering = ('category', 'name')
 
 
-class Rom(models.Model):
-    game = models.ForeignKey(Game, related_name='roms', on_delete=models.CASCADE)
+class TosecRom(models.Model):
+    game = models.ForeignKey(TosecGame, related_name='roms', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     size = models.IntegerField()
     crc = models.CharField(max_length=16)

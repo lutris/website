@@ -11,7 +11,7 @@ def import_tosec_database(filename):
     tosec_parser = TosecParser(dat_contents)
     tosec_parser.parse()
 
-    category = models.Category(
+    category = models.TosecCategory(
         name=tosec_parser.headers['name'],
         description=tosec_parser.headers['description'],
         category=tosec_parser.headers['category'],
@@ -21,14 +21,14 @@ def import_tosec_database(filename):
     category.save()
 
     for game in tosec_parser.games:
-        game_row = models.Game(
+        game_row = models.TosecGame(
             category=category,
             name=game['name'],
             description=game['description'],
         )
         game_row.save()
         rom = game['rom']
-        rom_row = models.Rom(
+        rom_row = models.TosecRom(
             game=game_row,
             name=rom['name'],
             size=rom['size'],

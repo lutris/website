@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class RomInline(admin.StackedInline):
-    model = models.Rom
+    model = models.TosecRom
     extra = 0
 
 
@@ -22,5 +22,5 @@ class GameAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Game, GameAdmin)
+admin.site.register(models.TosecCategory, CategoryAdmin)
+admin.site.register(models.TosecGame, GameAdmin)
