@@ -1,11 +1,12 @@
 """TOSEC tasks"""
 import os
 
+from celery import task
 from django.conf import settings
 
 from tosec.utils import import_tosec_database
 
-
+@task
 def import_tosec(folder='TOSEC'):
     """Import several TOSEC dat files to the database"""
     basepath = os.path.join(settings.TOSEC_DAT_PATH, folder)
@@ -20,4 +21,4 @@ def import_tosec(folder='TOSEC'):
     total_files = len(filenames)
     for index, filename in enumerate(filenames, start=1):
         print(f"Importing {filename} [{index} of {total_files}]")
-        import_tosec_database(filename)
+        import_tosec_database(filename, folder)

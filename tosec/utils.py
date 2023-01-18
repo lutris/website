@@ -37,7 +37,7 @@ def smart_split(string, sep=None):
 
 
 
-def import_tosec_database(filename):
+def import_tosec_database(filename, collection):
     """Import a TOSEC database referenced by filename"""
     tosec_parser = TosecParser(filename)
     tosec_parser.parse()
@@ -45,7 +45,7 @@ def import_tosec_database(filename):
     category = models.TosecCategory(
         name=tosec_parser.headers['name'],
         description=tosec_parser.headers['description'],
-        category=tosec_parser.headers.get('category', ''),
+        category=tosec_parser.headers.get('category', collection),
         version=tosec_parser.headers['version'],
         author=tosec_parser.headers['author'] or "",
     )
