@@ -5,7 +5,8 @@ from . import models
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'version', 'author')
+    list_display = ('name', 'category', 'version', 'author')
+    search_fields = ('name', )
 
 
 class RomInline(admin.StackedInline):

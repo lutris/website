@@ -1,4 +1,6 @@
 """Utilities for handling TOSEC files"""
+from django.db import DataError
+
 from tosec import models
 from tosec.parsers.xml import TosecParser
 
@@ -43,7 +45,7 @@ def import_tosec_database(filename):
     category = models.TosecCategory(
         name=tosec_parser.headers['name'],
         description=tosec_parser.headers['description'],
-        category=tosec_parser.headers['category'],
+        category=tosec_parser.headers.get('category', ''),
         version=tosec_parser.headers['version'],
         author=tosec_parser.headers['author'],
     )
@@ -60,9 +62,12 @@ def import_tosec_database(filename):
             rom_row = models.TosecRom(
                 game=game_row,
                 name=rom['name'],
-                size=rom['size'],
+                size=int(rom['size']),
                 crc=rom['crc'],
                 md5=rom.get('md5', ''),
                 sha1=rom.get('sha1', ''),
             )
-            rom_row.save()
+            try:
+                rom_row.save()
+            except DataError as ex:
+                print("Failed to save ROM %s: %s" % (rom, ex))

@@ -7,7 +7,7 @@ class TosecCategory(models.Model):
     description = models.CharField(max_length=256)
     category = models.CharField(max_length=256)
     version = models.CharField(max_length=32)
-    author = models.CharField(max_length=128)
+    author = models.TextField()
     section = models.CharField(max_length=12, default='TOSEC')
 
     def __str__(self):
@@ -33,7 +33,7 @@ class TosecGame(models.Model):
 class TosecRom(models.Model):
     game = models.ForeignKey(TosecGame, related_name='roms', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    size = models.IntegerField()
+    size = models.BigIntegerField()
     crc = models.CharField(max_length=16)
     md5 = models.CharField(max_length=32)
     sha1 = models.CharField(max_length=64)
