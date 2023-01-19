@@ -6,6 +6,13 @@ from django.conf import settings
 
 from tosec.utils import import_tosec_database
 
+
+@task
+def import_dat(filename, folder):
+    """Wrapper around import_tosec_database as a Celery task"""
+    import_tosec_database(filename, folder)
+
+
 @task
 def import_tosec(folder='TOSEC'):
     """Import several TOSEC dat files to the database"""
@@ -21,4 +28,4 @@ def import_tosec(folder='TOSEC'):
     total_files = len(filenames)
     for index, filename in enumerate(filenames, start=1):
         print(f"Importing {filename} [{index} of {total_files}]")
-        import_tosec_database(filename, folder)
+        import_dat.delay(filename, folder)
