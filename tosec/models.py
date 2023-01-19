@@ -26,6 +26,10 @@ class TosecGame(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def collection(self):
+        return self.category.category
+
     class Meta:
         ordering = ('category', 'name')
 
