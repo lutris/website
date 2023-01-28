@@ -28,18 +28,11 @@ urlpatterns = [
          TemplateView.as_view(template_name='games/submitted.html'),
          name="game-submitted"),
 
-    path('/game-issue',
-         views.submit_issue,
-         name='game-submit-issue'),
-    path('/banner/<slug:slug>.jpg',
-         views.get_banner,
-         name='get_banner'),
-    path('/icon/<slug:slug>.png',
-         views.get_icon,
-         name='get_icon'),
-    path('/install/<int:id>/view',
-         views.view_installer,
-         name='view_installer'),
+    path('/game-issue', views.submit_issue, name='game-submit-issue'),
+    path('/banner/<slug:slug>.jpg', views.get_banner, name='get_banner'),
+    path('/icon/<slug:slug>.png', views.get_icon, name='get_icon'),
+    path('/cover/<slug:slug>.jpg', views.get_coverart, name="get_coverart"),
+    path('/install/<int:id>/view', views.view_installer, name='view_installer'),
 
     # Deprecated! Remove after 0.5.0 release!
     path('/install/<slug:slug>/',

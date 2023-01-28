@@ -415,6 +415,13 @@ def get_icon(request, slug):
     return redirect(thumbnail.url)
 
 
+def get_coverart(request, slug):
+    game = get_object_or_404(Game, slug=slug)
+    if not game.coverart:
+        raise Http404
+    return redirect(game.coverart.url)
+
+
 def game_list(request):
     """View for all games"""
     games = models.Game.objects.filter(change_for__isnull=True)
