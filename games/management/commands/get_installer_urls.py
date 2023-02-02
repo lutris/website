@@ -17,11 +17,13 @@ class Command(BaseCommand):
             try:
                 files = installer_content.get("files", [])
             except AttributeError:
-                print("Deleting installer %s" % installer)
+                print(installer_content)
+                print("Attribute error while getting files, deleting installer %s" % installer)
                 installer.delete()
                 continue
             if files is None:
-                print("Deleting installer %s" % installer)
+                print(installer_content)
+                print("Files is None, deleting installer %s" % installer)
                 installer.delete()
                 continue
             for url_dict in files:
@@ -29,7 +31,8 @@ class Command(BaseCommand):
                 try:
                     url = url_dict[fileid]
                 except TypeError:
-                    print("Deleting installer %s" % installer)
+                    print(installer_content)
+                    print("TypeError while getting files, deleting installer %s" % installer)
                     installer.delete()
                     continue
                 if isinstance(url, str):
