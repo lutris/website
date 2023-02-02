@@ -20,24 +20,6 @@ def clean_action_log():
     ).delete()
 
 
-def process_new_steam_installers():
-    """Auto publish Steam installers"""
-    stats = defaultdict(int)
-    for installer in models.Installer.objects.new():
-        if installer.runner.slug != "steam":
-            stats["non-steam"] += 1
-            continue
-        stats["steam"] += 1
-        script = installer.raw_script
-        if script == {'game': {'appid': installer.game.steamid}}:
-            installer.published = True
-            installer.save()
-            stats["published"] += 1
-        print(script)
-        print(installer.game.provider_games.filter(provider__name="steam"))
-    return stats
-
-
 @task
 def populate_popularity():
     """Update the popularity field for all"""
