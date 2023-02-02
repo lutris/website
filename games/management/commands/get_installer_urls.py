@@ -36,7 +36,7 @@ class Command(BaseCommand):
                     installer.delete()
                     continue
                 if isinstance(url, str):
-                    if url.startswith("N/A"):
+                    if url.startswith(("N/A", "$STEAM")):
                         continue
                     url_stats[url].append(slug)
                 elif isinstance(url, dict):
