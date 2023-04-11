@@ -232,12 +232,17 @@ class GameSubmissionAcceptView(APIView):
         """Process the submission"""
         if not request.user.is_staff:
             raise PermissionDenied
-
         game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
-        game_submission.accept()
+        if request.data["accepted"]:
+            game_submission.published = True
+            game_submission.save()
+            accepted = True
+        else:
+            game_submission.delete()
+            accepted = False
         return Response({
             "id": game_submission.id,
-            "accepted": True
+            "accepted": accepted
         })
 
 class ScreenshotView(generics.ListAPIView):
