@@ -1,5 +1,3 @@
-.PHONY: tags
-
 watch:
 	npm run watch
 
@@ -66,7 +64,7 @@ syncdb:
 	rm latest.tar
 
 syncmedia:
-    rsync -avz anaheim:/srv/prod/website/media/ media/
+	rsync -avz anaheim:/srv/prod/website/media/ media/
 
 discord:
 	# Load Discord App IDS to database
