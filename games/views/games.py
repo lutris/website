@@ -234,8 +234,7 @@ class GameSubmissionAcceptView(APIView):
             raise PermissionDenied
         game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
         if request.data["accepted"]:
-            game_submission.published = True
-            game_submission.save()
+            game_submission.accept()
             accepted = True
         else:
             game_submission.delete()
