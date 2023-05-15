@@ -1,19 +1,18 @@
 """TOSEC tasks"""
 import os
 
-from celery import task
 from django.conf import settings
 
 from tosec.utils import import_tosec_database
+from lutrisweb.celery import app
 
-
-@task
+@app.task
 def import_dat(filename, folder):
     """Wrapper around import_tosec_database as a Celery task"""
     import_tosec_database(filename, folder)
 
 
-@task
+@app.task
 def import_tosec(folder='TOSEC'):
     """Import several TOSEC dat files to the database"""
     basepath = os.path.join(settings.TOSEC_DAT_PATH, folder)

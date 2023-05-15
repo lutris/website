@@ -76,7 +76,7 @@ GOG_LOGO_PATH = media_directory('gog-logos')
 GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MIDDLEWARE = [
     # Caching disabled until proper invalidation is implemented
     # 'django.middleware.cache.UpdateCacheMiddleware',
@@ -226,43 +226,43 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=6)
     },
     'load-gog-games': {
-        'task': 'providers.tasks.load_gog_games',
+        'task': 'providers.tasks.gog.load_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=1)
     },
     'match-gog-games': {
-        'task': 'providers.tasks.match_gog_games',
+        'task': 'providers.tasks.gog.match_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=10)
     },
     'load-steam-games': {
-        'task': 'providers.tasks.load_steam_games',
+        'task': 'providers.tasks.steam.load_steam_games',
         'schedule': crontab(day_of_week=1, hour=2, minute=1)
     },
     'match-steam-games': {
-        'task': 'providers.tasks.match_steam_games',
+        'task': 'providers.tasks.steam.match_steam_games',
         'schedule': crontab(day_of_week=1, hour=3, minute=1)
     },
     'load-igdb-genres': {
-        'task': 'providers.tasks.load_igdb_genres',
+        'task': 'providers.tasks.igdb.load_igdb_genres',
         'schedule': crontab(day_of_week=2, hour=3, minute=1)
     },
     'load-igdb-platforms': {
-        'task': 'providers.tasks.load_igdb_platforms',
+        'task': 'providers.tasks.igdb.load_igdb_platforms',
         'schedule': crontab(day_of_week=2, hour=3, minute=5)
     },
     'load-igdb-games': {
-        'task': 'providers.tasks.load_igdb_games',
+        'task': 'providers.tasks.igdb.load_igdb_games',
         'schedule': crontab(day_of_week=2, hour=3, minute=8)
     },
     'match-igdb-games': {
-        'task': 'providers.tasks.match_igdb_games',
+        'task': 'providers.tasks.igdb.match_igdb_games',
         'schedule': crontab(day_of_week=2, hour=4, minute=1)
     },
     'load-igdb-covers': {
-        'task': 'providers.tasks.load_igdb_covers',
+        'task': 'providers.tasks.igdb.load_igdb_covers',
         'schedule': crontab(day_of_week=2, hour=4, minute=30)
     },
     'sync-igdb-coverart': {
-        'task': 'providers.tasks.sync_igdb_coverart',
+        'task': 'providers.tasks.igdbsync_igdb_coverart',
         'schedule': crontab(day_of_week=2, hour=5, minute=30)
     },
 }

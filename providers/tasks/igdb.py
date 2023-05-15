@@ -9,7 +9,6 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import make_aware
 
-from celery import task
 from celery.utils.log import get_task_logger
 from common.util import slugify
 from common.models import save_action_log
@@ -18,7 +17,7 @@ from games.models import Game
 from platforms.models import Platform
 from providers.igdb import IGDBClient
 from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
-
+from lutrisweb.celery import app
 
 LOGGER = get_task_logger(__name__)
 
@@ -62,7 +61,7 @@ def _igdb_loader(resource_name, model):
         page += 1
 
 
-@task
+@app.task
 def load_igdb_games():
     """Load all games from IGDB"""
     start = datetime.now()
@@ -74,25 +73,25 @@ def load_igdb_games():
     save_action_log("igdb_load_games_duration", duration.seconds)
 
 
-@task
+@app.task
 def load_igdb_genres():
     """Load all genres from IGDB"""
     _igdb_loader("genres", ProviderGenre)
 
 
-@task
+@app.task
 def load_igdb_platforms():
     """Load all platforms from IGDB"""
     _igdb_loader("platforms", ProviderPlatform)
 
 
-@task
+@app.task
 def load_igdb_covers():
     """Load all covers from IGDB"""
     _igdb_loader("covers", ProviderCover)
 
 
-@task
+@app.task
 def match_igdb_games():
     """Create or update Lutris games from IGDB games"""
     platforms = {
@@ -143,7 +142,7 @@ def match_igdb_games():
         lutris_game.save()
 
 
-@task
+@app.task
 def sync_igdb_platforms():
     """Syncs IGDB platforms to Lutris"""
     for igdb_platform in ProviderPlatform.objects.filter(provider__name="igdb"):
@@ -166,7 +165,7 @@ def get_igdb_cover(image_id, size="cover_big"):
     return response.content
 
 
-@task
+@app.task
 def sync_igdb_coverart(force_update=False):
     """Downloads IGDB coverart and associates it with Lutris games
 
@@ -218,7 +217,7 @@ def sync_igdb_coverart(force_update=False):
     return stats
 
 
-@task
+@app.task
 def deduplicate_lutris_games():
     """IGDB uses a different slugify method,
     using dashes on apostrophes where we don't"""

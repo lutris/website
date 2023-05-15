@@ -1,15 +1,15 @@
 """Celery tasks for account related jobs"""
-from celery import task
 from celery.utils.log import get_task_logger
 from django.db.models import Q
 
 from common.models import KeyValueStore
 from games import models
 
+from lutrisweb.celery import app
 LOGGER = get_task_logger(__name__)
 
 
-@task
+@app.task
 def clean_action_log():
     """Remove zero value entries from log"""
     KeyValueStore.objects.filter(
@@ -19,7 +19,7 @@ def clean_action_log():
     ).delete()
 
 
-@task
+@app.task
 def populate_popularity():
     """Update the popularity field for all"""
     i = 0

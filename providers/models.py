@@ -4,7 +4,6 @@ import datetime
 import logging
 
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 from django.utils.timezone import make_aware
 
 LOGGER = logging.getLogger(__name__)
@@ -51,7 +50,7 @@ class ProviderGame(ProviderResource):
         on_delete=models.PROTECT,
     )
     updated_at = models.DateTimeField(null=True)
-    metadata = JSONField(null=True)
+    metadata = models.JSONField(null=True)
 
     class Meta:
         """Model configuration"""
@@ -76,7 +75,7 @@ class ProviderGenre(ProviderResource):
         on_delete=models.PROTECT
     )
     updated_at = models.DateTimeField(null=True)
-    metadata = JSONField(null=True)
+    metadata = models.JSONField(null=True)
 
 class ProviderPlatform(ProviderResource):
     """Platforms given by providers"""
@@ -89,7 +88,7 @@ class ProviderPlatform(ProviderResource):
         on_delete=models.PROTECT
     )
     updated_at = models.DateTimeField(null=True)
-    metadata = JSONField(null=True)
+    metadata = models.JSONField(null=True)
 
 
 class ProviderCover(ProviderResource):
@@ -102,7 +101,7 @@ class ProviderCover(ProviderResource):
         on_delete=models.PROTECT
     )
     updated_at = models.DateTimeField(null=True)
-    metadata = JSONField(null=True)
+    metadata = models.JSONField(null=True)
 
     @classmethod
     def create_from_igdb_api(cls, provider, api_payload):

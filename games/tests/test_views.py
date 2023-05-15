@@ -122,7 +122,7 @@ class TestGameViews(TestCase):
         self.assertEqual(response.status_code, 200)
         url = "/games?paginate_by=-1"
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         url = "/games?paginate_by=0"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
