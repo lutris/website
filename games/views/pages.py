@@ -344,15 +344,6 @@ def installer_complete(request, slug):
     return render(request, "installers/complete.html", {"game": game})
 
 
-def get_installers(request, slug):  # pylint: disable=unused-argument
-    """Deprecated function, use REST API"""
-    try:
-        installers_json = Installer.objects.get_json(slug)
-    except Installer.DoesNotExist:
-        raise Http404
-    return HttpResponse(installers_json, content_type="application/json")
-
-
 @never_cache
 def view_installer(request, id):
     try:
