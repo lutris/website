@@ -262,7 +262,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(day_of_week=2, hour=4, minute=30)
     },
     'sync-igdb-coverart': {
-        'task': 'providers.tasks.igdbsync_igdb_coverart',
+        'task': 'providers.tasks.igdb.sync_igdb_coverart',
         'schedule': crontab(day_of_week=2, hour=5, minute=30)
     },
 }
