@@ -199,7 +199,7 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 # Select2 - bundled using webpack
 SELECT2_JS = ''
 SELECT2_CSS = ''
