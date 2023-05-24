@@ -18,10 +18,10 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('grappelli/', include('grappelli.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/games/', include('games.urls.admin')),
+    path('admin/', admin.site.urls),
+    path('grappelli/', include('grappelli.urls')),
     path('select2/', include('django_select2.urls')),
     path('openid/', include('django_openid_auth.urls')),
     path('user/', include('accounts.urls')),
