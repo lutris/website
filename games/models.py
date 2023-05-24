@@ -287,14 +287,22 @@ class Game(models.Model):
         if self.title_logo:
             # Hardcoded domain isn't ideal but we have to find another solution for storing
             # and referencing banners and icons anyway so this will do for the time being.
-            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": self.slug})
+            if self.change_for:
+                slug = self.change_for.slug
+            else:
+                slug = self.slug
+            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": self.slug})
+            if self.change_for:
+                slug = self.change_for.slug
+            else:
+                slug = self.slug
+            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": slug})
         return ""
 
     @property
