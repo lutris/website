@@ -876,15 +876,6 @@ class BaseInstaller(models.Model):
 
 class Installer(BaseInstaller):
     """Game installer model"""
-
-    RATINGS = {
-        "5": "Platinum (this rating is meaningless)",
-        "4": "Gold (this rating is meaningless)",
-        "3": "Silver (this rating is meaningless)",
-        "2": "Bronze (this rating is meaningless)",
-        "1": "Garbage (this rating is meaningless)",
-    }
-
     game = models.ForeignKey(Game, related_name="installers", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
@@ -913,7 +904,7 @@ class Installer(BaseInstaller):
         null=True
     )
     draft = models.BooleanField(default=False)
-    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+    rating = models.CharField(max_length=24, choices=(("0", "Do not use"),), blank=True)
 
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
