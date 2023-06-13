@@ -21,8 +21,12 @@ RUNNER_DEFAULTS = {
     "dxvk": True,
     "vkd3d": True,
     "esync": True,
+    "fsync": True,
     "eac": True,
+    "d3d_extras": True,
+    "dxvk_nvapi": True,
     "battleye": True,
+    "dgvoodoo2": False,
     "Desktop": False,
     "show_debug": "-all",
 }
