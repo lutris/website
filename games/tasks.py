@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from common.util import load_yaml, dump_yaml
 from common.models import KeyValueStore
+from runners.models import RunnerVersion
 from games import models
 
 from lutrisweb.celery import app
@@ -15,6 +16,15 @@ LOGGER = get_task_logger(__name__)
 OBSOLETE_RUNNERS = (
     "winesteam",
     "browser"
+)
+
+CURRENT_LOL_BUILD = "lutris-ge-lol-8.7-1-x86_64"
+
+CURRENT_BUILDS = (
+    "lutris-GE-Proton8-7-x86_64",
+    "lutris-GE-Proton8-6-x86_64",
+    "lutris-GE-Proton8-5-x86_64",
+    "lutris-GE-Proton8-4-x86_64",
 )
 
 RUNNER_DEFAULTS = {
@@ -275,6 +285,57 @@ def remove_defaults():
                 changed = True
         for key in runner_config:
             stats["keys"].add(key)
+        if changed:
+            if runner_config:
+                stats["updated_config"] += 1
+                script[installer.runner.slug] = runner_config
+            else:
+                stats["removed_config"] += 1
+                script.pop(installer.runner.slug)
+            installer.content = dump_yaml(script)
+            installer.save()
+    return stats
+
+
+def fix_and_unpin_wine_versions():
+    """Removes Wine versions that reference non existant builds or the current default"""
+    published_versions = RunnerVersion.objects.filter(runner__slug="wine")
+    stats = {
+        "versions": defaultdict(list),
+        "published_versions": [f"{v.version}-{v.architecture}" for v in published_versions],
+        "updated_config": 0,
+        "removed_config": 0,
+        "lol_updates": 0,
+    }
+    for installer in models.Installer.objects.all():
+        script = load_yaml(installer.content)
+        runner = installer.runner.slug
+        if runner not in script:
+            continue
+        runner_config = script[runner]
+        if "version" not in runner_config:
+            continue
+        changed = False
+        version = str(runner_config["version"])
+        stats["versions"][version].append(installer.slug)
+
+        # Handle League of Legends installers
+        if "lol" in version.lower() and version != CURRENT_LOL_BUILD:
+            LOGGER.info("Switching %s to current LOL build %s", version, installer)
+            stats["lol_updates"] += 1
+            runner_config["version"] = CURRENT_LOL_BUILD
+            script[installer.runner.slug] = runner_config
+            installer.content = dump_yaml(script)
+            installer.save()
+            continue
+
+        # Handle current builds and non existant builds
+        if runner_config["version"] in CURRENT_BUILDS or runner_config["version"] not in stats["published_versions"]:
+            version =runner_config.pop("version")
+            LOGGER.info("Unpinning %s from %s", version, installer)
+            changed = True
+
+        # Save changes
         if changed:
             if runner_config:
                 stats["updated_config"] += 1
