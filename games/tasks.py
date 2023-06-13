@@ -17,6 +17,16 @@ OBSOLETE_RUNNERS = (
     "browser"
 )
 
+RUNNER_DEFAULTS = {
+    "dxvk": True,
+    "vkd3d": True,
+    "esync": True,
+    "eac": True,
+    "battleye": True,
+    "Desktop": False,
+    "show_debug": "-all",
+}
+
 # Fixes typos and non existent Winetricks verbs.
 # Empty string means the task will be removed
 WINETRICKS_FIXES = {
@@ -234,3 +244,40 @@ def fix_winetricks_verbs():
             script["installer"] = new_installer
             installer.content = dump_yaml(script)
             installer.save()
+
+
+def remove_defaults():
+    """Removes some directives from installers that represent the default behavior of the client
+    such as dxvk: true or esync: true"""
+    stats = defaultdict(int)
+    stats["keys"] = set()
+    for installer in models.Installer.objects.all():
+        script = load_yaml(installer.content)
+        if installer.runner.slug not in script:
+            continue
+        stats["total"] += 1
+        runner_config = script[installer.runner.slug]
+        if runner_config is None:
+            stats["empty_configs"] += 1
+            script.pop(installer.runner.slug)
+            installer.content = dump_yaml(script)
+            installer.save()
+            continue
+        changed = False
+        for key, default_value in RUNNER_DEFAULTS.items():
+            if key in runner_config and runner_config[key] == default_value:
+                LOGGER.info("Removing %s from %s", key, installer)
+                runner_config.pop(key)
+                changed = True
+        for key in runner_config:
+            stats["keys"].add(key)
+        if changed:
+            if runner_config:
+                stats["updated_config"] += 1
+                script[installer.runner.slug] = runner_config
+            else:
+                stats["removed_config"] += 1
+                script.pop(installer.runner.slug)
+            installer.content = dump_yaml(script)
+            installer.save()
+    return stats
