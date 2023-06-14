@@ -33,7 +33,6 @@ urlpatterns = [
     ),
     path('api/tosec', include('tosec.urls')),
     path('api/runners', include('runners.runner_urls')),
-    path('api/runtime', include('runners.runtime_urls_legacy')),
     path('api/runtimes', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
     path('api/installers', include('games.urls.installers')),

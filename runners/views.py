@@ -116,10 +116,6 @@ class RuntimeListView(generics.ListCreateAPIView):
         return Response(serializer.data, status=response_status)
 
 
-class RuntimeLegacyListView(RuntimeListView):
-    queryset = Runtime.objects.exclude(url="")
-
-
 class RuntimeDetailView(generics.RetrieveAPIView):
     """View the details of a runtime item with all its indiviual components"""
     serializer_class = RuntimeDetailSerializer
