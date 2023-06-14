@@ -41,7 +41,6 @@ urlpatterns = [
     path('api/bundles/<slug:slug>', BundleView.as_view(), name='api_bundle_view'),
     path('games', include('games.urls.pages')),
     path('bundles', include('bundles.urls')),
-    path('runners', include('runners.urls')),
     path('email/', include('emails.urls')),
     path(
         'steam-login/',
