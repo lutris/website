@@ -23,7 +23,7 @@ class Runner(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     @staticmethod
     def autocomplete_search_fields():
@@ -33,6 +33,7 @@ class Runner(models.Model):
     def icon_url(self):
         if self.icon:
             return self.icon.url
+        return ""
 
     @property
     def versions(self):
@@ -68,11 +69,11 @@ class RunnerVersion(models.Model):
         ordering = ("version", "architecture")
 
     def __str__(self):
-        return u"{} {} ({})".format(self.runner.name, self.version, self.architecture)
+        return f"{self.runner.name} {self.version} ({self.architecture})"
 
     @property
     def full_version(self):
-        return "%s-%s" % (self.version, self.architecture)
+        return f"{self.version}-{self.architecture}"
 
 
 class Runtime(models.Model):
@@ -83,12 +84,13 @@ class Runtime(models.Model):
     architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
     url = models.URLField(blank=True)
     enabled = models.BooleanField(default=True)
+    versioned = models.BooleanField(default=False)
 
     class Meta:
         ordering = ("-created_at",)
 
     def __str__(self):
-        return u"{} runtime (uploaded on {})".format(self.name, self.created_at)
+        return f"{self.name} runtime (uploaded on {self.created_at})"
 
 
 class RuntimeComponent(models.Model):
@@ -102,4 +104,4 @@ class RuntimeComponent(models.Model):
         ordering = ("filename", )
 
     def __str__(self):
-        return self.filename
+        return str(self.filename)
