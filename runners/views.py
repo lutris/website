@@ -112,7 +112,6 @@ class RuntimeListView(generics.ListCreateAPIView):
 
         queryset = Runtime.objects.all()
         if version_number:
-            print(version_number)
             queryset = queryset.filter(min_version__lte=version_number)
         filter_enabled = self.request.GET.get('enabled')
         if filter_enabled:
