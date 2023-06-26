@@ -107,6 +107,9 @@ class RuntimeListView(generics.ListCreateAPIView):
                 version_parts.append(0)
             release, major, minor, patch = version_parts[:4]
             version_number = int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+            if version_number < 5011000:
+                raise ClientTooOld
+
         queryset = Runtime.objects.all()
         if version_number:
             print(version_number)
