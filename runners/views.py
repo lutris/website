@@ -89,6 +89,16 @@ class RunnerUploadView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+def get_version_number(version):
+    """Return a decimal conversion of a version string"""
+    version_parts = version.split(".")
+    if len(version_parts) < 3:
+        raise ValueError
+    if len(version_parts) == 3:
+        version_parts.append(0)
+    release, major, minor, patch = version_parts[:4]
+    return int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+
 class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -100,13 +110,10 @@ class RuntimeListView(generics.ListCreateAPIView):
         version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
-            version_parts = remote_version.split(".")
-            if len(version_parts) < 3:
-                raise ClientTooOld
-            if len(version_parts) == 3:
-                version_parts.append(0)
-            release, major, minor, patch = version_parts[:4]
-            version_number = int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+            try:
+                version_number = get_version_number(remote_version)
+            except ValueError as ex:
+                raise ClientTooOld from ex
             if version_number < 5011000:
                 raise ClientTooOld
 
@@ -174,10 +181,13 @@ class RuntimeVersions(views.APIView):
             "runners": {},
         }
         user_agent = request.META["HTTP_USER_AGENT"]
+        version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
-        else:
-            remote_version = None
+            try:
+                version_number = get_version_number(remote_version)
+            except ValueError as ex:
+                raise ClientTooOld from ex
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
                 "version": version.version,
@@ -185,7 +195,7 @@ class RuntimeVersions(views.APIView):
                 "architecture": version.architecture
             } for version in runner.runner_versions.filter(default=True)]
         for runtime in Runtime.objects.filter(enabled=True):
-            if remote_version and runtime.min_version and remote_version < runtime.min_version:
+            if version_number and runtime.min_version and version_number < runtime.min_version:
                 continue
             response["runtimes"][runtime.name] = {
                 "created_at": runtime.created_at,
