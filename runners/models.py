@@ -85,7 +85,7 @@ class Runtime(models.Model):
     url = models.URLField(blank=True)
     enabled = models.BooleanField(default=True)
     versioned = models.BooleanField(default=False)  # Store each version in its own folder
-    min_version = models.CharField(max_length=8, blank=True)  # Restrict runtimes to client above given version
+    min_version = models.IntegerField(default=0)  # Restrict runtimes to client above given version
 
     class Meta:
         ordering = ("-created_at",)

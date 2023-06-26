@@ -8,11 +8,18 @@ from rest_framework import status
 from rest_framework import generics, filters, views
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.exceptions import APIException
 
 from common.permissions import IsAdminOrReadOnly
 from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
 from runners.serializers import RunnerSerializer, RuntimeSerializer, RuntimeDetailSerializer
 
+
+
+class ClientTooOld(APIException):
+    status_code = 426
+    default_detail = 'Your Lutris client is out of date. Please upgrade.'
+    default_code = 'client_out_of_date'
 
 class RunnerListView(generics.ListAPIView):
     serializer_class = RunnerSerializer
@@ -90,13 +97,20 @@ class RuntimeListView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Match lutris games against service appids"""
         user_agent = self.request.META["HTTP_USER_AGENT"]
+        version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
-        else:
-            remote_version = None
+            version_parts = remote_version.split(".")
+            if len(version_parts) < 3:
+                raise ClientTooOld
+            if len(version_parts) == 3:
+                version_parts.append(0)
+            release, major, minor, patch = version_parts[:4]
+            version_number = int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
         queryset = Runtime.objects.all()
-        # if remote_version:
-        #     queryset = queryset.filter(min_version__gte=remote_version)
+        if version_number:
+            print(version_number)
+            queryset = queryset.filter(min_version__lte=version_number)
         filter_enabled = self.request.GET.get('enabled')
         if filter_enabled:
             return queryset.filter(enabled=True)
