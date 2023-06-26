@@ -45,8 +45,11 @@ class GameList(ListView):
         self.q_params = {}
 
     def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '')
+        if "\0" in query:
+            return redirect("https://www.playmobil.fr/")
         self.q_params = {
-            'q': request.GET.get('q', ''),
+            'q': query,
             'platforms': request.GET.getlist('platforms',
                                              [kwargs.get('platform')] if 'platform' in kwargs else []),
             'genres': request.GET.getlist('genres',
