@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from rest_framework import status
-from rest_framework import generics, filters
+from rest_framework import generics, filters, views
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -89,7 +89,14 @@ class RuntimeListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Match lutris games against service appids"""
+        user_agent = self.request.META["HTTP_USER_AGENT"]
+        if user_agent.startswith("Lutris"):
+            remote_version = user_agent.split()[1]
+        else:
+            remote_version = None
         queryset = Runtime.objects.all()
+        # if remote_version:
+        #     queryset = queryset.filter(min_version__gte=remote_version)
         filter_enabled = self.request.GET.get('enabled')
         if filter_enabled:
             return queryset.filter(enabled=True)
@@ -141,3 +148,34 @@ class RuntimeDetailView(generics.RetrieveAPIView):
         component.url = url
         component.save()
         return Response("", status=status.HTTP_201_CREATED)
+
+
+class RuntimeVersions(views.APIView):
+    def get(self, request):
+        response = {
+            "client_version": settings.CLIENT_VERSION,
+            "runtimes": {},
+            "runners": {},
+        }
+        user_agent = request.META["HTTP_USER_AGENT"]
+        if user_agent.startswith("Lutris"):
+            remote_version = user_agent.split()[1]
+        else:
+            remote_version = None
+        for runner in Runner.objects.all():
+            response["runners"][runner.slug] = [{
+                "version": version.version,
+                "url": version.url,
+                "architecture": version.architecture
+            } for version in runner.runner_versions.filter(default=True)]
+        for runtime in Runtime.objects.filter(enabled=True):
+            if remote_version and runtime.min_version and remote_version < runtime.min_version:
+                continue
+            response["runtimes"][runtime.name] = {
+                "created_at": runtime.created_at,
+                "architecture": runtime.architecture,
+                "url": runtime.url,
+                "versioned": runtime.versioned,
+            }
+
+        return Response(response)
