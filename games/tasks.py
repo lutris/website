@@ -346,3 +346,30 @@ def fix_and_unpin_wine_versions():
             installer.content = dump_yaml(script)
             installer.save()
     return stats
+
+
+def migrate_unzip_installers():
+    """Migrate unzip usage to extract task"""
+    stats = {
+        "total": 0,
+        "keep": 0,
+        "deleted": 0,
+        "nofiles": 0,
+    }
+    for installer in models.Installer.objects.filter(content__icontains="files/tools/unzip"):
+        stats["total"] += 1
+        script = load_yaml(installer.content)
+        if "files" not in script:
+            stats["nofiles"] += 1
+            continue
+        stepnames = [list(step.keys())[0] for step in script["installer"]]
+        if (
+            installer.version in ("GOG", "GOG.com")
+            and stepnames == ["extract", "execute", "rename"]
+        ):
+            print("Deleting", installer)
+            stats["deleted"] += 1
+            installer.delete()
+            continue
+        stats["keep"] += 1
+    return stats
