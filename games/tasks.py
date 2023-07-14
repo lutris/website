@@ -21,6 +21,8 @@ OBSOLETE_RUNNERS = (
 CURRENT_LOL_BUILD = "lutris-ge-lol-8.7-1-x86_64"
 
 CURRENT_BUILDS = (
+    "lutris-GE-Proton8-10-x86_64",
+    "lutris-GE-Proton8-8-x86_64",
     "lutris-GE-Proton8-7-x86_64",
     "lutris-GE-Proton8-6-x86_64",
     "lutris-GE-Proton8-5-x86_64",
