@@ -221,9 +221,17 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.clear_spammers',
         'schedule': crontab(minute=4)
     },
-    'clean_action_log': {
-        'task': 'games.tasks.clean_action_log',
+    'action_log_cleanup': {
+        'task': 'games.tasks.action_log_cleanup',
         'schedule': crontab(minute=6)
+    },
+    'remove_defaults': {
+        'task': 'games.tasks.remove_defaults',
+        'schedule': crontab(minute=10)
+    },
+    'fix_and_unpin_wine_versions': {
+        'task': 'games.tasks.fix_and_unpin_wine_versions',
+        'schedule': crontab(minute=11)
     },
     'load-gog-games': {
         'task': 'providers.tasks.gog.load_gog_games',

@@ -262,6 +262,7 @@ def fix_winetricks_verbs():
             installer.save()
 
 
+@app.task
 def remove_defaults():
     """Removes some directives from installers that represent the default behavior of the client
     such as dxvk: true or esync: true"""
@@ -298,7 +299,7 @@ def remove_defaults():
             installer.save()
     return stats
 
-
+@app.task
 def fix_and_unpin_wine_versions():
     """Removes Wine versions that reference non existant builds or the current default"""
     published_versions = RunnerVersion.objects.filter(runner__slug="wine")
