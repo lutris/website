@@ -32,16 +32,18 @@ class HardwareInfoView(views.APIView):
             except models.Vendor.DoesNotExist:
                 subvendor_name = "Unknown"
             features = []
+            generation_name = ""
             if device.generation:
                 features = [
                     str(feature)
                     for feature in device.generation.features.all()
                 ]
+                generation_name = device.generation.name
             response[pci_id] = {
                 "vendor": vendor.name,
                 "device": device.name,
                 "subvendor": subvendor_name,
-                "generation": device.generation,
+                "generation": generation_name,
                 "features": features,
             }
         return Response(response)
