@@ -20,6 +20,7 @@ class ProviderCoverAdmin(admin.ModelAdmin):
     search_fields = ("image_id", "game")
     list_filter = ("provider", )
 
+
 admin.site.register(models.Provider, ProviderAdmin)
 admin.site.register(models.ProviderGame, ProviderItemAdmin)
 admin.site.register(models.ProviderGenre, ProviderItemAdmin)

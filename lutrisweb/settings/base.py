@@ -157,6 +157,7 @@ INSTALLED_APPS = [
     'accounts',
     'tosec',
     'providers',
+    'hardware'
 ]
 
 BANNER_SIZE = "184x69"

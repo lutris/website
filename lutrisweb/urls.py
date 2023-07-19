@@ -32,6 +32,7 @@ urlpatterns = [
         include('rest_framework.urls', namespace='rest_framework')
     ),
     path('api/tosec', include('tosec.urls')),
+    path('api/hardware', include('hardware.urls')),
     path('api/runners', include('runners.runner_urls')),
     path('api/runtimes', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
