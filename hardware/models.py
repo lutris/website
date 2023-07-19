@@ -40,19 +40,16 @@ class Feature(models.Model):
     """Store info about hardware features"""
     name = models.CharField(max_length=64)
     version = models.CharField(max_length=8, blank=True)
-    featureset = models.CharField(max_length=8, blank=True)
+    feature_level = models.CharField(max_length=8, blank=True)
 
     def __str__(self) -> str:
-        featureset = f" ({self.featureset})" if self.featureset else ""
-        return f"{self.name} {self.version}{featureset}"
+        feature_level = f" ({self.feature_level})" if self.feature_level else ""
+        return f"{self.name} {self.version}{feature_level}"
 
 class Generation(models.Model):
     """Store info about a hardware generation"""
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=64)
     year = models.SmallIntegerField()
+    introduced_with = models.CharField(max_length=128)
     features = models.ManyToManyField(Feature)
-    raw_id_fields = ('vendor', )
-    autocomplete_lookup_fields = {
-        'fk': ['vendor'],
-    }

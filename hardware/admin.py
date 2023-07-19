@@ -24,6 +24,10 @@ class SubsystemAdmin(admin.ModelAdmin):
 class GenerationAdmin(admin.ModelAdmin):
     """Admin config for Generation"""
     list_display = ("name", "vendor", "year")
+    raw_id_fields = ('vendor', )
+    autocomplete_lookup_fields = {
+        'fk': ['vendor'],
+    }
 
 
 class FeatureAdmin(admin.ModelAdmin):

@@ -30,7 +30,7 @@ class HardwareInfoView(views.APIView):
                 subvendor = models.Vendor.objects.get(vendor_id=subvendor_id)
                 subvendor_name = subvendor.name
             except models.Vendor.DoesNotExist:
-                subvendor_name = "Unkown"
+                subvendor_name = "Unknown"
             response[pci_id] = {
                 "vendor": vendor.name,
                 "device": device.name,

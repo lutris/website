@@ -1,5 +1,6 @@
 # pylint: disable=no-member
 import logging
+import json
 
 from django.conf import settings
 from hardware import models
@@ -80,3 +81,62 @@ def load_from_pci_ids():
                     LOGGER.info("Created device %s", device)
             elif line.startswith("ffff"):
                 return
+
+
+def load_features():
+    """Load GPU features by geneation from JSON"""
+    gpu_json_path = settings.MEDIA_ROOT + "/gpus.json"
+    vendor_ids = {
+        "ATI": "1002",
+        "AMD": "1002",
+        "Nvidia": "10de",
+        "Intel": "8086"
+    }
+    vendors = {
+        vendor_name: models.Vendor.objects.get(vendor_id=vendor_id)
+        for vendor_name, vendor_id in vendor_ids.items()
+    }
+    LOGGER.info("Reading features from %s", gpu_json_path)
+    with open(gpu_json_path, encoding="utf-8") as gpu_json_file:
+        gpu_features_generations =json.load(gpu_json_file)
+    for gpu_features in gpu_features_generations:
+        vendor = vendors[gpu_features["Vendor"]]
+        try:
+            generation = models.Generation.objects.get(
+                vendor=vendor,
+                name=gpu_features["Chip series"]
+            )
+            generation.year = gpu_features["Year"]
+            if gpu_features["Introduced with"]:
+                generation.introduced_with = gpu_features["Introduced with"]
+            generation.save()
+        except models.Generation.DoesNotExist:
+            generation = models.Generation.objects.create(
+                vendor=vendor,
+                name=gpu_features["Chip series"],
+                year=gpu_features["Year"],
+                introduced_with=gpu_features["Introduced with"]
+            )
+        for api in ("OpenGL", "Vulkan", "Direct3D"):
+            if not gpu_features[api]:
+                continue
+            versions = str(gpu_features[api])
+            feature_level = ""
+            for version in versions.strip(")").split(")"):
+                if " (FL" in version:
+                    version, feature_level = version.split(" (FL")
+                if not version:
+                    continue
+                try:
+                    feature = models.Feature.objects.get(
+                        name=api,
+                        version=version.strip(),
+                        feature_level=feature_level or "",
+                    )
+                except models.Feature.DoesNotExist:
+                    feature = models.Feature.objects.create(
+                        name=api,
+                        version=version.strip(),
+                        feature_level=feature_level or "",
+                    )
+                generation.features.add(feature)
