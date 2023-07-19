@@ -32,7 +32,7 @@ class GenerationAdmin(admin.ModelAdmin):
 
 class FeatureAdmin(admin.ModelAdmin):
     """Admin config for Feature"""
-    list_display = ("name", "version")
+    list_display = ("name", "version", "feature_level")
 
 
 admin.site.register(models.Vendor, VendorAdmin)
