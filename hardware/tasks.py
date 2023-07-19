@@ -8,6 +8,27 @@ from hardware import models
 LOGGER = logging.getLogger(__name__)
 
 
+GPU_GENERATION_FEATURE_MAP = {
+    "AMD": {
+        r"Mullins": "Sea Islands",
+        r"Vega": "Vega",
+        r"RX 5\d00": "Navi",
+        r"RX 6\d00": "Navi 2X",
+        r"RX 7\d00": "Navi 3X",
+    },
+    "Nvidia": {
+        r"GTX 10\d0": "Pascal",
+        r"RTX 20\d0": "Turing",
+        r"RTX 30\d0": "Ampere",
+        r"RTX 40\d0": "Ada Lovelace"
+    },
+    "Intel": {
+        r"N3xxx Integrated Graphics Controller": "HD Graphics 400",
+        r"HD Graphics 630": "HD Graphics 630"
+    }
+}
+
+
 def load_from_pci_ids():
     """Load IDs from https://pci-ids.ucw.cz/v2.2/pci.ids"""
     pci_ids_path = settings.MEDIA_ROOT + "/pci.ids"
@@ -157,22 +178,8 @@ def load_generations_to_devices():
         gen.name: gen
         for gen in models.Generation.objects.all()
     }
-    generation_map = {
-        "AMD": {
-            r"Vega": "Vega",
-            r"RX 5\d00": "Navi",
-            r"RX 6\d00": "Navi 2X",
-            r"RX 7\d00": "Navi 3X",
-        },
-        "Nvidia": {
-            r"GTX 10\d0": "Pascal",
-            r"RTX 20\d0": "Turing",
-            r"RTX 30\d0": "Ampere",
-            r"RTX 40\d0": "Ada Lovelace"
-        },
-        "Intel": {}
-    }
-    for vendor, patterns in generation_map.items():
+
+    for vendor, patterns in GPU_GENERATION_FEATURE_MAP.items():
         for pattern, generation_name in patterns.items():
             devices = models.Device.objects.filter(
                 vendor=vendors[vendor],
