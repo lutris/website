@@ -161,8 +161,8 @@ def load_generations_to_devices():
         "AMD": {
             r"Vega": "Vega",
             r"RX 5\d00": "Navi",
-            r"RX 6\d00": "Navi",
-            r"RX 7\d00": "Navi",
+            r"RX 6\d00": "Navi 2X",
+            r"RX 7\d00": "Navi 3X",
         },
         "Nvidia": {
             r"GTX 10\d0": "Pascal",
