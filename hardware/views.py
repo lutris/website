@@ -41,6 +41,7 @@ class HardwareInfoView(views.APIView):
                 "vendor": vendor.name,
                 "device": device.name,
                 "subvendor": subvendor_name,
+                "generation": device.generation,
                 "features": features,
             }
         return Response(response)

@@ -32,6 +32,9 @@ class Generation(models.Model):
     introduced_with = models.CharField(max_length=128)
     features = models.ManyToManyField(Feature)
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 
 class Device(models.Model):
     """Store info about devices"""
