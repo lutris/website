@@ -140,3 +140,45 @@ def load_features():
                         feature_level=feature_level or "",
                     )
                 generation.features.add(feature)
+
+
+def load_generations_to_devices():
+    """Apply generations to devices"""
+    vendor_ids = {
+        "AMD": "1002",
+        "Nvidia": "10de",
+        "Intel": "8086"
+    }
+    vendors = {
+        vendor_name: models.Vendor.objects.get(vendor_id=vendor_id)
+        for vendor_name, vendor_id in vendor_ids.items()
+    }
+    generations = {
+        gen.name: gen
+        for gen in models.Generation.objects.all()
+    }
+    generation_map = {
+        "AMD": {
+            r"Vega": "Vega",
+            r"RX 5\d00": "Navi",
+            r"RX 6\d00": "Navi",
+            r"RX 7\d00": "Navi",
+        },
+        "Nvidia": {
+            r"GTX 10\d0": "Pascal",
+            r"RTX 20\d0": "Turing",
+            r"RTX 30\d0": "Ampere",
+            r"RTX 40\d0": "Ada Lovelace"
+        },
+        "Intel": {}
+    }
+    for vendor, patterns in generation_map.items():
+        for pattern, generation_name in patterns.items():
+            devices = models.Device.objects.filter(
+                vendor=vendors[vendor],
+                name__regex=pattern
+            )
+            for device in devices:
+                if device.generation != generations[generation_name]:
+                    device.generation = generations[generation_name]
+                    device.save()
