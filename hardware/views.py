@@ -15,7 +15,10 @@ class HardwareInfoView(views.APIView):
             return Response({"error": "No pci_ids given"})
         response = {}
         for pci_id in pci_ids.split(","):
-            device_pci_id, subdevice_pci_id = pci_id.split()
+            try:
+                device_pci_id, subdevice_pci_id = pci_id.split()
+            except ValueError:
+                return Response({"error": "Incomplete PCI ID. Use following format: xxxx:xxxx xxxx:xxxx"})
             vendor_id, device_id = device_pci_id.split(":")
             try:
                 vendor = models.Vendor.objects.get(vendor_id=vendor_id)
