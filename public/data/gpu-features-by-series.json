@@ -1,0 +1,470 @@
+[
+  {
+    "Vendor":"ATI",
+    "Chip series":"3D Rage",
+    "Vulkan":null,
+    "OpenGL":null,
+    "Direct3D":"5",
+    "Year":1996,
+    "Introduced with":"3D Rage"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Rage Pro",
+    "Vulkan":null,
+    "OpenGL":1.1,
+    "Direct3D":"6",
+    "Year":1997,
+    "Introduced with":"Rage Pro"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Rage 128",
+    "Vulkan":null,
+    "OpenGL":1.2,
+    "Direct3D":"6",
+    "Year":1998,
+    "Introduced with":"Rage 128 GL\/VR"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R100",
+    "Vulkan":null,
+    "OpenGL":1.3,
+    "Direct3D":"7",
+    "Year":2000,
+    "Introduced with":"Radeon"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R200",
+    "Vulkan":null,
+    "OpenGL":1.3,
+    "Direct3D":"8.1",
+    "Year":2001,
+    "Introduced with":"Radeon 8500"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R300",
+    "Vulkan":null,
+    "OpenGL":2.0,
+    "Direct3D":"9.0 (FL 9_2)",
+    "Year":2002,
+    "Introduced with":"Radeon 9700"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R420",
+    "Vulkan":null,
+    "OpenGL":2.0,
+    "Direct3D":"9.0b (FL 9_2)",
+    "Year":2004,
+    "Introduced with":"Radeon X800"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R520",
+    "Vulkan":null,
+    "OpenGL":2.0,
+    "Direct3D":"9.0c (FL 9_3)",
+    "Year":2005,
+    "Introduced with":"Radeon X1800"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"R600",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10.0 (FL 10_0)",
+    "Year":2007,
+    "Introduced with":"Radeon HD 2900 XT"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"RV670",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10.1 (FL 10_1)",
+    "Year":2007,
+    "Introduced with":"Radeon HD 3850\/3870"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"RV770",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10.1 (FL 10_1)",
+    "Year":2008,
+    "Introduced with":"Radeon HD 4850\/4870"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Evergreen",
+    "Vulkan":null,
+    "OpenGL":4.2,
+    "Direct3D":"11 (FL 11_0)",
+    "Year":2009,
+    "Introduced with":"Radeon HD 5850\/5870"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Northern Islands",
+    "Vulkan":null,
+    "OpenGL":4.2,
+    "Direct3D":"11 (FL 11_0)",
+    "Year":2010,
+    "Introduced with":"Radeon HD 6850\/6870Radeon HD 6950\/6970"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Southern Islands",
+    "Vulkan":1.0,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 11_1)12 (FL11_1)",
+    "Year":2012,
+    "Introduced with":"Radeon HD 7950\/7970"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Sea Islands",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_0)12 (FL 12_0)",
+    "Year":2013,
+    "Introduced with":"Radeon HD 7790"
+  },
+  {
+    "Vendor":"ATI",
+    "Chip series":"Volcanic Islands",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_0)12 (FL 12_0)",
+    "Year":2014,
+    "Introduced with":"Radeon R9 285"
+  },
+  {
+    "Vendor":"AMD",
+    "Chip series":"Polaris",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_0)12 (FL 12_0)",
+    "Year":2016,
+    "Introduced with":"Radeon RX 480"
+  },
+  {
+    "Vendor":"AMD",
+    "Chip series":"Vega",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_1)12 (FL 12_1)",
+    "Year":2017,
+    "Introduced with":"Radeon Vega Frontier Edition"
+  },
+  {
+    "Vendor":"AMD",
+    "Chip series":"Navi",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_1)12 (FL 12_1)",
+    "Year":2019,
+    "Introduced with":"Radeon RX 5700 (XT)"
+  },
+  {
+    "Vendor":"AMD",
+    "Chip series":"Navi 2X",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_1)12 (FL 12_2)",
+    "Year":2020,
+    "Introduced with":"Radeon RX 6800 (XT)"
+  },
+  {
+    "Vendor":"AMD",
+    "Chip series":"Navi 3X",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"11 (FL 12_1)12 (FL 12_2)",
+    "Year":2022,
+    "Introduced with":"Radeon RX 7900 XT(X)"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Geforce FX",
+    "Vulkan":null,
+    "OpenGL":2.1,
+    "Direct3D":"9.0a",
+    "Year":2003,
+    "Introduced with":"GeForce FX 5800"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Geforce 6",
+    "Vulkan":null,
+    "OpenGL":2.1,
+    "Direct3D":"9.0c",
+    "Year":2004,
+    "Introduced with":"GeForce 6800 Ultra"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"GeForce 7",
+    "Vulkan":null,
+    "OpenGL":2.1,
+    "Direct3D":"9.0c",
+    "Year":2005,
+    "Introduced with":"GeForce 7900"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"GeForce 8",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10",
+    "Year":2006,
+    "Introduced with":"GeForce 8800 GTX"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"GeForce 9",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10",
+    "Year":2008,
+    "Introduced with":"GeForce 9800 GX2"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Geforce 100",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10",
+    "Year":2009,
+    "Introduced with":"GTS 150"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Geforce 200",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10",
+    "Year":2008,
+    "Introduced with":"GTX 295"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Geforce 300",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"10.1",
+    "Year":2009,
+    "Introduced with":"GT 340"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Fermi",
+    "Vulkan":null,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 11_0)",
+    "Year":2010,
+    "Introduced with":"GTX 470"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Fermi 2.0",
+    "Vulkan":null,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 11_0)",
+    "Year":2011,
+    "Introduced with":"GTX 560"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Kepler",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 11_0)",
+    "Year":2012,
+    "Introduced with":"GTX 680"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Maxwell 1",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 11_0)",
+    "Year":2014,
+    "Introduced with":"GTX 750"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Maxwell 2",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 12_2)",
+    "Year":2015,
+    "Introduced with":"GTX 980"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Pascal",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 12_2)",
+    "Year":2016,
+    "Introduced with":"GTX 1060"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Turing",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 12_2)",
+    "Year":2019,
+    "Introduced with":"RTX 2060"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Ampere",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 12_2)",
+    "Year":2021,
+    "Introduced with":"RTX 3060"
+  },
+  {
+    "Vendor":"Nvidia",
+    "Chip series":"Ada Lovelace",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL 12_2)",
+    "Year":2022,
+    "Introduced with":"RTX 4080"
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics",
+    "Vulkan":null,
+    "OpenGL":2.1,
+    "Direct3D":"10.1 (FL10_0)",
+    "Year":2010,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 2000",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"11.1 (FL10_1)",
+    "Year":2011,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 3000",
+    "Vulkan":null,
+    "OpenGL":3.3,
+    "Direct3D":"11.1 (FL10_1)",
+    "Year":2011,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 2500",
+    "Vulkan":1.0,
+    "OpenGL":4.2,
+    "Direct3D":"11.1 (FL11_0)",
+    "Year":2012,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 4000",
+    "Vulkan":1.0,
+    "OpenGL":4.2,
+    "Direct3D":"11.1 (FL11_0)",
+    "Year":2012,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 4400",
+    "Vulkan":1.0,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL11_1)",
+    "Year":2013,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 400",
+    "Vulkan":1.1,
+    "OpenGL":4.6,
+    "Direct3D":"11.2",
+    "Year":2016,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 6000",
+    "Vulkan":1.1,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL11_1)",
+    "Year":2015,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 530",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL12_1)",
+    "Year":2015,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"HD Graphics 630",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL12_1)",
+    "Year":2017,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"UHD Graphics 630",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL12_1)",
+    "Year":2018,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"Iris Plus Graphics",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL12_1)",
+    "Year":2019,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"Iris Xe Graphics",
+    "Vulkan":1.2,
+    "OpenGL":4.6,
+    "Direct3D":"12 (FL12_1)",
+    "Year":2021,
+    "Introduced with":""
+  },
+  {
+    "Vendor":"Intel",
+    "Chip series":"Arc",
+    "Vulkan":1.3,
+    "OpenGL":4.6,
+    "Direct3D":"12",
+    "Year":2022,
+    "Introduced with":""
+  }
+]

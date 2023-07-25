@@ -8,6 +8,9 @@ from hardware import models
 LOGGER = logging.getLogger(__name__)
 
 
+# Warning: The load order is important, for example, "HD Graphics 630" matches
+# both "HD Graphics 630" and "UHD Graphics 630" so "UHD Graphics 630" has
+# to come *after* to override this match.
 GPU_GENERATION_FEATURE_MAP = {
     "AMD": {
         r"HD 6\d\d0": "Northern Islands",
@@ -26,8 +29,8 @@ GPU_GENERATION_FEATURE_MAP = {
     },
     "Intel": {
         r"N3xxx Integrated Graphics Controller": "HD Graphics 400",
-        r"HD Graphics 630": "HD Graphics 630",
-        r"UHD Graphics ?630": "UHD Graphics 630",
+        r"HD Graphics .?630": "HD Graphics 630",
+        r"UHD Graphics .?630": "UHD Graphics 630",
     }
 }
 
@@ -109,7 +112,7 @@ def load_from_pci_ids():
 
 def load_features():
     """Load GPU features by geneation from JSON"""
-    gpu_json_path = settings.MEDIA_ROOT + "/gpus.json"
+    gpu_json_path = settings.BASE_DIR + "/public/data/gpu-features-by-series.json"
     vendor_ids = {
         "ATI": "1002",
         "AMD": "1002",
