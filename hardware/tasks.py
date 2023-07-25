@@ -30,7 +30,8 @@ GPU_GENERATION_FEATURE_MAP = {
     "Intel": {
         r"N3xxx Integrated Graphics Controller": "HD Graphics 400",
         r"HD Graphics .?630": "HD Graphics 630",
-        r"UHD Graphics .?630": "UHD Graphics 630",
+        r"UHD Graphics .?620": "HD Graphics 630",
+        r"UHD Graphics .?6[2-3]0": "UHD Graphics 630",
     }
 }
 
