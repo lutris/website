@@ -10,9 +10,9 @@ class VendorAdmin(admin.ModelAdmin):
 
 class DeviceAdmin(admin.ModelAdmin):
     """Admin config for Device"""
-    list_display = ("device_id", "vendor", "name")
-    search_fields = ("device_id", "name")
-    list_filter = ("vendor", )
+    list_display = ("device_id", "vendor", "name", "generation", "comment")
+    search_fields = ("device_id", "name", "comment")
+    list_filter = ("vendor", "generation")
 
 
 class SubsystemAdmin(admin.ModelAdmin):

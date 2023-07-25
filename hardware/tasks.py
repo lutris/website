@@ -10,8 +10,10 @@ LOGGER = logging.getLogger(__name__)
 
 GPU_GENERATION_FEATURE_MAP = {
     "AMD": {
+        r"HD 6\d\d0": "Northern Islands",
         r"Mullins": "Sea Islands",
         r"Vega": "Vega",
+        r"RX [4-5][7-9]0": "Polaris",
         r"RX 5\d00": "Navi",
         r"RX 6\d00": "Navi 2X",
         r"RX 7\d00": "Navi 3X",
@@ -24,7 +26,8 @@ GPU_GENERATION_FEATURE_MAP = {
     },
     "Intel": {
         r"N3xxx Integrated Graphics Controller": "HD Graphics 400",
-        r"HD Graphics 630": "HD Graphics 630"
+        r"HD Graphics 630": "HD Graphics 630",
+        r"UHD Graphics ?630": "UHD Graphics 630",
     }
 }
 
