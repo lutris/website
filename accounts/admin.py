@@ -7,12 +7,9 @@ from accounts import models
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'email', 'email_confirmed', 'is_staff',
-                    'steamid', 'website', 'installers_link')
+                    'steamid', 'website', 'date_joined', 'installers_link')
     list_filter = ('is_staff', 'groups')
     search_fields = ('username', 'email', 'steamid')
-
-    def game_count(self, obj):
-        return obj.gamelibrary.games.count()
 
     def installers_link(self, obj):
         installers_url = reverse('admin:games_installer_changelist')
