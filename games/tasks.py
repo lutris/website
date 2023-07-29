@@ -305,7 +305,7 @@ def fix_and_unpin_wine_versions():
     published_versions = RunnerVersion.objects.filter(runner__slug="wine")
     stats = {
         "versions": defaultdict(list),
-        "published_versions": [f"{v.version}-{v.architecture}" for v in published_versions],
+        "published_versions": {f"{v.version}-{v.architecture}": 0 for v in published_versions},
         "updated_config": 0,
         "removed_config": 0,
         "lol_updates": 0,
@@ -337,6 +337,8 @@ def fix_and_unpin_wine_versions():
             version =runner_config.pop("version")
             LOGGER.info("Unpinning %s from %s", version, installer)
             changed = True
+        elif runner_config["version"]:
+            stats["published_versions"][runner_config["version"]] += 1
 
         # Save changes
         if changed:
