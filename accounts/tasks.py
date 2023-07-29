@@ -66,6 +66,8 @@ def daily_mod_mail():
 def clear_spammers():
     """Delete spam accounts"""
     spam_website_deleted = spam_control.clear_users(spam_control.get_no_games_with_website())
-    save_action_log("spam_website_deleted", spam_website_deleted)
+    if spam_website_deleted:
+        save_action_log("spam_website_deleted", spam_website_deleted)
     spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
-    save_action_log("spam_avatar_deleted", spam_avatar_deleted)
+    if spam_avatar_deleted:
+        save_action_log("spam_avatar_deleted", spam_avatar_deleted)
