@@ -33,7 +33,7 @@ GPU_GENERATION_FEATURE_MAP = {
         r"GeForce GTX 4\d0": "Fermi",
         r"GeForce GTX 5\d0": "Fermi 2.0",
         r"GeForce GTX 6\d0": "Kepler",
-        r"GeForce GTX 7\d0": "Maxwell",
+        r"GeForce GTX 7\d0": "Maxwell 1",
         r"GeForce GTX 9\d0": "Maxwell 2",
         r"GTX 10\d0": "Pascal",
         r"RTX 20\d0": "Turing",
