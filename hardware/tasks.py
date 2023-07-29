@@ -22,8 +22,8 @@ GPU_GENERATION_FEATURE_MAP = {
         r"RX 7\d00": "Navi 3X",
     },
     "Nvidia": {
-        r"GeForce FX": "GeForce FX",
-        r"GeForce 6\d00": "GeForce 6",
+        r"GeForce FX": "Geforce FX",
+        r"GeForce 6\d00": "Geforce 6",
         r"GeForce 7\d00": "GeForce 7",
         r"GeForce 8\d00": "GeForce 8",
         r"GeForce 9\d00": "GeForce 9",
