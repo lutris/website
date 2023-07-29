@@ -915,6 +915,12 @@ class Installer(BaseInstaller):
     reason = models.CharField(max_length=512, blank=True, null=True)
     review = models.CharField(max_length=512, blank=True, null=True)
 
+    # Wine pinning management. Pinning Wine versions is heavily discouraged,
+    # installers having a pinned Wine version without a justification will
+    # show a warning to the user.
+    pinned = models.BooleanField(default=False)
+    pin_reason = models.URLField(blank=True)
+
     # Collection manager
     objects = InstallerManager()
 
