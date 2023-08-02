@@ -190,6 +190,7 @@ class RuntimeVersions(views.APIView):
                 raise ClientTooOld from ex
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
+                "name": runner.slug,
                 "version": version.version,
                 "url": version.url,
                 "architecture": version.architecture
@@ -198,6 +199,7 @@ class RuntimeVersions(views.APIView):
             if version_number and runtime.min_version and version_number < runtime.min_version:
                 continue
             response["runtimes"][runtime.name] = {
+                "name": runtime.name,
                 "created_at": runtime.created_at,
                 "architecture": runtime.architecture,
                 "url": runtime.url,
