@@ -203,6 +203,7 @@ class RuntimeVersions(views.APIView):
                 "created_at": runtime.created_at,
                 "architecture": runtime.architecture,
                 "url": runtime.url,
+                "version": runtime.version,
                 "versioned": runtime.versioned,
             }
 

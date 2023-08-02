@@ -84,6 +84,7 @@ class Runtime(models.Model):
     architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
     url = models.URLField(blank=True)
     enabled = models.BooleanField(default=True)
+    version = models.CharField(max_length= 32, default="", blank=True)
     versioned = models.BooleanField(default=False)  # Store each version in its own folder
     min_version = models.IntegerField(default=0)  # Restrict runtimes to client above given version
 
