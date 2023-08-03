@@ -60,15 +60,6 @@ separate terminal::
 
     npm run watch
 
-The installer issues use another frontend stack based on VueJS. It is not
-required to build them to work on other areas of the site. To build those
-assets, run::
-
-    cd frontend/vue
-    npm install
-    npm run build:issues  # for a production build
-    npm run build:issues-dev  # for a development build and watch file changes
-
 Once your PostgreSQL database is configured (explained in the paragraph below),
 run the database migrations to populate the database with tables::
 
