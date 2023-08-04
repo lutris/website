@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from hardware import models
 
 
-
 class HardwareInfoView(views.APIView):
     """Return hardware features from a PCI ID"""
     def get(self, request):
@@ -16,37 +15,7 @@ class HardwareInfoView(views.APIView):
         response = {}
         for pci_id in pci_ids.split(","):
             try:
-                device_pci_id, subdevice_pci_id = pci_id.split()
-            except ValueError:
-                return Response({"error": "Incomplete PCI ID. Use following format: xxxx:xxxx xxxx:xxxx"})
-            vendor_id, device_id = device_pci_id.split(":")
-            try:
-                vendor = models.Vendor.objects.get(vendor_id=vendor_id)
-            except models.Vendor.DoesNotExist:
-                return Response({"error": f"Invalid vendor {vendor_id}"})
-            try:
-                device = models.Device.objects.get(vendor=vendor, device_id=device_id)
-            except models.Device.DoesNotExist:
-                return Response({"error": f"Unkown device {vendor_id}:{device_id}"})
-            subvendor_id, subsystem_id = subdevice_pci_id.split(":")
-            try:
-                subvendor = models.Vendor.objects.get(vendor_id=subvendor_id)
-                subvendor_name = subvendor.name
-            except models.Vendor.DoesNotExist:
-                subvendor_name = "Unknown"
-            features = []
-            generation_name = ""
-            if device.generation:
-                features = [
-                    str(feature)
-                    for feature in device.generation.features.all()
-                ]
-                generation_name = device.generation.name
-            response[pci_id] = {
-                "vendor": vendor.name,
-                "device": device.name,
-                "subvendor": subvendor_name,
-                "generation": generation_name,
-                "features": features,
-            }
+                response[pci_id] = models.get_hardware_features(pci_id)
+            except ValueError as ex:
+                return Response({"error": ex.message})
         return Response(response)

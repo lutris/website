@@ -60,3 +60,42 @@ class Subsystem(models.Model):
     def __str__(self) -> str:
         name = self.name if self.name else "[UNKOWN]"
         return f"{name} ({self.subvendor_id}:{self.subdevice_id})"
+
+
+
+def get_hardware_features(pci_id):
+    """Return hardware capabilities from a PCI ID"""
+    try:
+        device_pci_id, subdevice_pci_id = pci_id.split()
+    except ValueError as ex:
+        raise ValueError("Incomplete PCI ID. Use following format: xxxx:xxxx xxxx:xxxx") from ex
+    vendor_id, device_id = device_pci_id.split(":")
+    try:
+        vendor = Vendor.objects.get(vendor_id=vendor_id)
+    except Vendor.DoesNotExist as ex:
+        raise ValueError(f"Invalid vendor {vendor_id}") from ex
+    try:
+        device = Device.objects.get(vendor=vendor, device_id=device_id)
+    except Device.DoesNotExist as ex:
+        raise ValueError(f"Unkown device {vendor_id}:{device_id}") from ex
+    subvendor_id, _subsystem_id = subdevice_pci_id.split(":")
+    try:
+        subvendor = Vendor.objects.get(vendor_id=subvendor_id)
+        subvendor_name = subvendor.name
+    except Vendor.DoesNotExist:
+        subvendor_name = "Unknown"
+    features = []
+    generation_name = ""
+    if device.generation:
+        features = [
+            str(feature)
+            for feature in device.generation.features.all()
+        ]
+        generation_name = device.generation.name
+    return {
+        "vendor": vendor.name,
+        "device": device.name,
+        "subvendor": subvendor_name,
+        "generation": generation_name,
+        "features": features,
+    }

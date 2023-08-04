@@ -13,6 +13,7 @@ from rest_framework.exceptions import APIException
 from common.permissions import IsAdminOrReadOnly
 from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
 from runners.serializers import RunnerSerializer, RuntimeSerializer, RuntimeDetailSerializer
+from hardware.models import get_hardware_features
 
 
 
@@ -177,6 +178,7 @@ class RuntimeVersions(views.APIView):
     def get(self, request):
         response = {
             "client_version": settings.CLIENT_VERSION,
+            "gpus": {},
             "runtimes": {},
             "runners": {},
         }
@@ -188,6 +190,12 @@ class RuntimeVersions(views.APIView):
                 version_number = get_version_number(remote_version)
             except ValueError as ex:
                 raise ClientTooOld from ex
+
+        for pci_id in request.GET.get("pci_ids", "").lower().split(","):
+            try:
+                response["gpus"][pci_id] = get_hardware_features(pci_id)
+            except ValueError:
+                continue
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
                 "name": runner.slug,
