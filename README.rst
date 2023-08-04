@@ -3,7 +3,7 @@ Getting the site up and running for development
 
 Install required packages:
 
-    apt install python3.8-venv
+    apt install python3-venv
 
 
 If you haven't done it already, install and configure virtualenvwrapper.
