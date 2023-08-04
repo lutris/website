@@ -52,7 +52,6 @@ to install a more recent version.
 You can then build the frontend assets::
 
     npm install
-    npm run setup
     npm run build
 
 To watch for file changes and recompile assets on the fly, you can run in a
