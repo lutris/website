@@ -4,6 +4,7 @@ set -e
 
 ENV=staging
 WEBPACK=""
+VUE=""
 
 params=$(getopt -n $0 -o pw --long prod,webpack -- "$@")
 eval set -- $params
@@ -27,13 +28,15 @@ export $(cat .env.$ENV | xargs)
 if [[ "$WEBPACK" == "1" ]]; then
     npm run build
     npm run build-prod
+fi
+
+if [[ "$VUE" == "1" ]]; then
     cd frontend/vue
     npm run build:issues
     cd ../..
-    ./manage.py collectstatic --clear --noinput \
-        --ignore less/test/* --ignore select2/docs/*
 fi
 
+./manage.py collectstatic --clear --noinput --ignore less/test/* --ignore select2/docs/*
 ./manage.py migrate
 
 sudo systemctl restart gunicorn_$ENV
