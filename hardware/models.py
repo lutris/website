@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """Hardware reference from PCI Ids"""
 from django.db import models
 

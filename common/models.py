@@ -1,14 +1,10 @@
 """Models for the common app"""
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,no-member
 import os
 import shutil
 import datetime
 from django.db import models
 from django.conf import settings
-from django.urls import reverse
-from markupfield.fields import MarkupField
-
-from common.util import slugify
 from common.spaces import SpacesBucket
 
 
@@ -16,7 +12,7 @@ class News(models.Model):
     """News announcements, not currently used"""
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    content = MarkupField(markup_type='restructuredtext')
+    content = models.TextField(blank=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now)
     image = models.ImageField(upload_to='news', null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
@@ -79,7 +75,7 @@ class KeyValueStore(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.key
+        return str(self.key)
 
 
 def save_action_log(key, value):
