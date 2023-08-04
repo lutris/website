@@ -221,7 +221,7 @@ class RuntimeVersions(views.APIView):
             if hw_support[api] is None:
                 hw_support[api] = True
 
-        response["apis"] = hw_support
+        response["hw_support"] = hw_support
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
                 "name": runner.slug,

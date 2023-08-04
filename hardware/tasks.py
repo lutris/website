@@ -49,6 +49,9 @@ GPU_GENERATION_FEATURE_MAP = {
         r"HD Graphics .?630": "HD Graphics 630",
         r"UHD Graphics .?620": "HD Graphics 630",
         r"UHD Graphics .?6[2-3]0": "UHD Graphics 630",
+        r"Iris Plus Graphics": "Iris Plus Graphics",
+        r"Iris Xe Graphics": "Iris Xe Graphics",
+        r"Arc ": "Arc"
     }
 }
 
