@@ -43,11 +43,13 @@ DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
 
 ROOT_URL = "http://localhost:8000"
 DASHBOARD_URL = "http://localhost:9527"
-ALLOWED_HOSTS = (
+ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
     "localhost",
-)
+]
+if os.environ.get("EXTRA_ALLOWED_HOST"):
+    ALLOWED_HOSTS.append(os.environ["EXTRA_ALLOWED_HOSTS"])
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
