@@ -231,7 +231,7 @@ class RuntimeVersions(views.APIView):
                     and client_version_number < runtime.min_version
             ):
                 continue
-            if not vulkan_support and runtime.name.startswith("dxvk") or runtime.name == "vkd3d":
+            if not vulkan_support and (runtime.name.startswith("dxvk") or runtime.name == "vkd3d"):
                 continue
             if not vulkan_1_3_support:
                 if runtime.name == "dxvk" and int(runtime.version.strip("v")[0]) > 1:
