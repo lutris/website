@@ -12,6 +12,7 @@ while true ; do
     case "$1" in
         -p|--prod) ENV="prod"; shift ;;
         -w|--webpack) WEBPACK="1"; shift ;;
+        -v|--vue) VUE="1"; shift ;;
         *) shift; break ;;
     esac
 done
