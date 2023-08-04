@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """Remove any personally identifying information from the database"""
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -44,7 +45,7 @@ class Command(BaseCommand):
         res = AccessAttempt.objects.all().delete()
         print("Deleted %s access attempt entries" % res[0])
 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args, **_kwargs):
         if not settings.DEBUG:
             raise RuntimeError("Never run this in production")
 

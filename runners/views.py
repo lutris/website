@@ -179,15 +179,16 @@ class RuntimeVersions(views.APIView):
         response = {
             "client_version": settings.CLIENT_VERSION,
             "gpus": {},
+            "apis": {},
             "runtimes": {},
             "runners": {},
         }
         user_agent = request.META["HTTP_USER_AGENT"]
-        version_number = 0
+        client_version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
             try:
-                version_number = get_version_number(remote_version)
+                client_version_number = get_version_number(remote_version)
             except ValueError as ex:
                 raise ClientTooOld from ex
 
@@ -196,6 +197,26 @@ class RuntimeVersions(views.APIView):
                 response["gpus"][pci_id] = get_hardware_features(pci_id)
             except ValueError:
                 continue
+        vulkan_support = None
+        vulkan_1_3_support = None
+        if response["gpus"]:
+            for gpu_info in response["gpus"].values():
+                if not gpu_info.get("features"):
+                    continue
+                apis = [feature.split()[0] for feature in gpu_info["features"]]
+                if not vulkan_support:
+                    vulkan_support = "Vulkan" in apis
+                if not vulkan_1_3_support:
+                    vulkan_1_3_support = "Vulkan 1.3" in gpu_info["features"]
+
+        if vulkan_support is None:
+            vulkan_support = True
+        if vulkan_1_3_support is None:
+            vulkan_1_3_support = True
+        response["apis"] = {
+            "hardware_vulkan": vulkan_support,
+            "hardware_vulkan_1_3": vulkan_1_3_support,
+        }
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
                 "name": runner.slug,
@@ -204,8 +225,17 @@ class RuntimeVersions(views.APIView):
                 "architecture": version.architecture
             } for version in runner.runner_versions.filter(default=True)]
         for runtime in Runtime.objects.filter(enabled=True):
-            if version_number and runtime.min_version and version_number < runtime.min_version:
+            if (
+                    client_version_number
+                    and runtime.min_version
+                    and client_version_number < runtime.min_version
+            ):
                 continue
+            if not vulkan_support and runtime.name.startswith("dxvk") or runtime.name == "vkd3d":
+                continue
+            if not vulkan_1_3_support:
+                if runtime.name == "dxvk" and int(runtime.version.strip("v")[0]) > 1:
+                    continue
             response["runtimes"][runtime.name] = {
                 "name": runtime.name,
                 "created_at": runtime.created_at,
