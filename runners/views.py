@@ -197,35 +197,31 @@ class RuntimeVersions(views.APIView):
                 response["gpus"][pci_id] = get_hardware_features(pci_id)
             except ValueError:
                 continue
-        vulkan_support = None
-        vulkan_1_3_support = None
-        directx_11_support = None
-        directx_12_support = None
+        hw_support = {
+            "vulkan": None,
+            "vulkan_1_3": None,
+            "directx_11": None,
+            "directx_12": None,
+        }
         if response["gpus"]:
             for gpu_info in response["gpus"].values():
                 if not gpu_info.get("features"):
                     continue
                 apis = [feature.split()[0] for feature in gpu_info["features"]]
                 versioned_apis = [" ".join(feature.split()[0:2]) for feature in gpu_info["features"]]
-                if not vulkan_support:
-                    vulkan_support = "Vulkan" in apis
-                if not vulkan_1_3_support:
-                    vulkan_1_3_support = "Vulkan 1.3" in gpu_info["features"]
-                if not directx_11_support:
-                    directx_11_support = "Direct3D 11" in versioned_apis
-                if not directx_12_support:
-                    directx_12_support = directx_11_support = "Direct3D 12" in versioned_apis
+                if not hw_support["vulkan"]:
+                    hw_support["vulkan"] = "Vulkan" in apis
+                if not hw_support["vulkan_1_3"]:
+                    hw_support["vulkan_1_3"] = "Vulkan 1.3" in versioned_apis
+                if not hw_support["directx_11"]:
+                    hw_support["directx_11"] = "Direct3D 11" in versioned_apis
+                if not hw_support["directx_12"]:
+                    hw_support["directx_12"] = hw_support["directx_11"] = "Direct3D 12" in versioned_apis
+        for api, _support in hw_support.items():
+            if hw_support[api] is None:
+                hw_support[api] = True
 
-        if vulkan_support is None:
-            vulkan_support = True
-        if vulkan_1_3_support is None:
-            vulkan_1_3_support = True
-        response["apis"] = {
-            "hw_vulkan": vulkan_support,
-            "hw_vulkan_1_3": vulkan_1_3_support,
-            "hw_directx_11": directx_11_support,
-            "hw_directx_12": directx_12_support,
-        }
+        response["apis"] = hw_support
         for runner in Runner.objects.all():
             response["runners"][runner.slug] = [{
                 "name": runner.slug,
@@ -241,13 +237,13 @@ class RuntimeVersions(views.APIView):
             ):
                 continue
             if (
-                    (not vulkan_support or not directx_11_support)
+                    (not hw_support["vulkan"] or not hw_support["directx_11"])
                     and (runtime.name.startswith("dxvk") or runtime.name == "vkd3d")
             ):
                 continue
-            if not directx_12_support and runtime.name == "vkd3d":
+            if not hw_support["directx_12"] and runtime.name == "vkd3d":
                 continue
-            if not vulkan_1_3_support:
+            if not hw_support["vulkan_1_3"]:
                 if runtime.name == "dxvk" and int(runtime.version.strip("v")[0]) > 1:
                     continue
                 if runtime.name == "vkd3d" and runtime.version != "v2.6":
