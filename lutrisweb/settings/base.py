@@ -49,7 +49,7 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 if os.environ.get("EXTRA_ALLOWED_HOST"):
-    ALLOWED_HOSTS.append(os.environ["EXTRA_ALLOWED_HOSTS"])
+    ALLOWED_HOSTS.append(os.environ["EXTRA_ALLOWED_HOST"])
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
