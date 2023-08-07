@@ -20,9 +20,11 @@ services:
 
   lutrisdb:
     image: postgres:latest
+    shm_size: 4g
     restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - lutrisdb_backups:/backups
     environment:
       POSTGRES_DB: lutris
       POSTGRES_USER: lutris
@@ -35,4 +37,5 @@ services:
     network_mode: service:app
     
 volumes:
-  postgres-data:
+  postgres_data:
+  lutrisdb_backups:
