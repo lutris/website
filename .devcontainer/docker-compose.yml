@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        PYTHON_VER: "3.9"
+        NODE_VERSION: "lts/*"
+        # On Linux, you may need to update USER_UID and USER_GID below if your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000      
+    environment:
+      DJANGO_SETTINGS_MODULE: lutrisweb.settings.local
+    volumes:
+      # This is where VS Code should expect to find your project's source code and the value of "workspaceFolder" in .devcontainer/devcontainer.json
+      - ..:/workspace/lutris-website:cached
+    command: sleep infinity
+
+  lutrisdb:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: lutris
+      POSTGRES_USER: lutris
+      POSTGRES_PASSWORD: admin    
+    network_mode: service:app
+  
+  lutriscache:
+    image: redis:latest
+    restart: unless-stopped
+    network_mode: service:app
+    
+volumes:
+  postgres-data:

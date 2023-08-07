@@ -8,3 +8,4 @@ coverage==7.2.5
 ipdb==0.13.13
 django-debug-toolbar==4.0.0
 Faker
+rst2html
