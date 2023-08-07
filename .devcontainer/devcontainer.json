@@ -1,0 +1,34 @@
+{
+	"name": "lutris-website",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"postCreateCommand": ".devcontainer/post-create.sh",
+	"remoteUser": "vscode",
+	"workspaceFolder": "/workspace/lutris-website",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.black-formatter",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg"
+			],
+			"settings": {
+				"sqltools.connections": [
+					{
+						"name": "lutrisdb",
+						"driver": "PostgreSQL",
+						"previewLimit": 50,
+						"server": "localhost",
+						"port": 5432,
+						"database": "lutris",
+						"username": "lutris",
+						"password": "admin"
+					}
+				]
+			}
+		}
+	},
+	"mounts": [
+		"source=${env:HOME}${env:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind"
+	]
+}
