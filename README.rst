@@ -217,6 +217,7 @@ Reset devcontainers env
 - Wait until all containers have been stopped, which may take up to 10 seconds.
 - Proceed to remove the SQL DB volume using the command: 
     
-    docker volume rm lutris-website_devcontainer_postgres-data
+    docker rm lutris-website_devcontainer_lutrisdb_1
+    docker volume rm lutris-website_devcontainer_postgres_data
 
 - Finally, select the `Rebuild and Reopen in Container` option from the VSCode menu.
