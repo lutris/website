@@ -177,7 +177,7 @@ class GameStatsView(APIView):
             game__change_for__isnull=False,
         ).count()
         statistics["installers"] = models.Installer.objects.all().count()
-        statistics["published_installers"] = models.Installer.objects.published().count()
+        statistics["published_installers"] = models.Installer.objects.get_filtered({"published": True}).count()
         statistics["submitted_drafts"] = models.InstallerDraft.objects.filter(draft=False).count()
         statistics["drafts"] = models.InstallerDraft.objects.all().count()
         statistics["screenshots"] = models.Screenshot.objects.all().count()

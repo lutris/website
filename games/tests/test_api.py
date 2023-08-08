@@ -2,10 +2,13 @@
 import json
 import logging
 
+from unittest.mock import MagicMock
+
 from django.test import TestCase
 from django.urls import reverse
 
 from . import factories
+from games import models
 from providers.models import Provider, ProviderGame
 
 LOGGER = logging.getLogger(__name__)
@@ -104,6 +107,31 @@ class TestInstallerApi(TestCase):
         """The API can return a list of installers for a game"""
         self.assertTrue(self.game.platforms.count())
         response = self.client.get(reverse('api_game_installer_list', kwargs={'slug': self.slug}))
+        self.assertEqual(response.status_code, 200)
+    
+    def test_get_installers_list_filtered(self):
+        """The API returns a list of installers by filter"""
+        self.assertTrue(self.game.platforms.count())
+        inst_mgr = models.Installer.objects
+        inst_mgr.get_filtered = MagicMock()
+        period_start = '2020-01-01T00:00:00'
+        period_end = '2021-01-01T00:00:00'
+        response = self.client.get(reverse('api_installer_list'), {
+            'status': 'published',
+            'revision': 'final',
+            'created_from': period_start,
+            'created_to': period_end,
+            'updated_from': period_start,
+            'updated_to': period_end,
+        })
+        inst_mgr.get_filtered.assert_called_with({
+            'published': True,
+            'draft': False,
+            'created_from': period_start,
+            'created_to': period_end,
+            'updated_from': period_start,
+            'updated_to': period_end,
+        })
         self.assertEqual(response.status_code, 200)
 
 
