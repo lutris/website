@@ -222,7 +222,7 @@ def game_detail(request, slug):
             LOGGER.error("The slug '%s' was used multiple times", slug)
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
     user = request.user
-    installers = game.installers.published()
+    installers = game.installers.get_filtered({"published": True})
     provider_links = game.get_provider_links()
 
     pending_change_subm_count = 0

@@ -18,6 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models, IntegrityError
 from django.db.models import Count, Q
+from django.db.models.query import QuerySet
 from django.urls import reverse
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
@@ -683,17 +684,29 @@ class Screenshot(models.Model):
 class InstallerManager(models.Manager):
     """Model manager for Installer"""
 
-    def published(self):
-        """Return published installers"""
-        return self.get_queryset().filter(published=True)
-
-    def unpublished(self):
-        """Return unpublished installers"""
-        return self.get_queryset().filter(published=False)
-
-    def drafts(self):
-        """Return unpublished installers"""
-        return self.get_queryset().filter(published=False, draft=True)
+    def get_filtered(self, filter: dict) -> QuerySet:
+        """Return installers filtered by params
+        filter:
+            published (boolean): is published
+            draft (boolean): is draft
+            created_from (timestamp): installer creation period start
+            created_to (timestamp): installer creation period end
+            updated_from (timestamp): installer modification period start
+            updated_to (timestamp): installer modification period end
+        """
+        filter_ = {}
+        for f in {'published', 'draft'}:
+            if f in filter:
+                filter_[f] = filter[f]
+        if 'created_from' in filter:
+            filter_['created_at__gte'] = filter['created_from']
+        if 'created_to' in filter:
+            filter_['created_at__lt'] = filter['created_to']
+        if 'updated_from' in filter:
+            filter_['updated_at__gte'] = filter['updated_from']
+        if 'updated_to' in filter:
+            filter_['updated_at__lt'] = filter['updated_to']
+        return self.get_queryset().filter(**filter_)
 
     def _fuzzy_search(self, slug, return_models=False):
         try:
