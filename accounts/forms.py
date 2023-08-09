@@ -46,6 +46,13 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ("username", "email")
 
+    def clean_email(self):
+        """Users with a 'hotmails.com email are not legit'"""
+        email = self.cleaned_data["email"]
+        if email.endswith("hotmails.com"):
+            raise forms.ValidationError("lol :)")
+        return email
+
     def clean_username(self):
         """Check that no similar username exist in a case insensitive way"""
         # Since User.username is unique, this check is redundant,

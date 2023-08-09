@@ -1,7 +1,6 @@
 """Celery tasks for user management"""
 import logging
 
-from celery import task
 from django.db import IntegrityError
 
 import games.models
@@ -11,11 +10,12 @@ from accounts.models import User
 from accounts import spam_control
 from common.util import slugify
 from common.models import save_action_log
+from lutrisweb.celery import app
 
 LOGGER = logging.getLogger()
 
 
-@task
+@app.task
 def sync_steam_library(user_id):
     """Launch a Steam to Lutris library sync"""
     user = User.objects.get(pk=user_id)
@@ -56,16 +56,18 @@ def sync_steam_library(user_id):
     LOGGER.info("Added %s Steam games to %s's library", game_count, user.username)
 
 
-@task
+@app.task
 def daily_mod_mail():
     """Send a daily moderation mail to moderators"""
     send_daily_mod_mail()
 
 
-@task
+@app.task
 def clear_spammers():
     """Delete spam accounts"""
     spam_website_deleted = spam_control.clear_users(spam_control.get_no_games_with_website())
-    save_action_log("spam_website_deleted", spam_website_deleted)
+    if spam_website_deleted:
+        save_action_log("spam_website_deleted", spam_website_deleted)
     spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
-    save_action_log("spam_avatar_deleted", spam_avatar_deleted)
+    if spam_avatar_deleted:
+        save_action_log("spam_avatar_deleted", spam_avatar_deleted)

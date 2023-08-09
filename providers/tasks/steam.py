@@ -1,12 +1,12 @@
 """Sync Steam games"""
 import requests
 
-from celery import task
 from celery.utils.log import get_task_logger
 
 from providers import models
 from games.models import Game
 from common.models import save_action_log
+from lutrisweb.celery import app
 
 LOGGER = get_task_logger(__name__)
 
@@ -14,7 +14,7 @@ LOGGER = get_task_logger(__name__)
 API_URL = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?"
 
 
-@task
+@app.task
 def load_steam_games():
     """Query the Steam API and load every game as a ProviderGame"""
     provider = models.Provider.objects.get(name="steam")
@@ -42,7 +42,7 @@ def load_steam_games():
     return stats
 
 
-@task
+@app.task
 def match_steam_games():
     """Match Steam provider games with those imported from user libraries"""
     stats = {

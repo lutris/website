@@ -1,8 +1,13 @@
+# pylint: disable=no-member
 """Remove any personally identifying information from the database"""
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
-from django_openid_auth.models import UserOpenID
+from django.contrib.sessions.models import Session
+from django_openid_auth.models import (
+    Nonce,
+    UserOpenID,
+)
 from rest_framework.authtoken.models import Token
 from axes.models import AccessAttempt, AccessLog
 from games.models import (
@@ -14,7 +19,10 @@ from games.models import (
     Screenshot,
     GameSubmission,
 )
-from accounts.models import User
+from accounts.models import (
+    EmailConfirmationToken,
+    User,
+)
 from common.models import Upload, News
 
 
@@ -44,7 +52,16 @@ class Command(BaseCommand):
         res = AccessAttempt.objects.all().delete()
         print("Deleted %s access attempt entries" % res[0])
 
-    def handle(self, *args, **kwargs):
+        res = EmailConfirmationToken.objects.all().delete()
+        print("Deleted %s email confirmation tokens" % res[0])
+
+        res = Nonce.objects.all().delete()
+        print("Deleted %s openid auth nonce entries" % res[0])
+
+        res = Session.objects.all().delete()
+        print("Deleted %s session entries" % res[0])
+
+    def handle(self, *args, **_kwargs):
         if not settings.DEBUG:
             raise RuntimeError("Never run this in production")
 

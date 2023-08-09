@@ -18,7 +18,7 @@ def media_directory(path):
     return abs_path
 
 
-CLIENT_VERSION = "0.5.12"
+CLIENT_VERSION = "0.5.13"
 
 DEBUG = True
 THUMBNAIL_DEBUG = False
@@ -43,11 +43,13 @@ DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "lutris.net")
 
 ROOT_URL = "http://localhost:8000"
 DASHBOARD_URL = "http://localhost:9527"
-ALLOWED_HOSTS = (
+ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
     "localhost",
-)
+]
+if os.environ.get("EXTRA_ALLOWED_HOST"):
+    ALLOWED_HOSTS.append(os.environ["EXTRA_ALLOWED_HOST"])
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -76,7 +78,7 @@ GOG_LOGO_PATH = media_directory('gog-logos')
 GOG_LUTRIS_LOGO_PATH = media_directory('gog-lutris-logos')
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MIDDLEWARE = [
     # Caching disabled until proper invalidation is implemented
     # 'django.middleware.cache.UpdateCacheMiddleware',
@@ -157,6 +159,7 @@ INSTALLED_APPS = [
     'accounts',
     'tosec',
     'providers',
+    'hardware'
 ]
 
 BANNER_SIZE = "184x69"
@@ -199,7 +202,7 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 # Select2 - bundled using webpack
 SELECT2_JS = ''
 SELECT2_CSS = ''
@@ -221,48 +224,56 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.clear_spammers',
         'schedule': crontab(minute=4)
     },
-    'clean_action_log': {
-        'task': 'games.tasks.clean_action_log',
+    'action_log_cleanup': {
+        'task': 'games.tasks.action_log_cleanup',
         'schedule': crontab(minute=6)
     },
+    'remove_defaults': {
+        'task': 'games.tasks.remove_defaults',
+        'schedule': crontab(minute=10)
+    },
+    'fix_and_unpin_wine_versions': {
+        'task': 'games.tasks.fix_and_unpin_wine_versions',
+        'schedule': crontab(minute=11)
+    },
     'load-gog-games': {
-        'task': 'providers.tasks.load_gog_games',
+        'task': 'providers.tasks.gog.load_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=1)
     },
     'match-gog-games': {
-        'task': 'providers.tasks.match_gog_games',
+        'task': 'providers.tasks.gog.match_gog_games',
         'schedule': crontab(day_of_week=1, hour=1, minute=10)
     },
     'load-steam-games': {
-        'task': 'providers.tasks.load_steam_games',
+        'task': 'providers.tasks.steam.load_steam_games',
         'schedule': crontab(day_of_week=1, hour=2, minute=1)
     },
     'match-steam-games': {
-        'task': 'providers.tasks.match_steam_games',
+        'task': 'providers.tasks.steam.match_steam_games',
         'schedule': crontab(day_of_week=1, hour=3, minute=1)
     },
     'load-igdb-genres': {
-        'task': 'providers.tasks.load_igdb_genres',
+        'task': 'providers.tasks.igdb.load_igdb_genres',
         'schedule': crontab(day_of_week=2, hour=3, minute=1)
     },
     'load-igdb-platforms': {
-        'task': 'providers.tasks.load_igdb_platforms',
+        'task': 'providers.tasks.igdb.load_igdb_platforms',
         'schedule': crontab(day_of_week=2, hour=3, minute=5)
     },
     'load-igdb-games': {
-        'task': 'providers.tasks.load_igdb_games',
+        'task': 'providers.tasks.igdb.load_igdb_games',
         'schedule': crontab(day_of_week=2, hour=3, minute=8)
     },
     'match-igdb-games': {
-        'task': 'providers.tasks.match_igdb_games',
+        'task': 'providers.tasks.igdb.match_igdb_games',
         'schedule': crontab(day_of_week=2, hour=4, minute=1)
     },
     'load-igdb-covers': {
-        'task': 'providers.tasks.load_igdb_covers',
+        'task': 'providers.tasks.igdb.load_igdb_covers',
         'schedule': crontab(day_of_week=2, hour=4, minute=30)
     },
     'sync-igdb-coverart': {
-        'task': 'providers.tasks.sync_igdb_coverart',
+        'task': 'providers.tasks.igdb.sync_igdb_coverart',
         'schedule': crontab(day_of_week=2, hour=5, minute=30)
     },
 }

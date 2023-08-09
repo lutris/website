@@ -1,7 +1,6 @@
 """Routing for custom admin views"""
 
 # pylint: disable=E1120, C0103
-from __future__ import absolute_import
 from django.urls import path
 from games.views import admin as views
 

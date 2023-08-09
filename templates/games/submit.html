@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static from staticfiles %}
+{% load static %}
 
 
 {% block title %}
@@ -15,6 +15,7 @@
 {% block content %}
 <div class="row">
   <div class="col-lg-10 col-lg-offset-1">
+
     <div class="form-view">
       <h1>
         {% if not game %}
@@ -23,7 +24,9 @@
         Suggest changes to '{{ game.name }}'
         {% endif %}
       </h1>
-      {% if not game %}
+      {% if game %}
+      <p class="warning">If you abuse this form to report bugs, we will disable your Lutris account.</p>
+      {% else %}
       <p class="warning">
         Please check the spelling of the game you're adding. Do not use an abbreviated version of a name.
         Submissions that we judge have been sent in bad faith can get your Lutris account deleted.

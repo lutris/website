@@ -28,6 +28,16 @@
       <li>
         <ul>
           <li>
+            <img src='{{ STATIC_URL }}images/icons/nobara.png' alt='Pop!_OS'>Nobara
+          </li>
+        </ul>
+        <p>
+          Lutris is pre-installed on Nobara. <a href="https://nobaraproject.org/download-nobara/">Download Nobara</a>.
+        </p>
+      </li>
+      <li>
+        <ul>
+          <li>
             <img src='{{ STATIC_URL }}images/icons/pop_os.png' alt='Pop!_OS'>Pop!_OS
           </li>
         </ul>
@@ -93,22 +103,13 @@
           <br/>
           You can add a repository using terminal to receive automatic updates:<br/>
           <br/>
-          <code>echo "deb [signed-by=/etc/apt/keyrings/lutris.gpg] https://download.opensuse.org/repositories/home:/strycore/Debian_11/ ./" |
+          <code>echo "deb [signed-by=/etc/apt/keyrings/lutris.gpg] https://download.opensuse.org/repositories/home:/strycore/Debian_12/ ./" |
             sudo tee /etc/apt/sources.list.d/lutris.list > /dev/null</code><br/>
-          <code>wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_11/Release.key |
+          <code>wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key |
             gpg --dearmor |
             sudo tee /etc/apt/keyrings/lutris.gpg > /dev/null</code><br/>
           <code>sudo apt update</code><br/>
           <code>sudo apt install lutris</code>
-        </p>
-      </li>
-      <li>
-        <ul>
-          <li><img src="{{STATIC_URL}}images/icons/solus.png" alt="Solus">Solus</li>
-        </ul>
-        <p>
-          Lutris is available in the Solus Software Center<br/><br/>
-          <code>sudo eopkg it lutris</code>
         </p>
       </li>
       <li>
@@ -145,7 +146,7 @@
         </ul>
         <p>
         You can get Lutris from the
-        <a href="https://www.archlinux.org/packages/community/any/lutris/">Arch Community Repository</a>. Updates on Manjaro are delayed.<br/><br/>
+        <a href="https://www.archlinux.org/packages/extra/any/lutris/">Arch Extra Repository</a>. Updates on Manjaro are delayed.<br/><br/>
         <code>sudo pacman -S lutris</code>
         </p>
       </li>
@@ -190,7 +191,7 @@
           </li>
         </ul>
         <p>
-        For CentOS Stream and derivatives like RHEL 8,9 or Rocky Linux 8,9 the package is available in EPEL (Extra packages for Enterprise Linux)
+        For CentOS Stream and derivatives like RHEL 9 or Rocky Linux 9 the package is available in EPEL (Extra packages for Enterprise Linux)
 	  <br/>Note: Enable EPEL, you can follow these <a href="https://docs.fedoraproject.org/en-US/epel/#_el9">instructions </a>for more information.
         </p>
       </li>

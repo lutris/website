@@ -18,10 +18,10 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('grappelli/', include('grappelli.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/games/', include('games.urls.admin')),
+    path('admin/', admin.site.urls),
+    path('grappelli/', include('grappelli.urls')),
     path('select2/', include('django_select2.urls')),
     path('openid/', include('django_openid_auth.urls')),
     path('user/', include('accounts.urls')),
@@ -32,8 +32,8 @@ urlpatterns = [
         include('rest_framework.urls', namespace='rest_framework')
     ),
     path('api/tosec', include('tosec.urls')),
+    path('api/hardware', include('hardware.urls')),
     path('api/runners', include('runners.runner_urls')),
-    path('api/runtime', include('runners.runtime_urls_legacy')),
     path('api/runtimes', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
     path('api/installers', include('games.urls.installers')),
@@ -41,7 +41,6 @@ urlpatterns = [
     path('api/bundles/<slug:slug>', BundleView.as_view(), name='api_bundle_view'),
     path('games', include('games.urls.pages')),
     path('bundles', include('bundles.urls')),
-    path('runners', include('runners.urls')),
     path('email/', include('emails.urls')),
     path(
         'steam-login/',

@@ -19,7 +19,7 @@ class RuntimeComponentAdmin(admin.StackedInline):
 
 
 class RuntimeAdmin(admin.ModelAdmin):
-    list_display = ("name", "architecture", "created_at")
+    list_display = ("name", "architecture", "enabled", "versioned", "min_version", "created_at")
     model = models.Runtime
 
     inlines = [

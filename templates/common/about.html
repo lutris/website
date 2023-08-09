@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load lutris %}
-{% load static from staticfiles %}
+{% load static %}
 {% block title %}About Lutris{% endblock %}
 
 
@@ -15,8 +15,9 @@ The client can connect with existing services like Humble Bundle, GOG and Steam 
         Before installing Lutris (or at least before running any games), make sure your computer is fully setup to run games.
         This includes making sure your graphics drivers are installed and up to date, that Vulkan is installed and that the 32bit
         libraries for OpenGL / Vulkan are present. If any of those components are missing Lutris will give a warning.
-        We also very highly recommend installing Wine from your package manager. Lutris will usually not make use of it directly
-        but the peer dependencies installed from the Wine package are necessary to run our Wine version properly.
+        We also very highly recommend installing Wine from your package manager. This can be any version of Wine
+        (stable, development or staging) as long as it pulls both 32bit and 64bit variants. Lutris will usually not make
+        use of it directly but the peer dependencies installed from the Wine package are necessary to run our Wine version properly.
       </p>
     </div>
   </div>

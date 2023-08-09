@@ -18,18 +18,37 @@ LOGGER = logging.getLogger(__name__)
 
 
 class InstallerListView(generics.ListAPIView):
-    """Return a list of all installers"""
+    """Return a list of all installers
+    Supported query parameters:
+        status: installer status (published, unpublished)
+        revision: installer revision (draft, final)
+        created_from: installer creation period start
+        created_to: installer creation period end
+        updated_from: installer modification period start
+        updated_to: installer modification period end
+        order: order results by creation date (oldest, newest), default=newest
+    """
     serializer_class = serializers.InstallerSerializer
 
-    def get_queryset(self):
-        installer_status = self.request.GET.get('status')
-        order_by = "created_at" if self.request.GET.get('order') == "oldest" else "-created_at"
-        if installer_status == 'published':
-            return models.Installer.objects.published()
-        if installer_status == 'unpublished':
-            return models.Installer.objects.unpublished()
-        return models.Installer.objects.order_by(order_by)
-
+    def get_queryset(self):        
+        params = self.request.GET.dict()
+        filter = {}
+        if 'status' in params:
+            if params['status'] == 'published':
+                filter['published'] = True
+            elif params['status'] == 'unpublished':
+                filter['published'] = False
+        if 'revision' in params:
+            if params['revision'] == 'draft':
+                filter['draft'] = True
+            elif params['revision'] == 'final':
+                filter['draft'] = False
+        for param in {'created_from', 'created_to', 'updated_from', 'updated_to'}:
+            if param in params:
+                filter[param] = params[param]        
+        order = self.request.GET.get('order')
+        order_by = "created_at" if order == "oldest" else "-created_at"
+        return models.Installer.objects.get_filtered(filter).order_by(order_by)
 
 class InstallerDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Returns the details for a given installer accessed by its id"""

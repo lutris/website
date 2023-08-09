@@ -45,8 +45,11 @@ class GameList(ListView):
         self.q_params = {}
 
     def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '')
+        if "\0" in query:
+            return redirect("https://www.playmobil.fr/")
         self.q_params = {
-            'q': request.GET.get('q', ''),
+            'q': query,
             'platforms': request.GET.getlist('platforms',
                                              [kwargs.get('platform')] if 'platform' in kwargs else []),
             'genres': request.GET.getlist('genres',
@@ -219,7 +222,7 @@ def game_detail(request, slug):
             LOGGER.error("The slug '%s' was used multiple times", slug)
             return redirect(reverse("game_detail", kwargs={"slug": games[0].slug}))
     user = request.user
-    installers = game.installers.published()
+    installers = game.installers.get_filtered({"published": True})
     provider_links = game.get_provider_links()
 
     pending_change_subm_count = 0
@@ -342,15 +345,6 @@ def delete_draft(request, draft_id):
 def installer_complete(request, slug):
     game = get_object_or_404(models.Game, slug=slug)
     return render(request, "installers/complete.html", {"game": game})
-
-
-def get_installers(request, slug):  # pylint: disable=unused-argument
-    """Deprecated function, use REST API"""
-    try:
-        installers_json = Installer.objects.get_json(slug)
-    except Installer.DoesNotExist:
-        raise Http404
-    return HttpResponse(installers_json, content_type="application/json")
 
 
 @never_cache

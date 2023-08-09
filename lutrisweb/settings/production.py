@@ -30,7 +30,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", 25))
 
 STATICFILES_STORAGE = (
-    'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+    'django.contrib.staticfiles.storage.StaticFilesStorage'
 )
 
 TEMPLATE_LOADERS = (

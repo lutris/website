@@ -1,21 +1,26 @@
-# pylint: disable=missing-docstring, too-many-ancestors
+# pylint: disable=missing-docstring, too-many-ancestors, no-member
 import os
 
 from django.utils import timezone
 from django.conf import settings
-from django.views.generic import ListView
-from django.http import Http404
 
 from rest_framework import status
-from rest_framework import generics, filters
+from rest_framework import generics, filters, views
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.exceptions import APIException
 
 from common.permissions import IsAdminOrReadOnly
 from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
 from runners.serializers import RunnerSerializer, RuntimeSerializer, RuntimeDetailSerializer
-from games.models import Game
+from hardware.models import get_hardware_features
 
+
+
+class ClientTooOld(APIException):
+    status_code = 426
+    default_detail = 'Your Lutris client is out of date. Please upgrade.'
+    default_code = 'client_out_of_date'
 
 class RunnerListView(generics.ListAPIView):
     serializer_class = RunnerSerializer
@@ -85,6 +90,16 @@ class RunnerUploadView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+def get_version_number(version):
+    """Return a decimal conversion of a version string"""
+    version_parts = version.split(".")
+    if len(version_parts) < 3:
+        raise ValueError
+    if len(version_parts) == 3:
+        version_parts.append(0)
+    release, major, minor, patch = version_parts[:4]
+    return int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+
 class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -92,7 +107,20 @@ class RuntimeListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Match lutris games against service appids"""
+        user_agent = self.request.META["HTTP_USER_AGENT"]
+        version_number = 0
+        if user_agent.startswith("Lutris"):
+            remote_version = user_agent.split()[1]
+            try:
+                version_number = get_version_number(remote_version)
+            except ValueError as ex:
+                raise ClientTooOld from ex
+            if version_number < 5011000:
+                raise ClientTooOld
+
         queryset = Runtime.objects.all()
+        if version_number:
+            queryset = queryset.filter(min_version__lte=version_number)
         filter_enabled = self.request.GET.get('enabled')
         if filter_enabled:
             return queryset.filter(enabled=True)
@@ -117,10 +145,6 @@ class RuntimeListView(generics.ListCreateAPIView):
             response_status = status.HTTP_200_OK
 
         return Response(serializer.data, status=response_status)
-
-
-class RuntimeLegacyListView(RuntimeListView):
-    queryset = Runtime.objects.exclude(url="")
 
 
 class RuntimeDetailView(generics.RetrieveAPIView):
@@ -150,52 +174,87 @@ class RuntimeDetailView(generics.RetrieveAPIView):
         return Response("", status=status.HTTP_201_CREATED)
 
 
-class RunnersList(ListView):
-    model = Runner
-    context_object_name = "runners"
+class RuntimeVersions(views.APIView):
+    def get(self, request):
+        response = {
+            "client_version": settings.CLIENT_VERSION,
+            "gpus": {},
+            "apis": {},
+            "runtimes": {},
+            "runners": {},
+        }
+        user_agent = request.META["HTTP_USER_AGENT"]
+        client_version_number = 0
+        if user_agent.startswith("Lutris"):
+            remote_version = user_agent.split()[1]
+            try:
+                client_version_number = get_version_number(remote_version)
+            except ValueError as ex:
+                raise ClientTooOld from ex
 
+        for pci_id in request.GET.get("pci_ids", "").lower().split(","):
+            try:
+                response["gpus"][pci_id] = get_hardware_features(pci_id)
+            except ValueError:
+                continue
+        hw_support = {
+            "vulkan": None,
+            "vulkan_1_3": None,
+            "directx_11": None,
+            "directx_12": None,
+        }
+        if response["gpus"]:
+            for gpu_info in response["gpus"].values():
+                if not gpu_info.get("features"):
+                    continue
+                apis = [feature.split()[0] for feature in gpu_info["features"]]
+                versioned_apis = [" ".join(feature.split()[0:2]) for feature in gpu_info["features"]]
+                if not hw_support["vulkan"]:
+                    hw_support["vulkan"] = "Vulkan" in apis
+                if not hw_support["vulkan_1_3"]:
+                    hw_support["vulkan_1_3"] = "Vulkan 1.3" in versioned_apis
+                if not hw_support["directx_11"]:
+                    hw_support["directx_11"] = "Direct3D 11" in versioned_apis
+                if not hw_support["directx_12"]:
+                    hw_support["directx_12"] = hw_support["directx_11"] = "Direct3D 12" in versioned_apis
+        for api, _support in hw_support.items():
+            if hw_support[api] is None:
+                hw_support[api] = True
 
-class RunnerGameList(ListView):
-    model = Game
-    context_object_name = "games"
-    paginate_by = 25
-    template_name = "runners/game_list.html"
+        response["hw_support"] = hw_support
+        for runner in Runner.objects.all():
+            response["runners"][runner.slug] = [{
+                "name": runner.slug,
+                "version": version.version,
+                "url": version.url,
+                "architecture": version.architecture
+            } for version in runner.runner_versions.filter(default=True)]
+        for runtime in Runtime.objects.filter(enabled=True):
+            if (
+                    client_version_number
+                    and runtime.min_version
+                    and client_version_number < runtime.min_version
+            ):
+                continue
+            if (
+                    (not hw_support["vulkan"] or not hw_support["directx_11"])
+                    and (runtime.name.startswith("dxvk") or runtime.name == "vkd3d")
+            ):
+                continue
+            if not hw_support["directx_12"] and runtime.name == "vkd3d":
+                continue
+            if not hw_support["vulkan_1_3"]:
+                if runtime.name == "dxvk" and int(runtime.version.strip("v")[0]) > 1:
+                    continue
+                if runtime.name == "vkd3d" and runtime.version != "v2.6":
+                    continue
+            response["runtimes"][runtime.name] = {
+                "name": runtime.name,
+                "created_at": runtime.created_at,
+                "architecture": runtime.architecture,
+                "url": runtime.url,
+                "version": runtime.version,
+                "versioned": runtime.versioned,
+            }
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(
-            installers__runner__slug=self.kwargs["runner"]
-        ).distinct()
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        """Get the context for this view"""
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        try:
-            context["runner"] = Runner.objects.get(slug=self.kwargs["runner"])
-        except Runner.DoesNotExist:
-            raise Http404
-        return context
-
-
-class RunnerVersionGameList(ListView):
-    model = Game
-    context_object_name = "games"
-    paginate_by = 25
-    template_name = "runners/game_list.html"
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(
-            installers__runner__slug=self.kwargs["runner"],
-            installers__content__icontains="  version: %s" % self.kwargs["version"],
-        ).distinct()
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        """Get the context for this view"""
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context["version"] = self.kwargs["version"]
-        try:
-            context["runner"] = Runner.objects.get(slug=self.kwargs["runner"])
-        except Runner.DoesNotExist:
-            raise Http404
-        return context
+        return Response(response)

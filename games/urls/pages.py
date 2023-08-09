@@ -34,11 +34,6 @@ urlpatterns = [
     path('/cover/<slug:slug>.jpg', views.get_coverart, name="get_coverart"),
     path('/install/<int:id>/view', views.view_installer, name='view_installer'),
 
-    # Deprecated! Remove after 0.5.0 release!
-    path('/install/<slug:slug>/',
-         views.get_installers,
-         name='get_installers'),
-
     re_path(r'/(?P<slug>[\w\-]+)/suggest-changes/?$',
             views.edit_game,
             name='game-edit'),

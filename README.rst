@@ -3,7 +3,7 @@ Getting the site up and running for development
 
 Install required packages:
 
-    apt install python3.8-venv
+    apt install python3-venv
 
 
 If you haven't done it already, install and configure virtualenvwrapper.
@@ -39,7 +39,7 @@ dependencies::
         libffi-dev libpq-dev libxml2-dev libjpeg-dev
 
     # Red Hat / Fedora dependencies
-    sudo dnf install libpq-devel python3-devel
+    sudo dnf install libpq-devel python3-devel libxml2-devel libxslt-devel
 
     # Python dependencies
     pip3 install -r config/requirements/devel.pip --exists-action=w
@@ -52,22 +52,12 @@ to install a more recent version.
 You can then build the frontend assets::
 
     npm install
-    npm run setup
     npm run build
 
 To watch for file changes and recompile assets on the fly, you can run in a
 separate terminal::
 
     npm run watch
-
-The installer issues use another frontend stack based on VueJS. It is not
-required to build them to work on other areas of the site. To build those
-assets, run::
-
-    cd frontend/vue
-    npm install
-    npm run build:issues  # for a production build
-    npm run build:issues-dev  # for a development build and watch file changes
 
 Once your PostgreSQL database is configured (explained in the paragraph below),
 run the database migrations to populate the database with tables::
@@ -202,3 +192,32 @@ build::
 
 The last command will run forever, watching for changes made to the
 source and rebuilding the project on each update. Press Ctrl+C to interrupt it.
+
+
+Devcontainers
+=============
+
+VSCode is recommended as a primary IDE for development. It provides an out of the box support for `devcontainers` - 
+a modern full-featured development environment.
+
+Prerequisite
+------------
+
+Latest version of VSCode with [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) extension and 
+Docker installed on your system.
+
+After cloning the project choose the `Reopen in Container`` option from the VSCode menu. 
+The bootstrap process will run automatically during the initial execution, encompassing all the steps mentioned in this 
+tutorial.
+
+Reset devcontainers env
+-----------------------
+
+- From the menu, opt for the `Reopen Folder Locally` choice.
+- Wait until all containers have been stopped, which may take up to 10 seconds.
+- Proceed to remove the SQL DB volume using the command: 
+    
+    docker rm lutris-website_devcontainer_lutrisdb_1
+    docker volume rm lutris-website_devcontainer_postgres_data
+
+- Finally, select the `Rebuild and Reopen in Container` option from the VSCode menu.

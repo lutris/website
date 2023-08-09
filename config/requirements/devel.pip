@@ -4,7 +4,8 @@
 git+https://github.com/lutris/django-jenkins.git#egg=django-jenkins
 pylint==2.4.4
 pep8==1.7.1
-coverage==5.0.3
-ipdb==0.13.2
-django-debug-toolbar==2.2
+coverage==7.2.5
+ipdb==0.13.13
+django-debug-toolbar==4.0.0
 Faker
+rst2html

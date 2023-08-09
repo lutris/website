@@ -18,6 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models, IntegrityError
 from django.db.models import Count, Q
+from django.db.models.query import QuerySet
 from django.urls import reverse
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
@@ -287,14 +288,22 @@ class Game(models.Model):
         if self.title_logo:
             # Hardcoded domain isn't ideal but we have to find another solution for storing
             # and referencing banners and icons anyway so this will do for the time being.
-            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": self.slug})
+            if self.change_for:
+                slug = self.change_for.slug
+            else:
+                slug = self.slug
+            return settings.ROOT_URL + reverse("get_banner", kwargs={"slug": slug})
         return ""
 
     @property
     def icon_url(self):
         """Return URL for the game icon"""
         if self.icon:
-            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": self.slug})
+            if self.change_for:
+                slug = self.change_for.slug
+            else:
+                slug = self.slug
+            return settings.ROOT_URL + reverse("get_icon", kwargs={"slug": slug})
         return ""
 
     @property
@@ -675,17 +684,29 @@ class Screenshot(models.Model):
 class InstallerManager(models.Manager):
     """Model manager for Installer"""
 
-    def published(self):
-        """Return published installers"""
-        return self.get_queryset().filter(published=True)
-
-    def unpublished(self):
-        """Return unpublished installers"""
-        return self.get_queryset().filter(published=False)
-
-    def drafts(self):
-        """Return unpublished installers"""
-        return self.get_queryset().filter(published=False, draft=True)
+    def get_filtered(self, filter: dict) -> QuerySet:
+        """Return installers filtered by params
+        filter:
+            published (boolean): is published
+            draft (boolean): is draft
+            created_from (timestamp): installer creation period start
+            created_to (timestamp): installer creation period end
+            updated_from (timestamp): installer modification period start
+            updated_to (timestamp): installer modification period end
+        """
+        filter_ = {}
+        for f in {'published', 'draft'}:
+            if f in filter:
+                filter_[f] = filter[f]
+        if 'created_from' in filter:
+            filter_['created_at__gte'] = filter['created_from']
+        if 'created_to' in filter:
+            filter_['created_at__lt'] = filter['created_to']
+        if 'updated_from' in filter:
+            filter_['updated_at__gte'] = filter['updated_from']
+        if 'updated_to' in filter:
+            filter_['updated_at__lt'] = filter['updated_to']
+        return self.get_queryset().filter(**filter_)
 
     def _fuzzy_search(self, slug, return_models=False):
         try:
@@ -807,8 +828,9 @@ class BaseInstaller(models.Model):
 
     def as_dict(self, with_metadata=True):
         """Return the installer data as a dict"""
+        yaml_content = {}
         try:
-            yaml_content = load_yaml(self.content) or {}
+            script_content = load_yaml(self.content) or {}
         except (yaml.parser.ParserError, yaml.scanner.ScannerError):
             LOGGER.error("Installer with invalid YAML. Deleting immediatly.")
             if self.id:
@@ -824,24 +846,27 @@ class BaseInstaller(models.Model):
             return {}
 
         # Do not add metadata if the clean argument has been passed
-        if with_metadata:
-            yaml_content["game_slug"] = self.game.slug
-            yaml_content["version"] = self.version
-            yaml_content["description"] = self.description
-            yaml_content["notes"] = self.notes
-            yaml_content["name"] = self.game.name
-            yaml_content["year"] = self.game.year
-            yaml_content["steamid"] = self.game.steamid
-            yaml_content["gogslug"] = self.game.gogslug
-            yaml_content["humblestoreid"] = self.game.humblestoreid
-            try:
-                yaml_content["runner"] = self.runner.slug
-            except ObjectDoesNotExist:
-                yaml_content["runner"] = ""
-            # Set slug to both slug and installer_slug for backward compatibility
-            # reasons with the client. Remove installer_slug sometime in the future
-            yaml_content["slug"] = self.slug
-            yaml_content["installer_slug"] = self.slug
+        if not with_metadata:
+            return script_content
+
+        yaml_content["game_slug"] = self.game.slug
+        yaml_content["version"] = self.version
+        yaml_content["description"] = self.description
+        yaml_content["notes"] = self.notes
+        yaml_content["name"] = self.game.name
+        yaml_content["year"] = self.game.year
+        yaml_content["steamid"] = self.game.steamid
+        yaml_content["gogslug"] = self.game.gogslug
+        yaml_content["humblestoreid"] = self.game.humblestoreid
+        try:
+            yaml_content["runner"] = self.runner.slug
+        except ObjectDoesNotExist:
+            yaml_content["runner"] = ""
+        # Set slug to both slug and installer_slug for backward compatibility
+        # reasons with the client. Remove installer_slug sometime in the future
+        yaml_content["slug"] = self.slug
+        yaml_content["installer_slug"] = self.slug
+        yaml_content["script"] = script_content
         return yaml_content
 
     def as_yaml(self):
@@ -868,15 +893,6 @@ class BaseInstaller(models.Model):
 
 class Installer(BaseInstaller):
     """Game installer model"""
-
-    RATINGS = {
-        "5": "Platinum (this rating is meaningless)",
-        "4": "Gold (this rating is meaningless)",
-        "3": "Silver (this rating is meaningless)",
-        "2": "Bronze (this rating is meaningless)",
-        "1": "Garbage (this rating is meaningless)",
-    }
-
     game = models.ForeignKey(Game, related_name="installers", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
@@ -905,12 +921,18 @@ class Installer(BaseInstaller):
         null=True
     )
     draft = models.BooleanField(default=False)
-    rating = models.CharField(max_length=24, choices=RATINGS.items(), blank=True)
+    rating = models.CharField(max_length=24, choices=(("0", "Do not use"),), blank=True)
 
     # Relevant for edit submissions only: Reason why the proposed change
     # is necessecary or useful
     reason = models.CharField(max_length=512, blank=True, null=True)
     review = models.CharField(max_length=512, blank=True, null=True)
+
+    # Wine pinning management. Pinning Wine versions is heavily discouraged,
+    # installers having a pinned Wine version without a justification will
+    # show a warning to the user.
+    pinned = models.BooleanField(default=False)
+    pin_reason = models.URLField(blank=True)
 
     # Collection manager
     objects = InstallerManager()

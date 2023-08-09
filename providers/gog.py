@@ -215,17 +215,19 @@ def load_games_from_gog_api():
 def populate_gogid_and_gogslug():
     """Fills the gogid and gogslug fields in games, respecting GOG packages"""
     packages = get_game_packages()
-    duplicates = []
+    stats = defaultdict(int)
     for gog_game in models.ProviderGame.objects.filter(provider__name="gog"):
         num_lutris_games = 0
         for lutris_game in gog_game.games.all():
             num_lutris_games += 1
             if not lutris_game.gogid:
                 lutris_game.gogid = gog_game.slug
+                stats["no_gog_id"] += 1
             if num_lutris_games > 1:
-                duplicates.append(lutris_game)
+                stats["duplicates"] += 1
             if gog_game.slug in packages:
                 lutris_game.gogslug = packages[gog_game.slug][0]
+                stats["in_packages"] += 1
             else:
                 store_url = gog_game.metadata["_links"]["store"]["href"]
                 if store_url:
@@ -233,6 +235,8 @@ def populate_gogid_and_gogslug():
                     lutris_game.gogslug = matches.groups()[0]
                 else:
                     LOGGER.warning("No store URL for %s", gog_game.name)
+                    stats["no_store_url"] += 1
                     lutris_game.gogslug = ""
             lutris_game.save()
-    return duplicates
+            stats["saved"] += 1
+    return stats

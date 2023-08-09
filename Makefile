@@ -1,5 +1,3 @@
-.PHONY: tags
-
 watch:
 	npm run watch
 
@@ -47,7 +45,7 @@ shell:
 	./manage.py shell_plus --traceback
 
 worker:
-	celery worker -A lutrisweb -B --loglevel=debug --hostname=lutris.net -E
+	celery -A lutrisweb worker -B --loglevel=debug --hostname=lutris.net -E
 
 localdb:
 	# Create a local Postgres database for development
@@ -64,6 +62,9 @@ syncdb:
 	docker cp latest.tar lutrisdb:/backups
 	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
 	rm latest.tar
+
+syncmedia:
+	rsync -avz anaheim:/srv/prod/website/media/ media/
 
 discord:
 	# Load Discord App IDS to database
