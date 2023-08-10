@@ -7,7 +7,6 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from rest_framework import generics, status
-from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -131,3 +130,31 @@ class InstallerDraftDetailView(generics.RetrieveUpdateDestroyAPIView):
             return models.InstallerDraft.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         except models.InstallerDraft.DoesNotExist:
             raise Http404
+
+class InstallerHistoryListView(generics.ListAPIView):
+    """Return history of installers
+    Supported query parameters:        
+        created_from: installer history period start
+        created_to: installer history period end        
+        order: order results by creation date (oldest, newest), default=newest
+    """
+    serializer_class = serializers.InstallerHistorySerializer
+
+    def get_queryset(self):        
+        params = self.request.GET.dict()
+        filter = {}        
+        for param in {'created_from', 'created_to'}:
+            if param in params:
+                filter[param] = params[param]        
+        order = self.request.GET.get('order')
+        order_by = "created_at" if order == "oldest" else "-created_at"
+        return models.InstallerHistory.objects.get_filtered(filter).order_by(order_by)
+
+class InstallerHistoryView(generics.ListAPIView):
+    """Retrieve a history for a given installer accessed by its id"""
+    serializer_class = serializers.InstallerHistorySerializer
+
+    def get_queryset(self):
+        return models.InstallerHistory.objects.filter(
+            installer_id=self.request.parser_context['kwargs']['installer_id']
+        ).order_by('created_at')

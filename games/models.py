@@ -681,6 +681,23 @@ class Screenshot(models.Model):
         return "%s: %s (uploaded by %s)" % (self.game, desc, self.uploaded_by)
 
 
+class InstallerHistoryManager(models.Manager):
+    """Model manager for InstallerHistory"""
+
+    def get_filtered(self, filter: dict) -> QuerySet:
+        """Return history of installers filtered by params
+        filter:            
+            created_from (timestamp): history period start
+            created_to (timestamp): history period end
+        """
+        filter_ = {}        
+        if 'created_from' in filter:
+            filter_['created_at__gte'] = filter['created_from']
+        if 'created_to' in filter:
+            filter_['created_at__lt'] = filter['created_to']        
+        return self.get_queryset().filter(**filter_)
+
+
 class InstallerManager(models.Manager):
     """Model manager for Installer"""
 
@@ -992,6 +1009,9 @@ class InstallerHistory(BaseInstaller):
     notes = models.TextField(blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    # Collection manager
+    objects = InstallerHistoryManager()
 
     @classmethod
     def create_from_installer(cls, installer):

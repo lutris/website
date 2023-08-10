@@ -134,6 +134,28 @@ class TestInstallerApi(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    def test_get_installers_history_list_filtered(self):
+        """The API returns a list of installers history by filter"""
+        self.assertTrue(self.game.platforms.count())
+        inst_mgr = models.InstallerHistory.objects
+        inst_mgr.get_filtered = MagicMock()
+        period_start = '2020-01-01T00:00:00'
+        period_end = '2021-01-01T00:00:00'
+        response = self.client.get(reverse('api_installer_history_list'), {
+            'created_from': period_start,
+            'created_to': period_end,
+        })
+        inst_mgr.get_filtered.assert_called_with({
+            'created_from': period_start,
+            'created_to': period_end,
+        })
+        self.assertEqual(response.status_code, 200)
+    
+    def test_can_get_installer_history_for_installer(self):
+        """The API can return a history for a given installer"""
+        response = self.client.get(reverse('api_installer_history', kwargs={'installer_id': 1307}))
+        self.assertEqual(response.status_code, 200)
+
 
 class TestGameProviderApi(TestCase):
     """Test case for 3rd party game services integration"""

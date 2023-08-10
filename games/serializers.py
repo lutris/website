@@ -83,6 +83,17 @@ class InstallerSerializer(serializers.ModelSerializer):
             'discord_id',
         )
 
+class InstallerHistorySerializer(serializers.ModelSerializer):
+    """Serializer for Installers History"""
+    runnername = serializers.ReadOnlyField(source='runner.name')
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerHistory
+        fields = (
+            'id', 'version', 'description', 'notes', 'content', 'created_at', 'installer_id', 'runnername', 'user',
+        )
 
 class InstallerDraftSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
