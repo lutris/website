@@ -38,6 +38,14 @@ urlpatterns = [
          deprecated.InstallerIssueReplyView.as_view(),
          name='api_installer_issue_reply'),
 
+    # History
+    path('/<int:installer_id>/history',
+         views.InstallerHistoryView.as_view(),
+         name='api_installer_history'),
+    path('/history',
+         views.InstallerHistoryListView.as_view(),
+         name='api_installer_history_list'),
+
     # Generic views
     path('/id/<int:pk>',
          views.InstallerDetailView.as_view(),
