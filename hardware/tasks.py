@@ -74,7 +74,6 @@ def load_from_pci_ids():
                 continue
             if line[0].isdigit():
                 vendor_id, vendor_name = line.strip().split(maxsplit=1)
-                print(vendor_name, vendor_id)
                 vendor, created = models.Vendor.objects.get_or_create(
                     vendor_id=vendor_id,
                     name=vendor_name
