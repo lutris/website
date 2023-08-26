@@ -1,4 +1,5 @@
 """Account management handling forms"""
+# pylint: disable=no-member
 import logging
 
 from django import forms
@@ -81,8 +82,8 @@ class RegistrationForm(forms.ModelForm):
             try:
                 user.save()
             except IntegrityError as ex:
-                LOGGER.error("Integrity error while saving %s: %s", user, ex)
-                return user
+                user.delete()
+                raise forms.ValidationError("You broke it.") from ex
         Token.objects.create(user=user)
         return user
 
