@@ -82,7 +82,6 @@ class RegistrationForm(forms.ModelForm):
             try:
                 user.save()
             except IntegrityError as ex:
-                user.delete()
                 raise forms.ValidationError("You broke it.") from ex
         Token.objects.create(user=user)
         return user
