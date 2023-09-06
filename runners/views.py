@@ -198,10 +198,10 @@ class RuntimeVersions(views.APIView):
             except ValueError:
                 continue
         hw_support = {
-            "vulkan": None,
-            "vulkan_1_3": None,
-            "directx_11": None,
-            "directx_12": None,
+            "vulkan": True,
+            "vulkan_1_3": True,
+            "directx_11": True,
+            "directx_12": True,
         }
         if response["gpus"]:
             for gpu_info in response["gpus"].values():
@@ -217,9 +217,6 @@ class RuntimeVersions(views.APIView):
                     hw_support["directx_11"] = "Direct3D 11" in versioned_apis
                 if not hw_support["directx_12"]:
                     hw_support["directx_12"] = hw_support["directx_11"] = "Direct3D 12" in versioned_apis
-        for api, _support in hw_support.items():
-            if hw_support[api] is None:
-                hw_support[api] = True
 
         response["hw_support"] = hw_support
         for runner in Runner.objects.all():
@@ -248,6 +245,9 @@ class RuntimeVersions(views.APIView):
                     continue
                 if runtime.name == "vkd3d" and runtime.version != "v2.6":
                     continue
+            else:
+                if runtime.name == "vkd3d" and runtime.version == "v2.6":
+                    continue
             response["runtimes"][runtime.name] = {
                 "name": runtime.name,
                 "created_at": runtime.created_at,
@@ -256,5 +256,4 @@ class RuntimeVersions(views.APIView):
                 "version": runtime.version,
                 "versioned": runtime.versioned,
             }
-
         return Response(response)
