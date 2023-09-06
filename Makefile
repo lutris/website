@@ -2,6 +2,7 @@ watch:
 	npm run watch
 
 run:
+	docker ps -a  # Docker has to be launched first or the db connection will fail
 	./manage.py runserver 0.0.0.0:8000
 
 deps:
