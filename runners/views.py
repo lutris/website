@@ -246,6 +246,8 @@ class RuntimeVersions(views.APIView):
                 if runtime.name == "vkd3d" and runtime.version != "v2.6":
                     continue
             else:
+                if runtime.name == "dxvk" and int(runtime.version.strip("v")[0]) == 1:
+                    continue
                 if runtime.name == "vkd3d" and runtime.version == "v2.6":
                     continue
             response["runtimes"][runtime.name] = {
