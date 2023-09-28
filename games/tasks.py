@@ -18,8 +18,10 @@ OBSOLETE_RUNNERS = (
     "browser"
 )
 
+# Build used for League of Legends games
 CURRENT_LOL_BUILD = "lutris-ge-lol-p8-12-x86_64"
 
+# The following builds will be unpinned.
 CURRENT_BUILDS = (
     "lutris-GE-Proton8-14-x86_64",
     "lutris-GE-Proton8-13-x86_64",
@@ -30,6 +32,7 @@ CURRENT_BUILDS = (
     "lutris-GE-Proton8-6-x86_64",
     "lutris-GE-Proton8-5-x86_64",
     "lutris-GE-Proton8-4-x86_64",
+    "lutris-5.7-11-x86_64",
 )
 
 RUNNER_DEFAULTS = {
