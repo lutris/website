@@ -23,6 +23,8 @@ CURRENT_LOL_BUILD = "lutris-ge-lol-p8-12-x86_64"
 
 # The following builds will be unpinned.
 CURRENT_BUILDS = (
+    "lutris-GE-Proton8-16-x86_64",
+    "lutris-GE-Proton8-15-x86_64",
     "lutris-GE-Proton8-14-x86_64",
     "lutris-GE-Proton8-13-x86_64",
     "lutris-GE-Proton8-12-x86_64",
