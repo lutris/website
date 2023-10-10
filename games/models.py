@@ -686,15 +686,15 @@ class InstallerHistoryManager(models.Manager):
 
     def get_filtered(self, filter: dict) -> QuerySet:
         """Return history of installers filtered by params
-        filter:            
+        filter:
             created_from (timestamp): history period start
             created_to (timestamp): history period end
         """
-        filter_ = {}        
+        filter_ = {}
         if 'created_from' in filter:
             filter_['created_at__gte'] = filter['created_from']
         if 'created_to' in filter:
-            filter_['created_at__lt'] = filter['created_to']        
+            filter_['created_at__lt'] = filter['created_to']
         return self.get_queryset().filter(**filter_)
 
 
@@ -761,7 +761,10 @@ class InstallerManager(models.Manager):
                     try:
                         games = [Game.objects.get(slug=game_slug)]
                     except Game.DoesNotExist:
-                        games = Game.objects.filter(slug__startswith=game_slug)
+                        if len(slug) > 40:
+                            games = Game.objects.filter(slug__startswith=game_slug)
+                        else:
+                            games = []
 
                     for game in games:
                         auto_installer = self.get_auto_installer(
