@@ -22,17 +22,6 @@
       <li role="presentation" class="nav-item">
         <button
           class="nav-link active"
-          id="installer-full-yaml-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#installer-full-yaml"
-          type="button"
-          role="tab"
-          aria-controls="installer-full-yaml"
-          aria-selected="true">YAML</button>
-      </li>
-      <li role="presentation" class="nav-item">
-        <button
-          class="nav-link"
           id="installer-yaml-tab"
           data-bs-toggle="tab"
           data-bs-target="#installer-yaml"
@@ -40,6 +29,17 @@
           role="tab"
           aria-controls="installer-yaml"
           aria-selected="true">YAML (script only)</button>
+      </li>
+      <li role="presentation" class="nav-item">
+        <button
+          class="nav-link"
+          id="installer-full-yaml-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#installer-full-yaml"
+          type="button"
+          role="tab"
+          aria-controls="installer-full-yaml"
+          aria-selected="true">YAML</button>
       </li>
       <li role="presentation" class="nav-item">
         <button
@@ -54,11 +54,11 @@
       </li>
     </ul>
     <div class="tab-content card-body border">
-      <div role="tabpanel" class="tab-pane active" id="installer-full-yaml" aria-labelledby="installer-full-yaml">
-        <pre class="text-white">{{installer.as_yaml}}</pre>
-      </div>
       <div role="tabpanel" class="tab-pane active" id="installer-yaml" aria-labelledby="installer-yaml">
         <pre class="text-white">{{installer.as_cleaned_yaml}}</pre>
+      </div>
+      <div role="tabpanel" class="tab-pane active" id="installer-full-yaml" aria-labelledby="installer-full-yaml">
+        <pre class="text-white">{{installer.as_yaml}}</pre>
       </div>
       <div role="tabpanel" class="tab-pane" id="installer-json" aria-labelledby="installer-json">
         <pre class="text-white">{{installer.as_json}}</pre>
