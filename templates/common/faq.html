@@ -14,7 +14,7 @@
       <p>
         No, we don't sell commercial games on the platform, Lutris allows you
         to install and play games purchased on a variety of different game stores such as
-        Steam, Humble Bundle, GOG, Battle.net etc.
+        Steam, Itch.io, Humble Bundle, GOG, Battle.net, EA, Ubisoft, etc.
       </p>
 
       <a class="title" href="#community">
@@ -150,16 +150,21 @@
     <article>
       <h2>Runners</h2>
       <a class="title" href="#runner">
-        <h3 id="runner">What is a "Runner"?</h3>
+        <h3 id="runner">What is a Runner?</h3>
       </a>
       <p>
-        A "runner" is the term we use to refer to programs that can run games,
+        A runner is the term we use to refer to programs that can run games,
         it can be Linux itself, Wine, DOSBox, MAME, gzdoom, …
-        Runners are recognized as such in Lutris itself, not all programs that
-        run games are considered runners. For example Darkplaces, the open
-        source engine for Quake, is not a runner but gzdoom is. Usually,
+        Not all game engines become runners, for example Darkplaces, the open
+        source engine for Quake, is not a runner but gzdoom is. Usually
         programs become runners if they can run a variety of games, not just
-        one or two.
+        one or two.<br>
+        A requirement for runners is that we must have a redistributable build
+        for Linux and some integration with the Lutris client written in Python
+        or JSON.<br>
+        If the upstream project for a runner doesn't provide a Linux build then 
+        we likely have a script to compile it from source in our 
+        <a href="https://github.com/lutris/buildbot/">buildbot repository</a>.
       </p>
     </article>
 
