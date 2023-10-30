@@ -97,6 +97,8 @@ class ServiceGameListView(generics.GenericAPIView):
     def get_queryset(self, service):  # pylint: disable=arguments-differ
         """Match lutris games against service appids"""
         appids = self.request.data.get('appids')
+        if not appids:
+            return models.Game.objects.none()
         return models.Game.objects.filter(
             change_for__isnull=True,
             provider_games__slug__in=appids,
