@@ -58,7 +58,9 @@
       </small>
     </div>
   </div>
-
+  {% if installer.flagged %}
+  <div class="danger-zone"><strong>☠️ THIS INSTALLER HAS BEEN FLAGGED AS POTENTIALLY UNSAFE.<br>USE WITH EXTREME CAUTION ☠️</strong></div>
+  {% endif %}
   {% if installer.description.strip %}
   <div><strong>{{ installer.description|clean_html|safe|linebreaksbr }}</strong></div>
   {% endif %}
