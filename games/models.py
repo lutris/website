@@ -954,6 +954,9 @@ class Installer(BaseInstaller):
     pinned = models.BooleanField(default=False)
     pin_reason = models.URLField(blank=True)
 
+    # Some installer can be flagged as dangerous.
+    flagged = models.BooleanField(default=False)
+
     # Collection manager
     objects = InstallerManager()
 
