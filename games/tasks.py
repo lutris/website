@@ -19,10 +19,24 @@ OBSOLETE_RUNNERS = (
 )
 
 # Build used for League of Legends games
-CURRENT_LOL_BUILD = "lutris-ge-lol-p8-12-x86_64"
+CURRENT_LOL_BUILD = "wine-ge-lol-8-27-x86_64"
+
+
+
+
 
 # The following builds will be unpinned.
 CURRENT_BUILDS = (
+    "lutris-GE-Proton8-26-x86_64",
+    "lutris-GE-Proton8-25-x86_64",
+    "lutris-GE-Proton8-24-x86_64",
+    "lutris-GE-Proton8-23-x86_64",
+    "lutris-GE-Proton8-22-x86_64",
+    "lutris-GE-Proton8-21-x86_64",
+    "lutris-GE-Proton8-20-x86_64",
+    "lutris-GE-Proton8-19-x86_64",
+    "lutris-GE-Proton8-18-x86_64",
+    "lutris-GE-Proton8-17-x86_64",
     "lutris-GE-Proton8-16-x86_64",
     "lutris-GE-Proton8-15-x86_64",
     "lutris-GE-Proton8-14-x86_64",
@@ -330,16 +344,6 @@ def fix_and_unpin_wine_versions():
         version = str(runner_config["version"])
         stats["versions"][version].append(installer.slug)
 
-        # Handle League of Legends installers
-        if "lol" in version.lower() and version != CURRENT_LOL_BUILD:
-            LOGGER.info("Switching %s to current LOL build %s", version, installer)
-            stats["lol_updates"] += 1
-            runner_config["version"] = CURRENT_LOL_BUILD
-            script[installer.runner.slug] = runner_config
-            installer.content = dump_yaml(script)
-            installer.save()
-            continue
-
         # Handle current builds and non existant builds
         if runner_config["version"] in CURRENT_BUILDS or runner_config["version"] not in stats["published_versions"]:
             version =runner_config.pop("version")
@@ -358,6 +362,14 @@ def fix_and_unpin_wine_versions():
                 script.pop(installer.runner.slug)
             installer.content = dump_yaml(script)
             installer.save()
+
+    for installer in models.Installer.objects.filter(game__slug="league-of-legends"):
+        script = load_yaml(installer.content)
+        if "wine" not in script:
+            script["wine"] = {}
+        script["wine"]["version"] = CURRENT_LOL_BUILD
+        installer.content = dump_yaml(script)
+        installer.save()
     return stats
 
 
