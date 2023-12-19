@@ -1,4 +1,5 @@
 """Email utility functions"""
+import socket
 from six import string_types
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -52,7 +53,10 @@ def send_email(template, context, subject, recipients, sender=None):
     # Under no circumstances this should be switched to https.
     html_part = transform(html_body, base_url='http://lutris.net')
     msg.attach_alternative(html_part, "text/html")
-    return msg.send(False)
+    try:
+        return msg.send(False)
+    except socket.gaierror:
+        return 0
 
 
 def notify_rejected_installer(installer, review, user):
