@@ -367,9 +367,10 @@ def fix_and_unpin_wine_versions():
         script = load_yaml(installer.content)
         if "wine" not in script:
             script["wine"] = {}
-        script["wine"]["version"] = CURRENT_LOL_BUILD
-        installer.content = dump_yaml(script)
-        installer.save()
+        if script["wine"].get("version") != CURRENT_LOL_BUILD:
+            script["wine"]["version"] = CURRENT_LOL_BUILD
+            installer.content = dump_yaml(script)
+            installer.save()
     return stats
 
 
