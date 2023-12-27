@@ -17,5 +17,5 @@ class HardwareInfoView(views.APIView):
             try:
                 response[pci_id] = models.get_hardware_features(pci_id)
             except ValueError as ex:
-                return Response({"error": ex.message})
+                return Response({"error": str(ex)})
         return Response(response)
