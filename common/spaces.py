@@ -1,5 +1,8 @@
 """Digital Ocean Spaces interaction"""
-import boto3
+try:
+    import boto3
+except ImportError:
+    boto3 = None
 from django.conf import settings
 
 

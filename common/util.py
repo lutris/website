@@ -1,6 +1,9 @@
 """Various utility functions used across the website"""
 import yaml
-import romkan
+try:
+    import romkan
+except ImportError:
+    romkan = None
 from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
 from xpinyin import Pinyin
 from transliterate import translit
@@ -16,7 +19,7 @@ def slugify(text):
     if not text:
         return ""
     slug = django_slugify(text)
-    if not slug:
+    if not slug and romkan is not None:
         # Title may be in Japanese
         slug = django_slugify(romkan.to_roma(text))
     if not slug:
