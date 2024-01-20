@@ -238,7 +238,17 @@ def game_detail(request, slug):
         unpublished_installers = []
         in_library = False
         screenshots = game.screenshot_set.published()
-
+    if game.flags.kernel_ac.is_set:
+        no_ac_recommendations = models.Game.objects.filter(slug__in=[
+            "warframe",
+            "dota-2",
+            "counter-strike-2",
+            "farlight-84",
+            "overwatch-2",
+            "apex-legends",
+        ])
+    else:
+        no_ac_recommendations = []
     return render(
         request,
         "games/detail.html",
@@ -254,7 +264,8 @@ def game_detail(request, slug):
             "auto_installers": game.get_default_installers(),
             "unpublished_installers": unpublished_installers,
             "screenshots": screenshots,
-            "provider_links": provider_links
+            "provider_links": provider_links,
+            "no_ac_recommendations": no_ac_recommendations,
         },
     )
 

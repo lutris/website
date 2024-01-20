@@ -63,6 +63,29 @@
 
   <div class="row">
     <div class="col-12 col-md-9">
+      {% if game.flags.kernel_ac.is_set %}
+      <div class="danger-zone">
+        <h3><strong>This game ships with an abusive anticheat and will not work on Linux.</strong></h3>
+        <p>
+          This game's anticheat works at the kernel level, giving full control of your machine to the publisher,
+          or anyone who manages to take control of the publisher.
+        </p>
+        <p>
+          Linux being a secure operating system, this type of anticheat will simply not work.
+        </p>
+        <p>
+          Publishers claim those anticheats are necessary to combat cheaters and keep the game competitive.
+          This is disproven by the fact there are still cheats easily available on websites such as
+          <a href="https://www.unknowncheats.me">UnknownCheats.me</a>.<br/>
+          A lot of games that are just as competitive work on Linux by not using a rootkit as their anticheat. Here are a few we suggest.<br>
+        </p>
+        <p class="centered">
+        {% for alt_game in no_ac_recommendations %}
+        <a href="{{ alt_game.get_absolute_url }}" title="{{ alt_game.name }}"><img src="{{ alt_game.coverart.url }}" alt="{{ alt_game.name }}"/></a>
+        {% endfor %}
+        </p>
+      </div>
+      {% else %}
       {% if screenshots %}
       <div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
         <div class="slides"></div>
@@ -75,7 +98,7 @@
         </div>
       </div>
       {% endif %}
-
+      {% endif %}
       <div class="installer-list">
         {% if installers %}
         <ul class="list-group">
