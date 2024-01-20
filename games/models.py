@@ -164,7 +164,8 @@ class Game(models.Model):
         ("open_engine", "Open engine only"),
         ("free", "Free"),
         ("freetoplay", "Free-to-play"),
-        ("pwyw", "Pay what you want")
+        ("pwyw", "Pay what you want"),
+        ("kernel_ac", "Infected with kernel level anticheat"),
     )
 
     # These model fields are editable by the user
