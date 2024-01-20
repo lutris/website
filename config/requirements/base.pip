@@ -1,6 +1,6 @@
 beautifulsoup4==4.12.3
 PyYAML==6.0.1
-ipython==8.20.0
+ipython
 boto3==1.34.23
 celery[redis]==5.3.6
 cssselect==1.2.0
