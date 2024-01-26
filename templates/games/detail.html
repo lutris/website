@@ -66,26 +66,34 @@
       {% if game.flags.kernel_ac.is_set %}
       <div class="danger-zone">
         <h3><strong>This game requires kernel-level anticheat software which is unsupported on Linux.</strong></h3>
-        <p>
-          <br>
-          This game's anticheat works at the kernel level, giving full control of your machine to the publisher,
-          or anyone who manages to take control of the publisher. As there is no way of knowing exactly what this software does,
-          running this game would require you to completely trust that the publisher will not abuse their power and are capable
-          of keeping the software secure from any attackers. Since it requires deep integration with the Windows kernel,
-          this game can't be played on Linux as well even though it could have been done very easily with Proton and Wine.
-        </p>
-        <p>
-          Although many publishers claim those anticheats are necessary to combat cheaters and keep the game competitive,
-          this is disproven by the fact that using such anticheat software has neither
-          <a href=https://www.vice.com/en/article/z3xjqa/cheat-maker-is-so-far-not-afraid-of-call-of-dutys-new-kernel-level-anti-cheat>
-            stopped such cheating from occurring
-          </a>
-          nor prevented cheats from being easily distributed. In fact, there are a lot of games which are just as competitive
-          and fun, but don't require complete control over your machine.
-        </p>
-        <p>
-          Here are a few we suggest.<br>
-        </p>
+        <ul>
+          <li>
+            <strong>What is a kernel level anticheat?</strong>
+            Some game anticheats install a driver on the system that runs at kernel level,
+            giving itself access to everything in the machine.
+          </li>
+          <li>
+            <strong>Are kernel anticheats better than regular anticheats?</strong>
+            No, they aren't. Many online games have more traditional anticheat methods and do not have more cheaters than games using a kernel driver.
+          </li>
+
+          <li>
+            <strong>Will this anticheat work on Linux?</strong>
+            No, it won't. Those anticheats rely on running on a genuine Windows OS (most of them won't even run in a virtual machine).
+            On Linux, Windows games run through the Wine compatibility layer. Wine does not have the ability to install and use Windows kernel drivers on Linux.
+          </li>
+          <li>
+            <strong>What can Lutris do about it?</strong>
+            Nothing. Do not ask for support for this game. Do not attempt running this game on Linux unless you have time to waste.
+            If you want to voice a complaint, go to the game publisher.
+          </li>
+          <li>
+            <strong>What can I do about it?</strong>
+            If the game is available on a streaming platform such as Geforce Now, then you can use that.
+            Otherwise, you'll have to play from a Windows machine.
+            You can also choose to play one of the many online competitive games that do work on Linux. Here are a few:
+          </li>
+        </ul>
         <p class="centered">
         {% for alt_game in no_ac_recommendations %}
         <a href="{{ alt_game.get_absolute_url }}" title="{{ alt_game.name }}"><img src="{{ alt_game.coverart.url }}" alt="{{ alt_game.name }}"/></a>
