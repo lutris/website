@@ -27,6 +27,7 @@ CURRENT_LOL_BUILD = "wine-ge-lol-8-27-x86_64"
 
 # The following builds will be unpinned.
 CURRENT_BUILDS = (
+    "wine-ge-8-25-x86_64",
     "lutris-GE-Proton8-26-x86_64",
     "lutris-GE-Proton8-25-x86_64",
     "lutris-GE-Proton8-24-x86_64",
