@@ -328,6 +328,7 @@ def fix_and_unpin_wine_versions():
     published_versions = RunnerVersion.objects.filter(runner__slug="wine")
     stats = {
         "versions": defaultdict(list),
+        "games": defaultdict(set),
         "published_versions": {f"{v.version}-{v.architecture}": 0 for v in published_versions},
         "updated_config": 0,
         "removed_config": 0,
@@ -344,6 +345,7 @@ def fix_and_unpin_wine_versions():
         changed = False
         version = str(runner_config["version"])
         stats["versions"][version].append(installer.slug)
+        stats["games"][installer.game.slug].add(version)
 
         # Handle current builds and non existant builds
         if runner_config["version"] in CURRENT_BUILDS or runner_config["version"] not in stats["published_versions"]:
@@ -364,6 +366,7 @@ def fix_and_unpin_wine_versions():
             installer.content = dump_yaml(script)
             installer.save()
 
+    # Update League of Legends installers
     for installer in models.Installer.objects.filter(game__slug="league-of-legends"):
         script = load_yaml(installer.content)
         if "wine" not in script:
