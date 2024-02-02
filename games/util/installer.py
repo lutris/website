@@ -21,6 +21,7 @@ def get_installer_script(installer):
 def validate_installer(installer):
     errors = []
     is_valid = True
+    continue_checks = True
     rules = [
         script_is_not_the_default_one,
         doesnt_contain_useless_fields,
@@ -36,9 +37,14 @@ def validate_installer(installer):
         all_files_are_used,
         uses_a_valid_wine_version,
     ]
+
     for rule in rules:
         try:
             success, message = rule(installer)
+        except TypeError:
+            message = "Your script is incorrectly formatted."
+            success = False
+            continue_checks = False
         except Exception as ex:  # pylint: disable=broad-except
             success = False
             message = "Unknown error!"
@@ -46,6 +52,8 @@ def validate_installer(installer):
         if not success:
             errors.append(message)
             is_valid = False
+        if not continue_checks:
+            break
 
     return (is_valid, errors)
 
