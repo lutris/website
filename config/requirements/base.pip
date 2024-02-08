@@ -38,3 +38,4 @@ premailer==3.6.1
 # romkan
 xpinyin==0.7.6
 transliterate==1.10.2
+GitPython==3.1.41

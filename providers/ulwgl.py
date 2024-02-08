@@ -1,11 +1,14 @@
 import os
 import git
-import yaml
-from lutris.api import get_game_service_api_page
+
+# import yaml
+from django.conf import settings
+from providers.models import ProviderGame
 
 
 PROTONFIXES_URL = "https://github.com/Open-Wine-Components/ULWGL-protonfixes"
-PROTONFIXES_PATH = "protonfixes"
+PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
+PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
 
 
 def update_repository():
@@ -17,7 +20,7 @@ def update_repository():
         repo = git.Repo.clone_from(PROTONFIXES_URL, PROTONFIXES_PATH)
 
 
-def get_game_ids(store="Steam"):
+def get_game_ids(store="steam"):
     fixes = os.listdir(os.path.join(PROTONFIXES_PATH, "gamefixes-%s" % store))
     game_ids = []
     for fix in fixes:
@@ -30,14 +33,12 @@ def get_game_ids(store="Steam"):
     return game_ids
 
 
-def get_lutris_games(appids, service="steam", page=1):
-    return get_game_service_api_page(service, appids, page)
-
-
 def print_lutris_matches():
     steam_ids = get_game_ids()
-    response = get_lutris_games(steam_ids)
-    for game in response["results"]:
+    steam_games = ProviderGame.objects.filter(
+        provider__slug="steam", appids__in=steam_ids
+    )
+    for game in steam_games:
         print(
             game["name"],
             ", ".join(
@@ -46,7 +47,7 @@ def print_lutris_matches():
         )
     matched_steam_ids = [
         [p["slug"] for p in g["provider_games"] if p["service"] == "steam"][0]
-        for g in response["results"]
+        for g in steam_games
     ]
     print("Unmatched IDs")
     print(set(steam_ids) - set(matched_steam_ids))
@@ -84,9 +85,16 @@ def parse_python_fix(file_path):
     return fixes
 
 
-def parse_protonfixes(store="Steam"):
+def iter_gamefix_folders():
+    for path in os.listdir(os.path.join(PROTONFIXES_PATH)):
+        if not path.startswith("gamefixes-"):
+            continue
+        yield path
+
+
+def parse_protonfixes(gamefix_folder):
     fixes = {}
-    store_path = os.path.join(PROTONFIXES_PATH, "gamefixes-%s" % store)
+    store_path = os.path.join(PROTONFIXES_PATH, gamefix_folder)
     fix_files = os.listdir(store_path)
     for fix in fix_files:
         appid, ext = os.path.splitext(fix)
@@ -106,7 +114,7 @@ def convert_to_lutris_script(protonfix):
         "set_cpu_topology_nosmt",
         "set_xml_options",
         "disable_uplay_overlay",
-        "disable_nvapi"
+        "disable_nvapi",
     )
     installer = {"game": {}, "installer": [], "wine": {}, "system": {}}
     script = []
@@ -157,7 +165,7 @@ def convert_to_lutris_script(protonfix):
             continue
         raise ValueError("unhandled task: %s in %s" % (task, protonfix))
     installer["installer"] = script
-    return {k: v for k,v in installer.items() if v}
+    return {k: v for k, v in installer.items() if v}
 
 
 if __name__ == "__main__":
