@@ -852,10 +852,12 @@ class BaseInstaller(models.Model):
         yaml_content = {}
         try:
             script_content = load_yaml(self.content) or {}
-        except (yaml.parser.ParserError, yaml.scanner.ScannerError):
-            LOGGER.error("Installer with invalid YAML. Deleting immediatly.")
+        except (yaml.parser.ParserError, yaml.scanner.ScannerError) as ex:
             if self.id:
+                LOGGER.error("Installer for %s %s contains errors (%s). Deleting immediatly.", self.game, self, ex)
                 self.delete()
+            else:
+                LOGGER.error("Non finalized script %s %s contains errors: %s", self.game, self, ex)
             return {}
 
         # Allow pasting raw install scripts (which are served as lists)

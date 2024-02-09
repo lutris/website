@@ -10,7 +10,7 @@ from providers.models import ProviderGame
 LOGGER = logging.getLogger(__name__)
 
 PROTONFIXES_URL = "https://github.com/Open-Wine-Components/ULWGL-protonfixes"
-
+ULWGL_API_URL = "https://ulwgl.openwinecomponents.org/ulwgl_api.php"
 PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
 PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
 
@@ -25,7 +25,7 @@ def update_repository():
 
 
 def get_ulwgl_api_games():
-    response = requests.get("https://ulwgl.openwinecomponents.org/ulwgl_api.php")
+    response = requests.get(ULWGL_API_URL)
     games_by_id = {}
     for entry in response.json():
         appid = entry["ulwgl_id"]
@@ -114,7 +114,8 @@ def check_lutris_associations():
             provider_games += log_lutris_games(steam_provider_game, "Fix not in DB")
     for (provider_game, steam_game) in provider_games:
         print(f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,")
-    LOGGER.warning(steam_games_not_found)
+    if steam_games_not_found:
+        LOGGER.warning(steam_games_not_found)
 
 
 def log_lutris_games(steam_provider_game, context=""):
