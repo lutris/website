@@ -1158,7 +1158,7 @@ class InstallerIssueReply(BaseIssue):
 class GameLibrary(models.Model):
     """Model to store user libraries"""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    games = models.ManyToManyField(Game, related_name="libraries")
+    games = models.ManyToManyField(Game, related_name="libraries", through="LibraryGame")
 
     class Meta:
         """Model configuration"""
@@ -1166,6 +1166,18 @@ class GameLibrary(models.Model):
 
     def __str__(self):
         return "%s's library" % self.user.username
+
+
+class LibraryGame(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE)
+    playtime = models.FloatField(default=0)
+
+
+# class StoreLibrary(models.Model):
+#     """Model to keep track of a user's library for a given store"""
+#     store_name = models.CharField(max_length=64)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class GameSubmission(models.Model):
