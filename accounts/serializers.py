@@ -3,7 +3,6 @@
 from rest_framework import serializers
 from accounts.models import User
 
-
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for Users"""
 
@@ -19,3 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
             "steamid",
             "is_staff",
         )
+
+
+class LibrarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = None # ?

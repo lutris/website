@@ -1168,16 +1168,21 @@ class GameLibrary(models.Model):
         return "%s's library" % self.user.username
 
 
+class NonLutrisGame(models.Model):
+    name = models.CharField(max_length=256)
+    slug = models.CharField(max_length=256)
+
 class LibraryGame(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+    non_lutris_game = models.ForeignKey(NonLutrisGame, on_delete=models.CASCADE, null=True)
     gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE)
     playtime = models.FloatField(default=0)
 
 
-# class StoreLibrary(models.Model):
-#     """Model to keep track of a user's library for a given store"""
-#     store_name = models.CharField(max_length=64)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class StoreLibrary(models.Model):
+    """Model to keep track of a user's library for a given store"""
+    store_name = models.CharField(max_length=64)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class GameSubmission(models.Model):

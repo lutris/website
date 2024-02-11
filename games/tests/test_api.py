@@ -77,8 +77,7 @@ class TestGameLibraryApi(TestCase):
     def test_anonymous_requests_are_rejected(self):
         """Anonymous users shouldn't be able to view a library"""
         user = self.library.user
-        library_url = reverse('api_game_library',
-                              kwargs={'username': user.username})
+        library_url = reverse('api_game_library', kwargs={"username": user.username})
         response = self.client.get(library_url)
         self.assertEqual(response.status_code, 401)
 
@@ -86,8 +85,7 @@ class TestGameLibraryApi(TestCase):
         """Users should be logged in to access a library"""
         user = self.library.user
         self.client.login(username=user.username, password='password')
-        library_url = reverse('api_game_library',
-                              kwargs={'username': user.username})
+        library_url = reverse('api_game_library', kwargs={"username": user.username})
         response = self.client.get(library_url)
         self.assertEqual(response.status_code, 200)
 
@@ -108,7 +106,7 @@ class TestInstallerApi(TestCase):
         self.assertTrue(self.game.platforms.count())
         response = self.client.get(reverse('api_game_installer_list', kwargs={'slug': self.slug}))
         self.assertEqual(response.status_code, 200)
-    
+
     def test_get_installers_list_filtered(self):
         """The API returns a list of installers by filter"""
         self.assertTrue(self.game.platforms.count())
@@ -150,7 +148,7 @@ class TestInstallerApi(TestCase):
             'created_to': period_end,
         })
         self.assertEqual(response.status_code, 200)
-    
+
     def test_can_get_installer_history_for_installer(self):
         """The API can return a history for a given installer"""
         response = self.client.get(reverse('api_installer_history', kwargs={'installer_id': 1307}))
