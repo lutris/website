@@ -2,6 +2,7 @@
 # pylint: disable=too-few-public-methods
 from rest_framework import serializers
 from accounts.models import User
+from games.models import LibraryGame
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for Users"""
@@ -22,4 +23,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LibrarySerializer(serializers.ModelSerializer):
     class Meta:
-        model = None # ?
+        model = LibraryGame
+        fields = (
+            "name",
+            "slug",
+            "banner",
+            "coverart",
+            "icon",
+            "playtime",
+        )

@@ -436,7 +436,11 @@ class UserDetailView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class GameLibraryAPIView(generics.RetrieveAPIView):
+class GameLibraryAPIView(generics.ListAPIView):
     """List a user's library"""
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.LibrarySerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        return models.LibraryGame.objects.prefetch_related("game").filter(gamelibrary__user=self.request.user)

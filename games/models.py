@@ -1178,6 +1178,34 @@ class LibraryGame(models.Model):
     gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE)
     playtime = models.FloatField(default=0)
 
+    @property
+    def coverart(self):
+        if self.game and self.game.coverart:
+            return "https://lutris.net" + self.game.coverart.url
+
+    @property
+    def banner(self):
+        if self.game:
+            return self.game.banner_url
+
+    @property
+    def icon(self):
+        if self.game:
+            return self.game.icon_url
+
+    @property
+    def name(self):
+        if self.game:
+            return self.game.name
+        if self.non_lutris_game:
+            return self.non_lutris_game.name
+
+    @property
+    def slug(self):
+        if self.game:
+            return self.game.slug
+        if self.non_lutris_game:
+            return self.non_lutris_game.slug
 
 class StoreLibrary(models.Model):
     """Model to keep track of a user's library for a given store"""
