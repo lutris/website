@@ -31,4 +31,9 @@ class LibrarySerializer(serializers.ModelSerializer):
             "coverart",
             "icon",
             "playtime",
+            "runner",
+            "platform",
+            "service",
+            "service_id",
+            "lastplayed",
         )

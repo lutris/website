@@ -1176,7 +1176,12 @@ class LibraryGame(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
     non_lutris_game = models.ForeignKey(NonLutrisGame, on_delete=models.CASCADE, null=True)
     gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE)
-    playtime = models.FloatField(default=0)
+    playtime = models.FloatField(default=0, null=True)
+    runner = models.CharField(max_length=64, null=True)
+    platform = models.CharField(max_length=255, null=True)
+    service = models.CharField(max_length=64, null=True)
+    service_id = models.CharField(max_length=255, null=True)
+    lastplayed = models.IntegerField(null=True)
 
     @property
     def coverart(self):
