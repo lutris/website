@@ -3,6 +3,7 @@
 import io
 from datetime import date
 import json
+import logging
 
 import yaml
 from PIL import Image
@@ -22,6 +23,7 @@ from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from games import models
 from games.util.installer import validate_installer
 
+LOGGER = logging.getLogger(__name__)
 
 class AutoSlugForm(forms.ModelForm):
 
@@ -101,7 +103,7 @@ class GameForm(forms.ModelForm):
         image = Image.open(image_data)
         image = image.convert("RGB")
         image = image.crop(ratio)
-        image = image.resize((184, 69), Image.ANTIALIAS)
+        image = image.resize((184, 69), Image.LANCZOS)
         image_io = io.BytesIO()
         image.save(image_io, 'JPEG')
         return InMemoryUploadedFile(
@@ -121,8 +123,9 @@ class GameForm(forms.ModelForm):
             crop_points = [int(p) for p in crop_data["points"]]
             try:
                 self.cleaned_data["title_logo"] = self.process_banner(title_logo, crop_points)
-            except AttributeError:
-                raise forms.ValidationError("This is not a valid image format")
+            except AttributeError as ex:
+                LOGGER.exception(ex)
+                raise forms.ValidationError("This is not a valid image format: %s" % ex)
         return self.cleaned_data
 
 class GameEditForm(GameForm):
