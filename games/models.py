@@ -1181,7 +1181,7 @@ class LibraryGame(models.Model):
     @property
     def coverart(self):
         if self.game and self.game.coverart:
-            return "https://lutris.net" + self.game.coverart.url
+            return self.game.coverart.url
 
     @property
     def banner(self):
