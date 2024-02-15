@@ -276,10 +276,9 @@ class ScreenshotAdmin(admin.ModelAdmin):
 
 class GameLibraryAdmin(admin.ModelAdmin):
     search_fields = ['user__username']
-    raw_id_fields = ('user', 'games')
+    raw_id_fields = ('user', )
     autocomplete_lookup_fields = {
         'fk': ['user'],
-        'm2m': ['games']
     }
 
 

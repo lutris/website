@@ -1,6 +1,7 @@
 """Module for user account views"""
 # pylint: disable=too-many-ancestors,raise-missing-from
 import logging
+from collections import defaultdict
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -35,7 +36,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 from games import models
-from games import serializers as game_serializers
 from . import forms, sso, tasks, serializers
 from .models import EmailConfirmationToken, User
 
@@ -436,11 +436,94 @@ class UserDetailView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class GameLibraryAPIView(generics.ListAPIView):
+class GameLibraryAPIView(generics.ListCreateAPIView):
     """List a user's library"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.LibrarySerializer
     pagination_class = None
 
     def get_queryset(self):
-        return models.LibraryGame.objects.prefetch_related("game").filter(gamelibrary__user=self.request.user)
+        return (
+            models.LibraryGame.objects.prefetch_related("game")
+            .filter(gamelibrary__user=self.request.user)
+            .order_by("game__slug")
+        )
+
+    def is_empty_key(self, key):
+        """Return true of runner, platform, service"""
+        return not key[1] and not key[2] and not key[3]
+
+    def post(self, request, *args, **kwargs):
+        client_library = defaultdict(list)
+        for game in request.data:
+            client_library[game["slug"]].append(game)
+        stored_library = self.get_queryset()
+        updated_games = set()
+        stats = {"updated": 0, "created": 0, "errors": 0}
+        for game in stored_library:
+            if game.get_slug() in client_library:
+                client_games = client_library[game.get_slug()]
+                stored_key = (game.get_slug(), game.runner, game.platform, game.service)
+                for client_game in client_games:
+                    client_key = (
+                        client_game["slug"],
+                        client_game["runner"],
+                        client_game["platform"],
+                        client_game["service"],
+                    )
+                    if client_key == stored_key or self.is_empty_key(stored_key):
+                        game.slug = client_game["slug"]
+                        game.name = client_game["name"]
+                        game.runner = client_game["runner"]
+                        game.platform = client_game["platform"]
+                        if not game.lastplayed or (
+                            game.lastplayed
+                            and client_game["lastplayed"]
+                            and game.lastplayed > client_game["lastplayed"]
+                        ):
+                            game.lastplayed = client_game["lastplayed"]
+                        if not game.playtime or game.playtime < client_game["playtime"]:
+                            game.playtime = client_game["playtime"]
+                        if client_game["service"]:
+                            game.service = client_game["service"]
+                            game.service_id = client_game["service_id"]
+                        game.save()
+                        stored_key = client_key
+                        updated_games.add(stored_key)
+                        stats["updated"] += 1
+        for slug in client_library:
+            client_games = client_library[slug]
+            for client_game in client_games:
+                client_key = (
+                    client_game["slug"],
+                    client_game["runner"],
+                    client_game["platform"],
+                    client_game["service"],
+                )
+                if client_key in updated_games:
+                    continue
+                try:
+                    game = models.Game.objects.get(slug=client_game["slug"])
+                except models.Game.DoesNotExist:
+                    game = None
+                try:
+                    models.LibraryGame.objects.create(
+                        game=game,
+                        name=client_game["name"],
+                        slug=client_game["slug"],
+                        gamelibrary=models.GameLibrary.objects.get(user=request.user),
+                        playtime=client_game["playtime"],
+                        runner=client_game["runner"],
+                        platform=client_game["platform"],
+                        service=client_game["service"],
+                        lastplayed=client_game["lastplayed"],
+                    )
+                    stats["created"] += 1
+                    LOGGER.info("Create new Library game %s", client_game["slug"])
+                except Exception as ex:
+                    LOGGER.error(
+                        "Failed to create new Library game %s: %s", client_game["slug"], ex
+                    )
+                    stats["errors"] += 1
+        return self.get(request)

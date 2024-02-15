@@ -176,10 +176,24 @@ class GameDetailSerializer(GameSerializer):
             'discord_id',
         )
 
+class TransitonalLibrarySerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source='game.name')
+    slug = serializers.ReadOnlyField(source='game.slug')
+    banner_url = serializers.ReadOnlyField(source='banner')
+    icon_url = serializers.ReadOnlyField(source='icon')
+    class Meta:
+        model = models.LibraryGame
+        fields = (
+            "name",
+            "slug",
+            "banner_url",
+            "coverart",
+            "icon_url",
+        )
 
 class GameLibrarySerializer(serializers.ModelSerializer):
     """Serializer for Games"""
-    games = GameSerializer(many=True)
+    games = TransitonalLibrarySerializer(many=True)
 
     class Meta:
         """Model and field definitions"""

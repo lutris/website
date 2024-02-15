@@ -136,7 +136,7 @@ class GameLibraryView(generics.RetrieveAPIView):
                 return Response(status=404)
         if user != request.user and not user.is_staff:
             return Response(status=404)
-        library = models.GameLibrary.objects.get(user=user)
+        library = models.GameLibrary.objects.prefetch_related("games", "games__game").get(user=user)
         serializer = serializers.GameLibrarySerializer(library)
         return Response(serializer.data)
 

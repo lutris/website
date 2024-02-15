@@ -1158,7 +1158,6 @@ class InstallerIssueReply(BaseIssue):
 class GameLibrary(models.Model):
     """Model to store user libraries"""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    games = models.ManyToManyField(Game, related_name="libraries", through="LibraryGame")
 
     class Meta:
         """Model configuration"""
@@ -1167,21 +1166,22 @@ class GameLibrary(models.Model):
     def __str__(self):
         return "%s's library" % self.user.username
 
-
-class NonLutrisGame(models.Model):
-    name = models.CharField(max_length=256)
-    slug = models.CharField(max_length=256)
-
 class LibraryGame(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
-    non_lutris_game = models.ForeignKey(NonLutrisGame, on_delete=models.CASCADE, null=True)
-    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, null=True)
+    slug = models.CharField(max_length=256, null=True)
+    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE, related_name="games")
     playtime = models.FloatField(default=0, null=True)
     runner = models.CharField(max_length=64, null=True)
     platform = models.CharField(max_length=255, null=True)
     service = models.CharField(max_length=64, null=True)
     service_id = models.CharField(max_length=255, null=True)
     lastplayed = models.IntegerField(null=True)
+
+    def get_slug(self):
+        if self.game:
+            return self.game.slug
+        return self.slug
 
     @property
     def coverart(self):
@@ -1198,19 +1198,9 @@ class LibraryGame(models.Model):
         if self.game:
             return self.game.icon_url
 
-    @property
-    def name(self):
-        if self.game:
-            return self.game.name
-        if self.non_lutris_game:
-            return self.non_lutris_game.name
-
-    @property
-    def slug(self):
-        if self.game:
-            return self.game.slug
-        if self.non_lutris_game:
-            return self.non_lutris_game.slug
+    class Meta:
+        """Model configuration"""
+        ordering = ("slug", )
 
 class StoreLibrary(models.Model):
     """Model to keep track of a user's library for a given store"""
