@@ -420,12 +420,7 @@ class Game(models.Model):
             self.platforms.add(platform)
 
         # Move user libraries
-        for library in other_game.libraries.all():
-            try:
-                library.games.add(self)
-            except IntegrityError:
-                pass
-                # User already has the game
+        LibraryGame.objects.filter(game=other_game).update(game=self)
 
         # Move provider games
         for provider_game in other_game.provider_games.all():
