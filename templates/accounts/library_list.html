@@ -1,6 +1,6 @@
 {% extends "accounts/profile_base.html" %}
 {% load thumbnail %}
-
+{% load lutris %}
 
 {% block title %}My Library | Lutris{% endblock %}
 
@@ -19,31 +19,50 @@
         <span class="px-2">Filter: </span>
         <input type="text" name="q" value="{{q}}" id="query-field">
         <span class="px-2">Sort by:</span>
-        <select name="sort" onchange="updateSort(this)">
+        <select name="sort" onchange="updateSortBy(this)">
           <option value="name" {% if sort == 'name' %} selected {% endif %}>Name &uarr;</option>
           <option value="-name" {% if sort == '-name' %} selected {% endif %}>Name &darr;</option>
-          <option value="year" {% if sort == 'year' %} selected {% endif %}>Year &uarr;</option>
-          <option value="-year" {% if sort == '-year' %} selected {% endif %}>Year &darr;</option>
+          <option value="-playtime" {% if sort == '-playtime' %} selected {% endif %}>Most played</option>
+          <option value="-lastplayed" {% if sort == '-lastplayed' %} selected {% endif %}>Last played</option>
         </select>
     </div>
-
+    {% if page_obj.has_other_pages %}
+    <div class="centered">
+        {% include 'includes/library_paginator.html' %}
+    </div>
+    {% endif %}
+    <div class="game-library">
     {% for game in games %}
-      <div class="game-preview">
-        <a href="{{ game.get_absolute_url }}" title="{{ game.name }}">
-          <img class='game-cover' src="{{ game.banner_url }}" alt="{{ game.name }}"/>
+      <div class="game-real-cover">
+        <a href="{{ game.game.get_absolute_url }}" title="{{ game.name }}">
+          <img src="{{ game.coverart }}" alt="{{ game.name }}"/><br/>
         </a>
-        <div class="game-details">
-          <a href="{{ game.get_absolute_url }}" class="game-name">{{ game.name }}</a>
-          <span class="small-text">{% if game.year %}({{ game.year }}){% endif %}</span>
-          <br>
+        <span class="game-library-actions">
           <a title="Remove from Library"
-            href="{% url 'remove_from_library' slug=game.slug %}"
+            href="{% url 'remove_from_library' pk=game.pk %}"
             class="btn btn-sm btn-secondary" style="font-size: 0.75em;">
-            <i class="bi-trash"></i> Remove
+            <i class="bi-trash"></i>
           </a>
-        </div>
+        </span>
+        <span class="game-library-name">
+          {{game.get_name}}
+          {% if game.playtime %}
+          <br>
+          <span class="game-library-playtime">played {{game.playtime|human_time}}</span>
+          {% endif %}
+          {% if game.service %}
+          <img src="{{ STATIC_URL }}images/icons/{{game.service}}.png" alt="{{game.service}}">
+          {% endif %}
+        </span>
       </div>
     {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <div class="centered">
+        {% include 'includes/library_paginator.html' %}
+    </div>
+    {% endif %}
+
   </div>
 </div>
 {% endblock %}
@@ -53,9 +72,15 @@
   {{ block.super }}
   <script>
     const URL = "{% url 'library_list' username=user.username %}"
-    function updateSort(elem) {
-      const queryField = document.getElementById("query-field")
-      window.location.replace(URL + "?sort=" + elem.value + "&q=" + queryField.value)
+    function updateSortBy(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("sort", elem.value)
+      window.location.replace(URL + "?" + params.toString())
+    }
+    function updatePaginateBy(elem) {
+      let params = new URLSearchParams(document.location.search);
+      params.set("paginate_by", elem.value)
+      window.location.replace(URL + "?" + params.toString())
     }
   </script>
 {% endblock %}

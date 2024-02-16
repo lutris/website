@@ -264,7 +264,7 @@ class Game(models.Model):
     @property
     def user_count(self):
         """How many users have the game in their libraries"""
-        return self.libraries.count()
+        return self.librarygame_set.count()
 
     @property
     def website_url(self):
@@ -1176,7 +1176,10 @@ class LibraryGame(models.Model):
     platform = models.CharField(max_length=255, null=True)
     service = models.CharField(max_length=64, null=True)
     service_id = models.CharField(max_length=255, null=True)
-    lastplayed = models.IntegerField(null=True)
+    lastplayed = models.IntegerField(null=True, default=0)
+
+    def __str__(self):
+        return f"{self.name} ({self.playtime}, {self.lastplayed})"
 
     def get_slug(self):
         """Temporary only"""

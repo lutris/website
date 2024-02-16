@@ -229,7 +229,7 @@ def game_detail(request, slug):
 
     if user.is_authenticated:
         unpublished_installers = game.draft_installers.filter(user=user)
-        in_library = game in user.gamelibrary.games.all()
+        in_library = models.LibraryGame.objects.filter(gamelibrary__user=user, game=game).exists()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
 
         if user.is_staff and user.has_perm("games.change_game"):

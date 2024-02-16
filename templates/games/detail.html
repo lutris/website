@@ -220,10 +220,6 @@
           <p>
             {% if not in_library %}
             <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-secondary">Add to my library</a>
-            {% else %}
-            <a href="{% url "remove_from_library" slug=game.slug %}" class="btn btn-secondary">
-              <span>Remove from my library</span>
-            </a>
             {% endif %}
           </p>
           {% for flag in game.flag_labels %}

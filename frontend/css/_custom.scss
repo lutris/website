@@ -583,6 +583,7 @@ header {
     margin-top: 0 !important;
   }
 }
+
 .game-preview {
   padding: .5em;
   margin-bottom: .5em;
@@ -594,6 +595,51 @@ header {
   }
   .game-details {
     padding-left: .5em;
+  }
+}
+
+.game-real-cover {
+  margin: 25px;
+  width: 264px;
+  height: 352px;
+  text-transform: uppercase;
+  background-color: #666;
+  text-align: center;
+  color: $light;
+  line-height: 0.9em;
+  font-size: 1.3em;
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  display: inline-block;
+  .game-library-actions {
+    visibility: hidden;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .game-library-name {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .game-library-playtime {
+    font-size: .7em;
+    text-transform: lowercase;
+    padding-top: 5px;
+  }
+  &:hover {
+    .game-library-actions {
+      visibility: visible;
+    }
+    .game-library-name {
+      visibility: visible;
+    }
   }
 }
 

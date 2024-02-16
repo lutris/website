@@ -17,8 +17,7 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
 )
 from django.views.generic import ListView
-from django.db import IntegrityError
-from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -30,8 +29,7 @@ from django_openid_auth.models import UserOpenID
 from django_openid_auth.exceptions import IdentityAlreadyClaimed
 from django_openid_auth.views import login_complete, parse_openid_response
 
-from rest_framework import generics, permissions
-from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
@@ -295,6 +293,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     context_object_name = "games"
     ordering = "name"
     profile_page = "library"
+    paginate_by = 30
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -311,7 +310,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
 
     def get_queryset(self):
         """Return all games in library, optionally filter them"""
-        queryset = models.GameLibrary.objects.get(user=self.get_user()).games.all()
+        queryset = models.LibraryGame.objects.filter(gamelibrary__user=self.get_user())
         if self.request.GET.get("q"):
             queryset = queryset.filter(name__icontains=self.request.GET["q"])
         return queryset.order_by(self.request.GET.get("sort", self.ordering))
@@ -367,22 +366,27 @@ def installer_list(request, username):
 @login_required
 def library_add(request, slug):
     """Add a game to the user's library"""
-    user = request.user
-    library = models.GameLibrary.objects.get(user=user)
+    library = models.GameLibrary.objects.get(user=request.user)
     game = get_object_or_404(models.Game, slug=slug)
-    try:
-        library.games.add(game)
-    except IntegrityError:
-        LOGGER.debug("Game already in library")
+    models.LibraryGame.objects.create(
+        name=game.name,
+        slug=game.slug,
+        game=game,
+        gamelibrary=library,
+    )
     return redirect(game.get_absolute_url())
 
 
 @login_required
-def library_remove(request, slug):
+def library_remove(request, pk):
     """Remove a game from a user's library"""
-    library = models.GameLibrary.objects.get(user=request.user)
-    game = get_object_or_404(models.Game, slug=slug)
-    library.games.remove(game)
+    gamelibrary = models.GameLibrary.objects.get(user=request.user)
+    library_game = get_object_or_404(models.LibraryGame, pk=pk)
+    if library_game.gamelibrary != gamelibrary:
+        response = HttpResponse("smartass")
+        response.status_code = 418
+        return response
+    library_game.delete()
     redirect_url = request.META.get("HTTP_REFERER")
     if not redirect_url:
         redirect_url = reverse(
@@ -482,9 +486,9 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             and client_game["lastplayed"]
                             and game.lastplayed > client_game["lastplayed"]
                         ):
-                            game.lastplayed = client_game["lastplayed"]
+                            game.lastplayed = client_game["lastplayed"] or 0
                         if not game.playtime or game.playtime < client_game["playtime"]:
-                            game.playtime = client_game["playtime"]
+                            game.playtime = client_game["playtime"] or 0
                         if client_game["service"]:
                             game.service = client_game["service"]
                             game.service_id = client_game["service_id"]

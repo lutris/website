@@ -17,11 +17,6 @@
         published by <a href="{% url 'games_by_company' company=game.publisher.pk %}">{{ game.publisher }}</a>
       {% endif %}
       </span>
-      {% if is_library %}
-      <a title="Remove from Library" href="{% url 'remove_from_library' slug=game.slug %}" class="float-right">
-        <i class="bi-trash"></i>
-      </a>
-    {% endif %}
     <div>
       {% if game.platforms.all %}
       <div class="small-text">
