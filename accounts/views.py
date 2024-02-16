@@ -1,6 +1,7 @@
 """Module for user account views"""
 # pylint: disable=too-many-ancestors,raise-missing-from
 import logging
+from datetime import datetime
 from collections import defaultdict
 from django.conf import settings
 from django.contrib import messages
@@ -448,11 +449,15 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        return (
+        queryset = (
             models.LibraryGame.objects.prefetch_related("game")
             .filter(gamelibrary__user=self.request.user)
             .order_by("game__slug")
         )
+        if self.request.GET.get("since"):
+            dt = datetime.fromtimestamp(int(self.request.GET["since"]))
+            queryset = queryset.filter(updated_at__gte=dt)
+        return queryset
 
     def is_empty_key(self, key):
         """Return true if runner, platform, service are empty"""

@@ -1172,6 +1172,7 @@ class LibraryGame(models.Model):
     service = models.CharField(max_length=64, null=True)
     service_id = models.CharField(max_length=255, null=True)
     lastplayed = models.IntegerField(null=True, default=0)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} ({self.playtime}, {self.lastplayed})"

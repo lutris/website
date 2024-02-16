@@ -24,6 +24,7 @@
           <option value="-name" {% if sort == '-name' %} selected {% endif %}>Name &darr;</option>
           <option value="-playtime" {% if sort == '-playtime' %} selected {% endif %}>Most played</option>
           <option value="-lastplayed" {% if sort == '-lastplayed' %} selected {% endif %}>Last played</option>
+          <option value="-updated_at" {% if sort == '-updated_at' %} selected {% endif %}>Last updated</option>
         </select>
     </div>
     {% if page_obj.has_other_pages %}
@@ -66,6 +67,7 @@
             {% if game.platform %}
               <br>{{game.platform}}
             {% endif %}
+            <br>Updated: {{game.updated_at}}
           </span>
         </span>
 
