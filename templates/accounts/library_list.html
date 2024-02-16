@@ -34,9 +34,16 @@
     <div class="game-library">
     {% for game in games %}
       <div class="game-real-cover">
-        <a href="{{ game.game.get_absolute_url }}" title="{{ game.name }}">
-          <img src="{{ game.coverart }}" alt="{{ game.name }}"/><br/>
-        </a>
+        {% if game.game %}
+          <a href="{{ game.game.get_absolute_url }}" title="{{ game.name }}">
+            <img class="coverart-medium" src="{{ game.coverart }}" alt="{{ game.name }}"/>
+          </a>
+        {% else %}
+          <a href="/games/{{ game.slug }}" title="{{ game.name }}">
+          <span class="coverart-medium">{{game.name}}</span>
+          </a>
+        {% endif %}
+
         <span class="game-library-actions">
           <a title="Remove from Library"
             href="{% url 'remove_from_library' pk=game.pk %}"
@@ -49,10 +56,10 @@
           {% if game.service %}
           <img src="{{ STATIC_URL }}images/icons/{{game.service}}.png" alt="{{game.service}}">
           {% endif %}
-          {% if game.playtime %}
-          <br>
-          <span class="game-library-info">played {{game.playtime|human_time}}</span>
           <span class="game-library-info">
+            {% if game.playtime %}
+            <br>Play time {{game.playtime|human_time}}
+            {% endif %}
             {% if game.lastplayed %}
             <br>Last played {{game.lastplayed|tsdate}}
             {% endif %}
@@ -60,8 +67,6 @@
               <br>{{game.platform}}
             {% endif %}
           </span>
-          {% endif %}
-
         </span>
 
       </div>

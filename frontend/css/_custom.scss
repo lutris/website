@@ -599,9 +599,9 @@ header {
 }
 
 .game-real-cover {
-  margin: 25px;
-  width: 264px;
-  height: 352px;
+  margin: 6px;
+  width: 176px;
+  height: 234px;
   text-transform: uppercase;
   background-color: #666;
   text-align: center;
@@ -613,6 +613,10 @@ header {
   align-items: center;
   justify-content: center;
   display: inline-block;
+  img.coverart-medium {
+    width: 176px;
+    height: 234px;
+  }
   .game-library-actions {
     visibility: hidden;
     position: absolute;

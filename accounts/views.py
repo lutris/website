@@ -293,7 +293,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     context_object_name = "games"
     ordering = "name"
     profile_page = "library"
-    paginate_by = 30
+    paginate_by = 60
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -458,6 +458,16 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         """Return true if runner, platform, service are empty"""
         return not key[1] and not key[2] and not key[3]
 
+    def get_lutris_game(self, slug):
+        try:
+            game = models.Game.objects.get(slug=slug)
+        except models.Game.DoesNotExist:
+            try:
+                game = models.Game.objects.get(aliases__slug=slug)
+            except models.Game.DoesNotExist:
+                game = None
+        return game
+
     def post(self, request, *args, **kwargs):
         client_library = defaultdict(list)
         for game in request.data:
@@ -477,6 +487,8 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         client_game["service"],
                     )
                     if client_key == stored_key or self.is_empty_key(stored_key):
+                        if not game.game:
+                            game.game = self.get_lutris_game(client_game["slug"])
                         game.slug = client_game["slug"]
                         game.name = client_game["name"]
                         game.runner = client_game["runner"]
@@ -505,10 +517,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                 )
                 if client_key in updated_games:
                     continue
-                try:
-                    game = models.Game.objects.get(slug=client_game["slug"])
-                except models.Game.DoesNotExist:
-                    game = None
+                game = self.get_lutris_game(client_game["slug"])
                 try:
                     models.LibraryGame.objects.create(
                         game=game,
