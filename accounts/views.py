@@ -499,8 +499,10 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                     if client_key == stored_key or self.is_empty_key(stored_key):
                         changed = False
                         if not game.game:
-                            game.game = self.get_lutris_game(client_game["slug"])
-                            changed = True
+                            lutris_game = self.get_lutris_game(client_game["slug"])
+                            if lutris_game:
+                                game.game = lutris_game
+                                changed = True
                         if game.name != client_game["name"]:
                             game.name = client_game["name"]
                             changed = True
@@ -512,12 +514,15 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             changed = True
                         client_lastplayed = client_game["lastplayed"] or 0
                         if not game.lastplayed or game.lastplayed < client_lastplayed:
-                            game.lastplayed = client_game["lastplayed"] or 0
-                            changed = True
+                            lastplayed = client_game["lastplayed"] or 0
+                            if game.lastplayed != lastplayed:
+                                game.lastplayed = lastplayed
+                                changed = True
                         client_playtime = client_game["playtime"] or 0
                         if not game.playtime or game.playtime < client_playtime:
-                            game.playtime = client_playtime
-                            changed = True
+                            if game.playtime != client_playtime:
+                                game.playtime = client_playtime
+                                changed = True
                         if game.service != client_game["service"]:
                             game.service = client_game["service"]
                             game.service_id = client_game["service_id"]
