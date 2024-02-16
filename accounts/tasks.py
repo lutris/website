@@ -87,9 +87,9 @@ def deduplicate_library(self, username):
             continue
         for game in _games:
             if not game_info:
-                game_info = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+                game_info = {"slug": game.slug, "runner": game.runner,  "platform": game.platform, "lastplayed": game.lastplayed}
             else:
-                other_game = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+                other_game = {"slug": game.slug, "runner": game.runner, "platform": game.platform, "lastplayed": game.lastplayed}
             if game_info == other_game:
                 print("delete", game)
                 game.delete()

@@ -567,23 +567,3 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         LOGGER.info(stats)
         return self.get(request)
 
-    def deduplicate_library(self):
-        buckets = {}
-        for lg in models.LibraryGame.objects.filter(gamelibrary__user=self.request.user):
-            if lg.slug in buckets:
-                buckets[lg.slug].append(lg)
-            else:
-                buckets[lg.slug] = [lg]
-        for slug, games in buckets.items():
-            game_info = {}
-            other_game = {}
-            if len(games) == 1:
-                continue
-            for game in games:
-                if not game_info:
-                    game_info = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
-                else:
-                    other_game = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
-                if game_info == other_game:
-                    print("delete", game)
-                    game.delete()
