@@ -71,3 +71,25 @@ def clear_spammers():
     spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
     if spam_avatar_deleted:
         save_action_log("spam_avatar_deleted", spam_avatar_deleted)
+
+
+def deduplicate_library(self, username):
+    buckets = {}
+    for lg in games.models.LibraryGame.objects.filter(gamelibrary__user=username):
+        if lg.slug in buckets:
+            buckets[lg.slug].append(lg)
+        else:
+            buckets[lg.slug] = [lg]
+    for slug, _games in buckets.items():
+        game_info = {}
+        other_game = {}
+        if len(_games) == 1:
+            continue
+        for game in _games:
+            if not game_info:
+                game_info = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+            else:
+                other_game = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+            if game_info == other_game:
+                print("delete", game)
+                game.delete()

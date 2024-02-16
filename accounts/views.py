@@ -453,14 +453,17 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.LibrarySerializer
     pagination_class = None
 
-    def get_queryset(self):
+    def get_queryset(self, ignore_since=False):
         queryset = (
             models.LibraryGame.objects.prefetch_related("game")
             .filter(gamelibrary__user=self.request.user)
             .order_by("game__slug")
         )
-        if self.request.GET.get("since"):
-            dt = datetime.fromtimestamp(int(self.request.GET["since"]))
+        since = self.request.GET.get("since")
+        if ignore_since:
+            since = None
+        if since:
+            dt = datetime.fromtimestamp(int(since))
             queryset = queryset.filter(updated_at__gte=dt)
         return queryset
 
@@ -482,9 +485,9 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         client_library = defaultdict(list)
         for game in request.data:
             client_library[game["slug"]].append(game)
-        stored_library = self.get_queryset()
+        stored_library = self.get_queryset(ignore_since=True)
         updated_games = set()
-        stats = {"updated": 0, "created": 0, "errors": 0}
+        stats = {"user": request.user.username, "unchanged": 0, "updated": 0, "created": 0, "errors": 0}
         for game in stored_library:
             if game.get_slug() in client_library:
                 client_games = client_library[game.get_slug()]
@@ -529,9 +532,12 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             changed = True
                         if changed:
                             game.save()
+                            stats["updated"] += 1
+                        else:
+                            stats["unchanged"] += 1
                         stored_key = client_key
                         updated_games.add(stored_key)
-                        stats["updated"] += 1
+
         for slug in client_library:
             client_games = client_library[slug]
             for client_game in client_games:
@@ -543,6 +549,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                 )
                 if client_key in updated_games:
                     continue
+
                 game = self.get_lutris_game(client_game["slug"])
                 models.LibraryGame.objects.create(
                     game=game,
@@ -556,6 +563,27 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                     lastplayed=client_game["lastplayed"] or 0,
                 )
                 stats["created"] += 1
-                LOGGER.info("Create new Library game %s", client_game["slug"])
-
+                LOGGER.info("Create new Library game %s", client_game)
+        LOGGER.info(stats)
         return self.get(request)
+
+    def deduplicate_library(self):
+        buckets = {}
+        for lg in models.LibraryGame.objects.filter(gamelibrary__user=self.request.user):
+            if lg.slug in buckets:
+                buckets[lg.slug].append(lg)
+            else:
+                buckets[lg.slug] = [lg]
+        for slug, games in buckets.items():
+            game_info = {}
+            other_game = {}
+            if len(games) == 1:
+                continue
+            for game in games:
+                if not game_info:
+                    game_info = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+                else:
+                    other_game = {"slug": game.slug, "runner": game.runner, "lastplayed": game.lastplayed}
+                if game_info == other_game:
+                    print("delete", game)
+                    game.delete()

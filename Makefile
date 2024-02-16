@@ -64,6 +64,10 @@ syncdb:
 	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
 	rm latest.tar
 
+quicksync:
+	docker cp latest.tar lutrisdb:/backups
+	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
+
 dbshell:
 	docker exec -it lutrisdb psql -U lutris lutris
 
