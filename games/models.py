@@ -1183,15 +1183,17 @@ class LibraryGame(models.Model):
 
     def get_slug(self):
         """Temporary only"""
+        if self.slug:
+            return self.slug
         if self.game:
             return self.game.slug
-        return self.slug
 
     def get_name(self):
         """Temporary"""
+        if self.name:
+            return self.name
         if self.game:
             return self.game.name
-        return self.name
 
     @property
     def coverart(self):
