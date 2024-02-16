@@ -18,7 +18,12 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
 )
 from django.views.generic import ListView
-from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponse
+from django.http import (
+    Http404,
+    HttpResponseBadRequest,
+    HttpResponseRedirect,
+    HttpResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -492,22 +497,33 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         client_game["service"],
                     )
                     if client_key == stored_key or self.is_empty_key(stored_key):
+                        changed = False
                         if not game.game:
                             game.game = self.get_lutris_game(client_game["slug"])
-                        game.slug = client_game["slug"]
-                        game.name = client_game["name"]
-                        game.runner = client_game["runner"]
-                        game.platform = client_game["platform"]
+                            changed = True
+                        if game.name != client_game["name"]:
+                            game.name = client_game["name"]
+                            changed = True
+                        if game.runner != client_game["runner"]:
+                            game.runner = client_game["runner"]
+                            changed = True
+                        if game.platform != client_game["platform"]:
+                            game.platform = client_game["platform"]
+                            changed = True
                         client_lastplayed = client_game["lastplayed"] or 0
                         if not game.lastplayed or game.lastplayed < client_lastplayed:
                             game.lastplayed = client_game["lastplayed"] or 0
+                            changed = True
                         client_playtime = client_game["playtime"] or 0
                         if not game.playtime or game.playtime < client_playtime:
                             game.playtime = client_playtime
-                        if client_game["service"]:
+                            changed = True
+                        if game.service != client_game["service"]:
                             game.service = client_game["service"]
                             game.service_id = client_game["service_id"]
-                        game.save()
+                            changed = True
+                        if changed:
+                            game.save()
                         stored_key = client_key
                         updated_games.add(stored_key)
                         stats["updated"] += 1
@@ -523,23 +539,18 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                 if client_key in updated_games:
                     continue
                 game = self.get_lutris_game(client_game["slug"])
-                try:
-                    models.LibraryGame.objects.create(
-                        game=game,
-                        name=client_game["name"],
-                        slug=client_game["slug"],
-                        gamelibrary=models.GameLibrary.objects.get(user=request.user),
-                        playtime=client_game["playtime"] or 0,
-                        runner=client_game["runner"],
-                        platform=client_game["platform"],
-                        service=client_game["service"],
-                        lastplayed=client_game["lastplayed"] or 0,
-                    )
-                    stats["created"] += 1
-                    LOGGER.info("Create new Library game %s", client_game["slug"])
-                except Exception as ex:
-                    LOGGER.error(
-                        "Failed to create new Library game %s: %s", client_game["slug"], ex
-                    )
-                    stats["errors"] += 1
+                models.LibraryGame.objects.create(
+                    game=game,
+                    name=client_game["name"],
+                    slug=client_game["slug"],
+                    gamelibrary=models.GameLibrary.objects.get(user=request.user),
+                    playtime=client_game["playtime"] or 0,
+                    runner=client_game["runner"],
+                    platform=client_game["platform"],
+                    service=client_game["service"],
+                    lastplayed=client_game["lastplayed"] or 0,
+                )
+                stats["created"] += 1
+                LOGGER.info("Create new Library game %s", client_game["slug"])
+
         return self.get(request)
