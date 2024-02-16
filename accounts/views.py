@@ -488,13 +488,13 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         for game in stored_library:
             if game.get_slug() in client_library:
                 client_games = client_library[game.get_slug()]
-                stored_key = (game.get_slug(), game.runner, game.platform, game.service)
+                stored_key = (game.get_slug(), game.runner or "", game.platform or "", game.service or "")
                 for client_game in client_games:
                     client_key = (
                         client_game["slug"],
-                        client_game["runner"],
-                        client_game["platform"],
-                        client_game["service"],
+                        client_game["runner"] or "",
+                        client_game["platform"] or "",
+                        client_game["service"] or "",
                     )
                     if client_key == stored_key or self.is_empty_key(stored_key):
                         changed = False
@@ -537,9 +537,9 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             for client_game in client_games:
                 client_key = (
                     client_game["slug"],
-                    client_game["runner"],
-                    client_game["platform"],
-                    client_game["service"],
+                    client_game["runner"] or "",
+                    client_game["platform"] or "",
+                    client_game["service"] or "",
                 )
                 if client_key in updated_games:
                     continue
