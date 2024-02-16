@@ -628,9 +628,9 @@ header {
     padding: 8px;
     background-color: rgba(0, 0, 0, 0.5);
   }
-  .game-library-playtime {
+  .game-library-info {
     font-size: .7em;
-    text-transform: lowercase;
+    text-transform: none;
     padding-top: 5px;
   }
   &:hover {

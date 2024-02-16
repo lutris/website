@@ -1,5 +1,6 @@
 """Custom template tags and filters"""
 import math
+from datetime import datetime
 from django import template
 
 from common import util
@@ -32,3 +33,8 @@ def human_time(playtime):
     if playtime:
         return "Less than a minute"
     return NO_PLAYTIME
+
+@register.filter
+def tsdate(timestamp):
+    date = datetime.fromtimestamp(timestamp)
+    return date.strftime("%b %-d %Y")

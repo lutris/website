@@ -455,7 +455,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         )
 
     def is_empty_key(self, key):
-        """Return true of runner, platform, service"""
+        """Return true if runner, platform, service are empty"""
         return not key[1] and not key[2] and not key[3]
 
     def post(self, request, *args, **kwargs):
@@ -481,14 +481,12 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         game.name = client_game["name"]
                         game.runner = client_game["runner"]
                         game.platform = client_game["platform"]
-                        if not game.lastplayed or (
-                            game.lastplayed
-                            and client_game["lastplayed"]
-                            and game.lastplayed > client_game["lastplayed"]
-                        ):
+                        client_lastplayed = client_game["lastplayed"] or 0
+                        if not game.lastplayed or game.lastplayed > client_lastplayed:
                             game.lastplayed = client_game["lastplayed"] or 0
-                        if not game.playtime or game.playtime < client_game["playtime"]:
-                            game.playtime = client_game["playtime"] or 0
+                        client_playtime = client_game["playtime"] or 0
+                        if not game.playtime or game.playtime < client_playtime:
+                            game.playtime = client_playtime
                         if client_game["service"]:
                             game.service = client_game["service"]
                             game.service_id = client_game["service_id"]
@@ -517,11 +515,11 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         name=client_game["name"],
                         slug=client_game["slug"],
                         gamelibrary=models.GameLibrary.objects.get(user=request.user),
-                        playtime=client_game["playtime"],
+                        playtime=client_game["playtime"] or 0,
                         runner=client_game["runner"],
                         platform=client_game["platform"],
                         service=client_game["service"],
-                        lastplayed=client_game["lastplayed"],
+                        lastplayed=client_game["lastplayed"] or 0,
                     )
                     stats["created"] += 1
                     LOGGER.info("Create new Library game %s", client_game["slug"])
