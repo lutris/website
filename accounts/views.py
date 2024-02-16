@@ -482,7 +482,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         game.runner = client_game["runner"]
                         game.platform = client_game["platform"]
                         client_lastplayed = client_game["lastplayed"] or 0
-                        if not game.lastplayed or game.lastplayed > client_lastplayed:
+                        if not game.lastplayed or game.lastplayed < client_lastplayed:
                             game.lastplayed = client_game["lastplayed"] or 0
                         client_playtime = client_game["playtime"] or 0
                         if not game.playtime or game.playtime < client_playtime:
