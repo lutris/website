@@ -55,7 +55,7 @@
         <span class="game-library-name">
           {{game.get_name}}
           {% if game.service %}
-          <img src="{{ STATIC_URL }}images/icons/{{game.service}}.png" alt="{{game.service}}">
+          <img src="{{ STATIC_URL }}images/icons/{{game.service}}.png" alt="{{game.service}}" width="24px">
           {% endif %}
           <span class="game-library-info">
             {% if game.playtime %}
@@ -67,7 +67,6 @@
             {% if game.platform %}
               <br>{{game.platform}}
             {% endif %}
-            <br>Updated: {{game.updated_at}}
           </span>
         </span>
 
@@ -92,6 +91,7 @@
     function updateSortBy(elem) {
       let params = new URLSearchParams(document.location.search);
       params.set("sort", elem.value)
+      params.set("ordering", elem.value)
       window.location.replace(URL + "?" + params.toString())
     }
     function updatePaginateBy(elem) {

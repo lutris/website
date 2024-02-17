@@ -333,6 +333,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
         context["profile_page"] = self.profile_page
         context["q"] = self.request.GET.get("q", "")
         context["sort"] = self.request.GET.get("sort", "")
+        context["order_by"] = self.request.GET.get("sort", "")
         return context
 
 
