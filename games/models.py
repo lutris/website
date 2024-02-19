@@ -1161,6 +1161,12 @@ class GameLibrary(models.Model):
     def __str__(self):
         return "%s's library" % self.user.username
 
+class LibraryCategory(models.Model):
+    """Model to represent a user defined category"""
+    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE, related_name="categories")
+    name = models.CharField(max_length=256)
+
+
 class LibraryGame(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=256, null=True)

@@ -1,5 +1,6 @@
 """Module for user account views"""
 # pylint: disable=too-many-ancestors,raise-missing-from
+import json
 import logging
 from datetime import datetime
 from collections import defaultdict
@@ -488,11 +489,22 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             client_library[game["slug"]].append(game)
         stored_library = self.get_queryset(ignore_since=True)
         updated_games = set()
-        stats = {"user": request.user.username, "unchanged": 0, "updated": 0, "created": 0, "errors": 0}
+        stats = {
+            "user": request.user.username,
+            "unchanged": 0,
+            "updated": 0,
+            "created": 0,
+            "errors": 0,
+        }
         for game in stored_library:
             if game.get_slug() in client_library:
                 client_games = client_library[game.get_slug()]
-                stored_key = (game.get_slug(), game.runner or "", game.platform or "", game.service or "")
+                stored_key = (
+                    game.get_slug(),
+                    game.runner or "",
+                    game.platform or "",
+                    game.service or "",
+                )
                 for client_game in client_games:
                     client_key = (
                         client_game["slug"],
@@ -568,3 +580,25 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         LOGGER.info(stats)
         return self.get(request)
 
+    def delete_game(self, game):
+        library_games = models.LibraryGame.objects.filter(
+            gamelibrary__user=self.request.user, slug=game["slug"]
+        )
+        if len(library_games) == 1:
+            return library_games[0].delete()
+
+        for library_game in library_games:
+            if library_game["lastplayed"] == game["lastplayed"]:
+                return library_game.delete()
+        return [""]
+
+    def delete(self, request):
+        stats = {"delete_results": {}}
+        for game in request.data:
+            slug = game["slug"]
+            if not slug:
+                LOGGER.warning("No slug provided")
+                return HttpResponseBadRequest("Missing slug")
+            result = self.delete_game(game)
+            stats["delete_results"][slug] = result[0]
+        return HttpResponse(json.dumps(stats))
