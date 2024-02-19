@@ -530,9 +530,8 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             changed = True
                         client_lastplayed = int(client_game["lastplayed"] or 0)
                         if not game.lastplayed or game.lastplayed < client_lastplayed:
-                            lastplayed = client_game["lastplayed"] or 0
-                            if game.lastplayed != lastplayed:
-                                game.lastplayed = lastplayed
+                            if game.lastplayed != client_lastplayed:
+                                game.lastplayed = client_lastplayed
                                 changed = True
                         client_playtime = float(client_game["playtime"] or 0)
                         if not game.playtime or game.playtime < client_playtime:
