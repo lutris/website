@@ -320,7 +320,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
         queryset = models.LibraryGame.objects.filter(gamelibrary__user=self.get_user())
         if self.request.GET.get("q"):
             queryset = queryset.filter(name__icontains=self.request.GET["q"])
-        return queryset.order_by(self.request.GET.get("sort", self.ordering))
+        return queryset.order_by(self.request.GET.get("sort") or self.ordering)
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
