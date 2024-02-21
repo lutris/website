@@ -587,7 +587,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             return library_games[0].delete()
 
         for library_game in library_games:
-            if library_game["lastplayed"] == game["lastplayed"]:
+            if library_game.lastplayed == game["lastplayed"]:
                 return library_game.delete()
         return [""]
 
