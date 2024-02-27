@@ -457,7 +457,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, ignore_since=False):
         queryset = (
-            models.LibraryGame.objects.prefetch_related("game")
+            models.LibraryGame.objects.prefetch_related("game", "categories")
             .filter(gamelibrary__user=self.request.user)
             .order_by("game__slug")
         )
