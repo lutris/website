@@ -100,6 +100,8 @@ class GameForm(forms.ModelForm):
 
     def process_banner(self, image_data, ratio):
         """Convert image to banner format"""
+        if not image_data:
+            return None
         image = Image.open(image_data)
         image = image.convert("RGB")
         image = image.crop(ratio)
@@ -124,7 +126,7 @@ class GameForm(forms.ModelForm):
             try:
                 self.cleaned_data["title_logo"] = self.process_banner(title_logo, crop_points)
             except AttributeError as ex:
-                LOGGER.exception(ex)
+                LOGGER.warning(ex)
                 raise forms.ValidationError("This is not a valid image format: %s" % ex)
         return self.cleaned_data
 
