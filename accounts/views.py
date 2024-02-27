@@ -485,9 +485,11 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         client_library = defaultdict(list)
+        library = models.GameLibrary.objects.get(user=request.user)
         for game in request.data:
             client_library[game["slug"]].append(game)
         stored_library = self.get_queryset(ignore_since=True)
+        stored_categories = {c.name: c for c in models.LibraryCategory.objects.filter(gamelibrary=library)}
         updated_games = set()
         stats = {
             "user": request.user.username,
@@ -496,6 +498,15 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             "created": 0,
             "errors": 0,
         }
+
+        def get_category(category_name):
+            if category_name not in stored_categories:
+                category = models.LibraryCategory.objects.create(gamelibrary=library, name=category_name)
+                stored_categories[category_name] = category
+            else:
+                category = stored_categories[category_name]
+            return category
+
         for game in stored_library:
             if game.get_slug() in client_library:
                 client_games = client_library[game.get_slug()]
@@ -542,6 +553,12 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             game.service = client_game["service"]
                             game.service_id = client_game["service_id"]
                             changed = True
+                        for category_name in client_game.get("categories", []):
+                            category = get_category(category_name)
+                            if category not in game.categories.all():
+                                game.categories.add(category)
+                                changed = True
+
                         if changed:
                             game.save()
                             stats["updated"] += 1
@@ -563,17 +580,20 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                     continue
 
                 game = self.get_lutris_game(client_game["slug"])
-                models.LibraryGame.objects.create(
+                library_game = models.LibraryGame.objects.create(
                     game=game,
                     name=client_game["name"],
                     slug=client_game["slug"],
-                    gamelibrary=models.GameLibrary.objects.get(user=request.user),
+                    gamelibrary=library,
                     playtime=client_game["playtime"] or 0,
                     runner=client_game["runner"],
                     platform=client_game["platform"],
                     service=client_game["service"],
                     lastplayed=client_game["lastplayed"] or 0,
                 )
+                for category_name in client_game["categories"]:
+                    category = get_category(category_name)
+                    library_game.categories.add(category)
                 stats["created"] += 1
                 LOGGER.info("Create new Library game %s", client_game)
         LOGGER.info(stats)

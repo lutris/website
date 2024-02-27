@@ -67,6 +67,9 @@
             {% if game.platform %}
               <br>{{game.platform}}
             {% endif %}
+            {% for category in game.categories.all %}
+              <span>{{ category.name}}</span>
+            {% endfor %}
           </span>
         </span>
 

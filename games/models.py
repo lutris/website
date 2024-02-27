@@ -1179,6 +1179,7 @@ class LibraryGame(models.Model):
     service_id = models.CharField(max_length=255, null=True)
     lastplayed = models.IntegerField(null=True, default=0)
     updated_at = models.DateTimeField(auto_now=True)
+    categories = models.ManyToManyField(LibraryCategory, blank=True)
 
     def __str__(self):
         return f"{self.name} ({self.playtime}, {self.lastplayed})"
@@ -1196,6 +1197,9 @@ class LibraryGame(models.Model):
             return self.name
         if self.game:
             return self.game.name
+
+    def get_category_names(self):
+        return [c.name for c in self.categories.all()]
 
     @property
     def coverart(self):

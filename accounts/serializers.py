@@ -24,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 class LibrarySerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='get_name')  # Do not make this last forever
     slug = serializers.ReadOnlyField(source='get_slug')  # GTFO soon
+    categories = serializers.ReadOnlyField(source='get_category_names')
 
     class Meta:
         model = LibraryGame
@@ -39,4 +40,5 @@ class LibrarySerializer(serializers.ModelSerializer):
             "service",
             "service_id",
             "lastplayed",
+            "categories",
         )
