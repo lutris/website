@@ -137,6 +137,12 @@ def populate_popularity():
 
 
 @app.task
+def auto_accept_installers():
+    for f in models.InstallerDraft.objects.filter(draft=False, user__username="vanstaveren"):
+        f.accept()
+
+
+@app.task
 def autofix_installers():
     """Automatically fix and cleanup installers"""
     stats = defaultdict(int)
