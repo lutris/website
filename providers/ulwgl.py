@@ -2,11 +2,11 @@ import os
 import git
 import logging
 
-# import yaml
 import requests
 from django.conf import settings
 from providers.models import ProviderGame
-from games.util.steam import get_store_info
+from games.steam import create_game_from_steam_appid
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -37,9 +37,9 @@ def get_ulwgl_api_games():
     return games_by_id
 
 
-def get_game_ids(gamefix_folder: str) -> list:
+def get_game_ids(gamefix_folder: str) -> set:
     fixes = os.listdir(os.path.join(PROTONFIXES_PATH, gamefix_folder))
-    game_ids = []
+    game_ids = set()
     for fix in fixes:
         base, ext = os.path.splitext(fix)
         if ext != ".py":
@@ -48,7 +48,7 @@ def get_game_ids(gamefix_folder: str) -> list:
             continue
         if base.startswith("ulwgl-"):
             base = base.split("ulwgl-")[1]
-        game_ids.append(base)
+        game_ids.add(base)
     return game_ids
 
 
@@ -141,25 +141,21 @@ def log_lutris_games(steam_provider_game, context=""):
 
 
 def print_lutris_matches():
-    steam_ids = get_game_ids("gamefixes-steam")
+    steam_ids: set = get_game_ids("gamefixes-steam")
     steam_games = ProviderGame.objects.filter(
         provider__name="steam", internal_id__in=steam_ids
     )
-    matched_steam_ids = []
+    matched_steam_ids = set()
     for steam_game in steam_games:
+        matched_steam_ids.add(steam_game.internal_id)
         for game in steam_game.games.all():
-            providers = []
-            for prov in game.provider_games.all():
-                providers.append(prov.name)
-                if prov.name == "stream":
-                    matched_steam_ids.append(prov.internal_id)
+            providers = [prov.name for prov in game.provider_games.all()]
             print(steam_game.name, ", ".join(providers))
 
     print("Unmatched IDs")
-    unmatched_games = set(steam_ids) - set(matched_steam_ids)
+    unmatched_games = set(steam_ids) - matched_steam_ids
     for appid in unmatched_games:
-        store_info = get_store_info(appid)
-        print(store_info)
+        create_game_from_steam_appid(appid)
 
 
 def parse_python_fix(file_path):
