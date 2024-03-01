@@ -6,6 +6,7 @@ import logging
 import requests
 from django.conf import settings
 from providers.models import ProviderGame
+from games.util.steam import get_store_info
 
 LOGGER = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def get_ulwgl_api_games():
     return games_by_id
 
 
-def get_game_ids(gamefix_folder):
+def get_game_ids(gamefix_folder: str) -> list:
     fixes = os.listdir(os.path.join(PROTONFIXES_PATH, gamefix_folder))
     game_ids = []
     for fix in fixes:
@@ -51,7 +52,7 @@ def get_game_ids(gamefix_folder):
     return game_ids
 
 
-def get_all_fixes_ids():
+def get_all_fixes_ids() -> set:
     game_ids = set()
     for folder in iter_gamefix_folders():
         for game_id in get_game_ids(folder):
@@ -105,15 +106,17 @@ def check_lutris_associations():
     for game_id in fixes_ids - seen_fixes:
         try:
             steam_provider_game = ProviderGame.objects.get(
-                    provider__name="steam", slug=game_id
+                provider__name="steam", slug=game_id
             )
         except ProviderGame.DoesNotExist:
             steam_games_not_found.add(game_id)
             steam_provider_game = None
         if steam_provider_game:
             provider_games += log_lutris_games(steam_provider_game, "Fix not in DB")
-    for (provider_game, steam_game) in provider_games:
-        print(f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,")
+    for provider_game, steam_game in provider_games:
+        print(
+            f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,"
+        )
     if steam_games_not_found:
         LOGGER.warning(steam_games_not_found)
 
@@ -121,19 +124,17 @@ def check_lutris_associations():
 def log_lutris_games(steam_provider_game, context=""):
     lutris_games = steam_provider_game.games.all()
     if not lutris_games:
-        LOGGER.warning(
-            "No associated Lutris game for %s", steam_provider_game
-        )
+        LOGGER.warning("No associated Lutris game for %s", steam_provider_game)
         return []
     if lutris_games.count() > 1:
-        LOGGER.warning(
-            "More than one Lutris game for %s", steam_provider_game
-        )
+        LOGGER.warning("More than one Lutris game for %s", steam_provider_game)
         for lutris_game in lutris_games:
             LOGGER.warning(lutris_game)
     lutris_game = lutris_games[0]
     provider_games = []
-    for provider_game in lutris_game.provider_games.exclude(provider__name__in=("igdb", "steam")):
+    for provider_game in lutris_game.provider_games.exclude(
+        provider__name__in=("igdb", "steam")
+    ):
         LOGGER.info("%s %s", context, provider_game)
         provider_games.append((provider_game, steam_provider_game))
     return provider_games
@@ -142,21 +143,23 @@ def log_lutris_games(steam_provider_game, context=""):
 def print_lutris_matches():
     steam_ids = get_game_ids("gamefixes-steam")
     steam_games = ProviderGame.objects.filter(
-        provider__name="steam", appids__in=steam_ids
+        provider__name="steam", internal_id__in=steam_ids
     )
-    for game in steam_games:
-        print(
-            game["name"],
-            ", ".join(
-                [f"{prov['service']}:{prov['slug']}" for prov in game["provider_games"]]
-            ),
-        )
-    matched_steam_ids = [
-        [p["slug"] for p in g["provider_games"] if p["service"] == "steam"][0]
-        for g in steam_games
-    ]
+    matched_steam_ids = []
+    for steam_game in steam_games:
+        for game in steam_game.games.all():
+            providers = []
+            for prov in game.provider_games.all():
+                providers.append(prov.name)
+                if prov.name == "stream":
+                    matched_steam_ids.append(prov.internal_id)
+            print(steam_game.name, ", ".join(providers))
+
     print("Unmatched IDs")
-    print(set(steam_ids) - set(matched_steam_ids))
+    unmatched_games = set(steam_ids) - set(matched_steam_ids)
+    for appid in unmatched_games:
+        store_info = get_store_info(appid)
+        print(store_info)
 
 
 def parse_python_fix(file_path):
