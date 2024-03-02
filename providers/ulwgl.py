@@ -1,12 +1,13 @@
-import os
-import git
 import logging
+import os
+from collections import defaultdict
 
+import git
 import requests
 from django.conf import settings
-from providers.models import ProviderGame
-from games.steam import create_game_from_steam_appid
 
+from games.steam import create_game_from_steam_appid
+from providers.models import ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 
@@ -52,11 +53,8 @@ def get_game_ids(gamefix_folder: str) -> set:
     return game_ids
 
 
-def get_all_fixes_ids() -> set:
+def get_proton_patch_ids() -> set:
     game_ids = set()
-    for folder in iter_gamefix_folders():
-        for game_id in get_game_ids(folder):
-            game_ids.add(game_id)
     with open(PROTON_PATCHES_STEAM_IDS) as patch_ids_file:
         for line in patch_ids_file.readlines():
             appid = line.strip()
@@ -64,10 +62,20 @@ def get_all_fixes_ids() -> set:
     return game_ids
 
 
+def get_all_fixes_ids() -> set:
+    """Get IDs for all games from all stores + Proton patches"""
+    game_ids = set()
+    for folder in iter_gamefix_folders():
+        for game_id in get_game_ids(folder):
+            game_ids.add(game_id)
+    return game_ids.union(get_proton_patch_ids())
+
+
 def check_lutris_associations():
     ulwgl_games = get_ulwgl_api_games()
     fixes_ids = get_all_fixes_ids()
     seen_fixes = set()
+    stats = defaultdict(int)
     for game_id in ulwgl_games:
         steam_id = None
         for store_game in ulwgl_games[game_id]:
@@ -75,32 +83,28 @@ def check_lutris_associations():
                 continue
             steam_id = store_game["ulwgl_id"].split("ulwgl-")[1]
             if steam_id not in fixes_ids:
-                LOGGER.warning("%s (%s) has no fixes", store_game["title"], steam_id)
+                stats["no fixes"] += 1
             else:
                 seen_fixes.add(steam_id)
+                stats["with fix"] += 1
             if not steam_id.isnumeric() or steam_id == store_game["codename"]:
                 LOGGER.info(
                     "Non Steam game %s with id %s", store_game["title"], steam_id
                 )
+                stats["non steam"] += 1
                 steam_id = None
-
             if steam_id:
                 try:
                     steam_provider_game = ProviderGame.objects.get(
                         provider__name="steam", slug=steam_id
                     )
                 except ProviderGame.DoesNotExist:
-                    LOGGER.warning("Steam game with ID %s not found")
+                    LOGGER.error("Steam game with ID %s not found")
+                    stats["steam game not found"] = steam_id
                     continue
-
+                stats["in api"] += 1
                 log_lutris_games(steam_provider_game, "In API")
-                # lutris_game = lutris_games[0]
-                # LOGGER.info(
-                #     "Steam game %s (%s) with id %s",
-                #     steam_provider_game.name,
-                #     lutris_game.name,
-                #     steam_provider_game.internal_id,
-                # )
+
     steam_games_not_found = set()
     provider_games = []
     for game_id in fixes_ids - seen_fixes:
@@ -113,12 +117,14 @@ def check_lutris_associations():
             steam_provider_game = None
         if steam_provider_game:
             provider_games += log_lutris_games(steam_provider_game, "Fix not in DB")
+            stats["fix not in DB"] += 1
     for provider_game, steam_game in provider_games:
         print(
             f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,"
         )
     if steam_games_not_found:
-        LOGGER.warning(steam_games_not_found)
+        LOGGER.error(steam_games_not_found)
+    return stats
 
 
 def log_lutris_games(steam_provider_game, context=""):
@@ -140,8 +146,11 @@ def log_lutris_games(steam_provider_game, context=""):
     return provider_games
 
 
-def print_lutris_matches():
-    steam_ids: set = get_game_ids("gamefixes-steam")
+def check_steam_to_lutris_matches():
+    """Check that every Steam game in the ULWGL database has a corresponding Lutris game
+    If not, create them.
+    """
+    steam_ids: set = get_game_ids("gamefixes-steam").union(get_proton_patch_ids())
     steam_games = ProviderGame.objects.filter(
         provider__name="steam", internal_id__in=steam_ids
     )
@@ -149,13 +158,18 @@ def print_lutris_matches():
     for steam_game in steam_games:
         matched_steam_ids.add(steam_game.internal_id)
         for game in steam_game.games.all():
-            providers = [prov.name for prov in game.provider_games.all()]
-            print(steam_game.name, ", ".join(providers))
+            providers = []
+            for prov in game.provider_games.exclude(provider__name="igdb"):
+                providers.append(prov.provider.name)
+            print(steam_game.name, ":", ", ".join(providers))
 
-    print("Unmatched IDs")
-    unmatched_games = set(steam_ids) - matched_steam_ids
-    for appid in unmatched_games:
-        create_game_from_steam_appid(appid)
+    unmatched_games = steam_ids - matched_steam_ids
+    if unmatched_games:
+        print("Unmatched IDs")
+        for appid in unmatched_games:
+            create_game_from_steam_appid(appid)
+    else:
+        print("All games matched")
 
 
 def parse_python_fix(file_path):
@@ -271,15 +285,3 @@ def convert_to_lutris_script(protonfix):
         raise ValueError("unhandled task: %s in %s" % (task, protonfix))
     installer["installer"] = script
     return {k: v for k, v in installer.items() if v}
-
-
-if __name__ == "__main__":
-    update_repository()
-    print_lutris_matches()
-    # results = parse_protonfixes()
-    # print(json.dumps(results, indent=2))
-    # for key, fix in results.items():
-    #     res = convert_to_lutris_script(fix)
-    #     if res:
-    #         print(key)
-    #         print(yaml.dump(res))
