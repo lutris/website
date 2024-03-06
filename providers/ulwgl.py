@@ -1,6 +1,7 @@
 import logging
 import os
 from collections import defaultdict
+from typing import List, Tuple
 
 import git
 import requests
@@ -15,6 +16,19 @@ PROTONFIXES_URL = "https://github.com/Open-Wine-Components/ULWGL-protonfixes"
 ULWGL_API_URL = "https://ulwgl.openwinecomponents.org/ulwgl_api.php"
 PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
 PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
+
+
+def fix_steam_ids():
+    games_updated = 0
+    provider_games = ProviderGame.objects.filter(provider__name="steam", internal_id__isnull=True)
+    provider_games_cnt = provider_games.count()
+    for pg in provider_games:
+        pg.internal_id = pg.slug
+        pg.save()
+        games_updated += 1
+        if (games_updated % 1000) == 0:
+            print(f"Updated {games_updated}/{provider_games_cnt}")
+    return games_updated
 
 
 def update_repository():
@@ -76,6 +90,8 @@ def check_lutris_associations():
     fixes_ids = get_all_fixes_ids()
     seen_fixes = set()
     stats = defaultdict(int)
+    stats["fixes"] = len(fixes_ids)
+    stats["api_games"] = len(ulwgl_games)
     for game_id in ulwgl_games:
         steam_id = None
         for store_game in ulwgl_games[game_id]:
@@ -88,49 +104,52 @@ def check_lutris_associations():
                 seen_fixes.add(steam_id)
                 stats["with fix"] += 1
             if not steam_id.isnumeric() or steam_id == store_game["codename"]:
-                LOGGER.info(
-                    "Non Steam game %s with id %s", store_game["title"], steam_id
-                )
                 stats["non steam"] += 1
                 steam_id = None
             if steam_id:
                 try:
                     steam_provider_game = ProviderGame.objects.get(
-                        provider__name="steam", slug=steam_id
+                        provider__name="steam", internal_id=steam_id
                     )
                 except ProviderGame.DoesNotExist:
-                    LOGGER.error("Steam game with ID %s not found")
+                    LOGGER.error("Steam game with ID %s not found", steam_id)
+                    create_game_from_steam_appid(steam_id)
                     stats["steam game not found"] = steam_id
                     continue
                 stats["in api"] += 1
-                log_lutris_games(steam_provider_game, "In API")
+                get_other_provider_games(steam_provider_game)
 
     steam_games_not_found = set()
     provider_games = []
     for game_id in fixes_ids - seen_fixes:
         try:
             steam_provider_game = ProviderGame.objects.get(
-                provider__name="steam", slug=game_id
+                provider__name="steam", internal_id=game_id
             )
+            provider_games += get_other_provider_games(steam_provider_game)
+            stats["fix not in DB"] += 1
         except ProviderGame.DoesNotExist:
             steam_games_not_found.add(game_id)
-            steam_provider_game = None
-        if steam_provider_game:
-            provider_games += log_lutris_games(steam_provider_game, "Fix not in DB")
-            stats["fix not in DB"] += 1
+
+    if steam_games_not_found:
+        LOGGER.error("Some Steam games are not in the Lutris database")
+        LOGGER.error(steam_games_not_found)
+    output_csv(provider_games)
+    return stats
+
+
+def output_csv(provider_games: List[Tuple]):
+    """Print to the terminal data that can be re-imported to the ULWGL database1"""
     for provider_game, steam_game in provider_games:
         print(
             f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,"
         )
-    if steam_games_not_found:
-        LOGGER.error(steam_games_not_found)
-    return stats
 
-
-def log_lutris_games(steam_provider_game, context=""):
+def get_other_provider_games(steam_provider_game):
     lutris_games = steam_provider_game.games.all()
     if not lutris_games:
         LOGGER.warning("No associated Lutris game for %s", steam_provider_game)
+        create_game_from_steam_appid(steam_provider_game.internal_id)
         return []
     if lutris_games.count() > 1:
         LOGGER.warning("More than one Lutris game for %s", steam_provider_game)
@@ -141,7 +160,6 @@ def log_lutris_games(steam_provider_game, context=""):
     for provider_game in lutris_game.provider_games.exclude(
         provider__name__in=("igdb", "steam")
     ):
-        LOGGER.info("%s %s", context, provider_game)
         provider_games.append((provider_game, steam_provider_game))
     return provider_games
 
