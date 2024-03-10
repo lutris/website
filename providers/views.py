@@ -4,8 +4,4 @@ from providers.ulwgl import export_ulwgl_games
 
 
 def ulwgl_games(request):
-    return JsonResponse(
-        {
-            "games": export_ulwgl_games(),
-        }
-    )
+    return JsonResponse(export_ulwgl_games(), safe=False)

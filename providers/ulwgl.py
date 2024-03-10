@@ -1,5 +1,6 @@
 import logging
 import os
+import json
 from collections import defaultdict
 from typing import List, Tuple
 
@@ -17,7 +18,7 @@ PROTONFIXES_URL = "https://github.com/Open-Wine-Components/ULWGL-protonfixes"
 ULWGL_API_URL = "https://ulwgl.openwinecomponents.org/ulwgl_api.php"
 PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
 PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
-
+ULWGL_GAMES_PATH = os.path.join(settings.MEDIA_ROOT, "ulwgl-games.json")
 
 def fix_steam_ids():
     games_updated = 0
@@ -360,3 +361,9 @@ def export_ulwgl_games():
             })
     return output
 
+
+def save_ulwgl_games():
+    """Save the list of ULWGL games to a file"""
+    ulwgl_games = export_ulwgl_games()
+    with open(ULWGL_GAMES_PATH, "w") as ulwgl_file:
+        json.dump(ulwgl_games, ulwgl_file, indent=2)
