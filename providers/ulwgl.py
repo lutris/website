@@ -6,9 +6,10 @@ from typing import List, Tuple
 import git
 import requests
 from django.conf import settings
+from django.utils import timezone
 
 from games.steam import create_game_from_steam_appid
-from providers.models import ProviderGame
+from providers.models import Provider, ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +21,9 @@ PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.tx
 
 def fix_steam_ids():
     games_updated = 0
-    provider_games = ProviderGame.objects.filter(provider__name="steam", internal_id__isnull=True)
+    provider_games = ProviderGame.objects.filter(
+        provider__name="steam", internal_id__isnull=True
+    )
     provider_games_cnt = provider_games.count()
     for pg in provider_games:
         pg.internal_id = pg.slug
@@ -144,6 +147,7 @@ def output_csv(provider_games: List[Tuple]):
         print(
             f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,"
         )
+
 
 def get_other_provider_games(steam_provider_game):
     lutris_games = steam_provider_game.games.all()
@@ -303,3 +307,56 @@ def convert_to_lutris_script(protonfix):
         raise ValueError("unhandled task: %s in %s" % (task, protonfix))
     installer["installer"] = script
     return {k: v for k, v in installer.items() if v}
+
+
+def import_ulwgl_games():
+    """Load ULWGL games from the API to the Lutris DB"""
+    api_games = get_ulwgl_api_games()
+    fix_ids = get_all_fixes_ids()
+    provider = Provider.objects.get(name="ulwgl")
+    stats = {
+        "api-games": len(api_games),
+        "fixes": len(fix_ids),
+        "created": 0,
+        "updated": 0,
+        "skipped": 0,
+
+    }
+    for game_id in api_games:
+        if game_id.split("ulwgl-")[1] not in fix_ids:
+            LOGGER.info("Skipping %s, it has no fix", game_id)
+            stats["skipped"] += 1
+            continue
+        provider_game, created = ProviderGame.objects.get_or_create(
+            internal_id=game_id,
+            provider=provider,
+        )
+        if created:
+            LOGGER.info("Created %s", game_id)
+            stats["created"] += 1
+        else:
+            LOGGER.info("Updated %s", game_id)
+            stats["updated"] += 1
+        provider_game.slug = game_id
+        provider_game.name = api_games[game_id][0]["title"]
+        provider_game.updated_at = timezone.now()
+        provider_game.metadata = api_games[game_id]
+        provider_game.save()
+    return stats
+
+
+def export_ulwgl_games():
+    """Export ULWGL games to a JSON that can be used by the client"""
+    provider_games = ProviderGame.objects.filter(provider__name="ulwgl")
+    output = []
+    for provider_game in provider_games:
+        for game in provider_game.metadata:
+            output.append({
+                "name": game["title"],
+                "store": game["store"],
+                "appid": game["codename"],
+                "notes": game["notes"],
+                "ulwgl_id": game["ulwgl_id"],
+            })
+    return output
+
