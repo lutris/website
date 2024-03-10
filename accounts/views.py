@@ -591,7 +591,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                     service=client_game["service"],
                     lastplayed=client_game["lastplayed"] or 0,
                 )
-                for category_name in client_game["categories"]:
+                for category_name in client_game.get("categories", []):
                     category = get_category(category_name)
                     library_game.categories.add(category)
                 stats["created"] += 1

@@ -132,8 +132,8 @@ def check_lutris_associations():
             steam_games_not_found.add(game_id)
 
     if steam_games_not_found:
-        LOGGER.error("Some Steam games are not in the Lutris database")
-        LOGGER.error(steam_games_not_found)
+        LOGGER.warning("Some Steam games are not in the Lutris database")
+        LOGGER.warning(steam_games_not_found)
     output_csv(provider_games)
     return stats
 

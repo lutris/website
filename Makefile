@@ -23,9 +23,6 @@ cleanthumbs:
 test:
 	DJANGO_TESTS=1 ./manage.py test --no-input --failfast $(test)
 
-jenkins:
-	./manage.py jenkins $(test)
-
 migration:
 	-./manage.py makemigrations
 	./manage.py migrate
