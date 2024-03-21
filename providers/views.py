@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
-from providers.ulwgl import export_ulwgl_games
+from providers.umu import export_umu_games
 
 
-def ulwgl_games(request):
-    return JsonResponse(export_ulwgl_games(), safe=False)
+def umu_games(request):
+    return JsonResponse(export_umu_games(), safe=False)

@@ -14,11 +14,11 @@ from providers.models import Provider, ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 
-PROTONFIXES_URL = "https://github.com/Open-Wine-Components/ULWGL-protonfixes"
-ULWGL_API_URL = "https://ulwgl.openwinecomponents.org/ulwgl_api.php"
+PROTONFIXES_URL = "https://github.com/Open-Wine-Components/umu-protonfixes"
+UMU_API_URL = "https://umu.openwinecomponents.org/umu_api.php"
 PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
 PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
-ULWGL_GAMES_PATH = os.path.join(settings.MEDIA_ROOT, "ulwgl-games.json")
+UMU_GAMES_PATH = os.path.join(settings.MEDIA_ROOT, "umu-games.json")
 
 def fix_steam_ids():
     games_updated = 0
@@ -44,11 +44,11 @@ def update_repository():
         repo = git.Repo.clone_from(PROTONFIXES_URL, PROTONFIXES_PATH)
 
 
-def get_ulwgl_api_games():
-    response = requests.get(ULWGL_API_URL)
+def get_umu_api_games():
+    response = requests.get(UMU_API_URL)
     games_by_id = {}
     for entry in response.json():
-        appid = entry["ulwgl_id"]
+        appid = entry["umu_id"]
         if appid in games_by_id:
             games_by_id[appid].append(entry)
         else:
@@ -65,8 +65,8 @@ def get_game_ids(gamefix_folder: str) -> set:
             continue
         if base in ("__init__", "default", "winetricks-gui"):
             continue
-        if base.startswith("ulwgl-"):
-            base = base.split("ulwgl-")[1]
+        if base.startswith("umu-"):
+            base = base.split("umu-")[1]
         game_ids.add(base)
     return game_ids
 
@@ -90,18 +90,18 @@ def get_all_fixes_ids() -> set:
 
 
 def check_lutris_associations():
-    ulwgl_games = get_ulwgl_api_games()
+    umu_games = get_umu_api_games()
     fixes_ids = get_all_fixes_ids()
     seen_fixes = set()
     stats = defaultdict(int)
     stats["fixes"] = len(fixes_ids)
-    stats["api_games"] = len(ulwgl_games)
-    for game_id in ulwgl_games:
+    stats["api_games"] = len(umu_games)
+    for game_id in umu_games:
         steam_id = None
-        for store_game in ulwgl_games[game_id]:
+        for store_game in umu_games[game_id]:
             if steam_id:
                 continue
-            steam_id = store_game["ulwgl_id"].split("ulwgl-")[1]
+            steam_id = store_game["umu_id"].split("umu-")[1]
             if steam_id not in fixes_ids:
                 stats["no fixes"] += 1
             else:
@@ -143,10 +143,10 @@ def check_lutris_associations():
 
 
 def output_csv(provider_games: List[Tuple]):
-    """Print to the terminal data that can be re-imported to the ULWGL database1"""
+    """Print to the terminal data that can be re-imported to the umu database1"""
     for provider_game, steam_game in provider_games:
         print(
-            f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},ulwgl-{steam_game.slug},,"
+            f"{provider_game.name},{provider_game.provider.name},{provider_game.slug},umu-{steam_game.slug},,"
         )
 
 
@@ -170,7 +170,7 @@ def get_other_provider_games(steam_provider_game):
 
 
 def check_steam_to_lutris_matches():
-    """Check that every Steam game in the ULWGL database has a corresponding Lutris game
+    """Check that every Steam game in the umu database has a corresponding Lutris game
     If not, create them.
     """
     steam_ids: set = get_game_ids("gamefixes-steam").union(get_proton_patch_ids())
@@ -310,11 +310,11 @@ def convert_to_lutris_script(protonfix):
     return {k: v for k, v in installer.items() if v}
 
 
-def import_ulwgl_games():
-    """Load ULWGL games from the API to the Lutris DB"""
-    api_games = get_ulwgl_api_games()
+def import_umu_games():
+    """Load umu games from the API to the Lutris DB"""
+    api_games = get_umu_api_games()
     fix_ids = get_all_fixes_ids()
-    provider = Provider.objects.get(name="ulwgl")
+    provider = Provider.objects.get(name="umu")
     stats = {
         "api-games": len(api_games),
         "fixes": len(fix_ids),
@@ -324,7 +324,7 @@ def import_ulwgl_games():
 
     }
     for game_id in api_games:
-        if game_id.split("ulwgl-")[1] not in fix_ids:
+        if game_id.split("umu-")[1] not in fix_ids:
             LOGGER.info("Skipping %s, it has no fix", game_id)
             stats["skipped"] += 1
             continue
@@ -346,9 +346,9 @@ def import_ulwgl_games():
     return stats
 
 
-def export_ulwgl_games():
-    """Export ULWGL games to a JSON that can be used by the client"""
-    provider_games = ProviderGame.objects.filter(provider__name="ulwgl")
+def export_umu_games():
+    """Export umu games to a JSON that can be used by the client"""
+    provider_games = ProviderGame.objects.filter(provider__name="umu")
     output = []
     for provider_game in provider_games:
         for game in provider_game.metadata:
@@ -357,13 +357,13 @@ def export_ulwgl_games():
                 "store": game["store"],
                 "appid": game["codename"],
                 "notes": game["notes"],
-                "ulwgl_id": game["ulwgl_id"],
+                "umu_id": game["umu_id"],
             })
     return output
 
 
-def save_ulwgl_games():
-    """Save the list of ULWGL games to a file"""
-    ulwgl_games = export_ulwgl_games()
-    with open(ULWGL_GAMES_PATH, "w") as ulwgl_file:
-        json.dump(ulwgl_games, ulwgl_file, indent=2)
+def save_umu_games():
+    """Save the list of umu games to a file"""
+    umu_games = export_umu_games()
+    with open(UMU_GAMES_PATH, "w") as umu_file:
+        json.dump(umu_games, umu_file, indent=2)
