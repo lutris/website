@@ -149,6 +149,13 @@ INVALID_INSTALLER_KEYS = (
     "game_slug",
     "name",
     "-Wine",
+    "-execute",
+    "execute",
+    "arch",
+    "fullscreen",
+    "overrides",
+    "steamid",
+    "Main_file",
 )
 
 INVALID_INSTALLER_KEYS_DELETE = (
