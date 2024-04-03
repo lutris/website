@@ -50,7 +50,7 @@ class ProviderGame(ProviderResource):
         on_delete=models.PROTECT,
     )
     updated_at = models.DateTimeField(null=True)
-    metadata = models.JSONField(null=True)
+    metadata = models.JSONField(null=True, blank=True)
 
     class Meta:
         """Model configuration"""
