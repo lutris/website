@@ -141,9 +141,14 @@ INVALID_INSTALLER_KEYS = (
     "Scummvm",
     "file",
     "install",
-    "enable_flash",
     "year",
-    "fifiles",
+    "task",
+    "pulse_latency",
+    "format",
+    "dst",
+    "game_slug",
+    "name",
+    "-Wine",
 )
 
 INVALID_INSTALLER_KEYS_DELETE = (
@@ -191,6 +196,7 @@ def autofix_installers():
     stats = defaultdict(int)
     stats["invalid_keys"] = defaultdict(int)
     stats["invalid_installers"] = set()
+    stats["steam_wanabee"] = set()
 
     for installer in models.Installer.objects.all():
         stats["total"] += 1
@@ -248,7 +254,7 @@ def autofix_installers():
             and list(script["game"].keys()) == ["appid"]
             and installer.runner.slug != "steam"
         ):
-            stats["steam_wanabee"] += 1
+            stats["steam_wanabee"].add(installer.slug)
         if installer.runner.slug in OBSOLETE_RUNNERS:
             stats["obsolete_runners"] += 1
     return stats
