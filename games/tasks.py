@@ -130,7 +130,6 @@ VALID_INSTALLER_KEYS = (
     "linux",
     "web",
 
-    "main_file",
     "exe",
     "exe64",
 
@@ -240,11 +239,11 @@ def autofix_installers():
                 installer.content = dump_yaml(script)
                 installer.save()
             stats["exe64"] += 1
-        if "iso" in script.keys():
+        if "main_file" in script.keys():
             if "game" not in script:
                 script["game"] = {}
-                script["game"]["iso"] = script["iso"]
-                del(script["iso"])
+                script["game"]["main_file"] = script["main_file"]
+                del(script["main_file"])
                 installer.content = dump_yaml(script)
                 installer.save()
 
