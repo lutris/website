@@ -242,10 +242,10 @@ def autofix_installers():
         if "main_file" in script.keys():
             if "game" not in script:
                 script["game"] = {}
-                script["game"]["main_file"] = script["main_file"]
-                del(script["main_file"])
-                installer.content = dump_yaml(script)
-                installer.save()
+            script["game"]["main_file"] = script["main_file"]
+            del(script["main_file"])
+            installer.content = dump_yaml(script)
+            installer.save()
 
         # The script is at the wrong level
         if list(script.keys()) == ["script"]:
