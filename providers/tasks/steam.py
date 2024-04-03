@@ -1,12 +1,13 @@
 """Sync Steam games"""
-import requests
 
+import requests
 from celery.utils.log import get_task_logger
 
-from providers import models
-from games.models import Game
 from common.models import save_action_log
+from games.models import Game
+from games.webhooks import send_simple_message
 from lutrisweb.celery import app
+from providers import models
 
 LOGGER = get_task_logger(__name__)
 
@@ -20,14 +21,10 @@ def load_steam_games():
     provider = models.Provider.objects.get(name="steam")
     response = requests.get(API_URL)
     game_list = response.json()["applist"]["apps"]
-    stats = {
-        "created": 0,
-        "updated": 0
-    }
+    stats = {"created": 0, "updated": 0}
     for game in game_list:
         provider_game, created = models.ProviderGame.objects.get_or_create(
-            slug=game["appid"],
-            provider=provider
+            slug=game["appid"], provider=provider
         )
         provider_game.name = game["name"]
         provider_game.internal_id = game["appid"]
@@ -39,6 +36,7 @@ def load_steam_games():
             stats["updated"] += 1
     LOGGER.info("Created: %s, Updated: %s", stats["created"], stats["updated"])
     save_action_log("load_steam_games", stats)
+    send_simple_message("Steam games loaded: %s" % stats)
     return stats
 
 
@@ -64,4 +62,5 @@ def match_steam_games():
         if similar_name_count > 1:
             stats["ambiguous_name"] += 1
     save_action_log("match_steam_games", stats)
+    send_simple_message("Steam games matched: %s" % stats)
     return stats

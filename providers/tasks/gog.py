@@ -6,6 +6,7 @@ from providers.gog import (
 )
 from common.models import save_action_log
 from lutrisweb.celery import app
+from games.webhooks import send_simple_message
 
 LOGGER = get_task_logger(__name__)
 
@@ -16,6 +17,7 @@ def load_gog_games():
     cache_gog_games()
     stats = load_games_from_gog_api()
     save_action_log("load_gog_games", stats)
+    send_simple_message("GOG games loaded: %s" % stats)
     return stats
 
 
@@ -26,4 +28,5 @@ def match_gog_games():
     save_action_log("match_gog_games", stats)
     stats = populate_gogid_and_gogslug()
     save_action_log("populate_gogid_and_gogslug", stats)
+    send_simple_message("GOG games matched: %s" % stats)
     return stats

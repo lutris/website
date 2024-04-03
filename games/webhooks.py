@@ -92,3 +92,13 @@ def notify_installer(installer):
         }]
     }
     return send_webhook_payload(hook_url, payload)
+
+
+def send_simple_message(text):
+    if not settings.DISCORD_INSTALLER_WEBHOOK_TOKEN:
+        return
+    hook_url = (
+        "https://discordapp.com/api/webhooks/"
+        f"{settings.DISCORD_INSTALLER_WEBHOOK_ID}/{settings.DISCORD_INSTALLER_WEBHOOK_TOKEN}"
+    )
+    return send_webhook_payload(hook_url, {"content": text})
