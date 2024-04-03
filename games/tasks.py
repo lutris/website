@@ -7,7 +7,7 @@ from django.db.models import Q
 
 from common.util import load_yaml, dump_yaml
 from common.models import KeyValueStore
-from runners.models import RunnerVersion
+from runners.models import RunnerVersion, Runner
 from games import models
 
 from lutrisweb.celery import app
@@ -248,6 +248,7 @@ def autofix_installers():
             installer.content = dump_yaml(script)
             installer.save()
             continue
+        steam_runner = Runner.objects.get(slug="steam")
         # Check if an installer looks like a Steam game one but uses another runner
         if (
             list(script.keys()) == ["game"]
@@ -255,6 +256,9 @@ def autofix_installers():
             and installer.runner.slug != "steam"
         ):
             stats["steam_wanabee"].add(installer.slug)
+            installer.runner = steam_runner
+            installer.save()
+
         if installer.runner.slug in OBSOLETE_RUNNERS:
             stats["obsolete_runners"] += 1
     return stats
