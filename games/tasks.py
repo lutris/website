@@ -110,28 +110,30 @@ VALID_INSTALLER_KEYS = (
     "installer",
     "files",
     "system",
+    "custom-name",
+    "requires",
+    "extends",
+    "variables",
+    "install_complete_text",
+    "require-libraries",  # ?? maybe not
+    "require-binaries",
+
     "wine",
     "dosbox",
     "libretro",
     "zdoom",
     "scummvm",
-    "custom-name",
     "winesteam",  # Deprecated
-    "requires",
-    "extends",
     "vice",
     "fsuae",
     "steam",  # But why
     "linux",
     "web",
-    "variables",
-    "install_complete_text",
+
     "main_file",
     "exe",
     "exe64",
-    "iso",
-    "require-libraries",  # ?? maybe not
-    "require-binaries",
+
     "gogid",  # Should be removed later
     "humblestoreid",  # Should be removed later
 )
@@ -238,6 +240,13 @@ def autofix_installers():
                 installer.content = dump_yaml(script)
                 installer.save()
             stats["exe64"] += 1
+        if "iso" in script.keys():
+            if "game" not in script:
+                script["game"] = {}
+                script["game"]["iso"] = script["iso"]
+                del(script["iso"])
+                installer.content = dump_yaml(script)
+                installer.save()
 
         # The script is at the wrong level
         if list(script.keys()) == ["script"]:
