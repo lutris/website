@@ -117,19 +117,16 @@ VALID_INSTALLER_KEYS = (
     "install_complete_text",
     "require-libraries",  # ?? maybe not
     "require-binaries",
-
     "wine",
     "dosbox",
     "libretro",
     "zdoom",
     "scummvm",
-    "winesteam",  # Deprecated
     "vice",
     "fsuae",
     "steam",  # But why
     "linux",
     "web",
-
     "gogid",  # Should be removed later
     "humblestoreid",  # Should be removed later
 )
@@ -208,6 +205,7 @@ def autofix_installers():
     stats["invalid_installers"] = set()
     stats["steam_wanabee"] = set()
     stats["exe_conflict"] = set()
+    stats["obsolete_runners"] = defaultdict(int)
 
     for installer in models.Installer.objects.all():
         stats["total"] += 1
@@ -223,7 +221,6 @@ def autofix_installers():
                     installer.content = dump_yaml(script)
                     installer.save()
 
-
         # Check if installer has exe64 support
         if "exe64" in script.keys():
             if "game" not in script:
@@ -231,18 +228,23 @@ def autofix_installers():
             script["game"]["exe"] = script["exe64"]
             if "exe" in script.keys():
                 script["game"]["launch_configs"] = []
-                script["game"]["launch_configs"].append({"exe": script["exe"], "name": "32 bit version"})
-                del(script["exe"])
-            del(script["exe64"])
+                script["game"]["launch_configs"].append(
+                    {"exe": script["exe"], "name": "32 bit version"}
+                )
+                del script["exe"]
+            del script["exe64"]
             installer.content = dump_yaml(script)
             installer.save()
             stats["exe64"] += 1
         if "exe" in script.keys() and "exe64" not in script.keys():
             if "game" not in script:
                 script["game"] = {}
-            if "exe" not in script["game"] or script["game"]["exe"].strip() == script["exe"].strip():
+            if (
+                "exe" not in script["game"]
+                or script["game"]["exe"].strip() == script["exe"].strip()
+            ):
                 script["game"]["exe"] = script["exe"]
-                del(script["exe"])
+                del script["exe"]
                 installer.content = dump_yaml(script)
                 installer.save()
                 stats["exe"] += 1
@@ -270,7 +272,7 @@ def autofix_installers():
             installer.content = dump_yaml(script)
             installer.save()
             continue
-        steam_runner = Runner.objects.get(slug="steam")
+
         # Check if an installer looks like a Steam game one but uses another runner
         if (
             list(script.keys()) == ["game"]
@@ -278,11 +280,21 @@ def autofix_installers():
             and installer.runner.slug != "steam"
         ):
             stats["steam_wanabee"].add(installer.slug)
-            installer.runner = steam_runner
+            installer.runner = Runner.objects.get(slug="steam")
             installer.save()
 
         if installer.runner.slug in OBSOLETE_RUNNERS:
-            stats["obsolete_runners"] += 1
+            stats["obsolete_runners"][installer.runner.slug] += 1
+            if installer.runner.slug == "browser":
+                if (
+                    set(script.keys()) in ({"game"}, {"game", "web"}, {"game", "custom-name"})
+                    and list(script["game"].keys()) == ["main_file"]
+                ):
+                    installer.runner = Runner.objects.get(slug="web")
+                    installer.save()
+                else:
+                    installer.delete()
+                    stats["deleted"] += 1
     return stats
 
 
