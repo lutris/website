@@ -229,21 +229,21 @@ def autofix_installers():
 
         # Check if installer has exe64 support
         if "exe64" in script.keys():
+            if "game" not in script:
+                script["game"] = {}
+            script["game"]["exe"] = script["exe64"]
             if "exe" in script.keys():
-                stats["exe64_exe"] += 1
-            else:
-                stats["exe64_only"] += 1
-                if "game" not in script:
-                    script["game"] = {}
-                script["game"]["exe"] = script["exe64"]
-                del(script["exe64"])
-                installer.content = dump_yaml(script)
-                installer.save()
+                script["game"]["launch_configs"] = []
+                script["game"]["launch_configs"].append({"exe": script["exe"], "name": "32 bit version"})
+                del(script["exe"])
+            del(script["exe64"])
+            installer.content = dump_yaml(script)
+            installer.save()
             stats["exe64"] += 1
         if "exe" in script.keys() and "exe64" not in script.keys():
             if "game" not in script:
                 script["game"] = {}
-            if "exe" not in script["game"] or script["game"]["exe"] != script["exe"]:
+            if "exe" not in script["game"] or script["game"]["exe"].strip() == script["exe"].strip():
                 script["game"]["exe"] = script["exe"]
                 del(script["exe"])
                 installer.content = dump_yaml(script)
