@@ -156,6 +156,11 @@ INVALID_INSTALLER_KEYS = (
     "overrides",
     "steamid",
     "Main_file",
+    "browser",
+    "requires-binaries",
+    "require_binaries",
+    "env",
+    "insert-disc",
 )
 
 INVALID_INSTALLER_KEYS_DELETE = (
