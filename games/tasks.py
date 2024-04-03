@@ -130,9 +130,6 @@ VALID_INSTALLER_KEYS = (
     "linux",
     "web",
 
-    "exe",
-    "exe64",
-
     "gogid",  # Should be removed later
     "humblestoreid",  # Should be removed later
 )
