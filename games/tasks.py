@@ -1,5 +1,6 @@
 # pylint:disable=no-member
 """Celery tasks for account related jobs"""
+
 from collections import defaultdict
 from celery.utils.log import get_task_logger
 from django.db.models import Q
@@ -10,19 +11,14 @@ from runners.models import RunnerVersion
 from games import models
 
 from lutrisweb.celery import app
+
 LOGGER = get_task_logger(__name__)
 
 
-OBSOLETE_RUNNERS = (
-    "winesteam",
-    "browser"
-)
+OBSOLETE_RUNNERS = ("winesteam", "browser")
 
 # Build used for League of Legends games
 CURRENT_LOL_BUILD = "wine-ge-lol-8-27-x86_64"
-
-
-
 
 
 # The following builds will be unpinned.
@@ -69,54 +65,99 @@ RUNNER_DEFAULTS = {
 # Fixes typos and non existent Winetricks verbs.
 # Empty string means the task will be removed
 WINETRICKS_FIXES = {
-    '--force': "",
-    '--unattended': "",
-    '-f': "",
-    'adobeair': "",
+    "--force": "",
+    "--unattended": "",
+    "-f": "",
+    "adobeair": "",
     "corfonts": "corefonts",
-    'ariel': "arial",
-    'd3d11_43': "d3dx11_43",
-    'd3d8=native': "",
-    'd3d9=native': "",
-    'd3dimm=native': "",
-    'd3dx11': "",
-    'd9vk': "",
-    'd9vk020': "",
-    'd9vk_master': "",
-    'ddr=gdi': "renderer=gdi",
-    'dotnet4': "dotnet40",
-    'dxvk_master': "",
-    'flash': "",
-    'fontsmooth-rgb': "fontsmooth=rgb",
-    'gdiplus=native': "gdiplus",
-    'gecko': "",
-    'glsl=disabled': "",
-    'jscript': "",
-    'mf_install_verb': "mf",
-    'mono': "",
-    'mscoree': "",
-    'multisampling=disabled': "",
-    'powershell20': "",
-    'python37': "python27",
-    'settings': "",
-    'vbrun2': "vb2run",
-    'vc2013': "vcrun2013",
-    'vcrun2005sp1': "vcrun2005",
-    'vcrun20xx': "vcrun2013",
-    'winegstreamer=builtin': "",
-    'wsh56': "wsh57",
-    'xact_jun2010': "xact",
-    'xinput1_3': "xinput"
+    "ariel": "arial",
+    "d3d11_43": "d3dx11_43",
+    "d3d8=native": "",
+    "d3d9=native": "",
+    "d3dimm=native": "",
+    "d3dx11": "",
+    "d9vk": "",
+    "d9vk020": "",
+    "d9vk_master": "",
+    "ddr=gdi": "renderer=gdi",
+    "dotnet4": "dotnet40",
+    "dxvk_master": "",
+    "flash": "",
+    "fontsmooth-rgb": "fontsmooth=rgb",
+    "gdiplus=native": "gdiplus",
+    "gecko": "",
+    "glsl=disabled": "",
+    "jscript": "",
+    "mf_install_verb": "mf",
+    "mono": "",
+    "mscoree": "",
+    "multisampling=disabled": "",
+    "powershell20": "",
+    "python37": "python27",
+    "settings": "",
+    "vbrun2": "vb2run",
+    "vc2013": "vcrun2013",
+    "vcrun2005sp1": "vcrun2005",
+    "vcrun20xx": "vcrun2013",
+    "winegstreamer=builtin": "",
+    "wsh56": "wsh57",
+    "xact_jun2010": "xact",
+    "xinput1_3": "xinput",
 }
+
+VALID_INSTALLER_KEYS = (
+    "game",
+    "installer",
+    "files",
+    "system",
+    "wine",
+    "dosbox",
+    "libretro",
+    "zdoom",
+    "scummvm",
+    "custom-name",
+    "winesteam",  # Deprecated
+    "requires",
+    "extends",
+    "vice",
+    "fsuae",
+    "steam",  # But why
+    "linux",
+    "web",
+    "variables",
+    "install_complete_text",
+    "main_file",
+    "exe",
+    "exe64",
+    "iso",
+    "require-libraries",  # ?? maybe not
+    "require-binaries",
+    "gogid",  # Should be removed later
+    "humblestoreid",  # Should be removed later
+)
+
+INVALID_INSTALLER_KEYS = (
+    "Requires",
+    "Scummvm",
+    "file",
+    "install",
+    "enable_flash",
+    "year",
+    "fifiles",
+)
+
+INVALID_INSTALLER_KEYS_DELETE = (
+    "Desktop",
+    "appid",
+    "custum-name",
+)
 
 
 @app.task
 def action_log_cleanup():
     """Remove zero value entries from log"""
     KeyValueStore.objects.filter(
-        Q(key="spam_avatar_deleted")
-        | Q(key="spam_website_deleted"),
-        value=0
+        Q(key="spam_avatar_deleted") | Q(key="spam_website_deleted"), value=0
     ).delete()
 
 
@@ -138,7 +179,9 @@ def populate_popularity():
 
 @app.task
 def auto_accept_installers():
-    for f in models.InstallerDraft.objects.filter(draft=False, user__username="vanstaveren"):
+    for f in models.InstallerDraft.objects.filter(
+        draft=False, user__username="vanstaveren"
+    ):
         f.accept()
 
 
@@ -146,13 +189,36 @@ def auto_accept_installers():
 def autofix_installers():
     """Automatically fix and cleanup installers"""
     stats = defaultdict(int)
+    stats["invalid_keys"] = defaultdict(int)
+    stats["invalid_installers"] = set()
 
     for installer in models.Installer.objects.all():
         stats["total"] += 1
         script = load_yaml(installer.content)
+        installer_keys = list(script.keys())
+        for key in installer_keys:
+            if key not in VALID_INSTALLER_KEYS:
+                stats["invalid_keys"][key] += 1
+                if key in INVALID_INSTALLER_KEYS:
+                    stats["invalid_installers"].add((installer.slug, key))
+                if key in INVALID_INSTALLER_KEYS_DELETE:
+                    del script[key]
+                    installer.content = dump_yaml(script)
+                    installer.save()
+
 
         # Check if installer has exe64 support
         if "exe64" in script.keys():
+            if "exe" in script.keys():
+                stats["exe64_exe"] += 1
+            else:
+                stats["exe64_only"] += 1
+                if "game" not in script:
+                    script["game"] = {}
+                script["game"]["exe"] = script["exe64"]
+                del(script["exe64"])
+                installer.content = dump_yaml(script)
+                installer.save()
             stats["exe64"] += 1
 
         # The script is at the wrong level
@@ -178,14 +244,15 @@ def autofix_installers():
             continue
         # Check if an installer looks like a Steam game one but uses another runner
         if (
-                list(script.keys()) == ["game"]
-                and list(script["game"].keys()) == ["appid"]
-                and installer.runner.slug != "steam"
-            ):
+            list(script.keys()) == ["game"]
+            and list(script["game"].keys()) == ["appid"]
+            and installer.runner.slug != "steam"
+        ):
             stats["steam_wanabee"] += 1
         if installer.runner.slug in OBSOLETE_RUNNERS:
             stats["obsolete_runners"] += 1
     return stats
+
 
 @app.task
 def command_stats():
@@ -246,7 +313,8 @@ def winetricks_stats():
                     stats["invalid_verbs"].add(app_name)
                     LOGGER.warning(
                         "Installer %s uses winetricks verb %s which is not valid",
-                        installer, app_name
+                        installer,
+                        app_name,
                     )
     return stats
 
@@ -328,6 +396,7 @@ def remove_defaults():
             installer.save()
     return stats
 
+
 @app.task
 def fix_and_unpin_wine_versions():
     """Removes Wine versions that reference non existant builds or the current default"""
@@ -335,7 +404,9 @@ def fix_and_unpin_wine_versions():
     stats = {
         "versions": defaultdict(list),
         "games": defaultdict(set),
-        "published_versions": {f"{v.version}-{v.architecture}": 0 for v in published_versions},
+        "published_versions": {
+            f"{v.version}-{v.architecture}": 0 for v in published_versions
+        },
         "updated_config": 0,
         "removed_config": 0,
         "lol_updates": 0,
@@ -354,8 +425,11 @@ def fix_and_unpin_wine_versions():
         stats["games"][installer.game.slug].add(version)
 
         # Handle current builds and non existant builds
-        if runner_config["version"] in CURRENT_BUILDS or runner_config["version"] not in stats["published_versions"]:
-            version =runner_config.pop("version")
+        if (
+            runner_config["version"] in CURRENT_BUILDS
+            or runner_config["version"] not in stats["published_versions"]
+        ):
+            version = runner_config.pop("version")
             LOGGER.info("Unpinning %s from %s", version, installer)
             changed = True
         elif runner_config["version"]:
@@ -392,17 +466,20 @@ def migrate_unzip_installers():
         "deleted": 0,
         "nofiles": 0,
     }
-    for installer in models.Installer.objects.filter(content__icontains="files/tools/unzip"):
+    for installer in models.Installer.objects.filter(
+        content__icontains="files/tools/unzip"
+    ):
         stats["total"] += 1
         script = load_yaml(installer.content)
         if "files" not in script:
             stats["nofiles"] += 1
             continue
         stepnames = [list(step.keys())[0] for step in script["installer"]]
-        if (
-            installer.version in ("GOG", "GOG.com")
-            and stepnames == ["extract", "execute", "rename"]
-        ):
+        if installer.version in ("GOG", "GOG.com") and stepnames == [
+            "extract",
+            "execute",
+            "rename",
+        ]:
             print("Deleting", installer)
             stats["deleted"] += 1
             installer.delete()
