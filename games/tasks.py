@@ -285,18 +285,25 @@ def autofix_installers():
 
         if installer.runner.slug in OBSOLETE_RUNNERS:
             stats["obsolete_runners"][installer.runner.slug] += 1
-            if installer.runner.slug == "browser":
-                if (
-                    set(script.keys()) in ({"game"}, {"game", "web"}, {"game", "custom-name"})
-                    and list(script["game"].keys()) == ["main_file"]
-                ):
-                    installer.runner = Runner.objects.get(slug="web")
-                    installer.save()
-                else:
-                    installer.delete()
-                    stats["deleted"] += 1
+            if installer.runner.slug == "winesteam":
+                cleanup_steam_script(script)
     return stats
 
+def cleanup_steam_script(script):
+    for key in ["arch", "prefix"]:
+        if key in script["game"]:
+            del script["game"][key]
+    new_installer = []
+    for task in script.get("installer", []):
+        if set(task.keys()) == {"task"}:
+            if task["task"]["name"] == "create_prefix":
+                print("skip")
+        new_installer.append(task)
+    if new_installer:
+        script["installer"] = new_installer
+    if script.get("system",{}).get("env") == {"DXVK_HUD": "0"}:
+        del script["system"]["env"]
+    print(dump_yaml(script))
 
 @app.task
 def command_stats():
