@@ -210,6 +210,7 @@ def autofix_installers():
     stats["invalid_keys"] = defaultdict(int)
     stats["invalid_installers"] = set()
     stats["steam_wanabee"] = set()
+    stats["exe_conflict"] = set()
 
     for installer in models.Installer.objects.all():
         stats["total"] += 1
@@ -239,13 +240,17 @@ def autofix_installers():
                 installer.content = dump_yaml(script)
                 installer.save()
             stats["exe64"] += 1
-        if "main_file" in script.keys():
+        if "exe" in script.keys() and "exe64" not in script.keys():
             if "game" not in script:
                 script["game"] = {}
-            script["game"]["main_file"] = script["main_file"]
-            del(script["main_file"])
-            installer.content = dump_yaml(script)
-            installer.save()
+            if "exe" not in script["game"] or script["game"]["exe"] != script["exe"]:
+                script["game"]["exe"] = script["exe"]
+                del(script["exe"])
+                installer.content = dump_yaml(script)
+                installer.save()
+                stats["exe"] += 1
+            else:
+                stats["exe_conflict"].add(installer.slug)
 
         # The script is at the wrong level
         if list(script.keys()) == ["script"]:
