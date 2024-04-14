@@ -130,6 +130,38 @@
               issues other Windows users are running into, in the Steam forums for
               example.
             </p>
+
+        <a class="title" href="#git-installers">
+          <h3 id="git-installers">Why aren't we using git to manage installers?</h3>
+        </a>
+        <p>
+          While it may seem tempting at first glance to think git is a good tool to
+          manage lutris install scripts, anyone who spends enough time learning about
+          the internals of the project will realize git isn't a good fit.
+        </p>
+        <p>
+          The integration of git with our current infrastructure would require an enormous
+          amount of work with little to no benefits. We would only use a very small subset of
+          git's features and we would still need to build tools on the website to transparently
+          interact with git because we don't want the knowledge of git to be a requirement for
+          our users to contribute scripts.
+        </p>
+        <p>
+          We already have a versionning system in our current database, it is simply not exposed to
+          end users. Creating an UI to make those available to all users would require way less
+          work than an integration with git.<br>
+          On top of that, the current system of scripts is not here to stay forever. Over time, we
+          will progressively migrate to installers dynamically generated through metadata. <br>
+          We already have a lot of automation to fix some aspects of user submitted scripts, which would only be
+          more difficult with a git backend.
+        </p>
+        <p>
+          We understand that some people are more confortable with git than they are with API design. But just
+          because all you have is a hammer, it doesn't mean everything is a nail. The "installers in git" request
+          mostly shows a refusal to follow the goals of our core team. We could use some help improving our
+          installer submission process and the tools for moderation. With some minimal amount of work, way less than
+          what is required to integrate with git, we could make our current system faster and more reliable.
+        </p>
     </article>
 
     <article>
@@ -147,8 +179,8 @@
         A requirement for runners is that we must have a redistributable build
         for Linux and some integration with the Lutris client written in Python
         or JSON.<br>
-        If the upstream project for a runner doesn't provide a Linux build then 
-        we likely have a script to compile it from source in our 
+        If the upstream project for a runner doesn't provide a Linux build then
+        we likely have a script to compile it from source in our
         <a href="https://github.com/lutris/buildbot/">buildbot repository</a>.
       </p>
     </article>
