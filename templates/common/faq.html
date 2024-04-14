@@ -59,22 +59,6 @@
         the client won't install other Gnome components.
       </p>
 
-      <a class="title" href="#ssl-issue">
-        <h3 id="ssl-issue">Runners and other lutris provided files fail to download</h3>
-      </a>
-      <p>
-        There seems to be some issues with CloudFlare and some ISPs (notably in
-        Turkey) when using older versions of libssl.<br>
-        <br>
-        A quick workaround so is to run lutris with <code>env LC_ALL=C
-          lutris</code> but a more reliable solution is to update your version of libssl.
-        The following repositories provide libssl 1.1.1.<br>
-        On Ubuntu 18.04 based systems:<br>
-        <code>sudo add-apt-repository ppa:mgrocock/openssl</code><br>
-        On Ubuntu 16.04 based systems:<br>
-        <code>sudo add-apt-repository ppa:carsten-uppenbrink-net/openssl</code>
-      </p>
-
       <a class="title" href="#game-dev">
         <h3 id="game-dev">I'm a game developer, can I publish my game on Lutris?</h3>
       </a>
@@ -197,21 +181,6 @@
         dependencies are present on the system and will produce better results
         when using Lutris builds.
       </p>
-      <a class="title" href="#wine-patches">
-        <h3 id="wine-patches">Some game requires a custom patch to work properly.</h3>
-      </a>
-      <p>
-        Lutris provides custom builds of wine to increase the number of playable games.
-        If there are patches out there that makes some game playable and we do
-        not distribute them, you can ask us to build it.
-      </p>
-        <p>
-          In order to build a patched version of Wine, we currently need a git
-          repository containing the fully patched source tree of Wine. If your
-          patches rely on Wine Staging, make sure to apply those as well.
-          Once you have patched Wine you can push it to a git repository of your
-          choice and notify the moderation team so we can publish the build.
-        </p>
       <a class="title" href="#wine-versions">
         <h3 id="wine-versions">How do I change the Wine version used in a game?</h3>
       </a>
@@ -220,36 +189,6 @@
         entry on the sidebar, you can right click on it then select "Manage
         versions". From there you can install or remove any Wine build we
         provide. The wine versions are downloaded to <code>~/.local/share/lutris/runners/wine/</code>
-      </p>
-      <a class="title" href="#wine-res">
-        <h3 id="wine-res">The resolution is messed up how can I fix that?</h3>
-      </a>
-      <p>
-        Resolution switching for Wine games heavily depends on your hardware
-        and your desktop environment as well as the game itself.
-      </p>
-        <p>
-          If you are experiencing issues, try using a virtual desktop in the Wine
-          runner options then start the game and set it to use your monitor's
-          native resolution. Once the game is using your native resolution, you
-          should be able to turn off the virtual desktop.
-        </p>
-      <a class="title" href="#winemenubuilder">
-        <h3 id="winemenubuilder">I get winemenubuilder.exe errors in the console output</h3>
-      </a>
-      <p>
-        You shouldn't worry about those. We explicitly disable winemenubuilder
-        at runtime so it doesn't mess with your Linux desktop's file type
-        associations. Any error related to winemenubuilder can be safely
-        ignored.
-      </p>
-      <a class="title" href="#overwatch">
-        <h3 id="overwatch">I'm just here for Overwatch, don't care about anything else</h3>
-      </a>
-      <p>
-        Please refer to the following article <a
-          href="https://github.com/lutris/docs/blob/master/Overwatch.md">in the
-          documentation on GitHub</a>.
       </p>
     </article>
   </div>
