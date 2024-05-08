@@ -570,6 +570,8 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         for slug in client_library:
             client_games = client_library[slug]
             for client_game in client_games:
+                if "runner" not in client_game:  # Skip invalid entries, I don't even know how there are created.
+                    continue
                 client_key = (
                     client_game["slug"],
                     client_game["runner"] or "",
