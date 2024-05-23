@@ -92,7 +92,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         """ModelForm configuration"""
         model = User
-        fields = ("website", "avatar", "email")
+        fields = ("email", )
 
     def save(self, commit=True):
         if "email" in self.changed_data:

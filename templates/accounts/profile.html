@@ -35,11 +35,6 @@
     {% endif %}
   {% endif %}
   <br/>
-  {% if user.website %}
-  <strong>Website:</strong>
-  <a href="{{user.website}}">{{user.website}}</a><br/>
-  {% endif %}
-  <br/>
   <p>
     You can log out from every computer you have Lutris installed on by regenerating a new authentication token.
     <a href="{% url 'clear_auth_token' %}"
