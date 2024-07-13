@@ -1,6 +1,7 @@
 """Celery tasks for user management"""
-import logging
 
+import logging
+import json
 from django.db import IntegrityError
 
 import games.models
@@ -27,23 +28,23 @@ def sync_steam_library(user_id):
         LOGGER.info("Steam user %s has no steam games", user.username)
         return
     for game in steam_games:
-        if not game['img_icon_url']:
-            LOGGER.info("Game %s has no icon", game['name'])
+        if not game["img_icon_url"]:
+            LOGGER.info("Game %s has no icon", game["name"])
             continue
         game_count += 1
         try:
-            steam_game = games.models.Game.objects.get(steamid=game['appid'])
+            steam_game = games.models.Game.objects.get(steamid=game["appid"])
         except games.models.Game.MultipleObjectsReturned:
-            LOGGER.error("Multiple games with appid '%s'", game['appid'])
+            LOGGER.error("Multiple games with appid '%s'", game["appid"])
             continue
         except games.models.Game.DoesNotExist:
-            LOGGER.info("No game with steam id %s", game['appid'])
+            LOGGER.info("No game with steam id %s", game["appid"])
             try:
                 steam_game = games.models.Game.objects.get(
-                    slug=slugify(game['name'])[:50]
+                    slug=slugify(game["name"])[:50]
                 )
                 if not steam_game.steamid:
-                    steam_game.steamid = game['appid']
+                    steam_game.steamid = game["appid"]
                     steam_game.save()
             except games.models.Game.DoesNotExist:
                 steam_game = create_game(game)
@@ -65,12 +66,24 @@ def daily_mod_mail():
 @app.task
 def clear_spammers():
     """Delete spam accounts"""
-    spam_website_deleted = spam_control.clear_users(spam_control.get_no_games_with_website())
-    if spam_website_deleted:
-        save_action_log("spam_website_deleted", spam_website_deleted)
+    spam_website_deleted = spam_control.clear_users(
+        spam_control.get_no_games_with_website()
+    )
     spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
-    if spam_avatar_deleted:
-        save_action_log("spam_avatar_deleted", spam_avatar_deleted)
+    spam_example_com_deleted = spam_control.clear_users(
+        spam_control.get_example_com_users()
+    )
+    if spam_website_deleted or spam_avatar_deleted or spam_example_com_deleted:
+        save_action_log(
+            "spam_accounts",
+            json.dumps(
+                {
+                    "spam_website": spam_website_deleted,
+                    "spam_avatar": spam_avatar_deleted,
+                    "spam_example_com": spam_example_com_deleted,
+                }
+            ),
+        )
 
 
 def deduplicate_library(self, username):
@@ -87,9 +100,19 @@ def deduplicate_library(self, username):
             continue
         for game in _games:
             if not game_info:
-                game_info = {"slug": game.slug, "runner": game.runner,  "platform": game.platform, "lastplayed": game.lastplayed}
+                game_info = {
+                    "slug": game.slug,
+                    "runner": game.runner,
+                    "platform": game.platform,
+                    "lastplayed": game.lastplayed,
+                }
             else:
-                other_game = {"slug": game.slug, "runner": game.runner, "platform": game.platform, "lastplayed": game.lastplayed}
+                other_game = {
+                    "slug": game.slug,
+                    "runner": game.runner,
+                    "platform": game.platform,
+                    "lastplayed": game.lastplayed,
+                }
             if game_info == other_game:
                 print("delete", game)
                 game.delete()
