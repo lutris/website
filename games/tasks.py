@@ -17,9 +17,6 @@ LOGGER = get_task_logger(__name__)
 
 OBSOLETE_RUNNERS = ("winesteam", "browser")
 
-# Build used for League of Legends games
-CURRENT_LOL_BUILD = "wine-ge-lol-8-27-x86_64"
-
 
 # The following builds will be unpinned.
 CURRENT_BUILDS = (
@@ -289,6 +286,7 @@ def autofix_installers():
                 cleanup_steam_script(script)
     return stats
 
+
 def cleanup_steam_script(script):
     for key in ["arch", "prefix"]:
         if key in script["game"]:
@@ -301,9 +299,10 @@ def cleanup_steam_script(script):
         new_installer.append(task)
     if new_installer:
         script["installer"] = new_installer
-    if script.get("system",{}).get("env") == {"DXVK_HUD": "0"}:
+    if script.get("system", {}).get("env") == {"DXVK_HUD": "0"}:
         del script["system"]["env"]
     print(dump_yaml(script))
+
 
 @app.task
 def command_stats():
@@ -460,7 +459,6 @@ def fix_and_unpin_wine_versions():
         },
         "updated_config": 0,
         "removed_config": 0,
-        "lol_updates": 0,
     }
     for installer in models.Installer.objects.all():
         script = load_yaml(installer.content)
@@ -494,16 +492,6 @@ def fix_and_unpin_wine_versions():
             else:
                 stats["removed_config"] += 1
                 script.pop(installer.runner.slug)
-            installer.content = dump_yaml(script)
-            installer.save()
-
-    # Update League of Legends installers
-    for installer in models.Installer.objects.filter(game__slug="league-of-legends"):
-        script = load_yaml(installer.content)
-        if "wine" not in script:
-            script["wine"] = {}
-        if script["wine"].get("version") != CURRENT_LOL_BUILD:
-            script["wine"]["version"] = CURRENT_LOL_BUILD
             installer.content = dump_yaml(script)
             installer.save()
     return stats
