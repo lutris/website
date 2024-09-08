@@ -525,3 +525,16 @@ def migrate_unzip_installers():
             continue
         stats["keep"] += 1
     return stats
+
+
+@app.task
+def remove_empty_game_changes():
+    """Delete game changes with no actual change"""
+    deleted_changes = 0
+    for change_suggestion in models.Game.objects.filter(change_for__isnull=False):
+        diff = change_suggestion.get_changes()
+        # The diff is empty, can be deleted
+        if not diff:
+            change_suggestion.delete()
+            deleted_changes += 1
+    return deleted_changes

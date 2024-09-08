@@ -386,20 +386,13 @@ class Game(models.Model):
                     "[{0}]".format(str(x)) for x in list(new_value.all())
                 )
             if entry == "description":
-                print(f'"{len(old_value)}"')
-                print(f'"{len(new_value)}"')
-                print(old_value == new_value)
                 old_comparator = clean_string(old_value)
-
                 new_comparator = clean_string(new_value)
-                print(f'"{len(old_comparator)}"')
-                print(f'"{len(new_comparator)}"')
             else:
                 old_comparator = old_value
                 new_comparator = new_value
 
             if old_comparator != new_comparator:
-                print(entry)
                 changes.append((entry, old_value, new_value))
         return changes
 
