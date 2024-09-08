@@ -1,4 +1,5 @@
 """Models for main lutris app"""
+
 # pylint: disable=no-member,too-few-public-methods,too-many-lines
 import os
 import shutil
@@ -37,6 +38,9 @@ DEFAULT_INSTALLER = {
 }
 
 
+def clean_string(string):
+    return string.replace("\r\n", "\n").strip()
+
 
 class Company(models.Model):
     """Gaming company"""
@@ -54,13 +58,13 @@ class Company(models.Model):
 
     def get_absolute_url(self):
         """Return URL to a company's games"""
-        return reverse("games_by_company", kwargs={'company': self.pk})
+        return reverse("games_by_company", kwargs={"company": self.pk})
 
     def __str__(self):
         return str(self.name)
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+        self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         if self.name:
             self.slug = slugify(self.name)
@@ -87,13 +91,14 @@ class Genre(models.Model):
 
     class Meta:
         """Model configuration"""
+
         ordering = ["name"]
 
     def __str__(self):
         return str(self.name)
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+        self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -115,6 +120,7 @@ class GameManager(models.Manager):
 
     class Meta:
         """Model configuration"""
+
         ordering = ["name"]
 
     def published(self):
@@ -170,8 +176,15 @@ class Game(models.Model):
 
     # These model fields are editable by the user
     TRACKED_FIELDS = [
-        "name", "year", "platforms", "genres", "publisher", "developer",
-        "website", "description", "title_logo"
+        "name",
+        "year",
+        "platforms",
+        "genres",
+        "publisher",
+        "developer",
+        "website",
+        "description",
+        "title_logo",
     ]
 
     ICON_PATH = os.path.join(settings.MEDIA_ROOT, "game-icons/128")
@@ -210,7 +223,9 @@ class Game(models.Model):
     humblestoreid = models.CharField(max_length=200, blank=True)
     flags = BitField(flags=GAME_FLAGS)
     popularity = models.IntegerField(default=0)
-    provider_games = models.ManyToManyField(ProviderGame, related_name="games", blank=True)
+    provider_games = models.ManyToManyField(
+        ProviderGame, related_name="games", blank=True
+    )
 
     # Indicates whether this data row is a changeset for another data row.
     # If so, this attribute is not NULL and the value is the ID of the
@@ -231,6 +246,7 @@ class Game(models.Model):
 
     class Meta:
         """Model configuration"""
+
         ordering = ["name"]
         permissions = (("can_publish_game", "Can publish game"),)
 
@@ -254,9 +270,9 @@ class Game(models.Model):
         """Humble Bundle ID, different from humblestoreid (store page ID for Humble Bundle)
         This should really get deprecated.
         """
-        _slugs = self.provider_games.filter(
-            provider__name="humblebundle"
-        ).values_list("slug", flat=True)
+        _slugs = self.provider_games.filter(provider__name="humblebundle").values_list(
+            "slug", flat=True
+        )
         if _slugs:
             return _slugs[0]
         return ""
@@ -335,7 +351,9 @@ class Game(models.Model):
         if "mame" in provider_games:
             romname = provider_games["mame"].slug
             links["gamesdatabase"] = f"https://www.gamesdatabase.org/mame-rom/{romname}"
-            links["arcadedatabase"] = f"http://adb.arcadeitalia.net/dettaglio_mame.php?game_name={romname}"
+            links["arcadedatabase"] = (
+                f"http://adb.arcadeitalia.net/dettaglio_mame.php?game_name={romname}"
+            )
         return links
 
     def get_change_model(self):
@@ -367,7 +385,21 @@ class Game(models.Model):
                 new_value = ", ".join(
                     "[{0}]".format(str(x)) for x in list(new_value.all())
                 )
-            if old_value != new_value:
+            if entry == "description":
+                print(f'"{len(old_value)}"')
+                print(f'"{len(new_value)}"')
+                print(old_value == new_value)
+                old_comparator = clean_string(old_value)
+
+                new_comparator = clean_string(new_value)
+                print(f'"{len(old_comparator)}"')
+                print(f'"{len(new_comparator)}"')
+            else:
+                old_comparator = old_value
+                new_comparator = new_value
+
+            if old_comparator != new_comparator:
+                print(entry)
                 changes.append((entry, old_value, new_value))
         return changes
 
@@ -405,11 +437,7 @@ class Game(models.Model):
             alias.save()
 
         # Create a new alias from the other game
-        GameAlias.objects.create(
-            game=self,
-            name=other_game.name,
-            slug=other_game.slug
-        )
+        GameAlias.objects.create(game=self, name=other_game.name, slug=other_game.slug)
 
         # Merge genres
         for genre in other_game.genres.all():
@@ -429,7 +457,6 @@ class Game(models.Model):
             except IntegrityError:
                 # This provider game already exist on this game
                 pass
-
 
         # Merge Steam ID if none is present
         if not self.steamid:
@@ -481,7 +508,9 @@ class Game(models.Model):
 
     def has_auto_installers(self):
         """Return whether this game has auto-generated installers"""
-        platform_has_autoinstaller = self.platforms.filter(default_installer__isnull=False).exists()
+        platform_has_autoinstaller = self.platforms.filter(
+            default_installer__isnull=False
+        ).exists()
         if platform_has_autoinstaller:
             return True
         return self.provider_games.filter(
@@ -514,10 +543,7 @@ class Game(models.Model):
             os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
-                self.icon,
-                settings.ICON_SIZE,
-                crop="center",
-                format="PNG"
+                self.icon, settings.ICON_SIZE, crop="center", format="PNG"
             )
         except AttributeError as ex:
             LOGGER.error("Icon failed for %s: %s", self, ex)
@@ -531,9 +557,7 @@ class Game(models.Model):
             os.unlink(dest_file)
         try:
             thumbnail = get_thumbnail(
-                self.title_logo,
-                settings.BANNER_SIZE,
-                crop="center"
+                self.title_logo, settings.BANNER_SIZE, crop="center"
             )
         except AttributeError as ex:
             LOGGER.error("Banner failed for %s: %s", self, ex)
@@ -564,12 +588,10 @@ class Game(models.Model):
         """Sets the game logo from the data retrieved from GOG"""
         if self.title_logo or not self.gogid:
             return
-        self.title_logo = ContentFile(
-            gog.get_logo(gog_game), "gog-%s.jpg" % self.gogid
-        )
+        self.title_logo = ContentFile(gog.get_logo(gog_game), "gog-%s.jpg" % self.gogid)
 
     def steam_support(self):
-        """ Return the platform supported by Steam """
+        """Return the platform supported by Steam"""
         if not self.steamid:
             return False
         platforms = [p.slug for p in self.platforms.all()]
@@ -584,7 +606,9 @@ class Game(models.Model):
         auto_installers = []
         provider_with_autoinstallers = ["gog", "steam", "humblebundle"]
         provider_names = {
-            "gog": "GOG", "steam": "Steam", "humblebundle": "Humble Bundle"
+            "gog": "GOG",
+            "steam": "Steam",
+            "humblebundle": "Humble Bundle",
         }
         for platform in self.platforms.all():
             if platform.default_installer:
@@ -598,25 +622,33 @@ class Game(models.Model):
                 installer["published"] = True
                 installer["auto"] = True
                 auto_installers.append(installer)
-        for provider_game in self.provider_games.filter(provider__name__in=provider_with_autoinstallers):
+        for provider_game in self.provider_games.filter(
+            provider__name__in=provider_with_autoinstallers
+        ):
             installer = {
                 "name": self.name,
                 "game_slug": self.slug,
                 "runner": "auto",
                 "version": provider_names[provider_game.provider.name] + "(Auto)",
-                "slug": "%s:%s" % (provider_game.provider.name, provider_game.internal_id),
+                "slug": "%s:%s"
+                % (provider_game.provider.name, provider_game.internal_id),
                 "description": (
                     "Make sure you have connected your %s account in Lutris and that you own this game."
-                     % provider_names[provider_game.provider.name]
+                    % provider_names[provider_game.provider.name]
                 ),
                 "published": True,
-                "auto": True
+                "auto": True,
             }
             auto_installers.append(installer)
         return auto_installers
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None, skip_precaching=False
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+        skip_precaching=False,
     ):
         # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
@@ -635,9 +667,9 @@ class Game(models.Model):
             self.precache_media()
 
 
-
 class GameAlias(models.Model):
     """Alternate names and spellings a game might be known as"""
+
     game = models.ForeignKey(Game, related_name="aliases", on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255)
     name = models.CharField(max_length=255)
@@ -658,11 +690,17 @@ class ScreenshotManager(models.Manager):
 
     def unpublished(self):
         """Return unpublished screenshots"""
-        return self.get_queryset().prefetch_related('game', 'uploaded_by').order_by("uploaded_at").filter(published=False)
+        return (
+            self.get_queryset()
+            .prefetch_related("game", "uploaded_by")
+            .order_by("uploaded_at")
+            .filter(published=False)
+        )
 
 
 class Screenshot(models.Model):
     """Screenshots for games"""
+
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="games/screenshots")
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -687,10 +725,10 @@ class InstallerHistoryManager(models.Manager):
             created_to (timestamp): history period end
         """
         filter_ = {}
-        if 'created_from' in filter:
-            filter_['created_at__gte'] = filter['created_from']
-        if 'created_to' in filter:
-            filter_['created_at__lt'] = filter['created_to']
+        if "created_from" in filter:
+            filter_["created_at__gte"] = filter["created_from"]
+        if "created_to" in filter:
+            filter_["created_at__lt"] = filter["created_to"]
         return self.get_queryset().filter(**filter_)
 
 
@@ -708,17 +746,17 @@ class InstallerManager(models.Manager):
             updated_to (timestamp): installer modification period end
         """
         filter_ = {}
-        for f in {'published', 'draft'}:
+        for f in {"published", "draft"}:
             if f in filter:
                 filter_[f] = filter[f]
-        if 'created_from' in filter:
-            filter_['created_at__gte'] = filter['created_from']
-        if 'created_to' in filter:
-            filter_['created_at__lt'] = filter['created_to']
-        if 'updated_from' in filter:
-            filter_['updated_at__gte'] = filter['updated_from']
-        if 'updated_to' in filter:
-            filter_['updated_at__lt'] = filter['updated_to']
+        if "created_from" in filter:
+            filter_["created_at__gte"] = filter["created_from"]
+        if "created_to" in filter:
+            filter_["created_at__lt"] = filter["created_to"]
+        if "updated_from" in filter:
+            filter_["updated_at__gte"] = filter["updated_from"]
+        if "updated_to" in filter:
+            filter_["updated_at__lt"] = filter["updated_to"]
         return self.get_queryset().filter(**filter_)
 
     def _fuzzy_search(self, slug, return_models=False):
@@ -727,7 +765,6 @@ class InstallerManager(models.Manager):
             installer = self.get_queryset().get(slug=slug)
             return [installer]
         except ObjectDoesNotExist:
-
             # Try getting installers by game name
             try:
                 game = Game.objects.get(slug=slug)
@@ -830,6 +867,7 @@ class BaseInstaller(models.Model):
 
     class Meta:
         """Model configuration"""
+
         abstract = True
 
     @property
@@ -849,10 +887,20 @@ class BaseInstaller(models.Model):
             script_content = load_yaml(self.content) or {}
         except (yaml.parser.ParserError, yaml.scanner.ScannerError) as ex:
             if self.id:
-                LOGGER.error("Installer for %s %s contains errors (%s). Deleting immediatly.", self.game, self, ex)
+                LOGGER.error(
+                    "Installer for %s %s contains errors (%s). Deleting immediatly.",
+                    self.game,
+                    self,
+                    ex,
+                )
                 self.delete()
             else:
-                LOGGER.error("Non finalized script %s %s contains errors: %s", self.game, self, ex)
+                LOGGER.error(
+                    "Non finalized script %s %s contains errors: %s",
+                    self.game,
+                    self,
+                    ex,
+                )
             return {}
 
         # Allow pasting raw install scripts (which are served as lists)
@@ -911,6 +959,7 @@ class BaseInstaller(models.Model):
 
 class Installer(BaseInstaller):
     """Game installer model"""
+
     game = models.ForeignKey(Game, related_name="installers", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
@@ -936,7 +985,7 @@ class Installer(BaseInstaller):
         on_delete=models.SET_NULL,
         related_name="maintainer",
         blank=True,
-        null=True
+        null=True,
     )
     draft = models.BooleanField(default=False)
     rating = models.CharField(max_length=24, choices=(("0", "Do not use"),), blank=True)
@@ -960,7 +1009,8 @@ class Installer(BaseInstaller):
 
     class Meta:
         """Model configuration"""
-        ordering = ("version", )
+
+        ordering = ("version",)
 
     def __str__(self):
         return self.slug
@@ -990,7 +1040,7 @@ class Installer(BaseInstaller):
         return settings.ROOT_URL + reverse("edit_installer", kwargs={"slug": self.slug})
 
     def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
+        self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         self.slug = self.build_slug(self.version)
         return super(Installer, self).save(
@@ -1005,7 +1055,10 @@ class InstallerHistory(BaseInstaller):
     """Past versions of installers
     This is a simplified version of the model
     """
-    installer = models.ForeignKey(Installer, related_name="past_versions", on_delete=models.CASCADE)
+
+    installer = models.ForeignKey(
+        Installer, related_name="past_versions", on_delete=models.CASCADE
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE)
     version = models.CharField(max_length=32)
@@ -1027,24 +1080,21 @@ class InstallerHistory(BaseInstaller):
             version=installer.version,
             description=installer.description,
             notes=installer.notes,
-            content=installer.content
+            content=installer.content,
         )
 
     def __str__(self):
         return "Snapshot of installer %s at %s" % (self.installer, self.created_at)
 
+
 class InstallerDraft(BaseInstaller):
     """Model for user drafts"""
+
     game = models.ForeignKey(
-        Game,
-        related_name="draft_installers",
-        on_delete=models.CASCADE
+        Game, related_name="draft_installers", on_delete=models.CASCADE
     )
     base_installer = models.ForeignKey(
-        Installer,
-        related_name="drafts",
-        on_delete=models.CASCADE,
-        null=True
+        Installer, related_name="drafts", on_delete=models.CASCADE, null=True
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     runner = models.ForeignKey("runners.Runner", on_delete=models.CASCADE, null=True)
@@ -1113,12 +1163,14 @@ class InstallerDraft(BaseInstaller):
 
 class BaseIssue(models.Model):
     """Abstract class for issue-like models"""
+
     submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submitted_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
     class Meta:
         """This is an abstract model"""
+
         abstract = True
 
     def __str__(self):
@@ -1152,18 +1204,24 @@ class InstallerIssueReply(BaseIssue):
 
 class GameLibrary(models.Model):
     """Model to store user libraries"""
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         """Model configuration"""
+
         verbose_name_plural = "game libraries"
 
     def __str__(self):
         return "%s's library" % self.user.username
 
+
 class LibraryCategory(models.Model):
     """Model to represent a user defined category"""
-    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE, related_name="categories")
+
+    gamelibrary = models.ForeignKey(
+        GameLibrary, on_delete=models.CASCADE, related_name="categories"
+    )
     name = models.CharField(max_length=256)
 
 
@@ -1171,7 +1229,9 @@ class LibraryGame(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=256, null=True)
     slug = models.CharField(max_length=256, null=True)
-    gamelibrary = models.ForeignKey(GameLibrary, on_delete=models.CASCADE, related_name="games")
+    gamelibrary = models.ForeignKey(
+        GameLibrary, on_delete=models.CASCADE, related_name="games"
+    )
     playtime = models.FloatField(default=0, null=True)
     runner = models.CharField(max_length=64, null=True)
     platform = models.CharField(max_length=255, null=True)
@@ -1218,32 +1278,31 @@ class LibraryGame(models.Model):
 
     class Meta:
         """Model configuration"""
-        ordering = ("slug", )
+
+        ordering = ("slug",)
+
 
 class StoreLibrary(models.Model):
     """Model to keep track of a user's library for a given store"""
+
     store_name = models.CharField(max_length=64)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class GameSubmission(models.Model):
     """User submitted game"""
+
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="submissions",
-        on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, related_name="submissions", on_delete=models.CASCADE
     )
-    game = models.ForeignKey(
-        Game,
-        related_name="submissions",
-        on_delete=models.CASCADE
-    )
+    game = models.ForeignKey(Game, related_name="submissions", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
 
     class Meta:
         """Model configuration"""
+
         verbose_name = "User submitted game"
 
     @property
@@ -1268,17 +1327,18 @@ class GameSubmission(models.Model):
 
 class GameLink(models.Model):
     """Web links associated to a game"""
+
     WEBSITE_CHOICES = (
-        ('battlenet', 'Battle.net'),
-        ('github', 'Github'),
-        ('isthereanydeal', 'IsThereAnyDeal'),
-        ('lemonamiga', 'Lemon Amiga'),
-        ('mobygames', 'MobyGames'),
-        ('origin', 'Origin'),
-        ('pcgamingwiki', 'PCGamingWiki'),
-        ('ubisoft', 'Ubisoft'),
-        ('wikipedia', 'Wikipedia'),
-        ('winehq', 'WineHQ AppDB'),
+        ("battlenet", "Battle.net"),
+        ("github", "Github"),
+        ("isthereanydeal", "IsThereAnyDeal"),
+        ("lemonamiga", "Lemon Amiga"),
+        ("mobygames", "MobyGames"),
+        ("origin", "Origin"),
+        ("pcgamingwiki", "PCGamingWiki"),
+        ("ubisoft", "Ubisoft"),
+        ("wikipedia", "Wikipedia"),
+        ("winehq", "WineHQ AppDB"),
     )
     game = models.ForeignKey(Game, related_name="links", on_delete=models.CASCADE)
     website = models.CharField(blank=True, choices=WEBSITE_CHOICES, max_length=32)
@@ -1291,8 +1351,10 @@ class GameLink(models.Model):
         verbose_name = "External link"
         ordering = ["website"]
 
+
 class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attributes
     """Auto-generated installer"""
+
     published = True
     draft = False
     auto = True
@@ -1323,23 +1385,31 @@ class AutoInstaller(BaseInstaller):  # pylint: disable=too-many-instance-attribu
 
 class Rating(models.Model):
     """Model to store installer ratings"""
-    installer = models.ForeignKey(Installer, on_delete=models.CASCADE, related_name="ratings")
+
+    installer = models.ForeignKey(
+        Installer, on_delete=models.CASCADE, related_name="ratings"
+    )
     playable = models.BooleanField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s: %s" % ("PLAYABLE" if self.playable else "NON PLAYABLE", self.installer.slug)
+        return "%s: %s" % (
+            "PLAYABLE" if self.playable else "NON PLAYABLE",
+            self.installer.slug,
+        )
 
 
 class Quirk(models.Model):
     """Model to store quirks and caveats for ratings"""
+
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name="quirks")
     value = models.CharField(max_length=256)
 
 
 class ShaderCache(models.Model):
     """Model to reference shader cache locations"""
+
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="shaders")
     updated_at = models.DateTimeField(auto_now=True)
     url = models.CharField(max_length=256)
