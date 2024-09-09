@@ -1,4 +1,5 @@
 """Forms for the main app"""
+
 # pylint: disable=missing-docstring,too-few-public-methods
 import io
 from datetime import date
@@ -14,7 +15,8 @@ from django.utils.safestring import mark_safe
 from django_select2.forms import (
     ModelSelect2Widget,
     Select2MultipleWidget,
-    Select2Widget, ModelSelect2MultipleWidget,
+    Select2Widget,
+    ModelSelect2MultipleWidget,
 )
 
 from bitfield.forms import BitFieldCheckboxSelectMultiple
@@ -25,8 +27,8 @@ from games.util.installer import validate_installer
 
 LOGGER = logging.getLogger(__name__)
 
-class AutoSlugForm(forms.ModelForm):
 
+class AutoSlugForm(forms.ModelForm):
     class Meta:
         # Override this in subclasses. Using a real model here not to confuse pylint
         model = models.Game
@@ -47,8 +49,8 @@ class AutoSlugForm(forms.ModelForm):
 
 
 class GameForm(forms.ModelForm):
-
     crop_data = forms.CharField(required=False, widget=forms.HiddenInput())
+
     class Meta:
         model = models.Game
         fields = (
@@ -68,34 +70,29 @@ class GameForm(forms.ModelForm):
             "platforms": Select2MultipleWidget(attrs={"class": "form-control select2"}),
             "genres": Select2MultipleWidget(attrs={"class": "form-control"}),
             "developer": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"],
-                attrs={"class": "form-control"}
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"class": "form-control"},
             ),
             "publisher": ModelSelect2Widget(
-                model=models.Company, search_fields=["name__icontains"],
-                attrs={"class": "form-control"}
+                model=models.Company,
+                search_fields=["name__icontains"],
+                attrs={"class": "form-control"},
             ),
             "website": forms.TextInput(attrs={"class": "select2-lookalike"}),
-            "description": forms.Textarea(attrs={"class": "select2-lookalike"})
+            "description": forms.Textarea(attrs={"class": "select2-lookalike"}),
         }
 
     def clean_name(self):
         name = self.cleaned_data["name"]
         slug = slugify(name)
+        if name == name.lower() and name.endswith("game"):
+            raise forms.ValidationError("Illegal name, do not submit this game.")
         try:
-            game = models.Game.objects.get(slug=slug)
+            models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
             return name
-        if game.is_public:
-            msg = (
-                f"This game is <a href='/games/{slug}'>already in our database</a>."
-            )
-        else:
-            msg = (
-                f"This game has <a href='/games/{slug}'>already been "
-                "submitted</a>, you're welcome to nag us so we "
-                "publish it faster."
-            )
+        msg = f"This game is <a href='/games/{slug}'>already in our database</a>."
         raise forms.ValidationError(mark_safe(msg))
 
     def process_banner(self, image_data, ratio):
@@ -107,13 +104,14 @@ class GameForm(forms.ModelForm):
         image = image.crop(ratio)
         image = image.resize((184, 69), Image.LANCZOS)
         image_io = io.BytesIO()
-        image.save(image_io, 'JPEG')
+        image.save(image_io, "JPEG")
         return InMemoryUploadedFile(
             image_io,
-            'title_logo',
+            "title_logo",
             image_data.name,
             image_data.content_type,
-            None, None,
+            None,
+            None,
         )
 
     def clean(self):
@@ -124,14 +122,18 @@ class GameForm(forms.ModelForm):
             crop_data = json.loads(crop_data)
             crop_points = [int(p) for p in crop_data["points"]]
             try:
-                self.cleaned_data["title_logo"] = self.process_banner(title_logo, crop_points)
+                self.cleaned_data["title_logo"] = self.process_banner(
+                    title_logo, crop_points
+                )
             except AttributeError as ex:
                 LOGGER.warning(ex)
                 raise forms.ValidationError("This is not a valid image format: %s" % ex)
         return self.cleaned_data
 
+
 class GameEditForm(GameForm):
     """Form to suggest changes for games"""
+
     crop_data = forms.CharField(required=False, widget=forms.HiddenInput())
     reason = forms.CharField(
         required=False,
@@ -143,6 +145,7 @@ class GameEditForm(GameForm):
 
     class Meta:
         """Form configuration"""
+
         model = models.Game
         fields = (
             "name",
@@ -167,19 +170,21 @@ class GameEditForm(GameForm):
             "developer": ModelSelect2Widget(
                 model=models.Company,
                 search_fields=["name__icontains"],
-                attrs={"style": "width: 100%;"}
+                attrs={"style": "width: 100%;"},
             ),
             "publisher": ModelSelect2Widget(
                 model=models.Company,
                 search_fields=["name__icontains"],
-                attrs={"style": "width: 100%;"}
-            )
+                attrs={"style": "width: 100%;"},
+            ),
         }
 
     def __init__(self, payload, *args, **kwargs):
         super().__init__(payload, *args, **kwargs)
         self.fields["title_logo"].required = False
-        self.fields["reason"].widget = forms.TextInput(attrs={"class": "select2-lookalike"})
+        self.fields["reason"].widget = forms.TextInput(
+            attrs={"class": "select2-lookalike"}
+        )
 
     def clean_name(self):
         return self.cleaned_data["name"]
@@ -213,13 +218,20 @@ class InstallerForm(forms.ModelForm):
         """Form configuration"""
 
         model = models.InstallerDraft
-        fields = ("runner", "version", "description", "notes", "credits", "content", "draft")
+        fields = (
+            "runner",
+            "version",
+            "description",
+            "notes",
+            "credits",
+            "content",
+            "draft",
+        )
         widgets = {
             "runner": Select2Widget,
-            "description": forms.TextInput(attrs={
-                "style": "width: 100%;",
-                "class": "select2-lookalike"
-            }),
+            "description": forms.TextInput(
+                attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+            ),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
             "credits": forms.Textarea(attrs={"class": "installer-textarea"}),
             "content": forms.Textarea(
@@ -248,7 +260,7 @@ class InstallerForm(forms.ModelForm):
             ),
             "credits": (
                 "You can optionally provide credits for the installers or the software used in it."
-            )
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -290,7 +302,9 @@ class InstallerForm(forms.ModelForm):
             )
         if self.instance.base_installer:
             version_exists = (
-                models.Installer.objects.filter(game=self.instance.game, version=version)
+                models.Installer.objects.filter(
+                    game=self.instance.game, version=version
+                )
                 .exclude(id=self.instance.base_installer.id)
                 .count()
             )
@@ -353,17 +367,20 @@ class ForkInstallerForm(forms.ModelForm):
 class LibraryFilterForm(forms.Form):
     q = forms.CharField(
         max_length=50,
-        widget=forms.TextInput(attrs={"style": "width: 100%;",
-                                      "class": "select2-lookalike"}),
+        widget=forms.TextInput(
+            attrs={"style": "width: 100%;", "class": "select2-lookalike"}
+        ),
         required=False,
-        label="Search"
+        label="Search",
     )
     platforms = forms.MultipleChoiceField(
         widget=Select2MultipleWidget(
-            attrs={'data-width': '100%',
-                   'data-close-on-select': 'false',
-                   'data-placeholder': '',
-                   'data-minimum-input-length': 2}
+            attrs={
+                "data-width": "100%",
+                "data-close-on-select": "false",
+                "data-placeholder": "",
+                "data-minimum-input-length": 2,
+            }
         ),
         required=False,
     )
@@ -371,11 +388,13 @@ class LibraryFilterForm(forms.Form):
         queryset=models.Genre.objects.all(),
         widget=ModelSelect2MultipleWidget(
             model=models.Genre,
-            search_fields=['name__icontains'],
-            attrs={'data-width': '100%',
-                   'data-close-on-select': 'false',
-                   'data-placeholder': '',
-                   'data-minimum-input-length': 3}
+            search_fields=["name__icontains"],
+            attrs={
+                "data-width": "100%",
+                "data-close-on-select": "false",
+                "data-placeholder": "",
+                "data-minimum-input-length": 3,
+            },
         ),
         required=False,
     )
@@ -383,27 +402,35 @@ class LibraryFilterForm(forms.Form):
         queryset=models.Company.objects.all(),
         widget=ModelSelect2MultipleWidget(
             model=models.Company,
-            search_fields=['name__icontains'],
-            attrs={'data-width': '100%',
-                   'data-close-on-select': 'false',
-                   'data-placeholder': '',
-                   'data-minimum-input-length': 3}
+            search_fields=["name__icontains"],
+            attrs={
+                "data-width": "100%",
+                "data-close-on-select": "false",
+                "data-placeholder": "",
+                "data-minimum-input-length": 3,
+            },
         ),
-        required=False
+        required=False,
     )
     years = forms.MultipleChoiceField(
         choices=[(i, i) for i in range(date.today().year, 1970, -1)],
-        widget=Select2MultipleWidget(attrs={'data-width': '100%',
-                                            'data-close-on-select': 'false',
-                                            'data-placeholder': ''}),
-        required=False
+        widget=Select2MultipleWidget(
+            attrs={
+                "data-width": "100%",
+                "data-close-on-select": "false",
+                "data-placeholder": "",
+            }
+        ),
+        required=False,
     )
     flags = forms.MultipleChoiceField(
         choices=models.Game.GAME_FLAGS,
-        widget=BitFieldCheckboxSelectMultiple(attrs={'class': "checkbox-list"}),
+        widget=BitFieldCheckboxSelectMultiple(attrs={"class": "checkbox-list"}),
         required=False,
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['platforms'].choices = (models.Platform.objects.values_list('pk', 'name'))
+        self.fields["platforms"].choices = models.Platform.objects.values_list(
+            "pk", "name"
+        )

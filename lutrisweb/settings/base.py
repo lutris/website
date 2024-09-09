@@ -233,6 +233,14 @@ CELERYBEAT_SCHEDULE = {
         "task": "games.tasks.fix_and_unpin_wine_versions",
         "schedule": crontab(minute=11),
     },
+    "remove_empty_changes": {
+        "task": "games.tasks.remove_empty_changes",
+        "schedule": crontab(hour=7, minute=9),
+    },
+    "auto_accept_installers": {
+        "task": "games.tasks.auto_accept_installers",
+        "schedule": crontab(hour=7, minute=12),
+    },
     "load-gog-games": {
         "task": "providers.tasks.gog.load_gog_games",
         "schedule": crontab(day_of_week=1, hour=1, minute=1),
@@ -276,14 +284,6 @@ CELERYBEAT_SCHEDULE = {
     "update-umu-games": {
         "task": "providers.tasks.umu.update_umu_games",
         "schedule": crontab(minute=25),
-    },
-    "remove_empty_changes": {
-        "task": "games.tasks.remove_empty_changes",
-        "schedule": crontab(hour=7, minute=9),
-    },
-    "auto_accept_installers": {
-        "task": "games.tasks.auto_accept_installers",
-        "schedule": crontab(hour=7, minute=12),
     },
 }
 
