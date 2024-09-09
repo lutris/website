@@ -277,6 +277,14 @@ CELERYBEAT_SCHEDULE = {
         "task": "providers.tasks.umu.update_umu_games",
         "schedule": crontab(minute=25),
     },
+    "remove_empty_changes": {
+        "task": "games.tasks.remove_empty_changes",
+        "schedule": crontab(hour=7, minute=9),
+    },
+    "auto_accept_installers": {
+        "task": "games.tasks.auto_accept_installers",
+        "schedule": crontab(hour=7, minute=12),
+    },
 }
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")

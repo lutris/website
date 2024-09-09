@@ -188,10 +188,13 @@ def populate_popularity():
 
 @app.task
 def auto_accept_installers():
+    accepted_installers = 0
     for f in models.InstallerDraft.objects.filter(
         draft=False, user__username="vanstaveren"
     ):
+        accepted_installers += 1
         f.accept()
+    return accepted_installers
 
 
 @app.task
