@@ -283,7 +283,7 @@ CELERYBEAT_SCHEDULE = {
     },
     "update-umu-games": {
         "task": "providers.tasks.umu.update_umu_games",
-        "schedule": crontab(minute=25),
+        "schedule": crontab(hour=5, minute=45),
     },
 }
 
