@@ -20,6 +20,7 @@ PROTONFIXES_PATH = os.path.join(settings.MEDIA_ROOT, "protonfixes")
 PROTON_PATCHES_STEAM_IDS = os.path.join(settings.MEDIA_ROOT, "proton-steamids.txt")
 UMU_GAMES_PATH = os.path.join(settings.MEDIA_ROOT, "umu-games.json")
 
+
 def fix_steam_ids():
     games_updated = 0
     provider_games = ProviderGame.objects.filter(
@@ -116,7 +117,7 @@ def check_lutris_associations():
                         provider__name="steam", internal_id=steam_id
                     )
                 except ProviderGame.DoesNotExist:
-                    LOGGER.error("Steam game with ID %s not found", steam_id)
+                    LOGGER.warning("Steam game with ID %s not found", steam_id)
                     create_game_from_steam_appid(steam_id)
                     stats["steam game not found"] = steam_id
                     continue
@@ -321,7 +322,6 @@ def import_umu_games():
         "created": 0,
         "updated": 0,
         "skipped": 0,
-
     }
     for game_id in api_games:
         if game_id.split("umu-")[1] not in fix_ids:
@@ -352,13 +352,15 @@ def export_umu_games():
     output = []
     for provider_game in provider_games:
         for game in provider_game.metadata:
-            output.append({
-                "name": game["title"],
-                "store": game["store"],
-                "appid": game["codename"],
-                "notes": game["notes"],
-                "umu_id": game["umu_id"],
-            })
+            output.append(
+                {
+                    "name": game["title"],
+                    "store": game["store"],
+                    "appid": game["codename"],
+                    "notes": game["notes"],
+                    "umu_id": game["umu_id"],
+                }
+            )
     return output
 
 
