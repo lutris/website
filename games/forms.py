@@ -88,6 +88,10 @@ class GameForm(forms.ModelForm):
         slug = slugify(name)
         if name == name.lower() and name.endswith("game"):
             raise forms.ValidationError("Illegal name, do not submit this game.")
+        if "geometry dash" in name.lower():
+            raise forms.ValidationError(
+                "We are warning you. Do not submit Geometry Dash games. We will ban you."
+            )
         try:
             models.Game.objects.get(slug=slug)
         except models.Game.DoesNotExist:
