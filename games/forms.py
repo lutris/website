@@ -86,7 +86,7 @@ class GameForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data["name"]
         slug = slugify(name)
-        if name == name.lower() and name.endswith("game"):
+        if name.endswith(" game"):
             raise forms.ValidationError("Illegal name, do not submit this game.")
         if "geometry dash" in name.lower():
             raise forms.ValidationError(
@@ -101,7 +101,7 @@ class GameForm(forms.ModelForm):
 
     def clean_description(self):
         description = self.cleaned_data["description"]
-        if "geometry dash" in description:
+        if "geometry dash" in description.lower():
             raise forms.ValidationError("We will ban your account if you continue")
         return description
 
