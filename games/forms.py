@@ -99,6 +99,20 @@ class GameForm(forms.ModelForm):
         msg = f"This game is <a href='/games/{slug}'>already in our database</a>."
         raise forms.ValidationError(mark_safe(msg))
 
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        if "geometry dash" in description:
+            raise forms.ValidationError("We will ban your account if you continue")
+        return description
+
+    def clean_website(self):
+        website = self.cleaned_data["website"]
+        if website.endswith(".io"):
+            raise forms.ValidationError(
+                ".io websites are not authorized. We will ban your account if you try that again."
+            )
+        return website
+
     def process_banner(self, image_data, ratio):
         """Convert image to banner format"""
         if not image_data:
