@@ -12,15 +12,19 @@ from rest_framework.exceptions import APIException
 
 from common.permissions import IsAdminOrReadOnly
 from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
-from runners.serializers import RunnerSerializer, RuntimeSerializer, RuntimeDetailSerializer
+from runners.serializers import (
+    RunnerSerializer,
+    RuntimeSerializer,
+    RuntimeDetailSerializer,
+)
 from hardware.models import get_hardware_features
-
 
 
 class ClientTooOld(APIException):
     status_code = 426
-    default_detail = 'Your Lutris client is out of date. Please upgrade.'
-    default_code = 'client_out_of_date'
+    default_detail = "Your Lutris client is out of date. Please upgrade."
+    default_code = "client_out_of_date"
+
 
 class RunnerListView(generics.ListAPIView):
     serializer_class = RunnerSerializer
@@ -98,7 +102,10 @@ def get_version_number(version):
     if len(version_parts) == 3:
         version_parts.append(0)
     release, major, minor, patch = version_parts[:4]
-    return int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+    return (
+        int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
+    )
+
 
 class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
@@ -107,7 +114,10 @@ class RuntimeListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Match lutris games against service appids"""
-        user_agent = self.request.META["HTTP_USER_AGENT"]
+        try:
+            user_agent = self.request.META["HTTP_USER_AGENT"]
+        except KeyError:
+            return Response("Invalid request", status=status.HTTP_403_FORBIDDEN)
         version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
@@ -121,7 +131,7 @@ class RuntimeListView(generics.ListCreateAPIView):
         queryset = Runtime.objects.all()
         if version_number:
             queryset = queryset.filter(min_version__lte=version_number)
-        filter_enabled = self.request.GET.get('enabled')
+        filter_enabled = self.request.GET.get("enabled")
         if filter_enabled:
             return queryset.filter(enabled=True)
         return queryset
@@ -149,10 +159,11 @@ class RuntimeListView(generics.ListCreateAPIView):
 
 class RuntimeDetailView(generics.RetrieveAPIView):
     """View the details of a runtime item with all its indiviual components"""
+
     serializer_class = RuntimeDetailSerializer
     queryset = Runtime.objects.all()
     lookup_field = "name"
-    permission_classes = (IsAdminOrReadOnly, )
+    permission_classes = (IsAdminOrReadOnly,)
 
     def post(self, request, name):
         """POST creates a new component in the current runtime item"""
@@ -166,8 +177,7 @@ class RuntimeDetailView(generics.RetrieveAPIView):
         if not url or not filename:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         component, _created = RuntimeComponent.objects.get_or_create(
-            runtime=runtime,
-            filename=filename
+            runtime=runtime, filename=filename
         )
         component.url = url
         component.save()
@@ -183,7 +193,10 @@ class RuntimeVersions(views.APIView):
             "runtimes": {},
             "runners": {},
         }
-        user_agent = request.META["HTTP_USER_AGENT"]
+        try:
+            user_agent = request.META["HTTP_USER_AGENT"]
+        except KeyError:
+            return Response("Invalid request", status=status.HTTP_403_FORBIDDEN)
         client_version_number = 0
         if user_agent.startswith("Lutris"):
             remote_version = user_agent.split()[1]
@@ -208,7 +221,9 @@ class RuntimeVersions(views.APIView):
                 if not gpu_info.get("features"):
                     continue
                 apis = [feature.split()[0] for feature in gpu_info["features"]]
-                versioned_apis = [" ".join(feature.split()[0:2]) for feature in gpu_info["features"]]
+                versioned_apis = [
+                    " ".join(feature.split()[0:2]) for feature in gpu_info["features"]
+                ]
                 if not hw_support["vulkan"]:
                     hw_support["vulkan"] = "Vulkan" in apis
                 if not hw_support["vulkan_1_3"]:
@@ -216,26 +231,30 @@ class RuntimeVersions(views.APIView):
                 if not hw_support["directx_11"]:
                     hw_support["directx_11"] = "Direct3D 11" in versioned_apis
                 if not hw_support["directx_12"]:
-                    hw_support["directx_12"] = hw_support["directx_11"] = "Direct3D 12" in versioned_apis
+                    hw_support["directx_12"] = hw_support["directx_11"] = (
+                        "Direct3D 12" in versioned_apis
+                    )
 
         response["hw_support"] = hw_support
         for runner in Runner.objects.all():
-            response["runners"][runner.slug] = [{
-                "name": runner.slug,
-                "version": version.version,
-                "url": version.url,
-                "architecture": version.architecture
-            } for version in runner.runner_versions.filter(default=True)]
+            response["runners"][runner.slug] = [
+                {
+                    "name": runner.slug,
+                    "version": version.version,
+                    "url": version.url,
+                    "architecture": version.architecture,
+                }
+                for version in runner.runner_versions.filter(default=True)
+            ]
         for runtime in Runtime.objects.filter(enabled=True):
             if (
-                    client_version_number
-                    and runtime.min_version
-                    and client_version_number < runtime.min_version
+                client_version_number
+                and runtime.min_version
+                and client_version_number < runtime.min_version
             ):
                 continue
-            if (
-                    (not hw_support["vulkan"] or not hw_support["directx_11"])
-                    and (runtime.name.startswith("dxvk") or runtime.name == "vkd3d")
+            if (not hw_support["vulkan"] or not hw_support["directx_11"]) and (
+                runtime.name.startswith("dxvk") or runtime.name == "vkd3d"
             ):
                 continue
             if not hw_support["directx_12"] and runtime.name == "vkd3d":
