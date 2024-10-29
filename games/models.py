@@ -553,7 +553,7 @@ class Game(models.Model):
                 self.title_logo, settings.BANNER_SIZE, crop="center"
             )
         except AttributeError as ex:
-            LOGGER.error("Banner failed for %s: %s", self, ex)
+            LOGGER.error("Could not create banner %s for %s: %s", dest_file, self, ex)
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
