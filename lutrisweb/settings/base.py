@@ -336,6 +336,7 @@ DEFAULT_LOGGING_CONFIG = {
     "level": "DEBUG",
     "propagate": True,
 }
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
@@ -411,7 +412,7 @@ LOGGING = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{os.getenv('REDIS_HOST', 'localhost')}:{os.getenv('REDIS_PORT', '6379')}/1",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
