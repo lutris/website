@@ -30,6 +30,3 @@ celerybeat-schedule
 gog-cache
 gog-logos
 gog-lutris-logos
-
-# Remove once Bower has been completely deprecated.
-components
