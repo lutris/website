@@ -43,7 +43,7 @@
         </span>
       </div>
       <div class="ms-auto">
-        <a class="btn btn-sm btn-secondary" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
+        <a class="btn btn-sm btn-secondary" href="{% url 'suggest-changes-disabled' %}">Suggest changes</a>
         {% if user.is_staff %}
           {% if can_edit and pending_change_subm_count > 0 %}
             <a class="btn btn-sm btn-secondary" href="{% url 'admin-change-submissions' game.id %}">
