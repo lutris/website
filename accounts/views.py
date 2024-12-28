@@ -1,4 +1,5 @@
 """Module for user account views"""
+
 # pylint: disable=too-many-ancestors,raise-missing-from
 import json
 import logging
@@ -474,8 +475,10 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         return not key[1] and not key[2] and not key[3]
 
     def get_lutris_game(self, slug):
+        if not slug:
+            return None
         try:
-            game = models.Game.objects.get(slug=slug)
+            game = models.Game.objects.get(slug=slug, change_for=None)
         except models.Game.DoesNotExist:
             try:
                 game = models.Game.objects.get(aliases__slug=slug)
@@ -489,7 +492,10 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         for game in request.data:
             client_library[game["slug"]].append(game)
         stored_library = self.get_queryset(ignore_since=True)
-        stored_categories = {c.name: c for c in models.LibraryCategory.objects.filter(gamelibrary=library)}
+        stored_categories = {
+            c.name: c
+            for c in models.LibraryCategory.objects.filter(gamelibrary=library)
+        }
         updated_games = set()
         stats = {
             "user": request.user.username,
@@ -501,7 +507,9 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
 
         def get_category(category_name):
             if category_name not in stored_categories:
-                category = models.LibraryCategory.objects.create(gamelibrary=library, name=category_name)
+                category = models.LibraryCategory.objects.create(
+                    gamelibrary=library, name=category_name
+                )
                 stored_categories[category_name] = category
             else:
                 category = stored_categories[category_name]
@@ -570,7 +578,9 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         for slug in client_library:
             client_games = client_library[slug]
             for client_game in client_games:
-                if "runner" not in client_game:  # Skip invalid entries, I don't even know how there are created.
+                if (
+                    "runner" not in client_game
+                ):  # Skip invalid entries, I don't even know how there are created.
                     continue
                 client_key = (
                     client_game["slug"],
