@@ -1,5 +1,6 @@
 """Sync Steam games"""
 
+import time
 import requests
 from celery.utils.log import get_task_logger
 
@@ -12,14 +13,19 @@ from providers import models
 LOGGER = get_task_logger(__name__)
 
 
-API_URL = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?"
+ALL_APPS_URL = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?"
+APP_DETAILS_URL = "https://store.steampowered.com/api/appdetails?appids="
+
+
+class RateLimitExceeded(Exception):
+    """Raised when the Steam API rate limit is exceeded"""
 
 
 @app.task
 def load_steam_games():
     """Query the Steam API and load every game as a ProviderGame"""
     provider = models.Provider.objects.get(name="steam")
-    response = requests.get(API_URL)
+    response = requests.get(ALL_APPS_URL)
     game_list = response.json()["applist"]["apps"]
     stats = {"created": 0, "updated": 0}
     for game in game_list:
@@ -48,8 +54,10 @@ def match_steam_games():
         "same_name_exists": 0,
         "ambiguous_name": 0,
     }
-    for steam_game in models.ProviderGame.objects.filter(provider__name="steam"):
-        existing_games = Game.objects.filter(steamid=steam_game.slug)
+    for steam_game in models.ProviderGame.objects.filter(
+        provider__name="steam", games__isnull=True
+    ):
+        existing_games = Game.objects.filter(steamid=steam_game.internal_id)
         for lutris_game in existing_games:
             lutris_game.provider_games.add(steam_game)
             stats["matched"] += 1
@@ -64,3 +72,48 @@ def match_steam_games():
     save_action_log("match_steam_games", stats)
     send_simple_message("Steam games matched: %s" % stats)
     return stats
+
+
+@app.task
+def fetch_app_details(appid):
+    details_response = requests.get(APP_DETAILS_URL + appid)
+    if details_response.status_code == 429:
+        raise RateLimitExceeded
+    if details_response.status_code != 200:
+        LOGGER.warning(
+            "Invalid response for appid %s: %s", appid, details_response.status_code
+        )
+        return False
+    details = details_response.json()
+    game = models.ProviderGame.objects.get(slug=appid)
+    success = details[appid]["success"]
+    if not success:
+        game.metadata = details
+    else:
+        game.metadata = details[appid]["data"]
+        LOGGER.info("App details for Steam game %s (%s)", game.name, game.internal_id)
+    game.save()
+    return success
+
+
+@app.task
+def fetch_app_details_all(max_games=200):
+    stats = {"fetched": 0, "failed": 0}
+    for index, game in enumerate(
+        models.ProviderGame.objects.filter(
+            provider__name="steam", metadata__isnull=True
+        )
+    ):
+        try:
+            success = fetch_app_details(game.slug)
+        except RateLimitExceeded:
+            LOGGER.warning("Rate limit exceeded, returning")
+            break
+        time.sleep(1)
+        if success:
+            stats["fetched"] += 1
+        else:
+            stats["failed"] += 1
+        if index > max_games:
+            break
+    send_simple_message("Steam details fetched: %s" % stats)

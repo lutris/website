@@ -257,6 +257,10 @@ CELERYBEAT_SCHEDULE = {
         "task": "providers.tasks.steam.match_steam_games",
         "schedule": crontab(day_of_week=1, hour=3, minute=1),
     },
+    "fetch-steam-app-details": {
+        "task": "providers.tasks.steam.fetch_app_details_all",
+        "schedule": 300,
+    },
     "load-igdb-genres": {
         "task": "providers.tasks.igdb.load_igdb_genres",
         "schedule": crontab(day_of_week=2, hour=3, minute=1),
