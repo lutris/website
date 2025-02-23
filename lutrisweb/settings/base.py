@@ -215,7 +215,7 @@ SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 # Celery
-CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERYD_HIJACK_ROOT_LOGGER = False
 CELERYBEAT_SCHEDULE = {
     "clear-spammers": {
         "task": "accounts.tasks.clear_spammers",
