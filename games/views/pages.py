@@ -1,4 +1,5 @@
 """Views for lutris main app"""
+
 # pylint: disable=too-many-ancestors,raise-missing-from
 from __future__ import absolute_import
 
@@ -7,11 +8,10 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
-                         JsonResponse)
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -23,8 +23,13 @@ from sorl.thumbnail import get_thumbnail
 from accounts.decorators import user_confirmed_required
 from emails.messages import send_email
 from games import models
-from games.forms import (GameEditForm, GameForm, InstallerEditForm,
-                         LibraryFilterForm, ScreenshotForm)
+from games.forms import (
+    GameEditForm,
+    GameForm,
+    InstallerEditForm,
+    LibraryFilterForm,
+    ScreenshotForm,
+)
 from games.models import Game, GameSubmission, Installer, InstallerIssue, InstallerDraft
 from games.webhooks import notify_installer, notify_issue_creation
 
@@ -33,33 +38,39 @@ LOGGER = logging.getLogger(__name__)
 
 class GameList(ListView):
     """Game list view"""
-    template_name = 'games/game_list.html'
+
+    template_name = "games/game_list.html"
     model = models.Game
     context_object_name = "games"
     paginate_by = 25
     paginate_orphans = 10
-    ordering = 'name'
+    ordering = "name"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.q_params = {}
 
     def get(self, request, *args, **kwargs):
-        query = request.GET.get('q', '')
+        query = request.GET.get("q", "")
         if "\0" in query:
             return redirect("https://www.playmobil.fr/")
         self.q_params = {
-            'q': query,
-            'platforms': request.GET.getlist('platforms',
-                                             [kwargs.get('platform')] if 'platform' in kwargs else []),
-            'genres': request.GET.getlist('genres',
-                                          [kwargs.get('genre')] if 'genre' in kwargs else []),
-            'companies': request.GET.getlist('companies',
-                                             [kwargs.get('company')] if 'company' in kwargs else []),
-            'years': request.GET.getlist('years', [kwargs.get('year')] if 'year' in kwargs else []),
-            'flags': request.GET.getlist('flags', []),
-            'unpublished-filter': request.GET.get('unpublished-filter', False),
-            'search-installers': request.GET.get('search-installers', False)
+            "q": query,
+            "platforms": request.GET.getlist(
+                "platforms", [kwargs.get("platform")] if "platform" in kwargs else []
+            ),
+            "genres": request.GET.getlist(
+                "genres", [kwargs.get("genre")] if "genre" in kwargs else []
+            ),
+            "companies": request.GET.getlist(
+                "companies", [kwargs.get("company")] if "company" in kwargs else []
+            ),
+            "years": request.GET.getlist(
+                "years", [kwargs.get("year")] if "year" in kwargs else []
+            ),
+            "flags": request.GET.getlist("flags", []),
+            "unpublished-filter": request.GET.get("unpublished-filter", False),
+            "search-installers": request.GET.get("search-installers", False),
         }
         return super().get(request, *args, **kwargs)
 
@@ -83,13 +94,13 @@ class GameList(ListView):
     def get_ordering(self):
         """Return the field used to order the query by"""
         field = self.request.GET.get("ordering", self.ordering)
-        if field.strip('-') not in Game.valid_fields():
+        if field.strip("-") not in Game.valid_fields():
             return None
         return field
 
     def get_queryset(self):
         queryset = models.Game.objects
-        if self.q_params['unpublished-filter']:
+        if self.q_params["unpublished-filter"]:
             queryset = queryset.filter(change_for__isnull=True)
         else:
             queryset = queryset.with_installer()
@@ -98,7 +109,7 @@ class GameList(ListView):
         )
         ordering = self.get_ordering()
         if ordering:
-            if self.q_params['q'] and not self.q_params['search-installers']:
+            if self.q_params["q"] and not self.q_params["search-installers"]:
                 queryset = queryset.order_by(ordering)
             else:
                 queryset = queryset.order_by(ordering)
@@ -107,26 +118,31 @@ class GameList(ListView):
     def get_filtered_queryset(self, queryset):
         """Build search query from the search parameters"""
         self.clean_search_query()
-        if self.q_params['q']:
-            if self.q_params['search-installers']:
-                queryset = queryset.filter(installers__content__icontains=self.q_params['q'])
+        if self.q_params["q"]:
+            if self.q_params["search-installers"]:
+                queryset = queryset.filter(
+                    installers__content__icontains=self.q_params["q"]
+                )
             else:
                 search_query = self.q_params["q"]
-                queryset = queryset.filter(Q(name__icontains=search_query) | Q(aliases__name__icontains=search_query))
-        if self.q_params['platforms']:
-            queryset = queryset.filter(platforms__pk__in=self.q_params['platforms'])
-        if self.q_params['genres']:
-            queryset = queryset.filter(genres__pk__in=self.q_params['genres'])
-        if self.q_params['companies']:
+                queryset = queryset.filter(
+                    Q(name__icontains=search_query)
+                    | Q(aliases__name__icontains=search_query)
+                )
+        if self.q_params["platforms"]:
+            queryset = queryset.filter(platforms__pk__in=self.q_params["platforms"])
+        if self.q_params["genres"]:
+            queryset = queryset.filter(genres__pk__in=self.q_params["genres"])
+        if self.q_params["companies"]:
             queryset = queryset.filter(
-                Q(publisher__pk__in=self.q_params['companies'])
-                | Q(developer__pk__in=self.q_params['companies'])
+                Q(publisher__pk__in=self.q_params["companies"])
+                | Q(developer__pk__in=self.q_params["companies"])
             )
-        if self.q_params['years']:
-            queryset = queryset.filter(Q(year__in=self.q_params['years']))
-        if self.q_params['flags']:
+        if self.q_params["years"]:
+            queryset = queryset.filter(Q(year__in=self.q_params["years"]))
+        if self.q_params["flags"]:
             flag_q = Q()
-            for flag_name in self.q_params['flags']:
+            for flag_name in self.q_params["flags"]:
                 try:
                     flag = getattr(models.Game.flags, flag_name)
                 except AttributeError:
@@ -142,9 +158,7 @@ class GameList(ListView):
         for field in int_lists:
             if field in self.q_params:
                 try:
-                    self.q_params[field] = [
-                        int(f) for f in self.q_params[field]
-                    ]
+                    self.q_params[field] = [int(f) for f in self.q_params[field]]
                 except ValueError:
                     self.q_params[field] = []
 
@@ -160,37 +174,43 @@ class GameList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the Lutris library"""
         self.clean_parameters()
-        context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
-        context['is_library'] = False
-        filter_string = ''
-        if self.q_params.get('q'):
-            filter_string = '&q=%s' % self.q_params['q']
-        if self.q_params.get('platforms'):
-            for platform in self.q_params['platforms']:
-                filter_string += '&platforms=%s' % platform
-        if self.q_params.get('genres'):
-            for genre in self.q_params['genres']:
-                filter_string += '&genres=%s' % genre
-        if self.q_params.get('companies'):
-            for company in self.q_params['companies']:
-                filter_string += '&companies=%s' % company
-        if self.q_params.get('years'):
-            for year in self.q_params['years']:
-                filter_string += '&years=%s' % year
-        if self.q_params.get('flags'):
-            for flag in self.q_params['flags']:
-                filter_string += '&flags=%s' % flag
-        if self.q_params.get('unpublished-filter'):
-            filter_string += '&unpublished-filter=%s' % self.q_params['unpublished-filter']
-        if self.q_params.get('search-installers'):
-            filter_string += '&search-installers=%s' % self.q_params['search-installers']
-        context['filter_string'] = filter_string
-        context['filter_form'] = LibraryFilterForm(initial=self.q_params)
-        context['order_by'] = self.get_ordering()
-        context['paginate_by'] = self.get_paginate_by(None)
-        context['search_terms'] = self.q_params.get('search', '')
-        context["unpublished_filter"] = self.q_params.get('unpublished-filter', False)
-        context["search_installers"] = self.q_params.get('search-installers', False)
+        context = super(GameList, self).get_context_data(
+            object_list=object_list, **kwargs
+        )
+        context["is_library"] = False
+        filter_string = ""
+        if self.q_params.get("q"):
+            filter_string = "&q=%s" % self.q_params["q"]
+        if self.q_params.get("platforms"):
+            for platform in self.q_params["platforms"]:
+                filter_string += "&platforms=%s" % platform
+        if self.q_params.get("genres"):
+            for genre in self.q_params["genres"]:
+                filter_string += "&genres=%s" % genre
+        if self.q_params.get("companies"):
+            for company in self.q_params["companies"]:
+                filter_string += "&companies=%s" % company
+        if self.q_params.get("years"):
+            for year in self.q_params["years"]:
+                filter_string += "&years=%s" % year
+        if self.q_params.get("flags"):
+            for flag in self.q_params["flags"]:
+                filter_string += "&flags=%s" % flag
+        if self.q_params.get("unpublished-filter"):
+            filter_string += (
+                "&unpublished-filter=%s" % self.q_params["unpublished-filter"]
+            )
+        if self.q_params.get("search-installers"):
+            filter_string += (
+                "&search-installers=%s" % self.q_params["search-installers"]
+            )
+        context["filter_string"] = filter_string
+        context["filter_form"] = LibraryFilterForm(initial=self.q_params)
+        context["order_by"] = self.get_ordering()
+        context["paginate_by"] = self.get_paginate_by(None)
+        context["search_terms"] = self.q_params.get("search", "")
+        context["unpublished_filter"] = self.q_params.get("unpublished-filter", False)
+        context["search_installers"] = self.q_params.get("search-installers", False)
         context["unpublished_match_count"] = self.get_filtered_queryset(
             models.Game.objects.filter(is_public=False)
         ).count()
@@ -229,7 +249,9 @@ def game_detail(request, slug):
 
     if user.is_authenticated:
         unpublished_installers = game.draft_installers.filter(user=user)
-        in_library = models.LibraryGame.objects.filter(gamelibrary__user=user, game=game).exists()
+        in_library = models.LibraryGame.objects.filter(
+            gamelibrary__user=user, game=game
+        ).exists()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
 
         if user.is_staff and user.has_perm("games.change_game"):
@@ -239,14 +261,16 @@ def game_detail(request, slug):
         in_library = False
         screenshots = game.screenshot_set.published()
     if game.flags.kernel_ac.is_set:
-        no_ac_recommendations = models.Game.objects.filter(slug__in=[
-            "warframe",
-            "dota-2",
-            "counter-strike-2",
-            "farlight-84",
-            "overwatch-2",
-            "apex-legends",
-        ])
+        no_ac_recommendations = models.Game.objects.filter(
+            slug__in=[
+                "warframe",
+                "dota-2",
+                "counter-strike-2",
+                "farlight-84",
+                "overwatch-2",
+                "apex-legends",
+            ]
+        )
     else:
         no_ac_recommendations = []
     return render(
@@ -277,7 +301,6 @@ def new_installer(request, slug):
     return edit_draft(request, None, game)
 
 
-
 @user_confirmed_required
 @never_cache
 def edit_draft(request, draft_id, game=None):
@@ -285,11 +308,7 @@ def edit_draft(request, draft_id, game=None):
     if draft_id:
         draft = get_object_or_404(InstallerDraft, id=draft_id)
     else:
-        draft = InstallerDraft(
-            user=request.user,
-            game=game,
-            created_at=timezone.now()
-        )
+        draft = InstallerDraft(user=request.user, game=game, created_at=timezone.now())
 
     # Reset reason when the installer is edited.
     draft.reason = ""
@@ -311,7 +330,7 @@ def edit_draft(request, draft_id, game=None):
             "form": form,
             "game": draft.game,
             "installer": draft,
-        }
+        },
     )
 
 
@@ -321,9 +340,7 @@ def edit_installer(request, slug):
     """Edit a draft of an installer"""
     installer = get_object_or_404(Installer, slug=slug)
     draft, created = InstallerDraft.objects.get_or_create(
-        user=request.user,
-        game=installer.game,
-        base_installer=installer
+        user=request.user, game=installer.game, base_installer=installer
     )
     if created:
         draft.runner = installer.runner
@@ -369,6 +386,7 @@ def view_installer(request, id):
 
 class InstallerFeed(Feed):
     """RSS feed for Lutris installers"""
+
     title = "Lutris installers"
     link = "/games/"
     description = "Latest lutris installers"
@@ -435,22 +453,19 @@ def game_list(request):
 
 def notify_new_game(game, user):
     """Notify managers a game has been submitted"""
-    admin_url = "https://lutris.net" + reverse("admin:games_game_change", args=(game.id,))
+    admin_url = "https://lutris.net" + reverse(
+        "admin:games_game_change", args=(game.id,)
+    )
     context = {
         "game_name": game.name,
         "username": user.username,
         "admin_link": admin_url,
     }
     subject = f"New game submitted: {game.name}"
-    send_email(
-        "new_game",
-        context,
-        subject,
-        settings.MANAGERS[0][1]
-    )
+    send_email("new_game", context, subject, settings.MANAGERS[0][1])
 
 
-@user_confirmed_required
+@user_passes_test(lambda u: u.is_staff)
 def submit_game(request):
     """Display a form to create a new game"""
     form = GameForm(request.POST or None, request.FILES or None)
@@ -566,4 +581,3 @@ def submit_issue(request):
     notify_issue_creation(installer_issue, request.user, content)
 
     return JsonResponse(response)
-
