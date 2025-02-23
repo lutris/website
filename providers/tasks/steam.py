@@ -86,7 +86,7 @@ def fetch_app_details(appid):
         )
         return False
     details = details_response.json()
-    game = models.ProviderGame.objects.get(slug=appid)
+    game = models.ProviderGame.objects.get(provider__name="steam", internal_id=appid)
     success = details[appid]["success"]
     if not success:
         game.metadata = details
