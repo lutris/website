@@ -1,6 +1,7 @@
 """Sync Steam games"""
 
 import time
+import json
 import requests
 from celery.utils.log import get_task_logger
 from django.utils import timezone
@@ -85,7 +86,11 @@ def fetch_app_details(appid):
             "Invalid response for appid %s: %s", appid, details_response.status_code
         )
         return False
-    details = details_response.json()
+    try:
+        details = details_response.json()
+    except json.JSONDecodeError:
+        LOGGER.warning("Invalid JSON for appid %s: %s", appid.details_response.text)
+        return False
     game = models.ProviderGame.objects.get(provider__name="steam", internal_id=appid)
     success = details[appid]["success"]
     if not success:
