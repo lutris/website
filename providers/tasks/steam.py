@@ -3,6 +3,7 @@
 import time
 import requests
 from celery.utils.log import get_task_logger
+from django.utils import timezone
 
 from common.models import save_action_log
 from games.models import Game
@@ -92,6 +93,7 @@ def fetch_app_details(appid):
     else:
         game.metadata = details[appid]["data"]
         LOGGER.info("App details for Steam game %s (%s)", game.name, game.internal_id)
+    game.updated_at = timezone.now()
     game.save()
     return success
 

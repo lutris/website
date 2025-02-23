@@ -172,6 +172,7 @@ class Game(models.Model):
         ("freetoplay", "Free-to-play"),
         ("pwyw", "Pay what you want"),
         ("kernel_ac", "Infected with kernel level anticheat"),
+        ("adult_only", "Adult only"),
     )
 
     # These model fields are editable by the user
@@ -636,12 +637,7 @@ class Game(models.Model):
         return auto_installers
 
     def save(
-        self,
-        force_insert=False,
-        force_update=False,
-        using=None,
-        update_fields=None,
-        skip_precaching=False,
+        self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         # Only create slug etc. if this is a game submission, no change submission
         if not self.change_for:
@@ -656,8 +652,6 @@ class Game(models.Model):
             using=using,
             update_fields=update_fields,
         )
-        if not skip_precaching:
-            self.precache_media()
 
 
 class GameAlias(models.Model):

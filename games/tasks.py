@@ -183,7 +183,7 @@ def populate_popularity():
         # Only update games in libraries to speed up the process
         if library_count:
             game.popularity = library_count
-            game.save(skip_precaching=True)
+            game.save()
 
 
 @app.task
@@ -541,3 +541,14 @@ def remove_empty_game_changes():
             change_suggestion.delete()
             deleted_changes += 1
     return deleted_changes
+
+
+@app.task
+def mark_games_as_adult_only():
+    """Mark games as adult only if they have adult content"""
+    for game in models.Game.objects.filter(
+        genres__slug__in=["nudity", "sexual-content"]
+    ):
+        game.flags.adult_only = True
+        game.save()
+        LOGGER.info("Marked %s as adult only", game)
