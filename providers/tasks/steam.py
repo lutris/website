@@ -89,7 +89,7 @@ def fetch_app_details(appid):
     try:
         details = details_response.json()
     except JSONDecodeError:
-        LOGGER.warning("Invalid JSON for appid %s: %s", appid.details_response.text)
+        LOGGER.warning("Invalid JSON for appid %s: %s", appid, details_response.text)
         return False
     game = models.ProviderGame.objects.get(provider__name="steam", internal_id=appid)
     success = details[appid]["success"]
