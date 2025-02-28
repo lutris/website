@@ -243,23 +243,23 @@ CELERYBEAT_SCHEDULE = {
     },
     "load-gog-games": {
         "task": "providers.tasks.gog.load_gog_games",
-        "schedule": crontab(day_of_week=1, hour=1, minute=1),
+        "schedule": crontab(hour=1, minute=1),
     },
     "match-gog-games": {
         "task": "providers.tasks.gog.match_gog_games",
-        "schedule": crontab(day_of_week=1, hour=1, minute=10),
+        "schedule": crontab(hour=1, minute=10),
     },
     "load-steam-games": {
         "task": "providers.tasks.steam.load_steam_games",
-        "schedule": crontab(day_of_week=1, hour=2, minute=1),
+        "schedule": crontab(hour=2, minute=1),
     },
     "match-steam-games": {
         "task": "providers.tasks.steam.match_steam_games",
-        "schedule": crontab(day_of_week=1, hour=3, minute=1),
+        "schedule": crontab(hour=3, minute=1),
     },
     "fetch-steam-app-details": {
         "task": "providers.tasks.steam.fetch_app_details_all",
-        "schedule": 300,
+        "schedule": 3600,
     },
     "load-igdb-genres": {
         "task": "providers.tasks.igdb.load_igdb_genres",
