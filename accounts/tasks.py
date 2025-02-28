@@ -51,9 +51,9 @@ def sync_steam_library(user_id):
                 LOGGER.info("Creating game %s", steam_game.slug)
 
         games.models.LibraryGame.objects.create(
-            game=game,
-            name=game.name,
-            slug=game.slug,
+            game=steam_game,
+            name=steam_game.name,
+            slug=steam_game.slug,
             gamelibrary=library,
             playtime=0,
             runner="",
