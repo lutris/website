@@ -49,11 +49,19 @@ def sync_steam_library(user_id):
             except games.models.Game.DoesNotExist:
                 steam_game = create_game(game)
                 LOGGER.info("Creating game %s", steam_game.slug)
-        try:
-            library.games.add(steam_game)
-        except IntegrityError:
-            # Game somehow already added.
-            pass
+
+        games.models.LibraryGame.objects.create(
+            game=game,
+            name=game.name,
+            slug=game.slug,
+            gamelibrary=library,
+            playtime=0,
+            runner="",
+            platform="",
+            service="steam",
+            lastplayed=0,
+        )
+
     LOGGER.info("Added %s Steam games to %s's library", game_count, user.username)
 
 
