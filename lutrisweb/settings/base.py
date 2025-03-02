@@ -233,8 +233,8 @@ CELERYBEAT_SCHEDULE = {
         "task": "games.tasks.fix_and_unpin_wine_versions",
         "schedule": crontab(minute=11),
     },
-    "remove_empty_changes": {
-        "task": "games.tasks.remove_empty_changes",
+    "remove_empty_game_changes": {
+        "task": "games.tasks.remove_empty_game_changes",
         "schedule": crontab(hour=7, minute=9),
     },
     "auto_accept_installers": {
