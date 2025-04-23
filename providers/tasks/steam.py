@@ -114,8 +114,8 @@ def fetch_app_details_all(max_games=200):
         try:
             success = fetch_app_details(game.slug)
         except RateLimitExceeded:
-            LOGGER.warning("Rate limit exceeded, returning")
-            break
+            time.sleep(60)
+            success = fetch_app_details(game.slug)
         time.sleep(1)
         if success:
             stats["fetched"] += 1
