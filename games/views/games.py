@@ -1,15 +1,19 @@
 """API views module"""
-# pylint: disable=too-few-public-methods
+
+# lint: disable=too-few-public-methods
 from __future__ import absolute_import
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
 
 from games import models, serializers
+from providers.models import Provider
 from accounts.models import User
+
 
 class GameListView(generics.GenericAPIView):
     """Return a list of games"""
@@ -109,6 +113,11 @@ class ServiceGameListView(generics.GenericAPIView):
 
     def post(self, _request, service):
         """This view is post only and accepts a payload in JSON"""
+        try:
+            Provider.objects.get(name=service)
+        except Provider.DoesNotExist:
+            return Response("Bwahahah, screw you.", status=status.HTTP_400_BAD_REQUEST)
+
         queryset = self.filter_queryset(self.get_queryset(service))
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -120,6 +129,7 @@ class ServiceGameListView(generics.GenericAPIView):
 
 class GameLibraryView(generics.RetrieveAPIView):
     """Legacy route for the library"""
+
     serializer_class = serializers.GameLibrarySerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -136,10 +146,11 @@ class GameLibraryView(generics.RetrieveAPIView):
                 return Response(status=404)
         if user != request.user and not user.is_staff:
             return Response(status=404)
-        library = models.GameLibrary.objects.prefetch_related("games", "games__game").get(user=user)
+        library = models.GameLibrary.objects.prefetch_related(
+            "games", "games__game"
+        ).get(user=user)
         serializer = serializers.GameLibrarySerializer(library)
         return Response(serializer.data)
-
 
 
 class GameDetailView(generics.RetrieveAPIView):
