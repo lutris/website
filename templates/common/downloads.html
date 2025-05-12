@@ -112,8 +112,7 @@
           <code>echo -e "Types: deb\nURIs: https://download.opensuse.org/repositories/home:/strycore/Debian_12/\nSuites: ./\nComponents: \nSigned-By: /etc/apt/keyrings/lutris.gpg" |
             sudo tee /etc/apt/sources.list.d/lutris.sources > /dev/null</code><br/>
           <code>wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key |
-            gpg --dearmor |
-            sudo tee /etc/apt/keyrings/lutris.gpg > /dev/null</code><br/>
+            sudo gpg --dearmor -o /etc/apt/keyrings/lutris.gpg</code><br/>
           <code>sudo apt update</code><br/>
           <code>sudo apt install lutris</code>
         </p>
