@@ -521,20 +521,23 @@ class Game(models.Model):
             slug = self.slug
         return reverse("game_detail", kwargs={"slug": slug})
 
-    def precache_media(self):
+    def precache_media(self, force=False):
         """Prerenders thumbnails so we can host them as static files"""
         icon_path = os.path.join(settings.MEDIA_ROOT, self.icon.name)
         if self.icon.name and os.path.exists(icon_path):
-            self.precache_icon()
+            self.precache_icon(force)
         banner_path = os.path.join(settings.MEDIA_ROOT, self.title_logo.name)
         if self.title_logo.name and os.path.exists(banner_path):
-            self.precache_banner()
+            self.precache_banner(force)
 
-    def precache_icon(self):
+    def precache_icon(self, force=False):
         """Render the icon and place it in the icons folder"""
         dest_file = os.path.join(self.ICON_PATH, "%s.png" % self.slug)
         if os.path.exists(dest_file):
-            os.unlink(dest_file)
+            if force:
+                os.unlink(dest_file)
+            else:
+                return
         try:
             thumbnail = get_thumbnail(
                 self.icon, settings.ICON_SIZE, crop="center", format="PNG"
@@ -544,17 +547,26 @@ class Game(models.Model):
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 
-    def precache_banner(self):
+    def precache_banner(self, force=False):
         """Render the icon and place it in the banners folder"""
         dest_file = os.path.join(self.BANNER_PATH, "%s.jpg" % self.slug)
         if os.path.exists(dest_file):
-            os.unlink(dest_file)
+            if force:
+                os.unlink(dest_file)
+            else:
+                return
         try:
             thumbnail = get_thumbnail(
                 self.title_logo, settings.BANNER_SIZE, crop="center"
             )
         except AttributeError as ex:
-            LOGGER.error("Could not create banner %s for %s: %s", dest_file, self, ex)
+            LOGGER.error(
+                "Could not write banner to %s from %s for %s: %s",
+                dest_file,
+                self.title_logo,
+                self,
+                ex,
+            )
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
 

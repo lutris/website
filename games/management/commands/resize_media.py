@@ -16,4 +16,4 @@ class Command(BaseCommand):
             os.makedirs(Game.BANNER_PATH)
 
         for game in Game.objects.all():
-            game.precache_media()
+            game.precache_media(force=False)
