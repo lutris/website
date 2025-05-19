@@ -471,6 +471,7 @@ def submit_game(request):
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()
+        game.precache_media()
         submission = GameSubmission(user=request.user, game=game)
         submission.save()
         notify_new_game(game, request.user)
@@ -503,6 +504,7 @@ def edit_game(request, slug):
         change_suggestion = form.save(commit=False)
         change_suggestion.change_for = game
         change_suggestion.save()
+        change_suggestion.precache_media()
         form.save_m2m()
 
         # Save metadata (author + reason)
