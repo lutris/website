@@ -465,7 +465,7 @@ def notify_new_game(game, user):
     send_email("new_game", context, subject, settings.MANAGERS[0][1])
 
 
-@user_passes_test(lambda u: u.is_staff)
+@user_confirmed_required
 def submit_game(request):
     """Display a form to create a new game"""
     form = GameForm(request.POST or None, request.FILES or None)

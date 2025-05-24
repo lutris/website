@@ -37,11 +37,6 @@ urlpatterns = [
         r"/(?P<slug>[\w\-]+)/suggest-changes/?$", views.edit_game, name="game-edit"
     ),
     path(
-        "/suggets-changes-disabled",
-        TemplateView.as_view(template_name="games/suggest-changes-disabled.html"),
-        name="suggest-changes-disabled",
-    ),
-    path(
         "/<slug:slug>/changes-submitted",
         views.changes_submitted,
         name="game-submitted-changes",

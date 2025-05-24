@@ -22,215 +22,222 @@
 {% block title %}{{ game.name }} - Lutris{% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-12 pb-3 d-flex align-items-center">
-      <div class=""><img src="{{ game.banner_url }}" class="banner p-2" /></div>
-      <div class="">
-        <h1>{{ game.name }}</h1>
-        <span class="text-muted">
-          {% if game.year %}
-            released in
-            {{ game.year }}
-          {% endif %}
-          {% if game.developer %}
-            by
-            <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
-          {% endif %}
-          {% if game.publisher %}
-            published by
-            <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
+<div class="row">
+  <div class="col-12 pb-3 d-flex align-items-center">
+    <div class=""><img src="{{ game.banner_url }}" class="banner p-2" /></div>
+    <div class="">
+      <h1>{{ game.name }}</h1>
+      <span class="text-muted">
+        {% if game.year %}
+        released in
+        {{ game.year }}
         {% endif %}
-        </span>
-      </div>
-      <div class="ms-auto">
-        <a class="btn btn-sm btn-secondary" href="{% url 'suggest-changes-disabled' %}">Suggest changes</a>
-        {% if user.is_staff %}
-          {% if can_edit and pending_change_subm_count > 0 %}
-            <a class="btn btn-sm btn-secondary" href="{% url 'admin-change-submissions' game.id %}">
-              {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
-            </a>
-          {% endif %}
-          {% if can_publish and not game.is_public %}
-            <a class="btn btn-sm btn-secondary" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
-          {% endif %}
-          {% if can_edit %}
-            <a class="btn btn-sm btn-secondary" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
-          {% endif %}
+        {% if game.developer %}
+        by
+        <a href="{{ game.developer.get_absolute_url }}">{{ game.developer }}</a>
         {% endif %}
-      </div>
+        {% if game.publisher %}
+        published by
+        <a href="{{ game.publisher.get_absolute_url }}">{{ game.publisher }}</a>
+        {% endif %}
+      </span>
+    </div>
+    <div class="ms-auto">
+      <a class="btn btn-sm btn-secondary" href="{% url 'game-edit' game.slug %}">Suggest changes</a>
+      {% if user.is_staff %}
+      {% if can_edit and pending_change_subm_count > 0 %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'admin-change-submissions' game.id %}">
+        {{ pending_change_subm_count }} pending change suggestion{{ pending_change_subm_count|pluralize:"s" }}
+      </a>
+      {% endif %}
+      {% if can_publish and not game.is_public %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'game-publish' game_id=game.id %}">Publish</a>
+      {% endif %}
+      {% if can_edit %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'admin:games_game_change' game.id %}">Edit</a>
+      {% endif %}
+      {% endif %}
     </div>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-12 col-md-9">
-      {% if game.flags.kernel_ac.is_set %}
-      <div class="danger-zone">
-        <h3><strong>This game requires kernel-level anticheat software which is unsupported on Linux.</strong></h3>
-        <ul>
-          <li>
-            <strong>What is a kernel level anticheat?</strong>
-            Some game anticheats install a driver on the system that runs at kernel level,
-            giving itself access to everything in the machine.
-          </li>
-          <li>
-            <strong>Are kernel anticheats better than regular anticheats?</strong>
-            No, they aren't. Many online games have more traditional anticheat methods and do not have more cheaters than games using a kernel driver.
-          </li>
+<div class="row">
+  <div class="col-12 col-md-9">
+    {% if game.flags.kernel_ac.is_set %}
+    <div class="danger-zone">
+      <h3><strong>This game requires kernel-level anticheat software which is unsupported on Linux.</strong></h3>
+      <ul>
+        <li>
+          <strong>What is a kernel level anticheat?</strong>
+          Some game anticheats install a driver on the system that runs at kernel level,
+          giving itself access to everything in the machine.
+        </li>
+        <li>
+          <strong>Are kernel anticheats better than regular anticheats?</strong>
+          No, they aren't. Many online games have more traditional anticheat methods and do not have more cheaters than
+          games using a kernel driver.
+        </li>
 
-          <li>
-            <strong>Will this anticheat work on Linux?</strong>
-            No, it won't. Those anticheats rely on running on a genuine Windows OS (most of them won't even run in a virtual machine).
-            On Linux, Windows games run through the Wine compatibility layer. Wine does not have the ability to install and use Windows kernel drivers on Linux.
-          </li>
-          <li>
-            <strong>What can Lutris do about it?</strong>
-            Nothing. Do not ask for support for this game. Do not attempt running this game on Linux unless you have time to waste.
-            If you want to voice a complaint, go to the game publisher.
-          </li>
-          <li>
-            <strong>What can I do about it?</strong>
-            If the game is available on a streaming platform such as Geforce Now, then you can use that.
-            Otherwise, you'll have to play from a Windows machine.
-            You can also choose to play one of the many online competitive games that do work on Linux. Here are a few:
-          </li>
-        </ul>
-        <p class="centered">
+        <li>
+          <strong>Will this anticheat work on Linux?</strong>
+          No, it won't. Those anticheats rely on running on a genuine Windows OS (most of them won't even run in a
+          virtual machine).
+          On Linux, Windows games run through the Wine compatibility layer. Wine does not have the ability to install
+          and use Windows kernel drivers on Linux.
+        </li>
+        <li>
+          <strong>What can Lutris do about it?</strong>
+          Nothing. Do not ask for support for this game. Do not attempt running this game on Linux unless you have time
+          to waste.
+          If you want to voice a complaint, go to the game publisher.
+        </li>
+        <li>
+          <strong>What can I do about it?</strong>
+          If the game is available on a streaming platform such as Geforce Now, then you can use that.
+          Otherwise, you'll have to play from a Windows machine.
+          You can also choose to play one of the many online competitive games that do work on Linux. Here are a few:
+        </li>
+      </ul>
+      <p class="centered">
         {% for alt_game in no_ac_recommendations %}
-        <a href="{{ alt_game.get_absolute_url }}" title="{{ alt_game.name }}"><img src="{{ alt_game.coverart.url }}" alt="{{ alt_game.name }}"/></a>
+        <a href="{{ alt_game.get_absolute_url }}" title="{{ alt_game.name }}"><img src="{{ alt_game.coverart.url }}"
+            alt="{{ alt_game.name }}" /></a>
         {% endfor %}
-        </p>
+      </p>
+    </div>
+    {% else %}
+    {% if screenshots %}
+    <div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
+      <div class="slides"></div>
+      <a class="prev" aria-label="previous slide"></a>
+      <a class="next" aria-label="next slide"></a>
+      <div id="screenshots" class="d-none">
+        {% for screenshot in screenshots %}
+        <a href="{{ MEDIA_URL }}{{ screenshot.image }}" title="{{ screenshot.description }}"></a>
+        {% endfor %}
       </div>
-      {% else %}
-      {% if screenshots %}
-      <div id="game_screenshots_carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls mt-0">
-        <div class="slides"></div>
-        <a class="prev" aria-label="previous slide"></a>
-        <a class="next" aria-label="next slide"></a>
-        <div id="screenshots" class="d-none">
-          {% for screenshot in screenshots %}
-          <a href="{{ MEDIA_URL }}{{ screenshot.image }}" title="{{ screenshot.description }}"></a>
-          {% endfor %}
-        </div>
+    </div>
+    {% endif %}
+    <div class="installer-list">
+      {% if installers %}
+      <ul class="list-group">
+        {% for installer in installers %}
+        {% include "games/_installer.html" %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if unpublished_installers %}
+      <ul class="list-group">
+        {% for installer in unpublished_installers %}
+        {% include "games/_draft.html" %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if auto_installers %}
+      <ul class="list-group">
+        {% for installer in auto_installers %}
+        {% include "games/_installer.html" %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+      <div class="actions-bar">
+        <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
+      </div>
+      <div class="actions-bar">
+        <a href="{% url "screenshot_add" slug=game.slug %}">Add screenshot</a>
       </div>
       {% endif %}
-      <div class="installer-list">
-        {% if installers %}
-        <ul class="list-group">
-          {% for installer in installers %}
-            {% include "games/_installer.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-
-        {% if unpublished_installers %}
-        <ul class="list-group">
-          {% for installer in unpublished_installers %}
-            {% include "games/_draft.html" %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-
-        {% if auto_installers %}
-        <ul class="list-group">
-        {% for installer in auto_installers %}
-          {% include "games/_installer.html" %}
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-        <div class="actions-bar">
-          <a href="{% url "new_installer" slug=game.slug %}">Write a new installer</a>
-        </div>
-        <div class="actions-bar">
-          <a href="{% url "screenshot_add" slug=game.slug %}">Add screenshot</a>
-        </div>
-        {% endif %}
-        {% if user.is_staff %}
-        <div class="actions-bar">
-          <a href="{{ DASHBOARD_URL }}/#/games/{{game.slug}}">Show in dashboard</a>
-        </div>
-        {% endif %}
-      </div>
-      <div class="py-3">
-        {{ game.description | linebreaks }}
+      {% if user.is_staff %}
+      <div class="actions-bar">
+        <a href="{{ DASHBOARD_URL }}/#/games/{{game.slug}}">Show in dashboard</a>
       </div>
       {% endif %}
     </div>
+    <div class="py-3">
+      {{ game.description | linebreaks }}
+    </div>
+    {% endif %}
+  </div>
 
-    <div class="col-12 col-md-3">
-      <div class="game-info">
-        {% if game.coverart %}
-        <img src="{{game.coverart.url}}"/>
-        {% endif %}
-        <ul>
-          {% if game.genres.count %}
-          <li>
-            <span class="info-label">Genre: </span>
-            {% for genre in game.genres.all %}
-              {{ genre }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          </li>
-          {% endif %}
-          {% if game.platforms.count %}
-          <li>
-            <span class="info-label">Platform: </span>
-            {% for platform in game.platforms.all %}
-              {{ platform }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          </li>
-          {% endif %}
-
-          {% if game.website %}
-          <li class="ellipse-text">
-            <span class="info-label">Website: </span>
-            <a href='{{ game.website_url }}'>{{ game.website_url_hr }}</a>
-          </li>
-          {% endif %}
-        </ul>
-
-        <div>
-          <p>
-            {% for link, url in provider_links.items %}
-            <a href="{{url}}" target="_blank" class='external-link'>
-              <img src="{{ STATIC_URL }}images/icons/{{link}}.png" />
-              <span>{{link}}</span>
-            </a>
-            {% endfor %}
-            {% if game.humblestoreid %}
-              <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store"  target="_blank" class='external-link'>
-                <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
-                <span>Humble Store</span>
-              </a>
-            {% endif %}
-            {% if game.gogslug %}
-            <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG"  target="_blank" class='external-link'>
-              <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
-              <span>GOG</span>
-            </a>
-          {% endif %}
-            {% for link in game.links.all %}
-            <a href="{{link.url}}" class='external-link' target="_blank">
-              <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}"/>
-              <span>{{link.get_website_display}}</span>
-            </a>
-            {% endfor %}
-          </p>
-          <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this game</p>
-          <p>
-            {% if not in_library %}
-            <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-secondary">Add to my library</a>
-            {% endif %}
-          </p>
-          {% for flag in game.flag_labels %}
-            <p class='badge'>
-             {{flag}}
-            </p>
+  <div class="col-12 col-md-3">
+    <div class="game-info">
+      {% if game.coverart %}
+      <img src="{{game.coverart.url}}" />
+      {% endif %}
+      <ul>
+        {% if game.genres.count %}
+        <li>
+          <span class="info-label">Genre: </span>
+          {% for genre in game.genres.all %}
+          {{ genre }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
-        </div>
+        </li>
+        {% endif %}
+        {% if game.platforms.count %}
+        <li>
+          <span class="info-label">Platform: </span>
+          {% for platform in game.platforms.all %}
+          {{ platform }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </li>
+        {% endif %}
+
+        {% if game.website %}
+        <li class="ellipse-text">
+          <span class="info-label">Website: </span>
+          <a href='{{ game.website_url }}'>{{ game.website_url_hr }}</a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <div>
+        <p>
+          {% for link, url in provider_links.items %}
+          <a href="{{url}}" target="_blank" class='external-link'>
+            <img src="{{ STATIC_URL }}images/icons/{{link}}.png" />
+            <span>{{link}}</span>
+          </a>
+          {% endfor %}
+          {% if game.humblestoreid %}
+          <a href="https://www.humblebundle.com/store/{{ game.humblestoreid }}" title="Humble Store" target="_blank"
+            class='external-link'>
+            <img src="{{ STATIC_URL }}images/icons/humblestore.png" alt="Humble Store" />
+            <span>Humble Store</span>
+          </a>
+          {% endif %}
+          {% if game.gogslug %}
+          <a href="https://www.gog.com/game/{{ game.gogslug }}" title="GOG" target="_blank" class='external-link'>
+            <img src="{{ STATIC_URL }}images/icons/gog.png" alt="GOG" />
+            <span>GOG</span>
+          </a>
+          {% endif %}
+          {% for link in game.links.all %}
+          <a href="{{link.url}}" class='external-link' target="_blank">
+            <img src="{{STATIC_URL}}images/icons/{{link.website}}.png" alt="{{link.website}}" />
+            <span>{{link.get_website_display}}</span>
+          </a>
+          {% endfor %}
+        </p>
+        <p>{{ game.user_count }} user{{ game.user_count|pluralize:"s" }} ha{{ game.user_count|pluralize:"s,ve" }} this
+          game</p>
+        <p>
+          {% if not in_library %}
+          <a href="{% url "add_to_library" slug=game.slug %}" class="btn btn-secondary">Add to my library</a>
+          {% endif %}
+        </p>
+        {% for flag in game.flag_labels %}
+        <p class='badge'>
+          {{flag}}
+        </p>
+        {% endfor %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -258,17 +265,17 @@
     var unpublishedInstallers = document.getElementById('unpublished-installers');
     unpublishedInstallers.classList.toggle('hide-unpublished');
   }
-$(window).on('load', function () {
-  const screenshotsDiv = document.getElementById('screenshots')
-  if (!screenshotsDiv) {
-    return
-  }
-  blueimp.Gallery(screenshotsDiv.getElementsByTagName('a'), {
-    container: '#game_screenshots_carousel',
-    carousel: true,
-    toggleControlsOnSlideClick: false,
-    stretchImages: true,
-  });
-})
+  $(window).on('load', function () {
+    const screenshotsDiv = document.getElementById('screenshots')
+    if (!screenshotsDiv) {
+      return
+    }
+    blueimp.Gallery(screenshotsDiv.getElementsByTagName('a'), {
+      container: '#game_screenshots_carousel',
+      carousel: true,
+      toggleControlsOnSlideClick: false,
+      stretchImages: true,
+    });
+  })
 </script>
 {% endblock %}
