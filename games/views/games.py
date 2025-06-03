@@ -63,7 +63,11 @@ class GameListView(generics.GenericAPIView):
                 provider_games__slug__in=self.request.data["humblestoreid"],
                 provider_games__provider__name="humblebundle",
             )
-
+        if (
+            not self.request.user.is_authenticated
+            or not self.request.user.show_adult_content
+        ):
+            base_query = base_query.exclude(Q(flags=models.Game.flags.adult_only))
         return base_query
 
     def get_serializer_class(self):

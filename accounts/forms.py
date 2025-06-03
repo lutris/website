@@ -1,4 +1,5 @@
 """Account management handling forms"""
+
 # pylint: disable=no-member
 import logging
 
@@ -26,8 +27,7 @@ class RegistrationForm(forms.ModelForm):
         help_text=("30 characters max."),
         error_messages={
             "invalid": (
-                "This value may contain only letters, numbers and "
-                "@/./+/-/_ characters."
+                "This value may contain only letters, numbers and @/./+/-/_ characters."
             )
         },
     )
@@ -44,6 +44,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         """Model and field definitions"""
+
         model = User
         fields = ("username", "email")
 
@@ -86,13 +87,18 @@ class RegistrationForm(forms.ModelForm):
         Token.objects.create(user=user)
         return user
 
+
 class ProfileForm(forms.ModelForm):
     """Form to edit profile information"""
 
     class Meta:
         """ModelForm configuration"""
+
         model = User
-        fields = ("email", )
+        fields = ("email", "show_adult_content")
+        help_texts = {
+            "show_adult_content": "Display adult content in Lutris searches. Only enable this if you are legally authorized to view this type of content in your country."
+        }
 
     def save(self, commit=True):
         if "email" in self.changed_data:
@@ -102,6 +108,7 @@ class ProfileForm(forms.ModelForm):
 
 class ProfileDeleteForm(forms.Form):
     """Form to ask confirmation for account deletion"""
+
     confirm_delete = forms.BooleanField(
         label="Yes, I confirm I want to delete my account"
     )
