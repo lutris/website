@@ -16,12 +16,7 @@
     {% else %}
       <div class="alert alert-info mx-auto d-table">
         No games found that match these criteria.
-        {% if not unpublished and unpublished_match_count > 0 %}
-            However, <a href="{% append_to_get unpublished-filter='on' %}">{{ unpublished_match_count }} unpublished
-            game{{ unpublished_match_count|pluralize:"s" }}</a> d{{ unpublished_match_count|pluralize:"oes,o" }}.
-        {% else %}
-            Feel free to <a href="{% url 'game-submit' %}" class="btn btn-sm btn-primary">add the game</a> to our database.
-        {% endif %}
+        Feel free to <a href="{% url 'game-submit' %}" class="btn btn-sm btn-primary">add the game</a> to our database.
       </div>
     {% endif %}
   </div>
@@ -48,11 +43,6 @@
     <div class="filter-form">
       <form action="{% url 'game_list' %}" method="get" id="library_filter_form">
         {{ filter_form.as_p }}
-        <label for="unpublished-filter" style="margin-bottom: 1em;margin-top: 0;">
-          <input type="checkbox" id="unpublished-filter" name="unpublished-filter"
-              {% if unpublished_filter %}checked{% endif %} />
-          Show unpublished
-        </label>
         <label for="search-installers" style="margin-bottom: 1em;margin-top: 0;">
           <input type="checkbox" id="search-installers" name="search-installers"
               {% if search_installers %}checked{% endif %} />

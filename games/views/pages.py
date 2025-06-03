@@ -68,8 +68,6 @@ class GameList(ListView):
             "years": request.GET.getlist(
                 "years", [kwargs.get("year")] if "year" in kwargs else []
             ),
-            "flags": request.GET.getlist("flags", []),
-            "unpublished-filter": request.GET.get("unpublished-filter", False),
             "search-installers": request.GET.get("search-installers", False),
         }
         return super().get(request, *args, **kwargs)
@@ -100,10 +98,7 @@ class GameList(ListView):
 
     def get_queryset(self):
         queryset = models.Game.objects
-        if self.q_params["unpublished-filter"]:
-            queryset = queryset.filter(change_for__isnull=True)
-        else:
-            queryset = queryset.with_installer()
+        queryset = queryset.filter(change_for__isnull=True)
         queryset = queryset.prefetch_related(
             "genres", "publisher", "developer", "platforms", "installers"
         )
@@ -140,15 +135,12 @@ class GameList(ListView):
             )
         if self.q_params["years"]:
             queryset = queryset.filter(Q(year__in=self.q_params["years"]))
-        if self.q_params["flags"]:
-            flag_q = Q()
-            for flag_name in self.q_params["flags"]:
-                try:
-                    flag = getattr(models.Game.flags, flag_name)
-                except AttributeError:
-                    continue
-                flag_q |= Q(flags=flag)
-            queryset = queryset.filter(flag_q)
+
+        if (
+            not self.request.user.is_authenticated
+            or not self.request.user.show_adult_content
+        ):
+            queryset = queryset.exclude(Q(flags=models.Game.flags.adult_only))
         return queryset
 
     def clean_search_query(self):
@@ -193,13 +185,6 @@ class GameList(ListView):
         if self.q_params.get("years"):
             for year in self.q_params["years"]:
                 filter_string += "&years=%s" % year
-        if self.q_params.get("flags"):
-            for flag in self.q_params["flags"]:
-                filter_string += "&flags=%s" % flag
-        if self.q_params.get("unpublished-filter"):
-            filter_string += (
-                "&unpublished-filter=%s" % self.q_params["unpublished-filter"]
-            )
         if self.q_params.get("search-installers"):
             filter_string += (
                 "&search-installers=%s" % self.q_params["search-installers"]
@@ -209,7 +194,6 @@ class GameList(ListView):
         context["order_by"] = self.get_ordering()
         context["paginate_by"] = self.get_paginate_by(None)
         context["search_terms"] = self.q_params.get("search", "")
-        context["unpublished_filter"] = self.q_params.get("unpublished-filter", False)
         context["search_installers"] = self.q_params.get("search-installers", False)
         context["unpublished_match_count"] = self.get_filtered_queryset(
             models.Game.objects.filter(is_public=False)

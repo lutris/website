@@ -1,22 +1,22 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-
-{% block title %}Register - Lutris{% endblock %}
-
+{% block title %}
+  Register - Lutris
+{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-sm-3"></div>
-  <div class="col-sm-6 form-view">
-    <h1>Register account</h4>
-    <form id='form_register' method="post" class="form-horizontal form">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <div>
-        <input type="submit" value="Register" class="btn btn-primary">
-      </div>
-    </form>
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 form-view">
+      <h1>Register account</h1>
+      <form id="form_register" method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+          <input type="submit" value="Register" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-3"></div>
   </div>
-  <div class="col-sm-3"></div>
-</div>
 {% endblock %}

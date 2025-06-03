@@ -5,14 +5,14 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
 
 
-$primary:   #F90;
+$primary: #F90;
 $secondary: #FFDBA4;
-$success:   #2DA750;
-$info:      #FD37A0;
-$warning:   #FDA750;
-$danger:    #FD3750;
-$light:     #DDD;
-$dark:      #222;
+$success: #2DA750;
+$info: #FD37A0;
+$warning: #FDA750;
+$danger: #FD3750;
+$light: #DDD;
+$dark: #222;
 
 $body-bg: $dark;
 $body-color: $gray-200;
@@ -36,16 +36,13 @@ $pagination-active-bg: #FFF;
 $pagination-active-color: #666;
 $pagination-disabled-color: #888;
 
-$theme-colors: map-merge(
-  $theme-colors,
-  (
-    "primary": $primary,
-    "secondary": $secondary,
-    "light": $light,
-    "dark": $dark,
-    "warning": $warning,
-  )
-);
+$theme-colors: map-merge($theme-colors,
+    ("primary": $primary,
+      "secondary": $secondary,
+      "light": $light,
+      "dark": $dark,
+      "warning": $warning,
+    ));
 
 $list-group-color: $light;
 $list-group-bg: #333;
@@ -58,14 +55,15 @@ $padding: 7px;
 $banner-width: 184px;
 
 // Remove outline from focused links
-a:focus, a:active,
+a:focus,
+a:active,
 button::-moz-focus-inner,
 input[type="reset"]::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner,
 input[type="submit"]::-moz-focus-inner,
 select::-moz-focus-inner,
-input[type="file"] > input[type="button"]::-moz-focus-inner {
-  outline : 0;
+input[type="file"]>input[type="button"]::-moz-focus-inner {
+  outline: 0;
 }
 
 
@@ -96,19 +94,23 @@ form {
       color: #bada55;
     }
   }
+
   textarea {
     padding: 5px 10px;
   }
+
   .form-actions {
     padding: 1.5em 0;
   }
 }
+
 .form {
   label {
     display: block;
     font-size: 1.1em;
     padding: .2em 0;
   }
+
   input {
     width: 100%;
     display: block;
@@ -117,11 +119,32 @@ form {
   }
 }
 
+.form-inline {
+  p {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  label {
+    min-width: 200px;
+    flex-shrink: 1;
+  }
+
+  input[type="text"],
+  input[type="email"] {
+    max-width: 650px;
+    border: saddlebrown solid 1px;
+    flex-grow: 1;
+  }
+}
+
 figure {
   padding: 0;
+
   img {
     width: 100%;
   }
+
   figcaption {
     background-color: rgba(30, 30, 30, 0.15);
     padding: 0;
@@ -136,6 +159,7 @@ figure.tiled {
     width: auto;
     padding: 4px 3px;
     margin: auto;
+
     @include media-breakpoint-down(md) {
       width: 100%;
       padding: 20px 20%;
@@ -147,24 +171,29 @@ header {
   border-bottom: 1px solid $primary;
   box-shadow: 0 0 5px #000;
   margin-bottom: 1em;
+
   .nav-link {
     text-transform: uppercase;
     font-weight: 600;
     color: #E5E5E5;
+
     &:hover {
       color: $primary;
     }
   }
+
   .logo {
     font-weight: 300;
     font-size: 24px;
-    margin-right:24px;
+    margin-right: 24px;
     color: $primary;
     text-decoration: none;
+
     span {
       padding: 12px;
     }
   }
+
   button {
     background: none;
     border: none;
@@ -179,6 +208,7 @@ header {
   color: #888;
   font-size: .8em;
   line-height: 1.7em;
+
   a {
     color: #FDAA5d;
     font-weight: 600;
@@ -186,6 +216,7 @@ header {
     border-radius: 5px;
     padding: 2px 6px;
   }
+
   select {
     background-color: $dark;
     border: 1px solid $light;
@@ -200,9 +231,11 @@ header {
 
 #footer {
   margin-top: 3em;
+
   a {
     color: #EEE;
   }
+
   svg {
     margin: 16px;
   }
@@ -220,7 +253,9 @@ header {
   color: #FDAA5d;
 }
 
-.right {float: right;}
+.right {
+  float: right;
+}
 
 .centered-vertical {
   display: table-cell;
@@ -260,8 +295,8 @@ header {
   margin-top: 20px;
   border-radius: 3px;
   border: 1px solid #444;
-  box-shadow: 0 1px 1px rgba(200,200,200,.6) inset,
-              0 1px 1px rgba(230,230,230, .7);
+  box-shadow: 0 1px 1px rgba(200, 200, 200, .6) inset,
+    0 1px 1px rgba(230, 230, 230, .7);
   background-color: #F0F0F0;
   box-sizing: border-box;
   padding: 20px;
@@ -278,6 +313,7 @@ header {
   border-radius: 6px;
   border: 1px solid #555;
   padding: 1em;
+
   tt {
     white-space: nowrap;
     font-family: monospace;
@@ -322,12 +358,15 @@ header {
 
 // Workaround for a cursor rendering bug in ACE editor:
 // https://github.com/ajaxorg/ace/issues/2548
-.ace_editor, .ace_text-input, .ace_editor div{
-  font-family : monospace !important;
+.ace_editor,
+.ace_text-input,
+.ace_editor div {
+  font-family: monospace !important;
 }
 
 .errorlist {
   padding: 0;
+
   li {
     padding: 8px 16px;
     list-style-type: none;
@@ -341,15 +380,19 @@ header {
 
 .download-list {
   padding: 0;
+
   li {
     list-style-type: none;
   }
+
   &>li {
     padding: 14px 15px;
     border-bottom: 1px solid #555;
+
     @include media-breakpoint-up(sm) {
       padding: 15px 20px;
     }
+
     &:last-child {
       border-bottom: none;
     }
@@ -359,6 +402,7 @@ header {
       padding-left: 0;
       border-right: none;
       display: block;
+
       @include media-breakpoint-up(sm) {
         display: table-cell;
         border-right: 1px solid #444;
@@ -386,9 +430,11 @@ header {
 .footnote {
   font-size: .75em;
   color: #999;
+
   a {
     color: $light;
     border-bottom: 1px dotted rgba(150, 150, 150, .3);
+
     &:hover {
       text-decoration: none;
       border-bottom-color: $light;
@@ -397,26 +443,29 @@ header {
 }
 
 
-.select2, .select2-dropdown {
+.select2,
+.select2-dropdown {
   color: #222 !important;
 }
 
 .select2-lookalike {
-    padding: 4px;
-    border: 1px solid #AAA;
-    border-radius: 4px;
+  padding: 4px;
+  border: 1px solid #AAA;
+  border-radius: 4px;
+  background-color: $white;
+  color: #222;
+  width: 100%;
+
+  &:focus {
     background-color: $white;
-    color: #222;
-    width: 100%;
-    &:focus {
-      background-color: $white;
-      border: 1px solid $black;
-      outline: 0;
-    }
-    input {
-      background-color: transparent;
-      border: none;
-    }
+    border: 1px solid $black;
+    outline: 0;
+  }
+
+  input {
+    background-color: transparent;
+    border: none;
+  }
 }
 
 .game-icon {
@@ -426,12 +475,14 @@ header {
 
 .important-checkbox {
   display: block;
+
   label {
     line-height: 24px;
     font-size: 1.2em;
     display: inline-block;
     padding-top: 4px;
   }
+
   input[type="checkbox"] {
     font-size: 24px;
     width: 24px;
@@ -448,15 +499,17 @@ header {
   padding: 5px;
   line-height: 25px;
   white-space: nowrap;
-  background-color: rgba(0,0,0,.8);
+  background-color: rgba(0, 0, 0, .8);
   color: #EEE;
 }
 
 .image-container {
   min-height: 350px;
+
   @include media-breakpoint-down(sm) {
     min-height: 100px;
   }
+
   img {
     width: 100%;
     height: auto;
@@ -489,7 +542,8 @@ header {
 
 .form-view {
   @extend .message-view;
-  & > h1 {
+
+  &>h1 {
     margin-top: 0;
   }
 }
@@ -507,44 +561,63 @@ header {
     width: 184px;
     height: 69px;
   }
+
   ul {
     @extend .ul-reset;
     margin-bottom: 10px;
   }
+
   li {
     padding: 5px 0;
   }
+
   .info-label {
     color: #888;
   }
+
   a {
     // md-button breaks this style
     text-decoration: none !important;
   }
+
   .in-library {
     width: 112px;
     background-color: #365278;
-    &:hover { background-color: #7e2b2b; }
-    &:hover span { display: none; }
-    &:hover:before { content: "Remove it"; }
+
+    &:hover {
+      background-color: #7e2b2b;
+    }
+
+    &:hover span {
+      display: none;
+    }
+
+    &:hover:before {
+      content: "Remove it";
+    }
   }
 }
 
 .game-list {
   list-style-type: none;
+
   li {
     display: flex;
     background-color: $dark;
     margin-bottom: 12px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   }
+
   .game-image {
     width: 184px;
     padding: 6px;
   }
-  .game-image, .game-info {
+
+  .game-image,
+  .game-info {
     padding: 6px;
   }
+
   .game-info {
     width: 100%;
     display: inline-block;
@@ -553,15 +626,19 @@ header {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   .game-meta {
     a {
       border-bottom: 1px dotted #666;
     }
+
     span {
       margin-right: 1em;
     }
+
     font-size: 0.8em;
   }
+
   .game-title {
     color: $primary;
     font-size: 1.2em;
@@ -575,11 +652,13 @@ header {
   width: 100%;
   text-align: center;
   font-style: italic;
-  & > .filter-failure-icon {
+
+  &>.filter-failure-icon {
     color: #444;
     font-size: 60px;
   }
-  & > p {
+
+  &>p {
     margin-top: 0 !important;
   }
 }
@@ -589,10 +668,12 @@ header {
   margin-bottom: .5em;
   display: flex;
   background-color: #333;
+
   .game-name {
     font-weight: bold;
     color: $primary;
   }
+
   .game-details {
     padding-left: .5em;
   }
@@ -613,16 +694,19 @@ header {
   align-items: center;
   justify-content: center;
   display: inline-block;
+
   img.coverart-medium {
     width: 176px;
     height: 234px;
   }
+
   .game-library-actions {
     visibility: hidden;
     position: absolute;
     top: 10px;
     right: 10px;
   }
+
   .game-library-name {
     visibility: hidden;
     position: absolute;
@@ -632,15 +716,18 @@ header {
     padding: 8px;
     background-color: rgba(0, 0, 0, 0.5);
   }
+
   .game-library-info {
     font-size: .7em;
     text-transform: none;
     padding-top: 5px;
   }
+
   &:hover {
     .game-library-actions {
       visibility: visible;
     }
+
     .game-library-name {
       visibility: visible;
     }
@@ -672,7 +759,7 @@ header {
   display: inline-block;
   width: $banner-width;
 
-  img{
+  img {
     border-bottom: 1px solid $primary;
   }
 
@@ -684,11 +771,13 @@ header {
     background: rgba(63, 63, 63, 0.80);
     text-overflow: ellipsis;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: #444;
       outline: 0;
     }
   }
+
   .game-title {
     font-size: 1.25em;
     text-align: center;
@@ -711,10 +800,12 @@ header {
 
 .choice-list {
   @extend .ul-reset;
+
   li {
     margin: 10px 20px 3px 0;
     min-width: 130px;
   }
+
   a {
     background-color: $dark;
     border-radius: 2px;
@@ -723,11 +814,13 @@ header {
     text-transform: capitalize;
     font-size: 1.1em;
     color: #EDEDED;
+
     &:hover {
       background-color: #444;
       text-decoration: none;
     }
   }
+
   img {
     margin-right: 4px;
   }
@@ -754,6 +847,7 @@ header {
   ul {
     @extend .ul-reset;
     margin-bottom: 0;
+
     li {
       border-bottom: 2px solid #222;
     }
@@ -786,6 +880,7 @@ header {
 
 .sidebar {
   font-weight: bold;
+
   i {
     padding-right: 4px;
   }
@@ -800,7 +895,8 @@ header {
   text-align: right;
   padding: 4px;
 
-  a, span {
+  a,
+  span {
     font-size: .8em;
     padding: 4px;
   }
@@ -1018,6 +1114,7 @@ header {
   ul {
     list-style: none;
   }
+
   padding: .8em;
   background-color: #333;
   color: $light;
@@ -1044,7 +1141,7 @@ header {
   font-size: xx-large;
 }
 
-ol.toc a{
+ol.toc a {
   color: white;
   text-decoration: none;
 
@@ -1074,14 +1171,17 @@ ol.toc a{
   max-width: 500px;
   width: max-content;
 }
+
 .alertify-notifier .ajs-message.ajs-success {
   color: $dark;
   background: $success;
 }
+
 .alertify-notifier .ajs-message.ajs-error {
   color: white;
   background: $danger;
 }
+
 .alertify-notifier .ajs-message.ajs-warning {
   color: $dark;
   background: $warning;
@@ -1089,11 +1189,11 @@ ol.toc a{
 
 .alertify-notifier .ajs-message.ajs-visible {
   -webkit-animation-name: ajs-fadeIn;
-          animation-name: ajs-fadeIn;
+  animation-name: ajs-fadeIn;
   -webkit-animation-duration: 500ms;
-          animation-duration: 500ms;
-  -webkit-transition:none;
-          transition:none;
+  animation-duration: 500ms;
+  -webkit-transition: none;
+  transition: none;
 }
 
 // Blueimp gallery
@@ -1101,7 +1201,8 @@ ol.toc a{
   background-color: #000 !important;
 }
 
-.blueimp-gallery > .prev, .blueimp-gallery > .next {
+.blueimp-gallery>.prev,
+.blueimp-gallery>.next {
   font-family: $font-family-base;
   background: None;
   border: None;
@@ -1110,10 +1211,12 @@ ol.toc a{
 
 // Fix for anchor links
 :target:before {
-  content:"";
-  display:block;
-  height:77px; /* fixed header height*/
-  margin:-77px 0 0; /* negative fixed header height */
+  content: "";
+  display: block;
+  height: 77px;
+  /* fixed header height*/
+  margin: -77px 0 0;
+  /* negative fixed header height */
 }
 
 .danger-zone {
