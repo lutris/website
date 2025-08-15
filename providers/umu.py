@@ -373,7 +373,7 @@ def save_umu_games():
         json.dump(umu_games, umu_file, indent=2)
     # Compress the file with xz using subprocess
     subprocess.run(
-        ["xz", "-z", "-f", UMU_GAMES_PATH],
+        ["xz", "--compress", "--force", "--keep", UMU_GAMES_PATH],
         check=True,
     )
     # Update API repository
