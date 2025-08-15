@@ -1,6 +1,7 @@
 import logging
 import os
 import json
+import subprocess
 from collections import defaultdict
 from typing import List, Tuple
 
@@ -11,6 +12,7 @@ from django.utils import timezone
 
 from games.steam import create_game_from_steam_appid
 from providers.models import Provider, ProviderGame
+from runners.models import Runtime
 
 LOGGER = logging.getLogger(__name__)
 
@@ -369,3 +371,12 @@ def save_umu_games():
     umu_games = export_umu_games()
     with open(UMU_GAMES_PATH, "w") as umu_file:
         json.dump(umu_games, umu_file, indent=2)
+    # Compress the file with xz using subprocess
+    subprocess.run(
+        ["xz", "-z", "-f", UMU_GAMES_PATH],
+        check=True,
+    )
+    # Update API repository
+    umu_games_runtime = Runtime.objects.get(name="umu-games")
+    umu_games_runtime.updated_at = timezone.now()
+    umu_games_runtime.save()
