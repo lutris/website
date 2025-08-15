@@ -3,6 +3,7 @@
 import logging
 import requests
 from django.conf import settings
+from simplejson.errors import JSONDecodeError
 
 from games import models
 from accounts.models import User
@@ -40,7 +41,11 @@ def steam_sync(steamid):
     response = requests.get(steam_games_url)
     if response.status_code > 400:
         raise ValueError("Invalid response from steam: %s" % response)
-    json_data = response.json()
+    try:
+        json_data = response.json()
+    except JSONDecodeError:
+        LOGGER.error("Invalid JSON response from Steam API: %s", response.content)
+        return []
     response = json_data["response"]
     if not response:
         LOGGER.info("No games in response of %s", steam_games_url)

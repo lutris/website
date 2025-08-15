@@ -1,4 +1,5 @@
 """Provider tasks"""
+
 import os
 import json
 from datetime import datetime
@@ -14,9 +15,16 @@ from common.util import slugify
 from common.models import save_action_log
 
 from games.models import Game
+from games.webhooks import send_simple_message
 from platforms.models import Platform
 from providers.igdb import IGDBClient
-from providers.models import Provider, ProviderGame, ProviderGenre, ProviderPlatform, ProviderCover
+from providers.models import (
+    Provider,
+    ProviderGame,
+    ProviderGenre,
+    ProviderPlatform,
+    ProviderCover,
+)
 from lutrisweb.celery import app
 
 LOGGER = get_task_logger(__name__)
@@ -35,7 +43,7 @@ IGDB_CAT = {
     "remaster": 9,
     "expanded_game": 10,
     "port": 11,
-    "fork": 12
+    "fork": 12,
 }
 
 
@@ -57,6 +65,11 @@ def _igdb_loader(resource_name, model):
             LOGGER.error("Failed to read JSON response: %s", response.text)
             continue
         for api_payload in resources:
+            if isinstance(api_payload, str):
+                LOGGER.warning(
+                    "Received string instead of JSON object: %s", api_payload
+                )
+                continue
             model.create_from_igdb_api(provider, api_payload)
         page += 1
 
@@ -65,6 +78,7 @@ def _igdb_loader(resource_name, model):
 def load_igdb_games():
     """Load all games from IGDB"""
     start = datetime.now()
+    send_simple_message("Starting IGDB loading")
     save_action_log("igdb_load_games_started_at", str(start))
     _igdb_loader("games", ProviderGame)
     end = datetime.now()
@@ -94,9 +108,7 @@ def load_igdb_covers():
 @app.task
 def match_igdb_games():
     """Create or update Lutris games from IGDB games"""
-    platforms = {
-        p.igdb_id: p for p in Platform.objects.filter(igdb_id__isnull=False)
-    }
+    platforms = {p.igdb_id: p for p in Platform.objects.filter(igdb_id__isnull=False)}
     for igdb_game in ProviderGame.objects.filter(provider__name="igdb"):
         igdb_slug = igdb_game.metadata["slug"]
         if not igdb_slug:
@@ -124,7 +136,9 @@ def match_igdb_games():
 
         # Set year
         if not lutris_game.year and igdb_game.metadata.get("first_release_date"):
-            lutris_game.year = datetime.fromtimestamp(igdb_game.metadata["first_release_date"]).year
+            lutris_game.year = datetime.fromtimestamp(
+                igdb_game.metadata["first_release_date"]
+            ).year
 
         # Set description
         if not lutris_game.description and igdb_game.metadata.get("summary"):
@@ -151,8 +165,7 @@ def sync_igdb_platforms():
             lutris_platform = Platform.objects.get(slug=igdb_slug)
         except Platform.DoesNotExist:
             lutris_platform = Platform.objects.create(
-                name=igdb_platform.name,
-                slug=igdb_slug
+                name=igdb_platform.name, slug=igdb_slug
             )
         lutris_platform.igdb_id = igdb_platform.metadata["id"]
         lutris_platform.save()
@@ -188,14 +201,18 @@ def sync_igdb_coverart(force_update=False):
             stats["existing_file"] += 1
             continue
         try:
-            igdb_game = ProviderGame.objects.get(provider__name="igdb", internal_id=igdb_cover.game)
+            igdb_game = ProviderGame.objects.get(
+                provider__name="igdb", internal_id=igdb_cover.game
+            )
         except ProviderGame.DoesNotExist:
             stats["missing_igdb_game"] += 1
             continue
         except ProviderGame.MultipleObjectsReturned:
             stats["multiple_igdb_games"] += 1
             LOGGER.warning("Multiple games for %s", igdb_cover.game)
-            igdb_game = ProviderGame.objects.filter(provider__name="igdb", internal_id=igdb_cover.game).first()
+            igdb_game = ProviderGame.objects.filter(
+                provider__name="igdb", internal_id=igdb_cover.game
+            ).first()
         try:
             lutris_game = Game.objects.get(provider_games=igdb_game)
         except Game.DoesNotExist:
@@ -208,10 +225,7 @@ def sync_igdb_coverart(force_update=False):
         if lutris_game.coverart and not force_update:
             stats["existing_lutris_coverart"] += 1
             continue
-        lutris_game.coverart = ContentFile(
-            get_igdb_cover(igdb_cover.image_id),
-            relpath
-        )
+        lutris_game.coverart = ContentFile(get_igdb_cover(igdb_cover.image_id), relpath)
         lutris_game.save()
         stats["coverart_saved"] += 1
     return stats
@@ -222,16 +236,17 @@ def deduplicate_lutris_games():
     """IGDB uses a different slugify method,
     using dashes on apostrophes where we don't"""
     # Select all title with an apostrophe that don't have an IGDB game already
-    games = Game.objects.filter(
-        change_for__isnull=True,
-        name__contains="'"
-    ).exclude(provider_games__provider__name="igdb")
+    games = Game.objects.filter(change_for__isnull=True, name__contains="'").exclude(
+        provider_games__provider__name="igdb"
+    )
     for game in games:
         # Generate a new slug
         igdb_slug = slugify(game.name.replace("'", "-"))
         # Check the presence of an IGDB game
         try:
-            igdb_game = Game.objects.get(provider_games__provider__name="igdb", slug=igdb_slug)
+            igdb_game = Game.objects.get(
+                provider_games__provider__name="igdb", slug=igdb_slug
+            )
         except Game.DoesNotExist:
             # No IGDB game found, just keep going
             continue
@@ -251,7 +266,9 @@ def deduplicate_igdb_games():
             # Skip slug based entries
             continue
         try:
-            game_by_slug = ProviderGame.objects.get(provider__name="igdb", slug=game_slug)
+            game_by_slug = ProviderGame.objects.get(
+                provider__name="igdb", slug=game_slug
+            )
         except ProviderGame.DoesNotExist:
             # No older entry to attach the data to, skip.
             continue
@@ -269,7 +286,9 @@ def fix_igdb_games():
     for game in ProviderGame.objects.filter(provider__name="igdb"):
         game.slug = game.metadata["slug"]
         game.internal_id = game.metadata["id"]
-        game.updated_at = make_aware(datetime.fromtimestamp(game.metadata["updated_at"]))
+        game.updated_at = make_aware(
+            datetime.fromtimestamp(game.metadata["updated_at"])
+        )
         game.save()
 
 
@@ -284,7 +303,11 @@ def remove_dlcs_from_games():
             stats["skipped"] += 1
             continue
         # Filter by DLC and bundles only for now.
-        if game.metadata["category"] not in (IGDB_CAT["dlc_addon"], IGDB_CAT["bundle"], IGDB_CAT["expansion"]):
+        if game.metadata["category"] not in (
+            IGDB_CAT["dlc_addon"],
+            IGDB_CAT["bundle"],
+            IGDB_CAT["expansion"],
+        ):
             stats["not_dlc"] += 1
             continue
 
