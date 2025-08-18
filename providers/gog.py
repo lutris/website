@@ -1,4 +1,5 @@
 """GOG functions"""
+
 import json
 import logging
 import os
@@ -38,7 +39,7 @@ def match_from_gog_api():
         "matched_exact": 0,
         "matched_case_insensitive": 0,
         "matched_alias": 0,
-        "matched_tm": 0
+        "matched_tm": 0,
     }
     for provider_game in models.ProviderGame.objects.filter(provider__name="gog"):
         if provider_game.games.count():
@@ -58,7 +59,9 @@ def match_from_gog_api():
         for strategy, query in queries.items():
             if matched:
                 continue
-            existing_games = query.exclude(change_for__isnull=False).order_by('id').distinct('id')
+            existing_games = (
+                query.exclude(change_for__isnull=False).order_by("id").distinct("id")
+            )
             if existing_games:
                 stats["matched_%s" % strategy] += 1
                 for lutris_game in existing_games:
@@ -67,7 +70,9 @@ def match_from_gog_api():
         if matched:
             continue
 
-        release_date = provider_game.metadata["_embedded"]["product"].get("globalReleaseDate")
+        release_date = provider_game.metadata["_embedded"]["product"].get(
+            "globalReleaseDate"
+        )
         if release_date:
             year = int(release_date[:4])
         else:
@@ -77,7 +82,7 @@ def match_from_gog_api():
             slug=get_auto_increment_slug(Game, None, provider_game.name),
             year=year,
             is_public=True,
-            gogid=provider_game.slug
+            gogid=provider_game.slug,
         )
         stats["created"] += 1
         lutris_game.provider_games.add(provider_game)
@@ -91,7 +96,7 @@ def fetch_gog_games_page(page):
     response = requests.get(url)
     response_data = response.json()
     with open(
-            os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
+        os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), "w", encoding="utf-8"
     ) as json_file:
         json.dump(response_data, json_file, indent=2)
     return response_data
@@ -115,7 +120,7 @@ def iter_gog_items():
     )
     for page in range(1, num_pages + 1):
         with open(
-                os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
+            os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"
         ) as json_file:
             api_results = json.load(json_file)
             for item in api_results["_embedded"]["items"]:
@@ -153,7 +158,6 @@ def get_game_packages():
     return game_packages
 
 
-
 def verify_gogid_uniqueness():
     """Check that every GOG ID is unique"""
     duplicate_ids = set()
@@ -166,7 +170,7 @@ def verify_gogid_uniqueness():
                 "Games shoudn't share a gogid %s (%s): %s",
                 lutris_game.name,
                 lutris_game.year,
-                lutris_game.gogid
+                lutris_game.gogid,
             )
     return duplicate_ids
 
@@ -186,8 +190,7 @@ def load_games_from_gog_api():
         gog_id = game["_embedded"]["product"]["id"]
         title = game["_embedded"]["product"]["title"]
         gog_game, created = models.ProviderGame.objects.get_or_create(
-            provider=provider,
-            slug=gog_id
+            provider=provider, slug=gog_id
         )
         gog_game.internal_id = gog_id
         gog_game.name = title
@@ -200,13 +203,11 @@ def load_games_from_gog_api():
         else:
             stats["updated"] += 1
     delete_result = models.ProviderGame.objects.filter(
-        provider=provider,
-        updated_at__lt=update_started_at
+        provider=provider, updated_at__lt=update_started_at
     ).delete()
     stats["deleted"] = delete_result[0]
     delete_result = models.ProviderGame.objects.filter(
-        provider=provider,
-        updated_at__isnull=True
+        provider=provider, updated_at__isnull=True
     ).delete()
     stats["deleted"] += delete_result[0]
     return stats
@@ -229,12 +230,16 @@ def populate_gogid_and_gogslug():
                 lutris_game.gogslug = packages[gog_game.slug][0]
                 stats["in_packages"] += 1
             else:
-                store_url = gog_game.metadata["_links"]["store"]["href"]
+                links = gog_game.metadata.get("_links", {})
+                if "store" in links:
+                    store_url = links["store"]["href"]
+                else:
+                    store_url = None
                 if store_url:
                     matches = re.search(r"game/([\w\d_]+)", store_url)
                     lutris_game.gogslug = matches.groups()[0]
                 else:
-                    LOGGER.warning("No store URL for %s", gog_game.name)
+                    LOGGER.error("No store URL for %s", gog_game.name)
                     stats["no_store_url"] += 1
                     lutris_game.gogslug = ""
             lutris_game.save()
