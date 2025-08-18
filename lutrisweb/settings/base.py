@@ -259,7 +259,7 @@ CELERYBEAT_SCHEDULE = {
     },
     "fetch-steam-app-details": {
         "task": "providers.tasks.steam.fetch_app_details_all",
-        "schedule": 3600,
+        "schedule": crontab(minute=40),
     },
     "load-igdb-genres": {
         "task": "providers.tasks.igdb.load_igdb_genres",
