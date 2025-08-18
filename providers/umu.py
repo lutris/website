@@ -369,6 +369,11 @@ def export_umu_games():
 def save_umu_games():
     """Save the list of umu games to a file"""
     umu_games = export_umu_games()
+    if os.path.exists(UMU_GAMES_PATH):
+        with open(UMU_GAMES_PATH, "r") as umu_file:
+            umu_entries = json.load(umu_file)
+    if len(umu_games) == len(umu_entries):
+        return
     with open(UMU_GAMES_PATH, "w") as umu_file:
         json.dump(umu_games, umu_file, indent=2)
     # Compress the file with xz using subprocess
