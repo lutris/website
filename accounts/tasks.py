@@ -2,8 +2,6 @@
 
 import logging
 import json
-from django.db import IntegrityError
-
 import games.models
 from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
@@ -21,7 +19,11 @@ def sync_steam_library(user_id):
     """Launch a Steam to Lutris library sync"""
     user = User.objects.get(pk=user_id)
     steamid = user.steamid
-    library = games.models.GameLibrary.objects.get(user=user)
+    try:
+        library = games.models.GameLibrary.objects.get(user=user)
+    except games.models.GameLibrary.DoesNotExist:
+        LOGGER.error("No library found for user %s", user.username)
+        return
     steam_games = games.util.steam.steam_sync(steamid)
     game_count = 0
     if not steam_games:
