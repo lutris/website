@@ -239,7 +239,6 @@ def populate_gogid_and_gogslug():
                     matches = re.search(r"game/([\w\d_]+)", store_url)
                     lutris_game.gogslug = matches.groups()[0]
                 else:
-                    LOGGER.error("No store URL for %s", gog_game.name)
                     stats["no_store_url"] += 1
                     lutris_game.gogslug = ""
             lutris_game.save()
