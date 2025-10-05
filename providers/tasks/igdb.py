@@ -115,7 +115,7 @@ def match_igdb_games():
             LOGGER.error("Missing slug for %s", igdb_game.metadata)
             continue
         # Only match main games
-        if igdb_game.metadata["category"] != 0:
+        if igdb_game.metadata.get("game_type", igdb_game.metadata.get("category")) != 0:
             continue
         if igdb_game.games.count():
             # Game is already matched
