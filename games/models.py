@@ -22,6 +22,7 @@ from django.db.models import Count, Q
 from django.db.models.query import QuerySet
 from django.urls import reverse
 
+from common.cloudflare import purge_urls
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from emails import messages
 from emails.messages import notify_rejected_installer
@@ -546,6 +547,10 @@ class Game(models.Model):
             LOGGER.error("Icon failed for %s: %s", self, ex)
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
+        if force:
+            purge_urls([
+                "https://%s/games/icon/%s.png" % (settings.DOMAIN_NAME, self.slug)
+            ])
 
     def precache_banner(self, force=False):
         """Render the icon and place it in the banners folder"""
@@ -569,6 +574,10 @@ class Game(models.Model):
             )
             return
         shutil.copy(os.path.join(settings.MEDIA_ROOT, thumbnail.name), dest_file)
+        if force:
+            purge_urls([
+                "https://%s/games/banner/%s.jpg" % (settings.DOMAIN_NAME, self.slug)
+            ])
 
     def set_logo_from_steam(self):
         """Fetch the banner from Steam and use it for the game"""
