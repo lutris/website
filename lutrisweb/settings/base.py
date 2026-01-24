@@ -294,6 +294,7 @@ CELERYBEAT_SCHEDULE = {
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6378")
 BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+BROKER_CONNECTION_RETRY_ON_STARTUP = True
 # API Keys
 STEAM_API_KEY = os.environ.get("STEAM_API_KEY", "NO_STEAM_API_KEY_SET")
 
