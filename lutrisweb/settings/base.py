@@ -215,8 +215,8 @@ SERVER_EMAIL = "admin@lutris.net"
 EMAIL_SUBJECT_PREFIX = "[Lutris] "
 
 # Celery
-CELERYD_HIJACK_ROOT_LOGGER = False
-CELERYBEAT_SCHEDULE = {
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+CELERY_BEAT_SCHEDULE = {
     "clear-spammers": {
         "task": "accounts.tasks.clear_spammers",
         "schedule": crontab(minute=4),
@@ -293,8 +293,8 @@ CELERYBEAT_SCHEDULE = {
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("REDIS_PORT", "6378")
-BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
-BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 # API Keys
 STEAM_API_KEY = os.environ.get("STEAM_API_KEY", "NO_STEAM_API_KEY_SET")
 
