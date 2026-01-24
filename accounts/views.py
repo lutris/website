@@ -3,7 +3,7 @@
 # pylint: disable=too-many-ancestors,raise-missing-from
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import defaultdict
 from django.conf import settings
 from django.contrib import messages
@@ -466,7 +466,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         if ignore_since:
             since = None
         if since:
-            dt = datetime.fromtimestamp(int(since))
+            dt = datetime.fromtimestamp(int(since), tz=timezone.utc)
             queryset = queryset.filter(updated_at__gte=dt)
         return queryset
 
