@@ -411,6 +411,11 @@ LOGGING = {
         "runners": DEFAULT_LOGGING_CONFIG,
         "tosec": DEFAULT_LOGGING_CONFIG,
         "providers": DEFAULT_LOGGING_CONFIG,
+        "sorl.thumbnail": {
+            "handlers": LOGGING_HANDLERS,
+            "level": "DEBUG",
+            "propagate": True,
+        },
     },
 }
 
