@@ -70,6 +70,7 @@ class GameList(ListView):
                 "years", [kwargs.get("year")] if "year" in kwargs else []
             ),
             "search-installers": request.GET.get("search-installers", False),
+            "flags": request.GET.getlist("flags", []),
         }
         return super().get(request, *args, **kwargs)
 
@@ -137,12 +138,28 @@ class GameList(ListView):
         if self.q_params["years"]:
             queryset = queryset.filter(Q(year__in=self.q_params["years"]))
 
+        if self.q_params.get("flags"):
+            flags = self.q_params["flags"]
+            if "open_source" in flags:
+                queryset = queryset.filter(
+                    Q(flags=models.Game.flags.fully_libre)
+                    | Q(flags=models.Game.flags.open_engine)
+                )
+            if "free" in flags:
+                queryset = queryset.filter(
+                    Q(flags=models.Game.flags.free)
+                    | Q(flags=models.Game.flags.freetoplay)
+                    | Q(flags=models.Game.flags.pwyw)
+                )
+
         if (
             not self.request.user.is_authenticated
             or not self.request.user.show_adult_content
         ):
             queryset = queryset.exclude(Q(flags=models.Game.flags.adult_only))
         return queryset
+
+    VALID_FLAGS = {"open_source", "free"}
 
     def clean_search_query(self):
         """Validators used to remove garbage input sent in search data."""
@@ -154,6 +171,10 @@ class GameList(ListView):
                     self.q_params[field] = [int(f) for f in self.q_params[field]]
                 except ValueError:
                     self.q_params[field] = []
+        if "flags" in self.q_params:
+            self.q_params["flags"] = [
+                f for f in self.q_params["flags"] if f in self.VALID_FLAGS
+            ]
 
     def clean_parameters(self):
         """Validators used to prevent sending garbage data to Django views"""
@@ -190,6 +211,9 @@ class GameList(ListView):
             filter_string += (
                 "&search-installers=%s" % self.q_params["search-installers"]
             )
+        if self.q_params.get("flags"):
+            for flag in self.q_params["flags"]:
+                filter_string += "&flags=%s" % flag
         context["filter_string"] = filter_string
         context["filter_form"] = LibraryFilterForm(initial=self.q_params)
         context["order_by"] = self.get_ordering()

@@ -19,7 +19,6 @@ from django_select2.forms import (
     ModelSelect2MultipleWidget,
 )
 
-from bitfield.forms import BitFieldCheckboxSelectMultiple
 
 from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
 from games import models
@@ -441,9 +440,13 @@ class LibraryFilterForm(forms.Form):
         ),
         required=False,
     )
+    SEARCH_FLAGS = (
+        ("open_source", "Open source"),
+        ("free", "Free"),
+    )
     flags = forms.MultipleChoiceField(
-        choices=models.Game.GAME_FLAGS,
-        widget=BitFieldCheckboxSelectMultiple(attrs={"class": "checkbox-list"}),
+        choices=SEARCH_FLAGS,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox-list"}),
         required=False,
     )
 
