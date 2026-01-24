@@ -1317,11 +1317,19 @@ class GameSubmission(models.Model):
         if self.accepted_at:
             LOGGER.warning("Game submission already accepted")
             return
-        self.game.is_public = True
-        self.game.save()
-        self.accepted_at = datetime.datetime.now()
-        self.save()
-        messages.send_game_accepted(self.user, self.game)
+        if self.game.change_for:
+            original_game = self.game.change_for
+            original_game.apply_changes(self.game)
+            original_game.save()
+            original_game.precache_media(force=True)
+            messages.send_game_accepted(self.user, original_game)
+            self.game.delete()  # cascades this submission
+        else:
+            self.game.is_public = True
+            self.game.save()
+            self.accepted_at = datetime.datetime.now()
+            self.save()
+            messages.send_game_accepted(self.user, self.game)
 
 
 class GameMergeSuggestion(models.Model):
