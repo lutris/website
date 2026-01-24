@@ -15,7 +15,7 @@ django-markupfield==2.0.1
 django_inlinecss==0.3.0
 django-rest-swagger==2.2.0
 django-reversion==5.0.4
-django-bitfield==2.2.0
+django-bitfield @ git+https://github.com/disqus/django-bitfield.git@17fbf76f8b331f89fd2f0bb2e4c3a4fd12c07484#egg=django-bitfield
 django-webpack-loader==1.8.1
 django-libs==2.0.3
 django-unslashed==0.3.0
