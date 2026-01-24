@@ -1324,6 +1324,35 @@ class GameSubmission(models.Model):
         messages.send_game_accepted(self.user, self.game)
 
 
+class GameMergeSuggestion(models.Model):
+    """User suggestion to merge two duplicate games"""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="merge_suggestions", on_delete=models.CASCADE
+    )
+    game = models.ForeignKey(Game, related_name="merge_suggestions", on_delete=models.CASCADE)
+    other_game = models.ForeignKey(
+        Game, related_name="merge_suggestions_as_other", on_delete=models.CASCADE
+    )
+    reason = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted_at = models.DateTimeField(null=True)
+
+    class Meta:
+        verbose_name = "Game merge suggestion"
+
+    def __str__(self):
+        return "Merge {0} into {1} (by {2})".format(self.other_game, self.game, self.user)
+
+    def accept(self):
+        """Accept the merge suggestion"""
+        if self.accepted_at:
+            return
+        self.accepted_at = datetime.datetime.now()
+        self.save()
+        self.game.merge_with_game(self.other_game)
+
+
 class GameLink(models.Model):
     """Web links associated to a game"""
 

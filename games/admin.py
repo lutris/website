@@ -300,6 +300,31 @@ class GameSubmissionAdmin(admin.ModelAdmin):
     user_link.short_description = "User"
 
 
+class GameMergeSuggestionAdmin(admin.ModelAdmin):
+    list_display = ("game_link", "other_game_link", "user_link", "created_at", "accepted_at", "reason")
+
+    def game_link(self, obj):
+        return mark_safe("<a href='{0}'>{1}</a>".format(
+            reverse("admin:games_game_change", args=(obj.game.id,)),
+            obj.game
+        ))
+    game_link.short_description = "Keep"
+
+    def other_game_link(self, obj):
+        return mark_safe("<a href='{0}'>{1}</a>".format(
+            reverse("admin:games_game_change", args=(obj.other_game.id,)),
+            obj.other_game
+        ))
+    other_game_link.short_description = "Remove (duplicate)"
+
+    def user_link(self, obj):
+        return mark_safe("<a href='{0}'>{1}</a>".format(
+            reverse("admin:accounts_user_change", args=(obj.user.id,)),
+            obj.user
+        ))
+    user_link.short_description = "User"
+
+
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)
@@ -309,3 +334,4 @@ admin.site.register(models.InstallerDraft, InstallerDraftAdmin)
 admin.site.register(models.InstallerIssue, InstallerIssueAdmin)
 admin.site.register(models.GameLibrary, GameLibraryAdmin)
 admin.site.register(models.GameSubmission, GameSubmissionAdmin)
+admin.site.register(models.GameMergeSuggestion, GameMergeSuggestionAdmin)

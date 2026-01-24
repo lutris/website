@@ -94,6 +94,36 @@ def notify_installer(installer):
     return send_webhook_payload(hook_url, payload)
 
 
+def notify_merge_suggestion(suggestion):
+    """Sends a merge suggestion notification to Discord through a Webhook"""
+    if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
+        return
+    hook_url = (
+        f"https://discordapp.com/api/webhooks/"
+        f"{settings.DISCORD_ISSUE_WEBHOOK_ID}/{settings.DISCORD_ISSUE_WEBHOOK_TOKEN}"
+    )
+    payload = {
+        "embeds": [{
+            "title": f"[merge suggestion] {suggestion.other_game} → {suggestion.game}",
+            "description": suggestion.reason or "No reason provided.",
+            "url": f"https://lutris.net/games/{suggestion.game.slug}",
+            "color": 13965399,
+            "thumbnail": {
+                "url": suggestion.game.banner_url
+            },
+            "author": {
+                "name": suggestion.user.username,
+                "url": f"https://lutris.net/admin/accounts/user/{suggestion.user.id}/change"
+            },
+            "fields": [
+                {"name": "Keep", "value": suggestion.game.name, "inline": True},
+                {"name": "Remove", "value": suggestion.other_game.name, "inline": True},
+            ]
+        }]
+    }
+    return send_webhook_payload(hook_url, payload)
+
+
 def send_simple_message(text):
     if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
         return

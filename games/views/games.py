@@ -283,6 +283,42 @@ class GameSubmissionAcceptView(APIView):
         return Response({"id": game_submission.id, "accepted": accepted})
 
 
+class GameMergeSuggestionsView(generics.ListAPIView):
+    """List all pending game merge suggestions"""
+
+    serializer_class = serializers.GameMergeSuggestionSerializer
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get_queryset(self):
+        return (
+            models.GameMergeSuggestion.objects.filter(accepted_at__isnull=True)
+            .select_related("game", "other_game", "user")
+            .order_by("-created_at")
+        )
+
+
+class GameMergeSuggestionAcceptView(APIView):
+    """Accept, reject, or swap a merge suggestion"""
+
+    @staticmethod
+    def post(request, suggestion_id):
+        """Process the merge suggestion"""
+        if not request.user.is_staff:
+            raise PermissionDenied
+        suggestion = get_object_or_404(models.GameMergeSuggestion, pk=suggestion_id)
+        if request.data.get("swap"):
+            suggestion.game, suggestion.other_game = suggestion.other_game, suggestion.game
+            suggestion.save()
+            return Response({"id": suggestion_id, "swapped": True})
+        if request.data.get("accepted"):
+            suggestion.accept()
+            accepted = True
+        else:
+            suggestion.delete()
+            accepted = False
+        return Response({"id": suggestion_id, "accepted": accepted})
+
+
 class ScreenshotView(generics.ListAPIView):
     """List all game submissions"""
 

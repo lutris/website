@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Suggest merge for {{ game.name }} - Lutris{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2">
+    <div class="form-view">
+      <h1>Suggest merge for '{{ game.name }}'</h1>
+      <p>
+        If you believe another game on Lutris is a duplicate of <strong>{{ game.name }}</strong>,
+        you can suggest merging them here. The other game's installers and data will be merged
+        into this one, and the duplicate will be removed.
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+          {{ form.other_game_slug.errors }}
+          <label for="{{ form.other_game_slug.id_for_label }}">{{ form.other_game_slug.label }}</label>
+          <input type="text" name="other_game_slug" id="{{ form.other_game_slug.id_for_label }}"
+                 class="form-control" value="{{ form.other_game_slug.value|default_if_none:'' }}"
+                 placeholder="e.g. some-game-slug or https://lutris.net/games/some-game-slug/">
+          <small class="form-text text-muted">{{ form.other_game_slug.help_text }}</small>
+        </div>
+        <div class="form-group">
+          {{ form.reason.errors }}
+          <label for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>
+          <textarea name="reason" id="{{ form.reason.id_for_label }}"
+                    class="form-control" rows="4">{{ form.reason.value|default_if_none:'' }}</textarea>
+          <small class="form-text text-muted">{{ form.reason.help_text }}</small>
+        </div>
+        <div>
+          <input type="submit" value="Submit" class="btn btn-primary">
+          <a href="{% url 'game_detail' game.slug %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

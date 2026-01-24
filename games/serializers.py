@@ -154,6 +154,18 @@ class GameSubmissionSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'game', 'created_at', 'accepted_at', 'reason',)
 
 
+class GameMergeSuggestionSerializer(serializers.ModelSerializer):
+    """Serializer for game merge suggestions"""
+    game = GameSerializer()
+    other_game = GameSerializer()
+    user = UserSerializer()
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.GameMergeSuggestion
+        fields = ('id', 'user', 'game', 'other_game', 'created_at', 'accepted_at', 'reason',)
+
+
 class GameDetailSerializer(GameSerializer):
     """A serializer for games with it's associated meta-data.
     Do not use in List views as it might cause performance issues.

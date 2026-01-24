@@ -26,12 +26,13 @@ from games import models
 from games.forms import (
     GameEditForm,
     GameForm,
+    GameMergeSuggestionForm,
     InstallerEditForm,
     LibraryFilterForm,
     ScreenshotForm,
 )
-from games.models import Game, GameSubmission, Installer, InstallerIssue, InstallerDraft
-from games.webhooks import notify_installer, notify_issue_creation
+from games.models import Game, GameMergeSuggestion, GameSubmission, Installer, InstallerIssue, InstallerDraft
+from games.webhooks import notify_installer, notify_issue_creation, notify_merge_suggestion
 
 LOGGER = logging.getLogger(__name__)
 
@@ -567,3 +568,25 @@ def submit_issue(request):
     notify_issue_creation(installer_issue, request.user, content)
 
     return JsonResponse(response)
+
+
+@user_confirmed_required
+def suggest_merge(request, slug):
+    """Allow a user to suggest merging two games"""
+    game = get_object_or_404(Game, slug=slug)
+    form = GameMergeSuggestionForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        other_game = form.cleaned_data["other_game_slug"]
+        if other_game == game:
+            form.add_error("other_game_slug", "A game cannot be merged with itself.")
+        else:
+            suggestion = GameMergeSuggestion(
+                user=request.user,
+                game=game,
+                other_game=other_game,
+                reason=form.cleaned_data.get("reason", ""),
+            )
+            suggestion.save()
+            notify_merge_suggestion(suggestion)
+            return redirect(reverse("merge-suggested"))
+    return render(request, "games/suggest_merge.html", {"form": form, "game": game})

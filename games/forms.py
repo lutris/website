@@ -452,3 +452,30 @@ class LibraryFilterForm(forms.Form):
         self.fields["platforms"].choices = models.Platform.objects.values_list(
             "pk", "name"
         )
+
+
+class GameMergeSuggestionForm(forms.Form):
+    other_game_slug = forms.CharField(
+        max_length=255,
+        label="Game to merge (slug or URL)",
+        help_text="Enter the slug or full URL of the duplicate game.",
+    )
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4}),
+        required=False,
+        label="Reason",
+        help_text="Explain why these games should be merged.",
+    )
+
+    def clean_other_game_slug(self):
+        value = self.cleaned_data["other_game_slug"].strip().rstrip("/")
+        # Extract slug from a full URL like https://lutris.net/games/some-game/
+        if "/" in value:
+            value = value.split("/")[-1]
+        if not value:
+            raise forms.ValidationError("Please enter a valid game slug or URL.")
+        try:
+            game = models.Game.objects.get(slug=value)
+        except models.Game.DoesNotExist:
+            raise forms.ValidationError("No game found with slug '%s'." % value)
+        return game

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Merge suggested - Lutris{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="message-view col-sm-6">
+    <p>
+      Merge suggestion submitted, thank you!
+    </p>
+    <p>
+      A moderator will review your suggestion and merge the games if appropriate.
+    </p>
+    <a href="{% url 'game_list' %}">Back to the games list</a>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
+{% endblock %}

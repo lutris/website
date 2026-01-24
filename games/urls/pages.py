@@ -70,5 +70,15 @@ urlpatterns = [
         views.game_for_installer,
         name="game_for_installer",
     ),
+    re_path(
+        r"/(?P<slug>[\w\-]+)/suggest-merge/?$",
+        views.suggest_merge,
+        name="suggest-merge",
+    ),
+    path(
+        "/merge-suggested",
+        TemplateView.as_view(template_name="games/merge_suggested.html"),
+        name="merge-suggested",
+    ),
     path("/<slug:slug>/", views.game_detail, name="game_detail"),
 ]
