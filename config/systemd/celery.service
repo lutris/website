@@ -7,7 +7,7 @@ User=strider
 Group=strider
 WorkingDirectory=/srv/prod/website/
 EnvironmentFile=/srv/prod/website/.env.prod
-ExecStart=/srv/prod/venv/bin/celery A lutrisweb worker -B -l debug
+ExecStart=/srv/prod/venv/bin/celery -A lutrisweb.celery.app worker -B -l info
 
 [Install]
 WantedBy=multi-user.target
