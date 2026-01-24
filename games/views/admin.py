@@ -125,7 +125,7 @@ def change_submission_accept(request, submission_id):
     game = game_changes.change_for
     game.apply_changes(game_changes)
     game.save()
-    game.precache_media()
+    game.precache_media(force=True)
     game_changes.delete()
 
     # Redirect

@@ -251,6 +251,11 @@ class GameAdmin(admin.ModelAdmin):
 
     custom_actions.short_description = 'Actions'
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if "title_logo" in form.changed_data or "icon" in form.changed_data:
+            obj.precache_media(force=True)
+
 
 class ScreenshotAdmin(admin.ModelAdmin):
     ordering = ("-uploaded_at", )
