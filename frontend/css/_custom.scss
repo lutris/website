@@ -172,8 +172,8 @@ header {
   box-shadow: 0 0 5px #000;
   margin-bottom: 1em;
 
-  .navbar {
-    flex-direction: row;
+  nav.navbar {
+    flex-direction: row !important;
     flex-wrap: wrap;
     padding: 0.5rem 0;
   }
@@ -251,16 +251,20 @@ header {
   }
 }
 
-#global-search {
-  width: 120px;
+.header-search {
+  width: 150px;
 
-  @include media-breakpoint-up(md) {
-    width: 150px;
+  @include media-breakpoint-up(sm) {
+    width: 200px;
   }
 
   @include media-breakpoint-up(lg) {
-    width: 180px;
+    width: 250px;
   }
+}
+
+#global-search {
+  width: 100%;
 }
 
 #footer {
