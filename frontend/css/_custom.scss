@@ -172,10 +172,34 @@ header {
   box-shadow: 0 0 5px #000;
   margin-bottom: 1em;
 
+  .navbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+  }
+
+  .navbar-toggler {
+    border-color: rgba($primary, 0.5);
+    padding: 0.25rem 0.5rem;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+    }
+  }
+
+  .navbar-collapse {
+    flex-basis: 100%;
+
+    @include media-breakpoint-up(md) {
+      flex-basis: auto;
+    }
+  }
+
   .nav-link {
     text-transform: uppercase;
     font-weight: 600;
     color: #E5E5E5;
+    padding: 0.5rem 0.75rem;
 
     &:hover {
       color: $primary;
@@ -185,21 +209,24 @@ header {
   .logo {
     font-weight: 300;
     font-size: 24px;
-    margin-right: 24px;
     color: $primary;
     text-decoration: none;
 
     span {
-      padding: 12px;
+      padding-left: 12px;
+    }
+
+    &:hover {
+      color: lighten($primary, 10%);
     }
   }
 
-  button {
-    background: none;
-    border: none;
-    margin-right: 5px;
-    margin-bottom: 0;
-    color: $light;
+  .user-dropdown {
+    color: #E5E5E5;
+
+    &:hover {
+      color: $primary;
+    }
   }
 }
 
@@ -225,8 +252,15 @@ header {
 }
 
 #global-search {
-  min-width: 150px;
-  max-width: 200px;
+  width: 120px;
+
+  @include media-breakpoint-up(md) {
+    width: 150px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    width: 180px;
+  }
 }
 
 #footer {
