@@ -28,7 +28,14 @@ def load_steam_games():
     """Query the Steam API and load every game as a ProviderGame"""
     provider = models.Provider.objects.get(name="steam")
     response = requests.get(ALL_APPS_URL)
-    game_list = response.json()["applist"]["apps"]
+    if response.status_code != 200 or not response.text:
+        LOGGER.warning("Steam API returned empty or bad response: %s", response.status_code)
+        return {"error": "Steam API unavailable"}
+    try:
+        game_list = response.json()["applist"]["apps"]
+    except (JSONDecodeError, KeyError) as ex:
+        LOGGER.warning("Failed to parse Steam API response: %s", ex)
+        return {"error": str(ex)}
     stats = {"created": 0, "updated": 0}
     for game in game_list:
         provider_game, created = models.ProviderGame.objects.get_or_create(
