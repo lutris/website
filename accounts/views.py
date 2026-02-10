@@ -3,6 +3,7 @@
 # pylint: disable=too-many-ancestors,raise-missing-from
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from collections import defaultdict
 from django.conf import settings
@@ -46,6 +47,14 @@ from . import forms, sso, tasks, serializers
 from .models import EmailConfirmationToken, User
 
 LOGGER = logging.getLogger(__name__)
+
+
+def sanitize_lastplayed(value):
+    """Sanitize lastplayed timestamp, returning 0 for invalid values."""
+    value = int(value or 0)
+    if value > int(time.time()) or value > 2147483647:
+        return 0
+    return value
 
 
 class LutrisRegisterView(CreateView):
@@ -547,7 +556,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                         if game.platform != client_game["platform"]:
                             game.platform = client_game["platform"]
                             changed = True
-                        client_lastplayed = int(client_game["lastplayed"] or 0)
+                        client_lastplayed = sanitize_lastplayed(client_game["lastplayed"])
                         if not game.lastplayed or game.lastplayed < client_lastplayed:
                             if game.lastplayed != client_lastplayed:
                                 game.lastplayed = client_lastplayed
@@ -601,7 +610,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                     runner=client_game["runner"],
                     platform=client_game["platform"],
                     service=client_game["service"],
-                    lastplayed=client_game["lastplayed"] or 0,
+                    lastplayed=sanitize_lastplayed(client_game["lastplayed"]),
                 )
                 for category_name in client_game.get("categories", []):
                     category = get_category(category_name)
