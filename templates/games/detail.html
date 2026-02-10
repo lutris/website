@@ -243,17 +243,7 @@
 
 {% block scripts %}
 <script src="{% static 'js/blueimp-gallery.min.js' %}"></script>
-<script src="https://unpkg.com/vue"></script>
-<script src="{% static 'installer-issues.umd.min.js' %}"></script>
 <script>
-  function submitInstallerIssue(event) {
-    event.preventDefault();
-    var installerSlug = event.target.getAttribute('data-slug');
-    var $issueModal = $('#installer-issue-modal');
-    $issueModal.attr('data-slug', installerSlug);
-    $issueModal.modal();
-  }
-
   function toggleUnpublishedInstallers(event) {
     event.preventDefault();
     var linkText = event.target.innerHTML;
