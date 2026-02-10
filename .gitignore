@@ -30,3 +30,8 @@ celerybeat-schedule
 gog-cache
 gog-logos
 gog-lutris-logos
+public/*.svg
+public/*.png
+public/*.gif
+public/*.woff
+public/*.woff2
