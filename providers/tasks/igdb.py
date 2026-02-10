@@ -2,6 +2,7 @@
 
 import os
 import json
+import time
 from datetime import datetime
 from collections import defaultdict
 
@@ -29,6 +30,10 @@ from lutrisweb.celery import app
 
 LOGGER = get_task_logger(__name__)
 
+# Retry settings for IGDB API
+IGDB_MAX_RETRIES = 3
+IGDB_RETRY_DELAYS = [5, 15, 30]  # seconds
+
 
 IGDB_CAT = {
     "main_game": 0,
@@ -47,6 +52,86 @@ IGDB_CAT = {
 }
 
 
+def _fetch_igdb_page(client, resource_name, page):
+    """Fetch a single page from IGDB with retry logic for timeouts"""
+    last_error = None
+
+    for attempt in range(IGDB_MAX_RETRIES):
+        response = client.get_resources(f"{resource_name}/", page=page)
+
+        # Check HTTP status
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                LOGGER.error(
+                    "Failed to parse JSON for %s page %s: %s",
+                    resource_name,
+                    page,
+                    response.text[:200],
+                )
+                return None
+
+        # Handle timeout (408) with retry
+        if response.status_code == 408:
+            delay = IGDB_RETRY_DELAYS[min(attempt, len(IGDB_RETRY_DELAYS) - 1)]
+            LOGGER.warning(
+                "IGDB timeout for %s page %s (attempt %d/%d), retrying in %ds...",
+                resource_name,
+                page,
+                attempt + 1,
+                IGDB_MAX_RETRIES,
+                delay,
+            )
+            time.sleep(delay)
+            last_error = response
+            continue
+
+        # Handle rate limiting (429)
+        if response.status_code == 429:
+            delay = int(response.headers.get("Retry-After", 60))
+            LOGGER.warning(
+                "IGDB rate limited for %s page %s, waiting %ds...",
+                resource_name,
+                page,
+                delay,
+            )
+            time.sleep(delay)
+            last_error = response
+            continue
+
+        # Other errors - log and return None
+        LOGGER.error(
+            "IGDB API error for %s page %s: HTTP %s - %s",
+            resource_name,
+            page,
+            response.status_code,
+            response.text[:200],
+        )
+        return None
+
+    # All retries exhausted
+    error_detail = ""
+    if last_error:
+        try:
+            error_body = last_error.json()
+            error_detail = (
+                f" - {error_body.get('title', 'Unknown')}: "
+                f"{error_body.get('cause', error_body.get('details', 'No details'))}"
+            )
+        except (json.JSONDecodeError, AttributeError):
+            error_detail = f" - {last_error.text[:100]}"
+
+    LOGGER.error(
+        "IGDB API failed after %d retries for %s page %s%s",
+        IGDB_MAX_RETRIES,
+        resource_name,
+        page,
+        error_detail,
+    )
+    return None
+
+
 def _igdb_loader(resource_name, model):
     """Generic function to load a collection from IGDB to database"""
     client = IGDBClient(settings.TWITCH_CLIENT_ID, settings.TWITCH_CLIENT_SECRET)
@@ -57,19 +142,42 @@ def _igdb_loader(resource_name, model):
     page = 1
     provider, _created = Provider.objects.get_or_create(name="igdb")
     while resources:
-        LOGGER.info("Getting page %s of IGDB API", page)
-        response = client.get_resources(f"{resource_name}/", page=page)
-        try:
-            resources = response.json()
-        except json.JSONDecodeError:
-            LOGGER.error("Failed to read JSON response: %s", response.text)
+        LOGGER.info("Getting page %s of IGDB %s", page, resource_name)
+        resources = _fetch_igdb_page(client, resource_name, page)
+
+        if resources is None:
+            # Fetch failed after retries, skip this page
+            page += 1
             continue
+
         for api_payload in resources:
+            # Skip string responses (shouldn't happen with proper error handling)
             if isinstance(api_payload, str):
                 LOGGER.warning(
                     "Received string instead of JSON object: %s", api_payload
                 )
                 continue
+
+            # Check for error objects in the response array
+            if isinstance(api_payload, dict) and api_payload.get("status"):
+                LOGGER.error(
+                    "IGDB error in %s response: %s - %s",
+                    resource_name,
+                    api_payload.get("title", "Unknown"),
+                    api_payload.get("cause", api_payload.get("details", "No details")),
+                )
+                continue
+
+            # Check for required 'slug' field
+            if isinstance(api_payload, dict) and "slug" not in api_payload:
+                LOGGER.error(
+                    "API payload missing 'slug' field for %s: id=%s, keys=%s",
+                    resource_name,
+                    api_payload.get("id", "unknown"),
+                    list(api_payload.keys())[:10],
+                )
+                continue
+
             model.create_from_igdb_api(provider, api_payload)
         page += 1
 
