@@ -3,6 +3,7 @@
 # pylint: disable=E1120, C0103
 from __future__ import absolute_import
 from django.urls import re_path, path
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from games.views import pages as views
 
@@ -25,7 +26,7 @@ urlpatterns = [
     path("/add-game/", views.submit_game, name="game-submit"),
     path(
         "/game-submitted",
-        TemplateView.as_view(template_name="games/submitted.html"),
+        login_required(TemplateView.as_view(template_name="games/submitted.html")),
         name="game-submitted",
     ),
     path("/game-issue", views.submit_issue, name="game-submit-issue"),
