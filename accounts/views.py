@@ -311,6 +311,7 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     ordering = "name"
     profile_page = "library"
     paginate_by = 60
+    allowed_sort_fields = {"name", "-name", "created_at", "-created_at", "updated_at", "-updated_at"}
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -325,12 +326,19 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
                 raise Http404
         return user
 
+    def get_sort_field(self):
+        """Return validated sort field or default ordering"""
+        sort = self.request.GET.get("sort")
+        if sort and sort in self.allowed_sort_fields:
+            return sort
+        return self.ordering
+
     def get_queryset(self):
         """Return all games in library, optionally filter them"""
         queryset = models.LibraryGame.objects.filter(gamelibrary__user=self.get_user())
         if self.request.GET.get("q"):
             queryset = queryset.filter(name__icontains=self.request.GET["q"])
-        return queryset.order_by(self.request.GET.get("sort") or self.ordering)
+        return queryset.order_by(self.get_sort_field())
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the user's library"""
@@ -355,13 +363,17 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
     context_object_name = "submissions"
     ordering = "-created_at"
     profile_page = "submissions"
+    allowed_sort_fields = {"name", "-name", "created_at", "-created_at"}
 
     def get_queryset(self):
         """Return all submitted games"""
         queryset = models.GameSubmission.objects.filter(user=self.get_user())
         if self.request.GET.get("q"):
             queryset = queryset.filter(game__name__icontains=self.request.GET["q"])
-        return queryset.order_by(self.request.GET.get("sort", self.ordering))
+        return queryset.order_by(self.get_sort_field())
+
+
+INSTALLER_ALLOWED_SORT_FIELDS = {"name", "-name", "created_at", "-created_at", "updated_at", "-updated_at"}
 
 
 @login_required
@@ -373,7 +385,9 @@ def installer_list(request, username):
     installers = models.InstallerDraft.objects.filter(user=request.user)
     if request.GET.get("q"):
         installers = installers.filter(game__name__icontains=request.GET["q"])
-    installers = installers.order_by(request.GET.get("sort", "-created_at"))
+    sort = request.GET.get("sort")
+    sort_field = sort if sort in INSTALLER_ALLOWED_SORT_FIELDS else "-created_at"
+    installers = installers.order_by(sort_field)
     return render(
         request,
         "accounts/installer_list.html",
