@@ -263,7 +263,24 @@ def associate_steam(request):
     """Associate a Steam account with a Lutris account"""
     LOGGER.info("Associating Steam user with Lutris account")
     if not request.user.is_authenticated:
-        return login_complete(request)
+        # Handle OpenID login manually to pass request to authenticate()
+        # (required by django-axes)
+        from django.contrib.auth import authenticate, login
+        from django_openid_auth.views import parse_openid_response as parse_openid
+        try:
+            openid_response = parse_openid(request)
+        except Exception as ex:
+            LOGGER.error("Failed to parse OpenID response: %s", ex)
+            messages.error(request, "Steam authentication failed. Please try again.")
+            return redirect("login")
+        
+        user = authenticate(request=request, openid_response=openid_response)
+        if user is not None:
+            login(request, user)
+            return redirect(reverse("user_account", args=(user.username,)))
+        else:
+            messages.error(request, "Could not authenticate with Steam. Please try again.")
+            return redirect("login")
 
     account_url = reverse("user_account", args=(request.user.username,))
     try:
