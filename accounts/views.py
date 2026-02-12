@@ -353,8 +353,11 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     def get_queryset(self):
         """Return all games in library, optionally filter them"""
         queryset = models.LibraryGame.objects.filter(gamelibrary__user=self.get_user())
-        if self.request.GET.get("q"):
-            queryset = queryset.filter(name__icontains=self.request.GET["q"])
+        search_query = self.request.GET.get("q", "")
+        # Sanitize: remove NULL bytes and limit length
+        search_query = search_query.replace("\x00", "")[:200]
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
         return queryset.order_by(self.get_sort_field())
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
@@ -385,8 +388,9 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
     def get_queryset(self):
         """Return all submitted games"""
         queryset = models.GameSubmission.objects.filter(user=self.get_user())
-        if self.request.GET.get("q"):
-            queryset = queryset.filter(game__name__icontains=self.request.GET["q"])
+        search_query = self.request.GET.get("q", "").replace("\x00", "")[:200]
+        if search_query:
+            queryset = queryset.filter(game__name__icontains=search_query)
         return queryset.order_by(self.get_sort_field())
 
 
@@ -400,8 +404,9 @@ def installer_list(request, username):
         raise Http404
 
     installers = models.InstallerDraft.objects.filter(user=request.user)
-    if request.GET.get("q"):
-        installers = installers.filter(game__name__icontains=request.GET["q"])
+    search_query = request.GET.get("q", "").replace("\x00", "")[:200]
+    if search_query:
+        installers = installers.filter(game__name__icontains=search_query)
     sort = request.GET.get("sort")
     sort_field = sort if sort in INSTALLER_ALLOWED_SORT_FIELDS else "-created_at"
     installers = installers.order_by(sort_field)
