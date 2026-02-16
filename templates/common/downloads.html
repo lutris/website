@@ -105,13 +105,13 @@
         </ul>
         <p>
           Packages compatible with Debian are available on the
-          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore&package=lutris">openSUSE Build Service</a>.
+          <a href="https://software.opensuse.org/download.html?project=home%3Astrycore%3Alutris&package=lutris">openSUSE Build Service</a>.
           <br/>
           You can add a repository using terminal to receive automatic updates:<br/>
           <br/>
-          <code>echo -e "Types: deb\nURIs: https://download.opensuse.org/repositories/home:/strycore/Debian_12/\nSuites: ./\nComponents: \nSigned-By: /etc/apt/keyrings/lutris.gpg" |
+          <code>echo -e "Types: deb\nURIs: https://download.opensuse.org/repositories/home:/strycore:/lutris/Debian_13/\nSuites: ./\nComponents: \nSigned-By: /etc/apt/keyrings/lutris.gpg" |
             sudo tee /etc/apt/sources.list.d/lutris.sources > /dev/null</code><br/>
-          <code>wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key |
+          <code>wget -q -O- https://download.opensuse.org/repositories/home:/strycore:/lutris/Debian_13/Release.key |
             sudo gpg --dearmor -o /etc/apt/keyrings/lutris.gpg</code><br/>
           <code>sudo apt update</code><br/>
           <code>sudo apt install lutris</code>
