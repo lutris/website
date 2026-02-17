@@ -8,6 +8,7 @@ from games import models
 from platforms.models import Platform
 from providers.serializers import ProviderGameSerializer
 from accounts.serializers import UserSerializer
+from runners.models import Runner
 
 LOGGER = logging.getLogger(__name__)
 
@@ -126,6 +127,111 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
             'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
             'discord_id', 'base_installer', 'review', 'reason'
         )
+
+
+class InstallerDraftWriteSerializer(serializers.ModelSerializer):
+    """Serializer for creating/updating installer drafts via API"""
+    game_slug = serializers.SlugField(write_only=True)
+    runner = serializers.SlugRelatedField(
+        slug_field="slug",
+        queryset=Runner.objects.all()
+    )
+    # Optional: link to existing installer for edits
+    base_installer_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    # draft=True means save as draft, draft=False means submit for moderation
+    draft = serializers.BooleanField(default=False)
+
+    class Meta:
+        """Model and field definitions"""
+        model = models.InstallerDraft
+        fields = (
+            'id', 'game_slug', 'runner', 'version', 'description', 'notes',
+            'credits', 'content', 'draft', 'reason', 'base_installer_id',
+        )
+        read_only_fields = ('id',)
+
+    def validate_game_slug(self, value):
+        """Validate game exists"""
+        try:
+            models.Game.objects.get(slug=value, change_for__isnull=True)
+        except models.Game.DoesNotExist:
+            raise serializers.ValidationError(f"Game with slug '{value}' not found")
+        return value
+
+    def validate_content(self, value):
+        """Validate YAML and strip metadata fields"""
+        from common.util import load_yaml, dump_yaml
+        import yaml
+        try:
+            yaml_data = load_yaml(value)
+        except yaml.error.MarkedYAMLError as ex:
+            raise serializers.ValidationError(
+                f"Invalid YAML at line {ex.problem_mark.line}: {ex.problem}"
+            )
+        if not yaml_data:
+            raise serializers.ValidationError("Content cannot be empty")
+        # Strip metadata fields that shouldn't be in script
+        if "script" in yaml_data:
+            yaml_data = yaml_data["script"]
+        return dump_yaml(yaml_data)
+
+    def validate(self, attrs):
+        """Run full installer validation"""
+        from games.util.installer import validate_installer
+
+        game_slug = attrs.get('game_slug')
+        game = models.Game.objects.get(slug=game_slug, change_for__isnull=True)
+
+        # Create a dummy installer for validation
+        dummy = models.Installer(
+            game=game,
+            runner=attrs.get('runner'),
+            version=attrs.get('version', ''),
+            content=attrs.get('content', ''),
+        )
+        is_valid, errors = validate_installer(dummy)
+        if not is_valid:
+            raise serializers.ValidationError({'content': errors})
+
+        # Check version uniqueness for new installers
+        base_installer_id = attrs.get('base_installer_id')
+        version = attrs.get('version')
+        if version:
+            existing = models.Installer.objects.filter(game=game, version=version)
+            if base_installer_id:
+                existing = existing.exclude(id=base_installer_id)
+            if existing.exists():
+                raise serializers.ValidationError({
+                    'version': 'An installer with this version already exists for this game'
+                })
+
+        return attrs
+
+    def create(self, validated_data):
+        """Create installer draft"""
+        from django.utils import timezone
+
+        game_slug = validated_data.pop('game_slug')
+        base_installer_id = validated_data.pop('base_installer_id', None)
+
+        game = models.Game.objects.get(slug=game_slug, change_for__isnull=True)
+        user = self.context['request'].user
+
+        base_installer = None
+        if base_installer_id:
+            try:
+                base_installer = models.Installer.objects.get(id=base_installer_id)
+            except models.Installer.DoesNotExist:
+                pass
+
+        draft = models.InstallerDraft.objects.create(
+            game=game,
+            user=user,
+            base_installer=base_installer,
+            created_at=timezone.now(),
+            **validated_data
+        )
+        return draft
 
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""

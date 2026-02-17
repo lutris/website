@@ -3,6 +3,7 @@
 # pylint: disable=missing-docstring,too-few-public-methods,no-member
 import factory
 from django.db.models.signals import post_save
+from django.utils import timezone
 
 from accounts.models import User
 from accounts.signals import create_library
@@ -148,10 +149,13 @@ class InstallerDraftFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.InstallerDraft
 
+    game = factory.SubFactory(GameFactory)
     runner = factory.SubFactory(RunnerFactory)
     version = "test"
+    content = "game:\n  exe: test.exe"
     draft = True
     user = factory.SubFactory(UserNoLibraryFactory)
+    created_at = factory.LazyFunction(timezone.now)
 
 
 class CompanyFactory(factory.DjangoModelFactory):

@@ -201,3 +201,221 @@ class TestGameProviderApi(TestCase):
         self.assertEqual(response.status_code, 200)
         games = json.loads(response.content.decode())
         self.assertEqual(len(games['results']), 0)
+
+
+class TestInstallerDraftApi(TestCase):
+    """Test case for installer draft creation and moderation API"""
+
+    def setUp(self):
+        self.game = factories.GameFactory(name='Test Game', slug='test-game')
+        self.runner = factories.RunnerFactory(name='Wine', slug='wine')
+        self.user = factories.UserFactory(username='testuser')
+        self.admin = factories.UserFactory(username='admin', is_staff=True)
+
+        # Valid installer content
+        self.valid_content = """game:
+  exe: drive_c/game/game.exe
+  prefix: $GAMEDIR/prefix
+files:
+  - setup: https://example.com/setup.exe
+installer:
+  - task:
+      name: wineexec
+      executable: setup
+"""
+
+    def test_anonymous_cannot_create_draft(self):
+        """Anonymous users should not be able to create drafts"""
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'test-game',
+                'runner': 'wine',
+                'version': 'Test',
+                'content': self.valid_content,
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_authenticated_user_can_create_draft(self):
+        """Authenticated users should be able to create installer drafts"""
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'test-game',
+                'runner': 'wine',
+                'version': 'Test Version',
+                'content': self.valid_content,
+                'draft': True,
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.content.decode())
+        self.assertEqual(data['version'], 'Test Version')
+        self.assertTrue(data['draft'])
+
+    def test_can_submit_for_review(self):
+        """Users can submit installers for moderation review"""
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'test-game',
+                'runner': 'wine',
+                'version': 'Review Version',
+                'content': self.valid_content,
+                'draft': False,
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.content.decode())
+        self.assertFalse(data['draft'])
+
+    def test_invalid_game_slug_rejected(self):
+        """Creating a draft with invalid game slug should fail"""
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'nonexistent-game',
+                'runner': 'wine',
+                'version': 'Test',
+                'content': self.valid_content,
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_runner_rejected(self):
+        """Creating a draft with invalid runner should fail"""
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'test-game',
+                'runner': 'invalid-runner',
+                'version': 'Test',
+                'content': self.valid_content,
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_yaml_rejected(self):
+        """Creating a draft with invalid YAML should fail"""
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_list'),
+            data=json.dumps({
+                'game_slug': 'test-game',
+                'runner': 'wine',
+                'version': 'Test',
+                'content': 'invalid: yaml: content:',
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_admin_can_accept_submission(self):
+        """Admins should be able to accept submissions"""
+        # Create a submission (not a draft)
+        draft = factories.InstallerDraftFactory(
+            game=self.game,
+            runner=self.runner,
+            user=self.user,
+            version='Submitted Version',
+            content=self.valid_content,
+            draft=False,
+        )
+
+        self.client.login(username='admin', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_accept', kwargs={'pk': draft.pk}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+
+        # Draft should be deleted after acceptance
+        self.assertFalse(models.InstallerDraft.objects.filter(pk=draft.pk).exists())
+        # Installer should be created
+        self.assertTrue(models.Installer.objects.filter(
+            game=self.game,
+            version='Submitted Version'
+        ).exists())
+
+    def test_admin_can_reject_submission(self):
+        """Admins should be able to reject submissions with feedback"""
+        draft = factories.InstallerDraftFactory(
+            game=self.game,
+            runner=self.runner,
+            user=self.user,
+            version='Rejected Version',
+            content=self.valid_content,
+            draft=False,
+        )
+
+        self.client.login(username='admin', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_reject', kwargs={'pk': draft.pk}),
+            data=json.dumps({'review': 'Missing wine version specification'}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+
+        # Draft should still exist but be set back to draft status
+        draft.refresh_from_db()
+        self.assertTrue(draft.draft)
+        self.assertEqual(draft.review, 'Missing wine version specification')
+
+    def test_reject_requires_review_message(self):
+        """Rejecting without review feedback should fail"""
+        draft = factories.InstallerDraftFactory(
+            game=self.game,
+            runner=self.runner,
+            user=self.user,
+            draft=False,
+        )
+
+        self.client.login(username='admin', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_reject', kwargs={'pk': draft.pk}),
+            data=json.dumps({}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_cannot_accept_draft_not_submitted(self):
+        """Cannot accept a draft that hasn't been submitted for review"""
+        draft = factories.InstallerDraftFactory(
+            game=self.game,
+            runner=self.runner,
+            user=self.user,
+            draft=True,  # Still a draft, not submitted
+        )
+
+        self.client.login(username='admin', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_accept', kwargs={'pk': draft.pk}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_non_admin_cannot_accept(self):
+        """Non-admin users should not be able to accept submissions"""
+        draft = factories.InstallerDraftFactory(
+            game=self.game,
+            runner=self.runner,
+            user=self.user,
+            draft=False,
+        )
+
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(
+            reverse('api_installer_draft_accept', kwargs={'pk': draft.pk}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 403)

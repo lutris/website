@@ -17,6 +17,12 @@ urlpatterns = [
          name="api_game_installer_revision_detail_client_typo_support"),
 
     # Drafts
+    path('/drafts/<int:pk>/accept',
+         views.InstallerDraftAcceptView.as_view(),
+         name="api_installer_draft_accept"),
+    path('/drafts/<int:pk>/reject',
+         views.InstallerDraftRejectView.as_view(),
+         name="api_installer_draft_reject"),
     path('/drafts/<int:pk>',
          views.InstallerDraftDetailView.as_view(),
          name="api_installer_draft_detail"),

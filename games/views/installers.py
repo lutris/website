@@ -6,14 +6,24 @@ import logging
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.views import APIView
 
 from common.permissions import IsAdminOrReadOnly
 from games import models, serializers
 
 LOGGER = logging.getLogger(__name__)
+
+
+class IsAuthenticatedOrReadOnly(permissions.BasePermission):
+    """Allow read access to anyone, write access to authenticated users."""
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_authenticated
 
 
 class InstallerListView(generics.ListAPIView):
@@ -80,12 +90,38 @@ class SmallResultsSetPagination(PageNumberPagination):
     page_query_param = 'page'
     max_page_size = 100
 
-class InstallerDraftListView(generics.ListAPIView):
-    """Return a list of revisions for a given installer"""
-    permission_classes = [IsAdminOrReadOnly]
-    serializer_class = serializers.InstallerDraftSerializer
+class InstallerDraftListView(generics.ListCreateAPIView):
+    """List installer drafts/submissions or create a new one.
 
+    GET: List drafts (admin only for all, or user's own drafts)
+        Query params:
+            type: 'submission' (pending review) or 'draft' (work in progress)
+            order: 'oldest' or 'newest' (default)
+
+    POST: Create a new installer draft/submission (authenticated users)
+        Body:
+            game_slug: slug of the game (required)
+            runner: runner slug e.g. 'wine', 'linux' (required)
+            version: version name e.g. 'GOG', 'Steam' (required)
+            content: YAML installer script (required)
+            description: optional description
+            notes: optional technical notes
+            credits: optional credits
+            reason: reason for edit (when editing existing installer)
+            base_installer_id: ID of installer being edited (optional)
+            draft: true to save as draft, false to submit for review (default: false)
+    """
     pagination_class = SmallResultsSetPagination
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAuthenticated()]
+        return [IsAdminOrReadOnly()]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.InstallerDraftWriteSerializer
+        return serializers.InstallerDraftSerializer
 
     def get_queryset(self):
         revision_type = self.request.GET.get('type')
@@ -96,6 +132,16 @@ class InstallerDraftListView(generics.ListAPIView):
         elif revision_type == 'draft':
             query = query.filter(draft=True)
         return query.order_by(order_by)
+
+    def create(self, request, *args, **kwargs):
+        """Create a new installer draft."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        draft = serializer.save()
+
+        # Return the created draft with read serializer for full details
+        read_serializer = serializers.InstallerDraftSerializer(draft)
+        return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
 class InstallerDraftDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve a detailed view of an installer draft"""
@@ -130,6 +176,75 @@ class InstallerDraftDetailView(generics.RetrieveUpdateDestroyAPIView):
             return models.InstallerDraft.objects.get(pk=self.request.parser_context['kwargs']['pk'])
         except models.InstallerDraft.DoesNotExist:
             raise Http404
+
+class InstallerDraftAcceptView(APIView):
+    """Accept an installer submission (moderators only).
+
+    POST /api/installers/drafts/<pk>/accept
+        Body (optional):
+            version: override version
+            description: override description
+            notes: override notes
+            content: override content
+    """
+    permission_classes = [IsAdminOrReadOnly]
+
+    def post(self, request, pk):
+        try:
+            draft = models.InstallerDraft.objects.get(pk=pk)
+        except models.InstallerDraft.DoesNotExist:
+            return Response(
+                {'error': 'Draft not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Don't accept drafts that are still marked as drafts (not submitted)
+        if draft.draft:
+            return Response(
+                {'error': 'Cannot accept a draft that has not been submitted for review'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Accept with optional overrides
+        installer_data = {}
+        for field in ('version', 'description', 'notes', 'content'):
+            if field in request.data:
+                installer_data[field] = request.data[field]
+
+        draft.accept(moderator=request.user, installer_data=installer_data or None)
+
+        return Response({'status': 'accepted'}, status=status.HTTP_200_OK)
+
+
+class InstallerDraftRejectView(APIView):
+    """Reject an installer submission (moderators only).
+
+    POST /api/installers/drafts/<pk>/reject
+        Body:
+            review: feedback message explaining rejection (required)
+    """
+    permission_classes = [IsAdminOrReadOnly]
+
+    def post(self, request, pk):
+        try:
+            draft = models.InstallerDraft.objects.get(pk=pk)
+        except models.InstallerDraft.DoesNotExist:
+            return Response(
+                {'error': 'Draft not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        review = request.data.get('review', '')
+        if not review:
+            return Response(
+                {'error': 'Review feedback is required when rejecting'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        draft.reject({'review': review})
+
+        return Response({'status': 'rejected'}, status=status.HTTP_200_OK)
+
 
 class InstallerHistoryListView(generics.ListAPIView):
     """Return history of installers
