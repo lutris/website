@@ -1,7 +1,7 @@
 """Sync Steam games"""
 
 import time
-from simplejson import JSONDecodeError
+from json import JSONDecodeError
 import requests
 from celery.utils.log import get_task_logger
 from django.utils import timezone
