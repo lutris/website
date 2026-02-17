@@ -34,7 +34,6 @@ TIME_ZONE = "Etc/UTC"
 LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Allow customization of domain
@@ -88,7 +87,7 @@ MIDDLEWARE = [
     # 'django.middleware.cache.FetchFromCacheMiddleware',
     "axes.middleware.AxesMiddleware",
 ]
-AXES_META_PRECEDENCE_ORDER = [
+AXES_IPWARE_META_PRECEDENCE_ORDER = [
     "HTTP_X_FORWARDED_FOR",
     "HTTP_X_REAL_IP",
     "REMOTE_ADDR",
@@ -132,14 +131,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    "grappelli",
     "django.contrib.admin",
     "django.contrib.admindocs",
     "sorl.thumbnail",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    "rest_framework_swagger",
     "django_select2",
     "markupfield",
     "django_openid_auth",
@@ -195,7 +192,7 @@ CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 
 # Modify temporarily the session serializer because the json serializer in
 # Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"

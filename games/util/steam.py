@@ -1,9 +1,9 @@
 """Steam related utilities"""
 
 import logging
+from json import JSONDecodeError
 import requests
 from django.conf import settings
-from simplejson.errors import JSONDecodeError
 
 from games import models
 from accounts.models import User

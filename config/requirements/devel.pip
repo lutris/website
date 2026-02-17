@@ -6,6 +6,6 @@ pylint==3.0.3
 pep8==1.7.1
 coverage==7.2.5
 ipdb==0.13.13
-django-debug-toolbar==4.0.0
+django-debug-toolbar==5.2.0
 Faker
 rst2html
