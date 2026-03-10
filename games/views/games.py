@@ -104,8 +104,10 @@ class ServiceGameListView(generics.GenericAPIView):
 
     serializer_class = serializers.GameSerializer
 
-    def get_queryset(self, service):  # pylint: disable=arguments-differ
+    def get_queryset(self, service=None):  # pylint: disable=arguments-differ
         """Match lutris games against service appids"""
+        if not service:
+            return models.Game.objects.none()
         appids = self.request.data.get("appids")
         if not appids:
             return models.Game.objects.none()
