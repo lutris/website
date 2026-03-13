@@ -14,12 +14,12 @@
     {% if regressions %}
     <div class="list-group">
       {% for regression in regressions %}
-      <div class="list-group-item">
+      <div class="list-group-item bg-darker">
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <h5>{{ regression.title }}</h5>
             <p class="mb-1">{{ regression.description|truncatewords:40 }}</p>
-            <small class="text-muted">
+            <small>
               Pinned to <strong>{{ regression.last_known_working_version }}</strong>
               &mdash; reported {{ regression.created_at|naturaltime }}
               {% if regression.bug_url %}
@@ -28,13 +28,10 @@
             </small>
             <div class="mt-1">
               {% for game in regression.games.all %}
-              <a href="{% url 'game_detail' slug=game.slug %}" class="badge bg-secondary">{{ game.name }}</a>
+              <a href="{% url 'game_detail' slug=game.slug %}" class="badge bg-dark border border-secondary text-light">{{ game.name }}</a>
               {% endfor %}
             </div>
           </div>
-          <span class="badge bg-{% if regression.status == 'accepted' %}warning{% elif regression.status == 'resolved' %}success{% else %}secondary{% endif %}">
-            {{ regression.get_status_display }}
-          </span>
         </div>
       </div>
       {% endfor %}

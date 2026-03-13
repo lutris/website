@@ -33,7 +33,7 @@ from games.forms import (
     ScreenshotForm,
 )
 from games.models import Game, GameMergeSuggestion, GameSubmission, Installer, InstallerIssue, InstallerDraft, Regression
-from games.webhooks import notify_installer, notify_issue_creation, notify_merge_suggestion
+from games.webhooks import notify_installer, notify_issue_creation, notify_merge_suggestion, notify_regression
 
 LOGGER = logging.getLogger(__name__)
 
@@ -629,6 +629,7 @@ def report_regression(request, slug):
         regression.submitted_by = request.user
         regression.save()
         regression.games.add(game)
+        notify_regression(regression)
         messages.info(request, "Regression report submitted for review.")
         return redirect(reverse("game_detail", kwargs={"slug": slug}))
     return render(

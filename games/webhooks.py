@@ -124,6 +124,36 @@ def notify_merge_suggestion(suggestion):
     return send_webhook_payload(hook_url, payload)
 
 
+def notify_regression(regression):
+    """Sends a regression report notification to Discord through a Webhook"""
+    if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
+        return
+    hook_url = (
+        f"https://discordapp.com/api/webhooks/"
+        f"{settings.DISCORD_ISSUE_WEBHOOK_ID}/{settings.DISCORD_ISSUE_WEBHOOK_TOKEN}"
+    )
+    game_names = ", ".join(g.name for g in regression.games.all())
+    fields = [
+        {"name": "Wine Version", "value": regression.last_known_working_version, "inline": True},
+        {"name": "Games", "value": game_names or "None", "inline": True},
+    ]
+    if regression.bug_url:
+        fields.append({"name": "Bug Report", "value": regression.bug_url, "inline": False})
+    payload = {
+        "embeds": [{
+            "title": f"[regression] {regression.title}",
+            "description": regression.description or "No description provided.",
+            "color": 15158332,
+            "author": {
+                "name": regression.submitted_by.username,
+                "url": f"https://lutris.net/admin/accounts/user/{regression.submitted_by.id}/change"
+            },
+            "fields": fields
+        }]
+    }
+    return send_webhook_payload(hook_url, payload)
+
+
 def send_simple_message(text):
     if not settings.DISCORD_ISSUE_WEBHOOK_TOKEN:
         return
