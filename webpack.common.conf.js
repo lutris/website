@@ -21,13 +21,9 @@ module.exports = {
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         include: path.resolve(__dirname, './node_modules/bootstrap-icons/font/fonts'),
-        use: {
-            loader: 'file-loader',
-            options: {
-                name: '[name].[ext]',
-                outputPath: 'webfonts',
-                publicPath: '../webfonts',
-            },
+        type: 'asset/resource',
+        generator: {
+          filename: 'webfonts/[name][ext]',
         }
       },
       // expose jQuery to other scripts
@@ -44,9 +40,7 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg|bmp|gif)$/,
-        use: {
-          loader: "url-loader",
-        },
+        type: 'asset',
       },
       // styles loader
       {
@@ -56,14 +50,11 @@ module.exports = {
       // fonts loader
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "fonts/[name].[ext]",
-            },
-          },
-        ],
+        exclude: path.resolve(__dirname, './node_modules/bootstrap-icons/font/fonts'),
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]',
+        }
       },
     ],
   },
