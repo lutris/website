@@ -330,6 +330,18 @@ class GameMergeSuggestionAdmin(admin.ModelAdmin):
     user_link.short_description = "User"
 
 
+class RegressionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'status', 'bug_status', 'last_known_working_version', 'created_at')
+    list_filter = ('status', 'bug_status')
+    search_fields = ('title', 'description')
+    raw_id_fields = ('games', 'submitted_by', 'reviewed_by')
+    autocomplete_lookup_fields = {
+        'fk': ['submitted_by', 'reviewed_by'],
+        'm2m': ['games'],
+    }
+
+
+admin.site.register(models.Regression, RegressionAdmin)
 admin.site.register(models.Game, GameAdmin)
 admin.site.register(models.Screenshot, ScreenshotAdmin)
 admin.site.register(models.Genre, GenreAdmin)

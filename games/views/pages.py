@@ -29,9 +29,10 @@ from games.forms import (
     GameMergeSuggestionForm,
     InstallerEditForm,
     LibraryFilterForm,
+    RegressionForm,
     ScreenshotForm,
 )
-from games.models import Game, GameMergeSuggestion, GameSubmission, Installer, InstallerIssue, InstallerDraft
+from games.models import Game, GameMergeSuggestion, GameSubmission, Installer, InstallerIssue, InstallerDraft, Regression
 from games.webhooks import notify_installer, notify_issue_creation, notify_merge_suggestion
 
 LOGGER = logging.getLogger(__name__)
@@ -282,6 +283,7 @@ def game_detail(request, slug):
         )
     else:
         no_ac_recommendations = []
+    active_regressions = game.regressions.filter(status="accepted")
     return render(
         request,
         "games/detail.html",
@@ -299,6 +301,7 @@ def game_detail(request, slug):
             "screenshots": screenshots,
             "provider_links": provider_links,
             "no_ac_recommendations": no_ac_recommendations,
+            "active_regressions": active_regressions,
         },
     )
 
@@ -614,3 +617,28 @@ def suggest_merge(request, slug):
             notify_merge_suggestion(suggestion)
             return redirect(reverse("merge-suggested"))
     return render(request, "games/suggest_merge.html", {"form": form, "game": game})
+
+
+@user_confirmed_required
+def report_regression(request, slug):
+    """Allow a user to report a Proton/Wine regression for a game"""
+    game = get_object_or_404(Game, slug=slug)
+    form = RegressionForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        regression = form.save(commit=False)
+        regression.submitted_by = request.user
+        regression.save()
+        regression.games.add(game)
+        messages.info(request, "Regression report submitted for review.")
+        return redirect(reverse("game_detail", kwargs={"slug": slug}))
+    return render(
+        request,
+        "games/report_regression.html",
+        {"form": form, "game": game},
+    )
+
+
+def regression_list(request):
+    """List accepted regressions"""
+    regressions = Regression.objects.filter(status="accepted").prefetch_related("games")
+    return render(request, "games/regression_list.html", {"regressions": regressions})
