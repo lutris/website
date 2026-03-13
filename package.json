@@ -41,7 +41,7 @@
     "bootstrap-icons": "^1.13.1",
     "croppie": "^2.6.5",
     "django-select2": "^8.4.8",
-    "jquery": "^4.0.0",
+    "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "select2": "^4.0.13"
   }
