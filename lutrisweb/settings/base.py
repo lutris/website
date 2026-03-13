@@ -94,6 +94,7 @@ AXES_IPWARE_META_PRECEDENCE_ORDER = [
 ]
 
 AXES_FAILURE_LIMIT = 50
+AXES_LOCKOUT_PARAMETERS = ["username"]
 
 ROOT_URLCONF = "lutrisweb.urls"
 WSGI_APPLICATION = "lutrisweb.wsgi.application"
