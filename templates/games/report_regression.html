@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Report Regression - {{ game.name }} - Lutris{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <div class="form-view">
+      <h1>Report a Proton/Wine regression for '{{ game.name }}'</h1>
+      <p class="text-muted">
+        Report a regression when a game that previously worked stops working with a newer Proton/Wine version.
+        Your report will be reviewed by a moderator before it takes effect.
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+          {{ form.title.errors }}
+          {{ form.title.label_tag }}
+          {{ form.title }}
+        </div>
+        <div class="form-group">
+          {{ form.description.errors }}
+          {{ form.description.label_tag }}
+          {{ form.description }}
+          <small class="form-text text-muted">
+            Describe the regression: what broke, symptoms, and any relevant details.
+          </small>
+        </div>
+        <div class="form-group">
+          {{ form.bug_url.errors }}
+          {{ form.bug_url.label_tag }}
+          {{ form.bug_url }}
+          <small class="form-text text-muted">
+            Link to the upstream bug report (e.g. on GitHub, ProtonDB, etc.)
+          </small>
+        </div>
+        <div class="form-group">
+          {{ form.last_known_working_version.errors }}
+          {{ form.last_known_working_version.label_tag }}
+          {{ form.last_known_working_version }}
+          <datalist id="wine-versions">
+            {% for version in form.wine_versions %}
+            <option value="{{ version }}">
+            {% endfor %}
+          </datalist>
+          <small class="form-text text-muted">
+            Start typing to see suggestions from known versions.
+          </small>
+          <small id="version-warning" class="form-text text-warning" style="display: none;">
+            This version is not in our database. Please contact the moderators to have it added.
+          </small>
+        </div>
+        <div>
+          <input type="submit" value="Submit Report" class="btn btn-primary">
+          <a href="{% url 'game_detail' slug=game.slug %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function() {
+    var input = document.getElementById('{{ form.last_known_working_version.id_for_label }}');
+    var warning = document.getElementById('version-warning');
+    var options = document.querySelectorAll('#wine-versions option');
+    var knownVersions = new Set();
+    options.forEach(function(opt) { knownVersions.add(opt.value); });
+
+    input.addEventListener('input', function() {
+      var val = this.value.trim();
+      if (val && !knownVersions.has(val)) {
+        warning.style.display = '';
+      } else {
+        warning.style.display = 'none';
+      }
+    });
+  })();
+</script>
+{% endblock %}

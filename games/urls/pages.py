@@ -81,5 +81,7 @@ urlpatterns = [
         TemplateView.as_view(template_name="games/merge_suggested.html"),
         name="merge-suggested",
     ),
+    path("/regressions/", views.regression_list, name="regression_list"),
+    path("/<slug:slug>/report-regression", views.report_regression, name="report_regression"),
     path("/<slug:slug>/", views.game_detail, name="game_detail"),
 ]

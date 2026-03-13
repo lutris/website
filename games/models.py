@@ -942,6 +942,23 @@ class BaseInstaller(models.Model):
         yaml_content["slug"] = self.slug
         yaml_content["installer_slug"] = self.slug
         yaml_content["script"] = script_content
+
+        # Inject wine version from active regression if applicable
+        if hasattr(self, 'game') and yaml_content.get("runner") == "wine":
+            active_regression = self.game.regressions.filter(status="accepted").first()
+            if active_regression:
+                wine_section = script_content.get("wine", {})
+                if not wine_section.get("version"):
+                    if "wine" not in script_content:
+                        script_content["wine"] = {}
+                    script_content["wine"]["version"] = active_regression.last_known_working_version
+                    yaml_content["script"] = script_content
+                    yaml_content["regression"] = {
+                        "id": active_regression.id,
+                        "title": active_regression.title,
+                        "bug_url": active_regression.bug_url,
+                    }
+
         return yaml_content
 
     def as_yaml(self):
@@ -1459,3 +1476,41 @@ class ShaderCache(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="shaders")
     updated_at = models.DateTimeField(auto_now=True)
     url = models.CharField(max_length=256)
+
+
+class Regression(models.Model):
+    """Track Proton/Wine regressions affecting games"""
+
+    STATUS_CHOICES = (
+        ("pending", "Pending Review"),
+        ("accepted", "Accepted"),
+        ("rejected", "Rejected"),
+        ("resolved", "Resolved"),
+    )
+
+    title = models.CharField(max_length=256)
+    description = models.TextField(blank=True)
+    bug_url = models.URLField(blank=True, help_text="Link to upstream bug tracker")
+    bug_status = models.CharField(max_length=64, blank=True)
+    last_known_working_version = models.CharField(max_length=64)
+    games = models.ManyToManyField(Game, related_name="regressions", blank=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="pending")
+
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name="submitted_regressions"
+    )
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="reviewed_regressions"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return self.title

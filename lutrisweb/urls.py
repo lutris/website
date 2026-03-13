@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/runners', include('runners.runner_urls')),
     path('api/runtimes', include('runners.runtime_urls')),
     path('api/games', include('games.urls.games')),
+    path('api/regressions', include('games.urls.regressions')),
     path('api/installers', include('games.urls.installers')),
     path('api/users', include('accounts.urls_api')),
     path('api/providers', include('providers.urls')),

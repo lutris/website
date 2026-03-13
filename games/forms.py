@@ -459,6 +459,34 @@ class LibraryFilterForm(forms.Form):
         )
 
 
+class RegressionForm(forms.ModelForm):
+    """Form to report a Proton/Wine regression"""
+
+    class Meta:
+        model = models.Regression
+        fields = ('title', 'description', 'bug_url', 'last_known_working_version')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'select2-lookalike'}),
+            'description': forms.Textarea(attrs={'class': 'select2-lookalike'}),
+            'bug_url': forms.URLInput(attrs={'class': 'select2-lookalike'}),
+            'last_known_working_version': forms.TextInput(attrs={
+                'class': 'select2-lookalike',
+                'list': 'wine-versions',
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from runners.models import RunnerVersion
+        self.wine_versions = list(
+            RunnerVersion.objects.filter(runner__slug='wine')
+            .values_list('version', flat=True)
+            .distinct()
+            .order_by('-version')
+        )
+
+
+
 class GameMergeSuggestionForm(forms.Form):
     other_game_slug = forms.CharField(
         max_length=255,

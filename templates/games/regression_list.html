@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Known Regressions - Lutris{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h1>Known Proton/Wine Regressions</h1>
+    <p class="text-muted">
+      Games affected by Proton/Wine regressions are automatically pinned to a last-known-working version.
+    </p>
+
+    {% if regressions %}
+    <div class="list-group">
+      {% for regression in regressions %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h5>{{ regression.title }}</h5>
+            <p class="mb-1">{{ regression.description|truncatewords:40 }}</p>
+            <small class="text-muted">
+              Pinned to <strong>{{ regression.last_known_working_version }}</strong>
+              &mdash; reported {{ regression.created_at|naturaltime }}
+              {% if regression.bug_url %}
+              &mdash; <a href="{{ regression.bug_url }}" target="_blank">Bug report</a>
+              {% endif %}
+            </small>
+            <div class="mt-1">
+              {% for game in regression.games.all %}
+              <a href="{% url 'game_detail' slug=game.slug %}" class="badge bg-secondary">{{ game.name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <span class="badge bg-{% if regression.status == 'accepted' %}warning{% elif regression.status == 'resolved' %}success{% else %}secondary{% endif %}">
+            {{ regression.get_status_display }}
+          </span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No known regressions at this time.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

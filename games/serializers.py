@@ -410,6 +410,59 @@ class GameRelatedField(serializers.RelatedField):
         raise Exception("This field is read-only")
 
 
+class RegressionSerializer(serializers.ModelSerializer):
+    """Read serializer for regressions"""
+    games = MicroGameSerializer(many=True, read_only=True)
+    submitted_by = serializers.StringRelatedField()
+    reviewed_by = serializers.StringRelatedField()
+
+    class Meta:
+        model = models.Regression
+        fields = (
+            'id', 'title', 'description', 'bug_url', 'bug_status',
+            'last_known_working_version', 'games', 'status',
+            'submitted_by', 'reviewed_by',
+            'created_at', 'updated_at', 'resolved_at',
+        )
+
+
+class RegressionWriteSerializer(serializers.ModelSerializer):
+    """Write serializer for regression submissions"""
+    game_slugs = serializers.ListField(
+        child=serializers.SlugField(), write_only=True
+    )
+
+    class Meta:
+        model = models.Regression
+        fields = (
+            'id', 'title', 'description', 'bug_url',
+            'last_known_working_version', 'game_slugs',
+        )
+        read_only_fields = ('id',)
+
+    def validate_game_slugs(self, value):
+        if not value:
+            raise serializers.ValidationError("At least one game slug is required.")
+        games = models.Game.objects.filter(slug__in=value, change_for__isnull=True)
+        found_slugs = set(games.values_list('slug', flat=True))
+        missing = set(value) - found_slugs
+        if missing:
+            raise serializers.ValidationError(
+                f"Games not found: {', '.join(missing)}"
+            )
+        return value
+
+    def create(self, validated_data):
+        game_slugs = validated_data.pop('game_slugs')
+        user = self.context['request'].user
+        regression = models.Regression.objects.create(
+            submitted_by=user, **validated_data
+        )
+        games = models.Game.objects.filter(slug__in=game_slugs, change_for__isnull=True)
+        regression.games.set(games)
+        return regression
+
+
 class ScreenshotSerializer(serializers.ModelSerializer):
     """Serializer for Screenshots"""
     game = MicroGameSerializer()
