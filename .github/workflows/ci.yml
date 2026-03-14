@@ -46,7 +46,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DJANGO_SETTINGS_MODULE: lutrisweb.settings.local
+      DJANGO_SETTINGS_MODULE: lutrisweb.settings.ci
       DJANGO_TESTS: "1"
       POSTGRES_HOST: localhost
       POSTGRES_PORT: "5432"

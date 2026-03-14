@@ -54,13 +54,18 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
     def on_authentication_error(
         self, request, provider_id, error=None, exception=None, extra_context=None
     ):
-        logger.error(
-            "Social login error for %s: error=%s exception=%s",
-            provider_id,
-            error,
-            exception,
-            exc_info=exception,
-        )
+        from allauth.socialaccount.providers.base import AuthError
+
+        if error == AuthError.CANCELLED:
+            logger.info("Social login cancelled for %s", provider_id)
+        else:
+            logger.warning(
+                "Social login error for %s: error=%s exception=%s",
+                provider_id,
+                error,
+                exception,
+                exc_info=exception,
+            )
         return super().on_authentication_error(
             request, provider_id, error=error, exception=exception, extra_context=extra_context
         )

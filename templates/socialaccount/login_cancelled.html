@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Login Cancelled - Lutris
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 form-view">
+      <h1>Login Cancelled</h1>
+      <p>You cancelled the third-party login. If this was a mistake, you can try again.</p>
+      <a href="{% url 'login' %}" class="btn btn-primary">Back to login</a>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+{% endblock %}
