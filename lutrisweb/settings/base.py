@@ -191,9 +191,10 @@ TWITCH_CLIENT_SECRET = os.environ.get("TWITCH_CLIENT_SECRET")
 CLOUDFLARE_ZONE_ID = os.environ.get("CLOUDFLARE_ZONE_ID")
 CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 
-# Modify temporarily the session serializer because the json serializer in
-# Django 1.6 can't serialize openid.yadis.manager.YadisServiceManager objects
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
+# PickleSerializer is required because django-openid-auth stores
+# openid.yadis.manager.YadisServiceManager objects in the session
+# which are not JSON serializable.
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
