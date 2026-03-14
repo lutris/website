@@ -20,6 +20,15 @@ cleanthumbs:
 	./manage.py thumbnail cleanup
 	rm -rf ./media/cache/
 
+lint:
+	ruff check .
+
+format:
+	ruff format .
+
+check: lint
+	ruff format . --check
+
 test:
 	DJANGO_TESTS=1 ./manage.py test --no-input --failfast $(test)
 

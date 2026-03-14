@@ -1,0 +1,74 @@
+on: [push, pull_request]
+
+name: CI
+
+jobs:
+  ruff:
+    name: Ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Check linting
+        run: ruff check .
+      - name: Check formatting
+        run: ruff format . --check
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: lutris
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: lutris
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DJANGO_SETTINGS_MODULE: lutrisweb.settings.local
+      DJANGO_TESTS: "1"
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: lutris
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: lutris
+      REDIS_HOST: localhost
+      REDIS_PORT: "6379"
+      SECRET_KEY: test-secret-key
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libxml2-dev libxslt1-dev libjpeg-dev imagemagick
+      - name: Install Python dependencies
+        run: pip install -r config/requirements/base.pip
+      - name: Run migrations
+        run: python manage.py migrate --no-input
+      - name: Run tests
+        run: python manage.py test --no-input --failfast

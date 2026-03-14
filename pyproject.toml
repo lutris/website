@@ -1,0 +1,20 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["*/migrations/*", "lutris_client/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "RUF"]
+ignore = [
+    "E501",   # Line too long — existing codebase has many, fix gradually
+    "F405",   # Undefined names from star imports (settings files)
+    "F403",   # Star imports (settings files)
+    "B904",   # raise-without-from-inside-except — fix gradually
+    "RUF005", # Collection literal concatenation — stylistic
+    "RUF012", # Mutable class attributes should use ClassVar
+    "RUF015", # Prefer next(iter()) over [0] — stylistic
+]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["accounts", "bundles", "common", "emails", "games", "hardware", "platforms", "providers", "runners", "tosec"]
