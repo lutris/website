@@ -19,16 +19,36 @@ their website: https://virtualenvwrapper.readthedocs.org/en/latest/
 Once the virtualenv is created, you need to make sure that some
 environment variables are exported and are set to valid values, the
 simplest way to achieve that is to edit the postactivate script in
-`$VIRTUAL_ENV/lutrisweb/bin/postactivate` and add your exports here.
-The only required environment varible is the DJANGO_SETTINGS_MODULE one::
+`$VIRTUAL_ENV/bin/postactivate` and add your exports here.
+
+The postactivate script should set the Django settings module and load
+environment variables from `.env.local`::
+
+    #!/usr/bin/zsh
+    # This hook is sourced after this virtualenv is activated.
 
     export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
+    set -a
+    source <(grep -v '^#' "$HOME/Projects/website/.env.local" | grep .)
+    set +a
 
-Alternatively, if you want to store additional secrets like API keys, you can place
-them in an environment file. You can then export values contained in this file by adding
-to the postactivate script::
+The `set -a` / `set +a` block automatically exports all variables assigned
+between them. The `grep` commands filter out comments and blank lines from
+the env file.
 
-    export $(cat $HOME/Projects/website/.env.local | xargs)
+A sample `.env.local` file is structured as simple `KEY=value` pairs::
+
+    SECRET_KEY=changeme
+    POSTGRES_DB=lutris
+    POSTGRES_USER=lutris
+    POSTGRES_PASSWORD=admin
+    POSTGRES_HOST=localhost
+    POSTGRES_PORT=5434
+    REDIS_HOST=localhost
+    REDIS_PORT=6378
+    STEAM_API_KEY=your_steam_api_key
+    DISCORD_CLIENT_ID=your_discord_client_id
+    DISCORD_CLIENT_SECRET=your_discord_client_secret
 
 Once your virtualenv is created, you can install the system and python
 dependencies::

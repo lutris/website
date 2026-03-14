@@ -13,7 +13,6 @@ urlpatterns = [
     path('password/reset/<uidb64>/<token>/', views.LutrisPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('register', views.LutrisRegisterView.as_view(), name="register"),
     path('clear-auth-token/', views.clear_auth_token, name="clear_auth_token"),
-    path('associate-steam/', views.associate_steam, name="associate_steam"),
     path('steam-disconnect', views.steam_disconnect, name="steam_disconnect"),
     path('<username>/library/', views.LibraryList.as_view(), name="library_list"),
     path('<username>/submissions/', views.SubmissionList.as_view(), name="submission_list"),

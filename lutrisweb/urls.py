@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import include, re_path, path
 from django.contrib import admin
 from django.views.static import serve
-from django_openid_auth.views import login_begin
+from django.views.generic import RedirectView
 from rest_framework.authtoken.views import obtain_auth_token
 
 from bundles.views import BundleView
@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/games/', include('games.urls.admin')),
     path('admin/', admin.site.urls),
     path('select2/', include('django_select2.urls')),
-    path('openid/', include('django_openid_auth.urls')),
+    path('accounts/', include('allauth.urls')),
     path('user/', include('accounts.urls')),
 
     path('api/accounts/token', obtain_auth_token, name='accounts_get_token'),
@@ -45,9 +45,8 @@ urlpatterns = [
     path('email/', include('emails.urls')),
     path(
         'steam-login/',
-        login_begin,
-        kwargs={'login_complete_view': 'associate_steam'},
-        name='steam_login'
+        RedirectView.as_view(url='/accounts/steam/login/?process=connect&next=/user/library/steam-sync/', permanent=False),
+        name='legacy_steam_login'
     ),
     path('server-status', server_status, name='server_status'),
     path('', include('common.urls')),

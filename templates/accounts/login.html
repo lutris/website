@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
+{% load static %}
 
 {% block title %}
   Sign in - Lutris
@@ -17,6 +19,36 @@
         </div>
       </form>
       <a href="{% url 'password_reset' %}">Forgot your password?</a>
+
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+      <hr />
+      <h4>Or sign in with</h4>
+      <div class="social-login-buttons d-flex flex-column gap-2">
+        {% for provider in socialaccount_providers %}
+        {% if provider.id == 'steam' %}
+        <a href="{% provider_login_url provider.id %}" class="btn d-flex align-items-center justify-content-center gap-2" style="background-color:#171a21;color:#fff;border:none;">
+          <img src="{% static 'images/icons/steam-white.svg' %}" alt="" height="20" width="20" />
+          Sign in with Steam
+        </a>
+        {% elif provider.id == 'discord' %}
+        <a href="{% provider_login_url provider.id %}" class="btn d-flex align-items-center justify-content-center gap-2" style="background-color:#5865F2;color:#fff;border:none;">
+          <img src="{% static 'images/icons/discord-white.svg' %}" alt="" height="20" width="20" />
+          Sign in with Discord
+        </a>
+        {% elif provider.id == 'google' %}
+        <a href="{% provider_login_url provider.id %}" class="btn d-flex align-items-center justify-content-center gap-2" style="background-color:#fff;color:#3c4043;border:1px solid #747775;">
+          <img src="{% static 'images/icons/google-color.svg' %}" alt="" height="20" width="20" />
+          Sign in with Google
+        </a>
+        {% elif provider.id != 'openid' %}
+        <a href="{% provider_login_url provider.id %}" class="btn btn-secondary d-flex align-items-center justify-content-center gap-2">
+          {{ provider.name }}
+        </a>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
     <div class="col-sm-3"></div>
   </div>

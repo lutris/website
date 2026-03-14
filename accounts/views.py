@@ -29,15 +29,8 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
-from openid.fetchers import HTTPFetchingError
-from django_openid_auth.auth import OpenIDBackend
-from django_openid_auth.models import UserOpenID
-from django_openid_auth.exceptions import IdentityAlreadyClaimed
-from django_openid_auth.views import login_complete, parse_openid_response
-
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
@@ -258,63 +251,11 @@ def profile_delete(request, username):
     return render(request, "accounts/profile_delete.html", {"form": form})
 
 
-@csrf_exempt
-def associate_steam(request):
-    """Associate a Steam account with a Lutris account"""
-    LOGGER.info("Associating Steam user with Lutris account")
-    if not request.user.is_authenticated:
-        # Handle OpenID login manually to pass request to authenticate()
-        # (required by django-axes)
-        from django.contrib.auth import authenticate, login
-        from django_openid_auth.views import parse_openid_response as parse_openid
-        try:
-            openid_response = parse_openid(request)
-        except Exception as ex:
-            LOGGER.error("Failed to parse OpenID response: %s", ex)
-            messages.error(request, "Steam authentication failed. Please try again.")
-            return redirect("login")
-        
-        user = authenticate(request=request, openid_response=openid_response)
-        if user is not None:
-            login(request, user)
-            return redirect(reverse("user_account", args=(user.username,)))
-        else:
-            messages.error(request, "Could not authenticate with Steam. Please try again.")
-            return redirect("login")
-
-    account_url = reverse("user_account", args=(request.user.username,))
-    try:
-        openid_response = parse_openid_response(request)
-    except HTTPFetchingError:
-        messages.warning(
-            request, "Steam server is unreachable, please try again in a few moments"
-        )
-        return redirect(account_url)
-
-    if openid_response.status == "failure":
-        messages.warning(request, "Failed to associate Steam account")
-        LOGGER.warning(
-            "Failed to associate Steam account for %s", request.user.username
-        )
-        return redirect(account_url)
-    openid_backend = OpenIDBackend()
-    try:
-        openid_backend.associate_openid(request.user, openid_response)
-    except IdentityAlreadyClaimed:
-        other_open_id = UserOpenID.objects.get(
-            claimed_id__exact=openid_response.identity_url
-        )
-        other_open_id.delete()
-        openid_backend.associate_openid(request.user, openid_response)
-    request.user.set_steamid()
-    request.user.save()
-    return redirect(reverse("library_steam_sync"))
-
-
 @login_required
 def steam_disconnect(request):
-    """Clears the Steam ID and OpenID key"""
-    request.user.useropenid_set.all().delete()
+    """Clears the Steam ID and disconnects the social account"""
+    from allauth.socialaccount.models import SocialAccount
+    SocialAccount.objects.filter(user=request.user, provider="steam").delete()
     request.user.steamid = ""
     request.user.save()
     return redirect(reverse("profile"))

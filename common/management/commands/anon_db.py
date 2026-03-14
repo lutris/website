@@ -4,10 +4,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
-from django_openid_auth.models import (
-    Nonce,
-    UserOpenID,
-)
+from allauth.socialaccount.models import SocialAccount, SocialToken
 from rest_framework.authtoken.models import Token
 from axes.models import AccessAttempt, AccessLog
 from games.models import (
@@ -37,8 +34,11 @@ class Command(BaseCommand):
     @staticmethod
     def delete_tokens():
         """Remove all auth tokens (OpenID, DRF, ...)"""
-        res = UserOpenID.objects.all().delete()
-        print("Deleted %s openids" % res[0])
+        res = SocialAccount.objects.all().delete()
+        print("Deleted %s social accounts" % res[0])
+
+        res = SocialToken.objects.all().delete()
+        print("Deleted %s social tokens" % res[0])
 
         res = Token.objects.all().delete()
         print("Deleted %s tokens" % res[0])
@@ -54,9 +54,6 @@ class Command(BaseCommand):
 
         res = EmailConfirmationToken.objects.all().delete()
         print("Deleted %s email confirmation tokens" % res[0])
-
-        res = Nonce.objects.all().delete()
-        print("Deleted %s openid auth nonce entries" % res[0])
 
         res = Session.objects.all().delete()
         print("Deleted %s session entries" % res[0])

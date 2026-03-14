@@ -14,8 +14,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django_openid_auth.models import UserOpenID
-
 from emails import messages
 
 LOGGER = logging.getLogger(__name__)
@@ -49,16 +47,15 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         )
 
     def set_steamid(self):
-        """Set the Steam ID from the OpenID auth"""
+        """Set the Steam ID from the allauth social account"""
+        from allauth.socialaccount.models import SocialAccount
         try:
-            user_openid = UserOpenID.objects.get(user=self)
-        except UserOpenID.DoesNotExist:
+            social = SocialAccount.objects.get(user=self, provider="steam")
+        except SocialAccount.DoesNotExist:
             return
-        except UserOpenID.MultipleObjectsReturned:
-            # TODO: Handle properly the case when a user has connected to
-            # multiple Steam accounts.
-            user_openid = UserOpenID.objects.filter(user=self)[0]
-        self.steamid = user_openid.claimed_id.split("/")[-1]
+        except SocialAccount.MultipleObjectsReturned:
+            social = SocialAccount.objects.filter(user=self, provider="steam").first()
+        self.steamid = social.uid
 
     @staticmethod
     def generate_key():
@@ -73,7 +70,8 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         Leaves the user intact while suppressing any identifying information"""
         self.gamelibrary.delete()
         self.groups.clear()
-        self.useropenid_set.all().delete()
+        from allauth.socialaccount.models import SocialAccount
+        SocialAccount.objects.filter(user=self).delete()
         self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
         self.set_password(
             hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest()

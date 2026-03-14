@@ -18,8 +18,7 @@ django-webpack-loader==1.8.1
 django-libs==2.0.3
 django-unslashed==0.3.0
 django-redis==5.4.0
-# git+https://github.com/strycore/django-openid-auth.git#egg=django-openid-auth
-django-openid-auth==0.17
+django-allauth[socialaccount,openid]==65.15.0
 wheel==0.40.0
 python3-openid
 requests==2.32.3

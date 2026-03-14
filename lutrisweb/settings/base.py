@@ -83,6 +83,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'django.middleware.cache.FetchFromCacheMiddleware',
     "axes.middleware.AxesMiddleware",
@@ -142,7 +143,13 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_select2",
     "markupfield",
-    "django_openid_auth",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.discord",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.openid",
+    "allauth.socialaccount.providers.steam",
     "django_extensions",
     "axes",
     "common",
@@ -169,11 +176,10 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/user/login"
 AUTHENTICATION_BACKENDS = (
     "axes.backends.AxesBackend",
-    "django_openid_auth.auth.OpenIDBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
     "django.contrib.auth.backends.ModelBackend",
     "accounts.backends.SmarterModelBackend",
 )
-OPENID_SSO_SERVER_URL = "http://steamcommunity.com/openid"
 
 DISCOURSE_SSO_SECRET = os.environ.get("DISCOURSE_SSO_SECRET")
 DISCOURSE_URL = "https://forums.lutris.net"
@@ -193,10 +199,38 @@ TWITCH_CLIENT_SECRET = os.environ.get("TWITCH_CLIENT_SECRET")
 CLOUDFLARE_ZONE_ID = os.environ.get("CLOUDFLARE_ZONE_ID")
 CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 
-# PickleSerializer is required because django-openid-auth stores
-# openid.yadis.manager.YadisServiceManager objects in the session
-# which are not JSON serializable.
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
+# django-allauth configuration
+ACCOUNT_LOGIN_METHODS = {"username"}
+ACCOUNT_SIGNUP_FIELDS = ["username*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_ADAPTER = "accounts.allauth_adapter.LutrisAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "accounts.allauth_adapter.LutrisSocialAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_PROVIDERS = {
+    "steam": {
+        "APP": {
+            "client_id": "none",
+            "secret": os.environ.get("STEAM_API_KEY", ""),
+        }
+    },
+}
+if os.environ.get("DISCORD_CLIENT_ID"):
+    SOCIALACCOUNT_PROVIDERS["discord"] = {
+        "APP": {
+            "client_id": os.environ["DISCORD_CLIENT_ID"],
+            "secret": os.environ.get("DISCORD_CLIENT_SECRET", ""),
+        },
+        "SCOPE": ["identify", "email"],
+    }
+if os.environ.get("GOOGLE_CLIENT_ID"):
+    SOCIALACCOUNT_PROVIDERS["google"] = {
+        "APP": {
+            "client_id": os.environ["GOOGLE_CLIENT_ID"],
+            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+        },
+        "SCOPE": ["profile", "email"],
+    }
 
 # Admin
 GRAPPELLI_ADMIN_TITLE = "Lutris Administration"
@@ -412,6 +446,11 @@ LOGGING = {
         "runners": DEFAULT_LOGGING_CONFIG,
         "tosec": DEFAULT_LOGGING_CONFIG,
         "providers": DEFAULT_LOGGING_CONFIG,
+        "allauth": {
+            "handlers": LOGGING_HANDLERS,
+            "level": "DEBUG",
+            "propagate": True,
+        },
     },
 }
 
