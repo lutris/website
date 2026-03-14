@@ -8,7 +8,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -32,8 +32,21 @@ from games.forms import (
     RegressionForm,
     ScreenshotForm,
 )
-from games.models import Game, GameMergeSuggestion, GameSubmission, Installer, InstallerIssue, InstallerDraft, Regression
-from games.webhooks import notify_installer, notify_issue_creation, notify_merge_suggestion, notify_regression
+from games.models import (
+    Game,
+    GameMergeSuggestion,
+    GameSubmission,
+    Installer,
+    InstallerDraft,
+    InstallerIssue,
+    Regression,
+)
+from games.webhooks import (
+    notify_installer,
+    notify_issue_creation,
+    notify_merge_suggestion,
+    notify_regression,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -67,9 +80,7 @@ class GameList(ListView):
             "companies": request.GET.getlist(
                 "companies", [kwargs.get("company")] if "company" in kwargs else []
             ),
-            "years": request.GET.getlist(
-                "years", [kwargs.get("year")] if "year" in kwargs else []
-            ),
+            "years": request.GET.getlist("years", [kwargs.get("year")] if "year" in kwargs else []),
             "search-installers": request.GET.get("search-installers", False),
             "flags": request.GET.getlist("flags", []),
         }
@@ -118,14 +129,11 @@ class GameList(ListView):
         self.clean_search_query()
         if self.q_params["q"]:
             if self.q_params["search-installers"]:
-                queryset = queryset.filter(
-                    installers__content__icontains=self.q_params["q"]
-                )
+                queryset = queryset.filter(installers__content__icontains=self.q_params["q"])
             else:
                 search_query = self.q_params["q"]
                 queryset = queryset.filter(
-                    Q(name__icontains=search_query)
-                    | Q(aliases__name__icontains=search_query)
+                    Q(name__icontains=search_query) | Q(aliases__name__icontains=search_query)
                 )
         if self.q_params["platforms"]:
             queryset = queryset.filter(platforms__pk__in=self.q_params["platforms"])
@@ -143,8 +151,7 @@ class GameList(ListView):
             flags = self.q_params["flags"]
             if "open_source" in flags:
                 queryset = queryset.filter(
-                    Q(flags=models.Game.flags.fully_libre)
-                    | Q(flags=models.Game.flags.open_engine)
+                    Q(flags=models.Game.flags.fully_libre) | Q(flags=models.Game.flags.open_engine)
                 )
             if "free" in flags:
                 queryset = queryset.filter(
@@ -153,10 +160,7 @@ class GameList(ListView):
                     | Q(flags=models.Game.flags.pwyw)
                 )
 
-        if (
-            not self.request.user.is_authenticated
-            or not self.request.user.show_adult_content
-        ):
+        if not self.request.user.is_authenticated or not self.request.user.show_adult_content:
             queryset = queryset.exclude(Q(flags=models.Game.flags.adult_only))
         return queryset.distinct()
 
@@ -173,9 +177,7 @@ class GameList(ListView):
                 except ValueError:
                     self.q_params[field] = []
         if "flags" in self.q_params:
-            self.q_params["flags"] = [
-                f for f in self.q_params["flags"] if f in self.VALID_FLAGS
-            ]
+            self.q_params["flags"] = [f for f in self.q_params["flags"] if f in self.VALID_FLAGS]
 
     def clean_parameters(self):
         """Validators used to prevent sending garbage data to Django views"""
@@ -189,9 +191,7 @@ class GameList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Display the Lutris library"""
         self.clean_parameters()
-        context = super(GameList, self).get_context_data(
-            object_list=object_list, **kwargs
-        )
+        context = super(GameList, self).get_context_data(object_list=object_list, **kwargs)
         context["is_library"] = False
         filter_string = ""
         if self.q_params.get("q"):
@@ -209,9 +209,7 @@ class GameList(ListView):
             for year in self.q_params["years"]:
                 filter_string += "&years=%s" % year
         if self.q_params.get("search-installers"):
-            filter_string += (
-                "&search-installers=%s" % self.q_params["search-installers"]
-            )
+            filter_string += "&search-installers=%s" % self.q_params["search-installers"]
         if self.q_params.get("flags"):
             for flag in self.q_params["flags"]:
                 filter_string += "&flags=%s" % flag
@@ -259,9 +257,7 @@ def game_detail(request, slug):
 
     if user.is_authenticated:
         unpublished_installers = game.draft_installers.filter(user=user)
-        in_library = models.LibraryGame.objects.filter(
-            gamelibrary__user=user, game=game
-        ).exists()
+        in_library = models.LibraryGame.objects.filter(gamelibrary__user=user, game=game).exists()
         screenshots = game.screenshot_set.published(user=user, is_staff=user.is_staff)
 
         if user.is_staff and user.has_perm("games.change_game"):
@@ -375,9 +371,7 @@ def delete_draft(request, draft_id):
         game = draft.game
         installer_name = draft.version
         draft.delete()
-        messages.warning(
-            request, "The draft {} has been deleted.".format(installer_name)
-        )
+        messages.warning(request, "The draft {} has been deleted.".format(installer_name))
         return redirect(game.get_absolute_url())
     return render(request, "installers/delete.html", {"installer": draft})
 
@@ -441,9 +435,7 @@ def get_icon(request, slug):
     if not game or not game.icon:
         raise Http404
     try:
-        thumbnail = get_thumbnail(
-            game.icon, settings.ICON_SIZE, crop="center", format="PNG"
-        )
+        thumbnail = get_thumbnail(game.icon, settings.ICON_SIZE, crop="center", format="PNG")
     except AttributeError:
         game.icon.delete()
         raise Http404
@@ -465,9 +457,7 @@ def game_list(request):
 
 def notify_new_game(game, user):
     """Notify managers a game has been submitted"""
-    admin_url = "https://lutris.net" + reverse(
-        "admin:games_game_change", args=(game.id,)
-    )
+    admin_url = "https://lutris.net" + reverse("admin:games_game_change", args=(game.id,))
     context = {
         "game_name": game.name,
         "username": user.username,

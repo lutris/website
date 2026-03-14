@@ -1,12 +1,13 @@
 # pylint: disable=missing-docstring,too-few-public-methods
 from rest_framework import serializers
+
 from .models import Runner, RunnerVersion, Runtime, RuntimeComponent
 
 
 class RunnerVersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunnerVersion
-        fields = ('version', 'architecture', 'url', 'default')
+        fields = ("version", "architecture", "url", "default")
 
 
 class RunnerSerializer(serializers.ModelSerializer):
@@ -14,19 +15,19 @@ class RunnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Runner
-        fields = ('name', 'slug', 'icon', 'website', 'versions')
+        fields = ("name", "slug", "icon", "website", "versions")
 
 
 class RuntimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Runtime
-        fields = ('id', 'name', 'created_at', 'architecture', 'url')
+        fields = ("id", "name", "created_at", "architecture", "url")
 
 
 class RuntimeComponentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RuntimeComponent
-        fields = ('filename', 'url', 'modified_at')
+        fields = ("filename", "url", "modified_at")
 
 
 class RuntimeDetailSerializer(serializers.ModelSerializer):
@@ -34,4 +35,4 @@ class RuntimeDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Runtime
-        fields = ('id', 'name', 'created_at', 'components')
+        fields = ("id", "name", "created_at", "components")

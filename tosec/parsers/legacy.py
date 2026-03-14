@@ -3,6 +3,7 @@ from tosec.utils import smart_split
 
 class TosecOldParser:
     """Parser for TOSEC dat files"""
+
     def __init__(self, contents):
         """contents is an list containing the lines of a Tosec dat file"""
         self.contents = contents
@@ -18,10 +19,10 @@ class TosecOldParser:
     def parse_line(line):
         """Parse a single line of data"""
         try:
-            key, raw_value = line.split(' ', 1)
+            key, raw_value = line.split(" ", 1)
         except ValueError:
             raise ValueError("Invalid line %s" % line)
-        return key, raw_value.strip("\"")
+        return key, raw_value.strip('"')
 
     @staticmethod
     def extract_rom(line):
@@ -37,14 +38,14 @@ class TosecOldParser:
 
     def extract_line(self, line, item):
         """This seems incomplete..."""
-        if line == ')':
+        if line == ")":
             return True
         parts = self.parse_line(line)
-        if parts[1] == '(':
+        if parts[1] == "(":
             return
-        if parts[0] == 'rom':
+        if parts[0] == "rom":
             # FIXME there can be multiple roms in one entry
-            item['rom'] = self.extract_rom(parts[1])
+            item["rom"] = self.extract_rom(parts[1])
         else:
             item[parts[0]] = parts[1]
 

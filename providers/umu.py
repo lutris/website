@@ -1,6 +1,6 @@
+import json
 import logging
 import os
-import json
 import subprocess
 from collections import defaultdict
 from typing import List, Tuple
@@ -25,9 +25,7 @@ UMU_GAMES_PATH = os.path.join(settings.MEDIA_ROOT, "umu-games.json")
 
 def fix_steam_ids():
     games_updated = 0
-    provider_games = ProviderGame.objects.filter(
-        provider__name="steam", internal_id__isnull=True
-    )
+    provider_games = ProviderGame.objects.filter(provider__name="steam", internal_id__isnull=True)
     provider_games_cnt = provider_games.count()
     for pg in provider_games:
         pg.internal_id = pg.slug
@@ -165,9 +163,7 @@ def get_other_provider_games(steam_provider_game):
             LOGGER.warning(lutris_game)
     lutris_game = lutris_games[0]
     provider_games = []
-    for provider_game in lutris_game.provider_games.exclude(
-        provider__name__in=("igdb", "steam")
-    ):
+    for provider_game in lutris_game.provider_games.exclude(provider__name__in=("igdb", "steam")):
         provider_games.append((provider_game, steam_provider_game))
     return provider_games
 
@@ -177,9 +173,7 @@ def check_steam_to_lutris_matches():
     If not, create them.
     """
     steam_ids: set = get_game_ids("gamefixes-steam").union(get_proton_patch_ids())
-    steam_games = ProviderGame.objects.filter(
-        provider__name="steam", internal_id__in=steam_ids
-    )
+    steam_games = ProviderGame.objects.filter(provider__name="steam", internal_id__in=steam_ids)
     matched_steam_ids = set()
     for steam_game in steam_games:
         matched_steam_ids.add(steam_game.internal_id)
@@ -214,9 +208,7 @@ def parse_python_fix(file_path):
             continue
         if line.strip().startswith("util"):
             line = line.strip().replace("util.", "")
-            if line.startswith(
-                ("winedll_override", "set_environment", "replace_command")
-            ):
+            if line.startswith(("winedll_override", "set_environment", "replace_command")):
                 line = line.replace("', '", "=").replace("','", "=")
             if not line.startswith(("regedit_add", "append_arguments")):
                 line = line.replace("('", ": ").replace("()", "")
@@ -242,7 +234,7 @@ def parse_protonfixes(gamefix_folder):
     store_path = os.path.join(PROTONFIXES_PATH, gamefix_folder)
     fix_files = os.listdir(store_path)
     for fix in fix_files:
-        appid, ext = os.path.splitext(fix)
+        appid, _ext = os.path.splitext(fix)
         if appid in ("default", "__init__"):
             continue
         fixes[appid] = parse_python_fix(os.path.join(store_path, fix))

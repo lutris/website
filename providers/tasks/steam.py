@@ -2,6 +2,7 @@
 
 import time
 from json import JSONDecodeError
+
 import requests
 from celery.utils.log import get_task_logger
 from django.utils import timezone
@@ -89,9 +90,7 @@ def fetch_app_details(appid):
     if details_response.status_code == 429:
         raise RateLimitExceeded
     if details_response.status_code != 200:
-        LOGGER.warning(
-            "Invalid response for appid %s: %s", appid, details_response.status_code
-        )
+        LOGGER.warning("Invalid response for appid %s: %s", appid, details_response.status_code)
         return False
     try:
         details = details_response.json()
@@ -114,9 +113,7 @@ def fetch_app_details(appid):
 def fetch_app_details_all(max_games=200):
     stats = {"fetched": 0, "failed": 0}
     for index, game in enumerate(
-        models.ProviderGame.objects.filter(
-            provider__name="steam", metadata__isnull=True
-        )
+        models.ProviderGame.objects.filter(provider__name="steam", metadata__isnull=True)
     ):
         try:
             success = fetch_app_details(game.slug)

@@ -1,11 +1,11 @@
 """Models for user accounts"""
 
 # pylint: disable=no-member
-import os
 import datetime
 import hashlib
 import hmac
 import logging
+import os
 import uuid
 from urllib.parse import urlencode
 
@@ -14,6 +14,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+
 from emails import messages
 
 LOGGER = logging.getLogger(__name__)
@@ -37,9 +38,7 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         """Return the local avatar URL or one from Gravatar"""
         if self.avatar:
             return self.avatar.url
-        default_url = (
-            "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
-        )
+        default_url = "https://lutris.net" + settings.STATIC_URL + "images/default-avatar.png"
         size = 64
         return "https://www.gravatar.com/avatar/%s?%s" % (
             hashlib.md5(self.email.encode("utf-8").lower()).hexdigest(),
@@ -49,6 +48,7 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
     def set_steamid(self):
         """Set the Steam ID from the allauth social account"""
         from allauth.socialaccount.models import SocialAccount
+
         try:
             social = SocialAccount.objects.get(user=self, provider="steam")
         except SocialAccount.DoesNotExist:
@@ -71,11 +71,10 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         self.gamelibrary.delete()
         self.groups.clear()
         from allauth.socialaccount.models import SocialAccount
+
         SocialAccount.objects.filter(user=self).delete()
         self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
-        self.set_password(
-            hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest()
-        )
+        self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
         self.is_active = False
         self.is_staff = False
         self.email_confirmed = False

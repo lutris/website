@@ -14,4 +14,4 @@ class Bundle(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('bundle_detail', kwargs={'slug': self.slug})
+        return reverse("bundle_detail", kwargs={"slug": self.slug})

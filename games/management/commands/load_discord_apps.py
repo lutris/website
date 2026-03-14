@@ -1,5 +1,5 @@
-from argparse import ArgumentParser
 import json
+from argparse import ArgumentParser
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -10,26 +10,25 @@ class Command(BaseCommand):
     updated_count: int = 0
 
     def add_arguments(self, parser: ArgumentParser):
-        parser.add_argument(
-            'file',
-            help="JSON File with game identifier and discord app ids"
-        )
+        parser.add_argument("file", help="JSON File with game identifier and discord app ids")
 
     def handle(self, *args, **options):
-        with open(options['file'], 'r') as json_file:
+        with open(options["file"], "r") as json_file:
             discord_app_list: list = json.load(json_file)
             if type(discord_app_list) is not list:
                 raise CommandError("Invalid JSON Data, a list must be provided")
 
         for discord_app in discord_app_list:
             # Skip if required keys are missing
-            if 'game' not in discord_app or 'discord_id' not in discord_app:
+            if "game" not in discord_app or "discord_id" not in discord_app:
                 self.stderr.write(f"Invalid Entry on JSON File {discord_app}")
                 continue
 
-            self.import_discord_app(discord_app['game'], discord_app['discord_id'])
+            self.import_discord_app(discord_app["game"], discord_app["discord_id"])
 
-        self.stdout.write(self.style.SUCCESS(f"Script Completed. Updated {self.updated_count} Games"))
+        self.stdout.write(
+            self.style.SUCCESS(f"Script Completed. Updated {self.updated_count} Games")
+        )
 
     def import_discord_app(self, game: str, discord_id: str):
         """

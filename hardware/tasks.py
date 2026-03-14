@@ -1,8 +1,9 @@
 # pylint: disable=no-member
-import logging
 import json
+import logging
 
 from django.conf import settings
+
 from hardware import models
 
 LOGGER = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ GPU_GENERATION_FEATURE_MAP = {
         r"GTX 10\d0": "Pascal",
         r"RTX 20\d0": "Turing",
         r"RTX 30\d0": "Ampere",
-        r"RTX 40\d0": "Ada Lovelace"
+        r"RTX 40\d0": "Ada Lovelace",
     },
     "Intel": {
         r"N3xxx Integrated Graphics Controller": "HD Graphics 400",
@@ -51,8 +52,8 @@ GPU_GENERATION_FEATURE_MAP = {
         r"UHD Graphics .?6[2-3]0": "UHD Graphics 630",
         r"Iris Plus Graphics": "Iris Plus Graphics",
         r"Iris Xe Graphics": "Iris Xe Graphics",
-        r"Arc ": "Arc"
-    }
+        r"Arc ": "Arc",
+    },
 }
 
 
@@ -75,8 +76,7 @@ def load_from_pci_ids():
             if line[0].isdigit():
                 vendor_id, vendor_name = line.strip().split(maxsplit=1)
                 vendor, created = models.Vendor.objects.get_or_create(
-                    vendor_id=vendor_id,
-                    name=vendor_name
+                    vendor_id=vendor_id, name=vendor_name
                 )
                 if created:
                     LOGGER.info("Created vendor %s", vendor)
@@ -84,9 +84,7 @@ def load_from_pci_ids():
                 subvendor_id, subdevice_id, name = line.strip().split(maxsplit=2)
                 try:
                     subsystem = models.Subsystem.objects.get(
-                        device=device,
-                        subvendor_id=subvendor_id,
-                        subdevice_id=subdevice_id
+                        device=device, subvendor_id=subvendor_id, subdevice_id=subdevice_id
                     )
                     if subsystem.name != name:
                         subsystem.name = name
@@ -96,7 +94,7 @@ def load_from_pci_ids():
                         device=device,
                         subvendor_id=subvendor_id,
                         subdevice_id=subdevice_id,
-                        name=name
+                        name=name,
                     )
                     LOGGER.info("Created subsystem %s", subsystem)
             elif line.startswith("\t"):
@@ -104,7 +102,7 @@ def load_from_pci_ids():
                 try:
                     device = models.Device.objects.get(
                         vendor=vendor,
-                        device_id = device_id,
+                        device_id=device_id,
                     )
                     device_changed = False
                     if device.name != name:
@@ -133,25 +131,19 @@ def load_from_pci_ids():
 def load_features():
     """Load GPU features by geneation from JSON"""
     gpu_json_path = settings.BASE_DIR + "/public/data/gpu-features-by-series.json"
-    vendor_ids = {
-        "ATI": "1002",
-        "AMD": "1002",
-        "Nvidia": "10de",
-        "Intel": "8086"
-    }
+    vendor_ids = {"ATI": "1002", "AMD": "1002", "Nvidia": "10de", "Intel": "8086"}
     vendors = {
         vendor_name: models.Vendor.objects.get(vendor_id=vendor_id)
         for vendor_name, vendor_id in vendor_ids.items()
     }
     LOGGER.info("Reading features from %s", gpu_json_path)
     with open(gpu_json_path, encoding="utf-8") as gpu_json_file:
-        gpu_features_generations =json.load(gpu_json_file)
+        gpu_features_generations = json.load(gpu_json_file)
     for gpu_features in gpu_features_generations:
         vendor = vendors[gpu_features["Vendor"]]
         try:
             generation = models.Generation.objects.get(
-                vendor=vendor,
-                name=gpu_features["Chip series"]
+                vendor=vendor, name=gpu_features["Chip series"]
             )
             generation.year = gpu_features["Year"]
             if gpu_features["Introduced with"]:
@@ -162,7 +154,7 @@ def load_features():
                 vendor=vendor,
                 name=gpu_features["Chip series"],
                 year=gpu_features["Year"],
-                introduced_with=gpu_features["Introduced with"]
+                introduced_with=gpu_features["Introduced with"],
             )
         for api in ("OpenGL", "Vulkan", "Direct3D"):
             if not gpu_features[api]:
@@ -191,26 +183,16 @@ def load_features():
 
 def load_generations_to_devices():
     """Apply generations to devices"""
-    vendor_ids = {
-        "AMD": "1002",
-        "Nvidia": "10de",
-        "Intel": "8086"
-    }
+    vendor_ids = {"AMD": "1002", "Nvidia": "10de", "Intel": "8086"}
     vendors = {
         vendor_name: models.Vendor.objects.get(vendor_id=vendor_id)
         for vendor_name, vendor_id in vendor_ids.items()
     }
-    generations = {
-        gen.name: gen
-        for gen in models.Generation.objects.all()
-    }
+    generations = {gen.name: gen for gen in models.Generation.objects.all()}
 
     for vendor, patterns in GPU_GENERATION_FEATURE_MAP.items():
         for pattern, generation_name in patterns.items():
-            devices = models.Device.objects.filter(
-                vendor=vendors[vendor],
-                name__regex=pattern
-            )
+            devices = models.Device.objects.filter(vendor=vendors[vendor], name__regex=pattern)
             for device in devices:
                 if device.generation != generations[generation_name]:
                     device.generation = generations[generation_name]

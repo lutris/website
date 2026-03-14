@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 
 from django.core.management.base import BaseCommand
+
 from common.util import load_yaml
 from games import models
 

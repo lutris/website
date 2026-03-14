@@ -1,7 +1,7 @@
 """Base settings"""
 
 import os
-from os.path import dirname, abspath
+from os.path import abspath, dirname
 
 from celery.schedules import crontab
 
@@ -383,8 +383,7 @@ LOGGING = {
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
         },
         "simple": {"format": "%(levelname)s %(message)s"},
     },

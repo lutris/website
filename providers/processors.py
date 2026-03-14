@@ -38,5 +38,5 @@ def clean_name(name):
     )
     for extra in extras:
         if name.strip(")").lower().endswith(extra):
-            name = name[:-len(extra)].strip(" -:®™(").replace("™", "")
+            name = name[: -len(extra)].strip(" -:®™(").replace("™", "")
     return name

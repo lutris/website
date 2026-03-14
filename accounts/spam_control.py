@@ -1,6 +1,7 @@
 """Functions to get rid of spam accounts"""
 
 from django.db.models import Count
+
 from accounts.models import User
 
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from . import models
-from . import forms
+
+from . import forms, models
 
 
 class RunnerVersionInline(admin.TabularInline):
@@ -19,7 +19,15 @@ class RuntimeComponentAdmin(admin.StackedInline):
 
 
 class RuntimeAdmin(admin.ModelAdmin):
-    list_display = ("name", "architecture", "enabled", "versioned", "version", "min_version", "created_at")
+    list_display = (
+        "name",
+        "architecture",
+        "enabled",
+        "versioned",
+        "version",
+        "min_version",
+        "created_at",
+    )
     model = models.Runtime
 
     inlines = [

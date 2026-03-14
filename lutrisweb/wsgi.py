@@ -1,5 +1,5 @@
-#pylint: disable=C0103
-""" WSGI config for lutrisweb project.
+# pylint: disable=C0103
+"""WSGI config for lutrisweb project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -13,6 +13,7 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
+
 import os
 
 from django.core.wsgi import get_wsgi_application

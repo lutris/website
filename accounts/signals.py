@@ -1,4 +1,5 @@
 """Accounts related signals"""
+
 import logging
 
 from allauth.socialaccount.signals import social_account_added, social_account_removed
@@ -16,6 +17,7 @@ LOGGER = logging.getLogger(__name__)
 def create_library(sender, instance, created, **_kwargs):  # pylint: disable=unused-argument
     """Create a new game library for new users"""
     from games.models import GameLibrary
+
     if created:
         game_library = GameLibrary(user=instance)
         game_library.save()
@@ -42,6 +44,7 @@ def on_steam_connected(request, sociallogin, **kwargs):
         user.steamid = sociallogin.account.uid
         user.save(update_fields=["steamid"])
         from . import tasks
+
         tasks.sync_steam_library.delay(user.id)
 
 

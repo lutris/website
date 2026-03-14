@@ -1,28 +1,28 @@
-import os
 import hashlib
+import os
 from optparse import make_option
-from tosec.models import Rom, Game
+
 from django.core.management.base import BaseCommand
+
+from tosec.models import Game, Rom
 
 
 class Command(BaseCommand):
-    args = '<folder>'
-    help = 'Scan a folder for TOSEC roms'
+    args = "<folder>"
+    help = "Scan a folder for TOSEC roms"
     option_list = BaseCommand.option_list + (
-        make_option('--destination', action='store', type="str"),
-        make_option('--create-set-folders', action='store_true',
-                    dest="create_set_folders"),
-
+        make_option("--destination", action="store", type="str"),
+        make_option("--create-set-folders", action="store_true", dest="create_set_folders"),
     )
 
     def handle(self, *args, **options):
         directory = args[0]
-        dest = options.get('destination')
+        dest = options.get("destination")
         if not dest:
-            dest = os.path.join(directory, 'TOSEC')
+            dest = os.path.join(directory, "TOSEC")
         if not os.path.exists(dest):
             os.makedirs(dest)
-        create_set_folders = options['create_set_folders']
+        create_set_folders = options["create_set_folders"]
         self.stdout.write("Scanning %s" % directory)
         filenames = os.listdir(directory)
         total_files = len(filenames)
@@ -41,9 +41,7 @@ class Command(BaseCommand):
                 tosec_sets[set_name] += 1
             else:
                 tosec_sets[set_name] = 1
-            self.stdout.write("[{} of {}] Found {}".format(index,
-                                                           total_files,
-                                                           rom.name))
+            self.stdout.write("[{} of {}] Found {}".format(index, total_files, rom.name))
             if create_set_folders:
                 set_path = os.path.join(dest, set_name)
                 if not os.path.exists(set_path):
@@ -55,6 +53,6 @@ class Command(BaseCommand):
 
         for set_name in tosec_sets:
             set_size = Game.objects.filter(category__name=set_name).count()
-            self.stdout.write("{}: imported {} of {} games".format(
-                set_name, tosec_sets[set_name], set_size
-            ))
+            self.stdout.write(
+                "{}: imported {} of {} games".format(set_name, tosec_sets[set_name], set_size)
+            )

@@ -1,4 +1,5 @@
 """GOG related utilities"""
+
 import logging
 import os
 

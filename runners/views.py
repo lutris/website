@@ -1,23 +1,21 @@
 # pylint: disable=missing-docstring, too-many-ancestors, no-member
 import os
 
-from django.utils import timezone
 from django.conf import settings
-
-from rest_framework import status
-from rest_framework import generics, filters, views
-from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from django.utils import timezone
+from rest_framework import filters, generics, status, views
 from rest_framework.exceptions import APIException
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.response import Response
 
 from common.permissions import IsAdminOrReadOnly
+from hardware.models import get_hardware_features
 from runners.models import Runner, RunnerVersion, Runtime, RuntimeComponent
 from runners.serializers import (
     RunnerSerializer,
-    RuntimeSerializer,
     RuntimeDetailSerializer,
+    RuntimeSerializer,
 )
-from hardware.models import get_hardware_features
 
 
 class ClientTooOld(APIException):
@@ -102,9 +100,7 @@ def get_version_number(version):
     if len(version_parts) == 3:
         version_parts.append(0)
     release, major, minor, patch = version_parts[:4]
-    return (
-        int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
-    )
+    return int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
 
 
 class RuntimeListView(generics.ListCreateAPIView):

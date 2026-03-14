@@ -1,12 +1,15 @@
 """Custom template tags and filters"""
+
 import math
 from datetime import datetime
+
 from django import template
 
 from common import util
 
 register = template.Library()  # pylint: disable=invalid-name
 NO_PLAYTIME = ""
+
 
 @register.filter
 def clean_html(markup):
@@ -33,6 +36,7 @@ def human_time(playtime):
     if playtime:
         return "Less than a minute"
     return NO_PLAYTIME
+
 
 @register.filter
 def tsdate(timestamp):

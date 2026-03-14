@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,too-few-public-methods,no-member
 import re
+
 from django.db import models
 
 ARCH_CHOICES = (
@@ -11,7 +12,7 @@ ARCH_CHOICES = (
 
 
 class Runner(models.Model):
-    """ Model definition for the runners """
+    """Model definition for the runners"""
 
     name = models.CharField(max_length=127)
     slug = models.SlugField(unique=True)
@@ -43,8 +44,8 @@ class Runner(models.Model):
             if not version_match:
                 return []
             version_number = version_match.groups()[0]
-            prefix = version[0: version_match.span()[0]]
-            suffix = version[version_match.span()[1]:]
+            prefix = version[0 : version_match.span()[0]]
+            suffix = version[version_match.span()[1] :]
             version = [int(p) for p in version_number.split(".")]
             version = version + [0] * (10 - len(version))
             version.append(prefix)
@@ -55,13 +56,9 @@ class Runner(models.Model):
 
 
 class RunnerVersion(models.Model):
-    runner = models.ForeignKey(
-        Runner, related_name="runner_versions", on_delete=models.CASCADE
-    )
+    runner = models.ForeignKey(Runner, related_name="runner_versions", on_delete=models.CASCADE)
     version = models.CharField(max_length=32)
-    architecture = models.CharField(
-        max_length=8, choices=ARCH_CHOICES, default="x86_64"
-    )
+    architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="x86_64")
     url = models.URLField(blank=True)
     default = models.BooleanField(default=False)
 
@@ -84,7 +81,7 @@ class Runtime(models.Model):
     architecture = models.CharField(max_length=8, choices=ARCH_CHOICES, default="all")
     url = models.URLField(blank=True)
     enabled = models.BooleanField(default=True)
-    version = models.CharField(max_length= 32, default="", blank=True)
+    version = models.CharField(max_length=32, default="", blank=True)
     versioned = models.BooleanField(default=False)  # Store each version in its own folder
     min_version = models.IntegerField(default=0)  # Restrict runtimes to client above given version
 
@@ -97,13 +94,14 @@ class Runtime(models.Model):
 
 class RuntimeComponent(models.Model):
     """Individual file from a runtime"""
+
     runtime = models.ForeignKey(Runtime, related_name="components", on_delete=models.CASCADE)
     filename = models.CharField(max_length=512)
     url = models.URLField()
     modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("filename", )
+        ordering = ("filename",)
 
     def __str__(self):
         return str(self.filename)

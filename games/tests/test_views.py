@@ -1,45 +1,44 @@
 """Game views tests"""
+
 # pylint: disable=no-member
-import json
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from django.conf import settings
-from games.models import InstallerIssue
+
 from . import factories
 
 
 class TestInstallerViews(TestCase):
     """Test installer views"""
+
     def setUp(self):
-        self.game = factories.GameFactory(name='doom', slug='doom')
+        self.game = factories.GameFactory(name="doom", slug="doom")
         self.user = factories.UserFactory()
 
     def test_anonymous_user_cant_create_installer(self):
         factories.GameFactory()
-        installer_url = reverse("new_installer", kwargs={'slug': 'doom'})
+        installer_url = reverse("new_installer", kwargs={"slug": "doom"})
         response = self.client.get(installer_url, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(settings.LOGIN_URL + '?next=' + installer_url,
-                         response.redirect_chain[1][0])
+        self.assertEqual(
+            settings.LOGIN_URL + "?next=" + installer_url, response.redirect_chain[1][0]
+        )
 
     def test_logged_in_user_can_create_installer(self):
         self.client.login(username=self.user.username, password="password")
-        installer_url = reverse("new_installer", kwargs={'slug': 'doom'})
+        installer_url = reverse("new_installer", kwargs={"slug": "doom"})
         response = self.client.get(installer_url)
         self.assertEqual(response.status_code, 200)
 
     def test_can_redirect_to_game_page_from_installer_slug(self):
         installer = factories.InstallerFactory(game=self.game)
 
-        game_for_installer_url = reverse("game_for_installer",
-                                         kwargs={'slug': installer.slug})
+        game_for_installer_url = reverse("game_for_installer", kwargs={"slug": installer.slug})
         response = self.client.get(game_for_installer_url)
-        self.assertRedirects(
-            response, reverse('game_detail', kwargs={'slug': self.game.slug})
-        )
+        self.assertRedirects(response, reverse("game_detail", kwargs={"slug": self.game.slug}))
 
     def test_can_access_installer_feed(self):
-        response = self.client.get('/games/installer/feed/')
+        response = self.client.get("/games/installer/feed/")
         self.assertEqual(response.status_code, 200)
 
 
@@ -47,11 +46,11 @@ class TestGameViews(TestCase):
     """Test game list view"""
 
     def setUp(self):
-        factories.CompanyFactory(name='Team 17', slug='team-17')
+        factories.CompanyFactory(name="Team 17", slug="team-17")
 
     def test_can_get_game_list(self):
         """Can get the basic game list"""
-        url = reverse('game_list')
+        url = reverse("game_list")
         self.assertEqual(url, "/games")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

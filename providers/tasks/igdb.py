@@ -1,32 +1,31 @@
 """Provider tasks"""
 
-import os
 import json
+import os
 import time
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 import requests
+from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import make_aware
 
-from celery.utils.log import get_task_logger
-from common.util import slugify
 from common.models import save_action_log
-
+from common.util import slugify
 from games.models import Game
 from games.webhooks import send_simple_message
+from lutrisweb.celery import app
 from platforms.models import Platform
 from providers.igdb import IGDBClient
 from providers.models import (
     Provider,
+    ProviderCover,
     ProviderGame,
     ProviderGenre,
     ProviderPlatform,
-    ProviderCover,
 )
-from lutrisweb.celery import app
 
 LOGGER = get_task_logger(__name__)
 
@@ -153,9 +152,7 @@ def _igdb_loader(resource_name, model):
         for api_payload in resources:
             # Skip string responses (shouldn't happen with proper error handling)
             if isinstance(api_payload, str):
-                LOGGER.warning(
-                    "Received string instead of JSON object: %s", api_payload
-                )
+                LOGGER.warning("Received string instead of JSON object: %s", api_payload)
                 continue
 
             # Check for error objects in the response array
@@ -244,9 +241,7 @@ def match_igdb_games():
 
         # Set year
         if not lutris_game.year and igdb_game.metadata.get("first_release_date"):
-            lutris_game.year = datetime.fromtimestamp(
-                igdb_game.metadata["first_release_date"]
-            ).year
+            lutris_game.year = datetime.fromtimestamp(igdb_game.metadata["first_release_date"]).year
 
         # Set description
         if not lutris_game.description and igdb_game.metadata.get("summary"):
@@ -272,9 +267,7 @@ def sync_igdb_platforms():
         try:
             lutris_platform = Platform.objects.get(slug=igdb_slug)
         except Platform.DoesNotExist:
-            lutris_platform = Platform.objects.create(
-                name=igdb_platform.name, slug=igdb_slug
-            )
+            lutris_platform = Platform.objects.create(name=igdb_platform.name, slug=igdb_slug)
         lutris_platform.igdb_id = igdb_platform.metadata["id"]
         lutris_platform.save()
 
@@ -309,9 +302,7 @@ def sync_igdb_coverart(force_update=False):
             stats["existing_file"] += 1
             continue
         try:
-            igdb_game = ProviderGame.objects.get(
-                provider__name="igdb", internal_id=igdb_cover.game
-            )
+            igdb_game = ProviderGame.objects.get(provider__name="igdb", internal_id=igdb_cover.game)
         except ProviderGame.DoesNotExist:
             stats["missing_igdb_game"] += 1
             continue
@@ -352,9 +343,7 @@ def deduplicate_lutris_games():
         igdb_slug = slugify(game.name.replace("'", "-"))
         # Check the presence of an IGDB game
         try:
-            igdb_game = Game.objects.get(
-                provider_games__provider__name="igdb", slug=igdb_slug
-            )
+            igdb_game = Game.objects.get(provider_games__provider__name="igdb", slug=igdb_slug)
         except Game.DoesNotExist:
             # No IGDB game found, just keep going
             continue
@@ -374,9 +363,7 @@ def deduplicate_igdb_games():
             # Skip slug based entries
             continue
         try:
-            game_by_slug = ProviderGame.objects.get(
-                provider__name="igdb", slug=game_slug
-            )
+            game_by_slug = ProviderGame.objects.get(provider__name="igdb", slug=game_slug)
         except ProviderGame.DoesNotExist:
             # No older entry to attach the data to, skip.
             continue
@@ -394,9 +381,7 @@ def fix_igdb_games():
     for game in ProviderGame.objects.filter(provider__name="igdb"):
         game.slug = game.metadata["slug"]
         game.internal_id = game.metadata["id"]
-        game.updated_at = make_aware(
-            datetime.fromtimestamp(game.metadata["updated_at"])
-        )
+        game.updated_at = make_aware(datetime.fromtimestamp(game.metadata["updated_at"]))
         game.save()
 
 

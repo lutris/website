@@ -1,12 +1,15 @@
 # pylint: disable=no-member
 """Hardware API views"""
+
 from rest_framework import views
 from rest_framework.response import Response
+
 from hardware import models
 
 
 class HardwareInfoView(views.APIView):
     """Return hardware features from a PCI ID"""
+
     def get(self, request):
         """Query PCI ID against database and return features"""
         pci_ids = request.GET.get("pci_ids", "").lower()

@@ -1,55 +1,54 @@
 """TOSEC naming convention parser"""
-import re
+
 import logging
+import re
+
 from tosec import constants
 
 LOGGER = logging.getLogger(__name__)
 
+
 class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
     """Naming conventions used in TOSEC files"""
+
     tosec_re = (
-        r'(?P<title>.*?) '
-        r'(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*'
-        r'\((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)'
-        r'\((?P<publisher>.*?)\)'
+        r"(?P<title>.*?) "
+        r"(?:\((?P<demo>demo(?:-[a-z]{5,9})*)\) )*"
+        r"\((?P<date>[0-9x]{4}(?:-[0-9]{2}(?:-[0-9x]{2})*)*)\)"
+        r"\((?P<publisher>.*?)\)"
     )
-    flags_re = r'\((.*?)\)*'
+    flags_re = r"\((.*?)\)*"
 
     parts = [
-        'title',
-        'version',
-        'demo',
-        'date',
-        'publisher',
-        'system',
-        'video',
-        'country',
-        'language',
-        'copyright',
-        'development',
-        'media',
-        'media_label',
-        'cracked',
-        'fixed',
-        'hacked',
-        'modified',
-        'pirated',
-        'trained',
-        'translated',
-        'over_dump',
-        'under_dump',
-        'virus',
-        'bad_dump',
-        'alternate',
-        'known_verified',
+        "title",
+        "version",
+        "demo",
+        "date",
+        "publisher",
+        "system",
+        "video",
+        "country",
+        "language",
+        "copyright",
+        "development",
+        "media",
+        "media_label",
+        "cracked",
+        "fixed",
+        "hacked",
+        "modified",
+        "pirated",
+        "trained",
+        "translated",
+        "over_dump",
+        "under_dump",
+        "virus",
+        "bad_dump",
+        "alternate",
+        "known_verified",
     ]
 
-    empty = {
-        'title': None,
-        'demo': None,
-        'date': None,
-        'publisher': None
-    }
+    empty = {"title": None, "demo": None, "date": None, "publisher": None}
 
     def __init__(self, name):
         for part in self.parts:
@@ -59,10 +58,10 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
         self.filename = name
         self.matches = re.search(self.tosec_re, name)
         groupdict = self.matches.groupdict() if self.matches else self.empty
-        self.title = groupdict['title']
-        self.demo = groupdict['demo']
-        self.date = groupdict['date']
-        self.publisher = groupdict['publisher']
+        self.title = groupdict["title"]
+        self.demo = groupdict["demo"]
+        self.date = groupdict["date"]
+        self.publisher = groupdict["publisher"]
 
         self.system = ""
         self.video = ""
@@ -75,51 +74,51 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
         self.media_label = ""
 
         if self.matches:
-            remainder = self.filename[self.matches.end():]
-            flag_match = re.search(r'\(.*\)', remainder)
+            remainder = self.filename[self.matches.end() :]
+            flag_match = re.search(r"\(.*\)", remainder)
             if flag_match:
-                flag_part = remainder[flag_match.start():flag_match.end()]
-                flags = [s for s in re.split(r'(\(.*?\))', flag_part) if s]
+                flag_part = remainder[flag_match.start() : flag_match.end()]
+                flags = [s for s in re.split(r"(\(.*?\))", flag_part) if s]
                 self.set_flags(flags)
-                remainder = remainder[flag_match.end():]
+                remainder = remainder[flag_match.end() :]
 
-            dump_match = re.search(r'\[.*\]', remainder)
+            dump_match = re.search(r"\[.*\]", remainder)
             if dump_match:
                 dump_part = remainder[dump_match.start(), dump_match.end()]
-                dump_flags = [d for d in re.split(r'(\[.*?\])', dump_part) if d]
+                dump_flags = [d for d in re.split(r"(\[.*?\])", dump_part) if d]
                 self.set_dump_flags(dump_flags)
 
     def set_flags(self, flags):
         """Dispatch flag assignment to the class' set_* methods"""
-        current_flag_index = self.parts.index('publisher') + 1
+        current_flag_index = self.parts.index("publisher") + 1
         for flag in flags:
             # if not flag.startswith('('):
             #     return
-            flag_value = flag.strip('()')
+            flag_value = flag.strip("()")
             flag_set = False
-            last_index = self.parts.index('cracked')
+            last_index = self.parts.index("cracked")
             while current_flag_index < last_index and not flag_set:
                 flag_type = self.parts[current_flag_index]
-                flag_method = getattr(self, 'set_' + flag_type)
+                flag_method = getattr(self, "set_" + flag_type)
                 flag_set = flag_method(flag_value)
                 current_flag_index += 1
 
     def set_dump_flags(self, dump_flags):
         """Set attributes on the instance from the game's dump flags"""
         dump_flags_attrs = {
-            'cr': 'cracked',
-            'f': 'fixed',
-            'h': 'hacked',
-            'm': 'modified',
-            'p': 'pirated',
-            't': 'trained',
-            'tr': 'translated',
-            'o': 'over_dump',
-            'u': 'under_dump',
-            'v': 'virus',
-            'b': 'bad_dump',
-            'a': 'alternate',
-            '!': 'known_verified',
+            "cr": "cracked",
+            "f": "fixed",
+            "h": "hacked",
+            "m": "modified",
+            "p": "pirated",
+            "t": "trained",
+            "tr": "translated",
+            "o": "over_dump",
+            "u": "under_dump",
+            "v": "virus",
+            "b": "bad_dump",
+            "a": "alternate",
+            "!": "known_verified",
         }
         for flag in dump_flags:
             flag_parts = flag.split()
@@ -128,7 +127,7 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
                 if len(flag_parts) == 1:
                     value = True
                 else:
-                    value = ' '.join(flag_parts[1:])
+                    value = " ".join(flag_parts[1:])
                 setattr(self, dump_flags_attrs[flag_name], value)
 
     def set_system(self, value):
@@ -161,7 +160,7 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
 
         For example: (EU-US) - Released in Europe and the US
         """
-        countries = value.split('-')
+        countries = value.split("-")
         if all([c in constants.COUNTRY_FLAGS for c in countries]):
             self.country = value
             return True
@@ -190,11 +189,11 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
         is used to represent multiple languages, where x is the number of
         languages:
         """
-        languages = value.split('-')
-        if all([l in constants.LANGUAGE_FLAGS for l in languages]):
+        languages = value.split("-")
+        if all(lang in constants.LANGUAGE_FLAGS for lang in languages):
             self.language = value
             return True
-        if re.match(r'^M\d$', value):
+        if re.match(r"^M\d$", value):
             self.language = value
             return True
 
@@ -233,14 +232,13 @@ class TosecNamingConvention:  # pylint: disable=too-many-instance-attributes
         media_info = value.split()
         if media_info[0] in constants.MEDIA_FLAGS:
             self.media = media_info[0]
-            self.media_numbers = media_info[1].split('-')
+            self.media_numbers = media_info[1].split("-")
             if len(media_info) > 2:
-                if media_info[2] != 'of':
-                    LOGGER.warning('Invalid value for media in %s',
-                                   self.filename)
+                if media_info[2] != "of":
+                    LOGGER.warning("Invalid value for media in %s", self.filename)
                 self.media_total = media_info[3]
             if len(media_info) > 4:
-                self.media_additional = ' '.join(media_info[4:])
+                self.media_additional = " ".join(media_info[4:])
             return True
 
     def set_media_label(self, value):

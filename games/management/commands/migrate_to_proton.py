@@ -1,8 +1,10 @@
 """Migrates winesteam scripts to Proton"""
+
 import logging
+
 from django.core.management.base import BaseCommand
 
-from common.util import load_yaml, dump_yaml
+from common.util import dump_yaml, load_yaml
 from games.models import Installer, Runner
 
 LOGGER = logging.getLogger(__name__)
@@ -18,7 +20,7 @@ class Command(BaseCommand):
             {"game"},
             {"game", "wine"},
             {"game", "winesteam"},
-            {"game", "winesteam", "system"}
+            {"game", "winesteam", "system"},
         ):
             return True
         # Any Media Foundation workaround is likely very
@@ -33,10 +35,7 @@ class Command(BaseCommand):
         return False
 
     def has_steam_installer(self, installer):
-        return bool(Installer.objects.filter(
-            game=installer.game,
-            runner__slug="steam"
-        ).count())
+        return bool(Installer.objects.filter(game=installer.game, runner__slug="steam").count())
 
     def get_winesteam_installers(self):
         return Installer.objects.filter(runner__slug="winesteam")

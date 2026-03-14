@@ -1,37 +1,42 @@
 """Models for the common app"""
+
 # pylint: disable=too-few-public-methods,no-member
+import datetime
 import os
 import shutil
-import datetime
-from django.db import models
+
 from django.conf import settings
+from django.db import models
+
 from common.spaces import SpacesBucket
 
 
 class News(models.Model):
     """News announcements, not currently used"""
+
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     content = models.TextField(blank=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now)
-    image = models.ImageField(upload_to='news', null=True, blank=True)
+    image = models.ImageField(upload_to="news", null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Model configuration"""
+
         verbose_name_plural = "news"
-        db_table = 'news'
+        db_table = "news"
+
 
 class Upload(models.Model):
     """References to user uploaded files"""
-    uploaded_file = models.FileField(upload_to='uploads')
+
+    uploaded_file = models.FileField(upload_to="uploads")
     destination = models.CharField("destination path", max_length=256)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     hosting = models.CharField(
-        max_length=8,
-        choices=[("local", "Local"), ("spaces", "Spaces")],
-        default="local"
+        max_length=8, choices=[("local", "Local"), ("spaces", "Spaces")], default="local"
     )
 
     def __str__(self):
@@ -69,6 +74,7 @@ class Upload(models.Model):
 
 class KeyValueStore(models.Model):
     """Generic key value store"""
+
     key = models.CharField(max_length=64)
     value = models.CharField(max_length=1024, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

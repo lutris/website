@@ -34,17 +34,11 @@ class ProviderResource(models.Model):
     def create_from_igdb_api(cls, provider, api_payload):
         """Create an instance from an IGDB payload"""
         if "slug" not in api_payload:
-            raise ValueError(
-                "API payload missing 'slug' field in {}".format(api_payload)
-            )
-        resource, _created = cls.objects.get_or_create(
-            provider=provider, slug=api_payload["slug"]
-        )
+            raise ValueError("API payload missing 'slug' field in {}".format(api_payload))
+        resource, _created = cls.objects.get_or_create(provider=provider, slug=api_payload["slug"])
         resource.name = api_payload["name"]
         resource.internal_id = api_payload["id"]
-        resource.updated_at = make_aware(
-            datetime.datetime.fromtimestamp(api_payload["updated_at"])
-        )
+        resource.updated_at = make_aware(datetime.datetime.fromtimestamp(api_payload["updated_at"]))
         resource.metadata = api_payload
         resource.save()
 
@@ -83,9 +77,7 @@ class ProviderGenre(ProviderResource):
     name = models.CharField(max_length=128)
     slug = models.SlugField()
     internal_id = models.CharField(max_length=255, null=True)
-    provider = models.ForeignKey(
-        Provider, related_name="genres", on_delete=models.PROTECT
-    )
+    provider = models.ForeignKey(Provider, related_name="genres", on_delete=models.PROTECT)
     updated_at = models.DateTimeField(null=True)
     metadata = models.JSONField(null=True)
 
@@ -96,9 +88,7 @@ class ProviderPlatform(ProviderResource):
     name = models.CharField(max_length=128)
     slug = models.SlugField()
     internal_id = models.CharField(max_length=255, null=True)
-    provider = models.ForeignKey(
-        Provider, related_name="platforms", on_delete=models.PROTECT
-    )
+    provider = models.ForeignKey(Provider, related_name="platforms", on_delete=models.PROTECT)
     updated_at = models.DateTimeField(null=True)
     metadata = models.JSONField(null=True)
 
@@ -108,9 +98,7 @@ class ProviderCover(ProviderResource):
 
     game = models.IntegerField(null=True)
     image_id = models.SlugField()
-    provider = models.ForeignKey(
-        Provider, related_name="covers", on_delete=models.PROTECT
-    )
+    provider = models.ForeignKey(Provider, related_name="covers", on_delete=models.PROTECT)
     updated_at = models.DateTimeField(null=True)
     metadata = models.JSONField(null=True)
 

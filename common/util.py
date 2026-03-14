@@ -1,16 +1,18 @@
 """Various utility functions used across the website"""
+
 import yaml
+
 try:
     import romkan
 except ImportError:
     romkan = None
-from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
-from xpinyin import Pinyin
-from transliterate import translit
-from transliterate.exceptions import LanguageDetectionError
-from PIL import Image
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify as django_slugify
+from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
+from PIL import Image
+from transliterate import translit
+from transliterate.exceptions import LanguageDetectionError
+from xpinyin import Pinyin
 
 SLUG_MAX_LENGTH = 50
 
@@ -57,32 +59,25 @@ def get_auto_increment_slug(model, instance, text, slug=None):
     counter = 1
     while slug_exists:
         pk = instance.pk if instance else 0
-        slug_exists = (
-            model.objects
-            .exclude(pk=pk)
-            .filter(slug=slug)
-            .exists()
-        )
+        slug_exists = model.objects.exclude(pk=pk).filter(slug=slug).exists()
         if slug_exists:
             suffix = "-%d" % counter
-            slug = original_slug[:SLUG_MAX_LENGTH - len(suffix)] + suffix
+            slug = original_slug[: SLUG_MAX_LENGTH - len(suffix)] + suffix
             counter += 1
     return slug
 
 
-def create_admin(username='admin', password='admin'):
-    user = get_user_model().objects.create(username=username,
-                                           is_superuser=True,
-                                           is_staff=True,
-                                           is_active=True)
+def create_admin(username="admin", password="admin"):
+    user = get_user_model().objects.create(
+        username=username, is_superuser=True, is_staff=True, is_active=True
+    )
     user.set_password(password)
     user.save()
     return user
 
 
-def create_user(username='user', password='password'):
-    user = get_user_model().objects.create(username=username,
-                                           is_active=True)
+def create_user(username="user", password="password"):
+    user = get_user_model().objects.create(username=username, is_active=True)
     user.set_password(password)
     user.save()
     return user
@@ -97,8 +92,8 @@ def clean_html(dirty_markup):
         style=True,
         scripts=True,
         remove_unknown_tags=False,
-        safe_attrs=set(['href']),
-        allow_tags=('b', 'i', 'a')
+        safe_attrs=set(["href"]),
+        allow_tags=("b", "i", "a"),
     )
     clean_markup = cleaner.clean_html(dirty_markup)
     # The lxml cleaner adds a div around the resulting

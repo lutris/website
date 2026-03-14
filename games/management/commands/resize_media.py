@@ -1,7 +1,9 @@
 """Resize all game banners to a fixed size"""
 
 import os
+
 from django.core.management.base import BaseCommand
+
 from games.models import Game
 
 

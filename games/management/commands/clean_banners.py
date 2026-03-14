@@ -1,8 +1,10 @@
 """Find and remove invalid game banners (0 bytes or HTML error pages)"""
 
 import os
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from games.models import Game
 
 

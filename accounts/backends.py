@@ -1,5 +1,7 @@
 """Custom authentication backends"""
+
 import logging
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
@@ -15,7 +17,7 @@ class SmarterModelBackend(ModelBackend):
         if username is None:
             username = kwargs.get(UserModel.USERNAME_FIELD)
         try:
-            case_insensitive_username_field = '{}__iexact'.format(UserModel.USERNAME_FIELD)
+            case_insensitive_username_field = "{}__iexact".format(UserModel.USERNAME_FIELD)
             user = UserModel._default_manager.get(  # pylint: disable=protected-access
                 **{case_insensitive_username_field: username}
             )

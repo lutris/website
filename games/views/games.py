@@ -2,17 +2,17 @@
 
 # lint: disable=too-few-public-methods
 from __future__ import absolute_import
-from django.db.models import Q
-from rest_framework import status
-from django.shortcuts import get_object_or_404
-from django.core.exceptions import PermissionDenied
-from rest_framework.views import APIView
-from rest_framework import filters, generics, permissions
-from rest_framework.response import Response
 
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from rest_framework import filters, generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from accounts.models import User
 from games import models, serializers
 from providers.models import Provider
-from accounts.models import User
 
 
 class GameListView(generics.GenericAPIView):
@@ -52,9 +52,7 @@ class GameListView(generics.GenericAPIView):
             ).distinct()
         # This is to be deprecated, starting from 0.5.8, the client won't use that anymore
         if "gogid" in self.request.data:
-            gogids = [
-                gogid for gogid in self.request.data["gogid"] if gogid.isnumeric()
-            ]
+            gogids = [gogid for gogid in self.request.data["gogid"] if gogid.isnumeric()]
             return base_query.filter(
                 provider_games__slug__in=gogids, provider_games__provider__name="gog"
             ).distinct()
@@ -63,10 +61,7 @@ class GameListView(generics.GenericAPIView):
                 provider_games__slug__in=self.request.data["humblestoreid"],
                 provider_games__provider__name="humblebundle",
             ).distinct()
-        if (
-            not self.request.user.is_authenticated
-            or not self.request.user.show_adult_content
-        ):
+        if not self.request.user.is_authenticated or not self.request.user.show_adult_content:
             base_query = base_query.exclude(Q(flags=models.Game.flags.adult_only))
         return base_query
 
@@ -152,9 +147,7 @@ class GameLibraryView(generics.RetrieveAPIView):
                 return Response(status=404)
         if user != request.user and not user.is_staff:
             return Response(status=404)
-        library = models.GameLibrary.objects.prefetch_related(
-            "games", "games__game"
-        ).get(user=user)
+        library = models.GameLibrary.objects.prefetch_related("games", "games__game").get(user=user)
         serializer = serializers.GameLibrarySerializer(library)
         return Response(serializer.data)
 
@@ -186,15 +179,9 @@ class GameStatsView(APIView):
         statistics = {}
 
         statistics["games"] = models.Game.objects.all().count()
-        statistics["published_games"] = models.Game.objects.filter(
-            is_public=True
-        ).count()
-        statistics["unpublished_games"] = models.Game.objects.filter(
-            is_public=False
-        ).count()
-        statistics["game_changes"] = models.Game.objects.filter(
-            change_for__isnull=False
-        ).count()
+        statistics["published_games"] = models.Game.objects.filter(is_public=True).count()
+        statistics["unpublished_games"] = models.Game.objects.filter(is_public=False).count()
+        statistics["game_changes"] = models.Game.objects.filter(change_for__isnull=False).count()
 
         statistics["game_submissions"] = models.GameSubmission.objects.all().count()
         statistics["accepted_game_submissions"] = models.GameSubmission.objects.filter(
@@ -212,9 +199,7 @@ class GameStatsView(APIView):
         statistics["published_installers"] = models.Installer.objects.get_filtered(
             {"published": True}
         ).count()
-        statistics["submitted_drafts"] = models.InstallerDraft.objects.filter(
-            draft=False
-        ).count()
+        statistics["submitted_drafts"] = models.InstallerDraft.objects.filter(draft=False).count()
         statistics["drafts"] = models.InstallerDraft.objects.all().count()
         statistics["screenshots"] = models.Screenshot.objects.all().count()
         statistics["published_screenshots"] = models.Screenshot.objects.filter(

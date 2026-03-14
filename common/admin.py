@@ -1,21 +1,23 @@
 """Admin configuration for common"""
+
 from django.contrib import admin
 
-from common import models
-from common import forms
+from common import forms, models
 
 
 class NewsAdmin(admin.ModelAdmin):
     """Admin configuration for News"""
+
     form = forms.NewsForm
-    list_display = ('__str__', 'publish_date')
-    search_fields = ('title', 'content')
+    list_display = ("__str__", "publish_date")
+    search_fields = ("title", "content")
 
 
 class KeyValueStoreAdmin(admin.ModelAdmin):
     """Admin configuration for News"""
-    list_display = ('key', 'value', 'created_at', 'updated_at')
-    search_fields = ('key', 'value')
+
+    list_display = ("key", "value", "created_at", "updated_at")
+    search_fields = ("key", "value")
 
 
 def validate_upload(_modeladmin, _request, queryset):
@@ -29,9 +31,10 @@ validate_upload.short_description = "Move uploads to destination"
 
 class UploadAdmin(admin.ModelAdmin):
     """Admin configuration for Uploads"""
-    list_display = ('__str__', 'destination', 'uploaded_by', 'uploaded_at')
+
+    list_display = ("__str__", "destination", "uploaded_by", "uploaded_at")
     actions = [validate_upload]
-    readonly_fields = ['uploaded_by', 'uploaded_at']
+    readonly_fields = ["uploaded_by", "uploaded_at"]
 
 
 admin.site.register(models.News, NewsAdmin)

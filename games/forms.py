@@ -2,25 +2,24 @@
 
 # pylint: disable=missing-docstring,too-few-public-methods
 import io
-from datetime import date
 import json
 import logging
+from datetime import date
 
 import yaml
-from PIL import Image
 from django import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django_select2.forms import (
+    ModelSelect2MultipleWidget,
     ModelSelect2Widget,
     Select2MultipleWidget,
     Select2Widget,
-    ModelSelect2MultipleWidget,
 )
+from PIL import Image
 
-
-from common.util import get_auto_increment_slug, slugify, load_yaml, dump_yaml
+from common.util import dump_yaml, get_auto_increment_slug, load_yaml, slugify
 from games import models
 from games.util.installer import validate_installer
 
@@ -139,9 +138,7 @@ class GameForm(forms.ModelForm):
             crop_data = json.loads(crop_data)
             crop_points = [int(p) for p in crop_data["points"]]
             try:
-                self.cleaned_data["title_logo"] = self.process_banner(
-                    title_logo, crop_points
-                )
+                self.cleaned_data["title_logo"] = self.process_banner(title_logo, crop_points)
             except AttributeError as ex:
                 LOGGER.warning(ex)
                 raise forms.ValidationError("This is not a valid image format: %s" % ex)
@@ -199,9 +196,7 @@ class GameEditForm(GameForm):
     def __init__(self, payload, *args, **kwargs):
         super().__init__(payload, *args, **kwargs)
         self.fields["title_logo"].required = False
-        self.fields["reason"].widget = forms.TextInput(
-            attrs={"class": "select2-lookalike"}
-        )
+        self.fields["reason"].widget = forms.TextInput(attrs={"class": "select2-lookalike"})
 
     def clean_name(self):
         return self.cleaned_data["name"]
@@ -251,9 +246,7 @@ class InstallerForm(forms.ModelForm):
             ),
             "notes": forms.Textarea(attrs={"class": "installer-textarea"}),
             "credits": forms.Textarea(attrs={"class": "installer-textarea"}),
-            "content": forms.Textarea(
-                attrs={"class": "code-editor", "spellcheck": "false"}
-            ),
+            "content": forms.Textarea(attrs={"class": "code-editor", "spellcheck": "false"}),
             "draft": forms.HiddenInput,
         }
         help_texts = {
@@ -272,8 +265,7 @@ class InstallerForm(forms.ModelForm):
                 "If unsure, please leave this field empty."
             ),
             "notes": (
-                "Describe any known issues or manual tasks required "
-                "to run the game properly."
+                "Describe any known issues or manual tasks required to run the game properly."
             ),
             "credits": (
                 "You can optionally provide credits for the installers or the software used in it."
@@ -316,14 +308,10 @@ class InstallerForm(forms.ModelForm):
         if not version:
             raise forms.ValidationError("This field is mandatory")
         if version.lower().endswith("version"):
-            raise forms.ValidationError(
-                "Don't put 'version' at the end of the 'version' field"
-            )
+            raise forms.ValidationError("Don't put 'version' at the end of the 'version' field")
         if self.instance.base_installer:
             version_exists = (
-                models.Installer.objects.filter(
-                    game=self.instance.game, version=version
-                )
+                models.Installer.objects.filter(game=self.instance.game, version=version)
                 .exclude(id=self.instance.base_installer.id)
                 .count()
             )
@@ -376,19 +364,13 @@ class ForkInstallerForm(forms.ModelForm):
     class Meta:
         model = models.Installer
         fields = ("game",)
-        widgets = {
-            "game": ModelSelect2Widget(
-                model=models.Game, search_fields=["name__icontains"]
-            )
-        }
+        widgets = {"game": ModelSelect2Widget(model=models.Game, search_fields=["name__icontains"])}
 
 
 class LibraryFilterForm(forms.Form):
     q = forms.CharField(
         max_length=50,
-        widget=forms.TextInput(
-            attrs={"style": "width: 100%;", "class": "select2-lookalike"}
-        ),
+        widget=forms.TextInput(attrs={"style": "width: 100%;", "class": "select2-lookalike"}),
         required=False,
         label="Search",
     )
@@ -454,9 +436,7 @@ class LibraryFilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["platforms"].choices = models.Platform.objects.values_list(
-            "pk", "name"
-        )
+        self.fields["platforms"].choices = models.Platform.objects.values_list("pk", "name")
 
 
 class RegressionForm(forms.ModelForm):
@@ -464,27 +444,29 @@ class RegressionForm(forms.ModelForm):
 
     class Meta:
         model = models.Regression
-        fields = ('title', 'description', 'bug_url', 'last_known_working_version')
+        fields = ("title", "description", "bug_url", "last_known_working_version")
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'select2-lookalike'}),
-            'description': forms.Textarea(attrs={'class': 'select2-lookalike'}),
-            'bug_url': forms.URLInput(attrs={'class': 'select2-lookalike'}),
-            'last_known_working_version': forms.TextInput(attrs={
-                'class': 'select2-lookalike',
-                'list': 'wine-versions',
-            }),
+            "title": forms.TextInput(attrs={"class": "select2-lookalike"}),
+            "description": forms.Textarea(attrs={"class": "select2-lookalike"}),
+            "bug_url": forms.URLInput(attrs={"class": "select2-lookalike"}),
+            "last_known_working_version": forms.TextInput(
+                attrs={
+                    "class": "select2-lookalike",
+                    "list": "wine-versions",
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         from runners.models import RunnerVersion
-        self.wine_versions = list(
-            RunnerVersion.objects.filter(runner__slug='wine')
-            .values_list('version', flat=True)
-            .distinct()
-            .order_by('-version')
-        )
 
+        self.wine_versions = list(
+            RunnerVersion.objects.filter(runner__slug="wine")
+            .values_list("version", flat=True)
+            .distinct()
+            .order_by("-version")
+        )
 
 
 class GameMergeSuggestionForm(forms.Form):

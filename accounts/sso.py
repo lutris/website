@@ -22,15 +22,17 @@ A SSO request handler might look something like
                                request.user.id, request.user.username)
         return redirect('http://discuss.example.com' + url)
 """
+
 import base64
 import hashlib
 import hmac
 import logging
 
 try:  # py3
-    from urllib.parse import unquote, urlencode, parse_qs
+    from urllib.parse import parse_qs, unquote, urlencode
 except ImportError:
     from urllib import unquote, urlencode
+
     from urlparse import parse_qs
 
 LOGGER = logging.getLogger(__name__)
@@ -38,54 +40,51 @@ LOGGER = logging.getLogger(__name__)
 
 def validate(payload, signature, secret):
     """
-        payload: provided by Discourse HTTP call to your SSO endpoint as sso GET param
-        signature: provided by Discourse HTTP call to your SSO endpoint as sig GET param
-        secret: the secret key you entered into Discourse sso secret
+    payload: provided by Discourse HTTP call to your SSO endpoint as sso GET param
+    signature: provided by Discourse HTTP call to your SSO endpoint as sig GET param
+    secret: the secret key you entered into Discourse sso secret
 
-        return value: The nonce used by discourse to validate the redirect URL
+    return value: The nonce used by discourse to validate the redirect URL
     """
     if not all([payload, signature, secret]):
-        raise RuntimeError('SSO payload, signature and secret are required')
+        raise RuntimeError("SSO payload, signature and secret are required")
 
-    payload = bytes(unquote(payload), 'utf-8')
+    payload = bytes(unquote(payload), "utf-8")
     if not payload:
-        raise RuntimeError('Invalid payload.')
+        raise RuntimeError("Invalid payload.")
 
-    decoded = base64.decodebytes(payload).decode('utf-8')
-    if 'nonce' not in decoded:
-        raise RuntimeError('Invalid payload.')
+    decoded = base64.decodebytes(payload).decode("utf-8")
+    if "nonce" not in decoded:
+        raise RuntimeError("Invalid payload.")
 
-    hmac_ = hmac.new(bytes(secret, 'utf-8'), payload, digestmod=hashlib.sha256)
+    hmac_ = hmac.new(bytes(secret, "utf-8"), payload, digestmod=hashlib.sha256)
     this_signature = hmac_.hexdigest()
 
     if this_signature != signature:
-        raise RuntimeError('Payload does not match signature.')
+        raise RuntimeError("Payload does not match signature.")
 
     query_string = parse_qs(decoded)
-    nonce = query_string['nonce'][0]
+    nonce = query_string["nonce"][0]
     return nonce
 
 
 def redirect_url(nonce, secret, email, external_id, username, **kwargs):
     """
-        nonce: returned by validate()
-        secret: the secret key you entered into Discourse sso secret
-        user_email: email address of the user who logged in
-        user_id: the internal id of the logged in user
-        user_username: username of the logged in user
+    nonce: returned by validate()
+    secret: the secret key you entered into Discourse sso secret
+    user_email: email address of the user who logged in
+    user_id: the internal id of the logged in user
+    user_username: username of the logged in user
 
-        return value: URL to redirect users back to discourse,
-                      now logged in as user_username
+    return value: URL to redirect users back to discourse,
+                  now logged in as user_username
     """
-    kwargs.update({
-        'nonce': nonce,
-        'email': email,
-        'external_id': external_id,
-        'username': username
-    })
+    kwargs.update(
+        {"nonce": nonce, "email": email, "external_id": external_id, "username": username}
+    )
 
-    return_payload = base64.encodebytes(bytes(urlencode(kwargs), 'utf-8'))
-    hmac_ = hmac.new(bytes(secret, 'utf-8'), return_payload, digestmod=hashlib.sha256)
-    query_string = urlencode({'sso': return_payload, 'sig': hmac_.hexdigest()})
+    return_payload = base64.encodebytes(bytes(urlencode(kwargs), "utf-8"))
+    hmac_ = hmac.new(bytes(secret, "utf-8"), return_payload, digestmod=hashlib.sha256)
+    query_string = urlencode({"sso": return_payload, "sig": hmac_.hexdigest()})
 
-    return '/session/sso_login?%s' % query_string
+    return "/session/sso_login?%s" % query_string

@@ -2,12 +2,13 @@
 
 import logging
 from json import JSONDecodeError
+
 import requests
 from django.conf import settings
 
-from games import models
 from accounts.models import User
 from common.util import slugify
+from games import models
 
 LOGGER = logging.getLogger(__name__)
 STEAM_API_URL = "https://api.steampowered.com/"
@@ -22,9 +23,8 @@ def get_capsule(steamid):
 
 
 def get_image(appid, img_logo_url):
-    img_url = (
-        "http://media.steampowered.com/"
-        "steamcommunity/public/images/apps/{}/{}.jpg".format(appid, img_logo_url)
+    img_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{}/{}.jpg".format(
+        appid, img_logo_url
     )
     response = requests.get(img_url)
     return response.content
@@ -88,13 +88,9 @@ def create_steam_installer(game):
 
 def get_store_info(appid):
     """Return the Steam store information for a game by it's Steam ID"""
-    response = requests.get(
-        "https://store.steampowered.com/api/appdetails?appids=%s" % appid
-    )
+    response = requests.get("https://store.steampowered.com/api/appdetails?appids=%s" % appid)
     if response.status_code != 200:
-        LOGGER.warning(
-            "Invalid response from the Steam store: %s", response.status_code
-        )
+        LOGGER.warning("Invalid response from the Steam store: %s", response.status_code)
         LOGGER.warning(response.content)
         return
     store_info = response.json()

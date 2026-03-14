@@ -1,26 +1,28 @@
 # pylint: disable=no-member
 """Remove any personally identifying information from the database"""
-from django.core.management.base import BaseCommand
+
+from allauth.socialaccount.models import SocialAccount, SocialToken
+from axes.models import AccessAttempt, AccessLog
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
-from allauth.socialaccount.models import SocialAccount, SocialToken
+from django.core.management.base import BaseCommand
 from rest_framework.authtoken.models import Token
-from axes.models import AccessAttempt, AccessLog
-from games.models import (
-    Installer,
-    InstallerDraft,
-    InstallerIssue,
-    InstallerIssueReply,
-    InstallerHistory,
-    Screenshot,
-    GameSubmission,
-)
+
 from accounts.models import (
     EmailConfirmationToken,
     User,
 )
-from common.models import Upload, News
+from common.models import News, Upload
+from games.models import (
+    GameSubmission,
+    Installer,
+    InstallerDraft,
+    InstallerHistory,
+    InstallerIssue,
+    InstallerIssueReply,
+    Screenshot,
+)
 
 
 class Command(BaseCommand):

@@ -59,9 +59,7 @@ def match_from_gog_api():
         for strategy, query in queries.items():
             if matched:
                 continue
-            existing_games = (
-                query.exclude(change_for__isnull=False).order_by("id").distinct("id")
-            )
+            existing_games = query.exclude(change_for__isnull=False).order_by("id").distinct("id")
             if existing_games:
                 stats["matched_%s" % strategy] += 1
                 for lutris_game in existing_games:
@@ -70,9 +68,7 @@ def match_from_gog_api():
         if matched:
             continue
 
-        release_date = provider_game.metadata["_embedded"]["product"].get(
-            "globalReleaseDate"
-        )
+        release_date = provider_game.metadata["_embedded"]["product"].get("globalReleaseDate")
         if release_date:
             year = int(release_date[:4])
         else:
@@ -115,9 +111,7 @@ def cache_gog_games():
 
 def iter_gog_items():
     """Iterate through GOG items, no matter the type"""
-    num_pages = len(
-        [f for f in os.listdir(settings.GOG_CACHE_PATH) if re.match(r"(\d+)\.json", f)]
-    )
+    num_pages = len([f for f in os.listdir(settings.GOG_CACHE_PATH) if re.match(r"(\d+)\.json", f)])
     for page in range(1, num_pages + 1):
         with open(
             os.path.join(settings.GOG_CACHE_PATH, f"{page}.json"), encoding="utf-8"

@@ -18,9 +18,7 @@ class PlatformFactory(factory.DjangoModelFactory):
         model = Platform
         django_get_or_create = ("name",)
 
-    name = factory.Iterator(
-        ["Amiga", "Super Nintendo", "Sega Genesis", "Sony Playstation"]
-    )
+    name = factory.Iterator(["Amiga", "Super Nintendo", "Sega Genesis", "Sony Playstation"])
 
 
 class GenreFactory(factory.DjangoModelFactory):
@@ -116,9 +114,7 @@ class GameLibraryFactory(factory.DjangoModelFactory):
         if extracted:
             for game in extracted:
                 self.games.add(
-                    models.LibraryGame.objects.create(
-                        game=game, gamelibrary=self.user.gamelibrary
-                    )
+                    models.LibraryGame.objects.create(game=game, gamelibrary=self.user.gamelibrary)
                 )
 
 

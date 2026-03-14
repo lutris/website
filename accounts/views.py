@@ -4,39 +4,40 @@
 import json
 import logging
 import time
-from datetime import datetime, timezone
 from collections import defaultdict
+from datetime import datetime, timezone
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
-    LogoutView,
     LoginView,
+    LogoutView,
+    PasswordChangeDoneView,
+    PasswordChangeView,
+    PasswordResetConfirmView,
     PasswordResetDoneView,
     PasswordResetView,
-    PasswordChangeView,
-    PasswordChangeDoneView,
-    PasswordResetConfirmView,
 )
-from django.views.generic import ListView
 from django.http import (
     Http404,
+    HttpResponse,
     HttpResponseBadRequest,
     HttpResponseRedirect,
-    HttpResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, UpdateView
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.views.generic import CreateView, ListView, UpdateView
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 
 from games import models
-from . import forms, sso, tasks, serializers
+
+from . import forms, serializers, sso, tasks
 from .models import EmailConfirmationToken, User
 
 LOGGER = logging.getLogger(__name__)
@@ -193,8 +194,7 @@ def user_require_confirmation(request):
     if request.user.is_authenticated:
         messages.error(
             request,
-            "The page you have requested requires that "
-            "you have confirmed your email address.",
+            "The page you have requested requires that you have confirmed your email address.",
         )
         return redirect(reverse("user_account", args=(request.user.username,)))
     login_url = settings.LOGIN_URL
@@ -255,6 +255,7 @@ def profile_delete(request, username):
 def steam_disconnect(request):
     """Clears the Steam ID and disconnects the social account"""
     from allauth.socialaccount.models import SocialAccount
+
     SocialAccount.objects.filter(user=request.user, provider="steam").delete()
     request.user.steamid = ""
     request.user.save()
@@ -269,7 +270,14 @@ class LibraryList(ListView):  # pylint: disable=too-many-ancestors
     ordering = "name"
     profile_page = "library"
     paginate_by = 60
-    allowed_sort_fields = {"name", "-name", "created_at", "-created_at", "updated_at", "-updated_at"}
+    allowed_sort_fields = {
+        "name",
+        "-name",
+        "created_at",
+        "-created_at",
+        "updated_at",
+        "-updated_at",
+    }
 
     def get_user(self):
         """Return a user object from the username url segment"""
@@ -335,7 +343,14 @@ class SubmissionList(LibraryList):  # pylint: disable=too-many-ancestors
         return queryset.order_by(self.get_sort_field())
 
 
-INSTALLER_ALLOWED_SORT_FIELDS = {"name", "-name", "created_at", "-created_at", "updated_at", "-updated_at"}
+INSTALLER_ALLOWED_SORT_FIELDS = {
+    "name",
+    "-name",
+    "created_at",
+    "-created_at",
+    "updated_at",
+    "-updated_at",
+}
 
 
 @login_required
@@ -384,9 +399,7 @@ def library_remove(request, pk):
     library_game.delete()
     redirect_url = request.META.get("HTTP_REFERER")
     if not redirect_url:
-        redirect_url = reverse(
-            "library_list", kwargs={"username": request.user.username}
-        )
+        redirect_url = reverse("library_list", kwargs={"username": request.user.username})
     return redirect(redirect_url)
 
 
@@ -396,9 +409,7 @@ def library_steam_sync(request):
     user = request.user
     LOGGER.info("Syncing contents of Steam library for user %s", user.username)
     tasks.sync_steam_library.delay(user.id)
-    messages.success(
-        request, "Your Steam library is being synced with your Lutris account"
-    )
+    messages.success(request, "Your Steam library is being synced with your Lutris account")
     return redirect(reverse("library_list", kwargs={"username": user.username}))
 
 
@@ -479,8 +490,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             client_library[game["slug"]].append(game)
         stored_library = self.get_queryset(ignore_since=True)
         stored_categories = {
-            c.name: c
-            for c in models.LibraryCategory.objects.filter(gamelibrary=library)
+            c.name: c for c in models.LibraryCategory.objects.filter(gamelibrary=library)
         }
         updated_games = set()
         stats = {

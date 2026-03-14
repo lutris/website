@@ -1,8 +1,11 @@
 """Serializers for account models"""
+
 # pylint: disable=too-few-public-methods
 from rest_framework import serializers
+
 from accounts.models import User
 from games.models import LibraryGame
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for Users"""
@@ -22,9 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LibrarySerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source='get_name')  # Do not make this last forever
-    slug = serializers.ReadOnlyField(source='get_slug')  # GTFO soon
-    categories = serializers.ReadOnlyField(source='get_category_names')
+    name = serializers.ReadOnlyField(source="get_name")  # Do not make this last forever
+    slug = serializers.ReadOnlyField(source="get_slug")  # GTFO soon
+    categories = serializers.ReadOnlyField(source="get_category_names")
 
     class Meta:
         model = LibraryGame

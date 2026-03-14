@@ -2,15 +2,15 @@
 
 from celery.utils.log import get_task_logger
 
-from providers.umu import (
-    update_repository,
-    import_umu_games,
-    check_lutris_associations,
-    save_umu_games,
-)
 from common.models import save_action_log
-from lutrisweb.celery import app
 from games.webhooks import send_simple_message
+from lutrisweb.celery import app
+from providers.umu import (
+    check_lutris_associations,
+    import_umu_games,
+    save_umu_games,
+    update_repository,
+)
 
 LOGGER = get_task_logger(__name__)
 

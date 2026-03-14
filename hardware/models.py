@@ -1,10 +1,12 @@
 # pylint: disable=no-member
 """Hardware reference from PCI Ids"""
+
 from django.db import models
 
 
 class Vendor(models.Model):
     """Store info about hardware vendor"""
+
     vendor_id = models.CharField(max_length=4, unique=True)
     name = models.CharField(max_length=128)
 
@@ -12,10 +14,12 @@ class Vendor(models.Model):
         return f"{self.name} ({self.vendor_id})"
 
     class Meta:
-        ordering = ("name", )
+        ordering = ("name",)
+
 
 class Feature(models.Model):
     """Store info about hardware features"""
+
     name = models.CharField(max_length=64)
     version = models.CharField(max_length=8, blank=True)
     feature_level = models.CharField(max_length=8, blank=True)
@@ -27,6 +31,7 @@ class Feature(models.Model):
 
 class Generation(models.Model):
     """Store info about a hardware generation"""
+
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=64)
     year = models.SmallIntegerField()
@@ -39,6 +44,7 @@ class Generation(models.Model):
 
 class Device(models.Model):
     """Store info about devices"""
+
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     device_id = models.CharField(max_length=4)
     name = models.CharField(max_length=256, blank=True)
@@ -52,6 +58,7 @@ class Device(models.Model):
 
 class Subsystem(models.Model):
     """Store info about a subsystem"""
+
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     subvendor_id = models.CharField(max_length=4)
     subdevice_id = models.CharField(max_length=32)
@@ -60,7 +67,6 @@ class Subsystem(models.Model):
     def __str__(self) -> str:
         name = self.name if self.name else "[UNKOWN]"
         return f"{name} ({self.subvendor_id}:{self.subdevice_id})"
-
 
 
 def get_hardware_features(pci_id):
@@ -87,10 +93,7 @@ def get_hardware_features(pci_id):
     features = []
     generation_name = ""
     if device.generation:
-        features = [
-            str(feature)
-            for feature in device.generation.features.all()
-        ]
+        features = [str(feature) for feature in device.generation.features.all()]
         generation_name = device.generation.name
     return {
         "vendor": vendor.name,

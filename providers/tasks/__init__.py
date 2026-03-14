@@ -14,19 +14,18 @@ from providers.tasks.igdb import (
 from providers.tasks.steam import load_steam_games, match_steam_games
 from providers.tasks.umu import update_umu_games
 
-
 __all__ = [
+    "deduplicate_igdb_games",
     "load_gog_games",
-    "match_gog_games",
     "load_igdb_covers",
+    "load_igdb_games",
     "load_igdb_genres",
     "load_igdb_platforms",
-    "load_igdb_games",
-    "deduplicate_igdb_games",
+    "load_steam_games",
+    "match_gog_games",
     "match_igdb_games",
+    "match_steam_games",
     "sync_igdb_coverart",
     "sync_igdb_platforms",
-    "load_steam_games",
-    "match_steam_games",
     "update_umu_games",
 ]

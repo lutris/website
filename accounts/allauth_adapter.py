@@ -1,4 +1,5 @@
 """Custom allauth adapters for Lutris"""
+
 import logging
 
 from allauth.account.adapter import DefaultAccountAdapter
@@ -30,6 +31,7 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
         # For Steam, match by steamid field
         if sociallogin.account.provider == "steam":
             from accounts.models import User
+
             try:
                 user = User.objects.get(steamid=sociallogin.account.uid)
             except User.DoesNotExist:
@@ -40,6 +42,7 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
             email = sociallogin.email_addresses[0].email if sociallogin.email_addresses else None
             if email:
                 from accounts.models import User
+
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
@@ -48,9 +51,19 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
         if user:
             sociallogin.connect(request, user)
 
-    def on_authentication_error(self, request, provider_id, error=None, exception=None, extra_context=None):
-        logger.error("Social login error for %s: error=%s exception=%s", provider_id, error, exception, exc_info=exception)
-        return super().on_authentication_error(request, provider_id, error=error, exception=exception, extra_context=extra_context)
+    def on_authentication_error(
+        self, request, provider_id, error=None, exception=None, extra_context=None
+    ):
+        logger.error(
+            "Social login error for %s: error=%s exception=%s",
+            provider_id,
+            error,
+            exception,
+            exc_info=exception,
+        )
+        return super().on_authentication_error(
+            request, provider_id, error=error, exception=exception, extra_context=extra_context
+        )
 
     def save_user(self, request, sociallogin, form=None):
         """After saving social user, set the steamid field if Steam."""

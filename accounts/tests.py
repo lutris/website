@@ -63,9 +63,7 @@ class TestApiAuth(TestCase):
 
 class TestSSO(TestCase):
     def test_redirect_url(self):
-        url = sso.redirect_url(
-            "nonce", "secret", "user@domain.com", "external_id", "username"
-        )
+        url = sso.redirect_url("nonce", "secret", "user@domain.com", "external_id", "username")
         self.assertIn("/session/sso_login", url)
         self.assertIn("sso=", url)
         self.assertIn("sig=", url)

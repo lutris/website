@@ -2,21 +2,18 @@
 
 # pylint: disable=E1120, C0103
 from __future__ import absolute_import
-from django.urls import re_path, path
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
-from games.views import pages as views
 
+from django.contrib.auth.decorators import login_required
+from django.urls import path, re_path
+from django.views.generic import TemplateView
+
+from games.views import pages as views
 
 urlpatterns = [
     re_path("^/?$", views.GameList.as_view(), name="game_list"),
     re_path(r"^/year/(?P<year>\d+)/?$", views.GameList.as_view(), name="games_by_year"),
-    re_path(
-        r"^/genre/(?P<genre>\d+)/?$", views.GameList.as_view(), name="games_by_genre"
-    ),
-    re_path(
-        r"^/by/(?P<company>\d+)/?$", views.GameList.as_view(), name="games_by_company"
-    ),
+    re_path(r"^/genre/(?P<genre>\d+)/?$", views.GameList.as_view(), name="games_by_genre"),
+    re_path(r"^/by/(?P<company>\d+)/?$", views.GameList.as_view(), name="games_by_company"),
     re_path(
         r"^/platform/(?P<platform>\d+)/?$",
         views.GameList.as_view(),
@@ -34,9 +31,7 @@ urlpatterns = [
     path("/icon/<slug:slug>.png", views.get_icon, name="get_icon"),
     path("/cover/<slug:slug>.jpg", views.get_coverart, name="get_coverart"),
     path("/install/<int:id>/view", views.view_installer, name="view_installer"),
-    re_path(
-        r"/(?P<slug>[\w\-]+)/suggest-changes/?$", views.edit_game, name="game-edit"
-    ),
+    re_path(r"/(?P<slug>[\w\-]+)/suggest-changes/?$", views.edit_game, name="game-edit"),
     path(
         "/<slug:slug>/changes-submitted",
         views.changes_submitted,

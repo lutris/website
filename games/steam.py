@@ -1,9 +1,10 @@
 import logging
+
+from common.util import slugify
 from games.models import Game, Genre
 from games.util.steam import get_store_info
 from platforms.models import Platform
-from providers.models import ProviderGame, Provider
-from common.util import slugify
+from providers.models import Provider, ProviderGame
 
 LOGGER = logging.getLogger(__name__)
 
@@ -31,9 +32,7 @@ def create_game_from_steam_appid(appid):
     if existing_games.count():
         for game in existing_games:
             game.provider_games.add(provider_game)
-        LOGGER.warning(
-            "Game %s already in Lutris but does not have a Steam ID (%s)", slug, appid
-        )
+        LOGGER.warning("Game %s already in Lutris but does not have a Steam ID (%s)", slug, appid)
         game = existing_games[0]
     else:
         game = Game.objects.create(
@@ -52,9 +51,7 @@ def create_game_from_steam_appid(appid):
         platform = Platform.objects.get(slug="win")
     game.platforms.add(platform)
     for steam_genre in store_info.get("genres", []):
-        genre, created = Genre.objects.get_or_create(
-            slug=slugify(steam_genre["description"])
-        )
+        genre, created = Genre.objects.get_or_create(slug=slugify(steam_genre["description"]))
         if created:
             genre.name = steam_genre["description"]
             LOGGER.info("Created genre %s", genre.name)

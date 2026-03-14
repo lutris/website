@@ -1,13 +1,14 @@
 """Generate banners from ProgettoSnap marquees"""
-import os
-from PIL import Image
 
+import os
+
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from PIL import Image
+
 from common.util import crop_banner
 from games.models import Game
-
 
 if settings.DEBUG:
     MARQUEE_PATH = "/media/strider/Backup/Games/Arcade/marquees/"

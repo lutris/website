@@ -1,4 +1,5 @@
 """Support for IDGB"""
+
 import requests
 
 GAME_CATEGORIES = {
@@ -14,12 +15,13 @@ GAME_CATEGORIES = {
     9: "remaster",
     10: "expanded_game",
     11: "port",
-    12: "fork"
+    12: "fork",
 }
 
 
 class IGDBClient:
     """API client for the IGDB API"""
+
     base_url = "https://api.igdb.com/v4/"
     page_size = 200
 
@@ -37,8 +39,8 @@ class IGDBClient:
             data={
                 "client_id": self.client_id,
                 "client_secret": self.client_secret,
-                "grant_type": "client_credentials"
-            }
+                "grant_type": "client_credentials",
+            },
         )
         self.access_token = response.json()["access_token"]
         return self.access_token
@@ -52,8 +54,5 @@ class IGDBClient:
                 f" limit {self.page_size};"
                 f" offset {self.page_size * page - 1};"
             ),
-            headers={
-                "Client-ID": self.client_id,
-                "Authorization": f"Bearer {self.access_token}"
-            }
+            headers={"Client-ID": self.client_id, "Authorization": f"Bearer {self.access_token}"},
         )

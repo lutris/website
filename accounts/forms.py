@@ -5,7 +5,6 @@ import logging
 
 from django import forms
 from django.db import IntegrityError
-
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
@@ -26,15 +25,11 @@ class RegistrationForm(forms.ModelForm):
         regex=r"^[\w.@+-]+$",
         help_text=("30 characters max."),
         error_messages={
-            "invalid": (
-                "This value may contain only letters, numbers and @/./+/-/_ characters."
-            )
+            "invalid": ("This value may contain only letters, numbers and @/./+/-/_ characters.")
         },
     )
     email = forms.EmailField(label="Email address")
-    password1 = forms.CharField(
-        label="Password", widget=forms.PasswordInput, max_length=64
-    )
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, max_length=64)
     password2 = forms.CharField(
         label="Password confirmation",
         widget=forms.PasswordInput,
@@ -109,9 +104,7 @@ class ProfileForm(forms.ModelForm):
 class ProfileDeleteForm(forms.Form):
     """Form to ask confirmation for account deletion"""
 
-    confirm_delete = forms.BooleanField(
-        label="Yes, I confirm I want to delete my account"
-    )
+    confirm_delete = forms.BooleanField(label="Yes, I confirm I want to delete my account")
 
     def clean_confirm_delete(self):
         """Only delete if the user has checked the corresponding checkbox"""

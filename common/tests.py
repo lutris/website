@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 from django.test import TestCase
-from common.util import slugify, clean_html, romkan
+
+from common.util import clean_html, romkan, slugify
 
 
 class PagesTest(TestCase):
@@ -28,9 +29,7 @@ class TestUtils(TestCase):
 
     def test_clean_html(self):
         dirty_markup = "This is <b> a string </b> with <span>tags</span>"
-        self.assertEqual(
-            clean_html(dirty_markup), "This is <b> a string </b> with tags"
-        )
+        self.assertEqual(clean_html(dirty_markup), "This is <b> a string </b> with tags")
 
     def test_clean_html_keeps_links(self):
         dirty_markup = (

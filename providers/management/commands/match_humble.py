@@ -1,4 +1,5 @@
 """Match Humble Bundle games with Lutris games"""
+
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 
@@ -9,12 +10,9 @@ from providers.processors import clean_name
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
-            "--create-missing",
-            action="store_true",
-            help="Create missing games in Lutris"
+            "--create-missing", action="store_true", help="Create missing games in Lutris"
         )
 
     @staticmethod
@@ -26,14 +24,19 @@ class Command(BaseCommand):
     def get_existing_matches(self, game):
         """Return Lutris games matching GOG games"""
         cleaned_name = clean_name(game.name)
-        return Game.objects.filter(
-            Q(name=cleaned_name)
-            | Q(name=game.name)
-            | Q(humblestoreid=game.slug)
-            | Q(slug=slugify(cleaned_name))
-            | Q(aliases__name=cleaned_name)
-            | Q(aliases__name=game.name)
-        ).exclude(change_for__isnull=False).order_by('id').distinct('id')
+        return (
+            Game.objects.filter(
+                Q(name=cleaned_name)
+                | Q(name=game.name)
+                | Q(humblestoreid=game.slug)
+                | Q(slug=slugify(cleaned_name))
+                | Q(aliases__name=cleaned_name)
+                | Q(aliases__name=game.name)
+            )
+            .exclude(change_for__isnull=False)
+            .order_by("id")
+            .distinct("id")
+        )
 
     def find_matches(self, game):
         """Find matching Lutris game for a Humble game"""
@@ -46,11 +49,8 @@ class Command(BaseCommand):
         return matches
 
     def handle(self, *args, **options):
-        platform_slugs = ['linux', 'windows']
-        platforms = {
-            slug: Platform.objects.get(slug=slug)
-            for slug in platform_slugs
-        }
+        platform_slugs = ["linux", "windows"]
+        platforms = {slug: Platform.objects.get(slug=slug) for slug in platform_slugs}
         for game in models.ProviderGame.objects.filter(provider__name="humblebundle"):
             matches = self.find_matches(game)
             if not matches and options.get("create_missing"):
@@ -58,7 +58,7 @@ class Command(BaseCommand):
                     name=game.name,
                     slug=get_auto_increment_slug(Game, None, game.name),
                     is_public=True,
-                    humblestoreid=game.slug
+                    humblestoreid=game.slug,
                 )
                 supported_systems = game.metadata.get("platforms", [])
                 for system in supported_systems:

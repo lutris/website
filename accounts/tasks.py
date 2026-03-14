@@ -1,14 +1,15 @@
 """Celery tasks for user management"""
 
-import logging
 import json
+import logging
+
 import games.models
+from accounts import spam_control
+from accounts.models import User
+from common.models import save_action_log
+from common.util import slugify
 from games.notifier import send_daily_mod_mail
 from games.util.steam import create_game
-from accounts.models import User
-from accounts import spam_control
-from common.util import slugify
-from common.models import save_action_log
 from lutrisweb.celery import app
 
 LOGGER = logging.getLogger()
@@ -42,9 +43,7 @@ def sync_steam_library(user_id):
         except games.models.Game.DoesNotExist:
             LOGGER.info("No game with steam id %s", game["appid"])
             try:
-                steam_game = games.models.Game.objects.get(
-                    slug=slugify(game["name"])[:50]
-                )
+                steam_game = games.models.Game.objects.get(slug=slugify(game["name"])[:50])
                 if not steam_game.steamid:
                     steam_game.steamid = game["appid"]
                     steam_game.save()
@@ -76,13 +75,9 @@ def daily_mod_mail():
 @app.task
 def clear_spammers():
     """Delete spam accounts"""
-    spam_website_deleted = spam_control.clear_users(
-        spam_control.get_no_games_with_website()
-    )
+    spam_website_deleted = spam_control.clear_users(spam_control.get_no_games_with_website())
     spam_avatar_deleted = spam_control.clear_users(spam_control.get_spam_avatar_users())
-    spam_example_com_deleted = spam_control.clear_users(
-        spam_control.get_example_com_users()
-    )
+    spam_example_com_deleted = spam_control.clear_users(spam_control.get_example_com_users())
     if spam_website_deleted or spam_avatar_deleted or spam_example_com_deleted:
         save_action_log(
             "spam_accounts",
@@ -103,7 +98,7 @@ def deduplicate_library(self, username):
             buckets[lg.slug].append(lg)
         else:
             buckets[lg.slug] = [lg]
-    for slug, _games in buckets.items():
+    for _slug, _games in buckets.items():
         game_info = {}
         other_game = {}
         if len(_games) == 1:

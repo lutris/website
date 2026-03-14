@@ -2,15 +2,15 @@
 """Celery tasks for account related jobs"""
 
 from collections import defaultdict
+
 from celery.utils.log import get_task_logger
 from django.db.models import Q
 
-from common.util import load_yaml, dump_yaml
 from common.models import KeyValueStore
-from runners.models import RunnerVersion, Runner
+from common.util import dump_yaml, load_yaml
 from games import models
-
 from lutrisweb.celery import app
+from runners.models import Runner, RunnerVersion
 
 LOGGER = get_task_logger(__name__)
 
@@ -189,9 +189,7 @@ def populate_popularity():
 @app.task
 def auto_accept_installers():
     accepted_installers = 0
-    for f in models.InstallerDraft.objects.filter(
-        draft=False, user__username="vanstaveren"
-    ):
+    for f in models.InstallerDraft.objects.filter(draft=False, user__username="vanstaveren"):
         accepted_installers += 1
         f.accept()
     return accepted_installers
@@ -457,9 +455,7 @@ def fix_and_unpin_wine_versions():
     stats = {
         "versions": defaultdict(list),
         "games": defaultdict(set),
-        "published_versions": {
-            f"{v.version}-{v.architecture}": 0 for v in published_versions
-        },
+        "published_versions": {f"{v.version}-{v.architecture}": 0 for v in published_versions},
         "updated_config": 0,
         "removed_config": 0,
     }
@@ -508,9 +504,7 @@ def migrate_unzip_installers():
         "deleted": 0,
         "nofiles": 0,
     }
-    for installer in models.Installer.objects.filter(
-        content__icontains="files/tools/unzip"
-    ):
+    for installer in models.Installer.objects.filter(content__icontains="files/tools/unzip"):
         stats["total"] += 1
         script = load_yaml(installer.content)
         if "files" not in script:
@@ -546,9 +540,7 @@ def remove_empty_game_changes():
 @app.task
 def mark_games_as_adult_only():
     """Mark games as adult only if they have adult content"""
-    for game in models.Game.objects.filter(
-        genres__slug__in=["nudity", "sexual-content"]
-    ):
+    for game in models.Game.objects.filter(genres__slug__in=["nudity", "sexual-content"]):
         game.flags.adult_only = True
         game.save()
         LOGGER.info("Marked %s as adult only", game)

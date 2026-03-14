@@ -1,16 +1,15 @@
-from django.db.models.functions import Lower
 from django.db.models import Count
+from django.db.models.functions import Lower
+
 from accounts.models import User
 
 
 def get_duplicate_usernames():
     """Return usernames of users that have duplicates"""
     return (
-        User
-        .objects
-        .annotate(uname=Lower('username'))
-        .values('uname')
-        .annotate(ncnt=Count('uname'))
+        User.objects.annotate(uname=Lower("username"))
+        .values("uname")
+        .annotate(ncnt=Count("uname"))
         .filter(ncnt__gt=1)
     )
 
@@ -18,7 +17,7 @@ def get_duplicate_usernames():
 def run():
     """Handle duplicate usernames"""
     for username_info in get_duplicate_usernames():
-        username = username_info['uname']
+        username = username_info["uname"]
         # print("Duplicate username %s" % username)
         users = User.objects.filter(username__iexact=username)
         first_user = users[0]

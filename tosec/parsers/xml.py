@@ -1,9 +1,11 @@
 """XML parser"""
+
 import xml.etree.ElementTree
 
 
 class TosecParser:
     """Parser for XML based dat files"""
+
     def __init__(self, filename):
         self.headers = {}
         self.games = []
@@ -15,10 +17,7 @@ class TosecParser:
         for header_tag in header:
             self.headers[header_tag.tag] = header_tag.text
         for game_tag in self.root.findall("game"):
-            game = {
-                "name": game_tag.attrib["name"],
-                "roms": []
-            }
+            game = {"name": game_tag.attrib["name"], "roms": []}
             description = game_tag.find("description")
             game["description"] = description.text
             for rom_tag in game_tag.findall("rom"):

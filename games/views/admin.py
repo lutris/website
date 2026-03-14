@@ -2,8 +2,8 @@
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from games import models
@@ -11,9 +11,7 @@ from games import models
 
 def redirect_to(request, target):
     """Helper to redirect to the given target"""
-    redirect_url = (
-        target if target[0] == "/" else request.build_absolute_uri(reverse(target))
-    )
+    redirect_url = target if target[0] == "/" else request.build_absolute_uri(reverse(target))
 
     # Enforce https
     if not settings.DEBUG:
@@ -35,9 +33,7 @@ def list_change_submissions_view(request, game_id=None):
         game = get_object_or_404(models.Game, id=game_id)
         change_suggestions_unfiltered = models.Game.objects.filter(change_for=game_id)
     else:
-        change_suggestions_unfiltered = models.Game.objects.filter(
-            change_for__isnull=False
-        )
+        change_suggestions_unfiltered = models.Game.objects.filter(change_for__isnull=False)
 
     # Populate additional information into the model
     obsolete_changes = 0

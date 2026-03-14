@@ -1,17 +1,16 @@
 """Match MAME games with Lutris games"""
-import json
+
 from django.core.management.base import BaseCommand
-from games.models import Game, Company, Platform
-from providers import models
+
 from common.util import get_auto_increment_slug, slugify
+from games.models import Company, Game, Platform
+from providers import models
+
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
-            "--create-missing",
-            action="store_true",
-            help="Path to the MAME game list"
+            "--create-missing", action="store_true", help="Path to the MAME game list"
         )
 
     @staticmethod
@@ -50,7 +49,7 @@ class Command(BaseCommand):
                     slug=get_auto_increment_slug(Game, None, game.name),
                     year=mame_year,
                     publisher=publisher,
-                    is_public=True
+                    is_public=True,
                 )
                 lutris_game.platforms.add(arcade_platform)
                 lutris_game.provider_games.add(game)

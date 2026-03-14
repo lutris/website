@@ -1,13 +1,14 @@
 """DRF serializers for Game models"""
+
 # pylint: disable=too-few-public-methods
 import logging
 
 from rest_framework import serializers
 
+from accounts.serializers import UserSerializer
 from games import models
 from platforms.models import Platform
 from providers.serializers import ProviderGameSerializer
-from accounts.serializers import UserSerializer
 from runners.models import Runner
 
 LOGGER = logging.getLogger(__name__)
@@ -15,10 +16,12 @@ LOGGER = logging.getLogger(__name__)
 
 class PlatformSerializer(serializers.ModelSerializer):
     """Serializer for Platforms"""
+
     class Meta:
         """Model and field definitions"""
+
         model = Platform
-        fields = ('name',)
+        fields = ("name",)
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -26,48 +29,54 @@ class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
-        model = models.Genre
-        fields = ('name',)
 
+        model = models.Genre
+        fields = ("name",)
 
 
 class GameAliasSerializer(serializers.ModelSerializer):
     """Serializer for game aliases, used to provide an alias list to GameSerializer"""
+
     class Meta:
         """Model and field definitions"""
+
         model = models.GameAlias
-        fields = ('slug', 'name')
+        fields = ("slug", "name")
+
 
 class MicroGameSerializer(serializers.ModelSerializer):
     """Another Serializer for Games since DRF doesn't support recursive relationships.
     Also can be used for very small reference to games"""
+
     class Meta:
         """Model and field definitions"""
+
         model = models.Game
-        fields = (
-            'id', 'slug', 'name'
-        )
+        fields = ("id", "slug", "name")
+
 
 class ShaderCacheSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ShaderCache
-        fields = ('url', 'updated_at')
+        fields = ("url", "updated_at")
+
 
 class InstallerSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
-    script = serializers.ReadOnlyField(source='raw_script')
+
+    script = serializers.ReadOnlyField(source="raw_script")
     game_id = serializers.PrimaryKeyRelatedField(read_only=True)
-    game_slug = serializers.ReadOnlyField(source='game.slug')
-    name = serializers.ReadOnlyField(source='game.name')
-    year = serializers.ReadOnlyField(source='game.year')
-    steamid = serializers.ReadOnlyField(source='game.steamid')
-    gogid = serializers.ReadOnlyField(source='game.gogid')
-    gogslug = serializers.ReadOnlyField(source='game.gogslug')
-    humbleid = serializers.ReadOnlyField(source='game.humbleid')
-    humblestoreid = serializers.ReadOnlyField(source='game.humbleid')
-    humblestoreid_real = serializers.ReadOnlyField(source='game.humblestoreid')
+    game_slug = serializers.ReadOnlyField(source="game.slug")
+    name = serializers.ReadOnlyField(source="game.name")
+    year = serializers.ReadOnlyField(source="game.year")
+    steamid = serializers.ReadOnlyField(source="game.steamid")
+    gogid = serializers.ReadOnlyField(source="game.gogid")
+    gogslug = serializers.ReadOnlyField(source="game.gogslug")
+    humbleid = serializers.ReadOnlyField(source="game.humbleid")
+    humblestoreid = serializers.ReadOnlyField(source="game.humbleid")
+    humblestoreid_real = serializers.ReadOnlyField(source="game.humblestoreid")
     # Adding Discord ID for Rich Presence Client
-    discord_id = serializers.ReadOnlyField(source='game.discord_id', allow_null=True)
+    discord_id = serializers.ReadOnlyField(source="game.discord_id", allow_null=True)
 
     user = serializers.StringRelatedField()
 
@@ -75,42 +84,79 @@ class InstallerSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = models.Installer
         fields = (
-            'id', 'game_id', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
-            'version', 'description', 'notes', 'credits', 'created_at', 'updated_at', 'draft',
-            'published', 'published_by', 'rating', 'is_playable', 'steamid', 'gogid', 'gogslug',
-            'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
-            'discord_id',
+            "id",
+            "game_id",
+            "game_slug",
+            "name",
+            "year",
+            "user",
+            "runner",
+            "slug",
+            "version",
+            "description",
+            "notes",
+            "credits",
+            "created_at",
+            "updated_at",
+            "draft",
+            "published",
+            "published_by",
+            "rating",
+            "is_playable",
+            "steamid",
+            "gogid",
+            "gogslug",
+            "humbleid",
+            "humblestoreid",
+            "humblestoreid_real",
+            "script",
+            "content",
+            "discord_id",
         )
+
 
 class InstallerHistorySerializer(serializers.ModelSerializer):
     """Serializer for Installers History"""
-    runnername = serializers.ReadOnlyField(source='runner.name')
+
+    runnername = serializers.ReadOnlyField(source="runner.name")
     user = serializers.StringRelatedField()
 
     class Meta:
         """Model and field definitions"""
+
         model = models.InstallerHistory
         fields = (
-            'id', 'version', 'description', 'notes', 'content', 'created_at', 'installer_id', 'runnername', 'user',
+            "id",
+            "version",
+            "description",
+            "notes",
+            "content",
+            "created_at",
+            "installer_id",
+            "runnername",
+            "user",
         )
+
 
 class InstallerDraftSerializer(serializers.ModelSerializer):
     """Serializer for Installers"""
-    script = serializers.ReadOnlyField(source='raw_script')
+
+    script = serializers.ReadOnlyField(source="raw_script")
     game = MicroGameSerializer()
-    game_slug = serializers.ReadOnlyField(source='game.slug')
-    name = serializers.ReadOnlyField(source='game.name')
-    year = serializers.ReadOnlyField(source='game.year')
-    steamid = serializers.ReadOnlyField(source='game.steamid')
-    gogid = serializers.ReadOnlyField(source='game.gogid')
-    gogslug = serializers.ReadOnlyField(source='game.gogslug')
-    humbleid = serializers.ReadOnlyField(source='game.humbleid')
-    humblestoreid = serializers.ReadOnlyField(source='game.humbleid')
-    humblestoreid_real = serializers.ReadOnlyField(source='game.humblestoreid')
+    game_slug = serializers.ReadOnlyField(source="game.slug")
+    name = serializers.ReadOnlyField(source="game.name")
+    year = serializers.ReadOnlyField(source="game.year")
+    steamid = serializers.ReadOnlyField(source="game.steamid")
+    gogid = serializers.ReadOnlyField(source="game.gogid")
+    gogslug = serializers.ReadOnlyField(source="game.gogslug")
+    humbleid = serializers.ReadOnlyField(source="game.humbleid")
+    humblestoreid = serializers.ReadOnlyField(source="game.humbleid")
+    humblestoreid_real = serializers.ReadOnlyField(source="game.humblestoreid")
     # Adding Discord ID for Rich Presence Client
-    discord_id = serializers.ReadOnlyField(source='game.discord_id', allow_null=True)
+    discord_id = serializers.ReadOnlyField(source="game.discord_id", allow_null=True)
 
     user = serializers.StringRelatedField()
 
@@ -119,23 +165,43 @@ class InstallerDraftSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = models.InstallerDraft
         fields = (
-            'id', 'game', 'game_slug', 'name', 'year', 'user', 'runner', 'slug',
-            'version', 'description', 'notes', 'credits', 'created_at', 'draft',
-            'steamid', 'gogid', 'gogslug',
-            'humbleid', 'humblestoreid', 'humblestoreid_real', 'script', 'content',
-            'discord_id', 'base_installer', 'review', 'reason'
+            "id",
+            "game",
+            "game_slug",
+            "name",
+            "year",
+            "user",
+            "runner",
+            "slug",
+            "version",
+            "description",
+            "notes",
+            "credits",
+            "created_at",
+            "draft",
+            "steamid",
+            "gogid",
+            "gogslug",
+            "humbleid",
+            "humblestoreid",
+            "humblestoreid_real",
+            "script",
+            "content",
+            "discord_id",
+            "base_installer",
+            "review",
+            "reason",
         )
 
 
 class InstallerDraftWriteSerializer(serializers.ModelSerializer):
     """Serializer for creating/updating installer drafts via API"""
+
     game_slug = serializers.SlugField(write_only=True)
-    runner = serializers.SlugRelatedField(
-        slug_field="slug",
-        queryset=Runner.objects.all()
-    )
+    runner = serializers.SlugRelatedField(slug_field="slug", queryset=Runner.objects.all())
     # Optional: link to existing installer for edits
     base_installer_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
     # draft=True means save as draft, draft=False means submit for moderation
@@ -143,12 +209,22 @@ class InstallerDraftWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = models.InstallerDraft
         fields = (
-            'id', 'game_slug', 'runner', 'version', 'description', 'notes',
-            'credits', 'content', 'draft', 'reason', 'base_installer_id',
+            "id",
+            "game_slug",
+            "runner",
+            "version",
+            "description",
+            "notes",
+            "credits",
+            "content",
+            "draft",
+            "reason",
+            "base_installer_id",
         )
-        read_only_fields = ('id',)
+        read_only_fields = ("id",)
 
     def validate_game_slug(self, value):
         """Validate game exists"""
@@ -160,8 +236,10 @@ class InstallerDraftWriteSerializer(serializers.ModelSerializer):
 
     def validate_content(self, value):
         """Validate YAML and strip metadata fields"""
-        from common.util import load_yaml, dump_yaml
         import yaml
+
+        from common.util import dump_yaml, load_yaml
+
         try:
             yaml_data = load_yaml(value)
         except yaml.error.MarkedYAMLError as ex:
@@ -179,31 +257,31 @@ class InstallerDraftWriteSerializer(serializers.ModelSerializer):
         """Run full installer validation"""
         from games.util.installer import validate_installer
 
-        game_slug = attrs.get('game_slug')
+        game_slug = attrs.get("game_slug")
         game = models.Game.objects.get(slug=game_slug, change_for__isnull=True)
 
         # Create a dummy installer for validation
         dummy = models.Installer(
             game=game,
-            runner=attrs.get('runner'),
-            version=attrs.get('version', ''),
-            content=attrs.get('content', ''),
+            runner=attrs.get("runner"),
+            version=attrs.get("version", ""),
+            content=attrs.get("content", ""),
         )
         is_valid, errors = validate_installer(dummy)
         if not is_valid:
-            raise serializers.ValidationError({'content': errors})
+            raise serializers.ValidationError({"content": errors})
 
         # Check version uniqueness for new installers
-        base_installer_id = attrs.get('base_installer_id')
-        version = attrs.get('version')
+        base_installer_id = attrs.get("base_installer_id")
+        version = attrs.get("version")
         if version:
             existing = models.Installer.objects.filter(game=game, version=version)
             if base_installer_id:
                 existing = existing.exclude(id=base_installer_id)
             if existing.exists():
-                raise serializers.ValidationError({
-                    'version': 'An installer with this version already exists for this game'
-                })
+                raise serializers.ValidationError(
+                    {"version": "An installer with this version already exists for this game"}
+                )
 
         return attrs
 
@@ -211,11 +289,11 @@ class InstallerDraftWriteSerializer(serializers.ModelSerializer):
         """Create installer draft"""
         from django.utils import timezone
 
-        game_slug = validated_data.pop('game_slug')
-        base_installer_id = validated_data.pop('base_installer_id', None)
+        game_slug = validated_data.pop("game_slug")
+        base_installer_id = validated_data.pop("base_installer_id", None)
 
         game = models.Game.objects.get(slug=game_slug, change_for__isnull=True)
-        user = self.context['request'].user
+        user = self.context["request"].user
 
         base_installer = None
         if base_installer_id:
@@ -229,9 +307,10 @@ class InstallerDraftWriteSerializer(serializers.ModelSerializer):
             user=user,
             base_installer=base_installer,
             created_at=timezone.now(),
-            **validated_data
+            **validated_data,
         )
         return draft
+
 
 class GameSerializer(serializers.ModelSerializer):
     """Serializer for Games"""
@@ -244,38 +323,72 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = models.Game
         fields = (
-            'id', 'name', 'slug', 'year', 'banner_url', 'icon_url', 'coverart',
-            'platforms', 'provider_games', 'aliases', 'shaders', 'discord_id', 'change_for'
+            "id",
+            "name",
+            "slug",
+            "year",
+            "banner_url",
+            "icon_url",
+            "coverart",
+            "platforms",
+            "provider_games",
+            "aliases",
+            "shaders",
+            "discord_id",
+            "change_for",
         )
+
 
 class GameSubmissionSerializer(serializers.ModelSerializer):
     """Serializer for game submissions"""
+
     game = GameSerializer()
     user = UserSerializer()
+
     class Meta:
         """Model and field definitions"""
+
         model = models.GameSubmission
-        fields = ('id', 'user', 'game', 'created_at', 'accepted_at', 'reason',)
+        fields = (
+            "id",
+            "user",
+            "game",
+            "created_at",
+            "accepted_at",
+            "reason",
+        )
 
 
 class GameMergeSuggestionSerializer(serializers.ModelSerializer):
     """Serializer for game merge suggestions"""
+
     game = GameSerializer()
     other_game = GameSerializer()
     user = UserSerializer()
 
     class Meta:
         """Model and field definitions"""
+
         model = models.GameMergeSuggestion
-        fields = ('id', 'user', 'game', 'other_game', 'created_at', 'accepted_at', 'reason',)
+        fields = (
+            "id",
+            "user",
+            "game",
+            "other_game",
+            "created_at",
+            "accepted_at",
+            "reason",
+        )
 
 
 class GameDetailSerializer(GameSerializer):
     """A serializer for games with it's associated meta-data.
     Do not use in List views as it might cause performance issues.
     """
+
     genres = GenreSerializer(many=True)
     platforms = PlatformSerializer(many=True)
     aliases = GameAliasSerializer(many=True)
@@ -284,21 +397,38 @@ class GameDetailSerializer(GameSerializer):
 
     class Meta:
         """Model and field definitions"""
+
         model = models.Game
         fields = (
-            'name', 'slug', 'year',
-            'platforms', 'genres', 'aliases',
-            'description', 'banner_url', 'icon_url', 'coverart', 'is_public',
-            'updated', 'steamid', 'gogslug', 'humblestoreid', 'id',
-            'user_count', 'installers', 'shaders',
-            'discord_id',
+            "name",
+            "slug",
+            "year",
+            "platforms",
+            "genres",
+            "aliases",
+            "description",
+            "banner_url",
+            "icon_url",
+            "coverart",
+            "is_public",
+            "updated",
+            "steamid",
+            "gogslug",
+            "humblestoreid",
+            "id",
+            "user_count",
+            "installers",
+            "shaders",
+            "discord_id",
         )
 
+
 class TransitonalLibrarySerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source='game.name')
-    slug = serializers.ReadOnlyField(source='game.slug')
-    banner_url = serializers.ReadOnlyField(source='banner')
-    icon_url = serializers.ReadOnlyField(source='icon')
+    name = serializers.ReadOnlyField(source="game.name")
+    slug = serializers.ReadOnlyField(source="game.slug")
+    banner_url = serializers.ReadOnlyField(source="banner")
+    icon_url = serializers.ReadOnlyField(source="icon")
+
     class Meta:
         model = models.LibraryGame
         fields = (
@@ -309,45 +439,57 @@ class TransitonalLibrarySerializer(serializers.ModelSerializer):
             "icon_url",
         )
 
+
 class GameLibrarySerializer(serializers.ModelSerializer):
     """Serializer for Games"""
+
     games = TransitonalLibrarySerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
+
         model = models.GameLibrary
-        fields = ('user', 'games')
+        fields = ("user", "games")
 
 
 class GameInstallersSerializer(GameSerializer):
     """Serializer for Installers belonging to a specific game"""
+
     installers = InstallerSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
+
         model = models.Game
         fields = (
-            'id', 'name', 'slug', 'year', 'platforms', 'genres',
-            'banner_url', 'icon_url', 'is_public', 'updated',
-            'steamid', 'gogid', 'gogslug', 'humblestoreid', 'installers'
+            "id",
+            "name",
+            "slug",
+            "year",
+            "platforms",
+            "genres",
+            "banner_url",
+            "icon_url",
+            "is_public",
+            "updated",
+            "steamid",
+            "gogid",
+            "gogslug",
+            "humblestoreid",
+            "installers",
         )
 
 
 class InstallerIssueReplySerializer(serializers.ModelSerializer):
     """Serializer for Installer issues"""
+
     username = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
+
         model = models.InstallerIssueReply
-        fields = (
-            'id',
-            'issue',
-            'username',
-            'submitted_by',
-            'submitted_on',
-            'description'
-        )
+        fields = ("id", "issue", "username", "submitted_by", "submitted_on", "description")
 
     def get_username(self, obj):  # pylint: disable=no-self-use
         """Return the username from the submitted_by field"""
@@ -356,21 +498,23 @@ class InstallerIssueReplySerializer(serializers.ModelSerializer):
 
 class InstallerIssueSerializer(serializers.ModelSerializer):
     """Serializer for installer issues"""
+
     replies = InstallerIssueReplySerializer(many=True, required=False)
     username = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
+
         model = models.InstallerIssue
         fields = (
-            'id',
-            'installer',
-            'username',
-            'submitted_by',
-            'submitted_on',
-            'description',
-            'solved',
-            'replies'
+            "id",
+            "installer",
+            "username",
+            "submitted_by",
+            "submitted_on",
+            "description",
+            "solved",
+            "replies",
         )
 
     def get_username(self, obj):  # pylint: disable=no-self-use
@@ -380,21 +524,23 @@ class InstallerIssueSerializer(serializers.ModelSerializer):
 
 class InstallerIssueListSerializer(serializers.ModelSerializer):
     """Serializer for grouping all issues from a installer together"""
+
     issues = InstallerIssueSerializer(many=True)
 
     class Meta:
         """Model and field definitions"""
+
         model = models.Installer
         fields = (
-            'id',
-            'slug',
-            'version',
-            'issues',
+            "id",
+            "slug",
+            "version",
+            "issues",
         )
 
 
 class GameRelatedField(serializers.RelatedField):
-    """A custom field to load games from generic relationship """
+    """A custom field to load games from generic relationship"""
 
     def to_representation(self, value):
         """
@@ -403,7 +549,7 @@ class GameRelatedField(serializers.RelatedField):
         if isinstance(value, models.Installer):
             serializer = InstallerSerializer(value)
             return serializer.data
-        raise Exception('Unexpected type of tagged object')
+        raise Exception("Unexpected type of tagged object")
 
     def to_internal_value(self, _value):
         """Raise an exception when trying to change back to internal values"""
@@ -412,6 +558,7 @@ class GameRelatedField(serializers.RelatedField):
 
 class RegressionSerializer(serializers.ModelSerializer):
     """Read serializer for regressions"""
+
     games = MicroGameSerializer(many=True, read_only=True)
     submitted_by = serializers.StringRelatedField()
     reviewed_by = serializers.StringRelatedField()
@@ -419,45 +566,53 @@ class RegressionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Regression
         fields = (
-            'id', 'title', 'description', 'bug_url', 'bug_status',
-            'last_known_working_version', 'games', 'status',
-            'submitted_by', 'reviewed_by',
-            'created_at', 'updated_at', 'resolved_at',
+            "id",
+            "title",
+            "description",
+            "bug_url",
+            "bug_status",
+            "last_known_working_version",
+            "games",
+            "status",
+            "submitted_by",
+            "reviewed_by",
+            "created_at",
+            "updated_at",
+            "resolved_at",
         )
 
 
 class RegressionWriteSerializer(serializers.ModelSerializer):
     """Write serializer for regression submissions"""
-    game_slugs = serializers.ListField(
-        child=serializers.SlugField(), write_only=True
-    )
+
+    game_slugs = serializers.ListField(child=serializers.SlugField(), write_only=True)
 
     class Meta:
         model = models.Regression
         fields = (
-            'id', 'title', 'description', 'bug_url',
-            'last_known_working_version', 'game_slugs',
+            "id",
+            "title",
+            "description",
+            "bug_url",
+            "last_known_working_version",
+            "game_slugs",
         )
-        read_only_fields = ('id',)
+        read_only_fields = ("id",)
 
     def validate_game_slugs(self, value):
         if not value:
             raise serializers.ValidationError("At least one game slug is required.")
         games = models.Game.objects.filter(slug__in=value, change_for__isnull=True)
-        found_slugs = set(games.values_list('slug', flat=True))
+        found_slugs = set(games.values_list("slug", flat=True))
         missing = set(value) - found_slugs
         if missing:
-            raise serializers.ValidationError(
-                f"Games not found: {', '.join(missing)}"
-            )
+            raise serializers.ValidationError(f"Games not found: {', '.join(missing)}")
         return value
 
     def create(self, validated_data):
-        game_slugs = validated_data.pop('game_slugs')
-        user = self.context['request'].user
-        regression = models.Regression.objects.create(
-            submitted_by=user, **validated_data
-        )
+        game_slugs = validated_data.pop("game_slugs")
+        user = self.context["request"].user
+        regression = models.Regression.objects.create(submitted_by=user, **validated_data)
         games = models.Game.objects.filter(slug__in=game_slugs, change_for__isnull=True)
         regression.games.set(games)
         return regression
@@ -465,17 +620,12 @@ class RegressionWriteSerializer(serializers.ModelSerializer):
 
 class ScreenshotSerializer(serializers.ModelSerializer):
     """Serializer for Screenshots"""
+
     game = MicroGameSerializer()
     uploaded_by = UserSerializer()
+
     class Meta:
         """Model and field definitions"""
+
         model = models.Screenshot
-        fields = (
-            'id',
-            'game',
-            'image',
-            'uploaded_at',
-            'uploaded_by',
-            'description',
-            'published'
-        )
+        fields = ("id", "game", "image", "uploaded_at", "uploaded_by", "description", "published")

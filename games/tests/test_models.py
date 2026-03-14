@@ -1,6 +1,8 @@
 from django.test import TestCase
-from . import factories
+
 from games import models
+
+from . import factories
 
 
 class TestGame(TestCase):
@@ -115,9 +117,7 @@ class TestGame(TestCase):
         self.assertEqual(game.description, change_model["description"])
 
         # Verify platforms and genres
-        self.assertListEqual(
-            [x.id for x in game.platforms.all()], change_model["platforms"]
-        )
+        self.assertListEqual([x.id for x in game.platforms.all()], change_model["platforms"])
         self.assertListEqual([x.id for x in game.genres.all()], change_model["genres"])
 
     def test_get_changes(self):
@@ -194,11 +194,9 @@ class TestGameLibrary(TestCase):
 
         library = user.gamelibrary
         self.assertEqual(len(library.games.all()), 0)
-        for i in range(5):
+        for _i in range(5):
             game = factories.GameFactory()
-            library.games.add(
-                models.LibraryGame.objects.create(game=game, gamelibrary=library)
-            )
+            library.games.add(models.LibraryGame.objects.create(game=game, gamelibrary=library))
 
         self.assertEqual(len(library.games.all()), 5)
 

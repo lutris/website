@@ -1,13 +1,14 @@
 """Admin module for TOSEC management"""
+
 from django.contrib import admin
 
 from . import models
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'version', 'author')
-    search_fields = ('name', )
-    list_filter = ('category', )
+    list_display = ("name", "category", "version", "author")
+    search_fields = ("name",)
+    list_filter = ("category",)
 
 
 class RomInline(admin.StackedInline):
@@ -16,9 +17,9 @@ class RomInline(admin.StackedInline):
 
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'collection')
-    search_fields = ('name', )
-    list_filter = ('category', 'category__category')
+    list_display = ("name", "category", "collection")
+    search_fields = ("name",)
+    list_filter = ("category", "category__category")
     inlines = [
         RomInline,
     ]

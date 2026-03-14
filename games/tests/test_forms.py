@@ -1,15 +1,16 @@
 # pylint: disable=no-member
 from io import BytesIO
-from django.test import TestCase
+
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from PIL import Image
 
 from games import forms
 from games.tests import factories
 
 
-def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_format='PNG'):
+def create_image(storage, filename, size=(100, 100), image_mode="RGB", image_format="PNG"):
     """Generate a test image, returning the filename that it was saved as.
 
     If ``storage`` is ``None``, the BytesIO containing the image data
@@ -26,16 +27,12 @@ def create_image(storage, filename, size=(100, 100), image_mode='RGB', image_for
 
 class TestInstallerForm(TestCase):
     def setUp(self):
-        self.game = factories.GameFactory(name='Doom')
-        self.runner = factories.RunnerFactory(name='Linux')
+        self.game = factories.GameFactory(name="Doom")
+        self.runner = factories.RunnerFactory(name="Linux")
         self.installer = factories.InstallerDraftFactory(game=self.game)
 
     def test_can_submit_installer(self):
-        form_data = {
-            'version': 'demo',
-            'content': "exe: doom.x86",
-            'runner': str(self.runner.id)
-        }
+        form_data = {"version": "demo", "content": "exe: doom.x86", "runner": str(self.runner.id)}
         form = forms.InstallerForm(form_data, instance=self.installer)
         self.assertFalse(form.errors)
         self.assertTrue(form.is_valid())
@@ -43,8 +40,8 @@ class TestInstallerForm(TestCase):
 
     def test_form_requires_runner(self):
         form_data = {
-            'version': 'zdoom',
-            'content': "exe: doom.x86",
+            "version": "zdoom",
+            "content": "exe: doom.x86",
         }
         form = forms.InstallerForm(form_data, instance=self.installer)
         self.assertFalse(form.is_valid())
@@ -61,61 +58,64 @@ class TestGameForm(TestCase):
         )
 
     def test_can_validate_basic_data(self):
-        image = create_image(None, 'banner.png')
-        form = forms.GameForm({
-            'name': 'bliblu',
-            'platforms': [self.platform.id],
-            'genres': [self.genre.id],
-            'developer': self.developer.id,
-            'publisher': self.publisher.id
-        }, {
-            'title_logo': SimpleUploadedFile('front.png', image.getvalue())
-        })
+        image = create_image(None, "banner.png")
+        form = forms.GameForm(
+            {
+                "name": "bliblu",
+                "platforms": [self.platform.id],
+                "genres": [self.genre.id],
+                "developer": self.developer.id,
+                "publisher": self.publisher.id,
+            },
+            {"title_logo": SimpleUploadedFile("front.png", image.getvalue())},
+        )
         form.is_valid()
         self.assertTrue(form.is_valid())
         self.assertFalse(form.errors)
 
     def test_catches_duplicate_slugs(self):
-        form = forms.GameForm({
-            'name': 'Hyperdimension Neptunia Re,Birth2: Sisters Generation',
-            'platforms': [self.platform.id],
-            'genres': [self.genre.id]
-        })
+        form = forms.GameForm(
+            {
+                "name": "Hyperdimension Neptunia Re,Birth2: Sisters Generation",
+                "platforms": [self.platform.id],
+                "genres": [self.genre.id],
+            }
+        )
         self.assertFalse(form.is_valid())
-        self.assertIn('name', form.errors)
+        self.assertIn("name", form.errors)
 
 
 class TestGameEditForm(TestCase):
     """Test suite for the form to suggest game changes"""
 
     def setUp(self):
-        name = 'Horribly Misspelled Game Title'
+        name = "Horribly Misspelled Game Title"
         developer = factories.CompanyFactory()
         publisher = factories.CompanyFactory()
         platform = factories.PlatformFactory()
         genre = factories.GenreFactory()
         year = 2012
-        website = 'https://example.com'
+        website = "https://example.com"
 
         self.game = factories.GameFactory(name=name)
         self.game.platforms.set([platform.id])
         self.game.genres.set([genre.id])
         self.game.website = website
         self.game.year = year
-        self.game.description = ''
+        self.game.description = ""
         self.game.developer = developer
         self.game.publisher = publisher
         self.game.save()
 
         self.inputs = {
-            'name': name,
-            'developer': developer.id,
-            'publisher': publisher.id,
-            'platforms': [platform.id],
-            'genres': [genre.id],
-            'website': website,
-            'year': year,
-            'description': ''
+            "name": name,
+            "developer": developer.id,
+            "publisher": publisher.id,
+            "platforms": [platform.id],
+            "genres": [genre.id],
+            "website": website,
+            "year": year,
+            "description": "",
         }
 
     def test_user_cannot_submit_unchanged_form(self):
@@ -126,13 +126,13 @@ class TestGameEditForm(TestCase):
 
         # Form should not be valid since no changes were made
         self.assertFalse(form.is_valid())
-        self.assertIn('You have not changed anything', str(form.errors))
+        self.assertIn("You have not changed anything", str(form.errors))
 
     def test_user_can_submit_valid_changed_form(self):
         """Ensures that a user can submit valid changes"""
 
         # Prepare the change to be suggested
-        self.inputs['name'] = 'Corrected Game Title'
+        self.inputs["name"] = "Corrected Game Title"
 
         # Needed for the foreign key of the change row
         change_for = self.game.get_change_model()
@@ -150,7 +150,7 @@ class TestGameEditForm(TestCase):
         form.save_m2m()
 
         # Assert that the changes are in the model
-        self.assertEqual(change_suggestion.name, 'Corrected Game Title')
+        self.assertEqual(change_suggestion.name, "Corrected Game Title")
 
         # Finally, verify the diff (did only the name change?)
         diff = change_suggestion.get_changes()
@@ -162,19 +162,19 @@ class TestGameEditForm(TestCase):
         (diff_name, diff_old, diff_new) = diff[0]
 
         # Verify diff
-        self.assertEqual(diff_name, 'name')
-        self.assertEqual(diff_old, 'Horribly Misspelled Game Title')
-        self.assertEqual(diff_new, 'Corrected Game Title')
+        self.assertEqual(diff_name, "name")
+        self.assertEqual(diff_old, "Horribly Misspelled Game Title")
+        self.assertEqual(diff_new, "Corrected Game Title")
 
     def test_user_cannot_submit_invalid_changed_form(self):
         """Ensures that a user cannot submit invalid changes"""
 
         # Prepare the change to be suggested (which is invalid here)
-        self.inputs['name'] = ''
+        self.inputs["name"] = ""
 
         # Create form
         form = forms.GameEditForm(self.inputs, initial=self.game.get_change_model())
 
         # Assert that form is invalid since the name must not be empty
         self.assertFalse(form.is_valid())
-        self.assertIn('This field is required', str(form.errors['name']))
+        self.assertIn("This field is required", str(form.errors["name"]))
