@@ -1,8 +1,6 @@
 """Steam related utilities"""
 
 import logging
-from json import JSONDecodeError
-
 import requests
 from django.conf import settings
 
@@ -32,6 +30,9 @@ def get_image(appid, img_logo_url):
 
 def steam_sync(steamid):
     """Get a user's (referenced by their SteamID) Steam library"""
+    if not steamid:
+        LOGGER.error("Cannot sync Steam library: no Steam ID provided")
+        return []
     get_owned_games = (
         "IPlayerService/GetOwnedGames/v0001/"
         "?key={}&steamid={}&format=json&include_appinfo=1"
@@ -39,11 +40,12 @@ def steam_sync(steamid):
     )
     steam_games_url = STEAM_API_URL + get_owned_games
     response = requests.get(steam_games_url)
-    if response.status_code > 400:
-        raise ValueError("Invalid response from steam: %s" % response)
+    if response.status_code >= 400:
+        LOGGER.error("Invalid response from Steam: %s %s", response.status_code, response.text)
+        return []
     try:
         json_data = response.json()
-    except JSONDecodeError:
+    except (ValueError, requests.exceptions.JSONDecodeError):
         LOGGER.error("Invalid JSON response from Steam API: %s", response.content)
         return []
     response = json_data["response"]
