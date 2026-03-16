@@ -148,7 +148,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
     "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.openid",
     "allauth.socialaccount.providers.steam",
     "django_extensions",
     "axes",
