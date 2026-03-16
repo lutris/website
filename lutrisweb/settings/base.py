@@ -74,6 +74,7 @@ GOG_LUTRIS_LOGO_PATH = media_directory("gog-lutris-logos")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "changeme")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+ALLAUTH_DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 MIDDLEWARE = [
     # Caching disabled until proper invalidation is implemented
     # 'django.middleware.cache.UpdateCacheMiddleware',
