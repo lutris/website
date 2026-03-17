@@ -466,3 +466,8 @@ CACHES = {
 
 CELERY_CACHE_BACKEND = "default"
 SELECT2_CACHE_BACKEND = "default"
+
+# python-openid (used by allauth's Steam provider) stores non-JSON-serializable
+# objects like YadisServiceManager in the session. The default JSONSerializer
+# cannot handle these, so we use PickleSerializer.
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
