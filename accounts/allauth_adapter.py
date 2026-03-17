@@ -47,6 +47,11 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     pass
+                except User.MultipleObjectsReturned:
+                    logger.warning(
+                        "Multiple users with email %s, skipping auto-connect",
+                        email,
+                    )
 
         if user:
             sociallogin.connect(request, user)
