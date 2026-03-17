@@ -96,9 +96,14 @@ class ProfileForm(forms.ModelForm):
         }
 
     def save(self, commit=True):
+        update_fields = list(self.changed_data)
         if "email" in self.changed_data:
             self.instance.email_confirmed = False
-        return super().save(commit=commit)
+            update_fields.append("email_confirmed")
+        self.instance = super().save(commit=False)
+        if commit and update_fields:
+            self.instance.save(update_fields=update_fields)
+        return self.instance
 
 
 class ProfileDeleteForm(forms.Form):
