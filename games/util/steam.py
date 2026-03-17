@@ -4,6 +4,7 @@ import logging
 
 import requests
 from django.conf import settings
+from django.db import IntegrityError
 
 from accounts.models import User
 from common.util import slugify
@@ -63,18 +64,26 @@ def steam_sync(steamid):
 
 def create_game(game):
     """Create game object from Steam API call"""
-    steam_game = models.Game(
-        name=game["name"],
-        steamid=game["appid"],
-        slug=slugify(game["name"])[:50],
-        is_public=True,
-    )
-    if game.get("img_logo_url"):
-        steam_game.set_logo_from_steam_api(game["img_logo_url"])
+    slug = slugify(game["name"])[:50]
+    try:
+        steam_game = models.Game(
+            name=game["name"],
+            steamid=game["appid"],
+            slug=slug,
+            is_public=True,
+        )
+        if game.get("img_logo_url"):
+            steam_game.set_logo_from_steam_api(game["img_logo_url"])
 
-    if game.get("img_icon_url"):
-        steam_game.set_icon_from_steam_api(game["img_icon_url"])
-    steam_game.save()
+        if game.get("img_icon_url"):
+            steam_game.set_icon_from_steam_api(game["img_icon_url"])
+        steam_game.save()
+    except IntegrityError:
+        LOGGER.warning("Slug '%s' already exists, fetching existing game", slug)
+        steam_game = models.Game.objects.get(slug=slug)
+        if not steam_game.steamid:
+            steam_game.steamid = game["appid"]
+            steam_game.save()
     return steam_game
 
 
