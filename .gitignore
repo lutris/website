@@ -7,9 +7,7 @@ lutris.db
 lutrisweb.log
 media
 static
-# Generated docs (make docs), but keep the placeholder
 templates/docs/*.html
-!templates/docs/installers.html
 lutris_client/
 local_settings.py
 .ropeproject

@@ -68,6 +68,10 @@ jobs:
           sudo apt-get install -y libpq-dev libxml2-dev libxslt1-dev libjpeg-dev imagemagick
       - name: Install Python dependencies
         run: pip install -r config/requirements/base.pip
+      - name: Create placeholder docs templates
+        run: |
+          mkdir -p templates/docs
+          [ -f templates/docs/installers.html ] || echo '<p>Installer docs not generated. Run <code>make client docs</code>.</p>' > templates/docs/installers.html
       - name: Run migrations
         run: python manage.py migrate --no-input
       - name: Run tests
