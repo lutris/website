@@ -36,3 +36,4 @@ urllib3==2.2.3
 xpinyin==0.7.6
 transliterate==1.10.2
 GitPython==3.1.41
+docutils
