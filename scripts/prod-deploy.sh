@@ -29,6 +29,7 @@ if [[ "$WEBPACK" == "1" ]]; then
     npm run build-prod
 fi
 
+make client docs
 ./manage.py collectstatic --clear --noinput --ignore less/test/* --ignore select2/docs/*
 ./manage.py migrate
 
