@@ -309,7 +309,9 @@ class InstallerForm(forms.ModelForm):
             raise forms.ValidationError("This field is mandatory")
         if version.lower().endswith("version"):
             raise forms.ValidationError("Don't put 'version' at the end of the 'version' field")
-        existing = models.Installer.objects.filter(game=self.instance.game, version=version)
+        existing = models.Installer.objects.filter(
+            game=self.instance.game, version=version, published=True, draft=False
+        )
         if self.instance.base_installer:
             existing = existing.exclude(id=self.instance.base_installer.id)
         if existing.exists():
