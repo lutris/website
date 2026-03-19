@@ -46,7 +46,7 @@ client:
 	if [ -e lutris_client/.git ]; then cd lutris_client; git pull; else git clone https://github.com/lutris/lutris lutris_client; fi
 
 docs:
-	rst2html.py --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html
+	rst2html --template=config/rst_template.txt lutris_client/docs/installers.rst > templates/docs/installers.html
 
 shell:
 	./manage.py shell_plus --traceback
