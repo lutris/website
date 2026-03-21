@@ -4,7 +4,7 @@ import logging
 
 import requests
 from django.conf import settings
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 from accounts.models import User
 from common.util import slugify
@@ -66,18 +66,19 @@ def create_game(game):
     """Create game object from Steam API call"""
     slug = slugify(game["name"])[:50]
     try:
-        steam_game = models.Game(
-            name=game["name"],
-            steamid=game["appid"],
-            slug=slug,
-            is_public=True,
-        )
-        if game.get("img_logo_url"):
-            steam_game.set_logo_from_steam_api(game["img_logo_url"])
+        with transaction.atomic():
+            steam_game = models.Game(
+                name=game["name"],
+                steamid=game["appid"],
+                slug=slug,
+                is_public=True,
+            )
+            if game.get("img_logo_url"):
+                steam_game.set_logo_from_steam_api(game["img_logo_url"])
 
-        if game.get("img_icon_url"):
-            steam_game.set_icon_from_steam_api(game["img_icon_url"])
-        steam_game.save()
+            if game.get("img_icon_url"):
+                steam_game.set_icon_from_steam_api(game["img_icon_url"])
+            steam_game.save()
     except IntegrityError:
         LOGGER.warning("Slug '%s' already exists, fetching existing game", slug)
         steam_game = models.Game.objects.get(slug=slug)
