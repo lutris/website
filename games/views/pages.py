@@ -106,7 +106,7 @@ class GameList(ListView):
     def get_ordering(self):
         """Return the field used to order the query by"""
         field = self.request.GET.get("ordering", self.ordering)
-        if field.strip("-") not in Game.valid_fields():
+        if field.lstrip("-") not in Game.valid_fields():
             return None
         return field
 
