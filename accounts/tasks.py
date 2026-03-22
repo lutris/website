@@ -48,19 +48,27 @@ def sync_steam_library(user_id):
                     steam_game.steamid = game["appid"]
                     steam_game.save()
             except games.models.Game.DoesNotExist:
-                steam_game = create_game(game)
+                try:
+                    steam_game = create_game(game)
+                except Exception:
+                    LOGGER.exception(
+                        "Failed to create game %s (appid %s)", game["name"], game["appid"]
+                    )
+                    continue
                 LOGGER.info("Creating game %s", steam_game.slug)
 
-        games.models.LibraryGame.objects.create(
+        games.models.LibraryGame.objects.get_or_create(
             game=steam_game,
-            name=steam_game.name,
-            slug=steam_game.slug,
             gamelibrary=library,
-            playtime=0,
-            runner="",
-            platform="",
             service="steam",
-            lastplayed=0,
+            defaults={
+                "name": steam_game.name,
+                "slug": steam_game.slug,
+                "playtime": 0,
+                "runner": "",
+                "platform": "",
+                "lastplayed": 0,
+            },
         )
 
     LOGGER.info("Added %s Steam games to %s's library", game_count, user.username)
