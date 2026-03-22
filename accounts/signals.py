@@ -3,6 +3,7 @@
 import logging
 
 from allauth.socialaccount.signals import social_account_added, social_account_removed
+from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -45,7 +46,7 @@ def on_steam_connected(request, sociallogin, **kwargs):
         user.save(update_fields=["steamid"])
         from . import tasks
 
-        tasks.sync_steam_library.delay(user.id)
+        transaction.on_commit(lambda: tasks.sync_steam_library.delay(user.id))
 
 
 @receiver(social_account_removed)

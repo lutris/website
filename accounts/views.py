@@ -407,6 +407,13 @@ def library_remove(request, pk):
 def library_steam_sync(request):
     """Launch a Steam library sync in the background"""
     user = request.user
+    if not user.steamid:
+        messages.error(
+            request,
+            "Your Steam account is not connected to Lutris. "
+            "Please link your Steam account before syncing your library.",
+        )
+        return redirect(reverse("user_account", kwargs={"username": user.username}))
     LOGGER.info("Syncing contents of Steam library for user %s", user.username)
     tasks.sync_steam_library.delay(user.id)
     messages.success(request, "Your Steam library is being synced with your Lutris account")
