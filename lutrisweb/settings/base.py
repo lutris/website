@@ -202,7 +202,7 @@ CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 
 # django-allauth configuration
 ACCOUNT_LOGIN_METHODS = {"username"}
-ACCOUNT_SIGNUP_FIELDS = ["username*", "password1*", "password2*"]
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_ADAPTER = "accounts.allauth_adapter.LutrisAccountAdapter"
 SOCIALACCOUNT_ADAPTER = "accounts.allauth_adapter.LutrisSocialAccountAdapter"
