@@ -31,7 +31,8 @@ class GameListView(generics.GenericAPIView):
 
         # Easter egg: Return a random game
         if "random" in self.request.GET:
-            return [models.Game.objects.get_random(self.request.GET["random"])]
+            game = models.Game.objects.get_random(self.request.GET["random"])
+            return [game] if game else []
 
         if "with-installers" in self.request.GET:
             base_query = models.Game.objects.with_installer()
