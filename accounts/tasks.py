@@ -57,19 +57,27 @@ def sync_steam_library(user_id):
                     continue
                 LOGGER.info("Creating game %s", steam_game.slug)
 
-        games.models.LibraryGame.objects.get_or_create(
-            game=steam_game,
-            gamelibrary=library,
-            service="steam",
-            defaults={
-                "name": steam_game.name,
-                "slug": steam_game.slug,
-                "playtime": 0,
-                "runner": "",
-                "platform": "",
-                "lastplayed": 0,
-            },
-        )
+        try:
+            games.models.LibraryGame.objects.get_or_create(
+                game=steam_game,
+                gamelibrary=library,
+                service="steam",
+                defaults={
+                    "name": steam_game.name,
+                    "slug": steam_game.slug,
+                    "playtime": 0,
+                    "runner": "",
+                    "platform": "",
+                    "lastplayed": 0,
+                },
+            )
+        except games.models.LibraryGame.MultipleObjectsReturned:
+            dupes = games.models.LibraryGame.objects.filter(
+                game=steam_game,
+                gamelibrary=library,
+                service="steam",
+            )
+            dupes.exclude(pk=dupes.first().pk).delete()
 
     LOGGER.info("Added %s Steam games to %s's library", game_count, user.username)
 
