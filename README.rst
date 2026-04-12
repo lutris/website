@@ -1,43 +1,35 @@
 Getting the site up and running for development
 ===============================================
 
-Install required packages:
+Install uv_, a fast Python package and virtualenv manager::
 
-    apt install python3-venv
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 
+.. _uv: https://docs.astral.sh/uv/
 
-If you haven't done it already, install and configure virtualenvwrapper.
-If you are unfamiliar with virtualenvwrapper, see their documentation on
-their website: https://virtualenvwrapper.readthedocs.org/en/latest/
+Clone the repository and install the Python dependencies::
 
-::
+    git clone https://github.com/lutris/website.git
+    cd website
+    uv sync
 
-    mkvirtualenv lutrisweb
-    cd lutrisweb
-    setvirtualenvproject
+``uv sync`` creates a project-local ``.venv/`` and installs everything
+from ``pyproject.toml``, including the ``dev`` dependency group
+(ruff, pylint, coverage, ipdb, debug toolbar). System-level build
+dependencies are still required to compile psycopg2, Pillow, and lxml::
 
-Once the virtualenv is created, you need to make sure that some
-environment variables are exported and are set to valid values, the
-simplest way to achieve that is to edit the postactivate script in
-`$VIRTUAL_ENV/bin/postactivate` and add your exports here.
+    # Ubuntu / Debian
+    sudo apt-get install build-essential git curl \
+        imagemagick libxml2-dev libxslt1-dev libssl-dev \
+        libffi-dev libpq-dev libjpeg-dev
 
-The postactivate script should set the Django settings module and load
-environment variables from `.env.local`::
+    # Red Hat / Fedora
+    sudo dnf install libpq-devel libxml2-devel libxslt-devel
 
-    #!/usr/bin/zsh
-    # This hook is sourced after this virtualenv is activated.
+Environment variables live in ``.env.local`` at the repository root.
+Copy the sample below and fill in real values::
 
-    export DJANGO_SETTINGS_MODULE="lutrisweb.settings.local"
-    set -a
-    source <(grep -v '^#' "$HOME/Projects/website/.env.local" | grep .)
-    set +a
-
-The `set -a` / `set +a` block automatically exports all variables assigned
-between them. The `grep` commands filter out comments and blank lines from
-the env file.
-
-A sample `.env.local` file is structured as simple `KEY=value` pairs::
-
+    DJANGO_SETTINGS_MODULE=lutrisweb.settings.local
     SECRET_KEY=changeme
     POSTGRES_DB=lutris
     POSTGRES_USER=lutris
@@ -50,19 +42,14 @@ A sample `.env.local` file is structured as simple `KEY=value` pairs::
     DISCORD_CLIENT_ID=your_discord_client_id
     DISCORD_CLIENT_SECRET=your_discord_client_secret
 
-Once your virtualenv is created, you can install the system and python
-dependencies::
+Export ``UV_ENV_FILE`` in your shell (or add it to a direnv ``.envrc``)
+so that every ``uv run`` command below automatically loads the env
+file::
 
-    # Ubuntu / Debian dependencies
-    sudo apt-get install build-essential git curl python3 python3-pip \
-        python3-dev imagemagick libxml2-dev libxslt1-dev libssl-dev \
-        libffi-dev libpq-dev libxml2-dev libjpeg-dev
+    export UV_ENV_FILE=.env.local
 
-    # Red Hat / Fedora dependencies
-    sudo dnf install libpq-devel python3-devel libxml2-devel libxslt-devel
-
-    # Python dependencies
-    pip3 install -r config/requirements/devel.pip --exists-action=w
+All subsequent examples assume this is set. If you'd rather be explicit,
+pass ``--env-file .env.local`` to each ``uv run`` invocation instead.
 
 To build the frontend assets (javascript and css files), you'll
 need Node and NPM available. If your distribution offers a version of
@@ -82,11 +69,11 @@ separate terminal::
 Once your PostgreSQL database is configured (explained in the paragraph below),
 run the database migrations to populate the database with tables::
 
-    ./manage.py migrate
+    uv run ./manage.py migrate
 
 You can create a new admin user with the command::
 
-    ./manage.py createsuperuser
+    uv run ./manage.py createsuperuser
 
 Alternatively, if you want a database that is already populated with games,
 there are snapshots on the Github releases page:
@@ -97,17 +84,17 @@ with the client, if you want to build the docs, you'll need to get the
 client and compile the rst files into HTML. All this process is
 automated::
 
-    make client
-    make docs
+    uv run make client
+    uv run make docs
 
 Once everything is set up correctly, you should be able to run the test
 suite without any failures::
 
-    make test
+    uv run make test
 
 Run the development server with::
 
-    make run
+    uv run make run
 
 Redis configuration
 ===================
@@ -201,17 +188,17 @@ PostgreSQL and run this script with cron::
 Devcontainers
 =============
 
-VSCode is recommended as a primary IDE for development. It provides an out of the box support for `devcontainers` - 
+VSCode is recommended as a primary IDE for development. It provides an out of the box support for `devcontainers` -
 a modern full-featured development environment.
 
 Prerequisite
 ------------
 
-Latest version of VSCode with [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) extension and 
+Latest version of VSCode with [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) extension and
 Docker installed on your system.
 
-After cloning the project choose the `Reopen in Container`` option from the VSCode menu. 
-The bootstrap process will run automatically during the initial execution, encompassing all the steps mentioned in this 
+After cloning the project choose the `Reopen in Container`` option from the VSCode menu.
+The bootstrap process will run automatically during the initial execution, encompassing all the steps mentioned in this
 tutorial.
 
 Reset devcontainers env
@@ -219,8 +206,8 @@ Reset devcontainers env
 
 - From the menu, opt for the `Reopen Folder Locally` choice.
 - Wait until all containers have been stopped, which may take up to 10 seconds.
-- Proceed to remove the SQL DB volume using the command: 
-    
+- Proceed to remove the SQL DB volume using the command:
+
     docker rm lutris-website_devcontainer_lutrisdb_1
     docker volume rm lutris-website_devcontainer_postgres_data
 
