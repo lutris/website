@@ -509,6 +509,8 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         }
 
         def get_category(category_name):
+            if not category_name:
+                return None
             if category_name not in stored_categories:
                 category = models.LibraryCategory.objects.create(
                     gamelibrary=library, name=category_name
@@ -566,7 +568,7 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                             changed = True
                         for category_name in client_game.get("categories", []):
                             category = get_category(category_name)
-                            if category not in game.categories.all():
+                            if category and category not in game.categories.all():
                                 game.categories.add(category)
                                 changed = True
 
@@ -608,7 +610,8 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
                 )
                 for category_name in client_game.get("categories", []):
                     category = get_category(category_name)
-                    library_game.categories.add(category)
+                    if category:
+                        library_game.categories.add(category)
                 stats["created"] += 1
                 LOGGER.info("Create new Library game %s", client_game)
         LOGGER.info(stats)
