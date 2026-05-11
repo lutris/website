@@ -482,13 +482,21 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         if not slug:
             return None
         try:
-            game = models.Game.objects.get(slug=slug, change_for=None)
+            return models.Game.objects.get(slug=slug, change_for=None)
         except models.Game.DoesNotExist:
-            try:
-                game = models.Game.objects.get(aliases__slug=slug)
-            except models.Game.DoesNotExist:
-                game = None
-        return game
+            pass
+        games = list(
+            models.Game.objects.filter(aliases__slug=slug, change_for=None)
+            .distinct()
+            .order_by("id")
+        )
+        if len(games) > 1:
+            LOGGER.warning(
+                "Alias slug '%s' matches multiple games: %s",
+                slug,
+                [g.id for g in games],
+            )
+        return games[0] if games else None
 
     def post(self, request, *args, **kwargs):
         client_library = defaultdict(list)
