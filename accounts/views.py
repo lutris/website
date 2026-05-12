@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
@@ -123,7 +123,7 @@ class LutrisSetPasswordView(LoginRequiredMixin, FormView):
     """
 
     template_name = "accounts/password_set.html"
-    form_class = SetPasswordForm
+    form_class = forms.SetUsernameAndPasswordForm
     success_url = reverse_lazy("profile")
 
     def dispatch(self, request, *args, **kwargs):
@@ -137,12 +137,12 @@ class LutrisSetPasswordView(LoginRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        form.save()
-        update_session_auth_hash(self.request, form.user)
+        user = form.save()
+        update_session_auth_hash(self.request, user)
         messages.success(
             self.request,
-            "Password set. You can now sign in to the Lutris desktop client "
-            "with your username and this password.",
+            f"Password set. Sign in to the Lutris desktop client with username "
+            f"'{user.username}' and your new password.",
         )
         return super().form_valid(form)
 
