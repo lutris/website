@@ -2,8 +2,11 @@
 
 # pylint: disable=no-member
 import logging
+import unicodedata
 
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordResetForm
 from django.db import IntegrityError
 from rest_framework.authtoken.models import Token
 
@@ -117,3 +120,28 @@ class ProfileDeleteForm(forms.Form):
         if not confirm_delete:
             raise forms.ValidationError("You must confirm to delete your account")
         return confirm_delete
+
+
+class LutrisPasswordResetForm(PasswordResetForm):
+    """Password reset that also serves users without a usable password.
+
+    Django's default form silently drops users with set_unusable_password(),
+    i.e. accounts created via social login (Discord, Google, Steam). Those
+    users would never receive a reset email and could not set a password,
+    blocking them from signing in to the desktop client.
+    """
+
+    def get_users(self, email):
+        user_model = get_user_model()
+        email_field = user_model.get_email_field_name()
+        active_users = user_model._default_manager.filter(
+            **{f"{email_field}__iexact": email, "is_active": True}
+        )
+        return (u for u in active_users if _email_ci_equal(email, getattr(u, email_field)))
+
+
+def _email_ci_equal(s1, s2):
+    """Case-insensitive Unicode-normalized email comparison (UTR 36)."""
+    return (
+        unicodedata.normalize("NFKC", s1).casefold() == unicodedata.normalize("NFKC", s2).casefold()
+    )

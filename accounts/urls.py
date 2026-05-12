@@ -7,6 +7,7 @@ urlpatterns = [
     re_path("^login/?$", views.LutrisLoginView.as_view(), name="login"),
     re_path("^logout/?$", views.LutrisLogoutView.as_view(), name="logout"),
     path("password/change", views.LutrisPasswordChangeView.as_view(), name="password_change"),
+    path("password/set", views.LutrisSetPasswordView.as_view(), name="password_set"),
     path(
         "password/change/done",
         views.LutrisPasswordChangeDoneView.as_view(),

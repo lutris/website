@@ -9,9 +9,9 @@ from datetime import datetime, timezone
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
@@ -31,6 +31,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic.edit import FormView
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -80,7 +81,7 @@ class LutrisPasswordResetView(PasswordResetView):
     """View to reset a user's password"""
 
     template_name = "accounts/password_reset.html"
-    form_class = PasswordResetForm
+    form_class = forms.LutrisPasswordResetForm
 
 
 class LutrisPasswordResetDoneView(PasswordResetDoneView):
@@ -109,6 +110,40 @@ class LutrisPasswordResetConfirmView(PasswordResetConfirmView):
 
     def form_valid(self, form):
         messages.success(self.request, "Your password has been updated.")
+        return super().form_valid(form)
+
+
+class LutrisSetPasswordView(LoginRequiredMixin, FormView):
+    """Let a logged-in social-auth user set their initial password.
+
+    Users created via Discord/Google/Steam have set_unusable_password() and
+    therefore can't sign in to the desktop client, which only supports
+    username + password auth. PasswordChangeView won't help because it
+    requires the old password.
+    """
+
+    template_name = "accounts/password_set.html"
+    form_class = SetPasswordForm
+    success_url = reverse_lazy("profile")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.has_usable_password():
+            return redirect("password_change")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        update_session_auth_hash(self.request, form.user)
+        messages.success(
+            self.request,
+            "Password set. You can now sign in to the Lutris desktop client "
+            "with your username and this password.",
+        )
         return super().form_valid(form)
 
 

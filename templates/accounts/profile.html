@@ -34,6 +34,15 @@
       <a href="{% url 'clear_auth_token' %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your existing token? You will have to log in again in Lutris.')">Clear token</a>
     </p>
   </section>
+  {% if not user.has_usable_password %}
+    <section>
+      <h4>Set a password</h4>
+      <p>
+        Your account was created via social login and doesn't have a password yet. The Lutris desktop client signs in with username and password, so you need to set one before you can use it.
+      </p>
+      <a href="{% url 'password_set' %}" class="btn">Set a password</a>
+    </section>
+  {% endif %}
   <section>
     <h4>Steam sync</h4>
     <p>You can automatically import the list of your Steam games and add them to your Lutris library.</p>
