@@ -68,8 +68,10 @@ class Command(BaseCommand):
         self.stdout.write(f"Eligible users to notify: {total}")
         if dry_run:
             for user in users:
+                joined = user.date_joined.date().isoformat() if user.date_joined else "?"
                 self.stdout.write(
-                    f"  would notify id={user.id} username={user.username} email={user.email}"
+                    f"  would notify id={user.id} joined={joined} "
+                    f"username={user.username} email={user.email}"
                 )
             return
 
