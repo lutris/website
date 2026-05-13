@@ -3,7 +3,11 @@
 import logging
 
 from allauth.account.adapter import DefaultAccountAdapter
+from allauth.core.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from django.contrib.sites.shortcuts import get_current_site
+from django.db import IntegrityError
+from django.shortcuts import render
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +81,37 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def save_user(self, request, sociallogin, form=None):
         """After saving social user, set the steamid field if Steam."""
-        user = super().save_user(request, sociallogin, form)
+        try:
+            user = super().save_user(request, sociallogin, form)
+        except IntegrityError:
+            # Allauth's form-level username uniqueness check can be raced past
+            # by a concurrent signup or a double-submitted form, leaving the
+            # unique-constraint violation as the only safety net. Re-render the
+            # signup form with a friendly error instead of returning a 500.
+            from accounts.models import User
+
+            username = sociallogin.user.username
+            if (
+                form is None
+                or not username
+                or not User.objects.filter(username__iexact=username).exists()
+            ):
+                raise
+            form.add_error(
+                "username",
+                "A user with that username already exists. Please choose another.",
+            )
+            raise ImmediateHttpResponse(
+                render(
+                    request,
+                    "socialaccount/signup.html",
+                    {
+                        "form": form,
+                        "account": sociallogin.account,
+                        "site": get_current_site(request),
+                    },
+                )
+            )
         if sociallogin.account.provider == "steam":
             user.steamid = sociallogin.account.uid
             user.save(update_fields=["steamid"])

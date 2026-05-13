@@ -435,7 +435,10 @@ LOGGING = {
         "django.request": {
             "handlers": LOGGING_HANDLERS,
             "level": "WARNING",
-            "propagate": True,
+            # Don't propagate to the parent ``django`` logger, which shares the
+            # ``mail_admins`` handler — otherwise every server error fires the
+            # admin email twice.
+            "propagate": False,
         },
         "lutrisweb": DEFAULT_LOGGING_CONFIG,
         "accounts": DEFAULT_LOGGING_CONFIG,
