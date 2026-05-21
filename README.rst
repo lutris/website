@@ -35,9 +35,9 @@ Copy the sample below and fill in real values::
     POSTGRES_USER=lutris
     POSTGRES_PASSWORD=admin
     POSTGRES_HOST=localhost
-    POSTGRES_PORT=5434
+    POSTGRES_PORT=5432
     REDIS_HOST=localhost
-    REDIS_PORT=6378
+    REDIS_PORT=6379
     STEAM_API_KEY=your_steam_api_key
     DISCORD_CLIENT_ID=your_discord_client_id
     DISCORD_CLIENT_SECRET=your_discord_client_secret
@@ -119,49 +119,11 @@ following command::
         --restart unless-stopped \
         --shm-size 4gb \
         -e POSTGRES_PASSWORD=admin \
-        -e POSGRES_DB=lutris \
+        -e POSTGRES_DB=lutris \
         -e POSTGRES_USER=lutris \
         -p 5432:5432 \
         -v lutrisdb_backups:/backups \
-        postgres:12
-
-Quickstart::
-
-    sudo -u postgres psql
-    create user lutris;
-    create database lutris with owner lutris;
-    alter user lutris createdb;
-    alter database lutris owner to lutris;
-    alter user lutris with password 'admin';
-
-Create a user::
-
-    sudo -u postgres create user lutris
-
-Note that the user will need to be able to create databases in order to
-run tests. If you have created an user without this permission, run::
-
-    sudo -u postgres psql
-    ALTER USER lutris CREATEDB;
-
-Creating a database::
-
-    sudo -u postgres psql
-    create database lutris with owner lutris;
-
-or (in shell)::
-
-    createdb lutris -O lutris
-
-Modify database's owner::
-
-    sudo -u postgres psql
-    alter database lutris owner to lutris;
-
-Change user's password::
-
-    sudo -u postgres psql
-    alter user lutris with password 'admin';
+        postgres:18
 
 Dropping all tables from the database::
 
