@@ -269,12 +269,9 @@ def game_detail(request, slug):
     if game.flags.kernel_ac.is_set:
         no_ac_recommendations = models.Game.objects.filter(
             slug__in=[
-                "warframe",
-                "dota-2",
-                "counter-strike-2",
                 "farlight-84",
-                "overwatch-2",
                 "apex-legends",
+                "league-of-legends",
             ]
         )
     else:
