@@ -64,15 +64,14 @@ localredis:
 
 syncdb:
 	# Syncs the production database to the local db
-	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.tar.gz latest.tar.gz
-	gunzip latest.tar.gz
-	docker cp latest.tar lutrisdb:/backups
-	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
-	rm latest.tar
+	scp anaheim:/home/strider/volumes/lutris-sqldumps/latest.pgdump latest.pgdump
+	docker cp latest.pgdump lutrisdb:/backups
+	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.pgdump
+	rm latest.pgdump
 
 quicksync:
-	docker cp latest.tar lutrisdb:/backups
-	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.tar
+	docker cp latest.pgdump lutrisdb:/backups
+	docker exec lutrisdb pg_restore -U lutris --clean --dbname=lutris /backups/latest.pgdump
 
 dbshell:
 	docker exec -it lutrisdb psql -U lutris lutris
