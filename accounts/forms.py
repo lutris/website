@@ -187,3 +187,42 @@ class SetUsernameAndPasswordForm(SetPasswordForm):
             if commit:
                 user.save()
         return user
+
+
+class UsernameChangeForm(forms.Form):
+    """Form to let an existing user change their username."""
+
+    username = forms.RegexField(
+        label="New username",
+        max_length=30,
+        regex=r"^[\w.@+-]+$",
+        help_text="30 characters max. Letters, digits and @/./+/-/_ only.",
+        error_messages={
+            "invalid": "This value may contain only letters, numbers and @/./+/-/_ characters."
+        },
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        self.fields["username"].initial = user.username
+
+    def clean_username(self):
+        """Reject duplicate usernames (case-insensitive), allow keeping current name."""
+        username = self.cleaned_data["username"]
+        if username == self.user.username:
+            return username
+        if User.objects.filter(username__iexact=username).exclude(pk=self.user.pk).exists():
+            raise forms.ValidationError("A user with that username already exists.")
+        return username
+
+    def save(self, commit=True):
+        """Persist the new username and record the timestamp."""
+        from django.utils import timezone
+
+        self.user.username = self.cleaned_data["username"]
+        self.user.username_changed_at = timezone.now()
+        if commit:
+            self.user.save(update_fields=["username", "username_changed_at"])
+        return self.user
+

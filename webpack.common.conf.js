@@ -82,11 +82,13 @@ module.exports = {
           to: "./img/"
         },
         {
-          from: path.resolve(__dirname, "node_modules/croppie/*.js"),
+          from: path.resolve(__dirname, "node_modules/croppie"),
+          filter: (resourcePath) => path.extname(resourcePath) === ".js",
           to: "./js/[name][ext]"
         },
         {
-          from: path.resolve(__dirname, "node_modules/croppie/*.css"),
+          from: path.resolve(__dirname, "node_modules/croppie"),
+          filter: (resourcePath) => path.extname(resourcePath) === ".css",
           to: "./css/[name][ext]"
         },
       ],

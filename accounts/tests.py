@@ -67,3 +67,70 @@ class TestSSO(TestCase):
         self.assertIn("/session/sso_login", url)
         self.assertIn("sso=", url)
         self.assertIn("sig=", url)
+
+
+class TestUsernameChange(TestCase):
+    def setUp(self):
+        self.username = "originaluser"
+        self.password = "s3cur3pass"
+        self.user = create_user(username=self.username, password=self.password)
+        self.change_url = reverse("username_change")
+        self.client.login(username=self.username, password=self.password)
+
+    def test_get_renders_form(self):
+        response = self.client.get(self.change_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "form_username_change")
+
+    def test_valid_rename_succeeds(self):
+        response = self.client.post(self.change_url, {"username": "newusername"}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, "newusername")
+        self.assertIsNotNone(self.user.username_changed_at)
+
+    def test_duplicate_username_rejected(self):
+        create_user(username="takenname", password="password")
+        response = self.client.post(self.change_url, {"username": "takenname"})
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, "form", "username", "A user with that username already exists.")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, self.username)
+
+    def test_same_username_accepted(self):
+        response = self.client.post(self.change_url, {"username": self.username}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, self.username)
+
+    def test_cooldown_blocks_second_change(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        # Simulate a recent username change (5 days ago)
+        self.user.username_changed_at = timezone.now() - timedelta(days=5)
+        self.user.save(update_fields=["username_changed_at"])
+
+        response = self.client.post(self.change_url, {"username": "anotherusername"}, follow=True)
+        # Should redirect back to profile_edit with an error
+        self.assertRedirects(response, reverse("profile_edit"))
+        messages_list = list(response.context["messages"])
+        self.assertTrue(any("30 days" in str(m) for m in messages_list))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, self.username)
+
+    def test_cooldown_expired_allows_change(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        # Simulate a username change 31 days ago (cooldown elapsed)
+        self.user.username_changed_at = timezone.now() - timedelta(days=31)
+        self.user.save(update_fields=["username_changed_at"])
+
+        response = self.client.post(self.change_url, {"username": "freshusername"}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, "freshusername")
+

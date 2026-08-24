@@ -30,6 +30,7 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
     email_confirmed = models.BooleanField(default=False)
     show_adult_content = models.BooleanField(default=False)
     password_setup_notified_at = models.DateTimeField(null=True, blank=True)
+    username_changed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.username

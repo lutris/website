@@ -271,6 +271,53 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
+USERNAME_CHANGE_COOLDOWN_DAYS = 30
+
+
+class UsernameChangeView(LoginRequiredMixin, FormView):
+    """Allow a logged-in user to change their username, at most once every 30 days."""
+
+    template_name = "accounts/username_change.html"
+    form_class = forms.UsernameChangeForm
+    success_url = reverse_lazy("profile")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            changed_at = request.user.username_changed_at
+            if changed_at is not None:
+                from datetime import timedelta
+
+                from django.utils import timezone
+
+                next_eligible = changed_at + timedelta(days=USERNAME_CHANGE_COOLDOWN_DAYS)
+                if timezone.now() < next_eligible:
+                    messages.error(
+                        request,
+                        f"You can only change your username once every {USERNAME_CHANGE_COOLDOWN_DAYS} days. "
+                        f"You can change it again on {next_eligible.strftime('%B %d, %Y')}.",
+                    )
+                    return redirect(reverse("profile_edit"))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile_page"] = "edit"
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        messages.success(
+            self.request,
+            f"Your username has been changed to '{user.username}'.",
+        )
+        return redirect(reverse("user_account", kwargs={"username": user.username}))
+
+
 @login_required
 def profile_delete(request, username):
     """Deactivate a user account"""
