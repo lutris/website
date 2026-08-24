@@ -1,0 +1,26 @@
+{% extends 'accounts/profile_base.html' %}
+
+{% block title %}
+  Change username - Lutris
+{% endblock %}
+
+{% block profile_content %}
+  <div class="form-view">
+    <h1>Change username</h1>
+
+    <div class="alert alert-warning" role="alert">
+      <strong>Please note:</strong> Changing your username will update your profile URL.
+      Any links or bookmarks pointing to your old profile page will no longer work.
+      You can only change your username once every 30 days.
+    </div>
+
+    <form action="{% url 'username_change' %}" method="post" class="form-inline" id="form_username_change">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div>
+        <input type="submit" value="Save username" class="btn btn-primary" id="btn_save_username" />
+        <a href="{% url 'profile_edit' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -39,6 +39,7 @@ urlpatterns = [
     path("confirm", views.user_email_confirm, name="user_email_confirm"),
     path("discourse-sso", views.discourse_sso, name="discourse_sso"),
     path("edit", views.ProfileUpdateView.as_view(), name="profile_edit"),
+    path("username/change", views.UsernameChangeView.as_view(), name="username_change"),
     path("<username>/delete", views.profile_delete, name="profile_delete"),
     path("<username>", views.user_account, name="user_account"),
 ]

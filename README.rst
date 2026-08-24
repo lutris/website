@@ -18,6 +18,11 @@ from ``pyproject.toml``, including the ``dev`` dependency group
 (ruff, pylint, coverage, ipdb, debug toolbar). System-level build
 dependencies are still required to compile psycopg2, Pillow, and lxml::
 
+On Windows, use the project-pinned Python version explicitly if uv selects a
+newer interpreter by default::
+
+    uv sync --python 3.12
+
     # Ubuntu / Debian
     sudo apt-get install build-essential git curl \
         imagemagick libxml2-dev libxslt1-dev libssl-dev \
