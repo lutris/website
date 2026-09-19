@@ -61,6 +61,38 @@ class TestApiAuth(TestCase):
         self.assertIn("token", response_data)
 
 
+class TestLibrarySync(TestCase):
+    def setUp(self):
+        self.user = create_user(username="syncuser", password="password")
+        self.client.force_login(self.user)
+        self.url = reverse("api_user_library")
+
+    def post_library(self, payload):
+        return self.client.post(self.url, json.dumps(payload), content_type="application/json")
+
+    def test_sync_accepts_list_of_games(self):
+        game = {
+            "name": "Quake",
+            "slug": "quake",
+            "runner": "linux",
+            "platform": "Linux",
+            "service": "",
+            "service_id": "",
+            "lastplayed": 0,
+            "playtime": 0,
+        }
+        response = self.post_library([game])
+        self.assertEqual(response.status_code, 200)
+
+    def test_sync_rejects_object_payload(self):
+        response = self.post_library({"slug": "quake"})
+        self.assertEqual(response.status_code, 400)
+
+    def test_sync_rejects_list_of_strings(self):
+        response = self.post_library(["quake"])
+        self.assertEqual(response.status_code, 400)
+
+
 class TestSSO(TestCase):
     def test_redirect_url(self):
         url = sso.redirect_url("nonce", "secret", "user@domain.com", "external_id", "username")

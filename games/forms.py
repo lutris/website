@@ -84,6 +84,10 @@ class GameForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data["name"]
         slug = slugify(name)
+        if not slug:
+            raise forms.ValidationError(
+                "This name can't be used to generate a URL, please use the English or romanized title."
+            )
         if name.endswith(" game"):
             raise forms.ValidationError("Illegal name, do not submit this game.")
         if "geometry dash" in name.lower():

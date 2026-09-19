@@ -2,6 +2,7 @@
 import os
 
 from django.conf import settings
+from django.http import Http404
 from django.utils import timezone
 from rest_framework import filters, generics, status, views
 from rest_framework.exceptions import APIException
@@ -161,11 +162,18 @@ class RuntimeDetailView(generics.RetrieveAPIView):
     lookup_field = "name"
     permission_classes = (IsAdminOrReadOnly,)
 
+    def get_object(self):
+        """Several runtimes can share a name (e.g. DXVK 1.x and 2.x), use the most recent one"""
+        runtime = self.get_queryset().filter(name=self.kwargs[self.lookup_field]).first()
+        if not runtime:
+            raise Http404
+        self.check_object_permissions(self.request, runtime)
+        return runtime
+
     def post(self, request, name):
         """POST creates a new component in the current runtime item"""
-        try:
-            runtime = Runtime.objects.get(name=name)
-        except Runtime.DoesNotExist:
+        runtime = Runtime.objects.filter(name=name).first()
+        if not runtime:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         url = request.data.get("url")

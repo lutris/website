@@ -534,6 +534,11 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         return games[0] if games else None
 
     def post(self, request, *args, **kwargs):
+        if not isinstance(request.data, list) or not all(
+            isinstance(game, dict) and "slug" in game for game in request.data
+        ):
+            LOGGER.warning("Rejected malformed library sync from %s", request.user.username)
+            return HttpResponseBadRequest("Expected a list of games")
         client_library = defaultdict(list)
         library = models.GameLibrary.objects.get(user=request.user)
         for game in request.data:

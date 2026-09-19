@@ -49,3 +49,18 @@ class TestApi(TestCase):
         self.assertEqual(response.status_code, 201)
         response_data = json.loads(response.content.decode())
         self.assertIn("lutris-runner.dummy", response_data["versions"][0]["url"])
+
+
+class TestRuntimeApi(TestCase):
+    def setUp(self):
+        models.Runtime.objects.create(name="dxvk", version="v1.10.3")
+        self.latest_dxvk = models.Runtime.objects.create(name="dxvk", version="v2.7")
+
+    def test_runtime_detail_with_duplicate_names_returns_latest(self):
+        response = self.client.get(reverse("runtime_detail", kwargs={"name": "dxvk"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["id"], self.latest_dxvk.id)
+
+    def test_unknown_runtime_detail_returns_404(self):
+        response = self.client.get(reverse("runtime_detail", kwargs={"name": "nope"}))
+        self.assertEqual(response.status_code, 404)
