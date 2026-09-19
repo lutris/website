@@ -84,6 +84,17 @@ class TestGameForm(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
 
+    def test_rejects_names_without_slug(self):
+        form = forms.GameForm(
+            {
+                "name": "\u2605\u2605\u2605",
+                "platforms": [self.platform.id],
+                "genres": [self.genre.id],
+            }
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("name", form.errors)
+
 
 class TestGameEditForm(TestCase):
     """Test suite for the form to suggest game changes"""
