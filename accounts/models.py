@@ -81,12 +81,16 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         from allauth.socialaccount.models import SocialAccount
 
         SocialAccount.objects.filter(user=self).delete()
+        from allauth.account.models import EmailAddress
+
+        EmailAddress.objects.filter(user=self).delete()
         self.username = hmac.new(uuid.uuid4().bytes, digestmod=hashlib.md5).hexdigest()
         self.set_password(hmac.new(uuid.uuid4().bytes, digestmod=hashlib.sha1).hexdigest())
         self.is_active = False
         self.is_staff = False
         self.email_confirmed = False
         self.email = ""
+        self.website = ""
         self.avatar = ""
         self.steamid = ""
         self.key = ""

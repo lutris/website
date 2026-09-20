@@ -87,5 +87,7 @@ class KeyValueStore(models.Model):
 def save_action_log(key, value):
     """Save the results of a task as a KeyValueStore object"""
     log_object = KeyValueStore.objects.create(key=key)
-    log_object.value = str(value)
+    # Values carry user-controlled text, and repr() escaping can multiply its
+    # length; the column is bounded and some callers log inside a transaction.
+    log_object.value = str(value)[: KeyValueStore._meta.get_field("value").max_length]
     log_object.save()

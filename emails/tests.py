@@ -1,10 +1,12 @@
 """Email test suite"""
 
 # pylint: disable=C0103
-from django.test import TestCase
+from django.core import mail
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from common.util import create_admin, create_user
+from emails.messages import send_email
 
 
 class TestEmailRendering(TestCase):
@@ -32,3 +34,22 @@ class TestEmailRendering(TestCase):
         self.client.login(username="user", password="password")
         response = self.client.get(reverse("email_sender_test"))
         self.assertEqual(response.status_code, 403)
+
+
+@override_settings(SEND_EMAILS=True)
+class TestSendEmailRecipients(TestCase):
+    def test_blank_recipients_are_dropped(self):
+        """A deactivated account has no address.
+
+        Django raises ValueError("Invalid address") from inside the SMTP
+        backend, past fail_silently, so an empty recipient must never get that
+        far: it 500s the moderator after the action has already been committed.
+        """
+        self.assertEqual(send_email("account_banned", {"username": "x"}, "subject", ""), 0)
+        self.assertEqual(send_email("account_banned", {"username": "x"}, "subject", [""]), 0)
+        self.assertEqual(mail.outbox, [])
+
+    def test_real_recipients_still_get_mail(self):
+        send_email("account_banned", {"username": "x"}, "subject", "someone@example.net")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["someone@example.net"])

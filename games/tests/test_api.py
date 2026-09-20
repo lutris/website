@@ -12,7 +12,7 @@ from django.urls import reverse
 from accounts.models import BannedAccount, User
 from common.models import KeyValueStore
 from games import antispam, models
-from games.models import GameLibrary
+from games.models import GameLibrary, SpamDomain
 from providers.models import Provider, ProviderGame
 
 from . import factories
@@ -748,3 +748,107 @@ class TestBanFailureHandling(TestCase):
         # Django mails the admins about the 500; the account must hear nothing
         to_account = [m for m in mail.outbox if m.to == ["spam@example.org"]]
         self.assertEqual(to_account, [])
+
+
+@override_settings(SEND_EMAILS=True)
+class TestBanningTheSameSpammerTwice(TestCase):
+    """A spammer usually submits more than one game"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="repeat-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.spammer = factories.UserFactory(username="repeat-spammer", email="spam@example.com")
+        self.submissions = []
+        for index in range(2):
+            game = factories.GameFactory(
+                name="Spam Title %s" % index,
+                website="https://spam-%s.example" % index,
+                is_public=False,
+            )
+            self.submissions.append(
+                models.GameSubmission.objects.create(user=self.spammer, game=game)
+            )
+
+    def ban(self, submission):
+        return self.client.post(
+            reverse("api_game_submission_accept", kwargs={"submission_id": submission.id}),
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+
+    def test_one_ban_clears_every_submission_from_that_account(self):
+        self.assertTrue(self.ban(self.submissions[0]).json()["banned"])
+        # Both submissions go, and both websites are remembered as spam
+        self.assertFalse(models.GameSubmission.objects.filter(user=self.spammer).exists())
+        self.assertTrue(models.SpamDomain.objects.filter(domain="spam-0.example").exists())
+        self.assertTrue(models.SpamDomain.objects.filter(domain="spam-1.example").exists())
+        # recorded and emailed exactly once
+        self.assertEqual(BannedAccount.objects.filter(user=self.spammer).count(), 1)
+
+    def test_banning_an_already_banned_account_adds_no_bookkeeping(self):
+        """Reachable for accounts deactivated by other means, e.g. clear_spammers."""
+        self.spammer.deactivate()
+        mail.outbox = []
+        response = self.ban(self.submissions[1])
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["banned"])
+        self.assertFalse(models.GameSubmission.objects.filter(pk=self.submissions[1].pk).exists())
+        self.assertEqual(BannedAccount.objects.filter(user=self.spammer).count(), 0)
+        self.assertEqual(mail.outbox, [])
+
+    def test_the_first_ban_is_recorded_normally(self):
+        self.ban(self.submissions[0])
+        record = BannedAccount.objects.get(user=self.spammer)
+        self.assertEqual(record.email, "spam@example.com")
+        self.assertEqual(record.username, "repeat-spammer")
+
+
+class TestSpamDomainLimits(TestCase):
+    def test_absurdly_long_hostnames_are_skipped(self):
+        """Longer than the column: storing it would abort the ban with DataError."""
+        self.assertIsNone(SpamDomain.record("http://" + "a" * 300 + ".com/x"))
+        self.assertFalse(SpamDomain.objects.exists())
+
+    def test_normal_hostnames_are_still_recorded(self):
+        self.assertIsNotNone(SpamDomain.record("http://spam-example.com/x"))
+        self.assertTrue(SpamDomain.objects.filter(domain="spam-example.com").exists())
+
+
+@override_settings(SEND_EMAILS=True)
+class TestBannedAccountsLeaveTheQueue(TestCase):
+    """A banned account must not leave work in the moderation queue.
+
+    Accepting a leftover submission published the game and then raised
+    ValueError from the mail backend, because deactivate() blanks the address.
+    """
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="queue-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.spammer = factories.UserFactory(username="queue-spammer", email="spam@example.net")
+        self.first, self.second = [
+            models.GameSubmission.objects.create(
+                user=self.spammer,
+                game=factories.GameFactory(name="Spam %s" % index, is_public=False),
+            )
+            for index in range(2)
+        ]
+
+    def ban(self, submission):
+        return self.client.post(
+            reverse("api_game_submission_accept", kwargs={"submission_id": submission.id}),
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+
+    def test_banning_clears_the_rest_of_that_account_queue(self):
+        self.ban(self.first)
+        self.assertFalse(models.GameSubmission.objects.filter(user=self.spammer).exists())
+        self.assertFalse(models.Game.objects.filter(pk=self.second.game.pk).exists())
+
+    def test_the_queue_hides_submissions_from_banned_accounts(self):
+        self.spammer.deactivate()
+        response = self.client.get(reverse("api_game_submissions"))
+        listed = [row["id"] for row in response.json()["results"]]
+        self.assertNotIn(self.first.id, listed)
+        self.assertNotIn(self.second.id, listed)

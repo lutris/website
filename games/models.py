@@ -1311,6 +1311,10 @@ class SpamDomain(models.Model):
         domain = extract_domain(url)
         if not antispam.is_recordable_domain(domain):
             return None
+        if len(domain) > cls._meta.get_field("domain").max_length:
+            # Not a hostname anyone can register; storing it would raise DataError
+            # and take the whole ban down with it.
+            return None
         spam_domain, _created = cls.objects.get_or_create(domain=domain)
         spam_domain.submission_count = models.F("submission_count") + 1
         spam_domain.save(update_fields=["submission_count", "last_seen"])

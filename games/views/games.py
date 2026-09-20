@@ -250,6 +250,9 @@ class GameSubmissionsView(generics.ListAPIView):
             models.GameSubmission.objects.filter(
                 accepted_at__isnull=True,
                 game__change_for__isnull=self.get_new_submissions,
+                # A banned account has no email left, so accepting its leftovers
+                # publishes the game and then fails on the notification.
+                user__is_active=True,
             )
             .prefetch_related("game", "user", "game__provider_games", "game__platforms")
             .annotate(library_game_count=Count("user__gamelibrary__games", distinct=True))
@@ -289,7 +292,7 @@ class GameSubmissionAcceptView(APIView):
             raise PermissionDenied
         game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
         submission_id = game_submission.id
-        if request.data["accepted"]:
+        if request.data.get("accepted"):
             game_submission.accept()
             return Response({"id": submission_id, "accepted": True, "banned": False})
 
@@ -304,38 +307,68 @@ class GameSubmissionAcceptView(APIView):
             banned_username = submitter.username
             banned_email = submitter.email
             game_name = game.name
+            # A spammer usually submits several games, so a later ban lands on an
+            # account that has already been scrubbed: blank email, hashed
+            # username. Recording that again would add a useless ban row and mail
+            # an empty address.
+            already_banned = not submitter.is_active
             # All of it or none of it: a failure part way through used to leave
             # the submission deleted and the account still active, with no way
             # back to it from the moderation queue.
             with transaction.atomic():
-                BannedAccount.objects.create(
-                    email=banned_email,
-                    username=banned_username,
-                    ip_address=game_submission.ip_address or submitter.signup_ip,
-                    user=submitter,
-                    banned_by=request.user,
-                    reason="Spam game submission: %s" % game_name,
-                )
-                save_action_log(
-                    "banned_submitter",
-                    {
-                        "username": banned_username,
-                        "email": banned_email,
-                        "user_id": submitter.id,
-                        "game": game_name,
-                        "submission_id": submission_id,
-                        "banned_by": request.user.username,
-                    },
-                )
+                if already_banned:
+                    LOGGER.info(
+                        "Submission %s removed from already banned account %s",
+                        submission_id,
+                        submitter.id,
+                    )
+                else:
+                    # deactivate() scrubs the username and email, so keep them for
+                    # the ban record and the email sent once the ban has committed.
+                    BannedAccount.objects.create(
+                        email=banned_email,
+                        username=banned_username,
+                        ip_address=game_submission.ip_address or submitter.signup_ip,
+                        user=submitter,
+                        banned_by=request.user,
+                        reason="Spam game submission: %s" % game_name,
+                    )
+                    save_action_log(
+                        "banned_submitter",
+                        {
+                            "username": banned_username,
+                            "email": banned_email,
+                            "user_id": submitter.id,
+                            "game": game_name,
+                            "submission_id": submission_id,
+                            "banned_by": request.user.username,
+                        },
+                    )
                 # Confirmed spam, so the sites it pushed are worth remembering.
                 for url in (game.website, submitter.website):
                     models.SpamDomain.record(url)
                 game_submission.delete()
                 if not game.is_public:
                     game.delete()
-                submitter.deactivate()
+                # Everything else this account has queued is spam by the same
+                # decision, and leaving it in the queue invites a moderator to
+                # accept a spam game from an account that can no longer be told.
+                for pending in models.GameSubmission.objects.filter(
+                    user=submitter, accepted_at__isnull=True
+                ).select_related("game"):
+                    pending_game = pending.game
+                    models.SpamDomain.record(pending_game.website)
+                    pending.delete()
+                    if not pending_game.is_public:
+                        pending_game.delete()
+                if not already_banned:
+                    submitter.deactivate()
             cache.delete(antispam.SPAM_DOMAINS_CACHE_KEY)
-            if getattr(settings, "ANTISPAM_BAN_EMAIL", True):
+            if (
+                not already_banned
+                and banned_email
+                and getattr(settings, "ANTISPAM_BAN_EMAIL", True)
+            ):
                 # Only once the ban is committed: nobody should be told their
                 # account was closed when it wasn't.
                 try:

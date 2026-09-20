@@ -47,6 +47,11 @@ def send_email(template, context, subject, recipients, sender=None):
     sender = sender or settings.DEFAULT_FROM_EMAIL
     if isinstance(recipients, string_types):
         recipients = [recipients]
+    # A deactivated account has no address, and Django raises ValueError from
+    # inside the SMTP backend rather than failing quietly on an empty one.
+    recipients = [recipient for recipient in recipients if recipient]
+    if not recipients:
+        return 0
     subject = f"{settings.EMAIL_SUBJECT_PREFIX} {subject}"
     text_part = render_to_string(f"emails/{template}.txt", context)
     msg = EmailMultiAlternatives(subject=subject, body=text_part, to=recipients, from_email=sender)

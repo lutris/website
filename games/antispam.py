@@ -61,7 +61,13 @@ def is_recordable_domain(domain):
     if is_shared_host is None:
         LOGGER.warning("Cannot record spam domain %s: lutris-antispam is missing", domain)
         return False
-    return not is_shared_host(domain)
+    try:
+        return not is_shared_host(domain)
+    except Exception:  # pylint: disable=broad-except
+        # Recording runs inside the ban transaction: a broken rules package must
+        # not make submitters unbannable.
+        LOGGER.exception("Cannot classify domain %s", domain)
+        return False
 
 
 def get_submission_payload(submission, library_game_count=None):
