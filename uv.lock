@@ -843,7 +843,7 @@ wheels = [
 [[package]]
 name = "lutris-antispam"
 version = "0.2.0"
-source = { git = "https://github.com/lutris/lutris-antispam.git?rev=main#1c6a49b89bcf1bc1056c29d253654c16ce8ec36d" }
+source = { git = "https://github.com/lutris/lutris-antispam.git?rev=main#39463d3206fa35f1ee11ec1b4ad54ef5cd742431" }
 
 [[package]]
 name = "lutrisweb"
