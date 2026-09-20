@@ -11,6 +11,9 @@ moderators through the dashboard; deleting or banning stays a human decision.
 import logging
 
 from django.conf import settings
+from django.core.cache import cache
+
+from common.util import extract_domain
 
 try:
     from lutris_antispam import assess
@@ -18,6 +21,24 @@ except ImportError:  # pragma: no cover - depends on the deployment
     assess = None
 
 LOGGER = logging.getLogger(__name__)
+
+SPAM_DOMAINS_CACHE_KEY = "antispam:spam_domains"
+SPAM_DOMAINS_CACHE_SECONDS = 300
+
+
+def get_spam_domains():
+    """Domains recorded from submissions a moderator banned.
+
+    Cached briefly: it is read once per submission when a whole moderation page
+    is scored, and the list only changes when someone presses the ban button.
+    """
+    domains = cache.get(SPAM_DOMAINS_CACHE_KEY)
+    if domains is None:
+        from games.models import SpamDomain
+
+        domains = SpamDomain.known_domains()
+        cache.set(SPAM_DOMAINS_CACHE_KEY, domains, SPAM_DOMAINS_CACHE_SECONDS)
+    return domains
 
 
 def is_available():
@@ -44,6 +65,7 @@ def get_submission_payload(submission, library_game_count=None):
         "account_age_days": account_age_days,
         "library_game_count": library_game_count,
         "platforms": tuple(platform.name for platform in game.platforms.all()),
+        "website_seen_in_spam": extract_domain(game.website) in get_spam_domains(),
     }
 
 

@@ -342,12 +342,26 @@ class GameSerializer(serializers.ModelSerializer):
         )
 
 
+class SubmittedGameSerializer(GameSerializer):
+    """Game as shown in the moderation queue.
+
+    Adds the fields a moderator needs to judge a submission (the website is what
+    link spam is usually after) without widening the game API the client uses.
+    """
+
+    class Meta(GameSerializer.Meta):
+        """Model and field definitions"""
+
+        fields = GameSerializer.Meta.fields + ("website", "description")
+
+
 class GameSubmissionSerializer(serializers.ModelSerializer):
     """Serializer for game submissions"""
 
-    game = GameSerializer()
+    game = SubmittedGameSerializer()
     user = UserSerializer()
     spam_assessment = serializers.SerializerMethodField()
+    library_game_count = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
@@ -360,8 +374,14 @@ class GameSubmissionSerializer(serializers.ModelSerializer):
             "created_at",
             "accepted_at",
             "reason",
+            "ip_address",
             "spam_assessment",
+            "library_game_count",
         )
+
+    def get_library_game_count(self, submission):
+        """How many games the submitter has in their library, None if not annotated"""
+        return getattr(submission, "library_game_count", None)
 
     def get_spam_assessment(self, submission):
         """Advisory spam score shown to moderators, None when unavailable"""

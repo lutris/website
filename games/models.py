@@ -23,7 +23,7 @@ from django.urls import reverse
 from sorl.thumbnail import get_thumbnail
 
 from common.cloudflare import purge_urls
-from common.util import dump_yaml, get_auto_increment_slug, load_yaml, slugify
+from common.util import dump_yaml, extract_domain, get_auto_increment_slug, load_yaml, slugify
 from emails import messages
 from emails.messages import notify_rejected_installer
 from games.util import gog, steam
@@ -1281,6 +1281,87 @@ class StoreLibrary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
+# Hosts where anyone can publish a page. Banning one spammer who used itch.io
+# must not mark every itch.io game as spam, so these are never recorded.
+SHARED_HOSTING_DOMAINS = frozenset(
+    {
+        "itch.io",
+        "github.io",
+        "github.com",
+        "gitlab.com",
+        "gamejolt.com",
+        "blogspot.com",
+        "wordpress.com",
+        "wixsite.com",
+        "weebly.com",
+        "tumblr.com",
+        "sourceforge.net",
+        "steampowered.com",
+        "store.steampowered.com",
+        "facebook.com",
+        "youtube.com",
+        "discord.gg",
+        "google.com",
+        "sites.google.com",
+        "drive.google.com",
+        "archive.org",
+        "netlify.app",
+        "vercel.app",
+        "pages.dev",
+        "neocities.org",
+        "indiedb.com",
+        "moddb.com",
+    }
+)
+
+
+class SpamDomain(models.Model):
+    """A website seen on a submission a moderator banned.
+
+    Only domains from confirmed bans are recorded: the scoring rules read this
+    table back, so letting them record their own verdicts would make the engine
+    agree with itself.
+    """
+
+    domain = models.CharField(max_length=253, unique=True)
+    submission_count = models.PositiveIntegerField(default=0)
+    first_seen = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """Model configuration"""
+
+        ordering = ("-last_seen",)
+        verbose_name = "Spam domain"
+
+    def __str__(self):
+        return self.domain
+
+    @classmethod
+    def is_shared_host(cls, domain):
+        """Whether a domain is a host anyone can publish on"""
+        if domain in SHARED_HOSTING_DOMAINS:
+            return True
+        # Catches user.itch.io and the like, without matching notitch.io
+        return any(domain.endswith("." + host) for host in SHARED_HOSTING_DOMAINS)
+
+    @classmethod
+    def record(cls, url):
+        """Record a domain seen in confirmed spam, returns it or None"""
+        domain = extract_domain(url)
+        if not domain or cls.is_shared_host(domain):
+            return None
+        spam_domain, _created = cls.objects.get_or_create(domain=domain)
+        spam_domain.submission_count = models.F("submission_count") + 1
+        spam_domain.save(update_fields=["submission_count", "last_seen"])
+        return spam_domain
+
+    @classmethod
+    def known_domains(cls):
+        """Every domain recorded so far"""
+        return set(cls.objects.values_list("domain", flat=True))
+
+
 class GameSubmission(models.Model):
     """User submitted game"""
 
@@ -1291,6 +1372,7 @@ class GameSubmission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_at = models.DateTimeField(null=True)
     reason = models.TextField(blank=True, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
 
     class Meta:
         """Model configuration"""

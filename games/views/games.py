@@ -3,6 +3,7 @@
 # lint: disable=too-few-public-methods
 from __future__ import absolute_import
 
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
@@ -10,7 +11,8 @@ from rest_framework import filters, generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import User
+from accounts.models import BannedAccount, User
+from common.models import save_action_log
 from games import antispam, models, serializers
 from providers.models import Provider
 
@@ -270,17 +272,59 @@ class GameSubmissionAcceptView(APIView):
 
     @staticmethod
     def post(request, submission_id):
-        """Process the submission"""
+        """Process the submission
+
+        Rejecting with "ban" also deactivates the submitter and removes the
+        unpublished game they submitted. That is a moderator's decision: the
+        antispam score is only ever advice.
+        """
         if not request.user.is_staff:
             raise PermissionDenied
         game_submission = get_object_or_404(models.GameSubmission, pk=submission_id)
+        submission_id = game_submission.id
         if request.data["accepted"]:
             game_submission.accept()
-            accepted = True
+            return Response({"id": submission_id, "accepted": True, "banned": False})
+
+        banned = False
+        if request.data.get("ban"):
+            submitter = game_submission.user
+            if submitter.is_staff:
+                raise PermissionDenied("Staff accounts cannot be banned this way")
+            game = game_submission.game
+            # deactivate() scrubs the username and email, so record who this was
+            # while we still can.
+            BannedAccount.objects.create(
+                email=submitter.email,
+                username=submitter.username,
+                ip_address=game_submission.ip_address or submitter.signup_ip,
+                user=submitter,
+                banned_by=request.user,
+                reason="Spam game submission: %s" % game.name,
+            )
+            save_action_log(
+                "banned_submitter",
+                {
+                    "username": submitter.username,
+                    "email": submitter.email,
+                    "user_id": submitter.id,
+                    "game": game.name,
+                    "submission_id": submission_id,
+                    "banned_by": request.user.username,
+                },
+            )
+            # Confirmed spam, so the sites it pushed are worth remembering.
+            for url in (game.website, submitter.website):
+                models.SpamDomain.record(url)
+            cache.delete(antispam.SPAM_DOMAINS_CACHE_KEY)
+            game_submission.delete()
+            if not game.is_public:
+                game.delete()
+            submitter.deactivate()
+            banned = True
         else:
             game_submission.delete()
-            accepted = False
-        return Response({"id": game_submission.id, "accepted": accepted})
+        return Response({"id": submission_id, "accepted": False, "banned": banned})
 
 
 class GameMergeSuggestionsView(generics.ListAPIView):

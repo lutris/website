@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, patch
 from django.test import TestCase
 from django.urls import reverse
 
+from common.models import KeyValueStore
 from games import antispam, models
 from providers.models import Provider, ProviderGame
 
@@ -493,3 +494,141 @@ class TestGameSubmissionSpamAssessment(TestCase):
         with patch.object(antispam, "assess", None):
             (result,) = self.get_results()
         self.assertIsNone(result["spam_assessment"])
+
+
+class TestGameSubmissionBan(TestCase):
+    """Rejecting a submission can also ban the submitter"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="ban-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.spammer = factories.UserFactory(username="spammer", email="spam@grr.la")
+        self.game = factories.GameFactory(name="Slope Game Free", is_public=False)
+        self.submission = models.GameSubmission.objects.create(user=self.spammer, game=self.game)
+        self.url = reverse(
+            "api_game_submission_accept", kwargs={"submission_id": self.submission.id}
+        )
+
+    def test_reject_without_ban_leaves_the_user_alone(self):
+        response = self.client.post(
+            self.url, json.dumps({"accepted": False}), content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.json()["banned"])
+        self.spammer.refresh_from_db()
+        self.assertTrue(self.spammer.is_active)
+        self.assertEqual(self.spammer.username, "spammer")
+
+    def test_reject_and_ban_deactivates_the_submitter(self):
+        response = self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["banned"])
+        self.spammer.refresh_from_db()
+        self.assertFalse(self.spammer.is_active)
+        self.assertEqual(self.spammer.email, "")
+        self.assertNotEqual(self.spammer.username, "spammer")
+        self.assertFalse(models.GameSubmission.objects.filter(pk=self.submission.pk).exists())
+        self.assertFalse(models.Game.objects.filter(pk=self.game.pk).exists())
+
+    def test_ban_records_who_was_banned(self):
+        self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+        log = KeyValueStore.objects.filter(key="banned_submitter").last()
+        self.assertIsNotNone(log)
+        self.assertIn("spammer", log.value)
+        self.assertIn("spam@grr.la", log.value)
+        self.assertIn("ban-admin", log.value)
+
+    def test_ban_keeps_a_published_game(self):
+        self.game.is_public = True
+        self.game.save()
+        self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+        self.assertTrue(models.Game.objects.filter(pk=self.game.pk).exists())
+
+    def test_staff_cannot_be_banned(self):
+        self.spammer.is_staff = True
+        self.spammer.save()
+        response = self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.spammer.refresh_from_db()
+        self.assertTrue(self.spammer.is_active)
+        self.assertTrue(models.GameSubmission.objects.filter(pk=self.submission.pk).exists())
+
+    def test_non_staff_cannot_ban(self):
+        self.client.force_login(factories.UserFactory(username="regular"))
+        response = self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.spammer.refresh_from_db()
+        self.assertTrue(self.spammer.is_active)
+
+
+class TestSpamDomainRecording(TestCase):
+    """Banning a submitter banks the websites it was pushing"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="domain-admin", is_staff=True)
+        self.client.force_login(self.admin)
+
+    def ban_submission_for(self, website, profile_website=""):
+        spammer = factories.UserFactory(
+            username="spammer-%s" % models.SpamDomain.objects.count(),
+            website=profile_website,
+        )
+        game = factories.GameFactory(name="Spam Game", website=website, is_public=False)
+        submission = models.GameSubmission.objects.create(user=spammer, game=game)
+        url = reverse("api_game_submission_accept", kwargs={"submission_id": submission.id})
+        return self.client.post(
+            url, json.dumps({"accepted": False, "ban": True}), content_type="application/json"
+        )
+
+    def test_ban_records_the_submitted_website(self):
+        self.ban_submission_for("https://www.spam-example.com/page")
+        self.assertTrue(models.SpamDomain.objects.filter(domain="spam-example.com").exists())
+
+    def test_ban_records_the_profile_website(self):
+        self.ban_submission_for("", profile_website="https://promo-example.net")
+        self.assertTrue(models.SpamDomain.objects.filter(domain="promo-example.net").exists())
+
+    def test_repeat_domain_increments_the_count(self):
+        self.ban_submission_for("https://spam-example.com/one")
+        self.ban_submission_for("https://spam-example.com/two")
+        domain = models.SpamDomain.objects.get(domain="spam-example.com")
+        self.assertEqual(domain.submission_count, 2)
+
+    def test_shared_hosts_are_never_recorded(self):
+        self.ban_submission_for("https://spammer.itch.io/game")
+        self.ban_submission_for("https://github.com/spammer/repo")
+        self.assertFalse(models.SpamDomain.objects.exists())
+
+    @skipUnless(antispam.is_available(), "lutris-antispam is not installed")
+    def test_a_recorded_domain_is_scored_on_the_next_submission(self):
+        self.ban_submission_for("https://spam-example.com/one")
+        later = models.GameSubmission.objects.create(
+            user=factories.UserFactory(username="another"),
+            game=factories.GameFactory(
+                name="Innocent Looking Title", website="https://spam-example.com/two"
+            ),
+        )
+        assessment = antispam.assess_submission(later, library_game_count=0)
+        self.assertIn(
+            "history.known_spam_domain", [hit["rule"] for hit in assessment["matched_rules"]]
+        )

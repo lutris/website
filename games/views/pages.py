@@ -6,6 +6,7 @@ from __future__ import absolute_import
 import json
 import logging
 
+from axes.helpers import get_client_ip_address
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -474,7 +475,9 @@ def submit_game(request):
     if request.method == "POST" and form.is_valid():
         game = form.save()
         game.precache_media()
-        submission = GameSubmission(user=request.user, game=game)
+        submission = GameSubmission(
+            user=request.user, game=game, ip_address=get_client_ip_address(request)
+        )
         submission.save()
         notify_new_game(game, request.user)
         return redirect(reverse("game-submitted"))

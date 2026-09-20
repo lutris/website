@@ -7,6 +7,7 @@ import time
 from collections import defaultdict
 from datetime import datetime, timezone
 
+from axes.helpers import get_client_ip_address
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
@@ -58,6 +59,13 @@ class LutrisRegisterView(CreateView):
     form_class = forms.RegistrationForm
     template_name = "accounts/register.html"
     success_url = reverse_lazy("homepage")
+
+    def form_valid(self, form):
+        """Keep the signup address: it is what links sockpuppet accounts"""
+        response = super().form_valid(form)
+        self.object.signup_ip = get_client_ip_address(self.request)
+        self.object.save(update_fields=["signup_ip"])
+        return response
 
 
 class LutrisLoginView(LoginView):

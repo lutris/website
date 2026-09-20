@@ -23,6 +23,13 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
     """Handle social login integration for Steam, Discord, Google."""
 
     def is_open_for_signup(self, request, sociallogin):
+        """Open to everyone except addresses that were banned for spam"""
+        from accounts.models import BannedAccount
+
+        for email_address in sociallogin.email_addresses:
+            if BannedAccount.is_email_banned(email_address.email):
+                logger.info("Refused social signup for banned email")
+                return False
         return True
 
     def pre_social_login(self, request, sociallogin):

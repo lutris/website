@@ -5,6 +5,8 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
+from games import models
+
 from . import factories
 
 
@@ -125,3 +127,27 @@ class TestGameViews(TestCase):
         url = "/games?paginate_by=0"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+class TestGameSubmissionView(TestCase):
+    """Submitting a game records where it came from"""
+
+    def setUp(self):
+        self.user = factories.UserFactory(username="submitter", email_confirmed=True)
+        self.client.force_login(self.user)
+        self.platform = factories.PlatformFactory()
+        self.genre = factories.GenreFactory()
+
+    def test_submission_records_the_client_ip(self):
+        response = self.client.post(
+            reverse("game-submit"),
+            {
+                "name": "A Brand New Game",
+                "platforms": [self.platform.id],
+                "genres": [self.genre.id],
+            },
+            REMOTE_ADDR="198.51.100.23",
+        )
+        self.assertEqual(response.status_code, 302)
+        submission = models.GameSubmission.objects.get(user=self.user)
+        self.assertEqual(submission.ip_address, "198.51.100.23")
