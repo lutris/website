@@ -1281,40 +1281,6 @@ class StoreLibrary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
-# Hosts where anyone can publish a page. Banning one spammer who used itch.io
-# must not mark every itch.io game as spam, so these are never recorded.
-SHARED_HOSTING_DOMAINS = frozenset(
-    {
-        "itch.io",
-        "github.io",
-        "github.com",
-        "gitlab.com",
-        "gamejolt.com",
-        "blogspot.com",
-        "wordpress.com",
-        "wixsite.com",
-        "weebly.com",
-        "tumblr.com",
-        "sourceforge.net",
-        "steampowered.com",
-        "store.steampowered.com",
-        "facebook.com",
-        "youtube.com",
-        "discord.gg",
-        "google.com",
-        "sites.google.com",
-        "drive.google.com",
-        "archive.org",
-        "netlify.app",
-        "vercel.app",
-        "pages.dev",
-        "neocities.org",
-        "indiedb.com",
-        "moddb.com",
-    }
-)
-
-
 class SpamDomain(models.Model):
     """A website seen on a submission a moderator banned.
 
@@ -1338,18 +1304,12 @@ class SpamDomain(models.Model):
         return self.domain
 
     @classmethod
-    def is_shared_host(cls, domain):
-        """Whether a domain is a host anyone can publish on"""
-        if domain in SHARED_HOSTING_DOMAINS:
-            return True
-        # Catches user.itch.io and the like, without matching notitch.io
-        return any(domain.endswith("." + host) for host in SHARED_HOSTING_DOMAINS)
-
-    @classmethod
     def record(cls, url):
         """Record a domain seen in confirmed spam, returns it or None"""
+        from games import antispam
+
         domain = extract_domain(url)
-        if not domain or cls.is_shared_host(domain):
+        if not antispam.is_recordable_domain(domain):
             return None
         spam_domain, _created = cls.objects.get_or_create(domain=domain)
         spam_domain.submission_count = models.F("submission_count") + 1
