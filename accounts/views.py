@@ -62,9 +62,17 @@ class LutrisRegisterView(CreateView):
 
     def form_valid(self, form):
         """Keep the signup address: it is what links sockpuppet accounts"""
+        # Set before the insert rather than saving a second time: the form hands
+        # back an unsaved user when the username is taken, and forcing an update
+        # on it raises "Cannot force an update in save() with no primary key".
+        form.instance.signup_ip = get_client_ip_address(self.request)
         response = super().form_valid(form)
-        self.object.signup_ip = get_client_ip_address(self.request)
-        self.object.save(update_fields=["signup_ip"])
+        if self.object.pk is None:
+            # RegistrationForm.save() swallows the IntegrityError from a username
+            # taken between validation and insert. No account exists, so say so
+            # instead of redirecting to the success page.
+            form.add_error("username", self.form_class.error_messages["duplicate_username"])
+            return self.form_invalid(form)
         return response
 
 

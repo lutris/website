@@ -1,9 +1,10 @@
 import json
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts import sso
+from accounts import forms, sso
 from accounts.models import BannedAccount, User
 from common.util import create_admin, create_user
 
@@ -29,6 +30,28 @@ class TestRegistration(TestCase):
         self.assertTrue(created_user)
         self.assertEqual(created_user.email, "testuser@lutris.net")
         self.assertTrue(created_user.gamelibrary)
+
+    def test_taken_username_does_not_crash_registration(self):
+        """A username taken between validation and insert must not 500.
+
+        RegistrationForm.save() swallows that IntegrityError and returns an
+        unsaved user; anything that then saves it raises "Cannot force an update
+        in save() with no primary key".
+        """
+        unsaved = User(username="racer", email="racer@example.net")
+        with patch.object(forms.RegistrationForm, "save", return_value=unsaved):
+            response = self.client.post(
+                reverse("register"),
+                {
+                    "username": "racer",
+                    "email": "racer@example.net",
+                    "password1": "testpassword",
+                    "password2": "testpassword",
+                },
+                REMOTE_ADDR="203.0.113.9",
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "already exists")
 
 
 class TestProfileView(TestCase):
