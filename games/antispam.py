@@ -1,8 +1,9 @@
 """Scoring of game submissions by the lutris-antispam rules.
 
-The rules themselves live in a separate package so they stay out of this public
-repository. That package is optional: when it isn't installed the API simply
-reports no assessment and moderation carries on unchanged.
+The rules live in their own package (https://github.com/lutris/lutris-antispam)
+so they can be tuned and tested without Django or a database. The import stays
+optional: if the package is missing the API reports no assessment and
+moderation carries on unchanged.
 
 Nothing here acts on a verdict. Scoring is advisory and only ever reaches
 moderators through the dashboard; deleting or banning stays a human decision.
@@ -16,9 +17,10 @@ from django.core.cache import cache
 from common.util import extract_domain
 
 try:
-    from lutris_antispam import assess
+    from lutris_antispam import assess, is_shared_host
 except ImportError:  # pragma: no cover - depends on the deployment
     assess = None
+    is_shared_host = None
 
 LOGGER = logging.getLogger(__name__)
 
@@ -44,6 +46,22 @@ def get_spam_domains():
 def is_available():
     """Whether submissions can be scored at all."""
     return assess is not None and getattr(settings, "ANTISPAM_ENABLED", True)
+
+
+def is_recordable_domain(domain):
+    """Whether a domain may be recorded as spam.
+
+    Hosts anyone can publish on are never recorded, so banning one spammer who
+    used itch.io cannot taint every game hosted there. Without the rules package
+    that call can't be made, and recording blindly would poison the table, so
+    nothing is recorded.
+    """
+    if not domain:
+        return False
+    if is_shared_host is None:
+        LOGGER.warning("Cannot record spam domain %s: lutris-antispam is missing", domain)
+        return False
+    return not is_shared_host(domain)
 
 
 def get_submission_payload(submission, library_game_count=None):

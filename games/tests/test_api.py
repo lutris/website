@@ -619,6 +619,13 @@ class TestSpamDomainRecording(TestCase):
         self.ban_submission_for("https://github.com/spammer/repo")
         self.assertFalse(models.SpamDomain.objects.exists())
 
+    def test_nothing_is_recorded_without_the_rules_package(self):
+        # Without the package a shared host can't be told apart from a spam
+        # domain, and recording blindly would poison the table.
+        with patch.object(antispam, "is_shared_host", None):
+            self.ban_submission_for("https://spam-example.com/one")
+        self.assertFalse(models.SpamDomain.objects.exists())
+
     @skipUnless(antispam.is_available(), "lutris-antispam is not installed")
     def test_a_recorded_domain_is_scored_on_the_next_submission(self):
         self.ban_submission_for("https://spam-example.com/one")
