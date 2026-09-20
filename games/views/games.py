@@ -3,6 +3,9 @@
 # lint: disable=too-few-public-methods
 from __future__ import absolute_import
 
+import logging
+
+from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q
@@ -13,8 +16,11 @@ from rest_framework.views import APIView
 
 from accounts.models import BannedAccount, User
 from common.models import save_action_log
+from emails.messages import send_account_banned
 from games import antispam, models, serializers
 from providers.models import Provider
+
+LOGGER = logging.getLogger(__name__)
 
 
 class GameListView(generics.GenericAPIView):
@@ -317,6 +323,13 @@ class GameSubmissionAcceptView(APIView):
             for url in (game.website, submitter.website):
                 models.SpamDomain.record(url)
             cache.delete(antispam.SPAM_DOMAINS_CACHE_KEY)
+            if getattr(settings, "ANTISPAM_BAN_EMAIL", True):
+                # Before deactivate(), which blanks the address. A mail failure
+                # must not leave the account un-banned.
+                try:
+                    send_account_banned(submitter, game.name)
+                except Exception:  # pylint: disable=broad-except
+                    LOGGER.exception("Failed to email banned user %s", submitter.id)
             game_submission.delete()
             if not game.is_public:
                 game.delete()

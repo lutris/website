@@ -5,7 +5,8 @@ import logging
 from unittest import skipUnless
 from unittest.mock import MagicMock, patch
 
-from django.test import TestCase
+from django.core import mail
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from common.models import KeyValueStore
@@ -639,3 +640,55 @@ class TestSpamDomainRecording(TestCase):
         self.assertIn(
             "history.known_spam_domain", [hit["rule"] for hit in assessment["matched_rules"]]
         )
+
+
+@override_settings(SEND_EMAILS=True)
+class TestBanEmail(TestCase):
+    """Banning a submitter tells them their account was closed"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="mail-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.spammer = factories.UserFactory(username="mailed-spammer", email="spam@example.net")
+        self.game = factories.GameFactory(name="Slope Game Free", is_public=False)
+        self.submission = models.GameSubmission.objects.create(user=self.spammer, game=self.game)
+        self.url = reverse(
+            "api_game_submission_accept", kwargs={"submission_id": self.submission.id}
+        )
+
+    def ban(self):
+        return self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+
+    def test_ban_emails_the_account(self):
+        mail.outbox = []
+        self.ban()
+        self.assertEqual(len(mail.outbox), 1)
+        message = mail.outbox[0]
+        # deactivate() blanks the address, so this proves the mail went out first
+        self.assertEqual(message.to, ["spam@example.net"])
+        self.assertIn("closed", message.subject)
+        self.assertIn("Slope Game Free", message.body)
+
+    def test_plain_reject_sends_nothing(self):
+        mail.outbox = []
+        self.client.post(self.url, json.dumps({"accepted": False}), content_type="application/json")
+        self.assertEqual(len(mail.outbox), 0)
+
+    @override_settings(ANTISPAM_BAN_EMAIL=False)
+    def test_the_email_can_be_turned_off(self):
+        mail.outbox = []
+        response = self.ban()
+        self.assertTrue(response.json()["banned"])
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_a_failing_email_does_not_leave_the_account_unbanned(self):
+        with patch("games.views.games.send_account_banned", side_effect=OSError("smtp down")):
+            response = self.ban()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["banned"])
+        self.spammer.refresh_from_db()
+        self.assertFalse(self.spammer.is_active)

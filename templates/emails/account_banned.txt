@@ -1,0 +1,8 @@
+Hello {{ username }},
+
+You have decided to play stupid games, and unfortunately, you have won a stupid prize.
+
+Your Lutris account has been banned for submitting trash to the website. 
+There is no warning shot, there is no redemption, your adventure with Lutris ends here.
+
+Better luck next time, The Lutris team

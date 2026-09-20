@@ -245,6 +245,9 @@ SELECT2_CSS = ""
 # verdict is shown to moderators in the dashboard. Advisory only: nothing is
 # deleted or banned automatically.
 ANTISPAM_ENABLED = True
+# Tell a user their account was closed when a moderator uses "reject and ban".
+# Only reached from that button, never from a score.
+ANTISPAM_BAN_EMAIL = True
 
 SEND_EMAILS = True
 if os.environ.get("DJANGO_TESTS") == "1":
