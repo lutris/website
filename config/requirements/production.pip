@@ -1,6 +1,3 @@
 -r base.pip
 gunicorn
 setproctitle
-# Private repo: needs an SSH deploy key on the server. The website degrades
-# gracefully (no assessments) when it isn't installed, so CI doesn't need it.
-lutris-antispam @ git+ssh://git@github.com/lutris/lutris-antispam.git@main
