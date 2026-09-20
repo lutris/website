@@ -8,6 +8,7 @@ import logging
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, generics, permissions, status
@@ -298,42 +299,49 @@ class GameSubmissionAcceptView(APIView):
             if submitter.is_staff:
                 raise PermissionDenied("Staff accounts cannot be banned this way")
             game = game_submission.game
-            # deactivate() scrubs the username and email, so record who this was
-            # while we still can.
-            BannedAccount.objects.create(
-                email=submitter.email,
-                username=submitter.username,
-                ip_address=game_submission.ip_address or submitter.signup_ip,
-                user=submitter,
-                banned_by=request.user,
-                reason="Spam game submission: %s" % game.name,
-            )
-            save_action_log(
-                "banned_submitter",
-                {
-                    "username": submitter.username,
-                    "email": submitter.email,
-                    "user_id": submitter.id,
-                    "game": game.name,
-                    "submission_id": submission_id,
-                    "banned_by": request.user.username,
-                },
-            )
-            # Confirmed spam, so the sites it pushed are worth remembering.
-            for url in (game.website, submitter.website):
-                models.SpamDomain.record(url)
+            # deactivate() scrubs the username and email, so keep them for the
+            # ban record and for the email sent once the ban has committed.
+            banned_username = submitter.username
+            banned_email = submitter.email
+            game_name = game.name
+            # All of it or none of it: a failure part way through used to leave
+            # the submission deleted and the account still active, with no way
+            # back to it from the moderation queue.
+            with transaction.atomic():
+                BannedAccount.objects.create(
+                    email=banned_email,
+                    username=banned_username,
+                    ip_address=game_submission.ip_address or submitter.signup_ip,
+                    user=submitter,
+                    banned_by=request.user,
+                    reason="Spam game submission: %s" % game_name,
+                )
+                save_action_log(
+                    "banned_submitter",
+                    {
+                        "username": banned_username,
+                        "email": banned_email,
+                        "user_id": submitter.id,
+                        "game": game_name,
+                        "submission_id": submission_id,
+                        "banned_by": request.user.username,
+                    },
+                )
+                # Confirmed spam, so the sites it pushed are worth remembering.
+                for url in (game.website, submitter.website):
+                    models.SpamDomain.record(url)
+                game_submission.delete()
+                if not game.is_public:
+                    game.delete()
+                submitter.deactivate()
             cache.delete(antispam.SPAM_DOMAINS_CACHE_KEY)
             if getattr(settings, "ANTISPAM_BAN_EMAIL", True):
-                # Before deactivate(), which blanks the address. A mail failure
-                # must not leave the account un-banned.
+                # Only once the ban is committed: nobody should be told their
+                # account was closed when it wasn't.
                 try:
-                    send_account_banned(submitter, game.name)
+                    send_account_banned(banned_username, banned_email, game_name)
                 except Exception:  # pylint: disable=broad-except
                     LOGGER.exception("Failed to email banned user %s", submitter.id)
-            game_submission.delete()
-            if not game.is_public:
-                game.delete()
-            submitter.deactivate()
             banned = True
         else:
             game_submission.delete()

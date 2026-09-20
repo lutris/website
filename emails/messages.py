@@ -23,14 +23,15 @@ def send_account_creation(user, confirmation_link):
     return send_email("account_creation", context, subject, user.email)
 
 
-def send_account_banned(user, game_name):
+def send_account_banned(username, email, game_name):
     """Tell a user their account was closed for a spam submission.
 
-    Sent while the account still has its address: deactivate() blanks it.
+    Takes the name and address explicitly: by the time this is sent the account
+    has been deactivated, which blanks both.
     """
-    context = {"username": user.username, "game_name": game_name}
+    context = {"username": username, "game_name": game_name}
     subject = "Your Lutris account has been closed"
-    return send_email("account_banned", context, subject, user.email)
+    return send_email("account_banned", context, subject, email)
 
 
 def send_email(template, context, subject, recipients, sender=None):

@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -70,7 +71,12 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
     def deactivate(self):
         """Deactivate a user
         Leaves the user intact while suppressing any identifying information"""
-        self.gamelibrary.delete()
+        try:
+            self.gamelibrary.delete()
+        except ObjectDoesNotExist:
+            # Accounts predating the library-on-signup signal have none, and so
+            # does an account that has been deactivated once already.
+            pass
         self.groups.clear()
         from allauth.socialaccount.models import SocialAccount
 

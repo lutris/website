@@ -9,8 +9,10 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from accounts.models import BannedAccount, User
 from common.models import KeyValueStore
 from games import antispam, models
+from games.models import GameLibrary
 from providers.models import Provider, ProviderGame
 
 from . import factories
@@ -666,12 +668,11 @@ class TestBanEmail(TestCase):
     def test_ban_emails_the_account(self):
         mail.outbox = []
         self.ban()
-        self.assertEqual(len(mail.outbox), 1)
-        message = mail.outbox[0]
-        # deactivate() blanks the address, so this proves the mail went out first
-        self.assertEqual(message.to, ["spam@example.net"])
-        self.assertIn("closed", message.subject)
-        self.assertIn("Slope Game Free", message.body)
+        # The address is captured before deactivate() blanks it
+        sent = [message for message in mail.outbox if message.to == ["spam@example.net"]]
+        self.assertEqual(len(sent), 1)
+        self.assertIn("Lutris account", sent[0].subject)
+        self.assertIn("mailed-spammer", sent[0].body)
 
     def test_plain_reject_sends_nothing(self):
         mail.outbox = []
@@ -692,3 +693,58 @@ class TestBanEmail(TestCase):
         self.assertTrue(response.json()["banned"])
         self.spammer.refresh_from_db()
         self.assertFalse(self.spammer.is_active)
+
+
+@override_settings(SEND_EMAILS=True)
+class TestBanFailureHandling(TestCase):
+    """A ban either happens completely or not at all"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="atomic-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.spammer = factories.UserFactory(username="atomic-spammer", email="spam@example.org")
+        self.game = factories.GameFactory(name="Spam Title", is_public=False)
+        self.submission = models.GameSubmission.objects.create(user=self.spammer, game=self.game)
+        self.url = reverse(
+            "api_game_submission_accept", kwargs={"submission_id": self.submission.id}
+        )
+
+    def ban(self):
+        return self.client.post(
+            self.url,
+            json.dumps({"accepted": False, "ban": True}),
+            content_type="application/json",
+        )
+
+    def test_ban_works_without_a_game_library(self):
+        """Accounts with no library row must still be bannable.
+
+        deactivate() raised RelatedObjectDoesNotExist on them in production,
+        after the submission had already been deleted.
+        """
+        GameLibrary.objects.filter(user=self.spammer).delete()
+        response = self.ban()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["banned"])
+        self.spammer.refresh_from_db()
+        self.assertFalse(self.spammer.is_active)
+
+    def test_a_failure_leaves_nothing_half_done(self):
+        with patch.object(User, "deactivate", side_effect=RuntimeError("boom")):
+            with self.assertRaises(RuntimeError):
+                self.ban()
+        self.spammer.refresh_from_db()
+        self.assertTrue(self.spammer.is_active)
+        self.assertTrue(models.GameSubmission.objects.filter(pk=self.submission.pk).exists())
+        self.assertTrue(models.Game.objects.filter(pk=self.game.pk).exists())
+        self.assertFalse(BannedAccount.objects.filter(username="atomic-spammer").exists())
+        self.assertFalse(models.SpamDomain.objects.exists())
+
+    def test_a_failed_ban_does_not_email_the_account(self):
+        mail.outbox = []
+        with patch.object(User, "deactivate", side_effect=RuntimeError("boom")):
+            with self.assertRaises(RuntimeError):
+                self.ban()
+        # Django mails the admins about the 500; the account must hear nothing
+        to_account = [m for m in mail.outbox if m.to == ["spam@example.org"]]
+        self.assertEqual(to_account, [])
