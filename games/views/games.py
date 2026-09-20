@@ -4,14 +4,14 @@
 from __future__ import absolute_import
 
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import User
-from games import models, serializers
+from games import antispam, models, serializers
 from providers.models import Provider
 
 
@@ -237,14 +237,26 @@ class GameSubmissionsView(generics.ListAPIView):
     get_new_submissions = True
 
     def get_queryset(self):
-        return (
+        queryset = (
             models.GameSubmission.objects.filter(
                 accepted_at__isnull=True,
                 game__change_for__isnull=self.get_new_submissions,
             )
-            .prefetch_related("game", "user", "game__provider_games")
+            .prefetch_related("game", "user", "game__provider_games", "game__platforms")
+            .annotate(library_game_count=Count("user__gamelibrary__games", distinct=True))
             .order_by("-created_at")
         )
+        verdict = self.request.GET.get("verdict")
+        if verdict:
+            queryset = [
+                submission
+                for submission in queryset
+                if (
+                    antispam.assess_submission(submission, submission.library_game_count) or {}
+                ).get("verdict")
+                == verdict
+            ]
+        return queryset
 
 
 class GameChangesView(GameSubmissionsView):

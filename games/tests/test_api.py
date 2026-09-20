@@ -2,12 +2,13 @@
 
 import json
 import logging
-from unittest.mock import MagicMock
+from unittest import skipUnless
+from unittest.mock import MagicMock, patch
 
 from django.test import TestCase
 from django.urls import reverse
 
-from games import models
+from games import antispam, models
 from providers.models import Provider, ProviderGame
 
 from . import factories
@@ -431,3 +432,64 @@ installer:
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 403)
+
+
+class TestGameSubmissionSpamAssessment(TestCase):
+    """The submissions API reports an advisory spam assessment to moderators"""
+
+    def setUp(self):
+        self.admin = factories.UserFactory(username="spam-admin", is_staff=True)
+        self.client.force_login(self.admin)
+        self.url = reverse("api_game_submissions")
+
+    def create_submission(self, game_name, **user_kwargs):
+        user = factories.UserFactory(**user_kwargs)
+        game = factories.GameFactory(name=game_name)
+        return models.GameSubmission.objects.create(user=user, game=game)
+
+    def get_results(self, **params):
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        return response.json()["results"]
+
+    @skipUnless(antispam.is_available(), "lutris-antispam is not installed")
+    def test_submission_carries_an_assessment(self):
+        self.create_submission("Quake")
+        (result,) = self.get_results()
+        self.assertIn("spam_assessment", result)
+        self.assertEqual(result["spam_assessment"]["verdict"], "clean")
+
+    @skipUnless(antispam.is_available(), "lutris-antispam is not installed")
+    def test_spam_submission_is_flagged(self):
+        self.create_submission(
+            "Slope Game Free", username="slopegamefree", email="slopegamefree@grr.la"
+        )
+        (result,) = self.get_results()
+        self.assertEqual(result["spam_assessment"]["verdict"], "spam")
+        self.assertIn(
+            "email.disposable_domain",
+            [rule["rule"] for rule in result["spam_assessment"]["matched_rules"]],
+        )
+
+    @skipUnless(antispam.is_available(), "lutris-antispam is not installed")
+    def test_results_can_be_filtered_by_verdict(self):
+        self.create_submission("Quake")
+        self.create_submission(
+            "Slope Game Free", username="slopegamefree", email="slopegamefree@grr.la"
+        )
+        self.assertEqual(len(self.get_results()), 2)
+        spam = self.get_results(verdict="spam")
+        self.assertEqual(len(spam), 1)
+        self.assertEqual(spam[0]["game"]["name"], "Slope Game Free")
+
+    def test_scoring_failure_does_not_break_the_queue(self):
+        self.create_submission("Quake")
+        with patch.object(antispam, "assess", side_effect=ValueError("boom")):
+            (result,) = self.get_results()
+        self.assertIsNone(result["spam_assessment"])
+
+    def test_no_assessment_when_package_is_missing(self):
+        self.create_submission("Quake")
+        with patch.object(antispam, "assess", None):
+            (result,) = self.get_results()
+        self.assertIsNone(result["spam_assessment"])

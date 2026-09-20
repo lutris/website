@@ -841,6 +841,11 @@ wheels = [
 ]
 
 [[package]]
+name = "lutris-antispam"
+version = "0.1.0"
+source = { git = "ssh://git@github.com/lutris/lutris-antispam.git?rev=main#0695851a3569f280b9286e69cd9881fe306fce77" }
+
+[[package]]
 name = "lutrisweb"
 version = "0.1.0"
 source = { virtual = "." }
@@ -898,6 +903,7 @@ dev = [
 ]
 prod = [
     { name = "gunicorn" },
+    { name = "lutris-antispam" },
     { name = "setproctitle" },
 ]
 
@@ -956,6 +962,7 @@ dev = [
 ]
 prod = [
     { name = "gunicorn" },
+    { name = "lutris-antispam", git = "ssh://git@github.com/lutris/lutris-antispam.git?rev=main" },
     { name = "setproctitle" },
 ]
 
