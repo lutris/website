@@ -30,7 +30,13 @@ def extract_domain(url):
     url = url.strip().lower()
     if "//" not in url:
         url = "//" + url
-    domain = urlparse(url).netloc.split("@")[-1].split(":")[0]
+    try:
+        netloc = urlparse(url).netloc
+    except ValueError:
+        # Submitted websites are arbitrary text: an unmatched "[" makes urlparse
+        # raise "Invalid IPv6 URL" rather than return anything.
+        return ""
+    domain = netloc.split("@")[-1].split(":")[0]
     domain = domain.removeprefix("www.")
     # Anything without a dot isn't a domain, it's the user typing prose.
     return domain if "." in domain else ""
