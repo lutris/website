@@ -26,6 +26,7 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
     avatar = models.ImageField(upload_to="avatars", blank=True)
     steamid = models.CharField("Steam id", max_length=32, blank=True)
     website = models.URLField(blank=True)
+    signup_ip = models.GenericIPAddressField(null=True, blank=True)
     key = models.CharField(max_length=256, blank=True, default="")
     email_confirmed = models.BooleanField(default=False)
     show_adult_content = models.BooleanField(default=False)
@@ -90,6 +91,53 @@ class User(AbstractUser):  # pylint: disable=too-many-instance-attributes
         if self.avatar and os.path.exists(self.avatar.path):
             self.avatar.delete()
         return super().delete(*args, **kwargs)
+
+
+class BannedAccount(models.Model):
+    """Record of an account banned for spam.
+
+    ``User.deactivate()`` scrubs the username and email, so this is the only
+    lasting record of who was banned and why. It also keeps a banned address
+    from simply signing up again.
+
+    The IP is kept for investigation (spotting one actor behind several
+    accounts) but is never used to refuse a signup on its own: addresses are
+    shared, reassigned and proxied, so blocking one hits bystanders.
+    """
+
+    email = models.EmailField(db_index=True)
+    username = models.CharField(max_length=150)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="ban_records",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    banned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="bans_issued",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    reason = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Model configuration"""
+
+        ordering = ("-created_at",)
+        verbose_name = "Banned account"
+
+    def __str__(self):
+        return "%s (%s) banned on %s" % (self.username, self.email, self.created_at)
+
+    @classmethod
+    def is_email_banned(cls, email):
+        """Whether an email address belongs to a banned account"""
+        if not email:
+            return False
+        return cls.objects.filter(email__iexact=email.strip()).exists()
 
 
 class EmailConfirmationToken(models.Model):

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from accounts import sso
-from accounts.models import User
+from accounts.models import BannedAccount, User
 from common.util import create_admin, create_user
 
 
@@ -99,3 +99,57 @@ class TestSSO(TestCase):
         self.assertIn("/session/sso_login", url)
         self.assertIn("sso=", url)
         self.assertIn("sig=", url)
+
+
+class TestBannedAccounts(TestCase):
+    """A banned email cannot be used to register again"""
+
+    def setUp(self):
+        self.banned = BannedAccount.objects.create(email="spammer@example.net", username="spammer")
+
+    def test_banned_email_is_refused_at_registration(self):
+        response = self.client.post(
+            reverse("register"),
+            {
+                "username": "spammer2",
+                "email": "spammer@example.net",
+                "password1": "testpassword",
+                "password2": "testpassword",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username="spammer2").exists())
+        self.assertContains(response, "cannot be used to register")
+
+    def test_banned_email_check_ignores_case_and_spacing(self):
+        self.assertTrue(BannedAccount.is_email_banned(" Spammer@Example.NET "))
+        self.assertFalse(BannedAccount.is_email_banned("someone@example.net"))
+        self.assertFalse(BannedAccount.is_email_banned(""))
+
+    def test_other_emails_still_register(self):
+        response = self.client.post(
+            reverse("register"),
+            {
+                "username": "legit",
+                "email": "legit@example.net",
+                "password1": "testpassword",
+                "password2": "testpassword",
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(User.objects.filter(username="legit").exists())
+
+    def test_signup_ip_is_recorded(self):
+        self.client.post(
+            reverse("register"),
+            {
+                "username": "tracked",
+                "email": "tracked@example.net",
+                "password1": "testpassword",
+                "password2": "testpassword",
+            },
+            REMOTE_ADDR="203.0.113.7",
+        )
+        user = User.objects.get(username="tracked")
+        self.assertEqual(user.signup_ip, "203.0.113.7")

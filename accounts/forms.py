@@ -10,7 +10,7 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.db import IntegrityError, transaction
 from rest_framework.authtoken.models import Token
 
-from accounts.models import User
+from accounts.models import BannedAccount, User
 
 LOGGER = logging.getLogger(__name__)
 
@@ -51,6 +51,8 @@ class RegistrationForm(forms.ModelForm):
         email = self.cleaned_data["email"]
         if email.endswith("hotmails.com"):
             raise forms.ValidationError("lol :)")
+        if BannedAccount.is_email_banned(email):
+            raise forms.ValidationError("This email address cannot be used to register.")
         return email
 
     def clean_username(self):

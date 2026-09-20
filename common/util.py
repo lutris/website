@@ -1,5 +1,7 @@
 """Various utility functions used across the website"""
 
+from urllib.parse import urlparse
+
 import yaml
 
 try:
@@ -15,6 +17,23 @@ from transliterate.exceptions import LanguageDetectionError
 from xpinyin import Pinyin
 
 SLUG_MAX_LENGTH = 50
+
+
+def extract_domain(url):
+    """Return the bare domain of a URL, or an empty string.
+
+    Submitted websites rarely carry a scheme, so a bare "www.example.com/page"
+    has to parse the same as "https://example.com/page".
+    """
+    if not url:
+        return ""
+    url = url.strip().lower()
+    if "//" not in url:
+        url = "//" + url
+    domain = urlparse(url).netloc.split("@")[-1].split(":")[0]
+    domain = domain.removeprefix("www.")
+    # Anything without a dot isn't a domain, it's the user typing prose.
+    return domain if "." in domain else ""
 
 
 def slugify(text):
