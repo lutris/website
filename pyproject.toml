@@ -42,6 +42,7 @@ dependencies = [
     "transliterate==1.10.2",
     "GitPython==3.1.41",
     "docutils",
+    "lutris-antispam @ git+https://github.com/lutris/lutris-antispam.git@main",
 ]
 
 [dependency-groups]
@@ -58,8 +59,6 @@ dev = [
 prod = [
     "gunicorn",
     "setproctitle",
-    # Private repo, optional at runtime: submissions simply go unscored without it.
-    "lutris-antispam @ git+ssh://git@github.com/lutris/lutris-antispam.git@main",
 ]
 
 [tool.uv]

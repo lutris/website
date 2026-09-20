@@ -37,3 +37,6 @@ xpinyin==0.7.6
 transliterate==1.10.2
 GitPython==3.1.41
 docutils
+# Scoring rules for spam game submissions. Optional at runtime: the website
+# reports no assessment when it isn't installed.
+lutris-antispam @ git+https://github.com/lutris/lutris-antispam.git@main
