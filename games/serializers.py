@@ -6,7 +6,7 @@ import logging
 from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
-from games import models
+from games import antispam, models
 from platforms.models import Platform
 from providers.serializers import ProviderGameSerializer
 from runners.models import Runner
@@ -347,6 +347,7 @@ class GameSubmissionSerializer(serializers.ModelSerializer):
 
     game = GameSerializer()
     user = UserSerializer()
+    spam_assessment = serializers.SerializerMethodField()
 
     class Meta:
         """Model and field definitions"""
@@ -359,6 +360,13 @@ class GameSubmissionSerializer(serializers.ModelSerializer):
             "created_at",
             "accepted_at",
             "reason",
+            "spam_assessment",
+        )
+
+    def get_spam_assessment(self, submission):
+        """Advisory spam score shown to moderators, None when unavailable"""
+        return antispam.assess_submission(
+            submission, getattr(submission, "library_game_count", None)
         )
 
 

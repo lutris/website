@@ -241,6 +241,11 @@ SELECT2_JS = ""
 SELECT2_CSS = ""
 
 # Email
+# Game submissions are scored by the (optional) lutris-antispam package and the
+# verdict is shown to moderators in the dashboard. Advisory only: nothing is
+# deleted or banned automatically.
+ANTISPAM_ENABLED = True
+
 SEND_EMAILS = True
 if os.environ.get("DJANGO_TESTS") == "1":
     SEND_EMAILS = False
