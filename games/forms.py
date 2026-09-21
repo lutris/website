@@ -34,7 +34,9 @@ class AutoSlugForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["slug"].required = False
+        # Admin drops every field from the form for view-only users
+        if "slug" in self.fields:
+            self.fields["slug"].required = False
 
     def get_slug(self, name, slug=None):
         return get_auto_increment_slug(self.Meta.model, self.instance, name, slug)

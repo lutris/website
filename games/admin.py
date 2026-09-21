@@ -192,7 +192,8 @@ class GameAdminForm(forms.AutoSlugForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["gogid"].required = False
+        if "gogid" in self.fields:
+            self.fields["gogid"].required = False
 
 
 class GameAdmin(admin.ModelAdmin):
