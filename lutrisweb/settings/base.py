@@ -248,6 +248,9 @@ ANTISPAM_ENABLED = True
 # Tell a user their account was closed when a moderator uses "reject and ban".
 # Only reached from that button, never from a score.
 ANTISPAM_BAN_EMAIL = True
+# Only let users with at least one game in their library submit new games.
+# An empty library means the account has never used the Lutris client.
+ANTISPAM_REQUIRE_LIBRARY = True
 
 SEND_EMAILS = True
 if os.environ.get("DJANGO_TESTS") == "1":

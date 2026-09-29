@@ -468,9 +468,23 @@ def notify_new_game(game, user):
     send_email("new_game", context, subject, settings.MANAGERS[0][1])
 
 
+def can_submit_games(user):
+    """Whether a user may submit new games.
+
+    Accounts with an empty library have never synced from the Lutris client,
+    and that is where nearly all spam submissions come from.
+    """
+    if not settings.ANTISPAM_REQUIRE_LIBRARY or user.is_staff:
+        return True
+    return models.LibraryGame.objects.filter(gamelibrary__user=user).exists()
+
+
 @user_confirmed_required
 def submit_game(request):
     """Display a form to create a new game"""
+    if not can_submit_games(request.user):
+        LOGGER.info("Game submission blocked for %s: empty library", request.user)
+        return render(request, "games/submit_blocked.html", status=403)
     form = GameForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         game = form.save()

@@ -134,9 +134,22 @@ class TestGameSubmissionView(TestCase):
 
     def setUp(self):
         self.user = factories.UserFactory(username="submitter", email_confirmed=True)
+        models.LibraryGame.objects.create(
+            game=factories.GameFactory(), gamelibrary=self.user.gamelibrary
+        )
         self.client.force_login(self.user)
         self.platform = factories.PlatformFactory()
         self.genre = factories.GenreFactory()
+
+    def _submit(self):
+        return self.client.post(
+            reverse("game-submit"),
+            {
+                "name": "A Brand New Game",
+                "platforms": [self.platform.id],
+                "genres": [self.genre.id],
+            },
+        )
 
     def test_submission_records_the_client_ip(self):
         response = self.client.post(
@@ -151,3 +164,42 @@ class TestGameSubmissionView(TestCase):
         self.assertEqual(response.status_code, 302)
         submission = models.GameSubmission.objects.get(user=self.user)
         self.assertEqual(submission.ip_address, "198.51.100.23")
+
+    def test_user_with_a_library_sees_the_form(self):
+        response = self.client.get(reverse("game-submit"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "games/submit.html")
+
+    def test_empty_library_is_shown_why_instead_of_the_form(self):
+        self.user.gamelibrary.games.all().delete()
+        response = self.client.get(reverse("game-submit"))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateUsed(response, "games/submit_blocked.html")
+        self.assertContains(response, "library is empty", status_code=403)
+
+    def test_empty_library_cannot_post_a_submission(self):
+        self.user.gamelibrary.games.all().delete()
+        response = self._submit()
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(models.GameSubmission.objects.exists())
+
+    def test_user_without_a_library_is_blocked(self):
+        user = factories.UserNoLibraryFactory(email_confirmed=True)
+        self.client.force_login(user)
+        response = self._submit()
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(models.GameSubmission.objects.exists())
+
+    def test_staff_can_submit_with_an_empty_library(self):
+        self.user.gamelibrary.games.all().delete()
+        self.user.is_staff = True
+        self.user.save()
+        response = self._submit()
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.GameSubmission.objects.filter(user=self.user).exists())
+
+    def test_library_requirement_can_be_turned_off(self):
+        self.user.gamelibrary.games.all().delete()
+        with self.settings(ANTISPAM_REQUIRE_LIBRARY=False):
+            response = self._submit()
+        self.assertEqual(response.status_code, 302)
