@@ -7,6 +7,7 @@ from django.urls import reverse
 from accounts import forms, sso
 from accounts.models import BannedAccount, User
 from common.util import create_admin, create_user
+from games.models import LibraryGame
 
 
 class TestRegistration(TestCase):
@@ -114,6 +115,45 @@ class TestLibrarySync(TestCase):
     def test_sync_rejects_list_of_strings(self):
         response = self.post_library(["quake"])
         self.assertEqual(response.status_code, 400)
+
+
+class TestLibraryDelete(TestCase):
+    def setUp(self):
+        self.user = create_user(username="deleteuser", password="password")
+        self.client.force_login(self.user)
+        self.url = reverse("api_user_library")
+
+    def add_library_game(self, lastplayed):
+        return LibraryGame.objects.create(
+            gamelibrary=self.user.gamelibrary, name="Quake", slug="quake", lastplayed=lastplayed
+        )
+
+    def delete_library(self, payload):
+        return self.client.delete(self.url, json.dumps(payload), content_type="application/json")
+
+    def test_delete_single_entry_without_lastplayed(self):
+        self.add_library_game(lastplayed=100)
+        response = self.delete_library([{"slug": "quake"}])
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(LibraryGame.objects.filter(slug="quake").exists())
+
+    def test_delete_duplicates_without_lastplayed_keeps_entries(self):
+        self.add_library_game(lastplayed=100)
+        self.add_library_game(lastplayed=200)
+        response = self.delete_library([{"slug": "quake"}])
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(LibraryGame.objects.filter(slug="quake").count(), 2)
+
+    def test_delete_duplicates_matches_lastplayed(self):
+        self.add_library_game(lastplayed=100)
+        kept = self.add_library_game(lastplayed=200)
+        response = self.delete_library([{"slug": "quake", "lastplayed": 100}])
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(LibraryGame.objects.filter(slug="quake")), [kept])
+
+    def test_delete_rejects_malformed_payload(self):
+        self.assertEqual(self.delete_library({"slug": "quake"}).status_code, 400)
+        self.assertEqual(self.delete_library(["quake"]).status_code, 400)
 
 
 class TestSSO(TestCase):

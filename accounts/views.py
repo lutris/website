@@ -549,10 +549,15 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
             )
         return games[0] if games else None
 
+    @staticmethod
+    def is_game_list(payload):
+        """Whether a library payload is a list of games, each with a slug"""
+        return isinstance(payload, list) and all(
+            isinstance(game, dict) and "slug" in game for game in payload
+        )
+
     def post(self, request, *args, **kwargs):
-        if not isinstance(request.data, list) or not all(
-            isinstance(game, dict) and "slug" in game for game in request.data
-        ):
+        if not self.is_game_list(request.data):
             LOGGER.warning("Rejected malformed library sync from %s", request.user.username)
             return HttpResponseBadRequest("Expected a list of games")
         client_library = defaultdict(list)
@@ -688,12 +693,24 @@ class GameLibraryAPIView(generics.ListCreateAPIView):
         if len(library_games) == 1:
             return library_games[0].delete()
 
+        if "lastplayed" not in game:
+            # lastplayed is the only way to tell duplicate entries apart
+            LOGGER.warning(
+                "Not deleting %s for %s: %s entries match and no lastplayed was sent",
+                game["slug"],
+                self.request.user.username,
+                len(library_games),
+            )
+            return [""]
         for library_game in library_games:
             if library_game.lastplayed == game["lastplayed"]:
                 return library_game.delete()
         return [""]
 
     def delete(self, request):
+        if not self.is_game_list(request.data):
+            LOGGER.warning("Rejected malformed library delete from %s", request.user.username)
+            return HttpResponseBadRequest("Expected a list of games")
         stats = {"delete_results": {}}
         for game in request.data:
             slug = game["slug"]
