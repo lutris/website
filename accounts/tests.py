@@ -1,10 +1,11 @@
 import json
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.test import TestCase
 from django.urls import reverse
 
 from accounts import forms, sso
+from accounts.allauth_adapter import LutrisSocialAccountAdapter
 from accounts.models import BannedAccount, User
 from common.util import create_admin, create_user
 from games.models import LibraryGame
@@ -216,3 +217,29 @@ class TestBannedAccounts(TestCase):
         )
         user = User.objects.get(username="tracked")
         self.assertEqual(user.signup_ip, "203.0.113.7")
+
+
+class TestSteamSocialLogin(TestCase):
+    def get_sociallogin(self, steamid):
+        sociallogin = MagicMock()
+        sociallogin.is_existing = False
+        sociallogin.account.provider = "steam"
+        sociallogin.account.uid = steamid
+        return sociallogin
+
+    def test_existing_user_is_connected_by_steamid(self):
+        user = create_user(username="steamer")
+        user.steamid = "76561197960287930"
+        user.save()
+        sociallogin = self.get_sociallogin("76561197960287930")
+        LutrisSocialAccountAdapter().pre_social_login(None, sociallogin)
+        sociallogin.connect.assert_called_once_with(None, user)
+
+    def test_duplicate_steamid_does_not_crash_login(self):
+        for index in range(2):
+            user = create_user(username="steamer%s" % index)
+            user.steamid = "76561197960287930"
+            user.save()
+        sociallogin = self.get_sociallogin("76561197960287930")
+        LutrisSocialAccountAdapter().pre_social_login(None, sociallogin)
+        sociallogin.connect.assert_not_called()
