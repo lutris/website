@@ -47,6 +47,11 @@ class LutrisSocialAccountAdapter(DefaultSocialAccountAdapter):
                 user = User.objects.get(steamid=sociallogin.account.uid)
             except User.DoesNotExist:
                 pass
+            except User.MultipleObjectsReturned:
+                logger.warning(
+                    "Multiple users with steamid %s, skipping auto-connect",
+                    sociallogin.account.uid,
+                )
 
         # For providers with email, match by email
         if sociallogin.account.provider in ("discord", "google"):
