@@ -1020,7 +1020,10 @@ class Installer(BaseInstaller):
         return self.slug
 
     def is_playable(self):
-        """Return value of rating if the installer has a verified one"""
+        """Return whether the installer is known to work: never for games with
+        kernel level anticheat, otherwise the value of its verified rating."""
+        if self.game.flags.kernel_ac.is_set:
+            return False
         rating = self.ratings.filter(verified=True).first()
         if rating:
             return rating.playable
