@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from games import models
 
@@ -256,3 +257,31 @@ class TestGenre(TestCase):
         genre.save()
         self.assertEqual(genre.slug, "platformer")
         self.assertEqual(genre.__str__(), "Platformer")
+
+
+class TestInstallerIsPlayable(TestCase):
+    def setUp(self):
+        self.game = factories.GameFactory(name="League of Legends")
+        self.installer = factories.InstallerFactory(game=self.game)
+
+    def test_installer_without_rating_is_unknown(self):
+        self.assertIsNone(self.installer.is_playable())
+
+    def test_anticheat_game_installer_is_not_playable(self):
+        self.game.flags.kernel_ac = True
+        self.game.save()
+        self.installer.refresh_from_db()
+        self.assertIs(self.installer.is_playable(), False)
+
+    def test_api_reports_anticheat_installers_as_not_playable(self):
+        self.game.flags.kernel_ac = True
+        self.game.save()
+        response = self.client.get(
+            reverse("api_game_installer_list", kwargs={"slug": self.game.slug})
+        )
+        self.assertEqual(response.status_code, 200)
+        installers = response.json()
+        installers = (
+            installers.get("results", installers) if isinstance(installers, dict) else installers
+        )
+        self.assertEqual([installer["is_playable"] for installer in installers], [False])
