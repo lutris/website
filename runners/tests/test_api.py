@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from common.util import create_admin
 from runners import models
+from runners.views import ClientTooOld, get_client_version_number
 
 
 class TestApi(TestCase):
@@ -64,3 +65,22 @@ class TestRuntimeApi(TestCase):
     def test_unknown_runtime_detail_returns_404(self):
         response = self.client.get(reverse("runtime_detail", kwargs={"name": "nope"}))
         self.assertEqual(response.status_code, 404)
+
+
+class TestClientVersion(TestCase):
+    def test_client_user_agent(self):
+        self.assertEqual(get_client_version_number("Lutris 0.5.22"), 5022000)
+
+    def test_slash_separated_user_agent(self):
+        self.assertEqual(get_client_version_number("Lutris/0.5.22"), 5022000)
+
+    def test_other_user_agents_have_no_version(self):
+        self.assertEqual(get_client_version_number("curl/8.9.1"), 0)
+
+    def test_lutris_user_agent_without_version_is_too_old(self):
+        with self.assertRaises(ClientTooOld):
+            get_client_version_number("Lutris")
+
+    def test_runtime_versions_accepts_slash_separated_user_agent(self):
+        response = self.client.get(reverse("runtime_versions"), HTTP_USER_AGENT="Lutris/0.5.22")
+        self.assertEqual(response.status_code, 200)

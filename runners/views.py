@@ -104,6 +104,19 @@ def get_version_number(version):
     return int(release) * 100000000 + int(major) * 1000000 + int(minor) * 1000 + int(patch)
 
 
+def get_client_version_number(user_agent):
+    """Return the version number of the Lutris client sending the request,
+    or 0 if the request doesn't come from Lutris"""
+    if not user_agent.startswith("Lutris"):
+        return 0
+    # The client sends "Lutris 0.5.22"; accept "Lutris/0.5.22" as well
+    user_agent_parts = user_agent.replace("/", " ").split()
+    try:
+        return get_version_number(user_agent_parts[1])
+    except (IndexError, ValueError) as ex:
+        raise ClientTooOld from ex
+
+
 class RuntimeListView(generics.ListCreateAPIView):
     serializer_class = RuntimeSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -115,15 +128,9 @@ class RuntimeListView(generics.ListCreateAPIView):
             user_agent = self.request.META["HTTP_USER_AGENT"]
         except KeyError:
             return Response("Invalid request", status=status.HTTP_403_FORBIDDEN)
-        version_number = 0
-        if user_agent.startswith("Lutris"):
-            remote_version = user_agent.split()[1]
-            try:
-                version_number = get_version_number(remote_version)
-            except ValueError as ex:
-                raise ClientTooOld from ex
-            if version_number < 5011000:
-                raise ClientTooOld
+        version_number = get_client_version_number(user_agent)
+        if version_number and version_number < 5011000:
+            raise ClientTooOld
 
         queryset = Runtime.objects.all()
         if version_number:
@@ -201,13 +208,7 @@ class RuntimeVersions(views.APIView):
             user_agent = request.META["HTTP_USER_AGENT"]
         except KeyError:
             return Response("Invalid request", status=status.HTTP_403_FORBIDDEN)
-        client_version_number = 0
-        if user_agent.startswith("Lutris"):
-            remote_version = user_agent.split()[1]
-            try:
-                client_version_number = get_version_number(remote_version)
-            except ValueError as ex:
-                raise ClientTooOld from ex
+        client_version_number = get_client_version_number(user_agent)
 
         for pci_id in request.GET.get("pci_ids", "").lower().split(","):
             try:
