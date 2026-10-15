@@ -1,8 +1,11 @@
 """Integration tests for Flatpak installer form validation."""
 
+from types import SimpleNamespace
+
 from django.test import TestCase
 
 from games.forms import InstallerForm
+from games.serializers import InstallerDraftWriteSerializer
 from runners.models import Runner
 
 from . import factories
@@ -86,3 +89,45 @@ installer:
         self.assertEqual(draft.runner.slug, "flatpak")
         self.assertIn("technology.haniwa.ai5-sdl2", draft.content)
         self.assertIn("install_flatpak", draft.content)
+
+    def test_yuno_api_submission_for_review(self):
+        """Exercise the API serializer through validation and database persistence."""
+        script = """files:
+- engine: https://github.com/nunuhara/ai5-sdl2/releases/download/1.5.0/ai5-sdl2-linux-x86_64-1.5.0.flatpak
+- font:
+     url: https://github.com/xerysherry/uEmuera/raw/refs/heads/master/Assets/Resources/Fonts/MS%20PGothic.ttf
+     filename: MS PGothic.ttf
+- data: https://archive.org/download/yuno.-7z/YUNO.7z
+game:
+  appid: technology.haniwa.ai5-sdl2
+  args: '--font "MS PGothic.ttf"'
+installer:
+- task:
+     name: install_flatpak
+     file: engine
+- extract:
+     file: data
+     dst: $GAMEDIR
+- copy:
+     src: font
+     dst: $GAMEDIR
+"""
+        user = factories.UserNoLibraryFactory()
+        serializer = InstallerDraftWriteSerializer(
+            data={
+                "game_slug": self.game.slug,
+                "runner": "flatpak",
+                "version": "YUNO Flatpak",
+                "content": script,
+                "draft": False,
+            },
+            context={"request": SimpleNamespace(user=user)},
+        )
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        submission = serializer.save()
+        submission.refresh_from_db()
+        self.assertEqual(submission.game, self.game)
+        self.assertEqual(submission.runner.slug, "flatpak")
+        self.assertFalse(submission.draft)
+        self.assertEqual(submission.user, user)
+        self.assertIn("technology.haniwa.ai5-sdl2", submission.content)
