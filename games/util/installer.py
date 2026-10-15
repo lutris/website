@@ -31,6 +31,7 @@ def validate_installer(installer):
         game_is_a_dict,
         installer_steps_have_one_key,
         scummvm_has_gameid,
+        flatpak_has_appid,
         winesteam_scripts_use_correct_prefix,
         no_duplicate_file_ids,
         files_have_correct_attributes,
@@ -133,6 +134,32 @@ def scummvm_has_gameid(installer):
         return (False, "Missing section 'game'")
     if "game_id" not in script["game"]:
         return (False, "ScummVM game should have a game identifier in the 'game' section")
+    return SUCCESS
+
+
+def flatpak_has_appid(installer):
+    """Require a Flatpak application ID and validate install_flatpak references."""
+    if getattr(installer.runner, "slug", "") != "flatpak":
+        return SUCCESS
+    script = get_installer_script(installer)
+    game = script.get("game")
+    if not isinstance(game, dict) or not isinstance(game.get("appid"), str) or not game["appid"].strip():
+        return (False, "Flatpak installers require 'game.appid'.")
+    for step in script.get("installer") or []:
+        if not isinstance(step, dict):
+            continue
+        task = step.get("task")
+        if isinstance(task, dict) and task.get("name") == "install_flatpak":
+            file_id = task.get("file")
+            if not isinstance(file_id, str) or not file_id:
+                return (False, "install_flatpak requires a 'file' identifier.")
+            ids = {
+                next(iter(item))
+                for item in script.get("files") or []
+                if isinstance(item, dict) and item
+            }
+            if file_id not in ids:
+                return (False, f"install_flatpak references unknown file '{file_id}'.")
     return SUCCESS
 
 
