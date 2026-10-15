@@ -80,9 +80,7 @@ class FlatpakSubmissionHTTPTests(TestCase):
         self.client.force_authenticate(user=self.moderator)
         queue = self.client.get(self.list_url, {"type": "submission"})
         self.assertEqual(queue.status_code, 200)
-        self.assertTrue(
-            any(item["id"] == submission.pk for item in queue.data["results"])
-        )
+        self.assertTrue(any(item["id"] == submission.pk for item in queue.data["results"]))
 
     def test_moderator_accepts_yuno_submission(self):
         response = self.submit_yuno()
@@ -92,7 +90,8 @@ class FlatpakSubmissionHTTPTests(TestCase):
         self.client.force_authenticate(user=self.moderator)
         response = self.client.post(
             reverse("api_installer_draft_accept", kwargs={"pk": submission.pk}),
-            {}, format="json",
+            {},
+            format="json",
         )
         self.assertEqual(response.status_code, 200, response.data)
         self.assertFalse(models.InstallerDraft.objects.filter(pk=submission.pk).exists())
@@ -108,7 +107,8 @@ class FlatpakSubmissionHTTPTests(TestCase):
         self.client.force_authenticate(user=self.moderator)
         response = self.client.post(
             reverse("api_installer_draft_accept", kwargs={"pk": submission.pk}),
-            {}, format="json",
+            {},
+            format="json",
         )
         self.assertEqual(response.status_code, 400)
         self.assertTrue(models.InstallerDraft.objects.filter(pk=submission.pk).exists())
@@ -121,7 +121,8 @@ class FlatpakSubmissionHTTPTests(TestCase):
         self.client.force_authenticate(user=self.moderator)
         response = self.client.post(
             reverse("api_installer_draft_reject", kwargs={"pk": submission.pk}),
-            {"review": "Please review the bundle source."}, format="json",
+            {"review": "Please review the bundle source."},
+            format="json",
         )
         self.assertEqual(response.status_code, 200, response.data)
         submission.refresh_from_db()
