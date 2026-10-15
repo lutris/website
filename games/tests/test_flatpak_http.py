@@ -129,3 +129,33 @@ class FlatpakSubmissionHTTPTests(TestCase):
         self.assertTrue(submission.draft)
         self.assertEqual(submission.review, "Please review the bundle source.")
         notify.assert_called_once()
+
+    def test_published_yuno_is_exposed_to_lutris_client(self):
+        """The public game installer API must expose the runner and parsed script."""
+        response = self.submit_yuno()
+        self.assertEqual(response.status_code, 201, response.data)
+        submission = models.InstallerDraft.objects.get(game=self.game)
+
+        self.client.force_authenticate(user=self.moderator)
+        accepted = self.client.post(
+            reverse("api_installer_draft_accept", kwargs={"pk": submission.pk}),
+            {},
+            format="json",
+        )
+        self.assertEqual(accepted.status_code, 200, accepted.data)
+
+        self.client.force_authenticate(user=None)
+        response = self.client.get(
+            reverse("api_game_installer_list", kwargs={"slug": self.game.slug})
+        )
+        self.assertEqual(response.status_code, 200)
+        installers = response.data["results"]
+        yuno = next(item for item in installers if item["version"] == "YUNO Flatpak")
+        self.assertEqual(yuno["runner"], "flatpak")
+        self.assertEqual(yuno["game_slug"], self.game.slug)
+        self.assertEqual(yuno["script"]["game"]["appid"], "technology.haniwa.ai5-sdl2")
+        self.assertEqual(
+            [step.get("task", {}).get("name") for step in yuno["script"]["installer"]],
+            ["install_flatpak", None, None],
+        )
+        self.assertEqual(yuno["script"]["installer"][0]["task"]["file"], "engine")
