@@ -143,7 +143,11 @@ def flatpak_has_appid(installer):
         return SUCCESS
     script = get_installer_script(installer)
     game = script.get("game")
-    if not isinstance(game, dict) or not isinstance(game.get("appid"), str) or not game["appid"].strip():
+    if (
+        not isinstance(game, dict)
+        or not isinstance(game.get("appid"), str)
+        or not game["appid"].strip()
+    ):
         return (False, "Flatpak installers require 'game.appid'.")
     for step in script.get("installer") or []:
         if not isinstance(step, dict):
