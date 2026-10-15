@@ -112,20 +112,24 @@ class TestScriptValidator(TestCase):
 
     def test_flatpak_bundle_task(self):
         self.installer.runner = Runner(name="Flatpak", slug="flatpak")
-        self.installer.content = json.dumps({
-            "game": {"appid": "org.example.Game"},
-            "files": [{"bundle": "https://example.org/game.flatpak"}],
-            "installer": [{"task": {"name": "install_flatpak", "file": "bundle"}}],
-        })
+        self.installer.content = json.dumps(
+            {
+                "game": {"appid": "org.example.Game"},
+                "files": [{"bundle": "https://example.org/game.flatpak"}],
+                "installer": [{"task": {"name": "install_flatpak", "file": "bundle"}}],
+            }
+        )
         valid, errors = validate_installer(self.installer)
         self.assertTrue(valid, errors)
 
     def test_flatpak_bundle_task_unknown_file(self):
         self.installer.runner = Runner(name="Flatpak", slug="flatpak")
-        self.installer.content = json.dumps({
-            "game": {"appid": "org.example.Game"},
-            "installer": [{"task": {"name": "install_flatpak", "file": "missing"}}],
-        })
+        self.installer.content = json.dumps(
+            {
+                "game": {"appid": "org.example.Game"},
+                "installer": [{"task": {"name": "install_flatpak", "file": "missing"}}],
+            }
+        )
         valid, errors = validate_installer(self.installer)
         self.assertFalse(valid)
         self.assertTrue(any("unknown file" in error for error in errors))
