@@ -96,3 +96,36 @@ class TestScriptValidator(TestCase):
         self.installer.content = json.dumps({"game": {"foo": "bar", "bar": "foo"}})
         is_valid, _errors = validate_installer(self.installer)
         self.assertTrue(is_valid)
+
+    def test_flatpak_requires_appid(self):
+        self.installer.runner = Runner(name="Flatpak", slug="flatpak")
+        self.installer.content = json.dumps({"game": {"args": "--fullscreen"}})
+        valid, errors = validate_installer(self.installer)
+        self.assertFalse(valid)
+        self.assertIn("Flatpak installers require 'game.appid'.", errors)
+
+    def test_flatpak_flathub_appid(self):
+        self.installer.runner = Runner(name="Flatpak", slug="flatpak")
+        self.installer.content = json.dumps({"game": {"appid": "org.example.Game"}})
+        valid, errors = validate_installer(self.installer)
+        self.assertTrue(valid, errors)
+
+    def test_flatpak_bundle_task(self):
+        self.installer.runner = Runner(name="Flatpak", slug="flatpak")
+        self.installer.content = json.dumps({
+            "game": {"appid": "org.example.Game"},
+            "files": [{"bundle": "https://example.org/game.flatpak"}],
+            "installer": [{"task": {"name": "install_flatpak", "file": "bundle"}}],
+        })
+        valid, errors = validate_installer(self.installer)
+        self.assertTrue(valid, errors)
+
+    def test_flatpak_bundle_task_unknown_file(self):
+        self.installer.runner = Runner(name="Flatpak", slug="flatpak")
+        self.installer.content = json.dumps({
+            "game": {"appid": "org.example.Game"},
+            "installer": [{"task": {"name": "install_flatpak", "file": "missing"}}],
+        })
+        valid, errors = validate_installer(self.installer)
+        self.assertFalse(valid)
+        self.assertTrue(any("unknown file" in error for error in errors))
