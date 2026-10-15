@@ -15,12 +15,12 @@ class FlatpakInstallerFormTests(TestCase):
 
     def make_form(self, script, save_as_draft=False):
         data = {
-                "runner": str(self.runner.pk),
-                "version": "Flatpak test",
-                "description": "",
-                "notes": "",
-                "credits": "",
-                "content": script,
+            "runner": str(self.runner.pk),
+            "version": "Flatpak test",
+            "description": "",
+            "notes": "",
+            "credits": "",
+            "content": script,
             }
         if save_as_draft:
             data["save"] = "1"
