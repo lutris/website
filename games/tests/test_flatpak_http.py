@@ -10,7 +10,6 @@ from games import models
 
 from . import factories
 
-
 YUNO_SCRIPT = """files:
 - engine: https://github.com/nunuhara/ai5-sdl2/releases/download/1.5.0/ai5-sdl2-linux-x86_64-1.5.0.flatpak
 - font:
