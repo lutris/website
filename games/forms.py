@@ -281,6 +281,13 @@ class InstallerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["notes"].label = "Technical notes"
+        self.fields["runner"].help_text = (
+            "For Flatpak installers, select the Flatpak runner and set game.appid "
+            "to the application ID. To install a downloaded .flatpak bundle, "
+            "add it under files and use an installer task with "
+            "name: install_flatpak and file: <file_id>. "
+            "Do not include a top-level runner key in the YAML."
+        )
 
     def clean_description(self):
         """Remove HTML tags from the description"""
