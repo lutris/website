@@ -13,16 +13,19 @@ class FlatpakInstallerFormTests(TestCase):
         self.game = factories.GameFactory(name="Flatpak Form Test")
         self.runner = Runner.objects.get(slug="flatpak")
 
-    def make_form(self, script):
-        return InstallerForm(
-            data={
+    def make_form(self, script, save_as_draft=False):
+        data = {
                 "runner": str(self.runner.pk),
                 "version": "Flatpak test",
                 "description": "",
                 "notes": "",
                 "credits": "",
                 "content": script,
-            },
+            }
+        if save_as_draft:
+            data["save"] = "1"
+        return InstallerForm(
+            data=data,
             instance=factories.InstallerDraftFactory.build(game=self.game),
         )
 
@@ -45,7 +48,7 @@ class FlatpakInstallerFormTests(TestCase):
         self.assertIn("content", form.errors)
 
     def test_valid_flatpak_form_can_be_saved_as_draft(self):
-        form = self.make_form("game:\\n  appid: org.example.Game\\n".replace("\\n", "\n"))
+        form = self.make_form("game:\\n  appid: org.example.Game\\n".replace("\\n", "\n"), save_as_draft=True)
         self.assertTrue(form.is_valid(), form.errors)
         draft = form.save()
         self.assertEqual(draft.runner.slug, "flatpak")
