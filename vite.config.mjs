@@ -65,7 +65,7 @@ export default defineConfig(({ mode }) => ({
     rolldownOptions: {
       output: {
         format: "iife",
-        entryFileNames: "js/[name].js",
+        entryFileNames: "js/[name].min.js",
       },
     },
   },
