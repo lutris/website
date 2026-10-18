@@ -9,8 +9,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // Expose jQuery to the scripts inlined in the templates
 window.$ = window.jQuery = $;
-// When imported as a CommonJS module, select2 only registers itself as a
-// jQuery plugin once its factory is called
 select2(window, $);
 
 let csrftoken = Cookies.get('csrftoken');

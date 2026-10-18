@@ -1,16 +1,13 @@
 import { cp } from "node:fs/promises";
 import { defineConfig } from "vite";
 
-// The templates load the bundles with plain <script> tags, so they are built
-// as IIFEs. Rolldown only supports that for a single input, hence one
-// environment (a separate build) per entry.
 const entries = {
   lutris: "frontend/js/app.js",
   editor: "frontend/js/editor.js",
   styles: "frontend/css/lutris.scss",
 };
 
-// Vendor files loaded directly by some templates, outside of the bundles
+// Vendor files loaded directly by some templates, outside the bundles
 const vendorFiles = {
   "node_modules/bootstrap-icons/font": "public/css",
   "node_modules/blueimp-gallery/css": "public/css",
@@ -68,9 +65,7 @@ export default defineConfig(({ mode }) => ({
     rolldownOptions: {
       output: {
         format: "iife",
-        // The templates load the .min.js files, so development builds use the
-        // same names, only without minification
-        entryFileNames: "js/[name].min.js",
+        entryFileNames: "js/[name].js",
       },
     },
   },
