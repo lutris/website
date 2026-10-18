@@ -16,9 +16,9 @@
     "vite": "^8.3.4"
   },
   "scripts": {
-    "build": "webpack --progress --config=webpack.dev.conf.js",
-    "build-prod": "webpack --config=webpack.prod.conf.js",
-    "watch": "webpack --progress --watch --config=webpack.dev.conf.js"
+    "build": "vite build --mode development",
+    "build-prod": "vite build",
+    "watch": "vite build --mode development --watch"
   },
   "repository": {
     "type": "git",
