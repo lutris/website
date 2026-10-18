@@ -68,7 +68,9 @@ export default defineConfig(({ mode }) => ({
     rolldownOptions: {
       output: {
         format: "iife",
-        entryFileNames: mode === "production" ? "js/[name].min.js" : "js/[name].js",
+        // The templates load the .min.js files, so development builds use the
+        // same names, only without minification
+        entryFileNames: "js/[name].min.js",
       },
     },
   },
