@@ -96,3 +96,24 @@ class TestScriptValidator(TestCase):
         self.installer.content = json.dumps({"game": {"foo": "bar", "bar": "foo"}})
         is_valid, _errors = validate_installer(self.installer)
         self.assertTrue(is_valid)
+
+
+class TestWineVersionValidator(TestCase):
+    def get_installer(self, version):
+        return Installer(
+            runner=Runner(name="Wine", slug="wine"),
+            version="test",
+            content=json.dumps({"wine": {"version": version}}),
+        )
+
+    def test_ge_proton_versions_are_valid(self):
+        """GE-Proton builds come from GitHub, not from the Lutris API"""
+        for version in ("GE-Proton11-8", "GE-Proton9-26", "ge-proton"):
+            is_valid, errors = validate_installer(self.get_installer(version))
+            self.assertTrue(is_valid, (version, errors))
+
+    def test_unknown_wine_version_is_invalid(self):
+        for version in ("wine-unknown-1.0-x86_64", "GE-Proton11-8-x86_64", "GE-Proton"):
+            is_valid, errors = validate_installer(self.get_installer(version))
+            self.assertFalse(is_valid, version)
+            self.assertIn(f"Wine version {version} is not available from Lutris", errors)
