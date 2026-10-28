@@ -1,6 +1,7 @@
 """Installer related utilities"""
 
 import logging
+import re
 
 from common.util import load_yaml
 from games.models import DEFAULT_INSTALLER
@@ -8,6 +9,11 @@ from runners.models import Runner, RunnerVersion
 
 LOGGER = logging.getLogger(__name__)
 SUCCESS = (True, "")
+
+# The client resolves 'ge-proton' to the latest GE-Proton through umu, and downloads
+# pinned GE-Proton release tags such as 'GE-Proton11-8' from GitHub, not from our API.
+GE_PROTON_LATEST = "ge-proton"
+GE_PROTON_TAG_RE = re.compile(r"^GE-Proton\d+-\d+$")
 
 
 def get_installer_script(installer):
@@ -232,7 +238,8 @@ def all_files_are_used(installer):
 
 
 def uses_a_valid_wine_version(installer):
-    """Checks if a referenced wine version is available from the API"""
+    """Checks if a referenced wine version is available from the API, or is a
+    GE-Proton version that the client gets from GitHub"""
 
     script = get_installer_script(installer)
     wine_config = script.get("wine") or {}
@@ -240,6 +247,8 @@ def uses_a_valid_wine_version(installer):
         return (False, "Wine configuration should be a mapping (dict)")
     script_version = wine_config.get("version")
     if not script_version:
+        return SUCCESS
+    if script_version == GE_PROTON_LATEST or GE_PROTON_TAG_RE.match(str(script_version)):
         return SUCCESS
     versions = [
         f"{v.version}-{v.architecture}" for v in RunnerVersion.objects.filter(runner__slug="wine")
