@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 
 [[package]]
@@ -621,15 +621,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/fe/e0/ddb9bd7712f6bda335223906e8971b526837fec5fb259046d37e4637732c/django-unslashed-0.3.0.tar.gz", hash = "sha256:62430dc135bff43ac970fccf2bba180288f85f0dd179ad344d0c01da2d4c5340", size = 7398, upload-time = "2014-12-19T05:07:04.579Z" }
 
 [[package]]
-name = "django-webpack-loader"
-version = "1.8.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/aa/8d/3a7d689e56ad739a3234af47d2dd2bc22172d263233712e3b39c8246615d/django-webpack-loader-1.8.1.tar.gz", hash = "sha256:073beda18e2929fa5cd83bafbcaaf975e5945e84a17bfa81927cb6c9f5a17b94", size = 17352, upload-time = "2023-02-06T13:55:56.855Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/8d/fd749aded7b724b1c200137fc07b046bac0927f87691e40a449add4803c6/django_webpack_loader-1.8.1-py2.py3-none-any.whl", hash = "sha256:2d50a902256cf94bdd87eac3e7687989c9aa757a63af21db68773115216cedee", size = 17866, upload-time = "2023-02-06T13:55:55.263Z" },
-]
-
-[[package]]
 name = "djangorestframework"
 version = "3.15.2"
 source = { registry = "https://pypi.org/simple" }
@@ -867,7 +858,6 @@ dependencies = [
     { name = "django-reversion" },
     { name = "django-select2" },
     { name = "django-unslashed" },
-    { name = "django-webpack-loader" },
     { name = "djangorestframework" },
     { name = "docutils" },
     { name = "factory-boy" },
@@ -926,7 +916,6 @@ requires-dist = [
     { name = "django-reversion", specifier = "==5.1.0" },
     { name = "django-select2", specifier = "==8.4.0" },
     { name = "django-unslashed", specifier = "==0.3.0" },
-    { name = "django-webpack-loader", specifier = "==1.8.1" },
     { name = "djangorestframework", specifier = "==3.15.2" },
     { name = "docutils" },
     { name = "factory-boy", specifier = "==2.12.0" },

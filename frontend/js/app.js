@@ -1,11 +1,15 @@
-/* global $ */
+import $ from 'jquery';
 import 'bootstrap';
 import './admin-forms';
-import 'select2';
+import select2 from 'select2';
 import 'django-select2';
 import alertify from 'alertifyjs';
 import Cookies from 'js-cookie';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Expose jQuery to the scripts inlined in the templates
+window.$ = window.jQuery = $;
+select2(window, $);
 
 let csrftoken = Cookies.get('csrftoken');
 let notification_queue = JSON.parse(sessionStorage.getItem('notification_queue')) || [];
