@@ -275,7 +275,7 @@ def game_detail(request, slug):
                 "counter-strike-2",
                 "farlight-84",
                 "overwatch-2",
-                "apex-legends",
+                "deadlock--2",
             ]
         )
     else:
