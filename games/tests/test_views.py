@@ -49,6 +49,17 @@ class TestGameViews(TestCase):
 
     def setUp(self):
         factories.CompanyFactory(name="Team 17", slug="team-17")
+        factories.GameFactory(name="Pokémon Red", slug="pokemon-red")
+        factories.GameFactory(
+            name="Counter-Strike: Global Offensive", slug="counter-strike-global-offensive"
+        )
+        factories.GameFactory(
+            name="S.T.A.L.K.E.R.: Shadow of Chernobyl", slug="stalker-shadow-of-chernobyl"
+        )
+        factories.GameFactory(name="Baldur's Gate", slug="baldurs-gate")
+        factories.GameFactory(
+            name="Warhammer 40,000: Dawn of War", slug="warhammer-40000-dawn-of-war"
+        )
 
     def test_can_get_game_list(self):
         """Can get the basic game list"""
@@ -127,6 +138,47 @@ class TestGameViews(TestCase):
         url = "/games?paginate_by=0"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_can_search_for_games_with_unaccented_characters(self):
+        response = self.client.get(reverse("game_list"), {"q": "pokemon"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("pokemon-red", [game.slug for game in response.context["games"]])
+
+    def test_can_search_for_games_with_special_characters(self):
+        test_cases = [
+            ("Counter Strike", "counter-strike-global-offensive"),
+            ("STALKER", "stalker-shadow-of-chernobyl"),
+            ("Baldurs Gate", "baldurs-gate"),
+            ("Warhammer 40000 Dawn of War", "warhammer-40000-dawn-of-war"),
+        ]
+
+        for search_term, expected_slug in test_cases:
+            with self.subTest(search_term=search_term, expected_slug=expected_slug):
+                response = self.client.get(reverse("game_list"), {"q": search_term})
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(expected_slug, [game.slug for game in response.context["games"]])
+
+    def test_punctuation_only_search_does_not_match_every_game(self):
+        """slugify(non-alphanumeric) returns an empty string, which would match every game"""
+        test_cases = ["!!!", "ポケモン"]
+        for search_term in test_cases:
+            with self.subTest(search_term=search_term):
+                response = self.client.get(reverse("game_list"), {"q": search_term})
+                self.assertEqual(response.status_code, 200)
+                self.assertFalse(response.context["games"])
+
+    def test_empty_slug_search_term_fallback_to_name_search(self):
+        response = self.client.get(reverse("game_list"), {"q": ":"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "counter-strike-global-offensive", [game.slug for game in response.context["games"]]
+        )
+        self.assertIn(
+            "stalker-shadow-of-chernobyl", [game.slug for game in response.context["games"]]
+        )
+        self.assertIn(
+            "warhammer-40000-dawn-of-war", [game.slug for game in response.context["games"]]
+        )
 
 
 class TestGameSubmissionView(TestCase):

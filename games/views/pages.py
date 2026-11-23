@@ -22,6 +22,7 @@ from django.views.generic import ListView
 from sorl.thumbnail import get_thumbnail
 
 from accounts.decorators import user_confirmed_required
+from common.util import slugify
 from emails.messages import send_email
 from games import models
 from games.forms import (
@@ -133,9 +134,13 @@ class GameList(ListView):
                 queryset = queryset.filter(installers__content__icontains=self.q_params["q"])
             else:
                 search_query = self.q_params["q"]
-                queryset = queryset.filter(
-                    Q(name__icontains=search_query) | Q(aliases__name__icontains=search_query)
+                slug = slugify(search_query)
+                search_filter = Q(name__unaccent__icontains=search_query) | Q(
+                    aliases__name__unaccent__icontains=search_query
                 )
+                if slug:
+                    search_filter = search_filter | Q(slug__icontains=slug)
+                queryset = queryset.filter(search_filter)
         if self.q_params["platforms"]:
             queryset = queryset.filter(platforms__pk__in=self.q_params["platforms"])
         if self.q_params["genres"]:
