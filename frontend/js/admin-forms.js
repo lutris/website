@@ -1,4 +1,4 @@
-/* global $ */
+import $ from 'jquery';
 
 var filters = function() {
   $('.confirm_text').toggle(
