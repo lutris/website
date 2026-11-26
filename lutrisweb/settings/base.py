@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.admin",
     "django.contrib.admindocs",
+    "django.contrib.postgres",
     "sorl.thumbnail",
     "rest_framework",
     "rest_framework.authtoken",
